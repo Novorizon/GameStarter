@@ -24,13 +24,21 @@ namespace UnityEngine
         public static void Destroy(Object target)
         {
             if (ReferenceEquals(target, null) || target.dead)
+            {
                 return;
+            }
             target.dead = true;
             if (target is GameObject go)
+            {
                 foreach (var c in go.Components.ToArray())
+                {
                     Destroy(c);
+                }
+            }
             else if (target is MonoBehaviour)
+            {
                 Invoke(target, "OnDestroy");
+            }
         }
         public static void Invoke(Object target, string method) => target.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.Invoke(target, null);
         public static bool operator ==(Object a, Object b) => ReferenceEquals(a, b) || ((ReferenceEquals(a, null) || a.dead) && (ReferenceEquals(b, null) || b.dead));
@@ -40,7 +48,9 @@ namespace UnityEngine
         public static void ClearForTest()
         {
             foreach (var go in FindObjectsOfType<GameObject>(true))
+            {
                 Destroy(go);
+            }
             Objects.Clear();
         }
     }
@@ -81,7 +91,9 @@ namespace UnityEngine
             c.gameObject = this;
             Components.Add(c);
             if (activeInHierarchy)
+            {
                 Invoke(c, "Awake");
+            }
             return c;
         }
     }
