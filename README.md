@@ -21,12 +21,12 @@
 项目默认引用的聚合包地址：
 
 ```text
-https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.9
+https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.10
 ```
 
 UPM 不支持 package.json 中的 Git 传递依赖，因此工程 manifest 同时声明 all 和它的依赖来源，让首次导入即可解析运行时程序集。所有来源由同一份聚合目录生成，维护时运行 sync-packages.py；源码由 UPM 获取，不随工程复制。
 
-公共 Manager 的准备顺序写在 `GameEntry.InitializeManagersAsync`：取得事件和定时器服务 → 准备资源管理器 → UI → ECS EntityManager/WorldManager → 有 NetworkSettings 时初始化网络。Framework、UI、ECS 的自动驱动和运行退出清理仍由各库负责，GameEntry 不重复调用其 Update。
+公共 Manager 的准备顺序写在 `GameEntry.InitializeManagersAsync`：取得事件和定时器服务 → 准备资源管理器 → UI → GPU 动画调度器 → ECS EntityManager/WorldManager → 有 NetworkSettings 时初始化网络。Framework、UI、ECS 的自动驱动和运行退出清理仍由各库负责，GameEntry 不重复调用其 Update。
 
 空模板不附带 YooAsset 资源包；项目配置好 DefaultPackage 的采集和构建后，在 GameEntry 上开启 **Initialize Yoo Asset**，入口会等待 ResourceManager.InitializeAsync 成功后继续。网络需要在 Resources 中创建 NetworkSettings 并填写项目配置；入口只做 Initialize，实际联网由项目流程调用 ConnectAsync。
 
@@ -46,7 +46,7 @@ HybridCLR 安装项会处理官方依赖、嵌入及默认 Configure；实际 DL
 2. 构建主包：选择目标平台，使用 **Tools → Novorizon → Hot Update → 2. Build New Player**。封装自动安装匹配原生运行时、收集热更 DLL/AOT 元数据并准备内置版本。需要对应 Unity 平台模块和 IL2CPP 工具链。
 3. 导出补丁：修改 `Assets/HotUpdate` 中的代码，使用 **3. Export Patch**。修改 AOT 层 GameEntry、共享契约或程序集依赖后，需要重新构建主包。
 
-项目的可更新初始化逻辑写在 GameModule.InitializeAsync，资源和订阅清理写在 Shutdown。AOT 程序集不直接引用 Game.HotUpdate；热更程序集可以引用 AOT 的公开接口。远程更新需要项目自己的发布地址和签名公钥，设置字段及发布工具见 [HybridCLR 封装指南](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.9/Packages/com.novorizon.framework.hybridclr/README.md)。
+项目的可更新初始化逻辑写在 GameModule.InitializeAsync，资源和订阅清理写在 Shutdown。AOT 程序集不直接引用 Game.HotUpdate；热更程序集可以引用 AOT 的公开接口。远程更新需要项目自己的发布地址和签名公钥，设置字段及发布工具见 [HybridCLR 封装指南](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.10/Packages/com.novorizon.framework.hybridclr/README.md)。
 
 ## Visual Studio 代码跳转
 
@@ -72,3 +72,5 @@ python3 Tools~/export.py --output /tmp/GameStarter.zip
 GpuAnimator 包名为 `com.novorizon.gpuanimator`，可选模块安装器会同时移除旧的 `com.guanjinbiao.gpuanimator` 依赖。
 
 更新依赖目录使用 `Tools~/sync-packages.py --ref <已发布标签>`。该工具从公开 Git 地址读取版本目录，同时更新聚合包、完整依赖清单和模块来源。正常打开工程不需要运行 Python 工具。
+
+包采用固定版本标签，不会随 GitHub 的新提交自动升级。维护依赖时运行 `python3 Tools~/sync-packages.py --ref v0.1.0-preview.10`；该命令同步聚合包及全部来源，Unity 随后按清单重新解析。当前入口包含 UIManager 和 GpuAnimatorManager，播放器会自行注册到 GPU 调度器，入口不重复推进动画。此次 AOT 变化需要重新构建 HybridCLR 主包。

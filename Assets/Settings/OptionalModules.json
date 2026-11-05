@@ -4,7 +4,7 @@
       "id": "com.novorizon.ability",
       "title": "Ability（含编辑器）",
       "version": "0.3.0-preview.1",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ability#v0.1.0-preview.9",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ability#v0.1.0-preview.10",
       "dependencies": [],
       "description": "技能运行时与编辑器为同一个包；Odin 插件由项目提供。",
       "replaces": [
@@ -15,8 +15,8 @@
     {
       "id": "com.novorizon.ecs",
       "title": "ECS",
-      "version": "2.0.0-preview.4",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ecs#v0.1.0-preview.9",
+      "version": "2.0.0-preview.5",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ecs#v0.1.0-preview.10",
       "dependencies": [
         "com.novorizon.framework"
       ],
@@ -29,8 +29,8 @@
     {
       "id": "com.novorizon.framework",
       "title": "Framework",
-      "version": "0.10.0-preview.2",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#v0.1.0-preview.9",
+      "version": "0.11.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#v0.1.0-preview.10",
       "dependencies": [],
       "hidden": true,
       "replaces": [],
@@ -39,8 +39,8 @@
     {
       "id": "com.novorizon.framework.hybridclr",
       "title": "HybridCLR 封装",
-      "version": "0.1.0-preview.3",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.hybridclr#v0.1.0-preview.9",
+      "version": "0.1.0-preview.4",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.hybridclr#v0.1.0-preview.10",
       "dependencies": [
         "com.novorizon.framework",
         "com.code-philosophy.hybridclr"
@@ -54,8 +54,8 @@
     {
       "id": "com.novorizon.framework.ui",
       "title": "UI",
-      "version": "0.6.0-preview.2",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.ui#v0.1.0-preview.9",
+      "version": "0.7.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.ui#v0.1.0-preview.10",
       "dependencies": [
         "com.novorizon.framework"
       ],
@@ -68,8 +68,8 @@
       "title": "YooAsset 适配",
       "description": "官方 YooAsset 2.3.18 与 Framework 共享资源适配。",
       "replaces": [],
-      "version": "0.10.0-preview.2",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.yooasset#v0.1.0-preview.9",
+      "version": "0.11.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.yooasset#v0.1.0-preview.10",
       "dependencies": [
         "com.novorizon.framework",
         "com.tuyoogame.yooasset"
@@ -79,9 +79,11 @@
     {
       "id": "com.novorizon.gpuanimator",
       "title": "GpuAnimator",
-      "version": "3.2.0-preview.4",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.gpuanimator#v0.1.0-preview.9",
-      "dependencies": [],
+      "version": "4.0.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.gpuanimator#v0.1.0-preview.10",
+      "dependencies": [
+        "com.novorizon.framework"
+      ],
       "description": "Built-in 渲染管线下的 GPU 动画烘焙与播放。",
       "replaces": [
         "com.guanjinbiao.gpuanimator"
@@ -92,7 +94,7 @@
       "id": "com.novorizon.rtree",
       "title": "RTree",
       "version": "1.0.0-preview.2",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.rtree#v0.1.0-preview.9",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.rtree#v0.1.0-preview.10",
       "dependencies": [],
       "description": "六种空间索引各自一个目录，共用一个包与程序集。",
       "replaces": [],

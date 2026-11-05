@@ -32,7 +32,7 @@ def validate_project(root=ROOT):
     assert modules['com.code-philosophy.hybridclr']['embed']
     assert modules['com.novorizon.framework.hybridclr']['setupMethod'] == 'Configure'
     runtime = json.loads((root / 'Assets/Game/Runtime/GameStarter.Runtime.asmdef').read_text())
-    assert set(runtime['references']) == {'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Network', 'Game.Framework.Network.Unity', 'Game.Framework.Resources.YooAsset', 'Game.Framework.UI', 'ECS'}
+    assert set(runtime['references']) == {'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Network', 'Game.Framework.Network.Unity', 'Game.Framework.Resources.YooAsset', 'Game.Framework.UI', 'ECS', 'GpuAnimator'}
     assert 'Editor' not in runtime.get('includePlatforms', [])
     hot_settings = json.loads((root / 'Assets/Resources/NovorizonHotUpdateSettings.json').read_text())
     hot = json.loads((root / 'Assets/HotUpdate/Game.HotUpdate.asmdef').read_text())

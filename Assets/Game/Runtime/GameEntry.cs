@@ -132,8 +132,9 @@ namespace Game
                 throw new OperationCanceledException();
             }
 
-            // UIRoot 会创建页面、弹窗、面板和提示管理器；ECS 单例会建立实体管理器和默认 World。
-            UIRoot.Instance.Initialize();
+            // UIManager 会创建页面、弹窗、面板和提示管理器；ECS 单例会建立实体管理器和默认 World。
+            UIManager.Instance.Initialize();
+            GpuAnimatorManager.Instance.Initialize();
             _ = EntityManager.Instance;
             WorldManager.Instance.Initialize();
 

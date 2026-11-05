@@ -34,7 +34,7 @@ namespace Game.Resource
 
 namespace UI
 {
-    public sealed class UIRoot : MonoSingleton<UIRoot>
+    public sealed class UIManager : MonoSingleton<UIManager>
     {
         private bool initialized;
         protected override void OnStart() => Initialize();
@@ -93,8 +93,9 @@ namespace ECS
 
 namespace Game.Framework.Network
 {
-    public sealed class NetworkManager : Singleton<NetworkManager>
+    public sealed class NetworkManager : ConfigurableSingleton<NetworkManager>
     {
+        public static NetworkManager Instance => GetOrCreateInstance(() => new NetworkManager());
         private bool initialized;
         public void Initialize()
         {
@@ -108,8 +109,28 @@ namespace Game.Framework.Network
         }
         internal static void Reset()
         {
-            Instance.initialized = false;
+            ResetInstance(null);
         }
+    }
+}
+
+public sealed class GpuAnimatorManager : MonoSingleton<GpuAnimatorManager>
+{
+    private bool initialized;
+
+    protected override void OnStart()
+    {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        if (initialized)
+        {
+            return;
+        }
+        initialized = true;
+        ManagerContracts.Calls.Add("gpu");
     }
 }
 

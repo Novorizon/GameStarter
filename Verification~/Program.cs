@@ -280,11 +280,11 @@ internal static class Program
         ResetEntry();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("ui,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         True(Game.Framework.Event.EventManager.IsCreated && Game.Framework.Timing.TimerManager.IsCreated);
         _ = GameEntry.Instance;
         _ = GameEntry.Instance;
-        Equal("ui,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -294,7 +294,7 @@ internal static class Program
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("ui,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
+        Equal("ui,gpu,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -320,7 +320,7 @@ internal static class Program
         UObject.Destroy(entry.gameObject);
         pending.SetResult(true);
         Equal("resources", string.Join(",", ManagerContracts.Calls));
-        True(!UI.UIRoot.TryGetInstance(out _));
+        True(!UI.UIManager.TryGetInstance(out _));
         ResetEntry();
     }
 
