@@ -1,1 +1,1 @@
-{"name":"GameStarter.Runtime","rootNamespace":"Game","references":["Game.Framework.Core","Game.Framework.Unity"],"autoReferenced":true,"allowUnsafeCode":false}
+{"name":"GameStarter.Runtime","rootNamespace":"Game","references":["Game.Framework.Core","Game.Framework.Unity","Game.Framework.Network","Game.Framework.Network.Unity","Game.Framework.Resources.YooAsset","Game.Framework.UI","ECS"],"autoReferenced":true,"allowUnsafeCode":false}

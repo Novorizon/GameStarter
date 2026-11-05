@@ -33,9 +33,16 @@ def main():
     manifest_path = ROOT / 'Packages/manifest.json'
     manifest = json.loads(manifest_path.read_text())
     framework = next(m for m in modules if m['id'] == 'com.novorizon.framework')
-    manifest['dependencies']['com.novorizon.framework'] = framework['source']
+    # Git dependencies in package.json are not transitive in UPM. Declare the
+    # aggregate plus its catalog sources together so runtime asmdefs can compile on first import.
+    dependencies = manifest['dependencies']
+    for obsolete in catalog.get('obsoletePackages', []):
+        dependencies.pop(obsolete, None)
+    dependencies.update({m['id']: m['source'] for m in modules})
+    repository = framework['source'].split('?path=', 1)[0]
+    dependencies['com.novorizon.framework.all'] = f'{repository}?path=/Packages/com.novorizon.framework.all#{args.ref}'
     manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
-    print('Updated standalone Git dependencies; no sibling repository paths are required.')
+    print('Updated aggregate package and its dependency sources; no source copies or sibling paths are required.')
 
 
 if __name__ == '__main__':

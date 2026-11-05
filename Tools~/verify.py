@@ -20,6 +20,10 @@ def validate_project(root=ROOT):
     modules = {m['id']: m for m in catalog}
     assert len(modules) == len(catalog), 'Duplicate package ID'
     assert manifest['dependencies']['com.novorizon.framework'] == modules['com.novorizon.framework']['source']
+    framework_source = modules['com.novorizon.framework']['source']
+    assert manifest['dependencies']['com.novorizon.framework.all'] == framework_source.replace('/Packages/com.novorizon.framework#', '/Packages/com.novorizon.framework.all#')
+    for spec in catalog:
+        assert manifest['dependencies'][spec['id']] == spec['source'], spec['id']
     assert not any(value.startswith('file:') for value in manifest['dependencies'].values())
     for spec in catalog:
         assert re.fullmatch(r'https://github.com/[^/]+/[^#]+#(?:v[0-9][A-Za-z0-9.\-]*|[a-f0-9]{40})', spec['source']), spec['id']
@@ -28,7 +32,7 @@ def validate_project(root=ROOT):
     assert modules['com.code-philosophy.hybridclr']['embed']
     assert modules['com.novorizon.framework.hybridclr']['setupMethod'] == 'Configure'
     runtime = json.loads((root / 'Assets/Game/Runtime/GameStarter.Runtime.asmdef').read_text())
-    assert set(runtime['references']) == {'Game.Framework.Core', 'Game.Framework.Unity'}
+    assert set(runtime['references']) == {'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Network', 'Game.Framework.Network.Unity', 'Game.Framework.Resources.YooAsset', 'Game.Framework.UI', 'ECS'}
     assert 'Editor' not in runtime.get('includePlatforms', [])
     guids = set()
     for asset in (root / 'Assets').rglob('*'):

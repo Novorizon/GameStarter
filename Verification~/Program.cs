@@ -32,6 +32,11 @@ internal static class Program
         Check("normal updates do not allocate", NoFrameAllocations);
         Check("entry uses actual Framework singleton and rejects duplicates", EntrySingleton);
         Check("entry restarts when scene/domain reload is disabled", EntryRestart);
+        Check("entry prepares managers before optional startup modules and only once", EntryManagers);
+        Check("entry initializes network only when NetworkSettings exists", EntryNetwork);
+        Check("failed resource initialization blocks managers and modules", EntryResourceFailure);
+        Check("closing while resources initialize prevents later manager creation", EntryResourceCancellation);
+        Check("manager failure reports failed startup before modules run", EntryManagerFailure);
         Check("catalog resolves dependencies once and before consumers", CatalogOrder);
         Check("catalog detects missing and circular dependencies", InvalidCatalog);
         Check("installer resumes after request handles are lost on reload", InstallerReload);
@@ -146,6 +151,7 @@ internal static class Program
         var lifecycle = typeof(MonoSingleton<>).Assembly.GetType("Game.Framework.MonoSingletonLifecycle");
         lifecycle.GetMethod("Reset", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
         UnityThread.Reset(); UnityThread.InitializeManual();
+        ManagerContracts.Reset();
     }
     private static void EntrySingleton()
     {
@@ -165,6 +171,87 @@ internal static class Program
         Equal(StartupState.NotStarted, entry.State);
         typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
         True(ReferenceEquals(entry, GameEntry.Instance)); Equal(StartupState.Ready, entry.State); ResetEntry();
+    }
+
+    private sealed class RecordingStartupModule : StartupModule
+    {
+        public RecordingStartupModule() { }
+        public override Task InitializeAsync(CancellationToken token)
+        {
+            ManagerContracts.Calls.Add("module");
+            return Task.CompletedTask;
+        }
+    }
+
+    private static GameEntry CreateEntry(bool resources = false)
+    {
+        var module = new GameObject().AddComponent<RecordingStartupModule>();
+        var go = new GameObject { activeInHierarchy = false };
+        var entry = go.AddComponent<GameEntry>();
+        var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        typeof(GameEntry).GetField("startupModules", flags).SetValue(entry, new StartupModule[] { module });
+        typeof(GameEntry).GetField("initializeYooAsset", flags).SetValue(entry, resources);
+        go.activeInHierarchy = true;
+        UObject.Invoke(entry, "Awake");
+        return entry;
+    }
+
+    private static void EntryManagers()
+    {
+        ResetEntry();
+        var entry = CreateEntry();
+        Equal(StartupState.Ready, entry.State);
+        Equal("ui,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        True(Game.Framework.Event.EventManager.IsCreated && Game.Framework.Timing.TimerManager.IsCreated);
+        _ = GameEntry.Instance; _ = GameEntry.Instance;
+        Equal("ui,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        ResetEntry();
+    }
+
+    private static void EntryNetwork()
+    {
+        ResetEntry();
+        UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
+        var entry = CreateEntry();
+        Equal(StartupState.Ready, entry.State);
+        Equal("ui,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
+        ResetEntry();
+    }
+
+    private static void EntryResourceFailure()
+    {
+        ResetEntry();
+        ManagerContracts.ResourceInitialization = Task.FromResult(false);
+        int errors = Debug.Exceptions.Count;
+        var entry = CreateEntry(resources: true);
+        Equal(StartupState.Failed, entry.State);
+        Equal("resources", string.Join(",", ManagerContracts.Calls));
+        Equal(errors + 1, Debug.Exceptions.Count);
+        ResetEntry();
+    }
+
+    private static void EntryResourceCancellation()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.ResourceInitialization = pending.Task;
+        var entry = CreateEntry(resources: true);
+        Equal(StartupState.Starting, entry.State);
+        UObject.Destroy(entry.gameObject);
+        pending.SetResult(true);
+        Equal("resources", string.Join(",", ManagerContracts.Calls));
+        True(!UI.UIRoot.TryGetInstance(out _));
+        ResetEntry();
+    }
+
+    private static void EntryManagerFailure()
+    {
+        ResetEntry();
+        ManagerContracts.UIFailure = new InvalidOperationException("UI initialization failed");
+        var entry = CreateEntry();
+        Equal(StartupState.Failed, entry.State);
+        True(!ManagerContracts.Calls.Contains("module"));
+        ResetEntry();
     }
     private static ModuleSpec Spec(string id, params string[] dependencies) => new ModuleSpec { id = id, title = id, version = "1.0.0", source = "git:" + id, dependencies = dependencies };
     private static void CatalogOrder()

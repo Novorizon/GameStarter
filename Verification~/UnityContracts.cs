@@ -36,6 +36,12 @@ namespace UnityEngine
         public Transform transform => gameObject.transform;
     }
     public class MonoBehaviour : Component { }
+    public class ScriptableObject : Object { }
+    public static class Resources
+    {
+        public static readonly Dictionary<string, Object> Assets = new Dictionary<string, Object>();
+        public static T Load<T>(string path) where T : Object => Assets.TryGetValue(path, out var asset) ? asset as T : null;
+    }
     public class Transform : Component { public Transform parent; }
     public sealed class GameObject : Object
     {
