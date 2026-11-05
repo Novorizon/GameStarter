@@ -9,6 +9,7 @@ import re
 import subprocess
 import tarfile
 import tempfile
+import xml.etree.ElementTree as ET
 from urllib.parse import urlsplit, urlunsplit, parse_qs
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,7 +41,18 @@ def validate_project(root=ROOT):
     assert hot_settings['entryAssembly'] == hot['name'] == 'Game.HotUpdate'
     assert hot_settings['entryType'] == 'Game.HotUpdate.GameModule'
     assert hot_settings['hotUpdateRoot'] == 'Assets/HotUpdate'
-    assert set(hot['references']) == {'GameStarter.Runtime', 'Game.Framework.HotUpdate'}
+    assert set(hot['references']) == {'GameStarter.Runtime', 'Game.Framework.HotUpdate', 'Game.Framework.Unity'}
+    hot_project = root / 'Verification~/HotUpdate/HotUpdate.csproj'
+    model = ET.parse(hot_project).getroot()
+    assert model.findtext('.//DisableTransitiveProjectReferences', '').lower() == 'true'
+    model_references = set()
+    for reference in model.findall('.//ProjectReference'):
+        project = (hot_project.parent / reference.attrib['Include']).resolve()
+        # Unity automatically supplies engine references unless noEngineReferences is enabled.
+        if project == (root / 'Verification~/Unity/Unity.csproj').resolve():
+            continue
+        model_references.add(ET.parse(project).getroot().findtext('.//AssemblyName'))
+    assert model_references == set(hot['references']), 'Verification must use the same direct references as the Unity asmdef'
     assert not hot['autoReferenced']
     assert hot['name'] not in runtime['references'], 'AOT cannot reference hot update assemblies'
     guids = set()
