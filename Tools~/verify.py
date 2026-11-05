@@ -9,6 +9,7 @@ import re
 import subprocess
 import tarfile
 import tempfile
+from urllib.parse import urlsplit, urlunsplit, parse_qs
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -18,9 +19,10 @@ def validate_project(root=ROOT):
     catalog = json.loads((root / 'Assets/Settings/OptionalModules.json').read_text())['modules']
     modules = {m['id']: m for m in catalog}
     assert len(modules) == len(catalog), 'Duplicate package ID'
-    assert manifest['dependencies']['com.novorizon.framework'] == modules['com.novorizon.framework']['source'] or manifest['dependencies']['com.novorizon.framework'] == 'file:OptionalArchives~/' + modules['com.novorizon.framework']['archive']
+    assert manifest['dependencies']['com.novorizon.framework'] == modules['com.novorizon.framework']['source']
+    assert not any(value.startswith('file:') for value in manifest['dependencies'].values())
     for spec in catalog:
-        assert re.fullmatch(r'https://github.com/[^/]+/[^#]+#[a-f0-9]{40}', spec['source']), spec['id']
+        assert re.fullmatch(r'https://github.com/[^/]+/[^#]+#v[0-9][A-Za-z0-9.\-]*', spec['source']), spec['id']
         assert len(spec['sha256']) == 64
         for dependency in spec['dependencies']:
             assert dependency in modules, dependency
@@ -66,13 +68,17 @@ def main():
     with tempfile.TemporaryDirectory(prefix='game-starter-verify-') as temp:
         framework = args.framework
         if framework is None:
+            # Test tooling obtains the same published package that Unity installs.
             spec = next(m for m in catalog if m['id'] == 'com.novorizon.framework')
-            archive = ROOT / 'Packages/OptionalArchives~' / spec['archive']
-            if not archive.is_file():
-                parser.error('Supply --framework or use the distribution with package archives.')
-            with tarfile.open(archive) as tf:
-                tf.extractall(temp, filter='data')
-            framework = Path(temp) / 'package'
+            source = urlsplit(spec['source'])
+            origin = urlunsplit((source.scheme, source.netloc, source.path, '', ''))
+            subfolder = parse_qs(source.query)['path'][0].lstrip('/')
+            checkout = Path(temp) / 'FrameworkSource'
+            git_env = os.environ.copy()
+            git_env['GIT_TERMINAL_PROMPT'] = '0'
+            subprocess.run(['git', 'clone', '--depth', '1', '--filter=blob:none', '--sparse', '--branch', source.fragment, origin, str(checkout)], env=git_env, check=True)
+            subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder], env=git_env, check=True)
+            framework = checkout / subfolder
         framework = framework.resolve()
         package = json.loads((framework / 'package.json').read_text())
         assert package['name'] == 'com.novorizon.framework'

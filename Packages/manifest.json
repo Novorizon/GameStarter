@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.novorizon.framework": "https://github.com/Novorizon/Framework.git?path=/Packages/com.novorizon.framework#65affcd12ece943da81ae7152c4e4682cde71b99",
+    "com.novorizon.framework": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#v0.1.0-preview.4",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
