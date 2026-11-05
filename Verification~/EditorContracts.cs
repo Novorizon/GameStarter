@@ -129,7 +129,10 @@ namespace UnityEditor.PackageManager
             }
             var p = Sources[source];
             foreach (string name in packagesToRemove ?? Array.Empty<string>())
+            {
                 Installed.Remove(name);
+            }
+
             Installed[p.name] = p;
             return new Requests.AddAndRemoveRequest { IsCompleted = true, Status = StatusCode.Success };
         }

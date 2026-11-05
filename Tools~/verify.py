@@ -34,6 +34,15 @@ def validate_project(root=ROOT):
     runtime = json.loads((root / 'Assets/Game/Runtime/GameStarter.Runtime.asmdef').read_text())
     assert set(runtime['references']) == {'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Network', 'Game.Framework.Network.Unity', 'Game.Framework.Resources.YooAsset', 'Game.Framework.UI', 'ECS'}
     assert 'Editor' not in runtime.get('includePlatforms', [])
+    hot_settings = json.loads((root / 'Assets/Resources/NovorizonHotUpdateSettings.json').read_text())
+    hot = json.loads((root / 'Assets/HotUpdate/Game.HotUpdate.asmdef').read_text())
+    assert hot_settings['autoStart'] and not hot_settings['enableRemote']
+    assert hot_settings['entryAssembly'] == hot['name'] == 'Game.HotUpdate'
+    assert hot_settings['entryType'] == 'Game.HotUpdate.GameModule'
+    assert hot_settings['hotUpdateRoot'] == 'Assets/HotUpdate'
+    assert set(hot['references']) == {'GameStarter.Runtime', 'Game.Framework.HotUpdate'}
+    assert not hot['autoReferenced']
+    assert hot['name'] not in runtime['references'], 'AOT cannot reference hot update assemblies'
     guids = set()
     for asset in (root / 'Assets').rglob('*'):
         if asset.suffix == '.meta':
@@ -72,18 +81,20 @@ def main():
             git_env = os.environ.copy()
             git_env['GIT_TERMINAL_PROMPT'] = '0'
             subprocess.run(['git', 'clone', '--depth', '1', '--filter=blob:none', '--sparse', '--branch', source.fragment, origin, str(checkout)], env=git_env, check=True)
-            subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder], env=git_env, check=True)
+            subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder, 'Packages/com.novorizon.framework.hybridclr'], env=git_env, check=True)
             framework = checkout / subfolder
         framework = framework.resolve()
         package = json.loads((framework / 'package.json').read_text())
         assert package['name'] == 'com.novorizon.framework'
         assert package['version'] == next(m['version'] for m in catalog if m['id'] == package['name'])
         assert (framework / 'Runtime/Unity/MonoSingleton.cs').is_file()
+        hot_package = framework.parent / 'com.novorizon.framework.hybridclr'
+        assert json.loads((hot_package / 'package.json').read_text())['name'] == 'com.novorizon.framework.hybridclr'
         env = os.environ.copy()
         env.setdefault('DOTNET_PROCESSOR_COUNT', '2')
         env.setdefault('DOTNET_CLI_HOME', str(Path(temp) / 'dotnet-home'))
         env.setdefault('DOTNET_SKIP_FIRST_TIME_EXPERIENCE', '1')
-        subprocess.run([args.dotnet, 'build', 'Verification~/GameStarter.Verification.csproj', '-c', 'Release', '-m:1', '--disable-build-servers', '--nologo', '-p:FrameworkPackageRoot=' + str(framework)], cwd=ROOT, env=env, check=True)
+        subprocess.run([args.dotnet, 'build', 'Verification~/GameStarter.Verification.csproj', '-c', 'Release', '-m:1', '--disable-build-servers', '--nologo', '-p:FrameworkPackageRoot=' + str(framework), '-p:HotUpdatePackageRoot=' + str(hot_package)], cwd=ROOT, env=env, check=True)
         subprocess.run([args.dotnet, 'Verification~/bin/Release/net8.0/GameStarter.Verification.dll'], cwd=ROOT, env=env, check=True)
 
 

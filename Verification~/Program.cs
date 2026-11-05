@@ -37,6 +37,12 @@ internal static class Program
         Check("failed resource initialization blocks managers and modules", EntryResourceFailure);
         Check("closing while resources initialize prevents later manager creation", EntryResourceCancellation);
         Check("manager failure reports failed startup before modules run", EntryManagerFailure);
+        Check("hot code is a separate assembly and AOT has no hot reference", HotAssemblyBoundary);
+        Check("hot entry waits for AOT readiness and reports startup health", HotEntryReady);
+        Check("hot entry waits for resource initialization", HotEntryWaits);
+        Check("cancelled hot startup cannot report readiness", HotEntryCancelled);
+        Check("AOT startup failure prevents hot readiness", HotEntryFailure);
+        Check("hot shutdown during initialization suppresses readiness", HotEntryStopped);
         Check("catalog resolves dependencies once and before consumers", CatalogOrder);
         Check("catalog detects missing and circular dependencies", InvalidCatalog);
         Check("installer resumes after request handles are lost on reload", InstallerReload);
@@ -57,17 +63,25 @@ internal static class Program
             passed++;
             Console.WriteLine("PASS " + name);
         }
-        catch (Exception ex) { Console.Error.WriteLine("FAIL " + name + ": " + ex); Environment.Exit(1); }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine("FAIL " + name + ": " + ex);
+            Environment.Exit(1);
+        }
     }
     private static void True(bool value)
     {
         if (!value)
+        {
             throw new Exception("Assertion failed");
+        }
     }
     private static void Equal<T>(T expected, T actual)
     {
         if (!EqualityComparer<T>.Default.Equals(expected, actual))
+        {
             throw new Exception($"Expected {expected}, got {actual}");
+        }
     }
     private static void Throws<T>(Action action) where T : Exception
     {
@@ -192,7 +206,10 @@ internal static class Program
         s.Tick(1, 1);
         long before = GC.GetAllocatedBytesForCurrentThread();
         for (int i = 0; i < 1000; i++)
+        {
             s.Tick(1, 1);
+        }
+
         Equal(0L, GC.GetAllocatedBytesForCurrentThread() - before);
     }
     private static void ResetEntry()
@@ -316,6 +333,112 @@ internal static class Program
         True(!ManagerContracts.Calls.Contains("module"));
         ResetEntry();
     }
+    private sealed class HotHost : Game.Framework.HotUpdate.IGameHost
+    {
+        internal readonly List<string> Logs = new List<string>();
+        internal int ReadyCount;
+        internal string Version;
+
+        public void Log(string message)
+        {
+            Logs.Add(message);
+        }
+
+        public void ReportReady(string moduleVersion)
+        {
+            ReadyCount++;
+            Version = moduleVersion;
+        }
+    }
+
+    private static void HotAssemblyBoundary()
+    {
+        Equal("Game.HotUpdate", typeof(Game.HotUpdate.GameModule).Assembly.GetName().Name);
+        Equal("GameStarter.Runtime", typeof(GameEntry).Assembly.GetName().Name);
+        True(!typeof(GameEntry).Assembly.GetReferencedAssemblies().Any(a => a.Name == "Game.HotUpdate"));
+        True(typeof(Game.Framework.HotUpdate.IGameModule).IsAssignableFrom(typeof(Game.HotUpdate.GameModule)));
+    }
+
+    private static void HotEntryReady()
+    {
+        ResetEntry();
+        var host = new HotHost();
+        var module = new Game.HotUpdate.GameModule();
+        module.InitializeAsync(host, CancellationToken.None).GetAwaiter().GetResult();
+        Equal(StartupState.Ready, GameEntry.Instance.State);
+        Equal(1, host.ReadyCount);
+        Equal("1.0.0", host.Version);
+        True(host.Logs.Contains("HOT_UPDATE_READY 1.0.0"));
+        module.Shutdown();
+        module.Shutdown();
+        Equal(1, host.Logs.Count(s => s == "HOT_UPDATE_STOPPED"));
+        ResetEntry();
+    }
+
+    private static void HotEntryWaits()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.ResourceInitialization = pending.Task;
+        CreateEntry(resources: true);
+        var host = new HotHost();
+        var module = new Game.HotUpdate.GameModule();
+        Task start = module.InitializeAsync(host, CancellationToken.None);
+        True(!start.IsCompleted);
+        Equal(0, host.ReadyCount);
+        pending.SetResult(true);
+        start.GetAwaiter().GetResult();
+        Equal(1, host.ReadyCount);
+        module.Shutdown();
+        ResetEntry();
+    }
+
+    private static void HotEntryCancelled()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.ResourceInitialization = pending.Task;
+        CreateEntry(resources: true);
+        using var stop = new CancellationTokenSource();
+        var host = new HotHost();
+        var module = new Game.HotUpdate.GameModule();
+        Task start = module.InitializeAsync(host, stop.Token);
+        stop.Cancel();
+        Throws<OperationCanceledException>(() => start.GetAwaiter().GetResult());
+        Equal(0, host.ReadyCount);
+        module.Shutdown();
+        pending.SetResult(true);
+        ResetEntry();
+    }
+
+    private static void HotEntryFailure()
+    {
+        ResetEntry();
+        ManagerContracts.UIFailure = new InvalidOperationException("UI initialization failed");
+        var host = new HotHost();
+        var module = new Game.HotUpdate.GameModule();
+        Throws<InvalidOperationException>(() => module.InitializeAsync(host, CancellationToken.None).GetAwaiter().GetResult());
+        Equal(0, host.ReadyCount);
+        module.Shutdown();
+        ResetEntry();
+    }
+
+    private static void HotEntryStopped()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.ResourceInitialization = pending.Task;
+        CreateEntry(resources: true);
+        var host = new HotHost();
+        var module = new Game.HotUpdate.GameModule();
+        Task start = module.InitializeAsync(host, CancellationToken.None);
+        module.Shutdown();
+        pending.SetResult(true);
+        Throws<OperationCanceledException>(() => start.GetAwaiter().GetResult());
+        Equal(0, host.ReadyCount);
+        ResetEntry();
+    }
+
     private static ModuleSpec Spec(string id, params string[] dependencies) => new ModuleSpec { id = id, title = id, version = "1.0.0", source = "git:" + id, dependencies = dependencies };
     private static void CatalogOrder()
     {
@@ -361,12 +484,17 @@ internal static class Program
     {
         File.WriteAllText(ModuleInstaller.CatalogPath, JsonUtility.ToJson(new ModuleCatalog { modules = specs }));
         foreach (var spec in specs)
+        {
             Client.Sources[spec.source] = new PackageInfo { name = spec.id, version = spec.version };
+        }
     }
     private static void Drain()
     {
         for (int i = 0; i < 60 && ModuleInstaller.Busy; i++)
+        {
             EditorApplication.TickForTest();
+        }
+
         True(!ModuleInstaller.Busy);
     }
     private static void InstallerReload() => InProject(() =>
@@ -389,7 +517,10 @@ internal static class Program
         WriteCatalog(Spec("base"), Spec("feature", "base"));
         ModuleInstaller.Install(new[] { "feature" });
         while (!Client.Installed.ContainsKey("base"))
+        {
             EditorApplication.TickForTest();
+        }
+
         Client.FailNext = true;
         Drain();
         Equal(1, Client.Installed.Count);
@@ -420,10 +551,16 @@ internal static class Program
         Client.HoldEmbed = true;
         ModuleInstaller.Install(new[] { "official" });
         for (int i = 0; i < 30 && Client.PendingEmbed == null; i++)
+        {
             EditorApplication.TickForTest();
+        }
+
         True(Client.PendingEmbed != null && ModuleInstaller.Busy);
         for (int i = 0; i < 3; i++)
+        {
             EditorApplication.TickForTest();
+        }
+
         True(ModuleInstaller.Busy);
         Client.PendingEmbed.IsCompleted = true;
         Drain();

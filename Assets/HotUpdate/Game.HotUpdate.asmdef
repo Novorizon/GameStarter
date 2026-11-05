@@ -1,0 +1,10 @@
+{
+  "name": "Game.HotUpdate",
+  "rootNamespace": "Game.HotUpdate",
+  "references": [
+    "GameStarter.Runtime",
+    "Game.Framework.HotUpdate"
+  ],
+  "autoReferenced": false,
+  "allowUnsafeCode": false
+}

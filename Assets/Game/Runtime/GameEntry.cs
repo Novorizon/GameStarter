@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using ECS;
 using Game.Framework;
@@ -30,6 +31,7 @@ namespace Game
 
         // 每次运行创建一个会话，由它协调模块的初始化、更新、取消和清理。
         private GameSession session;
+        private Task startupTask;
 
         // 关闭过程中禁止通过单例访问再次启动。
         private bool closing;
@@ -59,6 +61,7 @@ namespace Game
         private static void ResumeSession()
         {
             foreach (var entry in FindObjectsOfType<GameEntry>(true))
+            {
                 if (entry.gameObject.activeInHierarchy && !entry.IsDestroying)
                 {
                     entry.closing = false;
@@ -66,6 +69,7 @@ namespace Game
                     _ = Instance;
                     break;
                 }
+            }
         }
 
         // Framework 会在单例 Awake 或访问 Instance 时调用此钩子。
@@ -73,14 +77,39 @@ namespace Game
         {
             // 单例可能被多次访问，同一会话只启动一次。
             if (closing || session != null)
+            {
                 return;
+            }
+
             startupFailed = false;
             sessionOwner = this;
             var current = new GameSession(Debug.LogException);
             session = current;
 
             // Unity 生命周期回调不能等待 Task，在异步方法中统一处理完成和异常。
-            _ = StartSessionAsync(current);
+            startupTask = StartSessionAsync(current);
+        }
+
+        /// <summary>供热更新入口等待公共 Manager 和启动模块就绪；入口关闭、启动失败或调用取消时不会继续。</summary>
+        public async Task WaitUntilReadyAsync(CancellationToken token = default)
+        {
+            var current = session;
+            var pending = startupTask;
+            if (current == null || pending == null)
+            {
+                throw new InvalidOperationException("GameEntry startup has not begun.");
+            }
+
+            await TaskUtil.WaitAsync(pending, token);
+            token.ThrowIfCancellationRequested();
+            if (!ReferenceEquals(session, current))
+            {
+                throw new OperationCanceledException("GameEntry startup has ended.");
+            }
+            if (State != StartupState.Ready)
+            {
+                throw new InvalidOperationException("GameEntry startup failed. Check the initialization errors in Console.");
+            }
         }
 
         /// <summary>项目所需的公共 Manager 在这里集中准备；按依赖顺序添加自己的初始化调用。</summary>
@@ -93,11 +122,15 @@ namespace Game
             // 资源管理器本身是共享缓存；完整资源包初始化需要项目实际提供的 YooAsset 配置。
             var resources = ResourceManager.Instance;
             if (initializeYooAsset && !await resources.InitializeAsync())
+            {
                 throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
+            }
 
             // 等待资源初始化期间入口可能已关闭，旧流程不能继续创建 UI、ECS 或网络服务。
             if (!ReferenceEquals(session, current))
+            {
                 throw new OperationCanceledException();
+            }
 
             // UIRoot 会创建页面、弹窗、面板和提示管理器；ECS 单例会建立实体管理器和默认 World。
             UIRoot.Instance.Initialize();
@@ -106,24 +139,33 @@ namespace Game
 
             // 有项目网络配置时准备客户端与回调派发器；实际连接由项目流程调用 ConnectAsync。
             if (Resources.Load<NetworkSettings>("NetworkSettings") != null)
+            {
                 NetworkManager.Instance.Initialize();
+            }
         }
 
-        // 等待全部模块初始化结束；用 current 区分本次启动和后来创建的新会话。
+        // 确认这次异步启动仍然有效，入口关闭或重新启动后忽略旧结果。
         private async Task StartSessionAsync(GameSession current)
         {
             try
             {
                 await InitializeManagersAsync(current);
                 if (!ReferenceEquals(session, current))
+                {
                     return;
+                }
+
                 await current.StartAsync(startupModules);
                 // 旧会话的异步操作结束时，不能给已经关闭或替换的会话报告就绪。
                 if (ReferenceEquals(session, current))
+                {
                     Debug.Log("GAME_STARTER_READY");
+                }
             }
             // 退出或销毁入口会主动取消旧会话，这种取消属于正常结束。
-            catch (OperationCanceledException) when (!ReferenceEquals(session, current)) { }
+            catch (OperationCanceledException) when (!ReferenceEquals(session, current))
+            {
+            }
             catch (Exception exception)
             {
                 if (ReferenceEquals(session, current))
@@ -138,7 +180,9 @@ namespace Game
         private void Update()
         {
             if (!IsDestroying)
+            {
                 session?.Tick(Time.deltaTime, Time.unscaledDeltaTime);
+            }
         }
 
         // 两个 Unity 回调都可能到达，CloseSession 支持重复调用。
@@ -162,7 +206,9 @@ namespace Game
             session = null;
             previous?.Dispose();
             if (ReferenceEquals(sessionOwner, this))
+            {
                 sessionOwner = null;
+            }
         }
     }
 }

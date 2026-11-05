@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>GameStarter.Runtime</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>CS0649</NoWarn>
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Unity/Unity.csproj" />
+    <ProjectReference Include="../Core/Core.csproj" />
+    <ProjectReference Include="../FrameworkUnity/FrameworkUnity.csproj" />
+    <Compile Include="../../Assets/Game/Runtime/*.cs" />
+    <Compile Include="../ManagerContracts.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+</Project>

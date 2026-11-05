@@ -16,9 +16,14 @@ namespace Game.Editor
             foreach (var module in modules)
             {
                 if (string.IsNullOrWhiteSpace(module.id) || string.IsNullOrWhiteSpace(module.version) || string.IsNullOrWhiteSpace(module.source))
+                {
                     throw new InvalidDataException("Module id, version and source are required.");
+                }
+
                 if (!map.TryAdd(module.id, module))
+                {
                     throw new InvalidDataException("Duplicate module: " + module.id);
+                }
             }
             var result = new List<ModuleSpec>();
             var visiting = new HashSet<string>();
@@ -26,19 +31,34 @@ namespace Game.Editor
             void Visit(string id)
             {
                 if (visited.Contains(id))
+                {
                     return;
+                }
+
                 if (!map.TryGetValue(id, out var module))
+                {
                     throw new InvalidDataException("Unknown dependency: " + id);
+                }
+
                 if (!visiting.Add(id))
+                {
                     throw new InvalidDataException("Circular dependency: " + id);
+                }
+
                 foreach (string dependency in module.dependencies ?? Array.Empty<string>())
+                {
                     Visit(dependency);
+                }
+
                 visiting.Remove(id);
                 visited.Add(id);
                 result.Add(module);
             }
             foreach (string id in selection)
+            {
                 Visit(id);
+            }
+
             return result.ToArray();
         }
     }

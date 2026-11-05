@@ -41,9 +41,15 @@ namespace UI
         public void Initialize()
         {
             if (initialized)
+            {
                 return;
+            }
+
             if (ManagerContracts.UIFailure != null)
+            {
                 throw ManagerContracts.UIFailure;
+            }
+
             initialized = true;
             ManagerContracts.Calls.Add("ui");
         }
@@ -58,7 +64,10 @@ namespace ECS
         protected override void OnStart()
         {
             if (initialized)
+            {
                 return;
+            }
+
             initialized = true;
             ManagerContracts.Calls.Add("entities");
         }
@@ -69,7 +78,10 @@ namespace ECS
         protected override void OnStart()
         {
             if (initialized)
+            {
                 return;
+            }
+
             initialized = true;
             ManagerContracts.Calls.Add("worlds");
         }
@@ -87,7 +99,10 @@ namespace Game.Framework.Network
         public void Initialize()
         {
             if (initialized)
+            {
                 return;
+            }
+
             initialized = true;
             ManagerContracts.Calls.Add("network");
         }

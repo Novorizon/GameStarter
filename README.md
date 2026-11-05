@@ -5,7 +5,7 @@
 ## 使用
 
 1. 使用 Unity Hub 打开本工程，等待 Unity Package Manager 下载聚合包、各库及 Unity 基础模块，并完成脚本编译。Git URL 安装需要本机可用 Git 和网络连接。
-2. 打开 `Assets/Scenes/Bootstrap.unity`，进入 Play Mode，入口准备好公共 Manager 后输出 `GAME_STARTER_READY`。
+2. 打开 `Assets/Scenes/Bootstrap.unity`，进入 Play Mode，入口准备好公共 Manager 后输出 `GAME_STARTER_READY`，随后热更入口输出 `HOT_UPDATE_READY 1.0.0`。
 3. 聚合安装器会完成整套包的安装及 HybridCLR 默认配置。保留 **Tools/Novorizon/Optional Modules** 窗口用于按模块重试或维护安装来源。
 
 本项目只依赖包的公开程序集。Framework 提供单例、线程、事件、计时和池等基础能力；GameEntry 使用其 MonoSingleton，并在 InitializeManagersAsync 中集中准备公共 Manager。StartupModule 与 GameSession 继续负责额外启动模块的初始化、更新和清理。
@@ -32,6 +32,22 @@ UPM 不支持 package.json 中的 Git 传递依赖，因此工程 manifest 同�
 
 HybridCLR 安装项会处理官方依赖、嵌入及默认 Configure；实际 DLL/AOT 收集、原生安装和 Player 构建使用封装菜单。Odin 插件由项目自行提供，缺少 Odin 不影响 Ability 运行时。
 
+## HybridCLR 的使用
+
+项目已经包含热更新程序集和入口，打开 Bootstrap 场景即可在 Editor 验证启动：
+
+- `Assets/Game/Runtime/GameEntry.cs`：AOT 入口，初始化公共 Manager 和启动模块。
+- `Assets/HotUpdate/GameModule.cs`：热更入口，实现封装提供的 `IGameModule`；等待 GameEntry 就绪后执行项目热更初始化，并调用 `ReportReady`。
+- `Assets/Resources/NovorizonHotUpdateSettings.json`：指定自动启动、热更程序集和入口类型，默认使用随 Player 发布的内置版本。
+
+封装的 GameBootstrap 自动读取配置。Editor 使用 Unity 已编译的 Game.HotUpdate 程序集；IL2CPP Player 由封装准备版本、补充 AOT 元数据并加载热更 DLL。GameStarter 不再额外实现 DLL 加载逻辑。
+
+1. 编辑器验证：进入 Play，依次查看 `GAME_STARTER_READY`、`HOT_UPDATE_READY 1.0.0` 和封装的 `STARTUP_OK` 日志。
+2. 构建主包：选择目标平台，使用 **Tools → Novorizon → Hot Update → 2. Build New Player**。封装自动安装匹配原生运行时、收集热更 DLL/AOT 元数据并准备内置版本。需要对应 Unity 平台模块和 IL2CPP 工具链。
+3. 导出补丁：修改 `Assets/HotUpdate` 中的代码，使用 **3. Export Patch**。修改 AOT 层 GameEntry、共享契约或程序集依赖后，需要重新构建主包。
+
+项目的可更新初始化逻辑写在 GameModule.InitializeAsync，资源和订阅清理写在 Shutdown。AOT 程序集不直接引用 Game.HotUpdate；热更程序集可以引用 AOT 的公开接口。远程更新需要项目自己的发布地址和签名公钥，设置字段及发布工具见 [HybridCLR 封装指南](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.9/Packages/com.novorizon.framework.hybridclr/README.md)。
+
 ## Visual Studio 代码跳转
 
 工程清单声明了 Unity 官方 `com.unity.ide.visualstudio` 2.0.22，由 Package Manager 安装，用于生成 Visual Studio 的解决方案和项目文件。
@@ -51,7 +67,7 @@ python3 Tools~/verify.py --dotnet /path/to/dotnet
 python3 Tools~/export.py --output /tmp/GameStarter.zip
 ```
 
-验证器从项目清单里的同一个 Git 版本获取 Framework 源码到临时目录，编译真实 Core/MonoSingleton 并运行 26 组生命周期、Manager 准备及安装 API 模型。它不会从父目录寻找包仓库。Unity Editor、UPM 服务和 IL2CPP 使用原生流程单独验收；模型验证不代表已完成原生验收。
+验证器从项目清单里的同一个 Git 版本获取 Framework 源码到临时目录，编译真实 Core/MonoSingleton、HybridCLR 封装的 IGameModule 契约，并将 AOT 和热更代码编译成独立程序集，运行 32 组生命周期、Manager 准备、热更入口及安装 API 模型。它不会从父目录寻找包仓库。Unity Editor、UPM 服务和 IL2CPP 使用原生流程单独验收；模型验证不代表已完成原生验收。
 
 GpuAnimator 包名为 `com.novorizon.gpuanimator`，可选模块安装器会同时移除旧的 `com.guanjinbiao.gpuanimator` 依赖。
 

@@ -21,7 +21,10 @@ namespace Game.Editor
             {
                 catalog = ModuleInstaller.ReadCatalog();
             }
-            catch (Exception exception) { Debug.LogException(exception); }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+            }
         }
 
         private void OnGUI()
@@ -42,9 +45,14 @@ namespace Game.Editor
                     string status = installed == null ? "未安装" : "已安装 " + installed.version;
                     bool enabled = EditorGUILayout.ToggleLeft(module.title + "  " + module.version + "  (" + status + ")", selected.Contains(module.id));
                     if (enabled)
+                    {
                         selected.Add(module.id);
+                    }
                     else
+                    {
                         selected.Remove(module.id);
+                    }
+
                     EditorGUILayout.LabelField(module.description, EditorStyles.wordWrappedLabel);
                     EditorGUILayout.Space();
                 }
@@ -54,13 +62,18 @@ namespace Game.Editor
                     {
                         ModuleInstaller.Install(selected.OrderBy(id => id, StringComparer.Ordinal).ToArray());
                     }
-                    catch (Exception exception) { Debug.LogException(exception); }
+                    catch (Exception exception)
+                    {
+                        Debug.LogException(exception);
+                    }
                 }
             }
             EditorGUILayout.EndScrollView();
             EditorGUILayout.HelpBox(ModuleInstaller.Message, MessageType.Info);
             if (ModuleInstaller.Busy)
+            {
                 Repaint();
+            }
         }
     }
 }
