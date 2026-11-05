@@ -50,14 +50,14 @@ namespace Game
                 if (entry.gameObject.activeInHierarchy && !entry.IsDestroying)
                 {
                     entry.closing = false;
-                    // Instance 会调用 OnSingletonAccessed；已启动的入口会被下方判断跳过。
+                    // Instance 会调用 OnStart；已启动的入口会被下方判断跳过。
                     _ = Instance;
                     break;
                 }
         }
 
         // Framework 会在单例 Awake 或访问 Instance 时调用此钩子。
-        protected override void OnSingletonAccessed()
+        protected override void OnStart()
         {
             // 单例可能被多次访问，同一会话只启动一次。
             if (closing || session != null) return;
