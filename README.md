@@ -16,6 +16,8 @@
 
 添加项目逻辑时，继承 `StartupModule`，重写需要的初始化、更新和清理方法，将组件挂到 Bootstrap 场景的 GameObject 上，再拖入 GameEntry 的 **Startup Modules** 列表。被依赖的模块排在前面；异步初始化应响应取消信号，清理方法也应处理初始化只完成一部分的情况。默认列表为空，直接进入就绪状态。
 
+`StartupModule` 是项目自定义的抽象组件基类，本类不能直接挂载，场景中添加的是具体子类组件。Inspector 数组用于保存这些组件的引用和执行顺序，各模块的序列化参数在对应组件中配置；如果项目使用普通 C# 初始化对象，也可以在代码中通过 `IStartupModule` 组织流程。
+
 要一次安装全部库，也可在 Package Manager 添加：
 
 ```text
@@ -23,6 +25,16 @@ https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.fram
 ```
 
 HybridCLR 安装项会处理官方依赖、嵌入及默认 Configure；实际 DLL/AOT 收集、原生安装和 Player 构建使用封装菜单。Odin 插件由项目自行提供，缺少 Odin 不影响 Ability 运行时。
+
+## Visual Studio 代码跳转
+
+工程清单声明了 Unity 官方 `com.unity.ide.visualstudio` 2.0.22，由 Package Manager 安装，用于生成 Visual Studio 的解决方案和项目文件。
+
+1. 等待 Unity 完成包解析和脚本编译；Console 的依赖错误需要先处理。
+2. 在 **Edit → Preferences → External Tools** 中将 **External Script Editor** 设为实际安装的 Visual Studio，点击 **Regenerate project files**。
+3. 从 Unity 双击脚本或使用 **Assets → Open C# Project** 打开生成的解决方案，再使用 F12 跳转。
+
+`StartupModule` 的定义位于 [Assets/Game/Runtime/StartupModule.cs](Assets/Game/Runtime/StartupModule.cs)，和 GameEntry 同属 `GameStarter.Runtime` 程序集。`.sln`、`.csproj` 由各自的 Unity 编辑器生成，不随工程源码提交。
 
 ## 开发验证
 

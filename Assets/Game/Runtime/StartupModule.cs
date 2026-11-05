@@ -5,8 +5,9 @@ using UnityEngine;
 namespace Game
 {
     /// <summary>
-    /// 可挂载到场景 GameObject 上的启动模块基类，默认不执行任何工作。
-    /// 使用方式：继承此类，重写需要的方法，将组件拖入 GameEntry 的 startupModules 列表。
+    /// 项目自定义的启动模块抽象基类，默认不执行任何工作，本类不能直接挂到 GameObject。
+    /// 使用方式：继承此类，重写需要的方法，将子类组件挂到 GameObject，再拖入 GameEntry 的 startupModules 列表。
+    /// Inspector 列表用于保存场景组件引用和启动顺序；这是本工程选择的配置方式。
     /// 生命周期调用来自 GameSession，列表顺序就是初始化顺序，清理时顺序相反。
     /// </summary>
     public abstract class StartupModule : MonoBehaviour, IStartupModule
