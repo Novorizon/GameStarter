@@ -1,6 +1,6 @@
-PASS project structure, GUIDs, pinned package sources and archive integrity
-Cloning into '/tmp/game-starter-verify-22u82rt_/FrameworkSource'...
-Note: switching to 'be0f55dee5e4338d9e54981b2901552f4a8e1e81'.
+PASS project structure, GUIDs and pinned Git dependency references
+Cloning into '/tmp/game-starter-verify-j4zoyr2u/FrameworkSource'...
+Note: switching to '47f1f5af957b0c0ac804287d4d7288e42318c25e'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -17,43 +17,18 @@ Or undo this operation with:
 
 Turn off this advice by setting config variable advice.detachedHead to false
 
-
-Welcome to .NET 8.0!
----------------------
-SDK Version: 8.0.427
-
-Telemetry
----------
-The .NET tools collect usage data in order to help us improve your experience. It is collected by Microsoft and shared with the community. You can opt-out of telemetry by setting the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to '1' or 'true' using your favorite shell.
-
-Read more about .NET CLI Tools telemetry: https://aka.ms/dotnet-cli-telemetry
-
-----------------
-Installed an ASP.NET Core HTTPS development certificate.
-To trust the certificate, view the instructions: https://aka.ms/dotnet-https-linux
-
-----------------
-Write your first app: https://aka.ms/dotnet-hello-world
-Find out what's new: https://aka.ms/dotnet-whats-new
-Explore documentation: https://aka.ms/dotnet-docs
-Report issues and find source on GitHub: https://github.com/dotnet/core
-Use 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli
---------------------------------------------------------------------------------------
   Determining projects to restore...
-  Restored /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/Unity/Unity.csproj (in 114 ms).
-  Restored /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/GameStarter.Verification.csproj (in 126 ms).
-  Restored /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/Core/Core.csproj (in 3 ms).
-  Restored /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/FrameworkUnity/FrameworkUnity.csproj (in 3 ms).
-  Unity -> /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/Unity/bin/Release/net8.0/Unity.dll
-  Core -> /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/Core/bin/Release/netstandard2.1/Game.Framework.Core.dll
-  FrameworkUnity -> /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/FrameworkUnity/bin/Release/net8.0/Game.Framework.Unity.dll
-  GameStarter.Verification -> /tmp/game-starter-alone-og1z8x1d/GameStarter/Verification~/bin/Release/net8.0/GameStarter.Verification.dll
+  All projects are up-to-date for restore.
+  Unity -> /workspace/GameStarter/Verification~/Unity/bin/Release/net8.0/Unity.dll
+  Core -> /workspace/GameStarter/Verification~/Core/bin/Release/netstandard2.1/Game.Framework.Core.dll
+  FrameworkUnity -> /workspace/GameStarter/Verification~/FrameworkUnity/bin/Release/net8.0/Game.Framework.Unity.dll
+  GameStarter.Verification -> /workspace/GameStarter/Verification~/bin/Release/net8.0/GameStarter.Verification.dll
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:13.04
+Time Elapsed 00:00:12.60
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module
@@ -68,7 +43,6 @@ PASS entry uses actual Framework singleton and rejects duplicates
 PASS entry restarts when scene/domain reload is disabled
 PASS catalog resolves dependencies once and before consumers
 PASS catalog detects missing and circular dependencies
-PASS archive integrity and online fallback
 PASS installer resumes after request handles are lost on reload
 PASS installer retains installed packages after an add failure
 PASS installer verifies the resolved version
@@ -76,4 +50,4 @@ PASS HybridCLR embed request completes before installing consumers
 PASS installer waits for compilation and play mode
 PASS optional installer migrates an old package identifier
 PASS installer configures only after all dependencies exist
-PASS 22 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).
+PASS 21 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).

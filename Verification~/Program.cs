@@ -34,7 +34,6 @@ internal static class Program
         Check("entry restarts when scene/domain reload is disabled", EntryRestart);
         Check("catalog resolves dependencies once and before consumers", CatalogOrder);
         Check("catalog detects missing and circular dependencies", InvalidCatalog);
-        Check("archive integrity and online fallback", ArchiveIntegrity);
         Check("installer resumes after request handles are lost on reload", InstallerReload);
         Check("installer retains installed packages after an add failure", InstallerFailure);
         Check("installer verifies the resolved version", InstallerVersion);
@@ -182,18 +181,6 @@ internal static class Program
         var c = new ModuleCatalog { modules = new[] { Spec("a", "missing") } }; Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
         c.modules = new[] { Spec("a", "b"), Spec("b", "a") }; Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
         c.modules = new[] { Spec("a"), Spec("a") }; Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
-    }
-    private static void ArchiveIntegrity()
-    {
-        InProject(() =>
-        {
-            var spec = Spec("a"); spec.archive = "a.tgz";
-            Equal(spec.source, spec.ResolveSource(Directory.GetCurrentDirectory()));
-            Directory.CreateDirectory("Packages/OptionalArchives~"); File.WriteAllText("Packages/OptionalArchives~/a.tgz", "payload");
-            spec.sha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes("Packages/OptionalArchives~/a.tgz"))).ToLowerInvariant();
-            Equal("file:OptionalArchives~/a.tgz", spec.ResolveSource(Directory.GetCurrentDirectory()));
-            File.AppendAllText("Packages/OptionalArchives~/a.tgz", "corrupt"); Throws<InvalidDataException>(() => spec.ResolveSource(Directory.GetCurrentDirectory()));
-        });
     }
     private static void InProject(Action action)
     {

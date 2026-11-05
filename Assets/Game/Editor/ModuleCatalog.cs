@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace Game.Editor
 {
@@ -45,8 +44,6 @@ namespace Game.Editor
         public string title;
         public string version;
         public string source;
-        public string archive;
-        public string sha256;
         public string description;
         public string[] dependencies = Array.Empty<string>();
         public string[] replaces = Array.Empty<string>();
@@ -55,18 +52,5 @@ namespace Game.Editor
         public string setupType;
         public string setupMethod;
 
-        internal string ResolveSource(string projectRoot)
-        {
-            if (string.IsNullOrEmpty(archive)) return source;
-            if (Path.GetFileName(archive) != archive) throw new InvalidDataException("Archive must be a file name: " + id);
-            string path = Path.Combine(projectRoot, "Packages", "OptionalArchives~", archive);
-            if (!File.Exists(path)) return source;
-            using var input = File.OpenRead(path);
-            using var hash = SHA256.Create();
-            string actual = BitConverter.ToString(hash.ComputeHash(input)).Replace("-", "").ToLowerInvariant();
-            if (!string.Equals(actual, sha256, StringComparison.OrdinalIgnoreCase))
-                throw new InvalidDataException("Archive checksum mismatch: " + archive);
-            return "file:OptionalArchives~/" + archive;
-        }
     }
 }

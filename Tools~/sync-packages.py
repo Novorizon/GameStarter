@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--ref', default='v0.1.0-preview.4')
+    parser.add_argument('--ref', default='v0.1.0-preview.5')
     parser.add_argument('--catalog', type=Path, help='Optional explicit catalog file for package maintainers')
     args = parser.parse_args()
     if args.catalog:
@@ -24,7 +24,9 @@ def main():
     modules = []
     for package in catalog['packages']:
         module = previous.get(package['name'], dict(id=package['name'], title=package['name']))
-        module.update(version=package['version'], source=package['git'], archive=package['archive'], sha256=package['sha256'], dependencies=package.get('dependencies', []), embed=package.get('embed', False))
+        module.update(version=package['version'], source=package['git'], dependencies=package.get('dependencies', []), embed=package.get('embed', False))
+        module.pop('archive', None)
+        module.pop('sha256', None)
         assert module['source'].startswith('https://github.com/')
         modules.append(module)
     path.write_text(json.dumps(dict(modules=modules), ensure_ascii=False, indent=2) + '\n')

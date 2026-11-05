@@ -46,8 +46,6 @@ namespace Game.Editor
             if (Busy) throw new InvalidOperationException("An installation is already running.");
             var plan = ReadCatalog().Plan(selection);
             if (plan.Length == 0) return;
-            // Validate all local archives before changing the package manifest.
-            foreach (var module in plan) module.ResolveSource(Directory.GetCurrentDirectory());
             job = new InstallJob { plan = plan };
             Save("开始安装所选模块及其依赖。");
         }
@@ -104,7 +102,7 @@ namespace Game.Editor
                     if (job.awaitingAdd) throw new InvalidOperationException("Resolved version mismatch for " + module.id + "; expected " + module.version);
                     job.awaitingAdd = true;
                     Save("正在安装 " + module.title);
-                    adding = Client.AddAndRemove(new[] { module.ResolveSource(Directory.GetCurrentDirectory()) }, obsolete);
+                    adding = Client.AddAndRemove(new[] { module.source }, obsolete);
                     return;
                 }
                 if (module.embed && !Directory.Exists(Path.Combine("Packages", module.id)))

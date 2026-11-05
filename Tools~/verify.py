@@ -22,8 +22,7 @@ def validate_project(root=ROOT):
     assert manifest['dependencies']['com.novorizon.framework'] == modules['com.novorizon.framework']['source']
     assert not any(value.startswith('file:') for value in manifest['dependencies'].values())
     for spec in catalog:
-        assert re.fullmatch(r'https://github.com/[^/]+/[^#]+#v[0-9][A-Za-z0-9.\-]*', spec['source']), spec['id']
-        assert len(spec['sha256']) == 64
+        assert re.fullmatch(r'https://github.com/[^/]+/[^#]+#(?:v[0-9][A-Za-z0-9.\-]*|[a-f0-9]{40})', spec['source']), spec['id']
         for dependency in spec['dependencies']:
             assert dependency in modules, dependency
     assert modules['com.code-philosophy.hybridclr']['embed']
@@ -44,14 +43,6 @@ def validate_project(root=ROOT):
     scene_guid = re.search(r'^guid: (.+)$', (root / 'Assets/Scenes/Bootstrap.unity.meta').read_text(), re.M)[1]
     assert 'guid: ' + entry_guid in (root / 'Assets/Scenes/Bootstrap.unity').read_text()
     assert 'guid: ' + scene_guid in (root / 'ProjectSettings/EditorBuildSettings.asset').read_text()
-    archive_root = root / 'Packages/OptionalArchives~'
-    for spec in catalog:
-        archive = archive_root / spec['archive']
-        if archive.exists():
-            assert hashlib.sha256(archive.read_bytes()).hexdigest() == spec['sha256'], archive
-            with tarfile.open(archive) as tf:
-                metadata = json.load(tf.extractfile('package/package.json'))
-                assert (metadata['name'], metadata['version']) == (spec['id'], spec['version'])
     return catalog
 
 
@@ -62,7 +53,7 @@ def main():
     parser.add_argument('--structure-only', action='store_true')
     args = parser.parse_args()
     catalog = validate_project()
-    print('PASS project structure, GUIDs, pinned package sources and archive integrity', flush=True)
+    print('PASS project structure, GUIDs and pinned Git dependency references', flush=True)
     if args.structure_only:
         return
     with tempfile.TemporaryDirectory(prefix='game-starter-verify-') as temp:
