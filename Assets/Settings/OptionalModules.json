@@ -1,0 +1,106 @@
+{
+  "modules": [
+    {
+      "id": "com.novorizon.framework",
+      "title": "Framework",
+      "version": "0.10.0-preview.1",
+      "source": "https://github.com/Novorizon/Framework.git?path=/Packages/com.novorizon.framework#65affcd12ece943da81ae7152c4e4682cde71b99",
+      "archive": "com.novorizon.framework-0.10.0-preview.1.tgz",
+      "sha256": "af27015ed55636eefd65e46737a9b868ee5c966b655345f169f905fd37b257bd",
+      "dependencies": [],
+      "hidden": true
+    },
+    {
+      "id": "com.code-philosophy.hybridclr",
+      "title": "HybridCLR 官方运行时",
+      "version": "9.0.3",
+      "source": "https://github.com/focus-creative-games/hybridclr_unity.git#6cadd24d101f4cbd00cd80190106f6621132d24d",
+      "archive": "com.code-philosophy.hybridclr-9.0.3.tgz",
+      "sha256": "610b25889ce44bcdd07df4e176fcc49b3211203581504144ca4ea1d0cb763490",
+      "dependencies": [],
+      "hidden": true,
+      "embed": true
+    },
+    {
+      "id": "com.novorizon.framework.hybridclr",
+      "title": "HybridCLR 封装",
+      "version": "0.1.0-preview.2",
+      "source": "https://github.com/Novorizon/HybridCLR-Demo.git?path=/Packages/com.novorizon.framework.hybridclr#eb4c9b1e38f9319c4f70fe142e4e7adc5c7c3f1f",
+      "archive": "com.novorizon.framework.hybridclr-0.1.0-preview.2.tgz",
+      "sha256": "c450d16da7fd94ca403031d644c9f17e6f627964ac7116083301132a97a9bc5a",
+      "dependencies": [
+        "com.novorizon.framework",
+        "com.code-philosophy.hybridclr"
+      ],
+      "setupType": "Game.Framework.HotUpdate.Editor.GameBuild",
+      "setupMethod": "Configure",
+      "description": "安装官方运行时并生成默认配置、热更程序集及入口；构建与导出统一使用 GameBuild 菜单。"
+    },
+    {
+      "id": "com.novorizon.framework.ui",
+      "title": "UI",
+      "version": "0.6.0-preview.1",
+      "source": "https://github.com/Novorizon/Framework.git?path=/Framework/UI#65affcd12ece943da81ae7152c4e4682cde71b99",
+      "archive": "com.novorizon.framework.ui-0.6.0-preview.1.tgz",
+      "sha256": "23a161fcd63d518cfb27a80f12bf1a74d2a9f877a66db86d6aaf9eb9ceec9210",
+      "dependencies": [
+        "com.novorizon.framework"
+      ],
+      "description": "独立 uGUI 界面框架；页面、弹窗、面板、提示与资源加载接口。"
+    },
+    {
+      "id": "com.novorizon.ability",
+      "title": "Ability 运行时",
+      "version": "0.2.2-preview.1",
+      "source": "https://github.com/Novorizon/Cube.git?path=/Assets/Scripts/Ability#d450dfc484c94fa59ccf73df9f081695df88f990",
+      "archive": "com.novorizon.ability-0.2.2-preview.1.tgz",
+      "sha256": "65d85b3924caa17e0d9fc80fc17dc01a8e72613f05efebf547d624cd9b716804",
+      "dependencies": [],
+      "description": "技能、效果、属性与生命周期；独立于 ECS。"
+    },
+    {
+      "id": "com.novorizon.ability.editor.odin",
+      "title": "Ability Odin 编辑器",
+      "version": "0.1.1-preview.1",
+      "source": "https://github.com/Novorizon/Cube.git?path=/Packages/com.novorizon.ability.editor.odin#d450dfc484c94fa59ccf73df9f081695df88f990",
+      "archive": "com.novorizon.ability.editor.odin-0.1.1-preview.1.tgz",
+      "sha256": "b3da33740af811877a3e7e4b05095155979107d2ca5375b45b1c140616cfc093",
+      "dependencies": [
+        "com.novorizon.ability"
+      ],
+      "description": "技能配置编辑器。需另外导入有授权的 Odin Inspector；运行时无需 Odin。"
+    },
+    {
+      "id": "com.novorizon.rtree",
+      "title": "RTree",
+      "version": "1.0.0-preview.2",
+      "source": "https://github.com/Novorizon/RTree.git?path=/Packages/com.novorizon.rtree#21130e91329fcfea6e24ea05a9dcabab494e8e46",
+      "archive": "com.novorizon.rtree-1.0.0-preview.2.tgz",
+      "sha256": "3393644382dbaf05215f7d4035c49623c4814c987d26b1918d5df6f9337a83b8",
+      "dependencies": [],
+      "description": "六种空间索引各自一个目录，共用一个包与程序集。"
+    },
+    {
+      "id": "com.guanjinbiao.gpuanimator",
+      "title": "GpuAnimator",
+      "version": "3.2.0-preview.1",
+      "source": "https://github.com/Novorizon/GpuAnimator.git#b6a3d58c24397b51f7661918a0c50ea7ad845515",
+      "archive": "com.guanjinbiao.gpuanimator-3.2.0-preview.1.tgz",
+      "sha256": "7622711b9ada0fb3046f97a0299ba35bbfc8d80b353a31e38752901145835c9f",
+      "dependencies": [],
+      "description": "Built-in 渲染管线下的 GPU 动画烘焙与播放。"
+    },
+    {
+      "id": "com.novorizon.ecsframework",
+      "title": "ECS",
+      "version": "2.0.0-preview.2",
+      "source": "https://github.com/Novorizon/ECS-Framework.git#f5265cdb11af251ddbda085a8732ba780d94487b",
+      "archive": "com.novorizon.ecsframework-2.0.0-preview.2.tgz",
+      "sha256": "3e8bd8ea30e09784e2b4ee61cbcaa57144c98af1601002c5b177f8db848292c5",
+      "dependencies": [
+        "com.novorizon.framework"
+      ],
+      "description": "实体、系统、池与生命周期；基础单例使用 Framework，与 Ability 无关联。"
+    }
+  ]
+}
