@@ -72,7 +72,8 @@ namespace Game
         protected override void OnStart()
         {
             // 单例可能被多次访问，同一会话只启动一次。
-            if (closing || session != null) return;
+            if (closing || session != null)
+                return;
             startupFailed = false;
             sessionOwner = this;
             var current = new GameSession(Debug.LogException);
@@ -95,7 +96,8 @@ namespace Game
                 throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
 
             // 等待资源初始化期间入口可能已关闭，旧流程不能继续创建 UI、ECS 或网络服务。
-            if (!ReferenceEquals(session, current)) throw new OperationCanceledException();
+            if (!ReferenceEquals(session, current))
+                throw new OperationCanceledException();
 
             // UIRoot 会创建页面、弹窗、面板和提示管理器；ECS 单例会建立实体管理器和默认 World。
             UIRoot.Instance.Initialize();
@@ -113,10 +115,12 @@ namespace Game
             try
             {
                 await InitializeManagersAsync(current);
-                if (!ReferenceEquals(session, current)) return;
+                if (!ReferenceEquals(session, current))
+                    return;
                 await current.StartAsync(startupModules);
                 // 旧会话的异步操作结束时，不能给已经关闭或替换的会话报告就绪。
-                if (ReferenceEquals(session, current)) Debug.Log("GAME_STARTER_READY");
+                if (ReferenceEquals(session, current))
+                    Debug.Log("GAME_STARTER_READY");
             }
             // 退出或销毁入口会主动取消旧会话，这种取消属于正常结束。
             catch (OperationCanceledException) when (!ReferenceEquals(session, current)) { }
@@ -131,11 +135,23 @@ namespace Game
         }
 
         // 每帧将时间交给会话；会话只在所有模块就绪后调用模块 Tick。
-        private void Update() { if (!IsDestroying) session?.Tick(Time.deltaTime, Time.unscaledDeltaTime); }
+        private void Update()
+        {
+            if (!IsDestroying)
+                session?.Tick(Time.deltaTime, Time.unscaledDeltaTime);
+        }
 
         // 两个 Unity 回调都可能到达，CloseSession 支持重复调用。
-        protected override void OnApplicationQuit() { base.OnApplicationQuit(); CloseSession(); }
-        protected override void OnDestroy() { base.OnDestroy(); CloseSession(); }
+        protected override void OnApplicationQuit()
+        {
+            base.OnApplicationQuit();
+            CloseSession();
+        }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            CloseSession();
+        }
 
         // 停止更新、取消正在进行的初始化，并释放本次启动涉及的模块。
         private void CloseSession()
@@ -145,7 +161,8 @@ namespace Game
             // 先断开当前引用，防止异步完成回调或清理中的重入继续使用旧会话。
             session = null;
             previous?.Dispose();
-            if (ReferenceEquals(sessionOwner, this)) sessionOwner = null;
+            if (ReferenceEquals(sessionOwner, this))
+                sessionOwner = null;
         }
     }
 }

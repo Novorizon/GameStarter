@@ -44,21 +44,30 @@ namespace Game
         private IStartupModule[] readyModules = Array.Empty<IStartupModule>();
 
         /// <summary>会话初始值为 NotStarted，随后随启动、失败或关闭而更新。</summary>
-        public StartupState State { get; private set; }
+        public StartupState State
+        {
+            get; private set;
+        }
 
-        internal GameSession(Action<Exception> log) { this.log = log; }
+        internal GameSession(Action<Exception> log)
+        {
+            this.log = log;
+        }
 
         /// <summary>检查模块列表后开始初始化；返回的 Task 报告整个启动流程的成功、失败或取消。</summary>
         internal Task StartAsync(IEnumerable<IStartupModule> modules)
         {
-            if (completion != null) return completion.Task;
-            if (stopped) throw new ObjectDisposedException(nameof(GameSession));
+            if (completion != null)
+                return completion.Task;
+            if (stopped)
+                throw new ObjectDisposedException(nameof(GameSession));
 
             // 固定本次启动使用的列表，并在执行任何模块之前拒绝空项和重复项。
             var selected = modules.ToArray();
             var unique = new HashSet<IStartupModule>();
             foreach (var module in selected)
-                if (module == null || !unique.Add(module)) throw new ArgumentException("Startup modules must be non-null and unique.");
+                if (module == null || !unique.Add(module))
+                    throw new ArgumentException("Startup modules must be non-null and unique.");
 
             // 先保存共享 Task，再启动异步流程，防止模块初始化期间重入造成重复启动。
             completion = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -86,11 +95,18 @@ namespace Game
                 completion.TrySetResult(true);
             }
             catch (OperationCanceledException) when (token.IsCancellationRequested)
-            { completion.TrySetCanceled(token); }
+            {
+                completion.TrySetCanceled(token);
+            }
             catch (Exception exception)
             {
                 // 任一模块失败就中止后续启动，并逆序释放已经开始初始化的模块。
-                if (!stopped) { State = StartupState.Failed; CancelLifetime(); ReleaseModules(); }
+                if (!stopped)
+                {
+                    State = StartupState.Failed;
+                    CancelLifetime();
+                    ReleaseModules();
+                }
                 completion.TrySetException(exception);
             }
         }
@@ -98,15 +114,27 @@ namespace Game
         // 启动中、失败或停止时都不向模块派发更新。
         internal void Tick(float deltaTime, float unscaledDeltaTime)
         {
-            if (State != StartupState.Ready) return;
+            if (State != StartupState.Ready)
+                return;
             // 模块可能在自己的 Tick 中关闭入口，因此保留本轮数组，并在每次调用前检查状态。
             var snapshot = readyModules;
             foreach (var module in snapshot)
             {
-                if (State != StartupState.Ready) break;
-                try { module.Tick(deltaTime, unscaledDeltaTime); }
+                if (State != StartupState.Ready)
+                    break;
+                try
+                {
+                    module.Tick(deltaTime, unscaledDeltaTime);
+                }
                 // 更新异常也会停止整次会话，避免其他模块在不完整的系统状态下继续运行。
-                catch (Exception exception) { State = StartupState.Failed; CancelLifetime(); ReleaseModules(); log(exception); break; }
+                catch (Exception exception)
+                {
+                    State = StartupState.Failed;
+                    CancelLifetime();
+                    ReleaseModules();
+                    log(exception);
+                    break;
+                }
             }
         }
 
@@ -118,7 +146,10 @@ namespace Game
             started.Clear();
             // 后启动的模块通常依赖先启动的模块，所以先清理后启动者。
             for (int i = snapshot.Length - 1; i >= 0; i--)
-                try { snapshot[i].Shutdown(); }
+                try
+                {
+                    snapshot[i].Shutdown();
+                }
                 // 一个模块清理失败不能阻止其他模块释放资源。
                 catch (Exception exception) { log(exception); }
         }
@@ -126,13 +157,18 @@ namespace Game
         private void CancelLifetime()
         {
             // 模块注册的取消回调可能抛异常；记录后仍要继续后续清理。
-            try { lifetime.Cancel(); } catch (Exception exception) { log(exception); }
+            try
+            {
+                lifetime.Cancel();
+            }
+            catch (Exception exception) { log(exception); }
         }
 
         /// <summary>关闭会话：停止更新、发出取消信号、清理模块；重复调用不会重复清理。</summary>
         public void Dispose()
         {
-            if (stopped) return;
+            if (stopped)
+                return;
             stopped = true;
             State = StartupState.Stopped;
             CancelLifetime();

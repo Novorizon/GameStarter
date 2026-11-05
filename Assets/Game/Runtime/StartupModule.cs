@@ -22,12 +22,16 @@ namespace Game
         /// 编写每帧更新逻辑。只有全部模块就绪后才会调用；使用这个方法时无需另写 Unity Update。
         /// deltaTime 受时间缩放影响，unscaledDeltaTime 不受时间缩放影响。
         /// </summary>
-        public virtual void Tick(float deltaTime, float unscaledDeltaTime) { }
+        public virtual void Tick(float deltaTime, float unscaledDeltaTime)
+        {
+        }
 
         /// <summary>
         /// 编写退出或启动失败时的同步清理逻辑，也要能清理初始化尚未完成的资源。
         /// 入口关闭后即使组件仍在场景中，也应释放它为本次运行持有的资源和订阅。
         /// </summary>
-        public virtual void Shutdown() { }
+        public virtual void Shutdown()
+        {
+        }
     }
 }

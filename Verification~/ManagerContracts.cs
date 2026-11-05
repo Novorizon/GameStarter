@@ -40,8 +40,10 @@ namespace UI
         protected override void OnStart() => Initialize();
         public void Initialize()
         {
-            if (initialized) return;
-            if (ManagerContracts.UIFailure != null) throw ManagerContracts.UIFailure;
+            if (initialized)
+                return;
+            if (ManagerContracts.UIFailure != null)
+                throw ManagerContracts.UIFailure;
             initialized = true;
             ManagerContracts.Calls.Add("ui");
         }
@@ -55,7 +57,8 @@ namespace ECS
         private bool initialized;
         protected override void OnStart()
         {
-            if (initialized) return;
+            if (initialized)
+                return;
             initialized = true;
             ManagerContracts.Calls.Add("entities");
         }
@@ -65,11 +68,14 @@ namespace ECS
         private bool initialized;
         protected override void OnStart()
         {
-            if (initialized) return;
+            if (initialized)
+                return;
             initialized = true;
             ManagerContracts.Calls.Add("worlds");
         }
-        public void Initialize() { }
+        public void Initialize()
+        {
+        }
     }
 }
 
@@ -80,15 +86,21 @@ namespace Game.Framework.Network
         private bool initialized;
         public void Initialize()
         {
-            if (initialized) return;
+            if (initialized)
+                return;
             initialized = true;
             ManagerContracts.Calls.Add("network");
         }
-        internal static void Reset() { Instance.initialized = false; }
+        internal static void Reset()
+        {
+            Instance.initialized = false;
+        }
     }
 }
 
 namespace Game.Framework.Network.Unity
 {
-    public sealed class NetworkSettings : UnityEngine.ScriptableObject { }
+    public sealed class NetworkSettings : UnityEngine.ScriptableObject
+    {
+    }
 }

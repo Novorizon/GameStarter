@@ -51,12 +51,36 @@ internal static class Program
 
     private static void Check(string name, Action test)
     {
-        try { test(); passed++; Console.WriteLine("PASS " + name); }
+        try
+        {
+            test();
+            passed++;
+            Console.WriteLine("PASS " + name);
+        }
         catch (Exception ex) { Console.Error.WriteLine("FAIL " + name + ": " + ex); Environment.Exit(1); }
     }
-    private static void True(bool value) { if (!value) throw new Exception("Assertion failed"); }
-    private static void Equal<T>(T expected, T actual) { if (!EqualityComparer<T>.Default.Equals(expected, actual)) throw new Exception($"Expected {expected}, got {actual}"); }
-    private static void Throws<T>(Action action) where T : Exception { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+    private static void True(bool value)
+    {
+        if (!value)
+            throw new Exception("Assertion failed");
+    }
+    private static void Equal<T>(T expected, T actual)
+    {
+        if (!EqualityComparer<T>.Default.Equals(expected, actual))
+            throw new Exception($"Expected {expected}, got {actual}");
+    }
+    private static void Throws<T>(Action action) where T : Exception
+    {
+        try
+        {
+            action();
+        }
+        catch (T)
+        {
+            return;
+        }
+        throw new Exception("Expected " + typeof(T).Name);
+    }
     private static GameSession Session(List<Exception> errors = null) => new GameSession(e => errors?.Add(e));
     private sealed class Module : IStartupModule
     {
@@ -78,7 +102,8 @@ internal static class Program
         Equal(StartupState.Starting, s.State);
         wait.SetResult(true);
         start.GetAwaiter().GetResult();
-        s.Dispose(); s.Dispose();
+        s.Dispose();
+        s.Dispose();
         Equal("a+,b+,b-,a-", string.Join(",", events));
     }
     private static void StartupFailure()
@@ -90,7 +115,9 @@ internal static class Program
         var c = new Module { Init = _ => throw new Exception("must not start") };
         using var s = Session();
         Throws<InvalidOperationException>(() => s.StartAsync(new[] { a, b, c }).GetAwaiter().GetResult());
-        Equal(StartupState.Failed, s.State); Equal("2,1", string.Join(",", events)); True(canceled);
+        Equal(StartupState.Failed, s.State);
+        Equal("2,1", string.Join(",", events));
+        True(canceled);
     }
     private static void CancelStartup()
     {
@@ -100,48 +127,72 @@ internal static class Program
         var b = new Module { Init = _ => { later++; return Task.CompletedTask; } };
         using var s = Session();
         Task start = s.StartAsync(new[] { a, b });
-        s.Dispose(); wait.SetResult(true);
+        s.Dispose();
+        wait.SetResult(true);
         Throws<OperationCanceledException>(() => start.GetAwaiter().GetResult());
-        Equal(StartupState.Stopped, s.State); Equal(1, stopped); Equal(0, later);
+        Equal(StartupState.Stopped, s.State);
+        Equal(1, stopped);
+        Equal(0, later);
     }
     private static void ReentrantStart()
     {
-        using var s = Session(); int count = 0; Task inner = null;
+        using var s = Session();
+        int count = 0;
+        Task inner = null;
         var a = new Module { Init = _ => { count++; inner = s.StartAsync(Array.Empty<IStartupModule>()); return Task.CompletedTask; } };
-        Task outer = s.StartAsync(new[] { a }); outer.GetAwaiter().GetResult(); True(ReferenceEquals(inner, outer)); Equal(1, count);
+        Task outer = s.StartAsync(new[] { a });
+        outer.GetAwaiter().GetResult();
+        True(ReferenceEquals(inner, outer));
+        Equal(1, count);
     }
     private static void TickFailure()
     {
-        int stopped = 0, later = 0; var errors = new List<Exception>();
+        int stopped = 0, later = 0;
+        var errors = new List<Exception>();
         using var s = Session(errors);
         s.StartAsync(new[] { new Module { Update = () => throw new InvalidOperationException(), Stop = () => stopped++ }, new Module { Update = () => later++, Stop = () => stopped++ } }).GetAwaiter().GetResult();
-        s.Tick(1, 1); s.Tick(1, 1);
-        Equal(StartupState.Failed, s.State); Equal(2, stopped); Equal(0, later); Equal(1, errors.Count);
+        s.Tick(1, 1);
+        s.Tick(1, 1);
+        Equal(StartupState.Failed, s.State);
+        Equal(2, stopped);
+        Equal(0, later);
+        Equal(1, errors.Count);
     }
     private static void TickShutdown()
     {
-        using var s = Session(); int later = 0;
+        using var s = Session();
+        int later = 0;
         s.StartAsync(new[] { new Module { Update = s.Dispose }, new Module { Update = () => later++ } }).GetAwaiter().GetResult();
-        s.Tick(1, 1); Equal(0, later); Equal(StartupState.Stopped, s.State);
+        s.Tick(1, 1);
+        Equal(0, later);
+        Equal(StartupState.Stopped, s.State);
     }
     private static void CleanupFailure()
     {
-        int stopped = 0; var errors = new List<Exception>(); using var s = Session(errors);
+        int stopped = 0;
+        var errors = new List<Exception>();
+        using var s = Session(errors);
         s.StartAsync(new[] { new Module { Stop = () => stopped++ }, new Module { Stop = () => throw new Exception("cleanup") } }).GetAwaiter().GetResult();
-        s.Dispose(); Equal(1, stopped); Equal(1, errors.Count);
+        s.Dispose();
+        Equal(1, stopped);
+        Equal(1, errors.Count);
     }
     private static void InvalidModules()
     {
-        using var s = Session(); var a = new Module { Init = _ => throw new Exception("must not start") };
+        using var s = Session();
+        var a = new Module { Init = _ => throw new Exception("must not start") };
         Throws<ArgumentException>(() => s.StartAsync(new[] { a, a }));
         Throws<ArgumentException>(() => s.StartAsync(new Module[] { a, null }));
         Equal(StartupState.NotStarted, s.State);
     }
     private static void NoFrameAllocations()
     {
-        using var s = Session(); s.StartAsync(new[] { new Module() }).GetAwaiter().GetResult();
-        s.Tick(1, 1); long before = GC.GetAllocatedBytesForCurrentThread();
-        for (int i = 0; i < 1000; i++) s.Tick(1, 1);
+        using var s = Session();
+        s.StartAsync(new[] { new Module() }).GetAwaiter().GetResult();
+        s.Tick(1, 1);
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        for (int i = 0; i < 1000; i++)
+            s.Tick(1, 1);
         Equal(0L, GC.GetAllocatedBytesForCurrentThread() - before);
     }
     private static void ResetEntry()
@@ -150,32 +201,43 @@ internal static class Program
         typeof(GameEntry).GetMethod("ResetSession", Static).Invoke(null, null);
         var lifecycle = typeof(MonoSingleton<>).Assembly.GetType("Game.Framework.MonoSingletonLifecycle");
         lifecycle.GetMethod("Reset", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
-        UnityThread.Reset(); UnityThread.InitializeManual();
+        UnityThread.Reset();
+        UnityThread.InitializeManual();
         ManagerContracts.Reset();
     }
     private static void EntrySingleton()
     {
-        ResetEntry(); var first = new GameObject().AddComponent<GameEntry>();
-        Equal(StartupState.Ready, first.State); True(ReferenceEquals(first, GameEntry.Instance));
+        ResetEntry();
+        var first = new GameObject().AddComponent<GameEntry>();
+        Equal(StartupState.Ready, first.State);
+        True(ReferenceEquals(first, GameEntry.Instance));
         var second = new GameObject().AddComponent<GameEntry>();
-        True(second == null); True(ReferenceEquals(first, GameEntry.Instance));
-        UObject.Destroy(first.gameObject); True(!GameEntry.TryGetInstance(out _)); ResetEntry();
+        True(second == null);
+        True(ReferenceEquals(first, GameEntry.Instance));
+        UObject.Destroy(first.gameObject);
+        True(!GameEntry.TryGetInstance(out _));
+        ResetEntry();
     }
     private static void EntryRestart()
     {
-        ResetEntry(); var entry = new GameObject().AddComponent<GameEntry>();
+        ResetEntry();
+        var entry = new GameObject().AddComponent<GameEntry>();
         // Stop sends OnApplicationQuit, which clears sessionOwner before the next play session.
         UObject.Invoke(entry, "OnApplicationQuit");
         typeof(GameEntry).GetMethod("ResetSession", Static).Invoke(null, null);
         typeof(MonoSingleton<>).Assembly.GetType("Game.Framework.MonoSingletonLifecycle").GetMethod("Reset", Static).Invoke(null, null);
         Equal(StartupState.NotStarted, entry.State);
         typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
-        True(ReferenceEquals(entry, GameEntry.Instance)); Equal(StartupState.Ready, entry.State); ResetEntry();
+        True(ReferenceEquals(entry, GameEntry.Instance));
+        Equal(StartupState.Ready, entry.State);
+        ResetEntry();
     }
 
     private sealed class RecordingStartupModule : StartupModule
     {
-        public RecordingStartupModule() { }
+        public RecordingStartupModule()
+        {
+        }
         public override Task InitializeAsync(CancellationToken token)
         {
             ManagerContracts.Calls.Add("module");
@@ -203,7 +265,8 @@ internal static class Program
         Equal(StartupState.Ready, entry.State);
         Equal("ui,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         True(Game.Framework.Event.EventManager.IsCreated && Game.Framework.Timing.TimerManager.IsCreated);
-        _ = GameEntry.Instance; _ = GameEntry.Instance;
+        _ = GameEntry.Instance;
+        _ = GameEntry.Instance;
         Equal("ui,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
@@ -265,16 +328,24 @@ internal static class Program
     }
     private static void InvalidCatalog()
     {
-        var c = new ModuleCatalog { modules = new[] { Spec("a", "missing") } }; Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
-        c.modules = new[] { Spec("a", "b"), Spec("b", "a") }; Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
-        c.modules = new[] { Spec("a"), Spec("a") }; Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
+        var c = new ModuleCatalog { modules = new[] { Spec("a", "missing") } };
+        Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
+        c.modules = new[] { Spec("a", "b"), Spec("b", "a") };
+        Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
+        c.modules = new[] { Spec("a"), Spec("a") };
+        Throws<InvalidDataException>(() => c.Plan(new[] { "a" }));
     }
     private static void InProject(Action action)
     {
         string original = Directory.GetCurrentDirectory(), temp = Path.Combine(Path.GetTempPath(), "starter-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(Path.Combine(temp, "Assets/Settings"));
-        SessionState.ClearForTest(); Client.ClearForTest();
-        try { Directory.SetCurrentDirectory(temp); action(); }
+        SessionState.ClearForTest();
+        Client.ClearForTest();
+        try
+        {
+            Directory.SetCurrentDirectory(temp);
+            action();
+        }
         finally
         {
             typeof(ModuleInstaller).GetField("job", Static).SetValue(null, null);
@@ -282,80 +353,127 @@ internal static class Program
             typeof(ModuleInstaller).GetField("listing", Static).SetValue(null, null);
             typeof(ModuleInstaller).GetField("embedding", Static).SetValue(null, null);
             EditorApplication.isCompiling = EditorApplication.isPlayingOrWillChangePlaymode = false;
-            Directory.SetCurrentDirectory(original); Directory.Delete(temp, true);
+            Directory.SetCurrentDirectory(original);
+            Directory.Delete(temp, true);
         }
     }
     private static void WriteCatalog(params ModuleSpec[] specs)
     {
         File.WriteAllText(ModuleInstaller.CatalogPath, JsonUtility.ToJson(new ModuleCatalog { modules = specs }));
-        foreach (var spec in specs) Client.Sources[spec.source] = new PackageInfo { name = spec.id, version = spec.version };
+        foreach (var spec in specs)
+            Client.Sources[spec.source] = new PackageInfo { name = spec.id, version = spec.version };
     }
     private static void Drain()
     {
-        for (int i = 0; i < 60 && ModuleInstaller.Busy; i++) EditorApplication.TickForTest();
+        for (int i = 0; i < 60 && ModuleInstaller.Busy; i++)
+            EditorApplication.TickForTest();
         True(!ModuleInstaller.Busy);
     }
     private static void InstallerReload() => InProject(() =>
     {
-        WriteCatalog(Spec("base"), Spec("feature", "base")); ModuleInstaller.Install(new[] { "feature" });
-        EditorApplication.TickForTest(); EditorApplication.TickForTest(); // Add succeeded; its request handle is about to be lost.
+        WriteCatalog(Spec("base"), Spec("feature", "base"));
+        ModuleInstaller.Install(new[] { "feature" });
+        EditorApplication.TickForTest();
+        EditorApplication.TickForTest(); // Add succeeded; its request handle is about to be lost.
         var job = typeof(ModuleInstaller).GetField("job", Static);
         var reloaded = typeof(JsonUtility).GetMethod(nameof(JsonUtility.FromJson)).MakeGenericMethod(job.FieldType).Invoke(null, new object[] { SessionState.GetString("Novorizon.GameStarter.InstallJob", "") });
         job.SetValue(null, reloaded);
         typeof(ModuleInstaller).GetField("adding", Static).SetValue(null, null);
         typeof(ModuleInstaller).GetField("listing", Static).SetValue(null, null);
-        Drain(); Equal(2, Client.Installed.Count); Equal(2, Client.Added.Count);
+        Drain();
+        Equal(2, Client.Installed.Count);
+        Equal(2, Client.Added.Count);
     });
     private static void InstallerFailure() => InProject(() =>
     {
-        WriteCatalog(Spec("base"), Spec("feature", "base")); ModuleInstaller.Install(new[] { "feature" });
-        while (!Client.Installed.ContainsKey("base")) EditorApplication.TickForTest();
-        Client.FailNext = true; Drain(); Equal(1, Client.Installed.Count); True(ModuleInstaller.Message.Contains("中止"));
-        ModuleInstaller.Install(new[] { "feature" }); Drain(); Equal(2, Client.Installed.Count);
+        WriteCatalog(Spec("base"), Spec("feature", "base"));
+        ModuleInstaller.Install(new[] { "feature" });
+        while (!Client.Installed.ContainsKey("base"))
+            EditorApplication.TickForTest();
+        Client.FailNext = true;
+        Drain();
+        Equal(1, Client.Installed.Count);
+        True(ModuleInstaller.Message.Contains("中止"));
+        ModuleInstaller.Install(new[] { "feature" });
+        Drain();
+        Equal(2, Client.Installed.Count);
     });
     private static void InstallerVersion() => InProject(() =>
     {
-        WriteCatalog(Spec("feature")); Client.Sources["git:feature"].version = "0.9.0";
-        ModuleInstaller.Install(new[] { "feature" }); Drain(); True(ModuleInstaller.Message.Contains("mismatch")); Equal(1, Client.Added.Count);
+        WriteCatalog(Spec("feature"));
+        Client.Sources["git:feature"].version = "0.9.0";
+        ModuleInstaller.Install(new[] { "feature" });
+        Drain();
+        True(ModuleInstaller.Message.Contains("mismatch"));
+        Equal(1, Client.Added.Count);
     });
     private static void InstallerEmbed() => InProject(() =>
     {
-        var spec = Spec("official"); spec.embed = true; WriteCatalog(spec);
-        string source = Path.GetFullPath("Cache/official"); Directory.CreateDirectory(Path.Combine(source, "Data~"));
-        File.WriteAllText(Path.Combine(source, "Data~/native.txt"), "native"); File.WriteAllText(Path.Combine(source, "native.dll.meta"), "guid: original");
+        var spec = Spec("official");
+        spec.embed = true;
+        WriteCatalog(spec);
+        string source = Path.GetFullPath("Cache/official");
+        Directory.CreateDirectory(Path.Combine(source, "Data~"));
+        File.WriteAllText(Path.Combine(source, "Data~/native.txt"), "native");
+        File.WriteAllText(Path.Combine(source, "native.dll.meta"), "guid: original");
         Client.Sources[spec.source].resolvedPath = source;
         Client.HoldEmbed = true;
         ModuleInstaller.Install(new[] { "official" });
-        for (int i = 0; i < 30 && Client.PendingEmbed == null; i++) EditorApplication.TickForTest();
+        for (int i = 0; i < 30 && Client.PendingEmbed == null; i++)
+            EditorApplication.TickForTest();
         True(Client.PendingEmbed != null && ModuleInstaller.Busy);
-        for (int i = 0; i < 3; i++) EditorApplication.TickForTest();
+        for (int i = 0; i < 3; i++)
+            EditorApplication.TickForTest();
         True(ModuleInstaller.Busy);
-        Client.PendingEmbed.IsCompleted = true; Drain();
-        Equal("native", File.ReadAllText("Packages/official/Data~/native.txt")); Equal("guid: original", File.ReadAllText("Packages/official/native.dll.meta"));
+        Client.PendingEmbed.IsCompleted = true;
+        Drain();
+        Equal("native", File.ReadAllText("Packages/official/Data~/native.txt"));
+        Equal("guid: original", File.ReadAllText("Packages/official/native.dll.meta"));
     });
     private static void InstallerWaits() => InProject(() =>
     {
-        WriteCatalog(Spec("a")); ModuleInstaller.Install(new[] { "a" }); EditorApplication.isCompiling = true;
-        EditorApplication.TickForTest(); Equal(0, Client.Added.Count); EditorApplication.isCompiling = false;
-        EditorApplication.isPlayingOrWillChangePlaymode = true; EditorApplication.TickForTest(); Equal(0, Client.Added.Count);
-        EditorApplication.isPlayingOrWillChangePlaymode = false; Drain(); Equal(1, Client.Added.Count);
+        WriteCatalog(Spec("a"));
+        ModuleInstaller.Install(new[] { "a" });
+        EditorApplication.isCompiling = true;
+        EditorApplication.TickForTest();
+        Equal(0, Client.Added.Count);
+        EditorApplication.isCompiling = false;
+        EditorApplication.isPlayingOrWillChangePlaymode = true;
+        EditorApplication.TickForTest();
+        Equal(0, Client.Added.Count);
+        EditorApplication.isPlayingOrWillChangePlaymode = false;
+        Drain();
+        Equal(1, Client.Added.Count);
     });
     private static void InstallerMigration() => InProject(() =>
     {
-        var module = Spec("feature"); module.replaces = new[] { "old-feature" };
-        WriteCatalog(module); Client.Installed["old-feature"] = new PackageInfo { name = "old-feature", version = "old" };
-        ModuleInstaller.Install(new[] { "feature" }); Drain();
-        True(Client.Installed.ContainsKey("feature")); True(!Client.Installed.ContainsKey("old-feature"));
+        var module = Spec("feature");
+        module.replaces = new[] { "old-feature" };
+        WriteCatalog(module);
+        Client.Installed["old-feature"] = new PackageInfo { name = "old-feature", version = "old" };
+        ModuleInstaller.Install(new[] { "feature" });
+        Drain();
+        True(Client.Installed.ContainsKey("feature"));
+        True(!Client.Installed.ContainsKey("old-feature"));
     });
     private static void InstallerSetup() => InProject(() =>
     {
-        var module = Spec("feature", "base"); module.setupType = typeof(SetupProbe).FullName; module.setupMethod = nameof(SetupProbe.Configure);
-        WriteCatalog(Spec("base"), module); SetupProbe.Called = false;
-        ModuleInstaller.Install(new[] { "feature" }); Drain(); True(SetupProbe.Called);
+        var module = Spec("feature", "base");
+        module.setupType = typeof(SetupProbe).FullName;
+        module.setupMethod = nameof(SetupProbe.Configure);
+        WriteCatalog(Spec("base"), module);
+        SetupProbe.Called = false;
+        ModuleInstaller.Install(new[] { "feature" });
+        Drain();
+        True(SetupProbe.Called);
     });
     public static class SetupProbe
     {
         internal static bool Called;
-        public static void Configure() { True(Client.Installed.ContainsKey("base") && Client.Installed.ContainsKey("feature")); Called = true; }
+        public static void Configure()
+        {
+            True(Client.Installed.ContainsKey("base") && Client.Installed.ContainsKey("feature"));
+            Called = true;
+        }
     }
 }

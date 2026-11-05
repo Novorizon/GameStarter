@@ -35,7 +35,8 @@ namespace Game.Editor
         static ModuleInstaller()
         {
             string saved = SessionState.GetString(JobKey, "");
-            if (saved.Length > 0) job = JsonUtility.FromJson<InstallJob>(saved);
+            if (saved.Length > 0)
+                job = JsonUtility.FromJson<InstallJob>(saved);
             EditorApplication.update += Tick;
         }
 
@@ -43,9 +44,11 @@ namespace Game.Editor
 
         internal static void Install(string[] selection)
         {
-            if (Busy) throw new InvalidOperationException("An installation is already running.");
+            if (Busy)
+                throw new InvalidOperationException("An installation is already running.");
             var plan = ReadCatalog().Plan(selection);
-            if (plan.Length == 0) return;
+            if (plan.Length == 0)
+                return;
             job = new InstallJob { plan = plan };
             Save("开始安装所选模块及其依赖。");
         }
@@ -69,37 +72,53 @@ namespace Game.Editor
 
         private static void Tick()
         {
-            if (job == null || EditorApplication.isCompiling || EditorApplication.isUpdating || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            if (job == null || EditorApplication.isCompiling || EditorApplication.isUpdating || EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
             try
             {
-                if (job.index == job.plan.Length) { ConfigureModules(); return; }
+                if (job.index == job.plan.Length)
+                {
+                    ConfigureModules();
+                    return;
+                }
                 var module = job.plan[job.index];
                 if (embedding != null)
                 {
-                    if (!embedding.IsCompleted) return;
-                    if (embedding.Status == StatusCode.Failure) throw new InvalidOperationException(embedding.Error.message);
+                    if (!embedding.IsCompleted)
+                        return;
+                    if (embedding.Status == StatusCode.Failure)
+                        throw new InvalidOperationException(embedding.Error.message);
                     embedding = null;
                     listing = null;
                     return;
                 }
                 if (adding != null)
                 {
-                    if (!adding.IsCompleted) return;
-                    if (adding.Status == StatusCode.Failure) throw new InvalidOperationException(adding.Error.message);
+                    if (!adding.IsCompleted)
+                        return;
+                    if (adding.Status == StatusCode.Failure)
+                        throw new InvalidOperationException(adding.Error.message);
                     adding = null;
                     listing = null;
                     return; // Re-list to verify the resolved package, including after a domain reload.
                 }
-                if (listing == null) { listing = Client.List(true, true); return; }
-                if (!listing.IsCompleted) return;
-                if (listing.Status == StatusCode.Failure) throw new InvalidOperationException(listing.Error.message);
+                if (listing == null)
+                {
+                    listing = Client.List(true, true);
+                    return;
+                }
+                if (!listing.IsCompleted)
+                    return;
+                if (listing.Status == StatusCode.Failure)
+                    throw new InvalidOperationException(listing.Error.message);
                 var packages = listing.Result.ToArray();
                 var installed = packages.FirstOrDefault(p => p.name == module.id);
                 var obsolete = packages.Where(p => (module.replaces ?? Array.Empty<string>()).Contains(p.name)).Select(p => p.name).ToArray();
                 listing = null;
                 if (installed == null || installed.version != module.version || obsolete.Length > 0)
                 {
-                    if (job.awaitingAdd) throw new InvalidOperationException("Resolved version mismatch for " + module.id + "; expected " + module.version);
+                    if (job.awaitingAdd)
+                        throw new InvalidOperationException("Resolved version mismatch for " + module.id + "; expected " + module.version);
                     job.awaitingAdd = true;
                     Save("正在安装 " + module.title);
                     adding = Client.AddAndRemove(new[] { module.source }, obsolete);
@@ -132,15 +151,18 @@ namespace Game.Editor
             for (; job.setupIndex < job.plan.Length; job.setupIndex++)
             {
                 var module = job.plan[job.setupIndex];
-                if (string.IsNullOrEmpty(module.setupType)) continue;
+                if (string.IsNullOrEmpty(module.setupType))
+                    continue;
                 var type = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType(module.setupType, false)).FirstOrDefault(t => t != null);
                 if (type == null)
                 {
-                    if (DateTime.UtcNow.Ticks > job.setupDeadline) throw new InvalidOperationException("Editor assembly did not load: " + module.setupType);
+                    if (DateTime.UtcNow.Ticks > job.setupDeadline)
+                        throw new InvalidOperationException("Editor assembly did not load: " + module.setupType);
                     return;
                 }
                 var method = type.GetMethod(module.setupMethod, BindingFlags.Public | BindingFlags.Static, null, Type.EmptyTypes, null);
-                if (method == null) throw new MissingMethodException(module.setupType, module.setupMethod);
+                if (method == null)
+                    throw new MissingMethodException(module.setupType, module.setupMethod);
                 method.Invoke(null, null);
                 // Setup methods must be idempotent if they trigger a domain reload before this save.
                 Save("已配置 " + module.title);

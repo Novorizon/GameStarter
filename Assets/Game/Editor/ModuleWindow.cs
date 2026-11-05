@@ -17,7 +17,10 @@ namespace Game.Editor
 
         private void OnEnable()
         {
-            try { catalog = ModuleInstaller.ReadCatalog(); }
+            try
+            {
+                catalog = ModuleInstaller.ReadCatalog();
+            }
             catch (Exception exception) { Debug.LogException(exception); }
         }
 
@@ -25,7 +28,11 @@ namespace Game.Editor
         {
             EditorGUILayout.LabelField("GameStarter 可选模块", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Framework 已作为基础依赖。选择模块后会自动安装依赖，安装进度可跨脚本重编译继续。", MessageType.Info);
-            if (catalog == null) { EditorGUILayout.HelpBox("无法读取模块目录，请检查 OptionalModules.json。", MessageType.Error); return; }
+            if (catalog == null)
+            {
+                EditorGUILayout.HelpBox("无法读取模块目录，请检查 OptionalModules.json。", MessageType.Error);
+                return;
+            }
             scroll = EditorGUILayout.BeginScrollView(scroll);
             using (new EditorGUI.DisabledScope(ModuleInstaller.Busy || EditorApplication.isPlayingOrWillChangePlaymode))
             {
@@ -34,19 +41,26 @@ namespace Game.Editor
                     var installed = UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages().FirstOrDefault(p => p.name == module.id);
                     string status = installed == null ? "未安装" : "已安装 " + installed.version;
                     bool enabled = EditorGUILayout.ToggleLeft(module.title + "  " + module.version + "  (" + status + ")", selected.Contains(module.id));
-                    if (enabled) selected.Add(module.id); else selected.Remove(module.id);
+                    if (enabled)
+                        selected.Add(module.id);
+                    else
+                        selected.Remove(module.id);
                     EditorGUILayout.LabelField(module.description, EditorStyles.wordWrappedLabel);
                     EditorGUILayout.Space();
                 }
                 if (GUILayout.Button("安装所选模块"))
                 {
-                    try { ModuleInstaller.Install(selected.OrderBy(id => id, StringComparer.Ordinal).ToArray()); }
+                    try
+                    {
+                        ModuleInstaller.Install(selected.OrderBy(id => id, StringComparer.Ordinal).ToArray());
+                    }
                     catch (Exception exception) { Debug.LogException(exception); }
                 }
             }
             EditorGUILayout.EndScrollView();
             EditorGUILayout.HelpBox(ModuleInstaller.Message, MessageType.Info);
-            if (ModuleInstaller.Busy) Repaint();
+            if (ModuleInstaller.Busy)
+                Repaint();
         }
     }
 }
