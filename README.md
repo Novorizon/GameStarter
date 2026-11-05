@@ -13,7 +13,7 @@
 要一次安装全部库，也可在 Package Manager 添加：
 
 ```text
-https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.5
+https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.6
 ```
 
 HybridCLR 安装项会处理官方依赖、嵌入及默认 Configure；实际 DLL/AOT 收集、原生安装和 Player 构建使用封装菜单。Odin 插件由项目自行提供，缺少 Odin 不影响 Ability 运行时。
@@ -28,5 +28,7 @@ python3 Tools~/export.py --output /tmp/GameStarter.zip
 ```
 
 验证器从项目清单里的同一个 Git 版本获取 Framework 源码到临时目录，编译真实 Core/MonoSingleton 并运行 21 组生命周期及安装 API 模型。它不会从父目录寻找包仓库。Unity Editor、UPM 服务和 IL2CPP 使用原生流程单独验收；模型验证不代表已完成原生验收。
+
+GpuAnimator 包名为 `com.novorizon.gpuanimator`，可选模块安装器会同时移除旧的 `com.guanjinbiao.gpuanimator` 依赖。
 
 更新依赖目录使用 `Tools~/sync-packages.py --ref <已发布标签>`。该工具从公开 Git 地址读取版本目录，同时更新 Framework 清单和可选模块来源。正常打开工程不需要运行 Python 工具。
