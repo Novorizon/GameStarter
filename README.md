@@ -10,6 +10,10 @@
 
 本项目只依赖包的公开程序集。Framework 提供单例、线程、事件、计时和池等基础能力；GameEntry 使用其 MonoSingleton，通过项目自己的 StartupModule 初始化、更新及清理具体系统。
 
+`Assets/Game/Runtime` 中的启动流程是：`GameEntry` 创建 `GameSession` → 按列表顺序等待模块 `InitializeAsync` → 全部成功后逐帧调用 `Tick` → 退出或失败时逆序调用 `Shutdown`。`IStartupModule` 定义这三个方法，`StartupModule` 是可挂载到场景的空实现基类。`StartupState` 定义在 `GameSession.cs` 中，供入口查询启动状态。
+
+添加项目逻辑时，继承 `StartupModule`，重写需要的初始化、更新和清理方法，将组件挂到 Bootstrap 场景的 GameObject 上，再拖入 GameEntry 的 **Startup Modules** 列表。被依赖的模块排在前面；异步初始化应响应取消信号，清理方法也应处理初始化只完成一部分的情况。默认列表为空，直接进入就绪状态。
+
 要一次安装全部库，也可在 Package Manager 添加：
 
 ```text
