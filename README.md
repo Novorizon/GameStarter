@@ -21,7 +21,7 @@
 项目默认引用的聚合包地址：
 
 ```text
-https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.7
+https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.8
 ```
 
 UPM 不支持 package.json 中的 Git 传递依赖，因此工程 manifest 同时声明 all 和它的依赖来源，让首次导入即可解析运行时程序集。所有来源由同一份聚合目录生成，维护时运行 sync-packages.py；源码由 UPM 获取，不随工程复制。
