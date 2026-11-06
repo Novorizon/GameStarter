@@ -1,6 +1,6 @@
 PASS project structure, GUIDs and pinned Git dependency references
-Cloning into '/tmp/game-starter-verify-hqf2pokl/FrameworkSource'...
-Note: switching to '7ed2a3771cb09731fc84750e0cd7f0a2db025752'.
+Cloning into '/tmp/game-starter-verify-a3cu0h9g/FrameworkSource'...
+Note: switching to '06a2abd93269f596b05ca2c43c2da3268e152086'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -31,7 +31,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:28.77
+Time Elapsed 00:00:25.81
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module
@@ -49,16 +49,17 @@ PASS entry initializes network only when NetworkSettings exists
 PASS failed resource initialization blocks managers and modules
 PASS closing while resources initialize prevents later manager creation
 PASS manager failure reports failed startup before modules run
-PASS entry shutdown releases owned managers in reverse order after modules
-PASS partial manager startup failure rolls back resources and earlier managers
+PASS OnExit releases global managers after modules
+PASS manager initialization failure does not roll back other managers in GameEntry
 PASS a cleanup failure cannot skip later manager releases
-PASS new entry waits for previous asynchronous UI and resource cleanup
-PASS entry borrows externally initialized managers without disposing them
+PASS manager asynchronous cleanup stays inside managers
+PASS entry releases global managers without ownership bookkeeping
 PASS entry prepares project input asset and releases both configuration asset leases
-PASS startup module failure also releases public managers
-PASS tick failure also releases public managers
-PASS entry releases owned native objects after singleton references were reset
-PASS shutdown reentry observes the same unfinished cleanup task
+PASS UI adapter retains prefab leases until the UI factory releases them
+PASS startup module failure leaves manager cleanup to OnExit
+PASS module Tick failure leaves manager cleanup to OnExit
+PASS quit and destroy do not rerun OnExit or create unused managers
+PASS exit reentry does not run cleanup twice
 PASS hot code is a separate assembly and AOT has no hot reference
 PASS hot entry waits for AOT readiness and reports startup health
 PASS hot entry waits for resource initialization
@@ -74,4 +75,4 @@ PASS HybridCLR embed request completes before installing consumers
 PASS installer waits for compilation and play mode
 PASS optional installer migrates an old package identifier
 PASS installer configures only after all dependencies exist
-PASS 42 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).
+PASS 43 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).

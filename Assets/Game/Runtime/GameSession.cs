@@ -29,29 +29,25 @@ namespace Game
     {
         // 整个会话共用的取消信号，关闭或失败时通知正在初始化的模块停止工作。
         private readonly CancellationTokenSource lifetime = new CancellationTokenSource();
+        private readonly CancellationToken token;
+        internal CancellationToken Token => token;
 
         // 记录已经进入初始化的模块，包含初始化未完成或抛出异常的模块，以便清理部分资源。
         private readonly List<IStartupModule> started = new List<IStartupModule>();
-
         // 日志由入口传入，使这个调度器不需要直接调用 Unity 的日志 API。
         private readonly Action<Exception> log;
-
         // 保存同一次启动的完成结果；重复调用 StartAsync 时返回同一个 Task。
         private TaskCompletionSource<bool> completion;
         private bool stopped;
-
         // 就绪后直接遍历此数组，避免每帧复制列表和分配内存。
         private IStartupModule[] readyModules = Array.Empty<IStartupModule>();
-
         /// <summary>会话初始值为 NotStarted，随后随启动、失败或关闭而更新。</summary>
-        public StartupState State
-        {
-            get; private set;
-        }
+        public StartupState State { get; private set; }
 
         internal GameSession(Action<Exception> log)
         {
             this.log = log;
+            token = lifetime.Token;
         }
 
         /// <summary>检查模块列表后开始初始化；返回的 Task 报告整个启动流程的成功、失败或取消。</summary>
@@ -116,6 +112,7 @@ namespace Game
                     CancelLifetime();
                     ReleaseModules();
                 }
+
                 completion.TrySetException(exception);
             }
         }
@@ -127,6 +124,7 @@ namespace Game
             {
                 return;
             }
+
             // 模块可能在自己的 Tick 中关闭入口，因此保留本轮数组，并在每次调用前检查状态。
             var snapshot = readyModules;
             foreach (var module in snapshot)

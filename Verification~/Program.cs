@@ -22,6 +22,7 @@ internal static class Program
     private static void Main()
     {
         SynchronizationContext.SetSynchronizationContext(context);
+        Logger.Sink = new ModelLogger();
         Check("empty startup", () =>
         {
             using var s = Session();
@@ -44,16 +45,17 @@ internal static class Program
         Check("failed resource initialization blocks managers and modules", EntryResourceFailure);
         Check("closing while resources initialize prevents later manager creation", EntryResourceCancellation);
         Check("manager failure reports failed startup before modules run", EntryManagerFailure);
-        Check("entry shutdown releases owned managers in reverse order after modules", EntryShutdownOrder);
-        Check("partial manager startup failure rolls back resources and earlier managers", EntryRollback);
+        Check("OnExit releases global managers after modules", EntryShutdownOrder);
+        Check("manager initialization failure does not roll back other managers in GameEntry", EntryRollback);
         Check("a cleanup failure cannot skip later manager releases", EntryCleanupFailure);
-        Check("new entry waits for previous asynchronous UI and resource cleanup", EntryRestartWaitsForCleanup);
-        Check("entry borrows externally initialized managers without disposing them", EntryBorrowsManagers);
+        Check("manager asynchronous cleanup stays inside managers", EntryRestartWaitsForCleanup);
+        Check("entry releases global managers without ownership bookkeeping", EntryBorrowsManagers);
         Check("entry prepares project input asset and releases both configuration asset leases", EntryInputAndBinaryConfig);
-        Check("startup module failure also releases public managers", EntryModuleFailure);
-        Check("tick failure also releases public managers", EntryTickFailure);
-        Check("entry releases owned native objects after singleton references were reset", EntryCleanupAfterReferenceReset);
-        Check("shutdown reentry observes the same unfinished cleanup task", EntryShutdownReentry);
+        Check("UI adapter retains prefab leases until the UI factory releases them", UILeaseOwnership);
+        Check("startup module failure leaves manager cleanup to OnExit", EntryModuleFailure);
+        Check("module Tick failure leaves manager cleanup to OnExit", EntryTickFailure);
+        Check("quit and destroy do not rerun OnExit or create unused managers", EntryCleanupAfterReferenceReset);
+        Check("exit reentry does not run cleanup twice", EntryShutdownReentry);
         Check("hot code is a separate assembly and AOT has no hot reference", HotAssemblyBoundary);
         Check("hot entry waits for AOT readiness and reports startup health", HotEntryReady);
         Check("hot entry waits for resource initialization", HotEntryWaits);
@@ -302,11 +304,18 @@ internal static class Program
         Equal(0L, GC.GetAllocatedBytesForCurrentThread() - before);
     }
 
+    private sealed class ModelLogger : ILogger
+    {
+        public void Info(string value) => Debug.Log(value);
+        public void Warn(string value) => Debug.Log(value);
+        public void Error(string value) => Debug.Log(value);
+        public void Exception(Exception error) => Debug.LogException(error);
+    }
+
     private static void ResetEntry()
     {
         UObject.ClearForTest();
         typeof(GameEntry).GetMethod("ResetSession", Static).Invoke(null, null);
-        Complete((Task)typeof(GameEntry).GetField("serviceShutdown", Static).GetValue(null));
         var lifecycle = typeof(MonoSingleton<>).Assembly.GetType("Game.Framework.MonoSingletonLifecycle");
         lifecycle.GetMethod("Reset", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
         UnityThread.Reset();
@@ -477,12 +486,13 @@ internal static class Program
         ManagerContracts.UIFailure = new InvalidOperationException("UI init");
         var entry = CreateEntry(resources: true);
         Equal(StartupState.Failed, entry.State);
+        True(Game.Framework.Audio.AudioManager.TryGetInstance(out _));
+        True(Game.Framework.Storage.LocalStorageManager.IsCreated);
+        True(!ManagerContracts.Cleanup.Contains("audio") && !ManagerContracts.Cleanup.Contains("storage"));
         Complete(entry.ShutdownAsync());
-        Equal("config,audio,scenes,input,storage,resources", string.Join(",", ManagerContracts.Cleanup));
-        True(!Game.Framework.Data.DataManager.IsCreated);
+        True(ManagerContracts.Cleanup.Contains("audio") && ManagerContracts.Cleanup.Contains("storage"));
         True(!Game.Framework.Config.ConfigManager.IsCreated);
         True(!Game.Framework.Scenes.SceneManager.IsCreated);
-        True(!Game.Framework.Audio.AudioManager.TryGetInstance(out _));
         ResetEntry();
     }
 
@@ -506,17 +516,15 @@ internal static class Program
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         ManagerContracts.UIShutdown = release.Task;
         var stopping = previous.ShutdownAsync();
-        True(!stopping.IsCompleted);
-        UObject.Destroy(previous.gameObject);
-        int calls = ManagerContracts.Calls.Count;
-        var next = CreateEntry(resources: true);
-        Equal(StartupState.Starting, next.State);
-        Equal(calls, ManagerContracts.Calls.Count);
-        release.SetResult();
-        Complete(next.WaitUntilReadyAsync());
         True(stopping.IsCompleted);
-        True(Game.Resource.ResourceManager.Instance.Initialized);
+        True(!ManagerContracts.UIRelease.IsCompleted);
+        var next = CreateEntry(resources: true);
         Equal(StartupState.Ready, next.State);
+        var activeUI = UI.UIManager.Instance;
+        var oldRelease = ManagerContracts.UIRelease;
+        release.SetResult();
+        Complete(oldRelease);
+        True(UI.UIManager.TryGetInstance(out var retained) && ReferenceEquals(activeUI, retained));
         Complete(next.ShutdownAsync());
         ResetEntry();
     }
@@ -528,16 +536,14 @@ internal static class Program
         var config = Game.Framework.Config.ConfigManager.Instance;
         config.Initialize();
         var input = Game.Framework.Input.InputManager.Instance;
-        input.Initialize();
         var data = Game.Framework.Data.DataManager.Instance;
         var entry = CreateEntry();
         Complete(entry.ShutdownAsync());
-        True(UI.UIManager.TryGetInstance(out var retained) && ReferenceEquals(ui, retained));
-        True(Game.Framework.Config.ConfigManager.IsCreated);
-        True(Game.Framework.Data.DataManager.IsCreated);
-        True(Game.Framework.Input.InputManager.IsCreated);
-        True(!ManagerContracts.Cleanup.Contains("input"));
-        True(!ManagerContracts.Cleanup.Contains("ui") && !ManagerContracts.Cleanup.Contains("config"));
+        True(!UI.UIManager.TryGetInstance(out _));
+        True(!Game.Framework.Config.ConfigManager.IsCreated);
+        True(!Game.Framework.Data.DataManager.IsCreated);
+        True(!Game.Framework.Input.InputManager.IsCreated);
+        True(ManagerContracts.Cleanup.Contains("input") && ManagerContracts.Cleanup.Contains("ui"));
         ResetEntry();
     }
 
@@ -560,12 +566,30 @@ internal static class Program
         ResetEntry();
     }
 
+    private static void UILeaseOwnership()
+    {
+        ResetEntry();
+        var resources = Game.Resource.ResourceManager.Instance;
+        Complete(resources.InitializeAsync());
+        var loader = new YooAssetUIAssetLoader(resources);
+        var loading = loader.LoadPrefabAsync("window");
+        Complete(loading);
+        var prefab = loading.GetAwaiter().GetResult();
+        Equal(1, ManagerContracts.ProtectedAcquisitions);
+        Equal(0, ManagerContracts.LeasesReleased);
+        loader.ReleasePrefab(prefab);
+        Equal(1, ManagerContracts.LeasesReleased);
+        ResetEntry();
+    }
+
     private static void EntryModuleFailure()
     {
         ResetEntry();
         ManagerContracts.ModuleFailure = new InvalidOperationException("module init");
         var entry = CreateEntry(resources: true);
         Equal(StartupState.Failed, entry.State);
+        True(UI.UIManager.TryGetInstance(out _));
+        True(!ManagerContracts.Cleanup.Contains("audio"));
         Complete(entry.ShutdownAsync());
         Equal("module", ManagerContracts.Cleanup.First());
         Equal("resources", ManagerContracts.Cleanup.Last());
@@ -580,6 +604,8 @@ internal static class Program
         ManagerContracts.ModuleTickFailure = new InvalidOperationException("module tick");
         UObject.Invoke(entry, "Update");
         Equal(StartupState.Failed, entry.State);
+        True(UI.UIManager.TryGetInstance(out _));
+        True(!ManagerContracts.Cleanup.Contains("audio"));
         Complete(entry.ShutdownAsync());
         Equal("module", ManagerContracts.Cleanup.First());
         Equal("resources", ManagerContracts.Cleanup.Last());
@@ -589,14 +615,15 @@ internal static class Program
     private static void EntryCleanupAfterReferenceReset()
     {
         ResetEntry();
-        var entry = CreateEntry(resources: true);
-        var oldUI = UI.UIManager.Instance;
-        typeof(MonoSingleton<>).Assembly.GetType("Game.Framework.MonoSingletonLifecycle").GetMethod("Reset", Static).Invoke(null, null);
-        True(!UI.UIManager.TryGetInstance(out _));
+        var entry = CreateEntry();
+        int calls = ManagerContracts.Calls.Count;
         Complete(entry.ShutdownAsync());
-        True(oldUI == null);
-        True(ManagerContracts.Cleanup.Contains("worlds"));
-        Equal("resources", ManagerContracts.Cleanup.Last());
+        UObject.Invoke(entry, "OnApplicationQuit");
+        UObject.Invoke(entry, "OnDestroy");
+        Equal(calls, ManagerContracts.Calls.Count);
+        Equal(1, ManagerContracts.Cleanup.Count(name => name == "ui"));
+        Equal(1, ManagerContracts.Cleanup.Count(name => name == "worlds"));
+        True(!Game.Framework.Network.NetworkManager.IsCreated);
         ResetEntry();
     }
 
@@ -613,7 +640,7 @@ internal static class Program
         };
         var stopping = entry.ShutdownAsync();
         True(ReferenceEquals(stopping, reentered));
-        True(!completed);
+        True(completed);
         Complete(stopping);
         Equal(1, ManagerContracts.Cleanup.Count(name => name == "module"));
         ResetEntry();

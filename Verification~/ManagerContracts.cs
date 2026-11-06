@@ -11,17 +11,21 @@ internal static class ManagerContracts
     internal static Exception UIFailure;
     internal static readonly List<string> Cleanup = new List<string>();
     internal static Task UIShutdown = Task.CompletedTask;
+    internal static Task UIRelease = Task.CompletedTask;
     internal static Exception CleanupFailure;
     internal static Exception ModuleFailure, ModuleTickFailure;
     internal static Action ModuleShutdown;
     internal static Task<bool> ResourceInitialization = Task.FromResult(true);
     internal static int LeasesReleased;
+    internal static int ProtectedAcquisitions;
     internal static void Reset()
     {
         Calls.Clear();
         LeasesReleased = 0;
+        ProtectedAcquisitions = 0;
         Cleanup.Clear();
         UIShutdown = Task.CompletedTask;
+        UIRelease = Task.CompletedTask;
         CleanupFailure = null;
         ModuleFailure = ModuleTickFailure = null;
         ModuleShutdown = null;
@@ -86,17 +90,31 @@ namespace Game.Resource
             ManagerContracts.Cleanup.Add("resources");
         }
 
+        public static void Release()
+        {
+            if (IsCreated)
+            {
+                _ = Instance.ShutdownAsync();
+            }
+        }
+
         internal void ResetForTest()
         {
             Initialized = false;
             initializing = null;
         }
 
-        public Task<AssetLease<T>> AcquireAsync<T>(string path, CancellationToken token = default)
+        public Task<AssetLease<T>> AcquireAsync<T>(string path, CancellationToken token = default, bool keepAliveUntilDisposed = false)
             where T : UnityEngine.Object
         {
             token.ThrowIfCancellationRequested();
-            return Task.FromResult(new AssetLease<T>((T)Activator.CreateInstance(typeof(T))));
+            if (keepAliveUntilDisposed)
+            {
+                ManagerContracts.ProtectedAcquisitions++;
+            }
+
+            var asset = typeof(T) == typeof(UnityEngine.GameObject) ? (UnityEngine.Object)new UnityEngine.GameObject() : (UnityEngine.Object)Activator.CreateInstance(typeof(T));
+            return Task.FromResult(new AssetLease<T>((T)asset));
         }
     }
 }
@@ -121,6 +139,11 @@ namespace UI
 
         public void SetAssetLoader(IUIAssetLoader loader)
         {
+        }
+
+        protected override void OnExit()
+        {
+            ManagerContracts.UIRelease = ShutdownAsync();
         }
 
         public async Task ShutdownAsync()
@@ -153,10 +176,9 @@ namespace ECS
 {
     public sealed class EntityManager : MonoSingleton<EntityManager>
     {
-        protected override void OnDestroy()
+        protected override void OnExit()
         {
             ManagerContracts.Cleanup.Add("entities");
-            base.OnDestroy();
         }
 
         private bool initialized;
@@ -174,10 +196,9 @@ namespace ECS
 
     public sealed class WorldManager : MonoSingleton<WorldManager>
     {
-        protected override void OnDestroy()
+        protected override void OnExit()
         {
             ManagerContracts.Cleanup.Add("worlds");
-            base.OnDestroy();
         }
 
         private bool initialized;
@@ -200,17 +221,22 @@ namespace ECS
 
 namespace Game.Framework.Network
 {
-    public sealed class NetworkManager : ConfigurableSingleton<NetworkManager>
+    public sealed class NetworkManager : ConfigurableSingleton<NetworkManager>, IDisposable
     {
         public static NetworkManager Instance => GetOrCreateInstance(() => new NetworkManager());
 
         private bool initialized;
         public bool IsInitialized => initialized;
 
-        public ValueTask DisposeAsync()
+        public void Dispose()
         {
             ManagerContracts.Cleanup.Add("network");
             ReleaseInstance(this);
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            Dispose();
             return default;
         }
 
@@ -234,10 +260,9 @@ namespace Game.Framework.Network
 
 public sealed class GpuAnimatorManager : MonoSingleton<GpuAnimatorManager>
 {
-    protected override void OnDestroy()
+    protected override void OnExit()
     {
         ManagerContracts.Cleanup.Add("gpu");
-        base.OnDestroy();
     }
 
     private bool initialized;
@@ -315,10 +340,9 @@ namespace Game.Framework.Audio
 {
     public sealed class AudioManager : MonoSingleton<AudioManager>
     {
-        protected override void OnDestroy()
+        protected override void OnExit()
         {
             ManagerContracts.Cleanup.Add("audio");
-            base.OnDestroy();
         }
 
         private bool initialized;
