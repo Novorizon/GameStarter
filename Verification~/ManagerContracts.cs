@@ -15,9 +15,11 @@ internal static class ManagerContracts
     internal static Exception ModuleFailure, ModuleTickFailure;
     internal static Action ModuleShutdown;
     internal static Task<bool> ResourceInitialization = Task.FromResult(true);
+    internal static int LeasesReleased;
     internal static void Reset()
     {
         Calls.Clear();
+        LeasesReleased = 0;
         Cleanup.Clear();
         UIShutdown = Task.CompletedTask;
         CleanupFailure = null;
@@ -32,6 +34,7 @@ internal static class ManagerContracts
         Game.Framework.Data.DataManager.Reset();
         Game.Framework.Scenes.SceneManager.Reset();
         Game.Framework.Config.ConfigManager.Reset();
+        Game.Framework.Input.InputManager.Reset();
     }
 }
 
@@ -48,6 +51,7 @@ namespace Game.Resource
 
         public void Dispose()
         {
+            ManagerContracts.LeasesReleased++;
         }
     }
 
@@ -339,6 +343,8 @@ namespace Game.Framework.Config
         public static ConfigManager Instance => GetOrCreateInstance(() => new ConfigManager());
         public bool Initialized { get; private set; }
 
+        public Func<string, CancellationToken, Task<string>> TextLoader;
+        public Func<string, CancellationToken, Task<byte[]>> BytesLoader;
         public void Dispose()
         {
             ManagerContracts.Cleanup.Add("config");
@@ -349,10 +355,39 @@ namespace Game.Framework.Config
             }
         }
 
-        public void Initialize(Func<string, CancellationToken, Task<string>> loader = null)
+        public void Initialize(Func<string, CancellationToken, Task<string>> loader = null, Func<string, CancellationToken, Task<byte[]>> bytesLoader = null)
         {
+            TextLoader = loader;
+            BytesLoader = bytesLoader;
             Initialized = true;
             ManagerContracts.Calls.Add("config");
+        }
+
+        internal static void Reset() => ResetInstance(null);
+    }
+}
+
+namespace Game.Framework.Input
+{
+    public sealed class InputManager : ConfigurableSingleton<InputManager>, IDisposable
+    {
+        public static InputManager Instance => GetOrCreateInstance(() => new InputManager());
+        public bool Initialized { get; private set; }
+        public UnityEngine.InputSystem.InputActionAsset Source { get; private set; }
+        public string InitialMap { get; private set; }
+
+        public void Initialize(UnityEngine.InputSystem.InputActionAsset source = null, string initialMap = null)
+        {
+            Source = source;
+            InitialMap = initialMap;
+            Initialized = true;
+            ManagerContracts.Calls.Add("input");
+        }
+
+        public void Dispose()
+        {
+            ManagerContracts.Cleanup.Add("input");
+            ReleaseInstance(this);
         }
 
         internal static void Reset() => ResetInstance(null);

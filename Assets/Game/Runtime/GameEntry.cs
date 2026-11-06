@@ -6,6 +6,7 @@ using Game.Framework;
 using Game.Framework.Audio;
 using Game.Framework.Config;
 using Game.Framework.Data;
+using Game.Framework.Input;
 using Game.Framework.Storage;
 using Game.Framework.Event;
 using Game.Framework.Network;
@@ -14,6 +15,7 @@ using Game.Framework.Timing;
 using Game.Resource;
 using UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using GameSceneManager = Game.Framework.Scenes.SceneManager;
 
 namespace Game
@@ -31,6 +33,11 @@ namespace Game
         // 项目配置好 YooAsset 的 DefaultPackage 采集和资源包后开启；空模板先使用 UI 默认的 Resources 加载器。
         [SerializeField]
         private bool initializeYooAsset;
+        // 项目自己的 .inputactions；留空时读取 Resources/InputActions。
+        [SerializeField]
+        private InputActionAsset inputActions;
+        [SerializeField]
+        private string initialInputMap = "Gameplay";
         // 记录上次运行的入口，兼容 Unity 关闭 Domain Reload 后保留静态字段的情况。
         private static GameEntry sessionOwner;
         // 每次运行创建一个会话，由它协调模块的初始化、更新、取消和清理。
@@ -165,6 +172,14 @@ namespace Game
                 storage.Initialize();
             }
 
+            var input = InputManager.Instance;
+            if (!input.Initialized)
+            {
+                owned.Own(input.Dispose);
+                var source = inputActions != null ? inputActions : Resources.Load<InputActionAsset>("InputActions");
+                input.Initialize(source, source != null ? initialInputMap : null);
+            }
+
             var scenes = GameSceneManager.Instance;
             if (!scenes.Initialized)
             {
@@ -197,6 +212,12 @@ namespace Game
                         using (var text = await resources.AcquireAsync<TextAsset>(location, token))
                         {
                             return text.Asset.text;
+                        }
+                    }, async (location, token) =>
+                    {
+                        using (var binary = await resources.AcquireAsync<TextAsset>(location, token))
+                        {
+                            return binary.Asset.bytes;
                         }
                     });
                 }
@@ -296,6 +317,7 @@ namespace Game
                     UnityEngine.Object.Destroy(value);
                 }
             }
+
             // Destroy 在 Player 中延迟到帧尾；依赖资源必须保留到原生销毁完成。
             while (value != null)
             {
@@ -389,6 +411,7 @@ namespace Game
             {
                 sessionOwner = null;
             }
+
             _ = CompleteShutdownAsync(previous, owned, completion);
             return shutdownTask;
         }
@@ -403,6 +426,7 @@ namespace Game
             {
                 Debug.LogException(error);
             }
+
             try
             {
                 if (owned != null)
@@ -414,6 +438,7 @@ namespace Game
             {
                 Debug.LogException(error);
             }
+
             completion.TrySetResult(true);
         }
     }

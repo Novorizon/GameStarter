@@ -11,7 +11,9 @@
     "Game.Framework.Config",
     "Game.Framework.UI",
     "ECS",
-    "GpuAnimator"
+    "GpuAnimator",
+    "Game.Framework.Input",
+    "Unity.InputSystem"
   ],
   "autoReferenced": true,
   "allowUnsafeCode": false

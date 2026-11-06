@@ -1,7 +1,6 @@
 PASS project structure, GUIDs and pinned Git dependency references
-Cloning into '/tmp/game-starter-verify-uvwzegdz/FrameworkSource'...
-warning: refs/tags/v0.1.0-preview.12 04ebbb5acb0b4433adb20c0e77363d1f13381a2b is not a commit!
-Note: switching to '51a9e3371a950443d334fadefd27c125c05d6123'.
+Cloning into '/tmp/game-starter-verify-hqf2pokl/FrameworkSource'...
+Note: switching to '7ed2a3771cb09731fc84750e0cd7f0a2db025752'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -32,7 +31,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:15.34
+Time Elapsed 00:00:28.77
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module
@@ -55,6 +54,7 @@ PASS partial manager startup failure rolls back resources and earlier managers
 PASS a cleanup failure cannot skip later manager releases
 PASS new entry waits for previous asynchronous UI and resource cleanup
 PASS entry borrows externally initialized managers without disposing them
+PASS entry prepares project input asset and releases both configuration asset leases
 PASS startup module failure also releases public managers
 PASS tick failure also releases public managers
 PASS entry releases owned native objects after singleton references were reset
@@ -74,4 +74,4 @@ PASS HybridCLR embed request completes before installing consumers
 PASS installer waits for compilation and play mode
 PASS optional installer migrates an old package identifier
 PASS installer configures only after all dependencies exist
-PASS 41 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).
+PASS 42 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).
