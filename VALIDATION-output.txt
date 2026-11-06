@@ -1,8 +1,25 @@
 PASS project structure, GUIDs and pinned Git dependency references
+Cloning into '/tmp/game-starter-verify-zbv8e57r/FrameworkSource'...
+warning: refs/tags/v0.1.0-preview.11 e531e2a8d77534fb7db403ad055f45a10e1bec6d is not a commit!
+Note: switching to 'bcd20f33e45bb8b0aec33c11c6e91974212a1630'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
   Determining projects to restore...
-  Restored /workspace/GameStarter/Verification~/GameStarter.Verification.csproj (in 630 ms).
-  Restored /workspace/GameStarter/Verification~/HotUpdate/HotUpdate.csproj (in 640 ms).
-  5 of 7 projects are up-to-date for restore.
+  All projects are up-to-date for restore.
   Unity -> /workspace/GameStarter/Verification~/Unity/bin/Release/net8.0/Unity.dll
   Core -> /workspace/GameStarter/Verification~/Core/bin/Release/netstandard2.1/Game.Framework.Core.dll
   FrameworkUnity -> /workspace/GameStarter/Verification~/FrameworkUnity/bin/Release/net8.0/Game.Framework.Unity.dll
@@ -15,7 +32,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:42.82
+Time Elapsed 00:00:19.03
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module

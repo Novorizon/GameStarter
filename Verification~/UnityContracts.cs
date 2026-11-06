@@ -62,6 +62,10 @@ namespace UnityEngine
     public class MonoBehaviour : Component
     {
     }
+    public class TextAsset : Object
+    {
+        public string text = "";
+    }
     public class ScriptableObject : Object
     {
     }

@@ -280,11 +280,11 @@ internal static class Program
         ResetEntry();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("storage,scenes,audio,config,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         True(Game.Framework.Event.EventManager.IsCreated && Game.Framework.Timing.TimerManager.IsCreated);
         _ = GameEntry.Instance;
         _ = GameEntry.Instance;
-        Equal("ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("storage,scenes,audio,config,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -294,7 +294,7 @@ internal static class Program
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("ui,gpu,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
+        Equal("storage,scenes,audio,config,ui,gpu,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 

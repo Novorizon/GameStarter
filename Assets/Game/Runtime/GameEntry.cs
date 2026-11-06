@@ -3,6 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using ECS;
 using Game.Framework;
+using Game.Framework.Audio;
+using Game.Framework.Config;
+using Game.Framework.Data;
+using Game.Framework.Storage;
 using Game.Framework.Event;
 using Game.Framework.Network;
 using Game.Framework.Network.Unity;
@@ -10,6 +14,7 @@ using Game.Framework.Timing;
 using Game.Resource;
 using UI;
 using UnityEngine;
+using GameSceneManager = Game.Framework.Scenes.SceneManager;
 
 namespace Game
 {
@@ -21,25 +26,21 @@ namespace Game
     public sealed class GameEntry : MonoSingleton<GameEntry>
     {
         // 将项目的启动模块组件拖到这个列表中；被依赖的模块放前面。
-        [SerializeField] private StartupModule[] startupModules = Array.Empty<StartupModule>();
-
+        [SerializeField]
+        private StartupModule[] startupModules = Array.Empty<StartupModule>();
         // 项目配置好 YooAsset 的 DefaultPackage 采集和资源包后开启；空模板先使用 UI 默认的 Resources 加载器。
-        [SerializeField] private bool initializeYooAsset;
-
+        [SerializeField]
+        private bool initializeYooAsset;
         // 记录上次运行的入口，兼容 Unity 关闭 Domain Reload 后保留静态字段的情况。
         private static GameEntry sessionOwner;
-
         // 每次运行创建一个会话，由它协调模块的初始化、更新、取消和清理。
         private GameSession session;
         private Task startupTask;
-
         // 关闭过程中禁止通过单例访问再次启动。
         private bool closing;
         private bool startupFailed;
-
         /// <summary>当前会话的启动状态；尚未创建或已经移除会话时返回 NotStarted。</summary>
-        public StartupState State => session == null ? StartupState.NotStarted : startupFailed ? StartupState.Failed :
-            session.State == StartupState.NotStarted ? StartupState.Starting : session.State;
+        public StartupState State => session == null ? StartupState.NotStarted : startupFailed ? StartupState.Failed : session.State == StartupState.NotStarted ? StartupState.Starting : session.State;
 
         // 每次进入运行时都会调用，包括编辑器关闭 Domain Reload 的情况。
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -52,6 +53,7 @@ namespace Game
                 previous.CloseSession();
                 previous.closing = false;
             }
+
             sessionOwner = null;
             ResetSingletonReference();
         }
@@ -85,7 +87,6 @@ namespace Game
             sessionOwner = this;
             var current = new GameSession(Debug.LogException);
             session = current;
-
             // Unity 生命周期回调不能等待 Task，在异步方法中统一处理完成和异常。
             startupTask = StartSessionAsync(current);
         }
@@ -106,6 +107,7 @@ namespace Game
             {
                 throw new OperationCanceledException("GameEntry startup has ended.");
             }
+
             if (State != StartupState.Ready)
             {
                 throw new InvalidOperationException("GameEntry startup failed. Check the initialization errors in Console.");
@@ -118,7 +120,6 @@ namespace Game
             // Framework 已安装主线程和时钟驱动，这里取得共享服务，不再重复驱动它们的 Update。
             _ = EventManager.Instance;
             _ = TimerManager.Instance;
-
             // 资源管理器本身是共享缓存；完整资源包初始化需要项目实际提供的 YooAsset 配置。
             var resources = ResourceManager.Instance;
             if (initializeYooAsset && !await resources.InitializeAsync())
@@ -132,12 +133,40 @@ namespace Game
                 throw new OperationCanceledException();
             }
 
+            // 运行时数据只保存在内存；存储管理器负责本地文件，游戏自行定义数据和存档格式。
+            _ = DataManager.Instance;
+            LocalStorageManager.Instance.Initialize();
+            // 未启用 YooAsset 时使用 Build Settings 场景；启用后交由资源包场景加载器处理。
+            var scenes = GameSceneManager.Instance;
+            if (!scenes.Initialized)
+            {
+                scenes.Initialize(initializeYooAsset ? resources.CreateSceneLoader() : null);
+            }
+
+            AudioManager.Instance.Initialize();
+            // 这里只准备配置加载来源，不假定项目有哪些配置表或业务数据。
+            var config = ConfigManager.Instance;
+            if (!config.Initialized)
+            {
+                if (initializeYooAsset)
+                {
+                    config.Initialize(async (location, token) =>
+                    {
+                        var text = await TaskUtil.WaitAsync(resources.LoadTextAssetAsync(location), token);
+                        return text.text;
+                    });
+                }
+                else
+                {
+                    config.Initialize();
+                }
+            }
+
             // UIManager 会创建页面、弹窗、面板和提示管理器；ECS 单例会建立实体管理器和默认 World。
             UIManager.Instance.Initialize();
             GpuAnimatorManager.Instance.Initialize();
             _ = EntityManager.Instance;
             WorldManager.Instance.Initialize();
-
             // 有项目网络配置时准备客户端与回调派发器；实际连接由项目流程调用 ConnectAsync。
             if (Resources.Load<NetworkSettings>("NetworkSettings") != null)
             {
@@ -192,6 +221,7 @@ namespace Game
             base.OnApplicationQuit();
             CloseSession();
         }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
