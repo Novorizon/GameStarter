@@ -6,7 +6,7 @@
 
 编译实际 Framework Core/MonoSingleton、DataManager、Luban 导出器、官方 Luban.Runtime、生成表、Game.Startup、GameStarter.Runtime 和 Game.HotUpdate。asmdef 直接引用与模型项目对齐，AOT 入口不引用热更表、Luban 或 HotGame 程序集。
 
-当前 65 项场景涵盖启动、可选模块、取消、退出、单例重置、安装器、真实表解码、资源租约、采集规则、构建前置、端点分离、设置恢复/坏存档保护和签名资源配对。YooAsset 边界含两个同名 BuildReport，防止 Unity 构建接口的类型歧义回归。
+当前 67 项场景涵盖启动、可选模块、取消、退出、单例重置、安装器、真实表解码、资源租约、采集规则、构建前置、端点分离、设置恢复/坏存档保护和签名资源配对。YooAsset 边界含两个同名 BuildReport，防止 Unity 构建接口的类型歧义回归。
 
 Unity/UPM、音频、Input System、资源构建和 Player 构建使用边界模型；不能据此宣称真实 Unity 或 IL2CPP 通过。
 
@@ -68,3 +68,5 @@ Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032
 真实 Unity 2022.3.62f1、StandaloneLinux64 的资源验证使用包提交 `9502631577cc0ae31d335332d09bb91cebc83a48`：实际编译两份热更 DLL 和代表性未裁剪 AOT 输入，构建同一个 YooAsset 资源版本，通过本地 HTTP 冷缓存下载 4 个资源包，读取并校验 3 个代码文件，并读取 Luban 数据；随后同版本缓存重新初始化，缺失资源数为 0。HTTP 日志只有资源清单和 bundle 请求，没有独立 DLL 下载。该探针仅存在于验证副本。
 
 HTTP 探针采用 SDK 支持的纯远端文件系统，因为测试副本没有内置资源；初次默认内置文件系统初始化失败时，还观察到 YooAsset 2.3.18 的 Linux 本地 URL 会额外拼接 `/root/`。未修改第三方包；本次未将内置资源回退记为原生通过，回退及取消语义由模型回归覆盖。AOT 输入仅验证打包、传输和读取，不代表真实 IL2CPP 裁剪元数据可执行。
+
+最终包引用下，8 个 Demo 的 11 个 Editor 程序集、8 个 Runtime Player 程序集编译覆盖通过；Bootstrap Play 通过；关闭 Domain Reload/Scene Reload、保留同一个 GameEntry 的连续两次 Play 均就绪，退出后的 Timer/Event 均已释放。
