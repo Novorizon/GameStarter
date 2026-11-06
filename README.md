@@ -1,6 +1,6 @@
 # GameStarter
 
-独立 Unity 2022.3.62f1 启动工程。当前发行 `v0.1.0-preview.26`，依赖 UnityPackages 固定提交 `47a4a7d18c1694f1d4dfe63fc7ad7cbc5cfd2ca4`（移除 SingletonLifecycle 的待发行版本）。工程 manifest 已声明 framework.all 和完整包来源，不依赖相邻仓库或本地 file: 路径。
+独立 Unity 2022.3.62f1 启动工程。当前发行 `v0.1.0-preview.26`，依赖 UnityPackages 固定提交 `9502631577cc0ae31d335332d09bb91cebc83a48`（统一 YooAsset 下载的待发行版本）。工程 manifest 已声明 framework.all 和完整包来源，不依赖相邻仓库或本地 file: 路径。
 
 ## 从哪里开始
 
@@ -69,8 +69,10 @@ Tools → Novorizon → GameStarter：
 ## 更新与维护
 
 ```sh
-python3 Tools~/sync-packages.py --ref 47a4a7d18c1694f1d4dfe63fc7ad7cbc5cfd2ca4
+python3 Tools~/sync-packages.py --ref 9502631577cc0ae31d335332d09bb91cebc83a48
 python3 Tools~/verify.py --dotnet /path/to/dotnet
 ```
 
 固定 Git 标签不会自动更新。模型回归不代替 Unity 导入、图形或 IL2CPP；原生结果按验收环境生成的日志和报告核对。导入包示例只用于验证副本，不提交回模板。
+
+DLL 和 AOT 补充元数据现已纳入 YooAsset 同一资源版本，默认先统一下载全部缺失资源，再校验并加载代码。构建、职责与上传顺序见 [统一下载](Documentation/UnifiedDownloads.zh-CN.md)，原 UnityWebRequest 实现保存在 [备份分支](Documentation/UnityWebRequestBackup.zh-CN.md)。

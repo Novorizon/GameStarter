@@ -40,6 +40,7 @@ namespace Game.Framework.HotUpdate.Editor
     {
         public static int PlayerBuilds;
         public static Func<Game.Framework.HotUpdate.UpdateSettings> SettingsFactory;
+        public static Func<Game.Framework.HotUpdate.ReleaseManifest, string, string, bool, Game.Framework.HotUpdate.ReleaseContent> BuildContent;
         public static string ExportUpdateToDirectory() => throw new NotSupportedException("Native patch compilation is validated in Unity.");
         public static void BuildNewPlayer()
         {
@@ -81,6 +82,10 @@ namespace YooAsset.Editor
     }
 
     public sealed class PackDirectory
+    {
+    }
+
+    public sealed class PackSeparately
     {
     }
 

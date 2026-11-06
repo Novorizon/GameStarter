@@ -90,6 +90,7 @@ namespace Game
                 settings.loadFromCompiledAssemblies = true;
 #endif
                 settings.prepareContentAsync = PrepareResourcesAsync;
+                settings.loadCodeAsync = LoadCodeAsync;
                 await HotUpdateManager.Instance.InitializeAsync(settings, options, current.Token);
                 current.Token.ThrowIfCancellationRequested();
                 startupReady = true;
@@ -150,6 +151,17 @@ namespace Game
             if (!await resources.InitializeAsync(options, token))
             {
                 throw new InvalidOperationException("Resource initialization/download failed for version " + content.PackageVersion);
+            }
+        }
+
+        private static async Task<byte[]> LoadCodeAsync(
+            ReleaseContentContext content,
+            ReleaseFile file,
+            CancellationToken token)
+        {
+            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(content.CodeLocation(file), token))
+            {
+                return asset.Asset.bytes;
             }
         }
 

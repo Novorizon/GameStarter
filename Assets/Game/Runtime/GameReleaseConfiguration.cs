@@ -20,7 +20,6 @@ namespace Game
                 appId = app,
                 channel = Channel,
                 remoteBaseUrl = DownloadRoot + "manifests/" + app + "/",
-                remoteFilesBaseUrl = DownloadRoot + "patches/" + app + "/",
                 scopeRemoteByBaseline = true,
                 enableRemote = key != null && !string.IsNullOrWhiteSpace(key.modulus),
                 trustedKeys = key == null ? Array.Empty<TrustedKey>() : new[]

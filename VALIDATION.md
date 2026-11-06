@@ -57,3 +57,10 @@ Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032
 原生 GpuAnimator EditMode 重跑仍为 51 项：46 通过、5 失败、0 跳过，失败用例与前轮相同。三个资源持久化用例和两个测试准备阶段失败仍需独立定位，不归为本次移除引入的已确认缺陷，也不把该套件记为通过。
 
 模型验证工具同时修正固定提交来源的获取方式：按 manifest 的 SHA fetch，再 detached checkout；不再将 SHA 当作远端分支名。现有 HybridCLR 主包需要重建；这里不追加 IL2CPP、设备或渲染通过结论。
+
+
+## YooAsset 统一代码与资源下载
+
+原 WR 版本保存在两个仓库的 backup/unitywebrequest-updates-20261106 分支。新实现默认先通过 YooAsset 下载所选资源版本全部缺失内容，再读取 DLL/AOT 元数据并按签名清单校验；发布只新增 assets/ 与 manifests/，不再上传独立 patches DLL。控制清单仍通过 HTTP 获取。已有 HybridCLR 主包需重建，更新流程与管理器边界见 Documentation/UnifiedDownloads.zh-CN.md。
+
+模型回归：GameStarter 67 项及 UnityPackages 完整回归通过，后者包括 23 项代码发行/资源提供方场景、UI 183 项、网络 24 项。新增覆盖资源准备顺序、YooAsset 代码路径不下载独立 DLL、离线清单缓存、DLL/AOT 哈希失败、取消和缺少资源提供方时拒绝静默回退。

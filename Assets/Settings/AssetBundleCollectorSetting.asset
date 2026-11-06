@@ -38,3 +38,16 @@ MonoBehaviour:
         FilterRuleName: GameDataFilterRule
         AssetTags: data
         UserData:
+    - GroupName: GameStarterCode
+      GroupDesc: Hot DLLs and baseline AOT metadata
+      AssetTags: code
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/HotUpdate
+        CollectorGUID: 3f6cdbaefffc4560b24b208250bf6df9
+        CollectorType: 0
+        AddressRuleName: GameCodeAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: GameCodeFilterRule
+        AssetTags: code
+        UserData:

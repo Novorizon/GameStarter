@@ -18,6 +18,8 @@ Recordings/
 
 /Assets/StreamingAssets/yoo/
 /Assets/StreamingAssets/yoo.meta
+/Assets/GameAssets/HotUpdate/**
+!/Assets/GameAssets/HotUpdate/.gitkeep
 /Bundles/
 
 /Artifacts/
