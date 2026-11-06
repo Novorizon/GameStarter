@@ -22,7 +22,7 @@ namespace Game
         public Task<GameObject?> LoadPrefabAsync(string path) => LoadPrefabAsync(path, CancellationToken.None);
         public async Task<GameObject?> LoadPrefabAsync(string path, CancellationToken cancellationToken)
         {
-            var lease = await resources.AcquireAsync<GameObject>(path, cancellationToken);
+            var lease = await resources.AcquireAsync<GameObject>(path, cancellationToken, keepAliveUntilDisposed: true);
             var prefab = lease.Asset;
             if (!leases.TryGetValue(prefab, out var owned))
             {
