@@ -8,7 +8,6 @@ using Game.Framework.Data.Editor;
 using Game.Framework.HotUpdate.Editor;
 using UnityEditor;
 using UnityEditor.Build;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
 using YooAsset;
 using YooAsset.Editor;
@@ -323,7 +322,7 @@ namespace Game.Editor
     {
         public int callbackOrder => -20000;
 
-        public void OnPreprocessBuild(BuildReport report)
+        public void OnPreprocessBuild(UnityEditor.Build.Reporting.BuildReport report)
         {
             GameDataSetup.ValidatePlayerResources(report.summary.platform);
         }
