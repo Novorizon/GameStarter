@@ -7,7 +7,6 @@
     "Game.Framework.Unity",
     "Game.Framework.HotUpdate",
     "Game.Framework.Resources.YooAsset",
-    "Game.Framework.UI",
     "Unity.InputSystem",
     "YooAsset"
   ],

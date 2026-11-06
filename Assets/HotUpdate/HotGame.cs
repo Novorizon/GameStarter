@@ -21,7 +21,7 @@ using GameSceneManager = Game.Framework.Scenes.SceneManager;
 namespace Game.HotUpdate
 {
     /// <summary>热更业务入口：准备公共系统，再进入业务；与 GameEntry 使用相同的启动函数名称。</summary>
-    public sealed class HotGame : IGameModule, IGameApplicationEvents
+    public sealed partial class HotGame : IGameModule, IGameApplicationEvents
     {
         private const string Version = "1.0.0";
         private IGameHost host;
@@ -65,16 +65,12 @@ namespace Game.HotUpdate
             LocalStorageManager.Instance.Initialize();
             var source = options.InputActions as InputActionAsset ?? Resources.Load<InputActionAsset>("InputActions");
             InputManager.Instance.Initialize(source, source != null ? options.InitialInputMap : null);
-            GameSceneManager.Instance.Initialize(options.SceneLoaderFactory?.Invoke() as Game.Framework.Scenes.ISceneLoader);
+            GameSceneManager.Instance.Initialize(ResourceManager.Instance.CreateSceneLoader());
             AudioManager.Instance.Initialize();
             DataManager.Instance.Initialize(LoadDataBytesAsync);
             GameSettings.Instance.Initialize();
 
-            if (options.UIAssetLoaderFactory?.Invoke() is IUIAssetLoader loader)
-            {
-                UIManager.Instance.SetAssetLoader(loader);
-            }
-
+            UIManager.Instance.SetAssetLoader(new YooAssetUIAssetLoader(ResourceManager.Instance));
             UIManager.Instance.Initialize();
             GpuAnimatorManager.Instance.Initialize();
             EntityManager.Instance.Initialize();
@@ -98,18 +94,7 @@ namespace Game.HotUpdate
 
             token.ThrowIfCancellationRequested();
             var tables = DataManager.Instance.Get<cfg.Tables>();
-            var arguments = Environment.GetCommandLineArgs();
-            int probe = Array.IndexOf(arguments, "--expect-luban-table");
-            if (probe >= 0 && probe + 1 < arguments.Length)
-            {
-                string expected = arguments[probe + 1];
-                if (tables.GetType().GetProperty(expected)?.GetValue(tables) == null)
-                {
-                    throw new InvalidOperationException("Expected hot table was not loaded: " + expected);
-                }
-
-                host.Log("NATIVE_SCHEMA_READY " + expected);
-            }
+            ValidateNativeSchema(tables);
 
             var example = tables.TbExample.Get(1);
             host.Log("LUBAN_EXAMPLE " + example.Id + " " + example.Name);

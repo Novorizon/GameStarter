@@ -10,16 +10,15 @@ namespace Game
     {
         public UnityEngine.Object InputActions { get; }
         public string InitialInputMap { get; }
-        public Func<object> SceneLoaderFactory { get; }
-        public Func<object> UIAssetLoaderFactory { get; }
         public Func<CancellationToken, Task> InitializeModulesAsync { get; }
 
-        public GameStartupOptions(UnityEngine.Object inputActions = null, string initialInputMap = "Gameplay", Func<CancellationToken, Task> initializeModulesAsync = null, Func<object> sceneLoaderFactory = null, Func<object> uiAssetLoaderFactory = null)
+        public GameStartupOptions(
+            UnityEngine.Object inputActions = null,
+            string initialInputMap = "Gameplay",
+            Func<CancellationToken, Task> initializeModulesAsync = null)
         {
             InputActions = inputActions;
             InitialInputMap = initialInputMap;
-            SceneLoaderFactory = sceneLoaderFactory;
-            UIAssetLoaderFactory = uiAssetLoaderFactory;
             InitializeModulesAsync = initializeModulesAsync;
         }
     }

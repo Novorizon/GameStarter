@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Game
 {
-    /// <summary>项目接线：每次成功加载持有一份独立租约，交给 UI 工厂在实例销毁后释放。</summary>
+    /// <summary>热更侧 UI 接线：每次成功加载持有一份独立租约，在实例销毁后释放。</summary>
     internal sealed class YooAssetUIAssetLoader : ICancellableUIAssetLoader
     {
         private readonly ResourceManager resources;

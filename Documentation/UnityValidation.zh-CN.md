@@ -43,9 +43,9 @@ $unity = "C:\Program Files\Unity\Hub\Editor\2022.3.62f1\Editor\Unity.exe"
 .\Tools~\native-validate.ps1 -UnityEditor $unity -Phase Compile
 ```
 
-ImportSamples 从已解析包的 package.json 读取 samples，复制到 Assets/NovorizonSamples，并写 imported-samples.txt。目录已存在时拒绝覆盖；重新验证使用新的 checkout，或先自行移走该验证目录。它只导入自有包公开示例，不复制第三方包源码。
+ImportSamples 从已解析包的 package.json 读取 samples，复制到 Assets/NovorizonSamples，并写 imported-samples.txt。包目录中的点替换为下划线，例如 com_novorizon_framework，避免 .framework 后缀被 Unity 识别为原生插件目录而跳过 C#。目录已存在时拒绝覆盖；重新验证使用新的 checkout，或先自行移走该验证目录。它只导入自有包公开示例，不复制第三方包源码。
 
-CompileScripts 在 Unity 完成 Editor 导入后，调用 HybridCLR 的脚本编译器检查 Player 程序集，核对热更 DLL 输出并写 compile.json。此阶段不安装或替换原生 il2cpp，不构建 Player。宿主必须安装所选 Build Target 的支持模块；shell 保留工程当前目标，Windows 脚本使用 Win64。
+CompileScripts 在 Unity 完成 Editor 导入后，调用 HybridCLR 的脚本编译器检查 Player 程序集，核对热更 DLL 输出并写 compile.json。另按包中声明的全部示例 asmdef，逐一核对 Unity 实际发现的 Editor 程序集、DLL 文件、导入目录下的源文件以及非 Editor 示例是否进入当前 Player 编译列表，写 sample-assemblies.json；缺少任一项即失败。当前 8 个示例应有 11 个 Editor 编译程序集，其中 8 个 Runtime 程序集参与 Player 编译。此阶段不安装或替换原生 il2cpp，不构建 Player。宿主必须安装所选 Build Target 的支持模块；shell 保留工程当前目标，Windows 脚本使用 Win64。
 
 也可直接调用入口：
 
@@ -54,7 +54,7 @@ CompileScripts 在 Unity 完成 Editor 导入后，调用 HybridCLR 的脚本编
 "$UNITY_EDITOR" -batchmode -nographics -projectPath "$PWD" -executeMethod Game.Editor.NativeValidation.CompileScripts -quit -logFile compile.log
 ```
 
-通过条件：Unity 进程成功退出、日志无编译错误、compile.json 的 success 为 true，日志包含 NATIVE_COMPILE_READY。导入样例成功不等于编译成功。
+通过条件：Unity 进程成功退出、日志无编译错误、compile.json 和 sample-assemblies.json 的 success 为 true，日志包含 NATIVE_COMPILE_READY 与 PACKAGE_SAMPLE_ASSEMBLIES_VERIFIED。导入清单的条目数本身不能证明示例参与编译。
 
 ## 2. Editor 启动与 Demo
 
