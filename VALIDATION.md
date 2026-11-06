@@ -64,3 +64,7 @@ Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032
 原 WR 版本保存在两个仓库的 backup/unitywebrequest-updates-20261106 分支。新实现默认先通过 YooAsset 下载所选资源版本全部缺失内容，再读取 DLL/AOT 元数据并按签名清单校验；发布只新增 assets/ 与 manifests/，不再上传独立 patches DLL。控制清单仍通过 HTTP 获取。已有 HybridCLR 主包需重建，更新流程与管理器边界见 Documentation/UnifiedDownloads.zh-CN.md。
 
 模型回归：GameStarter 67 项及 UnityPackages 完整回归通过，后者包括 23 项代码发行/资源提供方场景、UI 183 项、网络 24 项。新增覆盖资源准备顺序、YooAsset 代码路径不下载独立 DLL、离线清单缓存、DLL/AOT 哈希失败、取消和缺少资源提供方时拒绝静默回退。
+
+真实 Unity 2022.3.62f1、StandaloneLinux64 的资源验证使用包提交 `9502631577cc0ae31d335332d09bb91cebc83a48`：实际编译两份热更 DLL 和代表性未裁剪 AOT 输入，构建同一个 YooAsset 资源版本，通过本地 HTTP 冷缓存下载 4 个资源包，读取并校验 3 个代码文件，并读取 Luban 数据；随后同版本缓存重新初始化，缺失资源数为 0。HTTP 日志只有资源清单和 bundle 请求，没有独立 DLL 下载。该探针仅存在于验证副本。
+
+HTTP 探针采用 SDK 支持的纯远端文件系统，因为测试副本没有内置资源；初次默认内置文件系统初始化失败时，还观察到 YooAsset 2.3.18 的 Linux 本地 URL 会额外拼接 `/root/`。未修改第三方包；本次未将内置资源回退记为原生通过，回退及取消语义由模型回归覆盖。AOT 输入仅验证打包、传输和读取，不代表真实 IL2CPP 裁剪元数据可执行。
