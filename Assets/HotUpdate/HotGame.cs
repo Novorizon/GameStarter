@@ -1,22 +1,36 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ECS;
+using Game.Framework;
+using Game.Framework.Audio;
+using Game.Framework.Config;
+using Game.Framework.Data;
+using Game.Framework.Event;
 using Game.Framework.HotUpdate;
+using Game.Framework.Input;
+using Game.Framework.Network;
+using Game.Framework.Network.Unity;
+using Game.Framework.Storage;
+using Game.Framework.Timing;
+using Game.Resource;
+using UI;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using GameSceneManager = Game.Framework.Scenes.SceneManager;
 
 namespace Game.HotUpdate
 {
-    /// <summary>
-    /// 热更入口的类定义。GameEntry 在基础服务就绪后调用 HotUpdateManager，加载程序集并创建本类的对象。
-    /// 本类是普通 C# 对象，不挂到 GameObject 上，也不会作为组件显示在 Hierarchy。
-    /// 业务系统和首场景的启动从 InitializeAsync 添加，业务类可以放在本程序集的其他文件中。
-    /// 当前示例的公共 Manager 由 GameEntry 准备；需要热更的装配调用也可以移入本入口。
-    /// </summary>
+    /// <summary>热更业务入口：准备公共系统，再进入业务；与 GameEntry 使用相同的启动函数名称。</summary>
     public sealed class HotGame : IGameModule
     {
         private const string Version = "1.0.0";
         private IGameHost host;
+        private GameStartupOptions options;
         private bool stopped;
-        public Task InitializeAsync(IGameHost gameHost, CancellationToken token)
+        private bool managersStarted;
+
+        public async Task InitializeAsync(IGameHost gameHost, CancellationToken token)
         {
             if (gameHost == null)
             {
@@ -30,12 +44,83 @@ namespace Game.HotUpdate
             }
 
             host = gameHost;
-            // 业务启动写在这里，可拆成 InitializeManagersAsync(token) 和 StartGameAsync(token)。
-            // 例如注册本项目使用的 Luban 表、初始化玩法系统、加载首场景或打开登录界面。
-            // 需要等待的工作完成后，再调用 ReportReady。
+            options = (gameHost as IGameContextHost)?.StartupContext as GameStartupOptions ?? new GameStartupOptions();
+            await InitializeManagersAsync(token);
+            await StartGameAsync(token);
+            token.ThrowIfCancellationRequested();
+            if (stopped)
+            {
+                throw new OperationCanceledException("Hot update module has stopped.");
+            }
+
             host.Log("HOT_UPDATE_READY " + Version);
             host.ReportReady(Version);
+        }
+
+        private Task InitializeManagersAsync(CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            managersStarted = true;
+            EventManager.Instance.Initialize();
+            TimerManager.Instance.Initialize();
+            DataManager.Instance.Initialize();
+            LocalStorageManager.Instance.Initialize();
+            var source = options.InputActions as InputActionAsset ?? Resources.Load<InputActionAsset>("InputActions");
+            InputManager.Instance.Initialize(source, source != null ? options.InitialInputMap : null);
+            GameSceneManager.Instance.Initialize(options.SceneLoader as Game.Framework.Scenes.ISceneLoader);
+            AudioManager.Instance.Initialize();
+            if (options.UseYooAsset)
+            {
+                ConfigManager.Instance.Initialize(LoadConfigTextAsync, LoadConfigBytesAsync);
+            }
+            else
+            {
+                ConfigManager.Instance.Initialize();
+            }
+
+            if (options.UIAssetLoader is IUIAssetLoader loader)
+            {
+                UIManager.Instance.SetAssetLoader(loader);
+            }
+
+            UIManager.Instance.Initialize();
+            GpuAnimatorManager.Instance.Initialize();
+            EntityManager.Instance.Initialize();
+            WorldManager.Instance.Initialize();
+            if (Resources.Load<NetworkSettings>("NetworkSettings") != null)
+            {
+                NetworkManager.Instance.Initialize();
+            }
+
             return Task.CompletedTask;
+        }
+
+        private async Task StartGameAsync(CancellationToken token)
+        {
+            if (options.InitializeModulesAsync != null)
+            {
+                await options.InitializeModulesAsync(token);
+            }
+
+            token.ThrowIfCancellationRequested();
+            // 在这里注册本游戏使用的表、初始化玩法系统、加载首场景或打开登录界面。
+            // 具体业务类放在 Assets/HotUpdate 的其他目录，由这里组织调用。
+        }
+
+        private static async Task<string> LoadConfigTextAsync(string location, CancellationToken token)
+        {
+            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(location, token))
+            {
+                return asset.Asset.text;
+            }
+        }
+
+        private static async Task<byte[]> LoadConfigBytesAsync(string location, CancellationToken token)
+        {
+            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(location, token))
+            {
+                return asset.Asset.bytes;
+            }
         }
 
         public void Shutdown()
@@ -46,10 +131,30 @@ namespace Game.HotUpdate
             }
 
             stopped = true;
-            // 在这里释放热更业务持有的资源和订阅。当前公共 Manager 由 GameEntry 释放；
-            // 如果把某个 Manager 的初始化迁到这里，也要在此配对释放，并删除 GameEntry 中对应调用。
+            if (managersStarted)
+            {
+                ReleaseManagers();
+                managersStarted = false;
+            }
+
             host?.Log("HOT_UPDATE_STOPPED");
             host = null;
+            options = null;
+        }
+
+        private void ReleaseManagers()
+        {
+            NetworkManager.Release();
+            WorldManager.Release();
+            EntityManager.Release();
+            GpuAnimatorManager.Release();
+            UIManager.Release();
+            ConfigManager.Release();
+            AudioManager.Release();
+            GameSceneManager.Release();
+            InputManager.Release();
+            LocalStorageManager.Release();
+            DataManager.Release();
         }
     }
 }

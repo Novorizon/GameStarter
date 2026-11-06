@@ -1,0 +1,7 @@
+{
+  "name": "Game.Startup",
+  "rootNamespace": "Game",
+  "references": [],
+  "autoReferenced": true,
+  "allowUnsafeCode": false
+}

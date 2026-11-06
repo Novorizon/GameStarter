@@ -56,6 +56,7 @@ internal static class Program
         Check("module Tick failure leaves manager cleanup to OnExit", EntryTickFailure);
         Check("quit and destroy do not rerun OnExit or create unused managers", EntryCleanupAfterReferenceReset);
         Check("exit reentry does not run cleanup twice", EntryShutdownReentry);
+        Check("hot startup owns ordinary manager creation", HotOwnsManagers);
         Check("hot code is a separate assembly and AOT has no hot reference", HotAssemblyBoundary);
         Check("hot entry reports health without waiting for GameEntry", HotEntryReady);
         Check("GameEntry waits for resources before starting hot update", HotEntryWaits);
@@ -324,7 +325,8 @@ internal static class Program
         EditorStaticReset.RestoreDeclaredValues();
         UnityThread.Reset();
         UnityThread.InitializeManual();
-        ManagerContracts.Reset();
+        ManagerModels.Reset();
+        ManagerContracts.HotGameFactory = () => new Game.HotUpdate.HotGame();
     }
 
     private static void EntrySingleton()
@@ -477,7 +479,7 @@ internal static class Program
         var entry = CreateEntry(resources: true);
         Game.Framework.Data.DataManager.Instance.Register(new OwnedData());
         Complete(entry.ShutdownAsync());
-        Equal("hot,module,network,worlds,entities,gpu,ui,config,audio,scenes,input,storage,data,resources", string.Join(",", ManagerContracts.Cleanup));
+        Equal("module,hot,network,worlds,entities,gpu,ui,config,audio,scenes,input,storage,data,resources", string.Join(",", ManagerContracts.Cleanup));
         Complete(entry.ShutdownAsync());
         True(!UI.UIManager.TryGetInstance(out _));
         True(!Game.Framework.Data.DataManager.IsCreated);
@@ -668,6 +670,34 @@ internal static class Program
         }
     }
 
+    private sealed class BareHotGame : Game.Framework.HotUpdate.IGameModule
+    {
+        public async Task InitializeAsync(Game.Framework.HotUpdate.IGameHost host, CancellationToken token)
+        {
+            var contextHost = (Game.Framework.HotUpdate.IGameContextHost)host;
+            var options = (GameStartupOptions)contextHost.StartupContext;
+            True(!ManagerContracts.Calls.Contains("ui") && !ManagerContracts.Calls.Contains("input"));
+            await options.InitializeModulesAsync(token);
+            host.ReportReady("bare");
+        }
+
+        public void Shutdown()
+        {
+        }
+    }
+
+    private static void HotOwnsManagers()
+    {
+        ResetEntry();
+        ManagerContracts.HotGameFactory = () => new BareHotGame();
+        var entry = CreateEntry();
+        Complete(entry.WaitUntilReadyAsync());
+        Equal(StartupState.Ready, entry.State);
+        True(!ManagerContracts.Calls.Contains("ui") && !ManagerContracts.Calls.Contains("input"));
+        Complete(entry.ShutdownAsync());
+        ResetEntry();
+    }
+
     private static void HotAssemblyBoundary()
     {
         Equal("Game.HotUpdate", typeof(Game.HotUpdate.HotGame).Assembly.GetName().Name);
@@ -725,7 +755,7 @@ internal static class Program
         ManagerContracts.UIFailure = new InvalidOperationException("UI initialization failed");
         var entry = CreateEntry();
         Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
-        Equal(0, ManagerContracts.HotCalls.Count);
+        Equal("start", string.Join(",", ManagerContracts.HotCalls));
         ResetEntry();
     }
 
@@ -746,7 +776,7 @@ internal static class Program
         var pending = new TaskCompletionSource<bool>();
         ManagerContracts.HotInitialization = token =>
         {
-            True(ManagerContracts.Calls.Contains("ui") && ManagerContracts.Calls.Contains("module"));
+            True(!ManagerContracts.Calls.Contains("ui") && !ManagerContracts.Calls.Contains("module"));
             return pending.Task;
         };
         var entry = CreateEntry();
@@ -797,7 +827,7 @@ internal static class Program
         var entry = CreateEntry();
         Equal(StartupState.Failed, entry.State);
         Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
-        True(UI.UIManager.TryGetInstance(out _));
+        True(!UI.UIManager.TryGetInstance(out _));
         Complete(entry.ShutdownAsync());
         Equal("hot", ManagerContracts.Cleanup.First());
         ResetEntry();
@@ -814,7 +844,7 @@ internal static class Program
             EditorStaticReset.RestoreDeclaredValues();
             Equal(StartupState.NotStarted, entry.State);
             True(!GameEntry.TryGetInstance(out _));
-            Equal("hot", ManagerContracts.Cleanup.First());
+            Equal("module", ManagerContracts.Cleanup.First());
             True(!UI.UIManager.TryGetInstance(out _));
             typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
             Complete(entry.WaitUntilReadyAsync());

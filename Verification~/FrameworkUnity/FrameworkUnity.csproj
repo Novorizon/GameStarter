@@ -11,5 +11,8 @@
     <ProjectReference Include="../Unity/Unity.csproj" />
     <ProjectReference Include="../Core/Core.csproj" />
     <Compile Include="$(FrameworkPackageRoot)/Runtime/Unity/MonoSingleton.cs" Link="MonoSingleton.cs" />
+    <ProjectReference Include="../Managers/Common/Common.csproj" />
+    <Compile Include="../Managers/Storage/Models.cs" />
+    <Compile Include="../Managers/Scenes/Models.cs" />
   </ItemGroup>
 </Project>

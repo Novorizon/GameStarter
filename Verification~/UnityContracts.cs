@@ -190,10 +190,3 @@ namespace UnityEngine
         public static string ToJson(object target) => JsonSerializer.Serialize(target, Options);
     }
 }
-
-namespace UnityEngine.InputSystem
-{
-    public class InputActionAsset : UnityEngine.ScriptableObject
-    {
-    }
-}

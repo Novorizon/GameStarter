@@ -1,6 +1,6 @@
 PASS project structure, GUIDs and pinned Git dependency references
-Cloning into '/tmp/game-starter-verify-vpek0qes/FrameworkSource'...
-Note: switching to 'c1bf5447107f68a3f1c1f76068cc7675b41cc028'.
+Cloning into '/tmp/game-starter-verify-4q42laxz/FrameworkSource'...
+Note: switching to '7dc4127282ef4538c7f28d2eda0fcf0ea4e4be47'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -21,8 +21,21 @@ Turn off this advice by setting config variable advice.detachedHead to false
   All projects are up-to-date for restore.
   Unity -> /workspace/GameStarter/Verification~/Unity/bin/Release/net8.0/Unity.dll
   Core -> /workspace/GameStarter/Verification~/Core/bin/Release/netstandard2.1/Game.Framework.Core.dll
-  FrameworkUnity -> /workspace/GameStarter/Verification~/FrameworkUnity/bin/Release/net8.0/Game.Framework.Unity.dll
   HotUpdateContracts -> /workspace/GameStarter/Verification~/HotUpdateContracts/bin/Release/net8.0/Game.Framework.HotUpdate.dll
+  Common -> /workspace/GameStarter/Verification~/Managers/Common/bin/Release/net8.0/GameStarter.Verification.Support.dll
+  FrameworkUnity -> /workspace/GameStarter/Verification~/FrameworkUnity/bin/Release/net8.0/Game.Framework.Unity.dll
+  Resources -> /workspace/GameStarter/Verification~/Managers/Resources/bin/Release/net8.0/Game.Framework.Resources.YooAsset.dll
+  UI -> /workspace/GameStarter/Verification~/Managers/UI/bin/Release/net8.0/Game.Framework.UI.dll
+  ECS -> /workspace/GameStarter/Verification~/Managers/ECS/bin/Release/net8.0/ECS.dll
+  NetworkUnity -> /workspace/GameStarter/Verification~/Managers/NetworkUnity/bin/Release/net8.0/Game.Framework.Network.Unity.dll
+  Network -> /workspace/GameStarter/Verification~/Managers/Network/bin/Release/net8.0/Game.Framework.Network.dll
+  Gpu -> /workspace/GameStarter/Verification~/Managers/Gpu/bin/Release/net8.0/GpuAnimator.dll
+  Audio -> /workspace/GameStarter/Verification~/Managers/Audio/bin/Release/net8.0/Game.Framework.Audio.dll
+  Data -> /workspace/GameStarter/Verification~/Managers/Data/bin/Release/net8.0/Game.Framework.Config.dll
+  InputSystem -> /workspace/GameStarter/Verification~/Managers/InputSystem/bin/Release/net8.0/Unity.InputSystem.dll
+  Input -> /workspace/GameStarter/Verification~/Managers/Input/bin/Release/net8.0/Game.Framework.Input.dll
+  HotManager -> /workspace/GameStarter/Verification~/Managers/HotManager/bin/Release/net8.0/GameStarter.HotManager.Model.dll
+  Startup -> /workspace/GameStarter/Verification~/Startup/bin/Release/net8.0/Game.Startup.dll
   Runtime -> /workspace/GameStarter/Verification~/Runtime/bin/Release/net8.0/GameStarter.Runtime.dll
   HotUpdate -> /workspace/GameStarter/Verification~/HotUpdate/bin/Release/net8.0/Game.HotUpdate.dll
   GameStarter.Verification -> /workspace/GameStarter/Verification~/bin/Release/net8.0/GameStarter.Verification.dll
@@ -31,7 +44,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:56.49
+Time Elapsed 00:01:35.31
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module
@@ -60,6 +73,7 @@ PASS startup module failure leaves manager cleanup to OnExit
 PASS module Tick failure leaves manager cleanup to OnExit
 PASS quit and destroy do not rerun OnExit or create unused managers
 PASS exit reentry does not run cleanup twice
+PASS hot startup owns ordinary manager creation
 PASS hot code is a separate assembly and AOT has no hot reference
 PASS hot entry reports health without waiting for GameEntry
 PASS GameEntry waits for resources before starting hot update
@@ -80,4 +94,4 @@ PASS HybridCLR embed request completes before installing consumers
 PASS installer waits for compilation and play mode
 PASS optional installer migrates an old package identifier
 PASS installer configures only after all dependencies exist
-PASS 48 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).
+PASS 49 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).

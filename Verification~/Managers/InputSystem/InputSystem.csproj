@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>Unity.InputSystem</AssemblyName></PropertyGroup><ItemGroup><ProjectReference Include="../../Unity/Unity.csproj" /><Compile Include="Models.cs" /></ItemGroup></Project>

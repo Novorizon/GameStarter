@@ -1,23 +1,11 @@
 # 验证范围
 
-热更编译关闭 .NET SDK 的传递项目引用，并检查直接引用与 Game.HotUpdate.asmdef 完全一致。Unity 隐式提供的引擎引用由独立 Unity API 模型补齐，避免 .NET 自动补齐依赖掩盖 Unity 的 CS0012/CS0117。
+验证器按工程清单的固定 Git 标签下载 Framework 与热更封装，或接受维护者显式传入 --framework；不会自动读取相邻源码仓库。清单同时声明聚合包和全部依赖来源，不使用 file:../../../。结构检查覆盖包闭包、Bootstrap 场景、输入配置和资源 GUID。
 
-结构检查要求默认工程清单和所有可选模块来源都是发布标签的 Git URL，不依赖 file:../../../ 或父目录中的 UnityPackages。Bootstrap 场景、程序集引用和资源 GUID 也会核对。工程清单必须包含 all 和聚合目录中的全部依赖来源，确保初次解析时即可满足运行时程序集引用。
+实际 Framework Core、MonoSingleton 与 IGameModule/IGameHost 契约分别编译。Game.Startup 保存共享启动参数；GameStarter.Runtime 不引用 Game.HotUpdate。热更编译禁用传递项目引用，并检查每个直接引用与生产 Game.HotUpdate.asmdef 一致。测试用 Manager API 模型按生产程序集名拆分，防止合并编译掩盖缺少引用。
 
-48 组生命周期、Manager 初始化、热更入口和安装场景使用实际 Framework Core 和 MonoSingleton 源码。未显式提供 --framework 时，验证器按工程清单从 Git 下载 Framework 至临时目录，同时取得封装的真实 IGameModule 契约、UpdateSettings 和配置验证源码，没有相邻包仓库回退。热更与 AOT 源码分开编译成 Game.HotUpdate 和 GameStarter.Runtime DLL，验证 AOT 无热更引用、GameEntry 在基础服务与启动模块完成后才显式启动加载、热更完成前保持 Starting、关闭开关不创建加载器、失败与退出取消，以及 HotGame 的健康确认。HotGame 不反向等待 GameEntry。UI、ECS、资源、网络和热更 Manager 使用明确隔离的测试 API 模型，覆盖 Manager 先于启动模块、重复访问不重复初始化、配置驱动的网络准备、资源失败和退出期间的异步完成；这些模型不执行对应库的真实资源或原生逻辑。
+49 组受控场景覆盖：原有可选模块的顺序初始化、Tick、取消和清理；关闭热更时的 AOT 初始化；开启热更后由真实 HotGame 初始化普通 Manager；输入和资源参数的传递；就绪前不进入 Ready；退出取消；可选模块先于 Manager 释放；重复启动、异常清理、保留场景组件重启；包安装和解析行为。
 
-发行验收从只含 GameStarter 的干净解压目录执行上述检查与编译。模型中的 UnityEngine/UnityEditor/UPM 不执行原生导入、domain reload、渲染、IL2CPP 或设备行为；这些仍需要 Unity 2022.3.62f1 及目标平台模块验收。
+新增用例让自定义热更入口不创建普通 Manager，验证 GameEntry 也不会代为创建它们。默认热更入口由测试执行器通过工厂注入，AOT 模型和生产 AOT 代码都不引用热更具体类型。
 
-公共 Manager 顺序检查已包含 Storage、Scene、Audio、Config，并验证重复访问入口不会重复初始化。GameStarter 在这里检查接线；各服务的实际运行时、文件与异步回归在 UnityPackages/tools/GameModulesVerification 中验证。
-
-GameEntry 验证覆盖直接初始化、OnExit 释放全局 Manager、重复退出不重复清理，以及初始化失败不在入口回滚其他 Manager。Manager 内部负责清理异常、未完成的异步释放和后续启动协调。验证使用队列式 Unity SynchronizationContext 模型驱动异步续体，避免把线程池行为当成 Unity 主线程。
-
-输入接线检查覆盖项目 Action Asset、初始 Map、全局实例释放和清理顺序，配置接线检查确认文本/二进制读取均释放独立租约。结构检查要求 Input System 1.11.2、示例 .inputactions 与 Active Input Handling Both；这些不代替 Unity 导入与真实设备验收。
-
-真实热更加载器的显式启动、重复调用、超时、取消、健康确认和释放由 UnityPackages/tools/HotUpdateVerification 验证；该套件编译实际包运行时、Editor 构建代码及官方 HybridCLR 源码，并另行编译 Player 分支。原生 IL2CPP 加载仍需设备验收。启动 JSON 不再存在，也不会由安装工具生成。
-
-Framework 的预编译 RoslynAnalyzer 在验证项目中直接启用，Core、MonoSingleton 和 GameEntry 分别编译。连续两次保留入口组件的启动/退出检查，使用统一实例清理与生成的静态恢复，不调用手写的 ResetSession。宏 UNITY_EDITOR 仅用于此编辑器验证；Player 分支和 Domain Reload 选项判断在包仓库验证。
-
-本次未传 --framework 的发行验证已从 v0.1.0-preview.20 下载 Framework，48 组检查通过；生成器 DLL 也来自该远端标签。没有使用工作区相邻 UnityPackages 的源码。
-
-统一 Initialize 入口已从实际单例基类编译，GameEntry 的 Event/Timer/Data/Entity 使用显式 Initialize；既有 48 组初始化顺序、失败及生命周期场景通过。带参数的测试服务保留重载，并让无参 override 转到默认参数，和正式包 API 一致。
+模型中的 Unity/UPM/Manager API 不执行真实设备、资源包、渲染或 IL2CPP 行为。UnityPackages 验证包内实际服务；本工程验证启动接线。真实 Unity 2022.3 导入、Play 和目标平台构建仍需单独验收。Game.Startup/link.xml 保留热更端读取的共享 AOT 参数类型。增加 AOT 接口或程序集后需要重建 HybridCLR Player。
