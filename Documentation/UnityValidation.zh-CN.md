@@ -7,7 +7,7 @@
 | 内容 | 来源 |
 | --- | --- |
 | Unity 工程 | https://github.com/Novorizon/GameStarter，main；本次发行 v0.1.0-preview.26 |
-| 包仓库 | https://github.com/Novorizon/UnityPackages，manifest 固定 v0.1.0-preview.25 |
+| 包仓库 | https://github.com/Novorizon/UnityPackages，manifest 固定提交 47a4a7d18c1694f1d4dfe63fc7ad7cbc5cfd2ca4（待发行 preview.26） |
 | Editor | Unity 2022.3.62f1，或先明确记录使用的兼容版本 |
 | 场景 | Assets/Scenes/Bootstrap.unity |
 | 运行入口 | GameEntry 准备发行/资源；HotGame 初始化 Manager、设置与 Luban 表 |

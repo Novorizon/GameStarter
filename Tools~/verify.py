@@ -114,8 +114,11 @@ def main():
             checkout = Path(temp) / 'FrameworkSource'
             git_env = os.environ.copy()
             git_env['GIT_TERMINAL_PROMPT'] = '0'
-            subprocess.run(['git', 'clone', '--depth', '1', '--filter=blob:none', '--sparse', '--branch', source.fragment, origin, str(checkout)], env=git_env, check=True)
+            subprocess.run(['git', 'init', '-q', str(checkout)], env=git_env, check=True)
+            subprocess.run(['git', '-C', str(checkout), 'remote', 'add', 'origin', origin], env=git_env, check=True)
+            subprocess.run(['git', '-C', str(checkout), 'fetch', '--depth', '1', '--filter=blob:none', 'origin', source.fragment], env=git_env, check=True)
             subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder, 'Packages/com.novorizon.framework.hybridclr', 'Packages/com.novorizon.data', 'Packages/com.novorizon.framework.yooasset'], env=git_env, check=True)
+            subprocess.run(['git', '-C', str(checkout), 'checkout', '--detach', '-q', 'FETCH_HEAD'], env=git_env, check=True)
             framework = checkout / subfolder
         framework = framework.resolve()
         package = json.loads((framework / 'package.json').read_text())

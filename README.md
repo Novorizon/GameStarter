@@ -1,6 +1,6 @@
 # GameStarter
 
-独立 Unity 2022.3.62f1 启动工程。当前发行 `v0.1.0-preview.26`，依赖 UnityPackages `v0.1.0-preview.25`。工程 manifest 已声明 framework.all 和完整包来源，不依赖相邻仓库或本地 file: 路径。
+独立 Unity 2022.3.62f1 启动工程。当前发行 `v0.1.0-preview.26`，依赖 UnityPackages 固定提交 `47a4a7d18c1694f1d4dfe63fc7ad7cbc5cfd2ca4`（移除 SingletonLifecycle 的待发行版本）。工程 manifest 已声明 framework.all 和完整包来源，不依赖相邻仓库或本地 file: 路径。
 
 ## 从哪里开始
 
@@ -27,7 +27,7 @@ GameEntry 是 AOT 入口，不引用生成表。HotGame 是普通 C# 游戏入�
 
 StartupModule 是可选扩展，默认空列表；GameSession 只协调这些模块。普通 Manager 在 HotGame 直接 Initialize，退出时调用 Release，不需要在业务层登记 Manager 所有权或失败回滚。
 
-GameStartupOptions 只传输入配置和可选模块启动回调；资源就绪后，HotGame 直接创建场景加载器和热更侧 YooAssetUIAssetLoader，不通过 object 工厂传递。SingletonLifecycle 先释放旧实例、取消任务，Source Generator 再恢复关闭 Domain Reload 时的静态字段声明值，两者职责不同。
+GameStartupOptions 只传输入配置和可选模块启动回调；资源就绪后，HotGame 直接创建场景加载器和热更侧 YooAssetUIAssetLoader，不通过 object 工厂传递。正常退出由现有集中释放列表清理 Manager（包括事件与定时器），不再通过全局生命周期注册表；关闭 Domain Reload 时，基类与 Source Generator 共用已有 EditorStaticReset 恢复编辑器状态。
 
 命令行 Player 退出探针与表结构检查分别集中在 GameEntry.NativeValidation.cs、HotGame.NativeValidation.cs，供验收脚本使用；正常业务按生成类型直接查询表。共享 Game.Startup 构造签名和 AOT 程序集引用发生变化，已有 IL2CPP 主包需要重建基线后再发布补丁。
 
@@ -69,7 +69,7 @@ Tools → Novorizon → GameStarter：
 ## 更新与维护
 
 ```sh
-python3 Tools~/sync-packages.py --ref v0.1.0-preview.25
+python3 Tools~/sync-packages.py --ref 47a4a7d18c1694f1d4dfe63fc7ad7cbc5cfd2ca4
 python3 Tools~/verify.py --dotnet /path/to/dotnet
 ```
 

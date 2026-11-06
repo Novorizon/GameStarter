@@ -83,6 +83,18 @@ internal static partial class Program
             Equal(.8f, LocalStorageManager.Instance.LoadJson<GamePreferences>("user-settings.json").master);
             ResetEntry();
         });
+        Check("quit saves preferences before centralized service release without recreating managers", () =>
+        {
+            ResetEntry();
+            var entry = CreateEntry();
+            AudioManager.Instance.MasterVolume = .63f;
+            UnityEngine.Object.Invoke(entry, "OnApplicationQuit");
+            var saved = JsonUtility.FromJson<GamePreferences>(LocalStorageManager.Files["user-settings.json"]);
+            Equal(.63f, saved.master);
+            True(!InputManager.TryGetInstance(out _));
+            True(!LocalStorageManager.TryGetInstance(out _));
+            ResetEntry();
+        });
         Check("bad preferences remain intact until an explicit settings change", () =>
         {
             ResetEntry();

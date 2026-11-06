@@ -6,7 +6,7 @@
 
 编译实际 Framework Core/MonoSingleton、DataManager、Luban 导出器、官方 Luban.Runtime、生成表、Game.Startup、GameStarter.Runtime 和 Game.HotUpdate。asmdef 直接引用与模型项目对齐，AOT 入口不引用热更表、Luban 或 HotGame 程序集。
 
-当前 64 项场景涵盖启动、可选模块、取消、退出、单例重置、安装器、真实表解码、资源租约、采集规则、构建前置、端点分离、设置恢复/坏存档保护和签名资源配对。YooAsset 边界含两个同名 BuildReport，防止 Unity 构建接口的类型歧义回归。
+当前 65 项场景涵盖启动、可选模块、取消、退出、单例重置、安装器、真实表解码、资源租约、采集规则、构建前置、端点分离、设置恢复/坏存档保护和签名资源配对。YooAsset 边界含两个同名 BuildReport，防止 Unity 构建接口的类型歧义回归。
 
 Unity/UPM、音频、Input System、资源构建和 Player 构建使用边界模型；不能据此宣称真实 Unity 或 IL2CPP 通过。
 
@@ -43,6 +43,17 @@ Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032
 
 ## 启动接线简化复验
 
-移除 GameStartupOptions 中的两个 object 工厂，场景与 UI 适配器改在 HotGame 中直接装配；UI 租约适配器移入热更程序集。命令行探针移到单独的 NativeValidation partial 文件，保留现有验收脚本行为。SingletonLifecycle 的资源清理与 Source Generator 的静态字段恢复保持原有职责。
+移除 GameStartupOptions 中的两个 object 工厂，场景与 UI 适配器改在 HotGame 中直接装配；UI 租约适配器移入热更程序集。命令行探针移到单独的 NativeValidation partial 文件，保留现有验收脚本行为。该轮验证仍使用 SingletonLifecycle；后续移除记录见下。
 
 64 项模型回归通过（本地 net8.0 目标使用 .NET 9.0.22 roll-forward 执行）；真实 Unity 2022.3.62f1 的 Editor/Player 编译、8 个示例程序集覆盖检查和 Bootstrap Play 均通过。Game.Startup 及 AOT 引用有变化，已有 IL2CPP 主包需重建；本次未追加 IL2CPP 或 GPU 通过结论。
+
+
+## 移除全局单例生命周期注册表
+
+运行时清理改由 GameEntry/HotGame 的集中 Release 列表负责，补齐 TimerManager 和 EventManager；退出保存设置只读取已有服务，避免退出时重新创建 Manager。包侧删除 SingletonLifecycle 与 MonoSingletonLifecycle，不以其他运行时回调注册表替代；编辑器旧引用清理并入已有 EditorStaticReset。独立使用包的项目需要在自己的入口显式释放服务。
+
+65 项模型回归通过。真实 Unity 2022.3.62f1、StandaloneLinux64，在独立验证副本中使用包提交 `47a4a7d18c1694f1d4dfe63fc7ad7cbc5cfd2ca4`：8 个示例的 11 个 Editor 程序集和 8 个 Runtime Player 程序集均通过编译覆盖检查。额外验证同一 Editor 进程关闭 Domain Reload 与 Scene Reload，保留同一个 GameEntry 连续两次 Play：两次均启动就绪，两次退出后 TimerManager/EventManager 均未保留实例。临时连续 Play 探针只存在于验证副本。
+
+原生 GpuAnimator EditMode 重跑仍为 51 项：46 通过、5 失败、0 跳过，失败用例与前轮相同。三个资源持久化用例和两个测试准备阶段失败仍需独立定位，不归为本次移除引入的已确认缺陷，也不把该套件记为通过。
+
+模型验证工具同时修正固定提交来源的获取方式：按 manifest 的 SHA fetch，再 detached checkout；不再将 SHA 当作远端分支名。现有 HybridCLR 主包需要重建；这里不追加 IL2CPP、设备或渲染通过结论。

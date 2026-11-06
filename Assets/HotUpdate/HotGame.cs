@@ -171,6 +171,8 @@ namespace Game.HotUpdate
             InputManager.Release();
             LocalStorageManager.Release();
             DataManager.Release();
+            TimerManager.Release();
+            EventManager.Release();
         }
     }
 }
