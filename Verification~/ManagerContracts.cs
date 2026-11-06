@@ -28,9 +28,8 @@ internal static class ManagerModels
         ResourceInitialization = Task.FromResult(true);
         UnityEngine.Resources.Assets.Clear();
         Game.Framework.Network.NetworkManager.Reset();
-        Game.Framework.Data.DataManager.Reset();
         Game.Framework.Scenes.SceneManager.Reset();
-        Game.Framework.Config.ConfigManager.Reset();
+        Game.Framework.Data.DataManager.Reset();
         Game.Framework.Input.InputManager.Reset();
     }
 }

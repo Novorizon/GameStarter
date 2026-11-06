@@ -33,7 +33,7 @@ GameEntry.InitializeAsync
   -> GAME_STARTER_READY
 ```
 
-事件、定时器、运行时数据、本地存储、输入、场景、音频、配置、UI、GPU 动画、ECS 和网络的初始化调用，已经移到 HotGame.InitializeManagersAsync。Manager 的实现仍来自各个 package；只有装配调用和项目业务处于热更程序集。GameEntry 的同名方法作为关闭热更时的启动分支，不会和 HotGame 重复执行。
+事件、定时器、本地存储、输入、场景、音频、Luban 数据表、UI、GPU 动画、ECS 和网络的初始化调用，已经移到 HotGame.InitializeManagersAsync。Manager 的实现仍来自各个 package；只有装配调用和项目业务处于热更程序集。GameEntry 的同名方法作为关闭热更时的启动分支，不会和 HotGame 重复执行。
 
 项目使用哪些表、玩法系统、登录界面和首场景，都从当前分支的 StartGameAsync 添加。具体业务类放在 Assets/HotUpdate 的其他目录，入口只组织调用。空模板没有业务表、业务摄像机或首场景，因此默认不会自行加载它们。
 
@@ -43,7 +43,7 @@ HotGame 是普通 C# 对象，不挂到 GameObject 上。IGameModule 是 AOT/热
 
 Game.Startup 是项目的共享 AOT 契约程序集，包含 GameStartupOptions；它保存 Inspector 中的输入配置、资源适配器及可选模块启动回调，不拥有 Manager 或额外运行期。GameEntry 将它作为启动上下文传给封装，HotGame 通过可选 IGameContextHost 读取。旧 IGameHost/IGameModule 方法保持不变。Game.Startup/link.xml 保留这些热更端会访问的 AOT 成员。
 
-模板默认使用 Resources。配置好 YooAsset DefaultPackage 的采集和构建后开启 Initialize Yoo Asset，GameEntry 等待资源系统就绪，再开始热更加载；HotGame 的场景、UI、配置读取使用对应适配器。输入使用 Inspector 中的 Input Actions，留空时读取 Resources/InputActions，默认 Map 为 Gameplay。工程已设置 Active Input Handling Both，示例包含键盘和手柄动作。
+模板默认使用 Resources。配置好 YooAsset DefaultPackage 的采集和构建后开启 Initialize Yoo Asset，GameEntry 等待资源系统就绪，再开始热更加载；HotGame 的场景、UI、数据表读取使用对应适配器。输入使用 Inspector 中的 Input Actions，留空时读取 Resources/InputActions，默认 Map 为 Gameplay。工程已设置 Active Input Handling Both，示例包含键盘和手柄动作。
 
 网络只在 Resources/NetworkSettings 存在时 Initialize，连接仍由游戏业务显式调用 ConnectAsync。音频由业务场景的摄像机提供 AudioListener。框架自动驱动负责各 Manager 的 Update，项目入口不重复推进。
 
@@ -57,17 +57,26 @@ Framework 保证同次运行中 OnStart/OnExit 各执行一次。主动关闭可
 
 ## 包和程序集
 
-当前包标签为 `v0.1.0-preview.21`：
+当前包标签为 `v0.1.0-preview.22`：
 
 ```text
-https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.21
+https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.22
 ```
 
 UPM 不支持 package.json 的 Git 传递依赖，因此工程 manifest 同时声明聚合包及全部依赖来源。维护目录时运行 `python3 Tools~/sync-packages.py --ref <已发布标签>`；正常打开工程不需要运行 Python。固定标签不会随 GitHub 新提交自动升级。
 
 Game.HotUpdate.asmdef 已显式引用启动所需的公共库及 Game.Startup。新增业务使用其他库时，继续添加实际需要的程序集引用。AOT 的 GameStarter.Runtime 不引用 Game.HotUpdate。Framework 内置的 Source Generator 负责关闭 Domain Reload 时的单例静态恢复；关闭 Scene Reload 时不强制覆盖实例配置。
 
-当前发布包的 ConfigManager 负责 JSON/Luban 加载，Core 的 DataManager 是通用类型容器。两者的职责和 API 尚未变更。
+Luban 统一使用 com.novorizon.data 中的 DataManager，旧 ConfigManager、通用 JSON 表 API 和 Core 动态对象容器已删除。GameEntry 和 HotGame 已统一初始化 DataManager 的单一字节加载器；无需分别提供文本和二进制加载函数。
+
+业务的 StartGameAsync 中可直接加载生成的 Tables，无需预注册：
+
+```csharp
+var tables = await DataManager.Instance.LoadAsync(reader => new cfg.Tables(reader), token: token);
+var row = DataManager.Instance.Get<cfg.Tables>().TbExample[1];
+```
+
+该示例需先使用 Data 包的 Luban 菜单生成表，并在业务 asmdef 中引用生成程序集（默认 Game.Data.Generated）与 Luban.Runtime。模板未包含这些业务生成类型。玩家属性等动态数据由业务自身维护；其他 JSON 文件由业务加载并反序列化。Luban 导出默认路径仍为 Config/Luban，不要求移动既有资源。
 
 ## HybridCLR 构建
 
@@ -77,7 +86,7 @@ Editor 使用 Unity 已编译的热更程序集。IL2CPP Player 由封装准备�
 2. 选择目标平台，使用 Tools → Novorizon → Hot Update → 2. Build New Player；封装安装匹配的原生运行时并收集 DLL/AOT 元数据。
 3. 修改热更代码后用 3. Export Patch 导出补丁。修改 AOT 代码、共享契约或程序集依赖时必须重建 Player。
 
-远程地址、渠道、公钥等通过 C# UpdateSettings 传入。构建菜单通过 GameBuild.SettingsFactory 使用同一配置，不需要编辑启动 JSON。详见 [HybridCLR 封装指南](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.21/Packages/com.novorizon.framework.hybridclr/README.md)。
+远程地址、渠道、公钥等通过 C# UpdateSettings 传入。构建菜单通过 GameBuild.SettingsFactory 使用同一配置，不需要编辑启动 JSON。详见 [HybridCLR 封装指南](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.22/Packages/com.novorizon.framework.hybridclr/README.md)。
 
 ## 开发验证
 

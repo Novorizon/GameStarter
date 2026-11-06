@@ -5,22 +5,21 @@ using System.Threading.Tasks;
 using System.Threading;
 using Game.Framework;
 
-namespace Game.Framework.Config
+namespace Game.Framework.Data
 {
-    public sealed class ConfigManager : ConfigurableSingleton<ConfigManager>, IDisposable
+    public sealed class DataManager : ConfigurableSingleton<DataManager>, IDisposable
     {
-        public static ConfigManager Instance => GetOrCreateInstance(() => new ConfigManager());
+        public static DataManager Instance => GetOrCreateInstance(() => new DataManager());
         public bool Initialized
         {
             get;
             private set;
         }
 
-        public Func<string, CancellationToken, Task<string>> TextLoader;
-        public Func<string, CancellationToken, Task<byte[]>> BytesLoader;
+        public Func<string, CancellationToken, Task<byte[]>> Loader;
         public void Dispose()
         {
-            ManagerContracts.Cleanup.Add("config");
+            ManagerContracts.Cleanup.Add("data");
             ReleaseInstance(this);
             if (ManagerContracts.CleanupFailure != null)
             {
@@ -30,15 +29,14 @@ namespace Game.Framework.Config
 
         public override void Initialize()
         {
-            Initialize(null, null);
+            Initialize(null);
         }
 
-        public void Initialize(Func<string, CancellationToken, Task<string>> loader = null, Func<string, CancellationToken, Task<byte[]>> bytesLoader = null)
+        public void Initialize(Func<string, CancellationToken, Task<byte[]>> loader)
         {
-            TextLoader = loader;
-            BytesLoader = bytesLoader;
+            Loader = loader;
             Initialized = true;
-            ManagerContracts.Calls.Add("config");
+            ManagerContracts.Calls.Add("data");
         }
 
         public static void Reset() => ResetInstance(null);

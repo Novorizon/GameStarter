@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ECS;
 using Game.Framework;
 using Game.Framework.Audio;
-using Game.Framework.Config;
 using Game.Framework.Data;
 using Game.Framework.Event;
 using Game.Framework.Input;
@@ -78,7 +77,6 @@ namespace Game
             EventManager.Instance.Initialize();
             TimerManager.Instance.Initialize();
             token.ThrowIfCancellationRequested();
-            DataManager.Instance.Initialize();
             LocalStorageManager.Instance.Initialize();
             var source = inputActions != null ? inputActions : Resources.Load<InputActionAsset>("InputActions");
             InputManager.Instance.Initialize(source, source != null ? initialInputMap : null);
@@ -86,12 +84,12 @@ namespace Game
             AudioManager.Instance.Initialize();
             if (initializeYooAsset)
             {
-                ConfigManager.Instance.Initialize(LoadConfigTextAsync, LoadConfigBytesAsync);
+                DataManager.Instance.Initialize(LoadDataBytesAsync);
                 UIManager.Instance.SetAssetLoader(new YooAssetUIAssetLoader(ResourceManager.Instance));
             }
             else
             {
-                ConfigManager.Instance.Initialize();
+                DataManager.Instance.Initialize();
             }
 
             UIManager.Instance.Initialize();
@@ -106,15 +104,7 @@ namespace Game
             return Task.CompletedTask;
         }
 
-        private static async Task<string> LoadConfigTextAsync(string location, CancellationToken token)
-        {
-            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(location, token))
-            {
-                return asset.Asset.text;
-            }
-        }
-
-        private static async Task<byte[]> LoadConfigBytesAsync(string location, CancellationToken token)
+        private static async Task<byte[]> LoadDataBytesAsync(string location, CancellationToken token)
         {
             using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(location, token))
             {
@@ -210,7 +200,6 @@ namespace Game
             EntityManager.Release();
             GpuAnimatorManager.Release();
             UIManager.Release();
-            ConfigManager.Release();
             AudioManager.Release();
             GameSceneManager.Release();
             InputManager.Release();

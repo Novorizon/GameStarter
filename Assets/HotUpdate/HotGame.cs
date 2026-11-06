@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ECS;
 using Game.Framework;
 using Game.Framework.Audio;
-using Game.Framework.Config;
 using Game.Framework.Data;
 using Game.Framework.Event;
 using Game.Framework.HotUpdate;
@@ -63,7 +62,6 @@ namespace Game.HotUpdate
             managersStarted = true;
             EventManager.Instance.Initialize();
             TimerManager.Instance.Initialize();
-            DataManager.Instance.Initialize();
             LocalStorageManager.Instance.Initialize();
             var source = options.InputActions as InputActionAsset ?? Resources.Load<InputActionAsset>("InputActions");
             InputManager.Instance.Initialize(source, source != null ? options.InitialInputMap : null);
@@ -71,11 +69,11 @@ namespace Game.HotUpdate
             AudioManager.Instance.Initialize();
             if (options.UseYooAsset)
             {
-                ConfigManager.Instance.Initialize(LoadConfigTextAsync, LoadConfigBytesAsync);
+                DataManager.Instance.Initialize(LoadDataBytesAsync);
             }
             else
             {
-                ConfigManager.Instance.Initialize();
+                DataManager.Instance.Initialize();
             }
 
             if (options.UIAssetLoader is IUIAssetLoader loader)
@@ -103,19 +101,11 @@ namespace Game.HotUpdate
             }
 
             token.ThrowIfCancellationRequested();
-            // 在这里注册本游戏使用的表、初始化玩法系统、加载首场景或打开登录界面。
+            // 在这里加载本游戏使用的表、初始化玩法系统、加载首场景或打开登录界面。
             // 具体业务类放在 Assets/HotUpdate 的其他目录，由这里组织调用。
         }
 
-        private static async Task<string> LoadConfigTextAsync(string location, CancellationToken token)
-        {
-            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(location, token))
-            {
-                return asset.Asset.text;
-            }
-        }
-
-        private static async Task<byte[]> LoadConfigBytesAsync(string location, CancellationToken token)
+        private static async Task<byte[]> LoadDataBytesAsync(string location, CancellationToken token)
         {
             using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(location, token))
             {
@@ -149,7 +139,6 @@ namespace Game.HotUpdate
             EntityManager.Release();
             GpuAnimatorManager.Release();
             UIManager.Release();
-            ConfigManager.Release();
             AudioManager.Release();
             GameSceneManager.Release();
             InputManager.Release();
