@@ -66,6 +66,7 @@ internal static class Program
         Check("GameEntry can disable hot update without creating its manager", EntryHotDisabled);
         Check("GameEntry exit cancels hot startup before releasing services", EntryHotCancellation);
         Check("hot initialization failure fails GameEntry", EntryHotFailure);
+        Check("automatic singleton reset closes GameEntry before services and restarts retained scenes", EntryAutomaticReset);
         Check("catalog resolves dependencies once and before consumers", CatalogOrder);
         Check("catalog detects missing and circular dependencies", InvalidCatalog);
         Check("installer resumes after request handles are lost on reload", InstallerReload);
@@ -319,9 +320,8 @@ internal static class Program
     private static void ResetEntry()
     {
         UObject.ClearForTest();
-        typeof(GameEntry).GetMethod("ResetSession", Static).Invoke(null, null);
-        var lifecycle = typeof(MonoSingleton<>).Assembly.GetType("Game.Framework.MonoSingletonLifecycle");
-        lifecycle.GetMethod("Reset", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
+        SingletonLifecycle.Reset();
+        EditorStaticReset.RestoreDeclaredValues();
         UnityThread.Reset();
         UnityThread.InitializeManual();
         ManagerContracts.Reset();
@@ -347,8 +347,8 @@ internal static class Program
         var entry = new GameObject().AddComponent<GameEntry>();
         // Stop sends OnApplicationQuit, which clears sessionOwner before the next play session.
         UObject.Invoke(entry, "OnApplicationQuit");
-        typeof(GameEntry).GetMethod("ResetSession", Static).Invoke(null, null);
-        typeof(MonoSingleton<>).Assembly.GetType("Game.Framework.MonoSingletonLifecycle").GetMethod("Reset", Static).Invoke(null, null);
+        SingletonLifecycle.Reset();
+        EditorStaticReset.RestoreDeclaredValues();
         Equal(StartupState.NotStarted, entry.State);
         typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
         True(ReferenceEquals(entry, GameEntry.Instance));
@@ -800,6 +800,27 @@ internal static class Program
         True(UI.UIManager.TryGetInstance(out _));
         Complete(entry.ShutdownAsync());
         Equal("hot", ManagerContracts.Cleanup.First());
+        ResetEntry();
+    }
+
+    private static void EntryAutomaticReset()
+    {
+        ResetEntry();
+        var entry = CreateEntry();
+        for (int run = 0; run < 2; run++)
+        {
+            Equal(StartupState.Ready, entry.State);
+            SingletonLifecycle.Reset();
+            EditorStaticReset.RestoreDeclaredValues();
+            Equal(StartupState.NotStarted, entry.State);
+            True(!GameEntry.TryGetInstance(out _));
+            Equal("hot", ManagerContracts.Cleanup.First());
+            True(!UI.UIManager.TryGetInstance(out _));
+            typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
+            Complete(entry.WaitUntilReadyAsync());
+            True(ReferenceEquals(entry, GameEntry.Instance));
+        }
+
         ResetEntry();
     }
 

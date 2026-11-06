@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);UNITY_EDITOR</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Analyzer Include="$(FrameworkPackageRoot)/Analyzers/Game.Framework.StaticResetGenerator.dll" />
+  </ItemGroup>
+</Project>

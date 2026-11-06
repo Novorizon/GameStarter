@@ -4,7 +4,7 @@
 
 结构检查要求默认工程清单和所有可选模块来源都是发布标签的 Git URL，不依赖 file:../../../ 或父目录中的 UnityPackages。Bootstrap 场景、程序集引用和资源 GUID 也会核对。工程清单必须包含 all 和聚合目录中的全部依赖来源，确保初次解析时即可满足运行时程序集引用。
 
-47 组生命周期、Manager 初始化、热更入口和安装场景使用实际 Framework Core 和 MonoSingleton 源码。未显式提供 --framework 时，验证器按工程清单从 Git 下载 Framework 至临时目录，同时取得封装的真实 IGameModule 契约、UpdateSettings 和配置验证源码，没有相邻包仓库回退。热更与 AOT 源码分开编译成 Game.HotUpdate 和 GameStarter.Runtime DLL，验证 AOT 无热更引用、GameEntry 在基础服务与启动模块完成后才显式启动加载、热更完成前保持 Starting、关闭开关不创建加载器、失败与退出取消，以及 HotGame 的健康确认。HotGame 不反向等待 GameEntry。UI、ECS、资源、网络和热更 Manager 使用明确隔离的测试 API 模型，覆盖 Manager 先于启动模块、重复访问不重复初始化、配置驱动的网络准备、资源失败和退出期间的异步完成；这些模型不执行对应库的真实资源或原生逻辑。
+48 组生命周期、Manager 初始化、热更入口和安装场景使用实际 Framework Core 和 MonoSingleton 源码。未显式提供 --framework 时，验证器按工程清单从 Git 下载 Framework 至临时目录，同时取得封装的真实 IGameModule 契约、UpdateSettings 和配置验证源码，没有相邻包仓库回退。热更与 AOT 源码分开编译成 Game.HotUpdate 和 GameStarter.Runtime DLL，验证 AOT 无热更引用、GameEntry 在基础服务与启动模块完成后才显式启动加载、热更完成前保持 Starting、关闭开关不创建加载器、失败与退出取消，以及 HotGame 的健康确认。HotGame 不反向等待 GameEntry。UI、ECS、资源、网络和热更 Manager 使用明确隔离的测试 API 模型，覆盖 Manager 先于启动模块、重复访问不重复初始化、配置驱动的网络准备、资源失败和退出期间的异步完成；这些模型不执行对应库的真实资源或原生逻辑。
 
 发行验收从只含 GameStarter 的干净解压目录执行上述检查与编译。模型中的 UnityEngine/UnityEditor/UPM 不执行原生导入、domain reload、渲染、IL2CPP 或设备行为；这些仍需要 Unity 2022.3.62f1 及目标平台模块验收。
 
@@ -15,3 +15,7 @@ GameEntry 验证覆盖直接初始化、OnExit 释放全局 Manager、重复退�
 输入接线检查覆盖项目 Action Asset、初始 Map、全局实例释放和清理顺序，配置接线检查确认文本/二进制读取均释放独立租约。结构检查要求 Input System 1.11.2、示例 .inputactions 与 Active Input Handling Both；这些不代替 Unity 导入与真实设备验收。
 
 真实热更加载器的显式启动、重复调用、超时、取消、健康确认和释放由 UnityPackages/tools/HotUpdateVerification 验证；该套件编译实际包运行时、Editor 构建代码及官方 HybridCLR 源码，并另行编译 Player 分支。原生 IL2CPP 加载仍需设备验收。启动 JSON 不再存在，也不会由安装工具生成。
+
+Framework 的预编译 RoslynAnalyzer 在验证项目中直接启用，Core、MonoSingleton 和 GameEntry 分别编译。连续两次保留入口组件的启动/退出检查，使用统一实例清理与生成的静态恢复，不调用手写的 ResetSession。宏 UNITY_EDITOR 仅用于此编辑器验证；Player 分支和 Domain Reload 选项判断在包仓库验证。
+
+本次未传 --framework 的发行验证已从 v0.1.0-preview.19 下载 Framework，48 组检查通过；生成器 DLL 也来自该远端标签。没有使用工作区相邻 UnityPackages 的源码。

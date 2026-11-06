@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--ref', default='v0.1.0-preview.17')
+    parser.add_argument('--ref', default='v0.1.0-preview.19')
     parser.add_argument('--catalog', type=Path, help='Optional explicit catalog file for package maintainers')
     args = parser.parse_args()
     if args.catalog:
