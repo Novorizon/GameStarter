@@ -36,6 +36,10 @@ namespace Game
         // 每次运行创建一个会话，由它协调模块的初始化、更新、取消和清理。
         private GameSession session;
         private Task startupTask;
+        private ManagerLifetime managers;
+        private Task shutdownTask = Task.CompletedTask;
+        // 新入口等待旧入口的异步清理，防止旧资源关闭流程覆盖新启动。
+        private static Task serviceShutdown = Task.CompletedTask;
         // 关闭过程中禁止通过单例访问再次启动。
         private bool closing;
         private bool startupFailed;
@@ -88,7 +92,9 @@ namespace Game
             var current = new GameSession(Debug.LogException);
             session = current;
             // Unity 生命周期回调不能等待 Task，在异步方法中统一处理完成和异常。
-            startupTask = StartSessionAsync(current);
+            var owned = new ManagerLifetime(Debug.LogException);
+            managers = owned;
+            startupTask = StartSessionAsync(current, owned, serviceShutdown);
         }
 
         /// <summary>供热更新入口等待公共 Manager 和启动模块就绪；入口关闭、启动失败或调用取消时不会继续。</summary>
@@ -115,45 +121,83 @@ namespace Game
         }
 
         /// <summary>项目所需的公共 Manager 在这里集中准备；按依赖顺序添加自己的初始化调用。</summary>
-        private async Task InitializeManagersAsync(GameSession current)
+        private async Task InitializeManagersAsync(GameSession current, ManagerLifetime owned)
         {
-            // Framework 已安装主线程和时钟驱动，这里取得共享服务，不再重复驱动它们的 Update。
+            // 主线程、事件和时钟的宿主属于 Framework；这里借用，不创建第二个驱动。
             _ = EventManager.Instance;
             _ = TimerManager.Instance;
-            // 资源管理器本身是共享缓存；完整资源包初始化需要项目实际提供的 YooAsset 配置。
             var resources = ResourceManager.Instance;
-            if (initializeYooAsset && !await resources.InitializeAsync())
+            if (initializeYooAsset && !resources.Initialized)
             {
-                throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
+                // 先登记，初始化中途失败也能释放部分资源。
+                owned.Own(resources.ShutdownAsync);
+                if (!await TaskUtil.WaitAsync(resources.InitializeAsync(), owned.Token))
+                {
+                    throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
+                }
             }
 
-            // 等待资源初始化期间入口可能已关闭，旧流程不能继续创建 UI、ECS 或网络服务。
+            owned.Token.ThrowIfCancellationRequested();
             if (!ReferenceEquals(session, current))
             {
                 throw new OperationCanceledException();
             }
 
-            // 运行时数据只保存在内存；存储管理器负责本地文件，游戏自行定义数据和存档格式。
-            _ = DataManager.Instance;
-            LocalStorageManager.Instance.Initialize();
-            // 未启用 YooAsset 时使用 Build Settings 场景；启用后交由资源包场景加载器处理。
+            if (!DataManager.TryGetInstance(out var data))
+            {
+                data = DataManager.Instance;
+                owned.Own(data.Dispose);
+            }
+
+            bool hasStorage = LocalStorageManager.TryGetInstance(out var storage);
+            if (!hasStorage)
+            {
+                storage = LocalStorageManager.Instance;
+            }
+
+            if (!hasStorage || storage.RootDirectory == null)
+            {
+                owned.Own(storage.Dispose);
+            }
+
+            if (storage.RootDirectory == null)
+            {
+                storage.Initialize();
+            }
+
             var scenes = GameSceneManager.Instance;
             if (!scenes.Initialized)
             {
+                owned.Own(scenes.Dispose);
                 scenes.Initialize(initializeYooAsset ? resources.CreateSceneLoader() : null);
             }
 
-            AudioManager.Instance.Initialize();
-            // 这里只准备配置加载来源，不假定项目有哪些配置表或业务数据。
+            bool ownsAudio = !AudioManager.TryGetInstance(out _);
+            var audio = AudioManager.Instance;
+            if (ownsAudio)
+            {
+                owned.Own(() => DestroyOwnedAsync(audio, () =>
+                {
+                    if (AudioManager.TryGetInstance(out var value) && ReferenceEquals(value, audio))
+                    {
+                        AudioManager.DestroyInstance();
+                    }
+                }));
+            }
+
+            audio.Initialize();
             var config = ConfigManager.Instance;
             if (!config.Initialized)
             {
+                owned.Own(config.Dispose);
                 if (initializeYooAsset)
                 {
                     config.Initialize(async (location, token) =>
                     {
-                        var text = await TaskUtil.WaitAsync(resources.LoadTextAssetAsync(location), token);
-                        return text.text;
+                        using (var text = await resources.AcquireAsync<TextAsset>(location, token))
+                        {
+                            return text.Asset.text;
+                        }
                     });
                 }
                 else
@@ -162,24 +206,111 @@ namespace Game
                 }
             }
 
-            // UIManager 会创建页面、弹窗、面板和提示管理器；ECS 单例会建立实体管理器和默认 World。
-            UIManager.Instance.Initialize();
-            GpuAnimatorManager.Instance.Initialize();
-            _ = EntityManager.Instance;
-            WorldManager.Instance.Initialize();
-            // 有项目网络配置时准备客户端与回调派发器；实际连接由项目流程调用 ConnectAsync。
+            bool ownsUI = !UIManager.TryGetInstance(out var existingUI) || !existingUI.IsInitialized;
+            var ui = UIManager.Instance;
+            if (ownsUI)
+            {
+                owned.Own(async () =>
+                {
+                    await ui.ShutdownAsync();
+                    await DestroyOwnedAsync(ui, () =>
+                    {
+                        if (UIManager.TryGetInstance(out var value) && ReferenceEquals(value, ui))
+                        {
+                            UIManager.DestroyInstance();
+                        }
+                    });
+                });
+            }
+
+            ui.Initialize();
+            if (initializeYooAsset && ownsUI)
+            {
+                ui.SetAssetLoader(new YooAssetUIAssetLoader(resources));
+            }
+
+            bool ownsGpu = !GpuAnimatorManager.TryGetInstance(out _);
+            var gpu = GpuAnimatorManager.Instance;
+            if (ownsGpu)
+            {
+                owned.Own(() => DestroyOwnedAsync(gpu, () =>
+                {
+                    if (GpuAnimatorManager.TryGetInstance(out var value) && ReferenceEquals(value, gpu))
+                    {
+                        GpuAnimatorManager.DestroyInstance();
+                    }
+                }));
+            }
+
+            gpu.Initialize();
+            bool ownsEntities = !EntityManager.TryGetInstance(out _);
+            var entities = EntityManager.Instance;
+            if (ownsEntities)
+            {
+                owned.Own(() => DestroyOwnedAsync(entities, () =>
+                {
+                    if (EntityManager.TryGetInstance(out var value) && ReferenceEquals(value, entities))
+                    {
+                        EntityManager.DestroyInstance();
+                    }
+                }));
+            }
+
+            bool ownsWorlds = !WorldManager.TryGetInstance(out _);
+            var worlds = WorldManager.Instance;
+            if (ownsWorlds)
+            {
+                owned.Own(() => DestroyOwnedAsync(worlds, () =>
+                {
+                    if (WorldManager.TryGetInstance(out var value) && ReferenceEquals(value, worlds))
+                    {
+                        WorldManager.DestroyInstance();
+                    }
+                }));
+            }
+
+            worlds.Initialize();
             if (Resources.Load<NetworkSettings>("NetworkSettings") != null)
             {
-                NetworkManager.Instance.Initialize();
+                var network = NetworkManager.Instance;
+                if (!network.IsInitialized)
+                {
+                    owned.Own(async () => await network.DisposeAsync());
+                    network.Initialize();
+                }
+            }
+        }
+
+        private static async Task DestroyOwnedAsync(UnityEngine.Object value, Action destroy)
+        {
+            destroy();
+            // SubsystemRegistration 可能已清空单例引用，但旧入口仍拥有这个原生对象。
+            if (value != null)
+            {
+                if (value is Component component)
+                {
+                    UnityEngine.Object.Destroy(component.gameObject);
+                }
+                else
+                {
+                    UnityEngine.Object.Destroy(value);
+                }
+            }
+            // Destroy 在 Player 中延迟到帧尾；依赖资源必须保留到原生销毁完成。
+            while (value != null)
+            {
+                await Task.Yield();
             }
         }
 
         // 确认这次异步启动仍然有效，入口关闭或重新启动后忽略旧结果。
-        private async Task StartSessionAsync(GameSession current)
+        private async Task StartSessionAsync(GameSession current, ManagerLifetime owned, Task previousShutdown)
         {
             try
             {
-                await InitializeManagersAsync(current);
+                await TaskUtil.WaitAsync(previousShutdown, owned.Token);
+                owned.Token.ThrowIfCancellationRequested();
+                await InitializeManagersAsync(current, owned);
                 if (!ReferenceEquals(session, current))
                 {
                     return;
@@ -202,6 +333,8 @@ namespace Game
                 {
                     startupFailed = true;
                     Debug.LogException(exception);
+                    current.Dispose();
+                    await owned.StopAsync();
                 }
             }
         }
@@ -212,6 +345,11 @@ namespace Game
             if (!IsDestroying)
             {
                 session?.Tick(Time.deltaTime, Time.unscaledDeltaTime);
+                if (!startupFailed && session?.State == StartupState.Failed)
+                {
+                    startupFailed = true;
+                    _ = managers.StopAsync();
+                }
             }
         }
 
@@ -229,17 +367,54 @@ namespace Game
         }
 
         // 停止更新、取消正在进行的初始化，并释放本次启动涉及的模块。
-        private void CloseSession()
+        private void CloseSession() => _ = ShutdownAsync();
+        /// <summary>停止启动模块，再逆序释放本入口拥有的公共服务。切换入口或主动退出时可等待此任务。</summary>
+        public Task ShutdownAsync()
         {
+            if (closing && session == null)
+            {
+                return shutdownTask;
+            }
+
             closing = true;
             var previous = session;
-            // 先断开当前引用，防止异步完成回调或清理中的重入继续使用旧会话。
+            var owned = managers;
             session = null;
-            previous?.Dispose();
+            managers = null;
+            // 发布后再执行模块回调；回调重入 ShutdownAsync 时取得同一份未完成任务。
+            var completion = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            shutdownTask = completion.Task;
+            serviceShutdown = Task.WhenAll(serviceShutdown, shutdownTask);
             if (ReferenceEquals(sessionOwner, this))
             {
                 sessionOwner = null;
             }
+            _ = CompleteShutdownAsync(previous, owned, completion);
+            return shutdownTask;
+        }
+
+        private static async Task CompleteShutdownAsync(GameSession previous, ManagerLifetime owned, TaskCompletionSource<bool> completion)
+        {
+            try
+            {
+                previous?.Dispose();
+            }
+            catch (Exception error)
+            {
+                Debug.LogException(error);
+            }
+            try
+            {
+                if (owned != null)
+                {
+                    await owned.StopAsync();
+                }
+            }
+            catch (Exception error)
+            {
+                Debug.LogException(error);
+            }
+            completion.TrySetResult(true);
         }
     }
 }

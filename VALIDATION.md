@@ -9,3 +9,5 @@
 发行验收从只含 GameStarter 的干净解压目录执行上述检查与编译。模型中的 UnityEngine/UnityEditor/UPM 不执行原生导入、domain reload、渲染、IL2CPP 或设备行为；这些仍需要 Unity 2022.3.62f1 及目标平台模块验收。
 
 公共 Manager 顺序检查已包含 Storage、Scene、Audio、Config，并验证重复访问入口不会重复初始化。GameStarter 在这里检查接线；各服务的实际运行时、文件与异步回归在 UnityPackages/tools/GameModulesVerification 中验证。
+
+新增 ManagerLifetime 与 GameEntry 验证覆盖逆序释放、部分初始化回滚、清理异常继续执行、借用外部实例、模块/Tick 失败清理，以及新入口等待旧入口的异步退出。验证使用队列式 Unity SynchronizationContext 模型驱动异步续体，避免把线程池行为当成 Unity 主线程。
