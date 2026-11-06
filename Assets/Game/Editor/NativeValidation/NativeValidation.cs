@@ -17,7 +17,27 @@ namespace Game.Editor
         {
             GameDataSetup.EnsureConfigured();
             GameDataSetup.ValidateGenerated();
-            GameBuild.ValidatePlayerScripts();
+            int errors = 0;
+            Application.LogCallback capture = (message, stack, type) =>
+            {
+                if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
+                {
+                    System.Threading.Interlocked.Increment(ref errors);
+                }
+            };
+            Application.logMessageReceivedThreaded += capture;
+            try
+            {
+                GameBuild.ValidatePlayerScripts();
+                if (errors != 0)
+                {
+                    throw new InvalidOperationException("Unity reported errors while compiling Player scripts. Inspect the complete log.");
+                }
+            }
+            finally
+            {
+                Application.logMessageReceivedThreaded -= capture;
+            }
             WriteReport("compile", true, "PLAYER_SCRIPTS_COMPILED");
             Debug.Log("NATIVE_COMPILE_READY");
         }
