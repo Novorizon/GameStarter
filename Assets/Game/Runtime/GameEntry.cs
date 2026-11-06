@@ -22,7 +22,7 @@ using GameSceneManager = Game.Framework.Scenes.SceneManager;
 namespace Game
 {
     /// <summary>游戏入口：OnStart 初始化公共 Manager，OnExit 释放；额外启动模块仍由 GameSession 驱动。</summary>
-    public sealed class GameEntry : MonoSingleton<GameEntry>
+    public sealed partial class GameEntry : MonoSingleton<GameEntry>
     {
         [SerializeField]
         private StartupModule[] startupModules = Array.Empty<StartupModule>();
@@ -219,16 +219,18 @@ namespace Game
             return Task.CompletedTask;
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetSession()
+        static GameEntry()
+        {
+            // 项目入口先退出，随后各服务基类清理，最后由生成器恢复静态声明。
+            SingletonLifecycle.Register(EndPreviousSession, order: -200);
+        }
+
+        private static void EndPreviousSession()
         {
             if (sessionOwner != null)
             {
                 sessionOwner.EndLifetime();
             }
-
-            sessionOwner = null;
-            ResetSingletonReference();
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
