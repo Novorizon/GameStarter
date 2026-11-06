@@ -1,6 +1,6 @@
 PASS project structure, GUIDs and pinned Git dependency references
-Cloning into '/tmp/game-starter-verify-p6ixfzrv/FrameworkSource'...
-Note: switching to '2ce7d262c1bbcee90e36412632b961efc35ed832'.
+Cloning into '/tmp/game-starter-verify-vpek0qes/FrameworkSource'...
+Note: switching to 'c1bf5447107f68a3f1c1f76068cc7675b41cc028'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -31,7 +31,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:26.63
+Time Elapsed 00:00:56.49
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module

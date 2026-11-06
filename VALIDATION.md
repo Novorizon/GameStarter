@@ -18,4 +18,6 @@ GameEntry 验证覆盖直接初始化、OnExit 释放全局 Manager、重复退�
 
 Framework 的预编译 RoslynAnalyzer 在验证项目中直接启用，Core、MonoSingleton 和 GameEntry 分别编译。连续两次保留入口组件的启动/退出检查，使用统一实例清理与生成的静态恢复，不调用手写的 ResetSession。宏 UNITY_EDITOR 仅用于此编辑器验证；Player 分支和 Domain Reload 选项判断在包仓库验证。
 
-本次未传 --framework 的发行验证已从 v0.1.0-preview.19 下载 Framework，48 组检查通过；生成器 DLL 也来自该远端标签。没有使用工作区相邻 UnityPackages 的源码。
+本次未传 --framework 的发行验证已从 v0.1.0-preview.20 下载 Framework，48 组检查通过；生成器 DLL 也来自该远端标签。没有使用工作区相邻 UnityPackages 的源码。
+
+统一 Initialize 入口已从实际单例基类编译，GameEntry 的 Event/Timer/Data/Entity 使用显式 Initialize；既有 48 组初始化顺序、失败及生命周期场景通过。带参数的测试服务保留重载，并让无参 override 转到默认参数，和正式包 API 一致。

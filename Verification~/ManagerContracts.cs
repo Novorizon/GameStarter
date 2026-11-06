@@ -159,7 +159,7 @@ namespace UI
         }
 
         protected override void OnStart() => Initialize();
-        public void Initialize()
+        public override void Initialize()
         {
             if (initialized)
             {
@@ -218,7 +218,7 @@ namespace ECS
             ManagerContracts.Calls.Add("worlds");
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
         }
     }
@@ -245,7 +245,7 @@ namespace Game.Framework.Network
             return default;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             if (initialized)
             {
@@ -276,7 +276,7 @@ public sealed class GpuAnimatorManager : MonoSingleton<GpuAnimatorManager>
         Initialize();
     }
 
-    public void Initialize()
+    public override void Initialize()
     {
         if (initialized)
         {
@@ -302,7 +302,7 @@ namespace Game.Framework.Storage
         public static LocalStorageManager Instance => GetOrCreateInstance(() => new LocalStorageManager());
         public string RootDirectory { get; private set; }
 
-        public void Initialize()
+        public override void Initialize()
         {
             RootDirectory = "test";
             ManagerContracts.Calls.Add("storage");
@@ -331,6 +331,11 @@ namespace Game.Framework.Scenes
             ReleaseInstance(this);
         }
 
+        public override void Initialize()
+        {
+            Initialize(null);
+        }
+
         public void Initialize(object loader = null)
         {
             Initialized = true;
@@ -352,7 +357,7 @@ namespace Game.Framework.Audio
 
         private bool initialized;
         protected override void OnStart() => Initialize();
-        public void Initialize()
+        public override void Initialize()
         {
             if (initialized)
             {
@@ -384,6 +389,11 @@ namespace Game.Framework.Config
             }
         }
 
+        public override void Initialize()
+        {
+            Initialize(null, null);
+        }
+
         public void Initialize(Func<string, CancellationToken, Task<string>> loader = null, Func<string, CancellationToken, Task<byte[]>> bytesLoader = null)
         {
             TextLoader = loader;
@@ -404,6 +414,11 @@ namespace Game.Framework.Input
         public bool Initialized { get; private set; }
         public UnityEngine.InputSystem.InputActionAsset Source { get; private set; }
         public string InitialMap { get; private set; }
+
+        public override void Initialize()
+        {
+            Initialize(null, null);
+        }
 
         public void Initialize(UnityEngine.InputSystem.InputActionAsset source = null, string initialMap = null)
         {
