@@ -25,9 +25,6 @@ namespace Game
     {
         [SerializeField]
         private StartupModule[] startupModules = Array.Empty<StartupModule>();
-        // 配好 YooAsset DefaultPackage 的采集和构建后开启；默认使用 Resources。
-        [SerializeField]
-        private bool initializeYooAsset;
         [SerializeField]
         private InputActionAsset inputActions;
         [SerializeField]
@@ -80,17 +77,10 @@ namespace Game
             LocalStorageManager.Instance.Initialize();
             var source = inputActions != null ? inputActions : Resources.Load<InputActionAsset>("InputActions");
             InputManager.Instance.Initialize(source, source != null ? initialInputMap : null);
-            GameSceneManager.Instance.Initialize(initializeYooAsset ? ResourceManager.Instance.CreateSceneLoader() : null);
+            GameSceneManager.Instance.Initialize(ResourceManager.Instance.CreateSceneLoader());
             AudioManager.Instance.Initialize();
-            if (initializeYooAsset)
-            {
-                DataManager.Instance.Initialize(LoadDataBytesAsync);
-                UIManager.Instance.SetAssetLoader(new YooAssetUIAssetLoader(ResourceManager.Instance));
-            }
-            else
-            {
-                DataManager.Instance.Initialize();
-            }
+            DataManager.Instance.Initialize(LoadDataBytesAsync);
+            UIManager.Instance.SetAssetLoader(new YooAssetUIAssetLoader(ResourceManager.Instance));
 
             UIManager.Instance.Initialize();
             GpuAnimatorManager.Instance.Initialize();
@@ -102,6 +92,19 @@ namespace Game
             }
 
             return Task.CompletedTask;
+        }
+
+        private static async Task LoadTablesAsync(CancellationToken token)
+        {
+            await DataManager.Instance.LoadAsync<cfg.Tables>(CreateTables, GameDataPaths.ManifestLocation, token);
+            token.ThrowIfCancellationRequested();
+        }
+
+        // DataManager 加载好文件后调用此方法；返回的 Tables 会由它保存。
+        private static cfg.Tables CreateTables(Func<string, Luban.ByteBuf> readTable)
+        {
+            // readTable 是框架传进来的读表方法，Luban 用它读取每张表的二进制数据。
+            return new cfg.Tables(readTable);
         }
 
         private static async Task<byte[]> LoadDataBytesAsync(string location, CancellationToken token)
@@ -143,10 +146,10 @@ namespace Game
                 current.Token.ThrowIfCancellationRequested();
                 if (initializeHotUpdate)
                 {
-                    var options = new GameStartupOptions(initializeYooAsset, inputActions, initialInputMap,
+                    var options = new GameStartupOptions(inputActions, initialInputMap,
                         token => TaskUtil.WaitAsync(current.StartAsync(startupModules), token),
-                        initializeYooAsset ? ResourceManager.Instance.CreateSceneLoader() : null,
-                        initializeYooAsset ? new YooAssetUIAssetLoader(ResourceManager.Instance) : null);
+                        ResourceManager.Instance.CreateSceneLoader(),
+                        new YooAssetUIAssetLoader(ResourceManager.Instance));
                     await HotUpdateManager.Instance.InitializeAsync(new UpdateSettings(), options, current.Token);
                 }
                 else
@@ -174,13 +177,10 @@ namespace Game
 
         private async Task InitializeResourcesAsync(CancellationToken token)
         {
-            if (initializeYooAsset)
+            bool ready = await TaskUtil.WaitAsync(ResourceManager.Instance.InitializeAsync(), token);
+            if (!ready)
             {
-                bool ready = await TaskUtil.WaitAsync(ResourceManager.Instance.InitializeAsync(), token);
-                if (!ready)
-                {
-                    throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
-                }
+                throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
             }
 
             token.ThrowIfCancellationRequested();
@@ -188,8 +188,12 @@ namespace Game
 
         private async Task StartGameAsync(GameSession current)
         {
+            // 表已加载成功后，启动模块和后续业务才能查询 DataManager。
+            await LoadTablesAsync(current.Token);
             await current.StartAsync(startupModules);
             current.Token.ThrowIfCancellationRequested();
+            var example = DataManager.Instance.Get<cfg.Tables>().TbExample.Get(1);
+            Debug.Log("LUBAN_EXAMPLE " + example.Id + " " + example.Name);
             // 关闭热更时，本项目的业务系统和首场景从这里启动。
         }
 

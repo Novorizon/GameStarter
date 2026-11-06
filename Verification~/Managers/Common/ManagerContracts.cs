@@ -16,6 +16,8 @@ public static class ManagerContracts
     public static Exception ModuleFailure, ModuleTickFailure;
     public static Action ModuleShutdown;
     public static Task<bool> ResourceInitialization = Task.FromResult(true);
+    public static readonly List<string> DataAcquisitions = new List<string>();
+    public static Func<string, CancellationToken, Task<byte[]>> LoadDataBytes;
     public static int LeasesReleased;
     public static int ProtectedAcquisitions;
     public static Func<Game.Framework.HotUpdate.IGameModule> HotGameFactory;

@@ -14,7 +14,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 
-internal static class Program
+internal static partial class Program
 {
     private static int passed;
     private static readonly ModelContext context = new ModelContext();
@@ -23,6 +23,7 @@ internal static class Program
     {
         SynchronizationContext.SetSynchronizationContext(context);
         Logger.Sink = new ModelLogger();
+        GameDataScenarios();
         Check("empty startup", () =>
         {
             using var s = Session();
@@ -391,7 +392,7 @@ internal static class Program
         }
     }
 
-    private static GameEntry CreateEntry(bool resources = false, bool hotUpdate = true)
+    private static GameEntry CreateEntry(bool hotUpdate = true)
     {
         var module = new GameObject().AddComponent<RecordingStartupModule>();
         var go = new GameObject
@@ -401,7 +402,6 @@ internal static class Program
         var entry = go.AddComponent<GameEntry>();
         var flags = BindingFlags.Instance | BindingFlags.NonPublic;
         typeof(GameEntry).GetField("startupModules", flags).SetValue(entry, new StartupModule[] { module });
-        typeof(GameEntry).GetField("initializeYooAsset", flags).SetValue(entry, resources);
         typeof(GameEntry).GetField("initializeHotUpdate", flags).SetValue(entry, hotUpdate);
         go.activeInHierarchy = true;
         UObject.Invoke(entry, "Awake");
@@ -413,11 +413,11 @@ internal static class Program
         ResetEntry();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("storage,input,scenes,audio,data,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,tables,module", string.Join(",", ManagerContracts.Calls));
         True(Game.Framework.Event.EventManager.IsCreated && Game.Framework.Timing.TimerManager.IsCreated);
         _ = GameEntry.Instance;
         _ = GameEntry.Instance;
-        Equal("storage,input,scenes,audio,data,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,tables,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -427,7 +427,7 @@ internal static class Program
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("storage,input,scenes,audio,data,ui,gpu,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
+        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,network,tables,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -436,7 +436,7 @@ internal static class Program
         ResetEntry();
         ManagerContracts.ResourceInitialization = Task.FromResult(false);
         int errors = Debug.Exceptions.Count;
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         Equal(StartupState.Failed, entry.State);
         Equal("resources", string.Join(",", ManagerContracts.Calls));
         Equal(errors + 1, Debug.Exceptions.Count);
@@ -448,7 +448,7 @@ internal static class Program
         ResetEntry();
         var pending = new TaskCompletionSource<bool>();
         ManagerContracts.ResourceInitialization = pending.Task;
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         Equal(StartupState.Starting, entry.State);
         UObject.Destroy(entry.gameObject);
         pending.SetResult(true);
@@ -471,9 +471,9 @@ internal static class Program
     {
         ResetEntry();
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         Complete(entry.ShutdownAsync());
-        Equal("module,hot,network,worlds,entities,gpu,ui,audio,scenes,input,storage,data,resources", string.Join(",", ManagerContracts.Cleanup));
+        Equal("module,hot,network,worlds,entities,gpu,ui,audio,scenes,input,storage,resources", string.Join(",", ManagerContracts.Cleanup));
         Complete(entry.ShutdownAsync());
         True(!UI.UIManager.TryGetInstance(out _));
         True(!Game.Framework.Data.DataManager.IsCreated);
@@ -485,7 +485,7 @@ internal static class Program
     {
         ResetEntry();
         ManagerContracts.UIFailure = new InvalidOperationException("UI init");
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         Equal(StartupState.Failed, entry.State);
         True(Game.Framework.Audio.AudioManager.TryGetInstance(out _));
         True(Game.Framework.Storage.LocalStorageManager.IsCreated);
@@ -500,7 +500,7 @@ internal static class Program
     private static void EntryCleanupFailure()
     {
         ResetEntry();
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         ManagerContracts.CleanupFailure = new InvalidOperationException("cleanup");
         int errors = Debug.Exceptions.Count;
         Complete(entry.ShutdownAsync());
@@ -513,13 +513,13 @@ internal static class Program
     private static void EntryRestartWaitsForCleanup()
     {
         ResetEntry();
-        var previous = CreateEntry(resources: true);
+        var previous = CreateEntry();
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         ManagerContracts.UIShutdown = release.Task;
         var stopping = previous.ShutdownAsync();
         True(stopping.IsCompleted);
         True(!ManagerContracts.UIRelease.IsCompleted);
-        var next = CreateEntry(resources: true);
+        var next = CreateEntry();
         Equal(StartupState.Ready, next.State);
         var activeUI = UI.UIManager.Instance;
         var oldRelease = ManagerContracts.UIRelease;
@@ -535,7 +535,6 @@ internal static class Program
         ResetEntry();
         var ui = UI.UIManager.Instance;
         var data = Game.Framework.Data.DataManager.Instance;
-        data.Initialize();
         var input = Game.Framework.Input.InputManager.Instance;
         var entry = CreateEntry();
         Complete(entry.ShutdownAsync());
@@ -551,14 +550,14 @@ internal static class Program
         ResetEntry();
         var asset = new UnityEngine.InputSystem.InputActionAsset();
         UnityEngine.Resources.Assets["InputActions"] = asset;
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
         var input = Game.Framework.Input.InputManager.Instance;
         True(ReferenceEquals(asset, input.Source));
         Equal("Gameplay", input.InitialMap);
         var data = Game.Framework.Data.DataManager.Instance;
-        Complete(data.Loader("manifest", default));
-        Complete(data.Loader("tbexample", default));
+        Equal("示例配置", data.Get<cfg.Tables>().TbExample.Get(1).Name);
+        Equal("Data/Luban/manifest,Data/Luban/tbexample", string.Join(",", ManagerContracts.DataAcquisitions));
         Equal(2, ManagerContracts.LeasesReleased);
         Complete(entry.ShutdownAsync());
         True(ManagerContracts.Cleanup.Contains("input"));
@@ -585,7 +584,7 @@ internal static class Program
     {
         ResetEntry();
         ManagerContracts.ModuleFailure = new InvalidOperationException("module init");
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         Equal(StartupState.Failed, entry.State);
         True(UI.UIManager.TryGetInstance(out _));
         True(!ManagerContracts.Cleanup.Contains("audio"));
@@ -599,7 +598,7 @@ internal static class Program
     private static void EntryTickFailure()
     {
         ResetEntry();
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         ManagerContracts.ModuleTickFailure = new InvalidOperationException("module tick");
         UObject.Invoke(entry, "Update");
         Equal(StartupState.Failed, entry.State);
@@ -703,6 +702,7 @@ internal static class Program
         ResetEntry();
         var host = new HotHost();
         var module = new Game.HotUpdate.HotGame();
+        Complete(Game.Resource.ResourceManager.Instance.InitializeAsync());
         Complete(module.InitializeAsync(host, CancellationToken.None));
         True(!GameEntry.TryGetInstance(out _));
         Equal(1, host.ReadyCount);
@@ -719,7 +719,7 @@ internal static class Program
         ResetEntry();
         var pending = new TaskCompletionSource<bool>();
         ManagerContracts.ResourceInitialization = pending.Task;
-        var entry = CreateEntry(resources: true);
+        var entry = CreateEntry();
         Equal(StartupState.Starting, entry.State);
         Equal(0, ManagerContracts.HotCalls.Count);
         pending.SetResult(true);

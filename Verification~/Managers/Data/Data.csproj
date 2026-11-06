@@ -1,13 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AssemblyName>Game.Framework.Data</AssemblyName>
-  </PropertyGroup>
+  <PropertyGroup><AssemblyName>Game.Framework.Data</AssemblyName></PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../Unity/Unity.csproj" />
     <ProjectReference Include="../../Core/Core.csproj" />
-    <ProjectReference Include="../../FrameworkUnity/FrameworkUnity.csproj" />
-    <ProjectReference Include="../Common/Common.csproj" />
-    <Compile Include="Models.cs" />
+    <ProjectReference Include="../../LubanRuntime/LubanRuntime.csproj" />
+    <Compile Include="$(DataPackageRoot)/Runtime/*.cs" />
   </ItemGroup>
 </Project>

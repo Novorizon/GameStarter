@@ -35,11 +35,58 @@ namespace UnityEditor
     public static class EditorApplication
     {
         public static bool isCompiling, isUpdating, isPlayingOrWillChangePlaymode;
+        public static bool isPlaying;
+        public static event Action delayCall;
+        public static event Action<PlayModeStateChange> playModeStateChanged;
+        public static void DelayForTest() => delayCall?.Invoke();
+        public static void PlayForTest(PlayModeStateChange state) => playModeStateChanged?.Invoke(state);
         public static event Action update;
         public static void TickForTest() => update?.Invoke();
     }
+    public enum PlayModeStateChange
+    {
+        ExitingEditMode, EnteredPlayMode, ExitingPlayMode, EnteredEditMode
+    }
+
+    public enum BuildTarget
+    {
+        StandaloneLinux64, StandaloneWindows64, Android
+    }
+
+    public static class EditorUserBuildSettings
+    {
+        public static BuildTarget activeBuildTarget = BuildTarget.StandaloneLinux64;
+    }
+
+    public static class EditorUtility
+    {
+        public static void SetDirty(UnityEngine.Object value)
+        {
+        }
+    }
+
     public static class AssetDatabase
     {
+        private static readonly Dictionary<string, UnityEngine.Object> Assets = new Dictionary<string, UnityEngine.Object>();
+        public static T LoadAssetAtPath<T>(string path) where T : UnityEngine.Object
+        {
+            return Assets.TryGetValue(path, out var asset) ? (T)asset : null;
+        }
+
+        public static void CreateAsset(UnityEngine.Object asset, string path)
+        {
+            Assets.Add(path, asset);
+        }
+
+        public static string AssetPathToGUID(string path)
+        {
+            return File.ReadLines(path + ".meta").Single(line => line.StartsWith("guid: ", StringComparison.Ordinal)).Substring(6);
+        }
+
+        public static void SaveAssets()
+        {
+        }
+
         public static void Refresh()
         {
         }

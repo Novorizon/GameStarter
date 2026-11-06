@@ -15,3 +15,7 @@ Packages/OptionalArchives~/
 *.user
 MemoryCaptures/
 Recordings/
+
+/Assets/StreamingAssets/yoo/
+/Assets/StreamingAssets/yoo.meta
+/Bundles/

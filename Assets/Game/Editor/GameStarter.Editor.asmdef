@@ -1,1 +1,17 @@
-{"name":"GameStarter.Editor","rootNamespace":"Game.Editor","references":["GameStarter.Runtime"],"includePlatforms":["Editor"],"autoReferenced":true,"allowUnsafeCode":false}
+{
+  "name": "GameStarter.Editor",
+  "rootNamespace": "Game.Editor",
+  "references": [
+    "GameStarter.Runtime",
+    "Game.Startup",
+    "Game.Framework.Data.Editor",
+    "Game.Framework.HotUpdate.Editor",
+    "YooAsset",
+    "YooAsset.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true,
+  "allowUnsafeCode": false
+}
