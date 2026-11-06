@@ -7,6 +7,9 @@
     <NuGetAudit>false</NuGetAudit>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="../Unity/Unity.csproj" />
     <Compile Include="$(HotUpdatePackageRoot)/Runtime/Contracts/IGameModule.cs" Link="IGameModule.cs" />
+    <Compile Include="$(HotUpdatePackageRoot)/Runtime/UpdateSettings.cs" Link="UpdateSettings.cs" />
+    <Compile Include="$(HotUpdatePackageRoot)/Runtime/Release/ReleaseManifest.cs" Link="ReleaseManifest.cs" />
   </ItemGroup>
 </Project>

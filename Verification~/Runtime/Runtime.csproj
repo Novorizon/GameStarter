@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Unity/Unity.csproj" />
+    <ProjectReference Include="../HotUpdateContracts/HotUpdateContracts.csproj" />
     <ProjectReference Include="../Core/Core.csproj" />
     <ProjectReference Include="../FrameworkUnity/FrameworkUnity.csproj" />
     <Compile Include="../../Assets/Game/Runtime/*.cs" />

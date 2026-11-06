@@ -13,7 +13,8 @@
     "ECS",
     "GpuAnimator",
     "Game.Framework.Input",
-    "Unity.InputSystem"
+    "Unity.InputSystem",
+    "Game.Framework.HotUpdate"
   ],
   "autoReferenced": true,
   "allowUnsafeCode": false

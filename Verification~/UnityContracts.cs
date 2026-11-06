@@ -7,6 +7,11 @@ using System.Text.Json;
 
 namespace UnityEngine
 {
+    public static class Application
+    {
+        public static string identifier = "com.novorizon.gamestarter";
+    }
+
     public class Object
     {
         internal static readonly List<Object> Objects = new List<Object>();
