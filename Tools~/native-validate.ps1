@@ -12,6 +12,7 @@ New-Item -ItemType Directory -Force $report | Out-Null
 function Invoke-Unity([string]$method, [string]$name, [bool]$quit) {
     Remove-Item (Join-Path $report ($name + ".json")) -ErrorAction SilentlyContinue
     if ($name -eq "import-samples") { Remove-Item (Join-Path $report "imported-samples.txt") -ErrorAction SilentlyContinue }
+    if ($name -eq "compile") { Remove-Item (Join-Path $report "sample-assemblies.json") -ErrorAction SilentlyContinue }
     $arguments = @("-batchmode", "-projectPath", "`"$project`"", "-buildTarget", "Win64", "-executeMethod", $method, "-logFile", "`"$(Join-Path $report ($name + '.log'))`"")
     if ($quit) { $arguments += "-quit" }
     $process = Start-Process -FilePath $UnityEditor -ArgumentList $arguments -Wait -PassThru
@@ -19,6 +20,12 @@ function Invoke-Unity([string]$method, [string]$name, [bool]$quit) {
     if ($name -in @("compile", "editor")) {
         $result = Get-Content (Join-Path $report ($name + ".json")) -Raw | ConvertFrom-Json
         if (!$result.success) { throw "Unity $name did not report success" }
+    }
+    if ($name -eq "compile") {
+        $samples = Get-Content (Join-Path $report "sample-assemblies.json") -Raw | ConvertFrom-Json
+        if (!$samples.success -or $samples.sampleCount -eq 0 -or $samples.assemblies.Count -eq 0) {
+            throw "Sample assembly verification did not report success"
+        }
     }
     if ($name -eq "import-samples" -and !(Test-Path (Join-Path $report "imported-samples.txt"))) {
         throw "Sample import report is missing"

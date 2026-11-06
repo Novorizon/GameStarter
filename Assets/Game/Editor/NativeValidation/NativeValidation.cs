@@ -48,6 +48,8 @@ namespace Game.Editor
                 {
                     throw new InvalidOperationException("Unity reported errors while compiling Player scripts. Inspect the complete log.");
                 }
+
+                SampleValidation.VerifyCompiledSamples();
             }
             finally
             {

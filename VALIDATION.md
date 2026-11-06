@@ -23,11 +23,20 @@ Unity/UPM、音频、Input System、资源构建和 Player 构建使用边界模
 
 ## 2026-11-06 原生验证
 
-Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032a3e1` 和 manifest 固定的 UnityPackages `v0.1.0-preview.25` 为输入，在独立 checkout 中验证。本次修复将 YooAsset 的 FindAssetType 改为不含 `t:` 的类型名，并让 EditorSmoke 在 Play 域重载后恢复检查、写出报告再退出。
+Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032a3e1`（preview.26）加修复提交 `b31c769` 和 manifest 固定的 UnityPackages `v0.1.0-preview.25` 为输入，在独立 checkout 中验证。该修复将 YooAsset 的 FindAssetType 改为不含 `t:` 的类型名，并让 EditorSmoke 在 Play 域重载后恢复检查、写出报告再退出。
 
-- 已导入全部 8 个自有示例；另启 Unity 完成 Editor/Player 脚本编译，compile.json 为 success，包含 NATIVE_COMPILE_READY。
+- 原记录确认复制了 8 个自有示例、当前发现的 Editor/Player 脚本编译通过，但不能认定全部示例编译通过：交叉检查发现 Game.Framework.Demo 和 Game.Framework.Demo.Editor 未参与编译，旧导入目录的 .framework 后缀被 Unity 特殊处理。
 - 修复后 Bootstrap Play 成功，包含 LUBAN_EXAMPLE、HOT_UPDATE_READY、GAME_STARTER_READY，editor.json 为 success。
-- GpuAnimator EditMode 共 51 项：46 通过、5 失败，0 跳过。失败涉及 3 项资源写入/恢复、源动画重复匹配和五骨骼权重转换；该阶段未通过，不能计为 GPU 原生验收成功。包源码未在本次修改。
+- GpuAnimator EditMode 共 51 项：46 通过、5 失败，0 跳过。3 项资源写入/恢复用例未完成；另 2 项分别在 Bake 前的曲线绑定 Single() 和测试网格 SetBoneWeights 阶段失败。它们是测试失败，不等于 5 个生产代码缺陷，也不能统归为 Linux 环境问题。包源码未在本次修改。
 - Windows/Android/iOS IL2CPP、原主包结构补丁加载、实际界面/输入/音频及 Shader 渲染尚未验收。
 
 完整日志、JSON 和 gpu.xml 位于验证副本的 Artifacts/NativeValidation，验证副本和导入示例不回写模板。
+
+## 示例编译补验
+
+基于 `6d5af4e` 加本次导入目录和程序集核对修复，仍使用 Unity 2022.3.62f1、StandaloneLinux64 和固定包标签 preview.25。在旧导入目录上运行新的核对，因缺少 Game.Framework.Demo.Editor 明确失败；随后在全新验证副本中导入和编译。
+
+- 8 个示例全部导入；sample-assemblies.json 确认 11 个 Editor 编译程序集有实际 DLL 和导入源文件，其中 8 个 Runtime 程序集进入 Player 编译列表。
+- 编译日志包含 Game.Framework.Demo.dll 的 Editor/Player Csc 和复制步骤，以及 Game.Framework.Demo.Editor.dll 的 Csc；命令退出码为 0，compile.json 为 success，包含 PACKAGE_SAMPLE_ASSEMBLIES_VERIFIED 和 NATIVE_COMPILE_READY。
+- 新程序集集合下再次执行 Bootstrap Play，命令退出码为 0，editor.json 为 success，三个就绪标记齐全。
+- 上述补验不扩大为 Demo 交互功能或 GPU 测试通过，也不替代 IL2CPP 和设备验收；前述 51 项 GPU 测试保留为原环境下的历史结果。
