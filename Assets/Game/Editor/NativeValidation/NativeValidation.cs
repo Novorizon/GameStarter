@@ -10,9 +10,24 @@ using UnityEngine;
 namespace Game.Editor
 {
     /// <summary>仅由真实 Unity 执行；CLI 模型验证不将此结果计为原生验收。</summary>
+    [InitializeOnLoad]
     public static class NativeValidation
     {
+        private const string SmokeRunning = "Game.NativeValidation.EditorSmokeRunning";
+        private const string SmokeDeadline = "Game.NativeValidation.EditorSmokeDeadline";
         private static DateTime deadline;
+
+        static NativeValidation()
+        {
+            if (SessionState.GetBool(SmokeRunning, false))
+            {
+                // Entering Play Mode reloads this assembly and clears update delegates.
+                deadline = long.TryParse(SessionState.GetString(SmokeDeadline, ""), out long ticks)
+                    ? new DateTime(ticks, DateTimeKind.Utc) : DateTime.UtcNow;
+                EditorApplication.update += Poll;
+            }
+        }
+
         public static void CompileScripts()
         {
             GameDataSetup.EnsureConfigured();
@@ -47,10 +62,19 @@ namespace Game.Editor
         {
             GameDataSetup.EnsureConfigured();
             GameDataSetup.ValidateGenerated();
+            string scene = EditorBuildSettings.scenes.FirstOrDefault(candidate => candidate.enabled)?.path;
+            if (string.IsNullOrEmpty(scene))
+            {
+                throw new InvalidOperationException("Add a startup scene to Build Settings.");
+            }
+
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scene);
             deadline = DateTime.UtcNow.AddSeconds(40);
+            SessionState.SetBool(SmokeRunning, true);
+            SessionState.SetString(SmokeDeadline, deadline.Ticks.ToString());
             EditorApplication.update -= Poll;
             EditorApplication.update += Poll;
-            GameBuild.SmokeEditorStartup();
+            EditorApplication.isPlaying = true;
         }
 
         private static void Poll()
@@ -64,7 +88,16 @@ namespace Game.Editor
             }
 
             EditorApplication.update -= Poll;
+            SessionState.SetBool(SmokeRunning, false);
             WriteReport("editor", ready, ready ? "GAME_STARTER_READY" : active ? entry.StartupMessage : "Startup timed out");
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(ready ? 0 : 1);
+            }
+            else
+            {
+                EditorApplication.isPlaying = false;
+            }
         }
 
         public static async void GenerateTables()
