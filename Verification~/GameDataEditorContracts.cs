@@ -39,6 +39,8 @@ namespace Game.Framework.HotUpdate.Editor
     public static class GameBuild
     {
         public static int PlayerBuilds;
+        public static Func<Game.Framework.HotUpdate.UpdateSettings> SettingsFactory;
+        public static string ExportUpdateToDirectory() => throw new NotSupportedException("Native patch compilation is validated in Unity.");
         public static void BuildNewPlayer()
         {
             Game.Editor.GameDataSetup.ValidatePlayerResources(EditorUserBuildSettings.activeBuildTarget);
@@ -49,6 +51,11 @@ namespace Game.Framework.HotUpdate.Editor
 
 namespace YooAsset.Editor
 {
+    // Upstream also defines BuildReport; keep this collision visible to the compiler.
+    public sealed class BuildReport
+    {
+    }
+
     public sealed class AssetBundleCollectorSetting : ScriptableObject
     {
         public List<AssetBundleCollectorPackage> Packages = new List<AssetBundleCollectorPackage>();
@@ -102,6 +109,7 @@ namespace YooAsset.Editor
     {
         public bool Success;
         public string ErrorInfo;
+        public string OutputPackageDirectory;
     }
 
     public static class AssetBundleBuilderHelper
@@ -125,8 +133,12 @@ namespace YooAsset.Editor
                 File.WriteAllText(Path.Combine(package, parameters.PackageName + ".version"), parameters.PackageVersion);
             }
 
+            string output = Path.Combine(parameters.BuildOutputRoot, parameters.BuildTarget.ToString(), parameters.PackageName, parameters.PackageVersion);
+            Directory.CreateDirectory(output);
+            File.WriteAllText(Path.Combine(output, YooAsset.YooAssetSettingsData.GetManifestBinaryFileName(parameters.PackageName, parameters.PackageVersion)), "manifest");
             return new BuildResult
             {
+                OutputPackageDirectory = output,
                 Success = !Fail,
                 ErrorInfo = Fail ? "Model build failed" : ""
             };

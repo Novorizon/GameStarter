@@ -4,7 +4,7 @@
       "id": "com.novorizon.ability",
       "title": "Ability（含编辑器）",
       "version": "0.3.0-preview.1",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ability#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ability#v0.1.0-preview.23",
       "dependencies": [],
       "description": "技能运行时与编辑器为同一个包；Odin 插件由项目提供。",
       "replaces": [
@@ -16,7 +16,7 @@
       "id": "com.novorizon.audio",
       "title": "音频管理",
       "version": "0.2.0-preview.6",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.audio#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.audio#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework"
       ],
@@ -25,8 +25,8 @@
     {
       "id": "com.novorizon.data",
       "title": "Luban 数据表",
-      "version": "0.1.0-preview.1",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.data#v0.1.0-preview.22",
+      "version": "0.2.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.data#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework",
         "com.code-philosophy.luban"
@@ -41,7 +41,7 @@
       "id": "com.novorizon.ecs",
       "title": "ECS",
       "version": "2.0.0-preview.12",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ecs#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ecs#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework"
       ],
@@ -55,7 +55,7 @@
       "id": "com.novorizon.framework",
       "title": "Framework",
       "version": "0.18.0-preview.1",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#v0.1.0-preview.23",
       "dependencies": [],
       "hidden": true,
       "replaces": [],
@@ -64,8 +64,8 @@
     {
       "id": "com.novorizon.framework.hybridclr",
       "title": "HybridCLR 封装",
-      "version": "0.1.0-preview.15",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.hybridclr#v0.1.0-preview.22",
+      "version": "0.2.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.hybridclr#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework",
         "com.code-philosophy.hybridclr"
@@ -80,7 +80,7 @@
       "id": "com.novorizon.framework.ui",
       "title": "UI",
       "version": "0.9.0-preview.5",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.ui#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.ui#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework"
       ],
@@ -93,8 +93,8 @@
       "title": "YooAsset 适配",
       "description": "官方 YooAsset 2.3.18 与 Framework 共享资源适配。",
       "replaces": [],
-      "version": "0.15.0-preview.4",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.yooasset#v0.1.0-preview.22",
+      "version": "0.16.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.yooasset#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework",
         "com.tuyoogame.yooasset"
@@ -105,7 +105,7 @@
       "id": "com.novorizon.gpuanimator",
       "title": "GpuAnimator",
       "version": "4.0.0-preview.8",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.gpuanimator#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.gpuanimator#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework"
       ],
@@ -119,7 +119,7 @@
       "id": "com.novorizon.input",
       "title": "com.novorizon.input",
       "version": "0.1.0-preview.6",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.input#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.input#v0.1.0-preview.23",
       "dependencies": [
         "com.novorizon.framework"
       ],
@@ -129,7 +129,7 @@
       "id": "com.novorizon.rtree",
       "title": "RTree",
       "version": "1.0.0-preview.2",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.rtree#v0.1.0-preview.22",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.rtree#v0.1.0-preview.23",
       "dependencies": [],
       "description": "六种空间索引各自一个目录，共用一个包与程序集。",
       "replaces": [],

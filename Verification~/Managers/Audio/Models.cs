@@ -14,6 +14,10 @@ namespace Game.Framework.Audio
             ManagerContracts.Cleanup.Add("audio");
         }
 
+        public float MasterVolume { get; set; } = 1;
+        private readonly float[] groups = { 1, 1, 1, 1 };
+        public float GetGroupVolume(AudioGroup group) => groups[(int)group];
+        public void SetGroupVolume(AudioGroup group, float value) => groups[(int)group] = value;
         private bool initialized;
         protected override void OnStart() => Initialize();
         public override void Initialize()
@@ -27,4 +31,9 @@ namespace Game.Framework.Audio
             ManagerContracts.Calls.Add("audio");
         }
     }
+}
+
+namespace Game.Framework.Audio
+{
+    public enum AudioGroup { Music, Sound, Voice, UI }
 }

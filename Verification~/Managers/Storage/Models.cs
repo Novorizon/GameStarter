@@ -7,7 +7,7 @@ using Game.Framework;
 
 namespace Game.Framework.Storage
 {
-    public sealed class LocalStorageManager : ConfigurableSingleton<LocalStorageManager>, IDisposable
+    public sealed partial class LocalStorageManager : ConfigurableSingleton<LocalStorageManager>, IDisposable
     {
         public static LocalStorageManager Instance => GetOrCreateInstance(() => new LocalStorageManager());
         public string RootDirectory
@@ -21,6 +21,11 @@ namespace Game.Framework.Storage
             RootDirectory = "test";
             ManagerContracts.Calls.Add("storage");
         }
+
+        public static readonly Dictionary<string, string> Files = new Dictionary<string, string>();
+        public bool Exists(string name) => Files.ContainsKey(name);
+        public void SaveJson<T>(string name, T data, int version = 1) where T : class => Files[name] = UnityEngine.JsonUtility.ToJson(data);
+        public T LoadJson<T>(string name, int version = 1, Func<int, string, string> migrate = null) where T : class => UnityEngine.JsonUtility.FromJson<T>(Files[name]);
 
         public void Dispose()
         {

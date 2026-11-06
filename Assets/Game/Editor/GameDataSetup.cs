@@ -8,7 +8,6 @@ using Game.Framework.Data.Editor;
 using Game.Framework.HotUpdate.Editor;
 using UnityEditor;
 using UnityEditor.Build;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
 using YooAsset;
 using YooAsset.Editor;
@@ -41,7 +40,7 @@ namespace Game.Editor
 
             bool changed = create || settings.configFile != GameDataPaths.ConfigFile
                 || settings.codeOutput != GameDataPaths.CodeOutput || settings.dataOutput != GameDataPaths.DataOutput
-                || settings.locationPrefix != GameDataPaths.LocationPrefix || settings.generatedAssembly != GameDataPaths.GeneratedAssembly;
+                || settings.locationPrefix != GameDataPaths.LocationPrefix || settings.generatedAssembly != GameDataPaths.GeneratedAssembly || settings.generatedAutoReferenced;
             if (changed)
             {
                 settings.configFile = GameDataPaths.ConfigFile;
@@ -49,6 +48,7 @@ namespace Game.Editor
                 settings.dataOutput = GameDataPaths.DataOutput;
                 settings.locationPrefix = GameDataPaths.LocationPrefix;
                 settings.generatedAssembly = GameDataPaths.GeneratedAssembly;
+                settings.generatedAutoReferenced = false;
                 if (create)
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(SettingsPath));
@@ -150,7 +150,7 @@ namespace Game.Editor
                     ? await LubanExporter.EnsureToolAsync(root, settings.dotnetExecutable)
                     : Path.GetFullPath(settings.lubanDll);
                 await LubanExporter.GenerateAsync(root, settings.configFile, settings.target, settings.codeOutput,
-                    settings.dataOutput, settings.locationPrefix, settings.dotnetExecutable, cli, settings.generatedAssembly);
+                    settings.dataOutput, settings.locationPrefix, settings.dotnetExecutable, cli, settings.generatedAssembly, settings.generatedAutoReferenced);
                 RecordGeneratedSources();
                 AssetDatabase.Refresh();
                 Debug.Log("LUBAN_GENERATED. YooAsset collector and runtime table loading are already configured.");
@@ -226,6 +226,11 @@ namespace Game.Editor
         [MenuItem("Tools/Novorizon/GameStarter/2. Build Resources")]
         public static void BuildResources()
         {
+            BuildResources(true);
+        }
+
+        public static void BuildResources(bool copyToBuiltin)
+        {
             if (EditorApplication.isCompiling || EditorApplication.isUpdating || EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 throw new InvalidOperationException("Wait for compilation and leave Play Mode before building resources.");
@@ -242,11 +247,11 @@ namespace Game.Editor
                 BuildBundleType = (int)EBuildBundleType.AssetBundle,
                 BuildTarget = target,
                 PackageName = GameDataPaths.PackageName,
-                PackageVersion = DateTime.UtcNow.ToString("yyyyMMddHHmmss"),
+                PackageVersion = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff"),
                 EnableSharePackRule = true,
                 VerifyBuildingResult = true,
                 FileNameStyle = EFileNameStyle.HashName,
-                BuildinFileCopyOption = EBuildinFileCopyOption.ClearAndCopyAll,
+                BuildinFileCopyOption = copyToBuiltin ? EBuildinFileCopyOption.ClearAndCopyAll : EBuildinFileCopyOption.None,
                 CompressOption = ECompressOption.LZ4
             };
             var result = new BuiltinBuildPipeline().Run(parameters, true);
@@ -256,7 +261,11 @@ namespace Game.Editor
             }
 
             Directory.CreateDirectory("Library/Novorizon/GameStarter");
-            File.WriteAllText(BuildStamp, target + "\n" + BuildFingerprint() + "\n" + BuiltinFingerprint());
+            GameReleaseBuild.RecordResources(parameters.PackageVersion, result.OutputPackageDirectory);
+            if (copyToBuiltin)
+            {
+                File.WriteAllText(BuildStamp, target + "\n" + BuildFingerprint() + "\n" + BuiltinFingerprint());
+            }
             AssetDatabase.Refresh();
         }
 
@@ -264,7 +273,9 @@ namespace Game.Editor
         public static void BuildNewPlayer()
         {
             // Build bundles before Unity starts its Player build; YooAsset forbids nested builds.
+            GameReleaseBuild.EnsureSigningKey();
             BuildResources();
+            GameBuild.SettingsFactory = GameReleaseBuild.CreateBuildSettings;
             GameBuild.BuildNewPlayer();
         }
 
@@ -323,7 +334,7 @@ namespace Game.Editor
     {
         public int callbackOrder => -20000;
 
-        public void OnPreprocessBuild(BuildReport report)
+        public void OnPreprocessBuild(UnityEditor.Build.Reporting.BuildReport report)
         {
             GameDataSetup.ValidatePlayerResources(report.summary.platform);
         }

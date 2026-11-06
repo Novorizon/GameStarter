@@ -28,6 +28,7 @@ internal static class ManagerModels
         ModuleShutdown = null;
         Game.Resource.ResourceManager.Instance.ResetForTest();
         Game.Framework.Storage.LocalStorageManager.Reset();
+        Game.Framework.Storage.LocalStorageManager.Files.Clear();
         UIFailure = null;
         ResourceInitialization = Task.FromResult(true);
         UnityEngine.Resources.Assets.Clear();

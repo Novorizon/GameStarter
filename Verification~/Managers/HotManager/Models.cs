@@ -30,12 +30,17 @@ namespace Game.Framework.HotUpdate
             settings.Validate();
             ManagerContracts.HotCalls.Add("start");
             lifetime = CancellationTokenSource.CreateLinkedTokenSource(token);
-            startup = StartAsync(startupContext, lifetime.Token);
+            startup = StartAsync(settings, startupContext, lifetime.Token);
             return startup;
         }
 
-        private async Task StartAsync(object startupContext, CancellationToken token)
+        private async Task StartAsync(UpdateSettings settings, object startupContext, CancellationToken token)
         {
+            if (settings.prepareContentAsync != null)
+            {
+                await settings.prepareContentAsync(new ReleaseContentContext("compiled", settings.content, true), token);
+            }
+
             await ManagerContracts.HotInitialization(token);
             token.ThrowIfCancellationRequested();
             hotGame = ManagerContracts.HotGameFactory?.Invoke();
@@ -64,6 +69,16 @@ namespace Game.Framework.HotUpdate
             public void ReportReady(string moduleVersion)
             {
             }
+        }
+
+        public void NotifyApplicationPause(bool paused)
+        {
+            (hotGame as IGameApplicationEvents)?.OnApplicationPause(paused);
+        }
+
+        public void NotifyApplicationFocus(bool focused)
+        {
+            (hotGame as IGameApplicationEvents)?.OnApplicationFocus(focused);
         }
 
         public void Dispose()

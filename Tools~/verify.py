@@ -39,12 +39,12 @@ def validate_project(root=ROOT):
     assert modules['com.code-philosophy.hybridclr']['embed']
     assert modules['com.novorizon.framework.hybridclr']['setupMethod'] == 'Configure'
     runtime = json.loads((root / 'Assets/Game/Runtime/GameStarter.Runtime.asmdef').read_text())
-    assert set(runtime['references']) == {'ECS', 'Game.Startup', 'Game.Data.Generated', 'Luban.Runtime', 'Game.Framework.Data', 'Game.Framework.Network', 'Game.Framework.Resources.YooAsset', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Network.Unity', 'Game.Framework.UI', 'Game.Framework.Input', 'Unity.InputSystem', 'Game.Framework.HotUpdate'}
+    assert set(runtime['references']) == {'Game.Startup', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.HotUpdate', 'Game.Framework.Resources.YooAsset', 'Game.Framework.UI', 'Unity.InputSystem', 'YooAsset'}
     assert 'Editor' not in runtime.get('includePlatforms', [])
-    generated = json.loads((root / 'Assets/Generated/Data/Game.Data.Generated.asmdef').read_text())
-    assert generated['name'] == 'Game.Data.Generated' and generated['references'] == ['Luban.Runtime']
+    generated = json.loads((root / 'Assets/HotUpdate/Generated/Data/Game.Data.Generated.asmdef').read_text())
+    assert generated['name'] == 'Game.Data.Generated' and generated['references'] == ['Luban.Runtime'] and not generated['autoReferenced']
     editor = json.loads((root / 'Assets/Game/Editor/GameStarter.Editor.asmdef').read_text())
-    assert set(editor['references']) == {'GameStarter.Runtime', 'Game.Startup', 'Game.Framework.Data.Editor', 'Game.Framework.HotUpdate.Editor', 'YooAsset', 'YooAsset.Editor'}
+    assert set(editor['references']) == {'GameStarter.Runtime', 'Game.Startup', 'Game.Framework.Data.Editor', 'Game.Framework.HotUpdate.Editor', 'YooAsset', 'YooAsset.Editor', 'Game.Framework.HotUpdate'}
     data_root = root / 'Assets/GameAssets/Data/Luban'
     data_manifest = json.loads((data_root / 'manifest.json').read_text())
     assert data_manifest['version'] == 1 and data_manifest['format'] == 'bin'
@@ -115,7 +115,7 @@ def main():
             git_env = os.environ.copy()
             git_env['GIT_TERMINAL_PROMPT'] = '0'
             subprocess.run(['git', 'clone', '--depth', '1', '--filter=blob:none', '--sparse', '--branch', source.fragment, origin, str(checkout)], env=git_env, check=True)
-            subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder, 'Packages/com.novorizon.framework.hybridclr', 'Packages/com.novorizon.data'], env=git_env, check=True)
+            subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder, 'Packages/com.novorizon.framework.hybridclr', 'Packages/com.novorizon.data', 'Packages/com.novorizon.framework.yooasset'], env=git_env, check=True)
             framework = checkout / subfolder
         framework = framework.resolve()
         package = json.loads((framework / 'package.json').read_text())
@@ -145,7 +145,7 @@ def main():
         env.setdefault('DOTNET_PROCESSOR_COUNT', '2')
         env.setdefault('DOTNET_CLI_HOME', str(Path(temp) / 'dotnet-home'))
         env.setdefault('DOTNET_SKIP_FIRST_TIME_EXPERIENCE', '1')
-        subprocess.run([args.dotnet, 'build', 'Verification~/GameStarter.Verification.csproj', '-c', 'Release', '-m:1', '--disable-build-servers', '--nologo', '-p:FrameworkPackageRoot=' + str(framework), '-p:HotUpdatePackageRoot=' + str(hot_package), '-p:DataPackageRoot=' + str(data_package), '-p:LubanPackageRoot=' + str(luban), '-p:YooAssetPackageRoot=' + str(yoo / 'Assets/YooAsset')], cwd=ROOT, env=env, check=True)
+        subprocess.run([args.dotnet, 'build', 'Verification~/GameStarter.Verification.csproj', '-c', 'Release', '-m:1', '--disable-build-servers', '--nologo', '-p:FrameworkPackageRoot=' + str(framework), '-p:HotUpdatePackageRoot=' + str(hot_package), '-p:DataPackageRoot=' + str(data_package), '-p:LubanPackageRoot=' + str(luban), '-p:YooAssetPackageRoot=' + str(yoo / 'Assets/YooAsset'), '-p:ResourcesPackageRoot=' + str(framework.parent / 'com.novorizon.framework.yooasset')], cwd=ROOT, env=env, check=True)
         subprocess.run([args.dotnet, 'Verification~/bin/Release/net8.0/GameStarter.Verification.dll'], cwd=ROOT, env=env, check=True)
 
 

@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   configFile: Config/Luban/luban.conf
   target: client
-  codeOutput: Assets/Generated/Data
+  codeOutput: Assets/HotUpdate/Generated/Data
   dataOutput: Assets/GameAssets/Data/Luban
   locationPrefix: Data/Luban
   generatedAssembly: Game.Data.Generated
+  generatedAutoReferenced: 0
   dotnetExecutable: dotnet
   lubanDll:

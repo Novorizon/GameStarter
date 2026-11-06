@@ -13,22 +13,12 @@
     <ProjectReference Include="../Core/Core.csproj" />
     <ProjectReference Include="../FrameworkUnity/FrameworkUnity.csproj" />
     <Compile Include="../../Assets/Game/Runtime/*.cs" />
-    <Compile Include="../ManagerContracts.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <ProjectReference Include="../Managers/Common/Common.csproj" />
     <ProjectReference Include="../Managers/Resources/Resources.csproj" />
     <ProjectReference Include="../Managers/UI/UI.csproj" />
-    <ProjectReference Include="../Managers/ECS/ECS.csproj" />
-    <ProjectReference Include="../Managers/Network/Network.csproj" />
-    <ProjectReference Include="../Managers/NetworkUnity/NetworkUnity.csproj" />
-    <ProjectReference Include="../Managers/Gpu/Gpu.csproj" />
-    <ProjectReference Include="../Managers/Audio/Audio.csproj" />
-    <ProjectReference Include="../Managers/Data/Data.csproj" />
-    <ProjectReference Include="../Managers/Input/Input.csproj" />
     <ProjectReference Include="../Managers/HotManager/HotManager.csproj" />
     <ProjectReference Include="../Startup/Startup.csproj" />
     <ProjectReference Include="../Managers/InputSystem/InputSystem.csproj" />
-    <ProjectReference Include="../GeneratedData/GeneratedData.csproj" />
-    <ProjectReference Include="../LubanRuntime/LubanRuntime.csproj" />
+    <ProjectReference Include="../YooAssetRuntime/YooAssetRuntime.csproj" />
   </ItemGroup>
 </Project>

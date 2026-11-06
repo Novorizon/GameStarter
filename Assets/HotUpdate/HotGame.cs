@@ -21,7 +21,7 @@ using GameSceneManager = Game.Framework.Scenes.SceneManager;
 namespace Game.HotUpdate
 {
     /// <summary>热更业务入口：准备公共系统，再进入业务；与 GameEntry 使用相同的启动函数名称。</summary>
-    public sealed class HotGame : IGameModule
+    public sealed class HotGame : IGameModule, IGameApplicationEvents
     {
         private const string Version = "1.0.0";
         private IGameHost host;
@@ -65,11 +65,12 @@ namespace Game.HotUpdate
             LocalStorageManager.Instance.Initialize();
             var source = options.InputActions as InputActionAsset ?? Resources.Load<InputActionAsset>("InputActions");
             InputManager.Instance.Initialize(source, source != null ? options.InitialInputMap : null);
-            GameSceneManager.Instance.Initialize(options.SceneLoader as Game.Framework.Scenes.ISceneLoader);
+            GameSceneManager.Instance.Initialize(options.SceneLoaderFactory?.Invoke() as Game.Framework.Scenes.ISceneLoader);
             AudioManager.Instance.Initialize();
             DataManager.Instance.Initialize(LoadDataBytesAsync);
+            GameSettings.Instance.Initialize();
 
-            if (options.UIAssetLoader is IUIAssetLoader loader)
+            if (options.UIAssetLoaderFactory?.Invoke() is IUIAssetLoader loader)
             {
                 UIManager.Instance.SetAssetLoader(loader);
             }
@@ -96,7 +97,21 @@ namespace Game.HotUpdate
             }
 
             token.ThrowIfCancellationRequested();
-            var example = DataManager.Instance.Get<cfg.Tables>().TbExample.Get(1);
+            var tables = DataManager.Instance.Get<cfg.Tables>();
+            var arguments = Environment.GetCommandLineArgs();
+            int probe = Array.IndexOf(arguments, "--expect-luban-table");
+            if (probe >= 0 && probe + 1 < arguments.Length)
+            {
+                string expected = arguments[probe + 1];
+                if (tables.GetType().GetProperty(expected)?.GetValue(tables) == null)
+                {
+                    throw new InvalidOperationException("Expected hot table was not loaded: " + expected);
+                }
+
+                host.Log("NATIVE_SCHEMA_READY " + expected);
+            }
+
+            var example = tables.TbExample.Get(1);
             host.Log("LUBAN_EXAMPLE " + example.Id + " " + example.Name);
             // 数据表已经可用；在这里初始化玩法系统、加载首场景或打开登录界面。
             // 具体业务类放在 Assets/HotUpdate 的其他目录，由这里组织调用。
@@ -123,6 +138,22 @@ namespace Game.HotUpdate
             }
         }
 
+        public void OnApplicationPause(bool paused)
+        {
+            if (paused && GameSettings.TryGetInstance(out var settings))
+            {
+                settings.Save();
+            }
+        }
+
+        public void OnApplicationFocus(bool focused)
+        {
+            if (!focused && GameSettings.TryGetInstance(out var settings))
+            {
+                settings.Save();
+            }
+        }
+
         public void Shutdown()
         {
             if (stopped)
@@ -144,6 +175,7 @@ namespace Game.HotUpdate
 
         private void ReleaseManagers()
         {
+            GameSettings.Release();
             NetworkManager.Release();
             WorldManager.Release();
             EntityManager.Release();

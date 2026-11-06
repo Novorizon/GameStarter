@@ -3,5 +3,5 @@
   "references": [
     "Luban.Runtime"
   ],
-  "autoReferenced": true
+  "autoReferenced": false
 }

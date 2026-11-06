@@ -9,6 +9,9 @@ namespace UnityEngine
 {
     public static class Application
     {
+        public static void Quit(int code)
+        {
+        }
         public static string identifier = "com.novorizon.gamestarter";
     }
 
@@ -49,7 +52,7 @@ namespace UnityEngine
             }
         }
 
-        public static void Invoke(Object target, string method) => target.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.Invoke(target, null);
+        public static void Invoke(Object target, string method, params object[] arguments) => target.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.Invoke(target, arguments);
         public static bool operator ==(Object a, Object b) => ReferenceEquals(a, b) || ((ReferenceEquals(a, null) || a.dead) && (ReferenceEquals(b, null) || b.dead));
         public static bool operator !=(Object a, Object b) => !(a == b);
         public override bool Equals(object obj) => this == obj as Object;
@@ -220,6 +223,6 @@ namespace UnityEngine
             IncludeFields = true
         };
         public static T FromJson<T>(string json) => JsonSerializer.Deserialize<T>(json, Options);
-        public static string ToJson(object target) => JsonSerializer.Serialize(target, Options);
+        public static string ToJson(object target, bool prettyPrint = false) => JsonSerializer.Serialize(target, Options);
     }
 }
