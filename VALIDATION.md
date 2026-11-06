@@ -40,3 +40,9 @@ Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032
 - 编译日志包含 Game.Framework.Demo.dll 的 Editor/Player Csc 和复制步骤，以及 Game.Framework.Demo.Editor.dll 的 Csc；命令退出码为 0，compile.json 为 success，包含 PACKAGE_SAMPLE_ASSEMBLIES_VERIFIED 和 NATIVE_COMPILE_READY。
 - 新程序集集合下再次执行 Bootstrap Play，命令退出码为 0，editor.json 为 success，三个就绪标记齐全。
 - 上述补验不扩大为 Demo 交互功能或 GPU 测试通过，也不替代 IL2CPP 和设备验收；前述 51 项 GPU 测试保留为原环境下的历史结果。
+
+## 启动接线简化复验
+
+移除 GameStartupOptions 中的两个 object 工厂，场景与 UI 适配器改在 HotGame 中直接装配；UI 租约适配器移入热更程序集。命令行探针移到单独的 NativeValidation partial 文件，保留现有验收脚本行为。SingletonLifecycle 的资源清理与 Source Generator 的静态字段恢复保持原有职责。
+
+64 项模型回归通过（本地 net8.0 目标使用 .NET 9.0.22 roll-forward 执行）；真实 Unity 2022.3.62f1 的 Editor/Player 编译、8 个示例程序集覆盖检查和 Bootstrap Play 均通过。Game.Startup 及 AOT 引用有变化，已有 IL2CPP 主包需重建；本次未追加 IL2CPP 或 GPU 通过结论。

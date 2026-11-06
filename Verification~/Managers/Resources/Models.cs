@@ -28,7 +28,19 @@ namespace Game.Resource
     public sealed class ResourceManager : Singleton<ResourceManager>
     {
         public Task<UnityEngine.TextAsset> LoadTextAssetAsync(string location) => Task.FromResult(new UnityEngine.TextAsset());
-        public object CreateSceneLoader() => new object ();
+        private sealed class SceneLoader : Game.Framework.Scenes.ISceneLoader
+        {
+        }
+
+        public Game.Framework.Scenes.ISceneLoader CreateSceneLoader()
+        {
+            if (!Initialized)
+            {
+                throw new InvalidOperationException("Initialize YooAsset before creating the scene loader.");
+            }
+
+            return new SceneLoader();
+        }
         public bool Initialized
         {
             get;

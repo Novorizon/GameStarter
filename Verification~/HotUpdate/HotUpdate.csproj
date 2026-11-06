@@ -11,6 +11,7 @@
     <ProjectReference Include="../HotUpdateContracts/HotUpdateContracts.csproj" />
     <ProjectReference Include="../Unity/Unity.csproj" />
     <Compile Include="../../Assets/HotUpdate/*.cs" />
+    <Compile Include="../Runtime/AssemblyInfo.cs" Link="AssemblyInfo.cs" />
     <ProjectReference Include="../Managers/Resources/Resources.csproj" />
     <ProjectReference Include="../Managers/UI/UI.csproj" />
     <ProjectReference Include="../Managers/ECS/ECS.csproj" />

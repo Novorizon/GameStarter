@@ -81,13 +81,15 @@ namespace Game
 
         private async Task InitializeAsync(GameSession current)
         {
+            Task InitializeModulesAsync(CancellationToken token)
+            {
+                return TaskUtil.WaitAsync(current.StartAsync(startupModules), token);
+            }
+
             try
             {
                 StartupMessage = "Selecting code and resource versions";
-                var options = new GameStartupOptions(inputActions, initialInputMap,
-                    token => TaskUtil.WaitAsync(current.StartAsync(startupModules), token),
-                    () => ResourceManager.Instance.CreateSceneLoader(),
-                    () => new YooAssetUIAssetLoader(ResourceManager.Instance));
+                var options = new GameStartupOptions(inputActions, initialInputMap, InitializeModulesAsync);
                 var settings = GameReleaseConfiguration.CreateSettings();
                 settings.loadFromCompiledAssemblies = !initializeHotUpdate;
 #if NOVORIZON_COMPILED_GAME
@@ -158,8 +160,11 @@ namespace Game
         }
 
         // 单独保留 Player 文件系统准备，Editor 模型验证也编译并测试该分支。
-        internal static async Task ConfigurePlayerResourcesAsync(ResourceManager resources, ResourceInitializationOptions options,
-            ReleaseContentContext content, CancellationToken token)
+        internal static async Task ConfigurePlayerResourcesAsync(
+            ResourceManager resources,
+            ResourceInitializationOptions options,
+            ReleaseContentContext content,
+            CancellationToken token)
         {
             // 此时尚未创建 HotGame，DefaultPackage 由入口独占。
             // 回退时必须销毁旧 Host 文件系统，才能改用内置资源且不依赖下载站。
@@ -189,15 +194,6 @@ namespace Game
 
                 options.Parameters = YooAssetsSettings.CreateHostPlayModeParameters(
                     GameReleaseConfiguration.ResourceUrl(content.Platform, content.PackageName));
-            }
-        }
-
-        private static void NativeSmokeExit(int code)
-        {
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--novorizon-native-smoke") >= 0)
-            {
-                Debug.Log(code == 0 ? "NATIVE_PLAYER_READY" : "NATIVE_PLAYER_FAILED");
-                Application.Quit(code);
             }
         }
 

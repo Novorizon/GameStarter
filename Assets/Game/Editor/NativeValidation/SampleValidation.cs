@@ -18,7 +18,10 @@ namespace Game.Editor
                 throw new InvalidOperationException("Use a clean validation checkout; " + Destination + " already exists.");
             }
 
-            var packages = UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages().Where(package => package.name.StartsWith("com.novorizon.", StringComparison.Ordinal)).OrderBy(package => package.name, StringComparer.Ordinal).ToArray();
+            var packages = UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages()
+                .Where(package => package.name.StartsWith("com.novorizon.", StringComparison.Ordinal))
+                .OrderBy(package => package.name, StringComparer.Ordinal)
+                .ToArray();
             var imported = new System.Collections.Generic.List<string>();
             foreach (var package in packages)
             {
@@ -63,11 +66,17 @@ namespace Game.Editor
                 File.Delete(reportPath);
             }
 
-            var editor = UnityEditor.Compilation.CompilationPipeline.GetAssemblies(UnityEditor.Compilation.AssembliesType.Editor).ToDictionary(assembly => assembly.name);
-            var player = UnityEditor.Compilation.CompilationPipeline.GetAssemblies(UnityEditor.Compilation.AssembliesType.Player).ToDictionary(assembly => assembly.name);
+            var editor = UnityEditor.Compilation.CompilationPipeline
+                .GetAssemblies(UnityEditor.Compilation.AssembliesType.Editor)
+                .ToDictionary(assembly => assembly.name);
+            var player = UnityEditor.Compilation.CompilationPipeline
+                .GetAssemblies(UnityEditor.Compilation.AssembliesType.Player)
+                .ToDictionary(assembly => assembly.name);
             var verified = new System.Collections.Generic.List<CompiledSampleAssembly>();
             int sampleCount = 0;
-            foreach (var package in UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages().Where(package => package.name.StartsWith("com.novorizon.", StringComparison.Ordinal)).OrderBy(package => package.name, StringComparer.Ordinal))
+            foreach (var package in UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages()
+                .Where(package => package.name.StartsWith("com.novorizon.", StringComparison.Ordinal))
+                .OrderBy(package => package.name, StringComparer.Ordinal))
             {
                 var description = JsonUtility.FromJson<PackageDescription>(File.ReadAllText(Path.Combine(package.resolvedPath, "package.json")));
                 foreach (var sample in description.samples ?? Array.Empty<SampleDescription>())
@@ -99,7 +108,14 @@ namespace Game.Editor
                             throw new InvalidOperationException("Sample assembly is missing from the active Player compilation: " + expected.name);
                         }
 
-                        verified.Add(new CompiledSampleAssembly { name = expected.name, definition = imported, editorDll = assembly.outputPath, sourceFiles = assembly.sourceFiles, player = !editorOnly });
+                        verified.Add(new CompiledSampleAssembly
+                        {
+                            name = expected.name,
+                            definition = imported,
+                            editorDll = assembly.outputPath,
+                            sourceFiles = assembly.sourceFiles,
+                            player = !editorOnly
+                        });
                     }
 
                     sampleCount++;
@@ -112,7 +128,16 @@ namespace Game.Editor
             }
 
             Directory.CreateDirectory(Path.GetDirectoryName(reportPath));
-            File.WriteAllText(reportPath, JsonUtility.ToJson(new SampleAssemblyReport { success = true, sampleCount = sampleCount, assemblies = verified.ToArray() }, true));
+            File.WriteAllText(
+                reportPath,
+                JsonUtility.ToJson(
+                    new SampleAssemblyReport
+                    {
+                        success = true,
+                        sampleCount = sampleCount,
+                        assemblies = verified.ToArray()
+                    },
+                    true));
             Debug.Log("PACKAGE_SAMPLE_ASSEMBLIES_VERIFIED " + sampleCount + " samples, " + verified.Count + " assemblies.");
         }
 

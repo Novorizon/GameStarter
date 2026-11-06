@@ -27,6 +27,10 @@ GameEntry 是 AOT 入口，不引用生成表。HotGame 是普通 C# 游戏入�
 
 StartupModule 是可选扩展，默认空列表；GameSession 只协调这些模块。普通 Manager 在 HotGame 直接 Initialize，退出时调用 Release，不需要在业务层登记 Manager 所有权或失败回滚。
 
+GameStartupOptions 只传输入配置和可选模块启动回调；资源就绪后，HotGame 直接创建场景加载器和热更侧 YooAssetUIAssetLoader，不通过 object 工厂传递。SingletonLifecycle 先释放旧实例、取消任务，Source Generator 再恢复关闭 Domain Reload 时的静态字段声明值，两者职责不同。
+
+命令行 Player 退出探针与表结构检查分别集中在 GameEntry.NativeValidation.cs、HotGame.NativeValidation.cs，供验收脚本使用；正常业务按生成类型直接查询表。共享 Game.Startup 构造签名和 AOT 程序集引用发生变化，已有 IL2CPP 主包需要重建基线后再发布补丁。
+
 ## Luban 与设置
 
 | 内容 | 路径 |

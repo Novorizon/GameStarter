@@ -15,7 +15,6 @@
     <Compile Include="../../Assets/Game/Runtime/*.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <ProjectReference Include="../Managers/Resources/Resources.csproj" />
-    <ProjectReference Include="../Managers/UI/UI.csproj" />
     <ProjectReference Include="../Managers/HotManager/HotManager.csproj" />
     <ProjectReference Include="../Startup/Startup.csproj" />
     <ProjectReference Include="../Managers/InputSystem/InputSystem.csproj" />

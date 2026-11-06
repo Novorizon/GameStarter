@@ -135,7 +135,14 @@ namespace Game.Editor
             try
             {
                 Directory.CreateDirectory("Builds/LocalSource");
-                var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).ToArray(), locationPathName = "Builds/LocalSource/GameStarter.exe", target = BuildTarget.StandaloneWindows64, extraScriptingDefines = new[] { "NOVORIZON_COMPILED_GAME" }, options = BuildOptions.StrictMode });
+                var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+                {
+                    scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).ToArray(),
+                    locationPathName = "Builds/LocalSource/GameStarter.exe",
+                    target = BuildTarget.StandaloneWindows64,
+                    extraScriptingDefines = new[] { "NOVORIZON_COMPILED_GAME" },
+                    options = BuildOptions.StrictMode
+                });
                 if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
                 {
                     throw new InvalidOperationException("Local-source Player build failed.");
@@ -157,7 +164,18 @@ namespace Game.Editor
         private static void WriteReport(string phase, bool success, string detail)
         {
             Directory.CreateDirectory("Artifacts/NativeValidation");
-            File.WriteAllText("Artifacts/NativeValidation/" + phase + ".json", JsonUtility.ToJson(new Report { unity = Application.unityVersion, utc = DateTime.UtcNow.ToString("O"), phase = phase, success = success, detail = detail }, true));
+            File.WriteAllText(
+                "Artifacts/NativeValidation/" + phase + ".json",
+                JsonUtility.ToJson(
+                    new Report
+                    {
+                        unity = Application.unityVersion,
+                        utc = DateTime.UtcNow.ToString("O"),
+                        phase = phase,
+                        success = success,
+                        detail = detail
+                    },
+                    true));
         }
 
         [Serializable]

@@ -39,7 +39,7 @@ def validate_project(root=ROOT):
     assert modules['com.code-philosophy.hybridclr']['embed']
     assert modules['com.novorizon.framework.hybridclr']['setupMethod'] == 'Configure'
     runtime = json.loads((root / 'Assets/Game/Runtime/GameStarter.Runtime.asmdef').read_text())
-    assert set(runtime['references']) == {'Game.Startup', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.HotUpdate', 'Game.Framework.Resources.YooAsset', 'Game.Framework.UI', 'Unity.InputSystem', 'YooAsset'}
+    assert set(runtime['references']) == {'Game.Startup', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.HotUpdate', 'Game.Framework.Resources.YooAsset', 'Unity.InputSystem', 'YooAsset'}
     assert 'Editor' not in runtime.get('includePlatforms', [])
     generated = json.loads((root / 'Assets/HotUpdate/Generated/Data/Game.Data.Generated.asmdef').read_text())
     assert generated['name'] == 'Game.Data.Generated' and generated['references'] == ['Luban.Runtime'] and not generated['autoReferenced']
