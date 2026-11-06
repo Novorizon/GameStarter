@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$true)][string]$UnityEditor,
-    [ValidateSet("Editor", "Player", "SchemaPatch", "PatchPlayer")][string]$Phase = "Editor",
+    [ValidateSet("ImportSamples", "Compile", "Editor", "Player", "SchemaPatch", "PatchPlayer")][string]$Phase = "Editor",
     [string]$ProjectPath = (Split-Path $PSScriptRoot -Parent)
 )
 $ErrorActionPreference = "Stop"
@@ -10,13 +10,28 @@ $report = Join-Path $project "Artifacts/NativeValidation"
 New-Item -ItemType Directory -Force $report | Out-Null
 
 function Invoke-Unity([string]$method, [string]$name, [bool]$quit) {
+    Remove-Item (Join-Path $report ($name + ".json")) -ErrorAction SilentlyContinue
+    if ($name -eq "import-samples") { Remove-Item (Join-Path $report "imported-samples.txt") -ErrorAction SilentlyContinue }
     $arguments = @("-batchmode", "-projectPath", "`"$project`"", "-buildTarget", "Win64", "-executeMethod", $method, "-logFile", "`"$(Join-Path $report ($name + '.log'))`"")
     if ($quit) { $arguments += "-quit" }
     $process = Start-Process -FilePath $UnityEditor -ArgumentList $arguments -Wait -PassThru
     if ($process.ExitCode -ne 0) { throw "Unity $name failed ($($process.ExitCode)); inspect $report" }
+    if ($name -in @("compile", "editor")) {
+        $result = Get-Content (Join-Path $report ($name + ".json")) -Raw | ConvertFrom-Json
+        if (!$result.success) { throw "Unity $name did not report success" }
+    }
+    if ($name -eq "import-samples" -and !(Test-Path (Join-Path $report "imported-samples.txt"))) {
+        throw "Sample import report is missing"
+    }
 }
 
 switch ($Phase) {
+    "ImportSamples" {
+        Invoke-Unity "Game.Editor.SampleValidation.ImportSamples" "import-samples" $true
+    }
+    "Compile" {
+        Invoke-Unity "Game.Editor.NativeValidation.CompileScripts" "compile" $true
+    }
     "Editor" {
         Invoke-Unity "Game.Editor.NativeValidation.EditorSmoke" "editor" $false
     }

@@ -13,6 +13,34 @@ namespace Game.Editor
     public static class NativeValidation
     {
         private static DateTime deadline;
+        public static void CompileScripts()
+        {
+            GameDataSetup.EnsureConfigured();
+            GameDataSetup.ValidateGenerated();
+            int errors = 0;
+            Application.LogCallback capture = (message, stack, type) =>
+            {
+                if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
+                {
+                    System.Threading.Interlocked.Increment(ref errors);
+                }
+            };
+            Application.logMessageReceivedThreaded += capture;
+            try
+            {
+                GameBuild.ValidatePlayerScripts();
+                if (errors != 0)
+                {
+                    throw new InvalidOperationException("Unity reported errors while compiling Player scripts. Inspect the complete log.");
+                }
+            }
+            finally
+            {
+                Application.logMessageReceivedThreaded -= capture;
+            }
+            WriteReport("compile", true, "PLAYER_SCRIPTS_COMPILED");
+            Debug.Log("NATIVE_COMPILE_READY");
+        }
 
         [MenuItem("Tools/Novorizon/GameStarter/Native Validation/Editor Smoke")]
         public static void EditorSmoke()
@@ -72,14 +100,7 @@ namespace Game.Editor
             try
             {
                 Directory.CreateDirectory("Builds/LocalSource");
-                var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
-                {
-                    scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).ToArray(),
-                    locationPathName = "Builds/LocalSource/GameStarter.exe",
-                    target = BuildTarget.StandaloneWindows64,
-                    extraScriptingDefines = new[] { "NOVORIZON_COMPILED_GAME" },
-                    options = BuildOptions.StrictMode
-                });
+                var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).ToArray(), locationPathName = "Builds/LocalSource/GameStarter.exe", target = BuildTarget.StandaloneWindows64, extraScriptingDefines = new[] { "NOVORIZON_COMPILED_GAME" }, options = BuildOptions.StrictMode });
                 if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
                 {
                     throw new InvalidOperationException("Local-source Player build failed.");
@@ -101,14 +122,7 @@ namespace Game.Editor
         private static void WriteReport(string phase, bool success, string detail)
         {
             Directory.CreateDirectory("Artifacts/NativeValidation");
-            File.WriteAllText("Artifacts/NativeValidation/" + phase + ".json", JsonUtility.ToJson(new Report
-            {
-                unity = Application.unityVersion,
-                utc = DateTime.UtcNow.ToString("O"),
-                phase = phase,
-                success = success,
-                detail = detail
-            }, true));
+            File.WriteAllText("Artifacts/NativeValidation/" + phase + ".json", JsonUtility.ToJson(new Report { unity = Application.unityVersion, utc = DateTime.UtcNow.ToString("O"), phase = phase, success = success, detail = detail }, true));
         }
 
         [Serializable]
