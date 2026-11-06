@@ -14,7 +14,8 @@
     "GpuAnimator",
     "Game.Framework.Input",
     "Unity.InputSystem",
-    "Game.Framework.HotUpdate"
+    "Game.Framework.HotUpdate",
+    "Game.Startup"
   ],
   "autoReferenced": true,
   "allowUnsafeCode": false

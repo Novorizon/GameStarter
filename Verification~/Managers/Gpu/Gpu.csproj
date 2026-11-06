@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>GpuAnimator</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Unity/Unity.csproj" />
+    <ProjectReference Include="../../Core/Core.csproj" />
+    <ProjectReference Include="../../FrameworkUnity/FrameworkUnity.csproj" />
+    <ProjectReference Include="../Common/Common.csproj" />
+    <Compile Include="Models.cs" />
+  </ItemGroup>
+</Project>

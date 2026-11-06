@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>GameStarter.Verification.Support</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Core/Core.csproj" />
+    <Compile Include="ManagerContracts.cs" />
+    <ProjectReference Include="../../HotUpdateContracts/HotUpdateContracts.csproj" />
+  </ItemGroup>
+</Project>

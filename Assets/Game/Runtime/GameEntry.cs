@@ -70,22 +70,13 @@ namespace Game
             startupReady = false;
             sessionOwner = this;
             session = new GameSession(Debug.LogException);
-            startupTask = StartSessionAsync(session);
+            startupTask = InitializeAsync(session);
         }
 
-        private async Task InitializeManagersAsync(CancellationToken token)
+        private Task InitializeManagersAsync(CancellationToken token)
         {
             EventManager.Instance.Initialize();
             TimerManager.Instance.Initialize();
-            if (initializeYooAsset)
-            {
-                bool ready = await TaskUtil.WaitAsync(ResourceManager.Instance.InitializeAsync(), token);
-                if (!ready)
-                {
-                    throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
-                }
-            }
-
             token.ThrowIfCancellationRequested();
             DataManager.Instance.Initialize();
             LocalStorageManager.Instance.Initialize();
@@ -111,6 +102,8 @@ namespace Game
             {
                 NetworkManager.Instance.Initialize();
             }
+
+            return Task.CompletedTask;
         }
 
         private static async Task<string> LoadConfigTextAsync(string location, CancellationToken token)
@@ -131,21 +124,20 @@ namespace Game
 
         protected override void OnExit()
         {
+            Shutdown();
+        }
+
+        private void Shutdown()
+        {
             var previous = session;
             session = null;
-            HotUpdateManager.Release();
             previous?.Dispose();
-            NetworkManager.Release();
-            WorldManager.Release();
-            EntityManager.Release();
-            GpuAnimatorManager.Release();
-            UIManager.Release();
-            ConfigManager.Release();
-            AudioManager.Release();
-            GameSceneManager.Release();
-            InputManager.Release();
-            LocalStorageManager.Release();
-            DataManager.Release();
+            HotUpdateManager.Release();
+            if (!initializeHotUpdate)
+            {
+                ReleaseManagers();
+            }
+
             ResourceManager.Release();
             if (ReferenceEquals(sessionOwner, this))
             {
@@ -153,18 +145,24 @@ namespace Game
             }
         }
 
-        private async Task StartSessionAsync(GameSession current)
+        private async Task InitializeAsync(GameSession current)
         {
             try
             {
-                await InitializeManagersAsync(current.Token);
-                current.Token.ThrowIfCancellationRequested();
-                await current.StartAsync(startupModules);
+                await InitializeResourcesAsync(current.Token);
                 current.Token.ThrowIfCancellationRequested();
                 if (initializeHotUpdate)
                 {
-                    // Editor 使用已编译程序集；Player 补充 AOT 元数据、加载 DLL，再调用 HotGame。
-                    await HotUpdateManager.Instance.InitializeAsync(new UpdateSettings(), current.Token);
+                    var options = new GameStartupOptions(initializeYooAsset, inputActions, initialInputMap,
+                        token => TaskUtil.WaitAsync(current.StartAsync(startupModules), token),
+                        initializeYooAsset ? ResourceManager.Instance.CreateSceneLoader() : null,
+                        initializeYooAsset ? new YooAssetUIAssetLoader(ResourceManager.Instance) : null);
+                    await HotUpdateManager.Instance.InitializeAsync(new UpdateSettings(), options, current.Token);
+                }
+                else
+                {
+                    await InitializeManagersAsync(current.Token);
+                    await StartGameAsync(current);
                 }
 
                 current.Token.ThrowIfCancellationRequested();
@@ -182,6 +180,42 @@ namespace Game
                     Debug.LogException(error);
                 }
             }
+        }
+
+        private async Task InitializeResourcesAsync(CancellationToken token)
+        {
+            if (initializeYooAsset)
+            {
+                bool ready = await TaskUtil.WaitAsync(ResourceManager.Instance.InitializeAsync(), token);
+                if (!ready)
+                {
+                    throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
+                }
+            }
+
+            token.ThrowIfCancellationRequested();
+        }
+
+        private async Task StartGameAsync(GameSession current)
+        {
+            await current.StartAsync(startupModules);
+            current.Token.ThrowIfCancellationRequested();
+            // 关闭热更时，本项目的业务系统和首场景从这里启动。
+        }
+
+        private void ReleaseManagers()
+        {
+            NetworkManager.Release();
+            WorldManager.Release();
+            EntityManager.Release();
+            GpuAnimatorManager.Release();
+            UIManager.Release();
+            ConfigManager.Release();
+            AudioManager.Release();
+            GameSceneManager.Release();
+            InputManager.Release();
+            LocalStorageManager.Release();
+            DataManager.Release();
         }
 
         public async Task WaitUntilReadyAsync(CancellationToken token = default)

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>GameStarter.HotManager.Model</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Unity/Unity.csproj" />
+    <ProjectReference Include="../../Core/Core.csproj" />
+    <ProjectReference Include="../../FrameworkUnity/FrameworkUnity.csproj" />
+    <ProjectReference Include="../Common/Common.csproj" />
+    <ProjectReference Include="../../HotUpdateContracts/HotUpdateContracts.csproj" />
+    <Compile Include="Models.cs" />
+  </ItemGroup>
+</Project>

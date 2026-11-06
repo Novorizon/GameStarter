@@ -1,0 +1,3 @@
+<linker>
+  <assembly fullname="Game.Startup" preserve="all" />
+</linker>

@@ -2,7 +2,20 @@
   "name": "Game.HotUpdate",
   "rootNamespace": "Game.HotUpdate",
   "references": [
-    "Game.Framework.HotUpdate"
+    "Game.Startup",
+    "Game.Framework.Core",
+    "Game.Framework.Unity",
+    "Game.Framework.HotUpdate",
+    "Game.Framework.Resources.YooAsset",
+    "Game.Framework.Audio",
+    "Game.Framework.Config",
+    "Game.Framework.UI",
+    "ECS",
+    "GpuAnimator",
+    "Game.Framework.Input",
+    "Unity.InputSystem",
+    "Game.Framework.Network",
+    "Game.Framework.Network.Unity"
   ],
   "autoReferenced": false,
   "allowUnsafeCode": false

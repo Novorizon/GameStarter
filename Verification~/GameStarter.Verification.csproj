@@ -16,5 +16,18 @@
     <Compile Include="../Assets/Game/Editor/*.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="EditorContracts.cs" />
+    <ProjectReference Include="Managers/Audio/Audio.csproj" />
+    <ProjectReference Include="Managers/Common/Common.csproj" />
+    <ProjectReference Include="Managers/Data/Data.csproj" />
+    <ProjectReference Include="Managers/ECS/ECS.csproj" />
+    <ProjectReference Include="Managers/Gpu/Gpu.csproj" />
+    <ProjectReference Include="Managers/HotManager/HotManager.csproj" />
+    <ProjectReference Include="Managers/Input/Input.csproj" />
+    <ProjectReference Include="Managers/Network/Network.csproj" />
+    <ProjectReference Include="Managers/NetworkUnity/NetworkUnity.csproj" />
+    <ProjectReference Include="Managers/Resources/Resources.csproj" />
+    <ProjectReference Include="Managers/UI/UI.csproj" />
+    <ProjectReference Include="Startup/Startup.csproj" />
+    <ProjectReference Include="Managers/InputSystem/InputSystem.csproj" />
   </ItemGroup>
 </Project>
