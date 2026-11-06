@@ -75,8 +75,8 @@ namespace Game
 
         private async Task InitializeManagersAsync(CancellationToken token)
         {
-            _ = EventManager.Instance;
-            _ = TimerManager.Instance;
+            EventManager.Instance.Initialize();
+            TimerManager.Instance.Initialize();
             if (initializeYooAsset)
             {
                 bool ready = await TaskUtil.WaitAsync(ResourceManager.Instance.InitializeAsync(), token);
@@ -87,6 +87,7 @@ namespace Game
             }
 
             token.ThrowIfCancellationRequested();
+            DataManager.Instance.Initialize();
             LocalStorageManager.Instance.Initialize();
             var source = inputActions != null ? inputActions : Resources.Load<InputActionAsset>("InputActions");
             InputManager.Instance.Initialize(source, source != null ? initialInputMap : null);
@@ -104,7 +105,7 @@ namespace Game
 
             UIManager.Instance.Initialize();
             GpuAnimatorManager.Instance.Initialize();
-            _ = EntityManager.Instance;
+            EntityManager.Instance.Initialize();
             WorldManager.Instance.Initialize();
             if (Resources.Load<NetworkSettings>("NetworkSettings") != null)
             {

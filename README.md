@@ -21,12 +21,12 @@
 项目默认引用的聚合包地址：
 
 ```text
-https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.19
+https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#v0.1.0-preview.20
 ```
 
 UPM 不支持 package.json 中的 Git 传递依赖，因此工程 manifest 同时声明 all 和它的依赖来源，让首次导入即可解析运行时程序集。所有来源由同一份聚合目录生成，维护时运行 sync-packages.py；源码由 UPM 获取，不随工程复制。
 
-公共 Manager 的准备顺序写在 `GameEntry.InitializeManagersAsync`：取得事件和定时器服务 → 准备资源管理器 → 运行时数据与本地存储 → 输入 → 场景 → 音频 → 配置 → UI → GPU 动画调度器 → ECS EntityManager/WorldManager → 有 NetworkSettings 时初始化网络。Framework、UI、ECS 的自动驱动和运行退出清理仍由各库负责，GameEntry 不重复调用其 Update。
+公共 Manager 的准备顺序写在 `GameEntry.InitializeManagersAsync`：初始化事件和定时器服务 → 准备资源管理器 → 运行时数据与本地存储 → 输入 → 场景 → 音频 → 配置 → UI → GPU 动画调度器 → ECS EntityManager/WorldManager → 有 NetworkSettings 时初始化网络。Framework、UI、ECS 的自动驱动和运行退出清理仍由各库负责，GameEntry 不重复调用其 Update。
 
 空模板不附带 YooAsset 资源包；项目配置好 DefaultPackage 的采集和构建后，在 GameEntry 上开启 **Initialize Yoo Asset**，入口会等待 ResourceManager.InitializeAsync 成功后继续。网络需要在 Resources 中创建 NetworkSettings 并填写项目配置；入口只做 Initialize，实际联网由项目流程调用 ConnectAsync。
 
@@ -45,7 +45,7 @@ GameEntry 在基础 Manager 和可选启动模块就绪后，直接调用 `HotUp
 2. 构建主包：选择目标平台，使用 **Tools → Novorizon → Hot Update → 2. Build New Player**。封装自动安装匹配原生运行时、收集热更 DLL/AOT 元数据并准备内置版本。需要对应 Unity 平台模块和 IL2CPP 工具链。
 3. 导出补丁：修改 `Assets/HotUpdate` 中的代码，使用 **3. Export Patch**。修改 AOT 层 GameEntry、共享契约或程序集依赖后，需要重新构建主包。
 
-项目的可更新初始化逻辑写在 HotGame.InitializeAsync，资源和订阅清理写在 Shutdown。AOT 程序集不直接引用 Game.HotUpdate；热更程序集可以引用 AOT 的公开接口。远程更新需要项目自己的发布地址和签名公钥，设置字段及发布工具见 [HybridCLR 封装指南](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.19/Packages/com.novorizon.framework.hybridclr/README.md)。
+项目的可更新初始化逻辑写在 HotGame.InitializeAsync，资源和订阅清理写在 Shutdown。AOT 程序集不直接引用 Game.HotUpdate；热更程序集可以引用 AOT 的公开接口。远程更新需要项目自己的发布地址和签名公钥，设置字段及发布工具见 [HybridCLR 封装指南](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.20/Packages/com.novorizon.framework.hybridclr/README.md)。
 
 ## Visual Studio 代码跳转
 
@@ -72,12 +72,12 @@ GpuAnimator 包名为 `com.novorizon.gpuanimator`，可选模块安装器会同�
 
 更新依赖目录使用 `Tools~/sync-packages.py --ref <已发布标签>`。该工具从公开 Git 地址读取版本目录，同时更新聚合包、完整依赖清单和模块来源。正常打开工程不需要运行 Python 工具。
 
-包采用固定版本标签，不会随 GitHub 的新提交自动升级。维护依赖时运行 `python3 Tools~/sync-packages.py --ref v0.1.0-preview.19`；该命令同步聚合包及全部来源，Unity 随后按清单重新解析。当前入口包含 UIManager 和 GpuAnimatorManager，播放器会自行注册到 GPU 调度器，入口不重复推进动画。此次 AOT 变化需要重新构建 HybridCLR 主包。
+包采用固定版本标签，不会随 GitHub 的新提交自动升级。维护依赖时运行 `python3 Tools~/sync-packages.py --ref v0.1.0-preview.20`；该命令同步聚合包及全部来源，Unity 随后按清单重新解析。当前入口包含 UIManager 和 GpuAnimatorManager，播放器会自行注册到 GPU 调度器，入口不重复推进动画。此次 AOT 变化需要重新构建 HybridCLR 主包。
 
 
 新增服务在 GameEntry 中集中初始化。DataManager 只持有项目定义的运行时对象，LocalStorageManager 默认写入 persistentDataPath/Storage；ConfigManager 只准备加载来源，不假定存在任何业务表。默认场景来自 Build Settings，默认配置来自 Resources；开启 Initialize Yoo Asset 后分别使用资源包场景加载器和 TextAsset 配置来源。
 
-播放音频时由游戏场景的摄像机提供 AudioListener；空 Bootstrap 场景只启动框架，不创建业务摄像机或加载音频。音频与配置的独立包也包含在 framework.all 中。API 示例及取消、所有权、存储迁移规则见 [基础服务说明](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.19/Documentation/GameServices.zh-CN.md)。
+播放音频时由游戏场景的摄像机提供 AudioListener；空 Bootstrap 场景只启动框架，不创建业务摄像机或加载音频。音频与配置的独立包也包含在 framework.all 中。API 示例及取消、所有权、存储迁移规则见 [基础服务说明](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.20/Documentation/GameServices.zh-CN.md)。
 
 ## 启动与退出
 
@@ -87,7 +87,7 @@ Framework 保证同次运行中 OnStart/OnExit 各执行一次。主动关闭可
 
 ShutdownAsync 保留兼容调用，发起退出后返回，不再汇总等待所有服务。UI 原生销毁及资源租约释放在 UI 包内部完成；ResourceManager 自己等待未完成获取和旧关闭操作。需要等待具体服务时调用对应的 ShutdownAsync。
 
-开启 YooAsset 后，UI 和配置读取继续使用独立租约。相关规则见 [生命周期说明](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.19/Documentation/LifecycleAndOwnership.zh-CN.md)。AOT 生命周期接口变化需要重新构建 HybridCLR 主包。
+开启 YooAsset 后，UI 和配置读取继续使用独立租约。相关规则见 [生命周期说明](https://github.com/Novorizon/UnityPackages/blob/v0.1.0-preview.20/Documentation/LifecycleAndOwnership.zh-CN.md)。AOT 生命周期接口变化需要重新构建 HybridCLR 主包。
 
 ## 输入、Luban 与音频
 
@@ -102,3 +102,22 @@ HotGame.cs 是类定义。GameEntry 显式启动加载后，由 HotUpdateManager
 修改远程地址、渠道、公钥等参数时，运行时传入项目的 UpdateSettings。构建菜单使用同一配置：在项目 Editor 初始化代码中将 GameBuild.SettingsFactory 绑定到共享的 C# 配置工厂，示例见封装指南。生成的发布清单与下载缓存由工具内部维护，不需要编辑启动 JSON。升级旧工程时删除旧启动配置和 Bootstrap 宿主组件；启动流程属于 AOT 改动，需要重新构建主包。
 
 GameEntry 已使用 Framework 内置的静态重置生成器，声明为 partial；不需要手写 sessionOwner 的初值恢复。进入 Play 时由 Framework 判断 Domain Reload 选项，关闭时先退出旧生命周期再恢复静态声明。关闭 Scene Reload 时保留场景组件及其配置，OnStart/OnExit 管理运行资源。
+
+
+### HotGame 中的业务启动位置
+
+当前代码仍由 GameEntry.InitializeManagersAsync 初始化公共 Manager；HotGame.InitializeAsync 只做就绪确认，尚未包含游戏业务，也没有自动加载业务首场景。
+
+| 内容 | 当前入口 | 如果需要热更装配逻辑 |
+| --- | --- | --- |
+| YooAsset 等用于取得补丁的资源系统 | GameEntry | 保留在 GameEntry，加载热更程序集前完成 |
+| HybridCLR/AOT 元数据、热更 DLL 加载 | GameEntry 调用 HotUpdateManager | 保留在 GameEntry |
+| 音频、UI、输入、网络、ECS 等公共 Manager 的初始化调用 | GameEntry.InitializeManagersAsync | 移入 HotGame 自己的 InitializeManagersAsync |
+| 项目的表注册、玩法系统、登录界面、首场景 | 项目自行添加 | 由 HotGame.StartGameAsync 组织，从 InitializeAsync 等待完成 |
+| 热更业务资源和订阅释放 | HotGame.Shutdown | 和移入的初始化成对迁移，先于 AOT 资源层退出 |
+
+HotGame 是入口，具体业务类可以放在 Assets/HotUpdate 下的其他目录，不需要把所有实现塞进同一个类。可以在 HotGame.InitializeAsync 内按顺序等待 InitializeManagersAsync(token)、StartGameAsync(token)，最后调用 host.ReportReady。这里的两个私有方法由项目在 HotGame 中实现或委托给业务类；无需再创建启动模块或场景挂载组件。迁移某个 Manager 的调用后，要删除 GameEntry 中原有的同一调用，并配对安排释放。
+
+Game.HotUpdate.asmdef 当前只引用热更契约程序集。移动调用或编写业务时，在这个 asmdef 中添加实际使用的 AOT 公共程序集引用，例如 Game.Framework.Core、Game.Framework.Unity、Game.Framework.UI；不要让 AOT 的 GameStarter.Runtime 反向引用 Game.HotUpdate。若关闭 Initialize Hot Update，HotGame 不会创建，非热更业务启动可写在 GameEntry 的业务启动方法中。
+
+ConfigManager 目前仍存在并负责 JSON/文本和 Luban 表加载；DataManager 当前仍是类型注册容器。此前讨论的 Luban 职责迁移尚未实施，本文不将尚未存在的 DataManager 表 API 当作已实现接口。
