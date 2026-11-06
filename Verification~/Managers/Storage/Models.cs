@@ -26,6 +26,10 @@ namespace Game.Framework.Storage
         {
             ManagerContracts.Cleanup.Add("storage");
             ReleaseInstance(this);
+            if (ManagerContracts.CleanupFailure != null)
+            {
+                throw ManagerContracts.CleanupFailure;
+            }
         }
 
         public static void Reset() => ResetInstance(null);

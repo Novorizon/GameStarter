@@ -1,0 +1,7 @@
+{
+  "name": "Game.Data.Generated",
+  "references": [
+    "Luban.Runtime"
+  ],
+  "autoReferenced": true
+}

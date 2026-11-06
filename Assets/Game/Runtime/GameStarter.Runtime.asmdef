@@ -15,7 +15,9 @@
     "Game.Framework.Input",
     "Unity.InputSystem",
     "Game.Framework.HotUpdate",
-    "Game.Startup"
+    "Game.Startup",
+    "Game.Data.Generated",
+    "Luban.Runtime"
   ],
   "autoReferenced": true,
   "allowUnsafeCode": false

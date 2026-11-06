@@ -24,5 +24,7 @@
     <ProjectReference Include="../Managers/InputSystem/InputSystem.csproj" />
     <ProjectReference Include="../Core/Core.csproj" />
     <ProjectReference Include="../FrameworkUnity/FrameworkUnity.csproj" />
+    <ProjectReference Include="../GeneratedData/GeneratedData.csproj" />
+    <ProjectReference Include="../LubanRuntime/LubanRuntime.csproj" />
   </ItemGroup>
 </Project>

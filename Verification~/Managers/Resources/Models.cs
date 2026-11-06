@@ -74,7 +74,7 @@ namespace Game.Resource
             initializing = null;
         }
 
-        public Task<AssetLease<T>> AcquireAsync<T>(string path, CancellationToken token = default, bool keepAliveUntilDisposed = false)
+        public async Task<AssetLease<T>> AcquireAsync<T>(string path, CancellationToken token = default, bool keepAliveUntilDisposed = false)
             where T : UnityEngine.Object
         {
             token.ThrowIfCancellationRequested();
@@ -83,8 +83,37 @@ namespace Game.Resource
                 ManagerContracts.ProtectedAcquisitions++;
             }
 
-            var asset = typeof(T) == typeof(UnityEngine.GameObject) ? (UnityEngine.Object)new UnityEngine.GameObject() : (UnityEngine.Object)Activator.CreateInstance(typeof(T));
-            return Task.FromResult(new AssetLease<T>((T)asset));
+            if (!Initialized)
+            {
+                throw new InvalidOperationException("Initialize YooAsset first.");
+            }
+
+            UnityEngine.Object asset;
+            if (typeof(T) == typeof(UnityEngine.TextAsset))
+            {
+                ManagerContracts.DataAcquisitions.Add(path);
+                if (path == "Data/Luban/manifest")
+                {
+                    ManagerContracts.Calls.Add("tables");
+                }
+
+                byte[] bytes = await ManagerContracts.LoadDataBytes(path, token);
+                token.ThrowIfCancellationRequested();
+                asset = new UnityEngine.TextAsset
+                {
+                    bytes = bytes
+                };
+            }
+            else if (typeof(T) == typeof(UnityEngine.GameObject))
+            {
+                asset = new UnityEngine.GameObject();
+            }
+            else
+            {
+                asset = (UnityEngine.Object)Activator.CreateInstance(typeof(T));
+            }
+
+            return new AssetLease<T>((T)asset);
         }
     }
 }

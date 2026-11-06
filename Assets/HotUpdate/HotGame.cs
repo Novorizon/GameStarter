@@ -67,14 +67,7 @@ namespace Game.HotUpdate
             InputManager.Instance.Initialize(source, source != null ? options.InitialInputMap : null);
             GameSceneManager.Instance.Initialize(options.SceneLoader as Game.Framework.Scenes.ISceneLoader);
             AudioManager.Instance.Initialize();
-            if (options.UseYooAsset)
-            {
-                DataManager.Instance.Initialize(LoadDataBytesAsync);
-            }
-            else
-            {
-                DataManager.Instance.Initialize();
-            }
+            DataManager.Instance.Initialize(LoadDataBytesAsync);
 
             if (options.UIAssetLoader is IUIAssetLoader loader)
             {
@@ -95,14 +88,31 @@ namespace Game.HotUpdate
 
         private async Task StartGameAsync(CancellationToken token)
         {
+            // 先把完整 cfg.Tables 交给 DataManager，再允许模块和业务访问表。
+            await LoadTablesAsync(token);
             if (options.InitializeModulesAsync != null)
             {
                 await options.InitializeModulesAsync(token);
             }
 
             token.ThrowIfCancellationRequested();
-            // 在这里加载本游戏使用的表、初始化玩法系统、加载首场景或打开登录界面。
+            var example = DataManager.Instance.Get<cfg.Tables>().TbExample.Get(1);
+            host.Log("LUBAN_EXAMPLE " + example.Id + " " + example.Name);
+            // 数据表已经可用；在这里初始化玩法系统、加载首场景或打开登录界面。
             // 具体业务类放在 Assets/HotUpdate 的其他目录，由这里组织调用。
+        }
+
+        private static async Task LoadTablesAsync(CancellationToken token)
+        {
+            await DataManager.Instance.LoadAsync<cfg.Tables>(CreateTables, GameDataPaths.ManifestLocation, token);
+            token.ThrowIfCancellationRequested();
+        }
+
+        // DataManager 加载好文件后调用此方法；返回的 Tables 会由它保存。
+        private static cfg.Tables CreateTables(Func<string, Luban.ByteBuf> readTable)
+        {
+            // readTable 是框架传进来的读表方法，Luban 用它读取每张表的二进制数据。
+            return new cfg.Tables(readTable);
         }
 
         private static async Task<byte[]> LoadDataBytesAsync(string location, CancellationToken token)

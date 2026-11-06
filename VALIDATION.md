@@ -1,13 +1,11 @@
 # 验证范围
 
-验证器按工程清单的固定 Git 标签下载 Framework 与热更封装，或接受维护者显式传入 --framework；不会自动读取相邻源码仓库。清单同时声明聚合包和全部依赖来源，不使用 file:../../../。结构检查覆盖包闭包、Bootstrap 场景、输入配置和资源 GUID。
+验证器按 manifest 的固定 Git 标签获取 Framework、Data 和 HybridCLR 封装；依赖源码只缓存到系统临时目录，不复制到工程或 package。不会自动使用相邻仓库。
 
-实际 Framework Core、MonoSingleton 与 IGameModule/IGameHost 契约分别编译。Game.Startup 保存共享启动参数；GameStarter.Runtime 不引用 Game.HotUpdate。热更编译禁用传递项目引用，并检查每个直接引用与生产 Game.HotUpdate.asmdef 一致。测试用 Manager API 模型按生产程序集名拆分，防止合并编译掩盖缺少引用。
+分别编译真实 Framework Core、MonoSingleton、DataManager、Luban 导出器、官方 Luban.Runtime、工程提交的生成表、Game.Startup、GameStarter.Runtime 和 Game.HotUpdate。热更编译关闭传递引用，并与生产 asmdef 的直接引用比较；生成表和 Luban.Runtime 已显式引用。
 
-49 组受控场景覆盖：原有可选模块的顺序初始化、Tick、取消和清理；关闭热更时的 AOT 初始化；开启热更后由真实 HotGame 初始化普通 Manager；输入和资源参数的传递；就绪前不进入 Ready；退出取消；可选模块先于 Manager 释放；重复启动、异常清理、保留场景组件重启；包安装和解析行为。
+共 57 项验证：原有 49 项启动/模块/安装器场景保留并改为固定初始化 YooAsset；新增 8 项场景覆盖：AOT 和热更均加载真实 cfg.Tables；表成功解码前不运行模块或报告 Ready；读取失败和取消阻止业务启动；每次资源读取释放独立租约；寻址规则与 manifest 一致且排除 marker/meta；自动配置重复执行不新增采集器且保留用户分组；源数据变化阻止误用旧生成物；资源构建先于主包且失败/错误平台资源不能继续构建。
 
-新增用例让自定义热更入口不创建普通 Manager，验证 GameEntry 也不会代为创建它们。默认热更入口由测试执行器通过工厂注入，AOT 模型和生产 AOT 代码都不引用热更具体类型。
+配置生成规则的 IAddressRule、IFilterRule、ECollectorType 和构建枚举直接编译固定 YooAsset 2.3.18 的源码，验证接口及枚举值。Unity/资源句柄/UPM、原生资源构建与 Player 构建仍使用边界模型，不等于实际 Unity 导入、Editor 模拟模式、Bundle 烘焙或 IL2CPP 设备验收。
 
-模型中的 Unity/UPM/Manager API 不执行真实设备、资源包、渲染或 IL2CPP 行为。UnityPackages 验证包内实际服务；本工程验证启动接线。真实 Unity 2022.3 导入、Play 和目标平台构建仍需单独验收。Game.Startup/link.xml 保留热更端读取的共享 AOT 参数类型。增加 AOT 接口或程序集后需要重建 HybridCLR Player。
-
-Data 包迁移同时更新 AOT/热更 asmdef 和模型程序集为 Game.Framework.Data，验证单一字节加载器分别读取清单与表后释放两个独立资源租约；旧 Config 依赖不再进入工程 manifest。
+模板包含官方 Luban CLI 4.12.0 从 Excel 生成的源文件和二进制。数据包仍是 UnityPackages v0.1.0-preview.22；工程本次版本为 v0.1.0-preview.23。共享 AOT 参数和生成程序集发生变化，使用现有 HybridCLR 主包的项目需要重建 Player。

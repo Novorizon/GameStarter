@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using Game.Framework;
+using Game;
 using static ManagerContracts;
 
 internal static class ManagerModels
@@ -15,6 +16,9 @@ internal static class ManagerModels
         HotInitialization = _ => Task.CompletedTask;
         Calls.Clear();
         LeasesReleased = 0;
+        DataAcquisitions.Clear();
+        LoadDataBytes = (location, token) => Task.FromResult(System.IO.File.ReadAllBytes(
+            GameDataPaths.AssetRoot + "/" + location + (location.EndsWith("/manifest", StringComparison.Ordinal) ? ".json" : ".bytes")));
         ProtectedAcquisitions = 0;
         Cleanup.Clear();
         UIShutdown = Task.CompletedTask;

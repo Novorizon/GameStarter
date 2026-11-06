@@ -15,7 +15,9 @@
     "Game.Framework.Input",
     "Unity.InputSystem",
     "Game.Framework.Network",
-    "Game.Framework.Network.Unity"
+    "Game.Framework.Network.Unity",
+    "Game.Data.Generated",
+    "Luban.Runtime"
   ],
   "autoReferenced": false,
   "allowUnsafeCode": false

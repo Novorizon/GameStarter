@@ -1,1 +1,4 @@
 * -text
+
+# Preserve the official Luban CLI output; whitespace checks apply to handwritten code.
+Assets/Generated/Data/*.cs whitespace=-blank-at-eol,-blank-at-eof

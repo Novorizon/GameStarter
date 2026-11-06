@@ -28,5 +28,7 @@
     <ProjectReference Include="../Managers/HotManager/HotManager.csproj" />
     <ProjectReference Include="../Startup/Startup.csproj" />
     <ProjectReference Include="../Managers/InputSystem/InputSystem.csproj" />
+    <ProjectReference Include="../GeneratedData/GeneratedData.csproj" />
+    <ProjectReference Include="../LubanRuntime/LubanRuntime.csproj" />
   </ItemGroup>
 </Project>

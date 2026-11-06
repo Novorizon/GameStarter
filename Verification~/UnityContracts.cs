@@ -83,10 +83,43 @@ namespace UnityEngine
 
     public class ScriptableObject : Object
     {
+        public static T CreateInstance<T>() where T : ScriptableObject, new() => new T();
+    }
+
+    public sealed class CreateAssetMenuAttribute : Attribute
+    {
+        public string menuName;
+    }
+
+    public sealed class TooltipAttribute : Attribute
+    {
+        public TooltipAttribute(string text)
+        {
+        }
+    }
+
+    public class ResourceRequest
+    {
+        public bool isDone = true;
+        public Object asset;
+        public event Action<ResourceRequest> completed
+        {
+            add
+            {
+            }
+            remove
+            {
+            }
+        }
     }
 
     public static class Resources
     {
+        public static ResourceRequest LoadAsync<T>(string path) where T : Object
+        {
+            throw new InvalidOperationException("Startup tables must use YooAsset, not Resources: " + path);
+        }
+
         public static readonly Dictionary<string, Object> Assets = new Dictionary<string, Object>();
         public static T Load<T>(string path)
             where T : Object => Assets.TryGetValue(path, out var asset) ? asset as T : null;
