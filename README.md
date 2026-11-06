@@ -1,6 +1,6 @@
 # GameStarter
 
-独立 Unity 启动工程，建议 Unity 2022.3.62f1。当前工程版本为 `v0.1.0-preview.23`，依赖 UnityPackages `v0.1.0-preview.22`。通过 Git/UPM 引用 `com.novorizon.framework.all` 和完整依赖目录，不需要在旁边放 UnityPackages 源码仓库。
+独立 Unity 启动工程，建议 Unity 2022.3.62f1。当前工程版本为 `v0.1.0-preview.24`，依赖 UnityPackages `v0.1.0-preview.22`。通过 Git/UPM 引用 `com.novorizon.framework.all` 和完整依赖目录，不需要在旁边放 UnityPackages 源码仓库。
 
 ## 打开和运行
 

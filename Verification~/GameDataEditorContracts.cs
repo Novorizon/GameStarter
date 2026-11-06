@@ -49,6 +49,11 @@ namespace Game.Framework.HotUpdate.Editor
 
 namespace YooAsset.Editor
 {
+    // Upstream also defines BuildReport; keep this collision visible to the compiler.
+    public sealed class BuildReport
+    {
+    }
+
     public sealed class AssetBundleCollectorSetting : ScriptableObject
     {
         public List<AssetBundleCollectorPackage> Packages = new List<AssetBundleCollectorPackage>();
