@@ -1,26 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ECS;
 using Game.Framework;
-using Game.Framework.Audio;
-using Game.Framework.Data;
-using Game.Framework.Event;
-using Game.Framework.Input;
 using Game.Framework.HotUpdate;
-using Game.Framework.Network;
-using Game.Framework.Network.Unity;
-using Game.Framework.Storage;
-using Game.Framework.Timing;
 using Game.Resource;
-using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using GameSceneManager = Game.Framework.Scenes.SceneManager;
 
 namespace Game
 {
-    /// <summary>游戏入口：OnStart 初始化公共 Manager，OnExit 释放；额外启动模块仍由 GameSession 驱动。</summary>
+    /// <summary>AOT 入口：选择发行并准备资源，再交给 HotGame 初始化系统与业务。</summary>
     public sealed partial class GameEntry : MonoSingleton<GameEntry>
     {
         [SerializeField]
@@ -37,6 +26,9 @@ namespace Game
         private Task startupTask;
         private bool startupFailed;
         private bool startupReady;
+        public ResourceDownloadProgress DownloadProgress { get; private set; }
+        public string StartupMessage { get; private set; }
+
         public StartupState State
         {
             get
@@ -69,52 +61,6 @@ namespace Game
             startupTask = InitializeAsync(session);
         }
 
-        private Task InitializeManagersAsync(CancellationToken token)
-        {
-            EventManager.Instance.Initialize();
-            TimerManager.Instance.Initialize();
-            token.ThrowIfCancellationRequested();
-            LocalStorageManager.Instance.Initialize();
-            var source = inputActions != null ? inputActions : Resources.Load<InputActionAsset>("InputActions");
-            InputManager.Instance.Initialize(source, source != null ? initialInputMap : null);
-            GameSceneManager.Instance.Initialize(ResourceManager.Instance.CreateSceneLoader());
-            AudioManager.Instance.Initialize();
-            DataManager.Instance.Initialize(LoadDataBytesAsync);
-            UIManager.Instance.SetAssetLoader(new YooAssetUIAssetLoader(ResourceManager.Instance));
-
-            UIManager.Instance.Initialize();
-            GpuAnimatorManager.Instance.Initialize();
-            EntityManager.Instance.Initialize();
-            WorldManager.Instance.Initialize();
-            if (Resources.Load<NetworkSettings>("NetworkSettings") != null)
-            {
-                NetworkManager.Instance.Initialize();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        private static async Task LoadTablesAsync(CancellationToken token)
-        {
-            await DataManager.Instance.LoadAsync<cfg.Tables>(CreateTables, GameDataPaths.ManifestLocation, token);
-            token.ThrowIfCancellationRequested();
-        }
-
-        // DataManager 加载好文件后调用此方法；返回的 Tables 会由它保存。
-        private static cfg.Tables CreateTables(Func<string, Luban.ByteBuf> readTable)
-        {
-            // readTable 是框架传进来的读表方法，Luban 用它读取每张表的二进制数据。
-            return new cfg.Tables(readTable);
-        }
-
-        private static async Task<byte[]> LoadDataBytesAsync(string location, CancellationToken token)
-        {
-            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(location, token))
-            {
-                return asset.Asset.bytes;
-            }
-        }
-
         protected override void OnExit()
         {
             Shutdown();
@@ -126,11 +72,6 @@ namespace Game
             session = null;
             previous?.Dispose();
             HotUpdateManager.Release();
-            if (!initializeHotUpdate)
-            {
-                ReleaseManagers();
-            }
-
             ResourceManager.Release();
             if (ReferenceEquals(sessionOwner, this))
             {
@@ -142,25 +83,23 @@ namespace Game
         {
             try
             {
-                await InitializeResourcesAsync(current.Token);
-                current.Token.ThrowIfCancellationRequested();
-                if (initializeHotUpdate)
-                {
-                    var options = new GameStartupOptions(inputActions, initialInputMap,
-                        token => TaskUtil.WaitAsync(current.StartAsync(startupModules), token),
-                        ResourceManager.Instance.CreateSceneLoader(),
-                        new YooAssetUIAssetLoader(ResourceManager.Instance));
-                    await HotUpdateManager.Instance.InitializeAsync(new UpdateSettings(), options, current.Token);
-                }
-                else
-                {
-                    await InitializeManagersAsync(current.Token);
-                    await StartGameAsync(current);
-                }
-
+                StartupMessage = "Selecting code and resource versions";
+                var options = new GameStartupOptions(inputActions, initialInputMap,
+                    token => TaskUtil.WaitAsync(current.StartAsync(startupModules), token),
+                    () => ResourceManager.Instance.CreateSceneLoader(),
+                    () => new YooAssetUIAssetLoader(ResourceManager.Instance));
+                var settings = GameReleaseConfiguration.CreateSettings();
+                settings.loadFromCompiledAssemblies = !initializeHotUpdate;
+#if NOVORIZON_COMPILED_GAME
+                settings.loadFromCompiledAssemblies = true;
+#endif
+                settings.prepareContentAsync = PrepareResourcesAsync;
+                await HotUpdateManager.Instance.InitializeAsync(settings, options, current.Token);
                 current.Token.ThrowIfCancellationRequested();
                 startupReady = true;
+                StartupMessage = "Ready";
                 Debug.Log("GAME_STARTER_READY");
+                NativeSmokeExit(0);
             }
             catch (OperationCanceledException) when (current.Token.IsCancellationRequested)
             {
@@ -170,45 +109,112 @@ namespace Game
                 if (ReferenceEquals(session, current))
                 {
                     startupFailed = true;
+                    StartupMessage = error.Message;
                     Debug.LogException(error);
+                    NativeSmokeExit(1);
                 }
             }
         }
 
-        private async Task InitializeResourcesAsync(CancellationToken token)
+        private async Task PrepareResourcesAsync(ReleaseContentContext content, CancellationToken token)
         {
-            bool ready = await TaskUtil.WaitAsync(ResourceManager.Instance.InitializeAsync(), token);
-            if (!ready)
+            StartupMessage = "Preparing resources " + content.PackageVersion;
+            var resources = ResourceManager.Instance;
+#if UNITY_EDITOR
+            if (resources.Initialized && resources.PackageVersion != content.PackageVersion)
             {
-                throw new InvalidOperationException("YooAsset DefaultPackage initialization failed.");
+                await resources.ShutdownAsync();
             }
 
-            token.ThrowIfCancellationRequested();
+#endif
+
+            var options = new ResourceInitializationOptions
+            {
+                PackageVersion = content.PackageVersion,
+                DownloadAll = true,
+                ConcurrentDownloads = 4,
+                FailedTryAgain = 2,
+                Progress = new Progress<ResourceDownloadProgress>(value =>
+                {
+                    if (token.IsCancellationRequested || startupReady)
+                    {
+                        return;
+                    }
+
+                    DownloadProgress = value;
+                    StartupMessage = "Downloading resources " + value.CompletedCount + "/" + value.TotalCount;
+                })
+            };
+#if UNITY_EDITOR
+            options.Parameters = YooAssetsSettings.CreateEditorSimulateModeParameters();
+            options.PackageVersion = null;
+#else
+            await ConfigurePlayerResourcesAsync(resources, options, content, token);
+#endif
+            if (!await resources.InitializeAsync(options, token))
+            {
+                throw new InvalidOperationException("Resource initialization/download failed for version " + content.PackageVersion);
+            }
         }
 
-        private async Task StartGameAsync(GameSession current)
+        // 单独保留 Player 文件系统准备，Editor 模型验证也编译并测试该分支。
+        internal static async Task ConfigurePlayerResourcesAsync(ResourceManager resources, ResourceInitializationOptions options,
+            ReleaseContentContext content, CancellationToken token)
         {
-            // 表已加载成功后，启动模块和后续业务才能查询 DataManager。
-            await LoadTablesAsync(current.Token);
-            await current.StartAsync(startupModules);
-            current.Token.ThrowIfCancellationRequested();
-            var example = DataManager.Instance.Get<cfg.Tables>().TbExample.Get(1);
-            Debug.Log("LUBAN_EXAMPLE " + example.Id + " " + example.Name);
-            // 关闭热更时，本项目的业务系统和首场景从这里启动。
+            // 此时尚未创建 HotGame，DefaultPackage 由入口独占。
+            // 回退时必须销毁旧 Host 文件系统，才能改用内置资源且不依赖下载站。
+            var previousPackage = YooAsset.YooAssets.TryGetPackage(GameDataPaths.PackageName);
+            if (previousPackage != null && previousPackage.InitializeStatus != YooAsset.EOperationStatus.None)
+            {
+                await resources.ShutdownAsync();
+                var destroy = previousPackage.DestroyAsync();
+                await destroy.Task;
+                token.ThrowIfCancellationRequested();
+                if (destroy.Status != YooAsset.EOperationStatus.Succeed)
+                {
+                    throw new InvalidOperationException("Could not reset the previous resource package: " + destroy.Error);
+                }
+            }
+
+            if (content.IsPackaged || string.IsNullOrWhiteSpace(content.PackageVersion))
+            {
+                options.Parameters = YooAssetsSettings.CreateOfflinePlayModeParameters();
+            }
+            else
+            {
+                if (content.PackageName != GameDataPaths.PackageName)
+                {
+                    throw new InvalidOperationException("The selected release uses another resource package.");
+                }
+
+                options.Parameters = YooAssetsSettings.CreateHostPlayModeParameters(
+                    GameReleaseConfiguration.ResourceUrl(content.Platform, content.PackageName));
+            }
         }
 
-        private void ReleaseManagers()
+        private static void NativeSmokeExit(int code)
         {
-            NetworkManager.Release();
-            WorldManager.Release();
-            EntityManager.Release();
-            GpuAnimatorManager.Release();
-            UIManager.Release();
-            AudioManager.Release();
-            GameSceneManager.Release();
-            InputManager.Release();
-            LocalStorageManager.Release();
-            DataManager.Release();
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--novorizon-native-smoke") >= 0)
+            {
+                Debug.Log(code == 0 ? "NATIVE_PLAYER_READY" : "NATIVE_PLAYER_FAILED");
+                Application.Quit(code);
+            }
+        }
+
+        private void OnApplicationPause(bool paused)
+        {
+            if (HotUpdateManager.TryGetInstance(out var update))
+            {
+                update.NotifyApplicationPause(paused);
+            }
+        }
+
+        private void OnApplicationFocus(bool focused)
+        {
+            if (HotUpdateManager.TryGetInstance(out var update))
+            {
+                update.NotifyApplicationFocus(focused);
+            }
         }
 
         public async Task WaitUntilReadyAsync(CancellationToken token = default)

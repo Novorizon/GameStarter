@@ -35,6 +35,17 @@ namespace Game.Resource
             private set;
         }
 
+        public string PackageVersion { get; private set; }
+        public ResourceInitializationOptions LastOptions;
+        public async Task<bool> InitializeAsync(ResourceInitializationOptions options, CancellationToken token = default)
+        {
+            LastOptions = options;
+            token.ThrowIfCancellationRequested();
+            bool ready = await Game.Framework.TaskUtil.WaitAsync(InitializeAsync(), token);
+            PackageVersion = options.PackageVersion;
+            return ready;
+        }
+
         private Task<bool> initializing;
         public async Task<bool> InitializeAsync()
         {
@@ -115,5 +126,15 @@ namespace Game.Resource
 
             return new AssetLease<T>((T)asset);
         }
+    }
+}
+
+namespace Game.Resource
+{
+    public static class YooAssetsSettings
+    {
+        public static YooAsset.InitializeParameters CreateEditorSimulateModeParameters() => new YooAsset.InitializeParameters();
+        public static YooAsset.InitializeParameters CreateOfflinePlayModeParameters() => new YooAsset.OfflinePlayModeParameters();
+        public static YooAsset.InitializeParameters CreateHostPlayModeParameters(string main, string fallback = null) => new YooAsset.HostPlayModeParameters();
     }
 }

@@ -23,7 +23,9 @@ internal static partial class Program
     {
         SynchronizationContext.SetSynchronizationContext(context);
         Logger.Sink = new ModelLogger();
+        Environment.SetEnvironmentVariable("NOVORIZON_SIGNING_KEY_PATH", Path.Combine(Path.GetTempPath(), "novorizon-verification-keys", Guid.NewGuid().ToString("N") + ".xml"));
         GameDataScenarios();
+        RemoteReleaseScenarios();
         Check("empty startup", () =>
         {
             using var s = Session();
@@ -60,12 +62,12 @@ internal static partial class Program
         Check("hot startup owns ordinary manager creation", HotOwnsManagers);
         Check("hot code is a separate assembly and AOT has no hot reference", HotAssemblyBoundary);
         Check("hot entry reports health without waiting for GameEntry", HotEntryReady);
-        Check("GameEntry waits for resources before starting hot update", HotEntryWaits);
+        Check("resource preparation completes before game module initialization", HotEntryWaits);
         Check("cancelled hot startup cannot report readiness", HotEntryCancelled);
-        Check("base manager failure prevents hot loading", HotEntryFailure);
+        Check("ordinary manager failure prevents game readiness", HotEntryFailure);
         Check("stopped hot entry cannot initialize or report readiness", HotEntryStopped);
         Check("GameEntry stays Starting until hot initialization finishes", EntryWaitsForHot);
-        Check("GameEntry can disable hot update without creating its manager", EntryHotDisabled);
+        Check("GameEntry can select the compiled game module path", EntryHotDisabled);
         Check("GameEntry exit cancels hot startup before releasing services", EntryHotCancellation);
         Check("hot initialization failure fails GameEntry", EntryHotFailure);
         Check("automatic singleton reset closes GameEntry before services and restarts retained scenes", EntryAutomaticReset);
@@ -721,7 +723,8 @@ internal static partial class Program
         ManagerContracts.ResourceInitialization = pending.Task;
         var entry = CreateEntry();
         Equal(StartupState.Starting, entry.State);
-        Equal(0, ManagerContracts.HotCalls.Count);
+        Equal("start", string.Join(",", ManagerContracts.HotCalls));
+        True(!ManagerContracts.Calls.Contains("ui"));
         pending.SetResult(true);
         Complete(entry.WaitUntilReadyAsync());
         Equal("start", string.Join(",", ManagerContracts.HotCalls));
@@ -788,8 +791,8 @@ internal static partial class Program
         ResetEntry();
         var entry = CreateEntry(hotUpdate: false);
         Equal(StartupState.Ready, entry.State);
-        Equal(0, ManagerContracts.HotCalls.Count);
-        True(!Game.Framework.HotUpdate.HotUpdateManager.IsCreated);
+        Equal("start", string.Join(",", ManagerContracts.HotCalls));
+        True(Game.Framework.HotUpdate.HotUpdateManager.IsCreated);
         ResetEntry();
     }
 

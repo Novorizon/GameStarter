@@ -12,10 +12,14 @@
     <ProjectReference Include="Core/Core.csproj" />
     <ProjectReference Include="FrameworkUnity/FrameworkUnity.csproj" />
     <ProjectReference Include="Runtime/Runtime.csproj" />
+    <ProjectReference Include="HotUpdateContracts/HotUpdateContracts.csproj" />
     <ProjectReference Include="HotUpdate/HotUpdate.csproj" />
-    <Compile Include="../Assets/Game/Editor/**/*.cs" />
+    <Compile Include="../Assets/Game/Editor/**/*.cs" Exclude="../Assets/Game/Editor/NativeValidation/**/*.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ManagerContracts.cs" />
+    <ProjectReference Include="YooAssetRuntime/YooAssetRuntime.csproj" />
     <Compile Include="GameDataScenarios.cs" />
+    <Compile Include="RemoteReleaseScenarios.cs" />
     <Compile Include="GameDataEditorContracts.cs" />
     <Compile Include="$(YooAssetPackageRoot)/Editor/AssetBundleCollector/CollectRules/IAddressRule.cs" />
     <Compile Include="$(YooAssetPackageRoot)/Editor/AssetBundleCollector/CollectRules/IFilterRule.cs" />
@@ -23,8 +27,6 @@
     <Compile Include="$(YooAssetPackageRoot)/Editor/AssetBundleBuilder/EBuildPipeline.cs" />
     <Compile Include="$(YooAssetPackageRoot)/Editor/AssetBundleBuilder/EBuildinFileCopyOption.cs" />
     <Compile Include="$(YooAssetPackageRoot)/Editor/AssetBundleBuilder/ECompressOption.cs" />
-    <Compile Include="$(YooAssetPackageRoot)/Runtime/ResourcePackage/EFileNameStyle.cs" />
-    <Compile Include="$(YooAssetPackageRoot)/Runtime/ResourcePackage/EBuildBundleType.cs" />
     <ProjectReference Include="GeneratedData/GeneratedData.csproj" />
     <ProjectReference Include="LubanRuntime/LubanRuntime.csproj" />
     <ProjectReference Include="LubanEditor/LubanEditor.csproj" />

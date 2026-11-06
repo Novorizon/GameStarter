@@ -9,5 +9,7 @@
     <ProjectReference Include="../../FrameworkUnity/FrameworkUnity.csproj" />
     <ProjectReference Include="../Common/Common.csproj" />
     <Compile Include="Models.cs" />
+    <Compile Include="$(ResourcesPackageRoot)/Runtime/ResourceInitializationOptions.cs" />
+    <ProjectReference Include="../../YooAssetRuntime/YooAssetRuntime.csproj" />
   </ItemGroup>
 </Project>

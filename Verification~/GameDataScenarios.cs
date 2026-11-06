@@ -14,7 +14,7 @@ internal static partial class Program
 {
     private static void GameDataScenarios()
     {
-        Check("AOT startup loads actual generated Tables through YooAsset before modules", () =>
+        Check("compiled game startup loads Tables through YooAsset before modules", () =>
         {
             ResetEntry();
             var entry = CreateEntry(hotUpdate: false);

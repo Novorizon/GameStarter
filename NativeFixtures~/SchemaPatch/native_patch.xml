@@ -1,0 +1,7 @@
+<module name="">
+    <bean name="NativePatchRow">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+    </bean>
+    <table name="TbNativePatchProbe" value="NativePatchRow" input="example.xlsx" index="id" />
+</module>

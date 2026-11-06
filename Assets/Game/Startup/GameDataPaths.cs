@@ -5,7 +5,7 @@ namespace Game
     {
         public const string SourceDirectory = "Config/Luban";
         public const string ConfigFile = SourceDirectory + "/luban.conf";
-        public const string CodeOutput = "Assets/Generated/Data";
+        public const string CodeOutput = "Assets/HotUpdate/Generated/Data";
         public const string AssetRoot = "Assets/GameAssets";
         public const string DataOutput = AssetRoot + "/Data/Luban";
         public const string LocationPrefix = "Data/Luban";

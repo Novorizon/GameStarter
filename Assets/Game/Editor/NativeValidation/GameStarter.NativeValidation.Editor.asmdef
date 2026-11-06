@@ -1,0 +1,17 @@
+{
+  "name": "GameStarter.NativeValidation.Editor",
+  "references": [
+    "GameStarter.Runtime",
+    "GameStarter.Editor",
+    "Game.Startup",
+    "Game.Framework.Core",
+    "Game.Framework.Unity",
+    "Game.Framework.HotUpdate",
+    "Game.Framework.HotUpdate.Editor",
+    "HybridCLR.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

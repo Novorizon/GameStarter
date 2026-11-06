@@ -41,6 +41,16 @@ namespace Game.Framework.Input
             ManagerContracts.Calls.Add("input");
         }
 
+        private string bindings = "";
+        public string SaveBindingOverrides() => bindings;
+        public void LoadBindingOverrides(string value) => bindings = value;
+        public Task<string> RebindAsync(string action, int index, CancellationToken token = default)
+        {
+            token.ThrowIfCancellationRequested();
+            bindings = "test-binding";
+            return Task.FromResult(bindings);
+        }
+
         public void Dispose()
         {
             ManagerContracts.Cleanup.Add("input");
