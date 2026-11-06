@@ -57,6 +57,16 @@ namespace UnityEngine
         public static bool operator !=(Object a, Object b) => !(a == b);
         public override bool Equals(object obj) => this == obj as Object;
         public override int GetHashCode() => System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(this);
+        public static void ResetSingletonsForPlay()
+        {
+            var core = AppDomain.CurrentDomain.GetAssemblies().Single(assembly => assembly.GetName().Name == "Game.Framework.Core");
+            var state = core.GetType("Game.Framework.SingletonRuntimeState");
+            state.GetField("IsQuitting", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, false);
+            var epoch = state.GetField("Epoch", BindingFlags.Static | BindingFlags.NonPublic);
+            epoch.SetValue(null, (int)epoch.GetValue(null) + 1);
+            core.GetType("Game.Framework.EditorStaticReset")?.GetMethod("RestoreDeclaredValues").Invoke(null, null);
+        }
+
         public static void ClearForTest()
         {
             foreach (var go in FindObjectsOfType<GameObject>(true))

@@ -70,7 +70,7 @@ internal static partial class Program
         Check("GameEntry can select the compiled game module path", EntryHotDisabled);
         Check("GameEntry exit cancels hot startup before releasing services", EntryHotCancellation);
         Check("hot initialization failure fails GameEntry", EntryHotFailure);
-        Check("automatic singleton reset closes GameEntry before services and restarts retained scenes", EntryAutomaticReset);
+        Check("central entry shutdown precedes editor reset and restarts retained scenes", EntryAutomaticReset);
         Check("catalog resolves dependencies once and before consumers", CatalogOrder);
         Check("catalog detects missing and circular dependencies", InvalidCatalog);
         Check("installer resumes after request handles are lost on reload", InstallerReload);
@@ -324,8 +324,7 @@ internal static partial class Program
     private static void ResetEntry()
     {
         UObject.ClearForTest();
-        SingletonLifecycle.Reset();
-        EditorStaticReset.RestoreDeclaredValues();
+        UObject.ResetSingletonsForPlay();
         UnityThread.Reset();
         UnityThread.InitializeManual();
         ManagerModels.Reset();
@@ -350,10 +349,9 @@ internal static partial class Program
     {
         ResetEntry();
         var entry = new GameObject().AddComponent<GameEntry>();
-        // Stop sends OnApplicationQuit, which clears sessionOwner before the next play session.
+        // Unity Stop sends OnApplicationQuit before the next Play resets singleton references.
         UObject.Invoke(entry, "OnApplicationQuit");
-        SingletonLifecycle.Reset();
-        EditorStaticReset.RestoreDeclaredValues();
+        UObject.ResetSingletonsForPlay();
         Equal(StartupState.NotStarted, entry.State);
         typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
         True(ReferenceEquals(entry, GameEntry.Instance));
@@ -835,8 +833,9 @@ internal static partial class Program
         for (int run = 0; run < 2; run++)
         {
             Equal(StartupState.Ready, entry.State);
-            SingletonLifecycle.Reset();
-            EditorStaticReset.RestoreDeclaredValues();
+            ManagerContracts.Cleanup.Clear();
+            UObject.Invoke(entry, "OnApplicationQuit");
+            UObject.ResetSingletonsForPlay();
             Equal(StartupState.NotStarted, entry.State);
             True(!GameEntry.TryGetInstance(out _));
             Equal("module", ManagerContracts.Cleanup.First());

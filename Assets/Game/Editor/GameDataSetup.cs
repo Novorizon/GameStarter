@@ -114,6 +114,7 @@ namespace Game.Editor
                 changed = true;
             }
 
+            changed |= GameCodeResources.EnsureCollector(package);
             if (changed)
             {
                 AssetBundleCollectorSettingData.SaveFile();
@@ -288,8 +289,11 @@ namespace Game.Editor
 
         private static string BuildFingerprint()
         {
-            return SourceFingerprint() + "\n" + DirectoryFingerprint(GameDataPaths.DataOutput,
+            string data = DirectoryFingerprint(
+                GameDataPaths.DataOutput,
                 file => file.EndsWith(".json", StringComparison.Ordinal) || file.EndsWith(".bytes", StringComparison.Ordinal));
+            string code = DirectoryFingerprint(GameCodeResources.Output, file => file.EndsWith(".dll.bytes", StringComparison.Ordinal));
+            return SourceFingerprint() + "\n" + data + "\n" + code;
         }
 
         public static void ValidatePlayerResources(BuildTarget target)

@@ -110,14 +110,21 @@ namespace Game.HotUpdate
                 return;
             }
 
-            LocalStorageManager.Instance.SaveJson(FileName, new GamePreferences
+            if (!AudioManager.TryGetInstance(out var audio)
+                || !InputManager.TryGetInstance(out var input)
+                || !LocalStorageManager.TryGetInstance(out var storage))
             {
-                master = AudioManager.Instance.MasterVolume,
-                music = AudioManager.Instance.GetGroupVolume(AudioGroup.Music),
-                sound = AudioManager.Instance.GetGroupVolume(AudioGroup.Sound),
-                voice = AudioManager.Instance.GetGroupVolume(AudioGroup.Voice),
-                ui = AudioManager.Instance.GetGroupVolume(AudioGroup.UI),
-                bindings = InputManager.Instance.SaveBindingOverrides()
+                return;
+            }
+
+            storage.SaveJson(FileName, new GamePreferences
+            {
+                master = audio.MasterVolume,
+                music = audio.GetGroupVolume(AudioGroup.Music),
+                sound = audio.GetGroupVolume(AudioGroup.Sound),
+                voice = audio.GetGroupVolume(AudioGroup.Voice),
+                ui = audio.GetGroupVolume(AudioGroup.UI),
+                bindings = input.SaveBindingOverrides()
             });
         }
 

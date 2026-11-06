@@ -6,7 +6,7 @@
 
 编译实际 Framework Core/MonoSingleton、DataManager、Luban 导出器、官方 Luban.Runtime、生成表、Game.Startup、GameStarter.Runtime 和 Game.HotUpdate。asmdef 直接引用与模型项目对齐，AOT 入口不引用热更表、Luban 或 HotGame 程序集。
 
-当前 64 项场景涵盖启动、可选模块、取消、退出、单例重置、安装器、真实表解码、资源租约、采集规则、构建前置、端点分离、设置恢复/坏存档保护和签名资源配对。YooAsset 边界含两个同名 BuildReport，防止 Unity 构建接口的类型歧义回归。
+当前 67 项场景涵盖启动、可选模块、取消、退出、单例重置、安装器、真实表解码、资源租约、采集规则、构建前置、端点分离、设置恢复/坏存档保护和签名资源配对。YooAsset 边界含两个同名 BuildReport，防止 Unity 构建接口的类型歧义回归。
 
 Unity/UPM、音频、Input System、资源构建和 Player 构建使用边界模型；不能据此宣称真实 Unity 或 IL2CPP 通过。
 
@@ -43,6 +43,30 @@ Unity 2022.3.62f1、Debian 13 x86_64，目标 StandaloneLinux64；以工程 `032
 
 ## 启动接线简化复验
 
-移除 GameStartupOptions 中的两个 object 工厂，场景与 UI 适配器改在 HotGame 中直接装配；UI 租约适配器移入热更程序集。命令行探针移到单独的 NativeValidation partial 文件，保留现有验收脚本行为。SingletonLifecycle 的资源清理与 Source Generator 的静态字段恢复保持原有职责。
+移除 GameStartupOptions 中的两个 object 工厂，场景与 UI 适配器改在 HotGame 中直接装配；UI 租约适配器移入热更程序集。命令行探针移到单独的 NativeValidation partial 文件，保留现有验收脚本行为。该轮验证仍使用 SingletonLifecycle；后续移除记录见下。
 
 64 项模型回归通过（本地 net8.0 目标使用 .NET 9.0.22 roll-forward 执行）；真实 Unity 2022.3.62f1 的 Editor/Player 编译、8 个示例程序集覆盖检查和 Bootstrap Play 均通过。Game.Startup 及 AOT 引用有变化，已有 IL2CPP 主包需重建；本次未追加 IL2CPP 或 GPU 通过结论。
+
+
+## 移除全局单例生命周期注册表
+
+运行时清理改由 GameEntry/HotGame 的集中 Release 列表负责，补齐 TimerManager 和 EventManager；退出保存设置只读取已有服务，避免退出时重新创建 Manager。包侧删除 SingletonLifecycle 与 MonoSingletonLifecycle，不以其他运行时回调注册表替代；编辑器旧引用清理并入已有 EditorStaticReset。独立使用包的项目需要在自己的入口显式释放服务。
+
+65 项模型回归通过。真实 Unity 2022.3.62f1、StandaloneLinux64，在独立验证副本中使用包提交 `47a4a7d18c1694f1d4dfe63fc7ad7cbc5cfd2ca4`：8 个示例的 11 个 Editor 程序集和 8 个 Runtime Player 程序集均通过编译覆盖检查。额外验证同一 Editor 进程关闭 Domain Reload 与 Scene Reload，保留同一个 GameEntry 连续两次 Play：两次均启动就绪，两次退出后 TimerManager/EventManager 均未保留实例。临时连续 Play 探针只存在于验证副本。
+
+原生 GpuAnimator EditMode 重跑仍为 51 项：46 通过、5 失败、0 跳过，失败用例与前轮相同。三个资源持久化用例和两个测试准备阶段失败仍需独立定位，不归为本次移除引入的已确认缺陷，也不把该套件记为通过。
+
+模型验证工具同时修正固定提交来源的获取方式：按 manifest 的 SHA fetch，再 detached checkout；不再将 SHA 当作远端分支名。现有 HybridCLR 主包需要重建；这里不追加 IL2CPP、设备或渲染通过结论。
+
+
+## YooAsset 统一代码与资源下载
+
+原 WR 版本保存在两个仓库的 backup/unitywebrequest-updates-20261106 分支。新实现默认先通过 YooAsset 下载所选资源版本全部缺失内容，再读取 DLL/AOT 元数据并按签名清单校验；发布只新增 assets/ 与 manifests/，不再上传独立 patches DLL。控制清单仍通过 HTTP 获取。已有 HybridCLR 主包需重建，更新流程与管理器边界见 Documentation/UnifiedDownloads.zh-CN.md。
+
+模型回归：GameStarter 67 项及 UnityPackages 完整回归通过，后者包括 23 项代码发行/资源提供方场景、UI 183 项、网络 24 项。新增覆盖资源准备顺序、YooAsset 代码路径不下载独立 DLL、离线清单缓存、DLL/AOT 哈希失败、取消和缺少资源提供方时拒绝静默回退。
+
+真实 Unity 2022.3.62f1、StandaloneLinux64 的资源验证使用包提交 `9502631577cc0ae31d335332d09bb91cebc83a48`：实际编译两份热更 DLL 和代表性未裁剪 AOT 输入，构建同一个 YooAsset 资源版本，通过本地 HTTP 冷缓存下载 4 个资源包，读取并校验 3 个代码文件，并读取 Luban 数据；随后同版本缓存重新初始化，缺失资源数为 0。HTTP 日志只有资源清单和 bundle 请求，没有独立 DLL 下载。该探针仅存在于验证副本。
+
+HTTP 探针采用 SDK 支持的纯远端文件系统，因为测试副本没有内置资源；初次默认内置文件系统初始化失败时，还观察到 YooAsset 2.3.18 的 Linux 本地 URL 会额外拼接 `/root/`。未修改第三方包；本次未将内置资源回退记为原生通过，回退及取消语义由模型回归覆盖。AOT 输入仅验证打包、传输和读取，不代表真实 IL2CPP 裁剪元数据可执行。
+
+最终包引用下，8 个 Demo 的 11 个 Editor 程序集、8 个 Runtime Player 程序集编译覆盖通过；Bootstrap Play 通过；关闭 Domain Reload/Scene Reload、保留同一个 GameEntry 的连续两次 Play 均就绪，退出后的 Timer/Event 均已释放。

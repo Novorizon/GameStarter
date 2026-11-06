@@ -15,6 +15,58 @@ internal static partial class Program
 {
     private static void RemoteReleaseScenarios()
     {
+        Check("code collector preserves assembly names and excludes plugin/meta files", () =>
+        {
+            var rule = new GameCodeAddressRule();
+            Equal("HotUpdate/baseline/Game.HotUpdate.dll.bytes", rule.GetAssetAddress(new YooAsset.Editor.AddressRuleData
+            {
+                AssetPath = GameCodeResources.Output + "/baseline/Game.HotUpdate.dll.bytes"
+            }));
+            var filter = new GameCodeFilterRule();
+            Equal("TextAsset", filter.FindAssetType);
+            True(filter.IsCollectAsset(new YooAsset.Editor.FilterRuleData { AssetPath = "Game.dll.bytes" }));
+            True(!filter.IsCollectAsset(new YooAsset.Editor.FilterRuleData { AssetPath = "Game.dll" }));
+            True(!filter.IsCollectAsset(new YooAsset.Editor.FilterRuleData { AssetPath = "Game.dll.bytes.meta" }));
+        });
+        Check("staging code verifies compiled bytes, preserves GUIDs and removes obsolete payloads", () =>
+        {
+            string temp = Path.Combine(Path.GetTempPath(), "stage-code-" + Guid.NewGuid().ToString("N"));
+            string baseline = "model-stage-" + Guid.NewGuid().ToString("N");
+            string targetDirectory = Path.Combine(GameCodeResources.Output, baseline);
+            Directory.CreateDirectory(temp);
+            string previousDirectory = Directory.GetCurrentDirectory();
+            try
+            {
+                Directory.SetCurrentDirectory(temp);
+                byte[] code = { 1, 2, 3 };
+                byte[] metadata = { 4, 5 };
+                File.WriteAllBytes(Path.Combine(temp, "Game.dll"), code);
+                File.WriteAllBytes(Path.Combine(temp, "Core.dll"), metadata);
+                var manifest = new ReleaseManifest
+                {
+                    appId = "app", platform = "windows-x64", channel = "development", baselineId = baseline, version = 1,
+                    assemblies = new[] { new ReleaseFile { assemblyName = "Game", fileName = "Game.dll.bytes", size = code.Length, sha256 = ReleasePolicy.Sha256(code) } },
+                    aotMetadata = new[] { new ReleaseFile { assemblyName = "Core", fileName = "Core.dll.bytes", size = metadata.Length, sha256 = ReleasePolicy.Sha256(metadata) } }
+                };
+                GameCodeResources.Stage(manifest, temp, temp);
+                string target = Path.Combine(targetDirectory, "Game.dll.bytes");
+                True(code.SequenceEqual(File.ReadAllBytes(target)));
+                True(metadata.SequenceEqual(File.ReadAllBytes(Path.Combine(targetDirectory, "Core.dll.bytes"))));
+                File.WriteAllText(target + ".meta", "stable GUID");
+                string obsolete = Path.Combine(targetDirectory, "Old.dll.bytes");
+                File.WriteAllBytes(obsolete, code);
+                GameCodeResources.Stage(manifest, temp, temp);
+                Equal("stable GUID", File.ReadAllText(target + ".meta"));
+                True(!File.Exists(obsolete));
+                File.WriteAllBytes(Path.Combine(temp, "Game.dll"), new byte[] { 7 });
+                Throws<InvalidDataException>(() => GameCodeResources.Stage(manifest, temp, temp));
+            }
+            finally
+            {
+                Directory.SetCurrentDirectory(previousDirectory);
+                Directory.Delete(temp, true);
+            }
+        });
         Check("packaged resource fallback resets the old host package and uses offline resources", () =>
         {
             ResetEntry();
@@ -49,7 +101,7 @@ internal static partial class Program
         {
             var settings = GameReleaseConfiguration.CreateSettings();
             True(settings.remoteBaseUrl.StartsWith("https://15000.top/game-updates/manifests/"));
-            True(settings.remoteFilesBaseUrl.StartsWith("https://15000.top/game-updates/patches/"));
+            True(string.IsNullOrEmpty(settings.remoteFilesBaseUrl));
             True(GameReleaseConfiguration.ResourceUrl("windows-x64", "DefaultPackage").StartsWith("https://15000.top/game-updates/assets/"));
             Equal(443, new Uri(settings.remoteBaseUrl).Port);
             Equal(22370, GameReleaseConfiguration.GameServerPort);
@@ -81,6 +133,18 @@ internal static partial class Program
             AudioManager.Instance.MasterVolume = .8f;
             UnityEngine.Object.Invoke(entry, "OnApplicationFocus", false);
             Equal(.8f, LocalStorageManager.Instance.LoadJson<GamePreferences>("user-settings.json").master);
+            ResetEntry();
+        });
+        Check("quit saves preferences before centralized service release without recreating managers", () =>
+        {
+            ResetEntry();
+            var entry = CreateEntry();
+            AudioManager.Instance.MasterVolume = .63f;
+            UnityEngine.Object.Invoke(entry, "OnApplicationQuit");
+            var saved = JsonUtility.FromJson<GamePreferences>(LocalStorageManager.Files["user-settings.json"]);
+            Equal(.63f, saved.master);
+            True(!InputManager.TryGetInstance(out _));
+            True(!LocalStorageManager.TryGetInstance(out _));
             ResetEntry();
         });
         Check("bad preferences remain intact until an explicit settings change", () =>
@@ -134,7 +198,8 @@ internal static partial class Program
                     content = new ReleaseContent
                     {
                         packageName = "DefaultPackage",
-                        version = "resources-7"
+                        version = "resources-7",
+                        codeInResources = true
                     }
                 };
                 File.WriteAllText(Path.Combine(unsigned, "manifest.json"), JsonUtility.ToJson(manifest));
@@ -144,7 +209,7 @@ internal static partial class Program
                 var envelope = JsonUtility.FromJson<SignedEnvelope>(envelopeText);
                 byte[] payload = ReleasePolicy.VerifyEnvelope(envelope, GameReleaseBuild.CreateBuildSettings().trustedKeys);
                 Equal("resources-7", JsonUtility.FromJson<ReleaseManifest>(Encoding.UTF8.GetString(payload)).content.version);
-                True(Directory.GetFiles(Path.Combine(published, "patches"), "*.dll.bytes", SearchOption.AllDirectories).Length == 1);
+                True(!Directory.Exists(Path.Combine(published, "patches")));
                 True(Directory.GetFiles(published, "*.xml", SearchOption.AllDirectories).Length == 0);
                 True(Directory.GetFiles(published, "OutputCache*", SearchOption.AllDirectories).Length == 0);
                 True(Directory.GetFiles(published, "*.version", SearchOption.AllDirectories).Length == 0);

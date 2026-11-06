@@ -21,7 +21,6 @@ namespace Game
         // 热更由本入口显式启动；配置直接写 C#，不读取启动 JSON。
         [SerializeField]
         private bool initializeHotUpdate = true;
-        private static GameEntry sessionOwner;
         private GameSession session;
         private Task startupTask;
         private bool startupFailed;
@@ -56,7 +55,6 @@ namespace Game
         {
             startupFailed = false;
             startupReady = false;
-            sessionOwner = this;
             session = new GameSession(Debug.LogException);
             startupTask = InitializeAsync(session);
         }
@@ -73,10 +71,6 @@ namespace Game
             previous?.Dispose();
             HotUpdateManager.Release();
             ResourceManager.Release();
-            if (ReferenceEquals(sessionOwner, this))
-            {
-                sessionOwner = null;
-            }
         }
 
         private async Task InitializeAsync(GameSession current)
@@ -96,6 +90,7 @@ namespace Game
                 settings.loadFromCompiledAssemblies = true;
 #endif
                 settings.prepareContentAsync = PrepareResourcesAsync;
+                settings.loadCodeAsync = LoadCodeAsync;
                 await HotUpdateManager.Instance.InitializeAsync(settings, options, current.Token);
                 current.Token.ThrowIfCancellationRequested();
                 startupReady = true;
@@ -156,6 +151,17 @@ namespace Game
             if (!await resources.InitializeAsync(options, token))
             {
                 throw new InvalidOperationException("Resource initialization/download failed for version " + content.PackageVersion);
+            }
+        }
+
+        private static async Task<byte[]> LoadCodeAsync(
+            ReleaseContentContext content,
+            ReleaseFile file,
+            CancellationToken token)
+        {
+            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(content.CodeLocation(file), token))
+            {
+                return asset.Asset.bytes;
             }
         }
 
@@ -247,20 +253,6 @@ namespace Game
         {
             Dispose();
             return Task.CompletedTask;
-        }
-
-        static GameEntry()
-        {
-            // 项目入口先退出，随后各服务基类清理，最后由生成器恢复静态声明。
-            SingletonLifecycle.Register(EndPreviousSession, order: -200);
-        }
-
-        private static void EndPreviousSession()
-        {
-            if (sessionOwner != null)
-            {
-                sessionOwner.EndLifetime();
-            }
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

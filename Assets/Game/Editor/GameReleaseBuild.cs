@@ -22,6 +22,7 @@ namespace Game.Editor
         static GameReleaseBuild()
         {
             GameBuild.SettingsFactory = CreateBuildSettings;
+            GameBuild.BuildContent = GameCodeResources.Build;
         }
 
         public static UpdateSettings CreateBuildSettings()
@@ -32,7 +33,8 @@ namespace Game.Editor
                 settings.content = new ReleaseContent
                 {
                     packageName = GameDataPaths.PackageName,
-                    version = LastResourceVersion
+                    version = LastResourceVersion,
+                    codeInResources = true
                 };
             }
 
@@ -115,10 +117,9 @@ namespace Game.Editor
         public static void ExportSignedUpdate()
         {
             EnsureSigningKey();
-            GameDataSetup.BuildResources(false);
             string unsigned = GameBuild.ExportUpdateToDirectory();
             string output = PublishUnsigned(unsigned, File.ReadAllText(DirectoryFile));
-            Debug.Log("SIGNED_UPDATE_EXPORTED " + output + ". Upload patches/, assets/ and manifests/ to /srv/gameserver/updates/; publish manifests last.");
+            Debug.Log("SIGNED_UPDATE_EXPORTED " + output + ". Upload assets/ first, then publish manifests/ to /srv/gameserver/updates/.");
         }
 
         public static string PublishUnsigned(string unsigned, string resourcesDirectory, string outputRoot = "Artifacts/Publish")
@@ -127,7 +128,8 @@ namespace Game.Editor
             byte[] payload = File.ReadAllBytes(Path.Combine(unsigned, "manifest.json"));
             var manifest = JsonUtility.FromJson<ReleaseManifest>(Encoding.UTF8.GetString(payload));
             ReleasePolicy.Validate(manifest);
-            if (manifest.content == null || manifest.content.packageName != GameDataPaths.PackageName || manifest.content.version != LastResourceVersion)
+            if (manifest.content == null || !manifest.content.codeInResources
+                || manifest.content.packageName != GameDataPaths.PackageName || manifest.content.version != LastResourceVersion)
             {
                 throw new InvalidDataException("The unsigned DLL release must bind the resource version just built.");
             }
@@ -139,7 +141,6 @@ namespace Game.Editor
                 throw new InvalidDataException("The resource output is missing its bound package manifest: " + resourceManifest);
             }
 
-            string id = ReleasePolicy.Sha256(payload);
             var key = AssetDatabase.LoadAssetAtPath<GameUpdateKey>(KeyAsset);
             using var rsa = RSA.Create();
             rsa.FromXmlString(File.ReadAllText(PrivateKeyPath));
@@ -152,13 +153,10 @@ namespace Game.Editor
             ReleasePolicy.VerifyEnvelope(envelope, GameReleaseConfiguration.CreateSettings(key).trustedKeys);
             string root = Path.GetFullPath(outputRoot);
             string relative = manifest.appId + "/" + manifest.platform + "/" + manifest.channel + "/" + manifest.baselineId;
-            string patches = Path.Combine(root, "patches", relative, id);
-            Directory.CreateDirectory(patches);
             foreach (var dll in manifest.assemblies)
             {
                 string source = Path.Combine(unsigned, dll.fileName);
                 ReleasePolicy.VerifyFile(source, dll);
-                CopyImmutable(source, Path.Combine(patches, dll.fileName));
             }
 
             string assets = Path.Combine(root, "assets", manifest.appId, manifest.platform, manifest.content.packageName);

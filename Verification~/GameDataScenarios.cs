@@ -131,7 +131,7 @@ internal static partial class Program
             GameDataSetup.EnsureConfigured();
             GameDataSetup.EnsureConfigured();
             Equal(1, AssetBundleCollectorSettingData.Saves);
-            Equal(2, package.Groups.Count);
+            Equal(3, package.Groups.Count);
             True(package.Groups.Contains(unrelated));
             var collector = package.Groups.Single(g => g.GroupName == "GameStarterData").Collectors.Single();
             Equal(ECollectorType.MainAssetCollector, collector.CollectorType);

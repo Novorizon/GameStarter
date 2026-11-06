@@ -83,11 +83,11 @@ namespace Game.Resource
             ManagerContracts.Cleanup.Add("resources");
         }
 
-        public static void Release()
+        public new static void Release()
         {
-            if (IsCreated)
+            if (TryGetInstance(out var current))
             {
-                _ = Instance.ShutdownAsync();
+                _ = current.ShutdownAsync();
             }
         }
 
