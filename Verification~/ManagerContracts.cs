@@ -18,8 +18,13 @@ internal static class ManagerContracts
     internal static Task<bool> ResourceInitialization = Task.FromResult(true);
     internal static int LeasesReleased;
     internal static int ProtectedAcquisitions;
+    internal static readonly List<string> HotCalls = new List<string>();
+    internal static Func<CancellationToken, Task> HotInitialization = _ => Task.CompletedTask;
     internal static void Reset()
     {
+        Game.Framework.HotUpdate.HotUpdateManager.Release();
+        HotCalls.Clear();
+        HotInitialization = _ => Task.CompletedTask;
         Calls.Clear();
         LeasesReleased = 0;
         ProtectedAcquisitions = 0;
@@ -415,5 +420,46 @@ namespace Game.Framework.Input
         }
 
         internal static void Reset() => ResetInstance(null);
+    }
+}
+
+// 这里只验证 GameEntry 的调用顺序；真实加载器由包仓库的独立用例验证。
+namespace Game.Framework.HotUpdate
+{
+    public sealed class HotUpdateManager : ConfigurableSingleton<HotUpdateManager>, IDisposable
+    {
+        private CancellationTokenSource lifetime;
+        private Task startup;
+        private bool disposed;
+        public static HotUpdateManager Instance => GetOrCreateInstance(() => new HotUpdateManager());
+
+        public Task InitializeAsync(UpdateSettings settings, CancellationToken token)
+        {
+            if (startup != null)
+            {
+                return startup;
+            }
+
+            settings.Validate();
+            ManagerContracts.HotCalls.Add("start");
+            lifetime = CancellationTokenSource.CreateLinkedTokenSource(token);
+            startup = ManagerContracts.HotInitialization(lifetime.Token);
+            return startup;
+        }
+
+        public void Dispose()
+        {
+            if (disposed)
+            {
+                return;
+            }
+
+            disposed = true;
+            ManagerContracts.HotCalls.Add("stop");
+            ManagerContracts.Cleanup.Add("hot");
+            lifetime?.Cancel();
+            lifetime?.Dispose();
+            ReleaseInstance(this);
+        }
     }
 }

@@ -57,11 +57,15 @@ internal static class Program
         Check("quit and destroy do not rerun OnExit or create unused managers", EntryCleanupAfterReferenceReset);
         Check("exit reentry does not run cleanup twice", EntryShutdownReentry);
         Check("hot code is a separate assembly and AOT has no hot reference", HotAssemblyBoundary);
-        Check("hot entry waits for AOT readiness and reports startup health", HotEntryReady);
-        Check("hot entry waits for resource initialization", HotEntryWaits);
+        Check("hot entry reports health without waiting for GameEntry", HotEntryReady);
+        Check("GameEntry waits for resources before starting hot update", HotEntryWaits);
         Check("cancelled hot startup cannot report readiness", HotEntryCancelled);
-        Check("AOT startup failure prevents hot readiness", HotEntryFailure);
-        Check("hot shutdown during initialization suppresses readiness", HotEntryStopped);
+        Check("base manager failure prevents hot loading", HotEntryFailure);
+        Check("stopped hot entry cannot initialize or report readiness", HotEntryStopped);
+        Check("GameEntry stays Starting until hot initialization finishes", EntryWaitsForHot);
+        Check("GameEntry can disable hot update without creating its manager", EntryHotDisabled);
+        Check("GameEntry exit cancels hot startup before releasing services", EntryHotCancellation);
+        Check("hot initialization failure fails GameEntry", EntryHotFailure);
         Check("catalog resolves dependencies once and before consumers", CatalogOrder);
         Check("catalog detects missing and circular dependencies", InvalidCatalog);
         Check("installer resumes after request handles are lost on reload", InstallerReload);
@@ -385,7 +389,7 @@ internal static class Program
         }
     }
 
-    private static GameEntry CreateEntry(bool resources = false)
+    private static GameEntry CreateEntry(bool resources = false, bool hotUpdate = true)
     {
         var module = new GameObject().AddComponent<RecordingStartupModule>();
         var go = new GameObject
@@ -396,6 +400,7 @@ internal static class Program
         var flags = BindingFlags.Instance | BindingFlags.NonPublic;
         typeof(GameEntry).GetField("startupModules", flags).SetValue(entry, new StartupModule[] { module });
         typeof(GameEntry).GetField("initializeYooAsset", flags).SetValue(entry, resources);
+        typeof(GameEntry).GetField("initializeHotUpdate", flags).SetValue(entry, hotUpdate);
         go.activeInHierarchy = true;
         UObject.Invoke(entry, "Awake");
         return entry;
@@ -472,7 +477,7 @@ internal static class Program
         var entry = CreateEntry(resources: true);
         Game.Framework.Data.DataManager.Instance.Register(new OwnedData());
         Complete(entry.ShutdownAsync());
-        Equal("module,network,worlds,entities,gpu,ui,config,audio,scenes,input,storage,data,resources", string.Join(",", ManagerContracts.Cleanup));
+        Equal("hot,module,network,worlds,entities,gpu,ui,config,audio,scenes,input,storage,data,resources", string.Join(",", ManagerContracts.Cleanup));
         Complete(entry.ShutdownAsync());
         True(!UI.UIManager.TryGetInstance(out _));
         True(!Game.Framework.Data.DataManager.IsCreated);
@@ -665,19 +670,19 @@ internal static class Program
 
     private static void HotAssemblyBoundary()
     {
-        Equal("Game.HotUpdate", typeof(Game.HotUpdate.GameModule).Assembly.GetName().Name);
+        Equal("Game.HotUpdate", typeof(Game.HotUpdate.HotGame).Assembly.GetName().Name);
         Equal("GameStarter.Runtime", typeof(GameEntry).Assembly.GetName().Name);
         True(!typeof(GameEntry).Assembly.GetReferencedAssemblies().Any(a => a.Name == "Game.HotUpdate"));
-        True(typeof(Game.Framework.HotUpdate.IGameModule).IsAssignableFrom(typeof(Game.HotUpdate.GameModule)));
+        True(typeof(Game.Framework.HotUpdate.IGameModule).IsAssignableFrom(typeof(Game.HotUpdate.HotGame)));
     }
 
     private static void HotEntryReady()
     {
         ResetEntry();
         var host = new HotHost();
-        var module = new Game.HotUpdate.GameModule();
+        var module = new Game.HotUpdate.HotGame();
         Complete(module.InitializeAsync(host, CancellationToken.None));
-        Equal(StartupState.Ready, GameEntry.Instance.State);
+        True(!GameEntry.TryGetInstance(out _));
         Equal(1, host.ReadyCount);
         Equal("1.0.0", host.Version);
         True(host.Logs.Contains("HOT_UPDATE_READY 1.0.0"));
@@ -692,34 +697,25 @@ internal static class Program
         ResetEntry();
         var pending = new TaskCompletionSource<bool>();
         ManagerContracts.ResourceInitialization = pending.Task;
-        CreateEntry(resources: true);
-        var host = new HotHost();
-        var module = new Game.HotUpdate.GameModule();
-        Task start = module.InitializeAsync(host, CancellationToken.None);
-        True(!start.IsCompleted);
-        Equal(0, host.ReadyCount);
+        var entry = CreateEntry(resources: true);
+        Equal(StartupState.Starting, entry.State);
+        Equal(0, ManagerContracts.HotCalls.Count);
         pending.SetResult(true);
-        Complete(start);
-        Equal(1, host.ReadyCount);
-        module.Shutdown();
+        Complete(entry.WaitUntilReadyAsync());
+        Equal("start", string.Join(",", ManagerContracts.HotCalls));
         ResetEntry();
     }
 
     private static void HotEntryCancelled()
     {
         ResetEntry();
-        var pending = new TaskCompletionSource<bool>();
-        ManagerContracts.ResourceInitialization = pending.Task;
-        CreateEntry(resources: true);
         using var stop = new CancellationTokenSource();
-        var host = new HotHost();
-        var module = new Game.HotUpdate.GameModule();
-        Task start = module.InitializeAsync(host, stop.Token);
         stop.Cancel();
-        Throws<OperationCanceledException>(() => Complete(start));
+        var host = new HotHost();
+        var module = new Game.HotUpdate.HotGame();
+        Throws<OperationCanceledException>(() => Complete(module.InitializeAsync(host, stop.Token)));
         Equal(0, host.ReadyCount);
         module.Shutdown();
-        pending.SetResult(true);
         ResetEntry();
     }
 
@@ -727,27 +723,83 @@ internal static class Program
     {
         ResetEntry();
         ManagerContracts.UIFailure = new InvalidOperationException("UI initialization failed");
-        var host = new HotHost();
-        var module = new Game.HotUpdate.GameModule();
-        Throws<InvalidOperationException>(() => Complete(module.InitializeAsync(host, CancellationToken.None)));
-        Equal(0, host.ReadyCount);
-        module.Shutdown();
+        var entry = CreateEntry();
+        Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
+        Equal(0, ManagerContracts.HotCalls.Count);
         ResetEntry();
     }
 
     private static void HotEntryStopped()
     {
         ResetEntry();
-        var pending = new TaskCompletionSource<bool>();
-        ManagerContracts.ResourceInitialization = pending.Task;
-        CreateEntry(resources: true);
         var host = new HotHost();
-        var module = new Game.HotUpdate.GameModule();
-        Task start = module.InitializeAsync(host, CancellationToken.None);
+        var module = new Game.HotUpdate.HotGame();
         module.Shutdown();
-        pending.SetResult(true);
-        Throws<OperationCanceledException>(() => Complete(start));
+        Throws<OperationCanceledException>(() => Complete(module.InitializeAsync(host, CancellationToken.None)));
         Equal(0, host.ReadyCount);
+        ResetEntry();
+    }
+
+    private static void EntryWaitsForHot()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.HotInitialization = token =>
+        {
+            True(ManagerContracts.Calls.Contains("ui") && ManagerContracts.Calls.Contains("module"));
+            return pending.Task;
+        };
+        var entry = CreateEntry();
+        Equal(StartupState.Starting, entry.State);
+        Task ready = entry.WaitUntilReadyAsync();
+        True(!ready.IsCompleted);
+        _ = GameEntry.Instance;
+        Equal("start", string.Join(",", ManagerContracts.HotCalls));
+        pending.SetResult(true);
+        Complete(ready);
+        Equal(StartupState.Ready, entry.State);
+        ResetEntry();
+    }
+
+    private static void EntryHotDisabled()
+    {
+        ResetEntry();
+        var entry = CreateEntry(hotUpdate: false);
+        Equal(StartupState.Ready, entry.State);
+        Equal(0, ManagerContracts.HotCalls.Count);
+        True(!Game.Framework.HotUpdate.HotUpdateManager.IsCreated);
+        ResetEntry();
+    }
+
+    private static void EntryHotCancellation()
+    {
+        ResetEntry();
+        CancellationToken hotToken = default;
+        ManagerContracts.HotInitialization = token =>
+        {
+            hotToken = token;
+            return Task.Delay(Timeout.Infinite, token);
+        };
+        var entry = CreateEntry();
+        Equal(StartupState.Starting, entry.State);
+        Complete(entry.ShutdownAsync());
+        True(hotToken.IsCancellationRequested);
+        Equal("start,stop", string.Join(",", ManagerContracts.HotCalls));
+        Equal("hot", ManagerContracts.Cleanup.First());
+        True(!Game.Framework.HotUpdate.HotUpdateManager.IsCreated);
+        ResetEntry();
+    }
+
+    private static void EntryHotFailure()
+    {
+        ResetEntry();
+        ManagerContracts.HotInitialization = _ => Task.FromException(new InvalidOperationException("hot failed"));
+        var entry = CreateEntry();
+        Equal(StartupState.Failed, entry.State);
+        Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
+        True(UI.UIManager.TryGetInstance(out _));
+        Complete(entry.ShutdownAsync());
+        Equal("hot", ManagerContracts.Cleanup.First());
         ResetEntry();
     }
 

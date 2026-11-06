@@ -46,3 +46,4 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   startupModules: []
+  initializeHotUpdate: 1

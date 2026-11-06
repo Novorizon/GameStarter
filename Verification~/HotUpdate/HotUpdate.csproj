@@ -8,8 +8,6 @@
     <NuGetAudit>false</NuGetAudit>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../Runtime/Runtime.csproj" />
-    <ProjectReference Include="../FrameworkUnity/FrameworkUnity.csproj" />
     <ProjectReference Include="../HotUpdateContracts/HotUpdateContracts.csproj" />
     <ProjectReference Include="../Unity/Unity.csproj" />
     <Compile Include="../../Assets/HotUpdate/*.cs" />

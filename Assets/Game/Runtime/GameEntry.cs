@@ -8,6 +8,7 @@ using Game.Framework.Config;
 using Game.Framework.Data;
 using Game.Framework.Event;
 using Game.Framework.Input;
+using Game.Framework.HotUpdate;
 using Game.Framework.Network;
 using Game.Framework.Network.Unity;
 using Game.Framework.Storage;
@@ -32,15 +33,41 @@ namespace Game
         private InputActionAsset inputActions;
         [SerializeField]
         private string initialInputMap = "Gameplay";
+        // 热更由本入口显式启动；配置直接写 C#，不读取启动 JSON。
+        [SerializeField]
+        private bool initializeHotUpdate = true;
         private static GameEntry sessionOwner;
         private GameSession session;
         private Task startupTask;
         private bool startupFailed;
-        public StartupState State => session == null ? StartupState.NotStarted : startupFailed ? StartupState.Failed : session.State == StartupState.NotStarted ? StartupState.Starting : session.State;
+        private bool startupReady;
+        public StartupState State
+        {
+            get
+            {
+                if (session == null)
+                {
+                    return StartupState.NotStarted;
+                }
+
+                if (startupFailed || session.State == StartupState.Failed)
+                {
+                    return StartupState.Failed;
+                }
+
+                if (session.State == StartupState.Ready && startupReady)
+                {
+                    return StartupState.Ready;
+                }
+
+                return session.State == StartupState.Stopped ? StartupState.Stopped : StartupState.Starting;
+            }
+        }
 
         protected override void OnStart()
         {
             startupFailed = false;
+            startupReady = false;
             sessionOwner = this;
             session = new GameSession(Debug.LogException);
             startupTask = StartSessionAsync(session);
@@ -105,6 +132,7 @@ namespace Game
         {
             var previous = session;
             session = null;
+            HotUpdateManager.Release();
             previous?.Dispose();
             NetworkManager.Release();
             WorldManager.Release();
@@ -132,6 +160,14 @@ namespace Game
                 current.Token.ThrowIfCancellationRequested();
                 await current.StartAsync(startupModules);
                 current.Token.ThrowIfCancellationRequested();
+                if (initializeHotUpdate)
+                {
+                    // Editor 使用已编译程序集；Player 补充 AOT 元数据、加载 DLL，再调用 HotGame。
+                    await HotUpdateManager.Instance.InitializeAsync(new UpdateSettings(), current.Token);
+                }
+
+                current.Token.ThrowIfCancellationRequested();
+                startupReady = true;
                 Debug.Log("GAME_STARTER_READY");
             }
             catch (OperationCanceledException) when (current.Token.IsCancellationRequested)
@@ -168,7 +204,14 @@ namespace Game
             }
         }
 
-        private void Update() => session?.Tick(Time.deltaTime, Time.unscaledDeltaTime);
+        private void Update()
+        {
+            if (startupReady)
+            {
+                session?.Tick(Time.deltaTime, Time.unscaledDeltaTime);
+            }
+        }
+
         /// <summary>主动退出入口。各 Manager 的异步释放在各自内部继续完成。</summary>
         public Task ShutdownAsync()
         {

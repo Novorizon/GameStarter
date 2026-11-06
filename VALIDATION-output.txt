@@ -1,6 +1,6 @@
 PASS project structure, GUIDs and pinned Git dependency references
-Cloning into '/tmp/game-starter-verify-a3cu0h9g/FrameworkSource'...
-Note: switching to '06a2abd93269f596b05ca2c43c2da3268e152086'.
+Cloning into '/tmp/game-starter-verify-k_0nfqif/FrameworkSource'...
+Note: switching to '13ce48b22367b6c54a862c29d35192a1d8a7900f'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -22,8 +22,8 @@ Turn off this advice by setting config variable advice.detachedHead to false
   Unity -> /workspace/GameStarter/Verification~/Unity/bin/Release/net8.0/Unity.dll
   Core -> /workspace/GameStarter/Verification~/Core/bin/Release/netstandard2.1/Game.Framework.Core.dll
   FrameworkUnity -> /workspace/GameStarter/Verification~/FrameworkUnity/bin/Release/net8.0/Game.Framework.Unity.dll
-  Runtime -> /workspace/GameStarter/Verification~/Runtime/bin/Release/net8.0/GameStarter.Runtime.dll
   HotUpdateContracts -> /workspace/GameStarter/Verification~/HotUpdateContracts/bin/Release/net8.0/Game.Framework.HotUpdate.dll
+  Runtime -> /workspace/GameStarter/Verification~/Runtime/bin/Release/net8.0/GameStarter.Runtime.dll
   HotUpdate -> /workspace/GameStarter/Verification~/HotUpdate/bin/Release/net8.0/Game.HotUpdate.dll
   GameStarter.Verification -> /workspace/GameStarter/Verification~/bin/Release/net8.0/GameStarter.Verification.dll
 
@@ -31,7 +31,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:25.81
+Time Elapsed 00:00:29.44
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module
@@ -61,11 +61,15 @@ PASS module Tick failure leaves manager cleanup to OnExit
 PASS quit and destroy do not rerun OnExit or create unused managers
 PASS exit reentry does not run cleanup twice
 PASS hot code is a separate assembly and AOT has no hot reference
-PASS hot entry waits for AOT readiness and reports startup health
-PASS hot entry waits for resource initialization
+PASS hot entry reports health without waiting for GameEntry
+PASS GameEntry waits for resources before starting hot update
 PASS cancelled hot startup cannot report readiness
-PASS AOT startup failure prevents hot readiness
-PASS hot shutdown during initialization suppresses readiness
+PASS base manager failure prevents hot loading
+PASS stopped hot entry cannot initialize or report readiness
+PASS GameEntry stays Starting until hot initialization finishes
+PASS GameEntry can disable hot update without creating its manager
+PASS GameEntry exit cancels hot startup before releasing services
+PASS hot initialization failure fails GameEntry
 PASS catalog resolves dependencies once and before consumers
 PASS catalog detects missing and circular dependencies
 PASS installer resumes after request handles are lost on reload
@@ -75,4 +79,4 @@ PASS HybridCLR embed request completes before installing consumers
 PASS installer waits for compilation and play mode
 PASS optional installer migrates an old package identifier
 PASS installer configures only after all dependencies exist
-PASS 43 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).
+PASS 47 lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).
