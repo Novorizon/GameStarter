@@ -44,7 +44,7 @@ def validate_project(root=ROOT):
     generated = json.loads((root / 'Assets/HotUpdate/Generated/Data/Game.Data.Generated.asmdef').read_text())
     assert generated['name'] == 'Game.Data.Generated' and generated['references'] == ['Luban.Runtime'] and not generated['autoReferenced']
     editor = json.loads((root / 'Assets/Game/Editor/GameStarter.Editor.asmdef').read_text())
-    assert set(editor['references']) == {'GameStarter.Runtime', 'Game.Startup', 'Game.Framework.Data.Editor', 'Game.Framework.HotUpdate.Editor', 'YooAsset', 'YooAsset.Editor', 'Game.Framework.HotUpdate'}
+    assert set(editor['references']) == {'GameStarter.Runtime', 'Game.Startup', 'Game.Framework.Data.Editor', 'Game.Framework.HotUpdate.Editor', 'YooAsset', 'YooAsset.Editor', 'Game.Framework.HotUpdate', 'Unity.TextMeshPro', 'Game.Framework.Core', 'Game.Framework.Unity'}
     data_root = root / 'Assets/GameAssets/Data/Luban'
     data_manifest = json.loads((data_root / 'manifest.json').read_text())
     assert data_manifest['version'] == 1 and data_manifest['format'] == 'bin'
@@ -63,7 +63,7 @@ def validate_project(root=ROOT):
     assert not (root / 'Assets/Resources/NovorizonHotUpdateSettings.json').exists()
     hot = json.loads((root / 'Assets/HotUpdate/Game.HotUpdate.asmdef').read_text())
     assert hot['name'] == 'Game.HotUpdate'
-    assert set(hot['references']) == {'ECS', 'Game.Startup', 'Game.Data.Generated', 'Luban.Runtime', 'Game.Framework.Data', 'Game.Framework.Resources.YooAsset', 'Game.Framework.Network', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Input', 'Game.Framework.UI', 'Game.Framework.Network.Unity', 'Unity.InputSystem', 'Game.Framework.HotUpdate'}
+    assert set(hot['references']) == {'ECS', 'Game.Startup', 'Game.Data.Generated', 'Luban.Runtime', 'Game.Framework.Data', 'Game.Framework.Resources.YooAsset', 'Game.Framework.Network', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Input', 'Game.Framework.UI', 'Game.Framework.Network.Unity', 'Unity.InputSystem', 'Game.Framework.HotUpdate', 'Unity.ugui', 'Unity.TextMeshPro'}
     hot_project = root / 'Verification~/HotUpdate/HotUpdate.csproj'
     model = ET.parse(hot_project).getroot()
     assert model.findtext('.//DisableTransitiveProjectReferences', '').lower() == 'true'
@@ -150,6 +150,8 @@ def main():
         env.setdefault('DOTNET_SKIP_FIRST_TIME_EXPERIENCE', '1')
         subprocess.run([args.dotnet, 'build', 'Verification~/GameStarter.Verification.csproj', '-c', 'Release', '-m:1', '--disable-build-servers', '--nologo', '-p:FrameworkPackageRoot=' + str(framework), '-p:HotUpdatePackageRoot=' + str(hot_package), '-p:DataPackageRoot=' + str(data_package), '-p:LubanPackageRoot=' + str(luban), '-p:YooAssetPackageRoot=' + str(yoo / 'Assets/YooAsset'), '-p:ResourcesPackageRoot=' + str(framework.parent / 'com.novorizon.framework.yooasset')], cwd=ROOT, env=env, check=True)
         subprocess.run([args.dotnet, 'Verification~/bin/Release/net8.0/GameStarter.Verification.dll'], cwd=ROOT, env=env, check=True)
+        for suite in ['TowerDefenseDomain', 'TowerDefenseOnline']:
+            subprocess.run([args.dotnet, 'run', '--project', 'Verification~/' + suite + '/' + suite + '.csproj', '-c', 'Release'], cwd=ROOT, env=env, check=True)
 
 
 if __name__ == '__main__':

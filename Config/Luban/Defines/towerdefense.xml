@@ -1,0 +1,85 @@
+<module name="">
+    <bean name="TdStage">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+        <var name="configVersion" type="string" />
+        <var name="initialGold" type="int" />
+        <var name="baseHealth" type="int" />
+        <var name="mapAsset" type="string" />
+    </bean>
+    <table name="TbTdStage" value="TdStage" input="tdstage.xlsx" index="id" />
+    <bean name="TdRoutePoint">
+        <var name="id" type="int" />
+        <var name="stageId" type="int" />
+        <var name="routeId" type="int" />
+        <var name="sequence" type="int" />
+        <var name="x" type="int" />
+        <var name="y" type="int" />
+    </bean>
+    <table name="TbTdRoutePoint" value="TdRoutePoint" input="tdroutepoint.xlsx" index="id" />
+    <bean name="TdBuildSlot">
+        <var name="id" type="int" />
+        <var name="stageId" type="int" />
+        <var name="x" type="int" />
+        <var name="y" type="int" />
+    </bean>
+    <table name="TbTdBuildSlot" value="TdBuildSlot" input="tdbuildslot.xlsx" index="id" />
+    <bean name="TdTower">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+        <var name="buildCost" type="int" />
+        <var name="upgradeCost" type="int" />
+        <var name="damage" type="int" />
+        <var name="range" type="int" />
+        <var name="attackIntervalTicks" type="int" />
+        <var name="maxLevel" type="int" />
+        <var name="upgradeDamage" type="int" />
+        <var name="upgradeRange" type="int" />
+    </bean>
+    <table name="TbTdTower" value="TdTower" input="tdtower.xlsx" index="id" />
+    <bean name="TdEnemy">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+        <var name="health" type="int" />
+        <var name="speedPerTick" type="int" />
+        <var name="goldReward" type="int" />
+        <var name="baseDamage" type="int" />
+    </bean>
+    <table name="TbTdEnemy" value="TdEnemy" input="tdenemy.xlsx" index="id" />
+    <bean name="TdWave">
+        <var name="id" type="int" />
+        <var name="stageId" type="int" />
+        <var name="sequence" type="int" />
+        <var name="rewardGold" type="int" />
+        <var name="giveCard" type="bool" />
+    </bean>
+    <table name="TbTdWave" value="TdWave" input="tdwave.xlsx" index="id" />
+    <bean name="TdSpawn">
+        <var name="id" type="int" />
+        <var name="waveId" type="int" />
+        <var name="enemyId" type="int" />
+        <var name="routeId" type="int" />
+        <var name="count" type="int" />
+        <var name="startTick" type="int" />
+        <var name="intervalTicks" type="int" />
+    </bean>
+    <table name="TbTdSpawn" value="TdSpawn" input="tdspawn.xlsx" index="id" />
+    <bean name="TdCard">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+        <var name="description" type="string" />
+        <var name="effect" type="int" />
+        <var name="value" type="int" />
+        <var name="weight" type="int" />
+        <var name="maxStacks" type="int" />
+        <var name="iconIndex" type="int" />
+        <var name="rarity" type="int" />
+    </bean>
+    <table name="TbTdCard" value="TdCard" input="tdcard.xlsx" index="id" />
+    <bean name="TdViewAsset">
+        <var name="id" type="int" />
+        <var name="key" type="string" />
+        <var name="asset" type="string" />
+    </bean>
+    <table name="TbTdViewAsset" value="TdViewAsset" input="tdviewasset.xlsx" index="id" />
+</module>

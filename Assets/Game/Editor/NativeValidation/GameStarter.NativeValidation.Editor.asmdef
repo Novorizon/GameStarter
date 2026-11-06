@@ -8,7 +8,11 @@
     "Game.Framework.Unity",
     "Game.Framework.HotUpdate",
     "Game.Framework.HotUpdate.Editor",
-    "HybridCLR.Editor"
+    "HybridCLR.Editor",
+    "Game.HotUpdate",
+    "Game.Data.Generated",
+    "Unity.TextMeshPro",
+    "Unity.ugui"
   ],
   "includePlatforms": [
     "Editor"

@@ -1,0 +1,24 @@
+{
+  "generator": "imagegen",
+  "assets": [
+    {
+      "path": "Assets/GameAssets/TowerDefense/Art/Map.png",
+      "description": "Original top-down grass clearing, no baked route; runtime route comes from Luban."
+    },
+    {
+      "path": "Assets/GameAssets/TowerDefense/Art/CardIcons.png",
+      "description": "Original 3x2 transparent upgrade icons; runtime Sprite rectangles, no pixel edits."
+    },
+    {
+      "path": "Assets/GameAssets/TowerDefense/Art/CardFrame.png",
+      "description": "Original blank card frame, editable text rendered by TMP."
+    }
+  ],
+  "font": {
+    "family": "Tower Defense UI",
+    "source": "Noto Sans CJK SC Regular (Debian fonts-noto-cjk)",
+    "modification": "GB2312/Latin-1/punctuation subset, renamed family",
+    "license": "SIL Open Font License 1.1; see distributed Noto-CJK.txt"
+  },
+  "models": "Runtime primitive placeholders, not finished 3D art."
+}

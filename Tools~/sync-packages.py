@@ -24,7 +24,10 @@ def main():
     modules = []
     for package in catalog['packages']:
         module = previous.get(package['name'], dict(id=package['name'], title=package['name']))
-        module.update(version=package['version'], source=package['git'], dependencies=package.get('dependencies', []), embed=package.get('embed', False))
+        source = package['git']
+        if source.startswith('https://github.com/Novorizon/UnityPackages.git?'):
+            source = source.split('#', 1)[0] + '#' + args.ref
+        module.update(version=package['version'], source=source, dependencies=package.get('dependencies', []), embed=package.get('embed', False))
         module.pop('archive', None)
         module.pop('sha256', None)
         assert module['source'].startswith('https://github.com/')

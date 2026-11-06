@@ -2,3 +2,6 @@
 
 # Preserve the official Luban CLI output; whitespace checks apply to handwritten code.
 Assets/HotUpdate/Generated/Data/*.cs whitespace=-blank-at-eol,-blank-at-eof
+
+# Unity's official TMP Essentials retain their upstream formatting.
+"Assets/TextMesh Pro/**" -whitespace linguist-vendored

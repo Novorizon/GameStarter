@@ -14,16 +14,43 @@ namespace cfg
 public partial class Tables
 {
     public TbExample TbExample {get; }
+    public TbTdStage TbTdStage {get; }
+    public TbTdRoutePoint TbTdRoutePoint {get; }
+    public TbTdBuildSlot TbTdBuildSlot {get; }
+    public TbTdTower TbTdTower {get; }
+    public TbTdEnemy TbTdEnemy {get; }
+    public TbTdWave TbTdWave {get; }
+    public TbTdSpawn TbTdSpawn {get; }
+    public TbTdCard TbTdCard {get; }
+    public TbTdViewAsset TbTdViewAsset {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
         TbExample = new TbExample(loader("tbexample"));
+        TbTdStage = new TbTdStage(loader("tbtdstage"));
+        TbTdRoutePoint = new TbTdRoutePoint(loader("tbtdroutepoint"));
+        TbTdBuildSlot = new TbTdBuildSlot(loader("tbtdbuildslot"));
+        TbTdTower = new TbTdTower(loader("tbtdtower"));
+        TbTdEnemy = new TbTdEnemy(loader("tbtdenemy"));
+        TbTdWave = new TbTdWave(loader("tbtdwave"));
+        TbTdSpawn = new TbTdSpawn(loader("tbtdspawn"));
+        TbTdCard = new TbTdCard(loader("tbtdcard"));
+        TbTdViewAsset = new TbTdViewAsset(loader("tbtdviewasset"));
         ResolveRef();
     }
-    
+
     private void ResolveRef()
     {
         TbExample.ResolveRef(this);
+        TbTdStage.ResolveRef(this);
+        TbTdRoutePoint.ResolveRef(this);
+        TbTdBuildSlot.ResolveRef(this);
+        TbTdTower.ResolveRef(this);
+        TbTdEnemy.ResolveRef(this);
+        TbTdWave.ResolveRef(this);
+        TbTdSpawn.ResolveRef(this);
+        TbTdCard.ResolveRef(this);
+        TbTdViewAsset.ResolveRef(this);
     }
 }
 
