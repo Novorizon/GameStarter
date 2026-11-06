@@ -120,10 +120,13 @@ namespace Game
         {
             StartupMessage = "Preparing resources " + content.PackageVersion;
             var resources = ResourceManager.Instance;
+#if UNITY_EDITOR
             if (resources.Initialized && resources.PackageVersion != content.PackageVersion)
             {
                 await resources.ShutdownAsync();
             }
+
+#endif
 
             var options = new ResourceInitializationOptions
             {
@@ -146,7 +149,34 @@ namespace Game
             options.Parameters = YooAssetsSettings.CreateEditorSimulateModeParameters();
             options.PackageVersion = null;
 #else
-            if (string.IsNullOrWhiteSpace(content.PackageVersion))
+            await ConfigurePlayerResourcesAsync(resources, options, content, token);
+#endif
+            if (!await resources.InitializeAsync(options, token))
+            {
+                throw new InvalidOperationException("Resource initialization/download failed for version " + content.PackageVersion);
+            }
+        }
+
+        // 单独保留 Player 文件系统准备，Editor 模型验证也编译并测试该分支。
+        internal static async Task ConfigurePlayerResourcesAsync(ResourceManager resources, ResourceInitializationOptions options,
+            ReleaseContentContext content, CancellationToken token)
+        {
+            // 此时尚未创建 HotGame，DefaultPackage 由入口独占。
+            // 回退时必须销毁旧 Host 文件系统，才能改用内置资源且不依赖下载站。
+            var previousPackage = YooAsset.YooAssets.TryGetPackage(GameDataPaths.PackageName);
+            if (previousPackage != null && previousPackage.InitializeStatus != YooAsset.EOperationStatus.None)
+            {
+                await resources.ShutdownAsync();
+                var destroy = previousPackage.DestroyAsync();
+                await destroy.Task;
+                token.ThrowIfCancellationRequested();
+                if (destroy.Status != YooAsset.EOperationStatus.Succeed)
+                {
+                    throw new InvalidOperationException("Could not reset the previous resource package: " + destroy.Error);
+                }
+            }
+
+            if (content.IsPackaged || string.IsNullOrWhiteSpace(content.PackageVersion))
             {
                 options.Parameters = YooAssetsSettings.CreateOfflinePlayModeParameters();
             }
@@ -159,11 +189,6 @@ namespace Game
 
                 options.Parameters = YooAssetsSettings.CreateHostPlayModeParameters(
                     GameReleaseConfiguration.ResourceUrl(content.Platform, content.PackageName));
-            }
-#endif
-            if (!await resources.InitializeAsync(options, token))
-            {
-                throw new InvalidOperationException("Resource initialization/download failed for version " + content.PackageVersion);
             }
         }
 

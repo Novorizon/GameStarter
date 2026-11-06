@@ -15,6 +15,30 @@ internal static partial class Program
 {
     private static void RemoteReleaseScenarios()
     {
+        Check("packaged resource fallback resets the old host package and uses offline resources", () =>
+        {
+            ResetEntry();
+            var previous = new YooAsset.ResourcePackage { InitializeStatus = YooAsset.EOperationStatus.Succeed };
+            YooAsset.YooAssets.Package = previous;
+            try
+            {
+                var content = new ReleaseContentContext("windows-x64", new ReleaseContent
+                {
+                    packageName = "DefaultPackage",
+                    version = "baseline-resources"
+                }, true);
+                var options = new Game.Resource.ResourceInitializationOptions { PackageVersion = content.PackageVersion };
+                Complete(GameEntry.ConfigurePlayerResourcesAsync(Game.Resource.ResourceManager.Instance, options, content, System.Threading.CancellationToken.None));
+                Equal(1, previous.Destroyed);
+                Equal("baseline-resources", options.PackageVersion);
+                True(options.Parameters is YooAsset.OfflinePlayModeParameters);
+            }
+            finally
+            {
+                YooAsset.YooAssets.Package = null;
+                ResetEntry();
+            }
+        });
         Check("AOT entry has no reference to hot Tables or the Luban runtime", () =>
         {
             var references = typeof(GameEntry).Assembly.GetReferencedAssemblies().Select(a => a.Name).ToArray();

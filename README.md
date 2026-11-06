@@ -19,7 +19,7 @@ GameEntry.InitializeAsync
      → ReportReady
 ```
 
-资源准备发生在任何热更程序集加载之前。签名清单同时绑定 DLL 哈希、基线和资源包版本。新版资源准备失败时，在装载托管代码前回到配套的内置 DLL 与资源；装载代码后不在同一进程切换发行。
+资源准备发生在任何热更程序集加载之前。签名清单同时绑定 DLL 哈希、基线和资源包版本。新版资源准备失败时，在装载托管代码前回到配套的内置 DLL 与资源；内置发行使用离线资源模式，不依赖下载站。装载代码后不在同一进程切换发行。
 
 Editor 使用 Unity 已编译的游戏程序集及 YooAsset 模拟模式。关闭 Initialize Hot Update 可选择编译源模式；普通 AOT 主包使用 Native Validation → Build Local Source Player 菜单，游戏源码正常编入主包。两种模式通过同一个 IGameModule 入口启动，GameEntry 不直接引用热更表类型。可选 StartupModule 列表和 GameSession 保留，默认为空；业务可以直接写在 HotGame.StartGameAsync。
 

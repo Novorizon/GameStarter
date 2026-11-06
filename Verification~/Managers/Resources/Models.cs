@@ -134,7 +134,7 @@ namespace Game.Resource
     public static class YooAssetsSettings
     {
         public static YooAsset.InitializeParameters CreateEditorSimulateModeParameters() => new YooAsset.InitializeParameters();
-        public static YooAsset.InitializeParameters CreateOfflinePlayModeParameters() => new YooAsset.InitializeParameters();
-        public static YooAsset.InitializeParameters CreateHostPlayModeParameters(string main, string fallback = null) => new YooAsset.InitializeParameters();
+        public static YooAsset.InitializeParameters CreateOfflinePlayModeParameters() => new YooAsset.OfflinePlayModeParameters();
+        public static YooAsset.InitializeParameters CreateHostPlayModeParameters(string main, string fallback = null) => new YooAsset.HostPlayModeParameters();
     }
 }
