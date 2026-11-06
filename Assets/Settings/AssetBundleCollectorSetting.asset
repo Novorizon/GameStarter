@@ -51,3 +51,50 @@ MonoBehaviour:
         FilterRuleName: GameCodeFilterRule
         AssetTags: code
         UserData:
+    - GroupName: TowerDefenseMaps
+      GroupDesc:
+      AssetTags: maps
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/Map.png
+        CollectorGUID: 90c193a2a91f4e699e739f82a196b28d
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+    - GroupName: TowerDefenseUI
+      GroupDesc:
+      AssetTags: ui
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/CardIcons.png
+        CollectorGUID: ebf9157f72494c27943d06238e5160e1
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/CardFrame.png
+        CollectorGUID: 6fd828ae53c44f1087e6db1e0953e9f7
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+    - GroupName: TowerDefenseFonts
+      GroupDesc:
+      AssetTags: fonts
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.asset
+        CollectorGUID: 2db005800a75d85d9a1b61a0e17c7939
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:

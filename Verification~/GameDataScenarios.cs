@@ -23,8 +23,9 @@ internal static partial class Program
             Equal("示例配置", tables.TbExample.Get(1).Name);
             Equal("Second entry", tables.TbExample.Get(2).Name);
             True(ManagerContracts.Calls.IndexOf("tables") < ManagerContracts.Calls.IndexOf("module"));
-            Equal("Data/Luban/manifest,Data/Luban/tbexample", string.Join(",", ManagerContracts.DataAcquisitions));
-            Equal(2, ManagerContracts.LeasesReleased);
+            True(ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdstage") && ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdcard"));
+            Equal(11, ManagerContracts.DataAcquisitions.Count);
+            Equal(11, ManagerContracts.LeasesReleased);
             Complete(entry.ShutdownAsync());
             True(!DataManager.IsCreated);
             ResetEntry();
@@ -34,7 +35,7 @@ internal static partial class Program
             ResetEntry();
             var read = ManagerContracts.LoadDataBytes;
             var pending = new TaskCompletionSource<byte[]>();
-            ManagerContracts.LoadDataBytes = (path, token) => path == GameDataPaths.ManifestLocation ? read(path, token) : pending.Task;
+            ManagerContracts.LoadDataBytes = (path, token) => path == "Data/Luban/tbexample" ? pending.Task : read(path, token);
             var entry = CreateEntry();
             Equal(StartupState.Starting, entry.State);
             True(!ManagerContracts.Calls.Contains("module"));
@@ -43,7 +44,7 @@ internal static partial class Program
             Complete(entry.WaitUntilReadyAsync());
             Equal(StartupState.Ready, entry.State);
             Equal(2, DataManager.Instance.Get<cfg.Tables>().TbExample.DataList.Count);
-            Equal(2, ManagerContracts.LeasesReleased);
+            Equal(11, ManagerContracts.LeasesReleased);
             ResetEntry();
         });
         Check("invalid table bytes fail startup before any business module runs", () =>
@@ -62,7 +63,7 @@ internal static partial class Program
             ResetEntry();
             var read = ManagerContracts.LoadDataBytes;
             var pending = new TaskCompletionSource<byte[]>();
-            ManagerContracts.LoadDataBytes = (path, token) => path == GameDataPaths.ManifestLocation ? read(path, token) : pending.Task;
+            ManagerContracts.LoadDataBytes = (path, token) => path == "Data/Luban/tbexample" ? pending.Task : read(path, token);
             var entry = CreateEntry();
             Equal(StartupState.Starting, entry.State);
             Task ready = entry.WaitUntilReadyAsync();

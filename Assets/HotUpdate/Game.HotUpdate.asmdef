@@ -17,7 +17,9 @@
     "Game.Framework.Network",
     "Game.Framework.Network.Unity",
     "Game.Data.Generated",
-    "Luban.Runtime"
+    "Luban.Runtime",
+    "Unity.ugui",
+    "Unity.TextMeshPro"
   ],
   "autoReferenced": false,
   "allowUnsafeCode": false

@@ -98,8 +98,7 @@ namespace Game.HotUpdate
 
             var example = tables.TbExample.Get(1);
             host.Log("LUBAN_EXAMPLE " + example.Id + " " + example.Name);
-            // 数据表已经可用；在这里初始化玩法系统、加载首场景或打开登录界面。
-            // 具体业务类放在 Assets/HotUpdate 的其他目录，由这里组织调用。
+            await StartTowerDefenseAsync(tables, token);
         }
 
         private static async Task LoadTablesAsync(CancellationToken token)
@@ -149,6 +148,7 @@ namespace Game.HotUpdate
             stopped = true;
             if (managersStarted)
             {
+                StopTowerDefense();
                 ReleaseManagers();
                 managersStarted = false;
             }

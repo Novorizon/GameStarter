@@ -25,6 +25,7 @@ internal static partial class Program
         Logger.Sink = new ModelLogger();
         Environment.SetEnvironmentVariable("NOVORIZON_SIGNING_KEY_PATH", Path.Combine(Path.GetTempPath(), "novorizon-verification-keys", Guid.NewGuid().ToString("N") + ".xml"));
         GameDataScenarios();
+        TowerDefenseDataScenarios();
         RemoteReleaseScenarios();
         Check("empty startup", () =>
         {
@@ -557,8 +558,9 @@ internal static partial class Program
         Equal("Gameplay", input.InitialMap);
         var data = Game.Framework.Data.DataManager.Instance;
         Equal("示例配置", data.Get<cfg.Tables>().TbExample.Get(1).Name);
-        Equal("Data/Luban/manifest,Data/Luban/tbexample", string.Join(",", ManagerContracts.DataAcquisitions));
-        Equal(2, ManagerContracts.LeasesReleased);
+        True(ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdstage") && ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdcard"));
+            Equal(11, ManagerContracts.DataAcquisitions.Count);
+        Equal(11, ManagerContracts.LeasesReleased);
         Complete(entry.ShutdownAsync());
         True(ManagerContracts.Cleanup.Contains("input"));
         ResetEntry();

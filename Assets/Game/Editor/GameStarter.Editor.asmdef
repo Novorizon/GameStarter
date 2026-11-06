@@ -8,7 +8,10 @@
     "Game.Framework.HotUpdate.Editor",
     "YooAsset",
     "YooAsset.Editor",
-    "Game.Framework.HotUpdate"
+    "Game.Framework.HotUpdate",
+    "Unity.TextMeshPro",
+    "Game.Framework.Core",
+    "Game.Framework.Unity"
   ],
   "includePlatforms": [
     "Editor"

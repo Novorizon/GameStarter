@@ -11,6 +11,12 @@
     <ProjectReference Include="../HotUpdateContracts/HotUpdateContracts.csproj" />
     <ProjectReference Include="../Unity/Unity.csproj" />
     <Compile Include="../../Assets/HotUpdate/*.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/*.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Data/*.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Online/*.cs" />
+    <Compile Include="PresentationBoundary.cs" />
+    <ProjectReference Include="../UGUI/UGUI.csproj" />
+    <ProjectReference Include="../TMP/TMP.csproj" />
     <Compile Include="../Runtime/AssemblyInfo.cs" Link="AssemblyInfo.cs" />
     <ProjectReference Include="../Managers/Resources/Resources.csproj" />
     <ProjectReference Include="../Managers/UI/UI.csproj" />
