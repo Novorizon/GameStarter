@@ -39,12 +39,12 @@ def validate_project(root=ROOT):
     assert modules['com.code-philosophy.hybridclr']['embed']
     assert modules['com.novorizon.framework.hybridclr']['setupMethod'] == 'Configure'
     runtime = json.loads((root / 'Assets/Game/Runtime/GameStarter.Runtime.asmdef').read_text())
-    assert set(runtime['references']) == {'ECS', 'Game.Startup', 'Game.Framework.Config', 'Game.Framework.Network', 'Game.Framework.Resources.YooAsset', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Network.Unity', 'Game.Framework.UI', 'Game.Framework.Input', 'Unity.InputSystem', 'Game.Framework.HotUpdate'}
+    assert set(runtime['references']) == {'ECS', 'Game.Startup', 'Game.Framework.Data', 'Game.Framework.Network', 'Game.Framework.Resources.YooAsset', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Network.Unity', 'Game.Framework.UI', 'Game.Framework.Input', 'Unity.InputSystem', 'Game.Framework.HotUpdate'}
     assert 'Editor' not in runtime.get('includePlatforms', [])
     assert not (root / 'Assets/Resources/NovorizonHotUpdateSettings.json').exists()
     hot = json.loads((root / 'Assets/HotUpdate/Game.HotUpdate.asmdef').read_text())
     assert hot['name'] == 'Game.HotUpdate'
-    assert set(hot['references']) == {'ECS', 'Game.Startup', 'Game.Framework.Config', 'Game.Framework.Resources.YooAsset', 'Game.Framework.Network', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Input', 'Game.Framework.UI', 'Game.Framework.Network.Unity', 'Unity.InputSystem', 'Game.Framework.HotUpdate'}
+    assert set(hot['references']) == {'ECS', 'Game.Startup', 'Game.Framework.Data', 'Game.Framework.Resources.YooAsset', 'Game.Framework.Network', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Input', 'Game.Framework.UI', 'Game.Framework.Network.Unity', 'Unity.InputSystem', 'Game.Framework.HotUpdate'}
     hot_project = root / 'Verification~/HotUpdate/HotUpdate.csproj'
     model = ET.parse(hot_project).getroot()
     assert model.findtext('.//DisableTransitiveProjectReferences', '').lower() == 'true'

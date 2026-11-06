@@ -1,6 +1,10 @@
+Published UnityPackages v0.1.0-preview.22 (20820ba80894448e66cc302e183610e5c3c8782f)
+Command: python3 Tools~/verify.py --dotnet /workspace/.tools/dotnet/dotnet
+No --framework source override; Unity and package APIs use the documented verification models.
+
 PASS project structure, GUIDs and pinned Git dependency references
-Cloning into '/tmp/game-starter-verify-4q42laxz/FrameworkSource'...
-Note: switching to '7dc4127282ef4538c7f28d2eda0fcf0ea4e4be47'.
+Cloning into '/tmp/game-starter-verify-_zluensf/FrameworkSource'...
+Note: switching to '20820ba80894448e66cc302e183610e5c3c8782f'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -31,7 +35,7 @@ Turn off this advice by setting config variable advice.detachedHead to false
   Network -> /workspace/GameStarter/Verification~/Managers/Network/bin/Release/net8.0/Game.Framework.Network.dll
   Gpu -> /workspace/GameStarter/Verification~/Managers/Gpu/bin/Release/net8.0/GpuAnimator.dll
   Audio -> /workspace/GameStarter/Verification~/Managers/Audio/bin/Release/net8.0/Game.Framework.Audio.dll
-  Data -> /workspace/GameStarter/Verification~/Managers/Data/bin/Release/net8.0/Game.Framework.Config.dll
+  Data -> /workspace/GameStarter/Verification~/Managers/Data/bin/Release/net8.0/Game.Framework.Data.dll
   InputSystem -> /workspace/GameStarter/Verification~/Managers/InputSystem/bin/Release/net8.0/Unity.InputSystem.dll
   Input -> /workspace/GameStarter/Verification~/Managers/Input/bin/Release/net8.0/Game.Framework.Input.dll
   HotManager -> /workspace/GameStarter/Verification~/Managers/HotManager/bin/Release/net8.0/GameStarter.HotManager.Model.dll
@@ -44,7 +48,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:01:35.31
+Time Elapsed 00:01:23.93
 PASS empty startup
 PASS ordered async startup and reverse shutdown
 PASS partial initialization failure releases the failing module
@@ -67,7 +71,7 @@ PASS manager initialization failure does not roll back other managers in GameEnt
 PASS a cleanup failure cannot skip later manager releases
 PASS manager asynchronous cleanup stays inside managers
 PASS entry releases global managers without ownership bookkeeping
-PASS entry prepares project input asset and releases both configuration asset leases
+PASS entry prepares project input asset and uses one byte loader and releases each data asset lease
 PASS UI adapter retains prefab leases until the UI factory releases them
 PASS startup module failure leaves manager cleanup to OnExit
 PASS module Tick failure leaves manager cleanup to OnExit

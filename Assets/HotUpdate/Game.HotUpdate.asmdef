@@ -8,7 +8,7 @@
     "Game.Framework.HotUpdate",
     "Game.Framework.Resources.YooAsset",
     "Game.Framework.Audio",
-    "Game.Framework.Config",
+    "Game.Framework.Data",
     "Game.Framework.UI",
     "ECS",
     "GpuAnimator",

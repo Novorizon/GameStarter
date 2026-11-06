@@ -50,7 +50,7 @@ internal static class Program
         Check("a cleanup failure cannot skip later manager releases", EntryCleanupFailure);
         Check("manager asynchronous cleanup stays inside managers", EntryRestartWaitsForCleanup);
         Check("entry releases global managers without ownership bookkeeping", EntryBorrowsManagers);
-        Check("entry prepares project input asset and releases both configuration asset leases", EntryInputAndBinaryConfig);
+        Check("entry prepares project input asset and uses one byte loader and releases each data asset lease", EntryInputAndData);
         Check("UI adapter retains prefab leases until the UI factory releases them", UILeaseOwnership);
         Check("startup module failure leaves manager cleanup to OnExit", EntryModuleFailure);
         Check("module Tick failure leaves manager cleanup to OnExit", EntryTickFailure);
@@ -413,11 +413,11 @@ internal static class Program
         ResetEntry();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("storage,input,scenes,audio,config,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("storage,input,scenes,audio,data,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         True(Game.Framework.Event.EventManager.IsCreated && Game.Framework.Timing.TimerManager.IsCreated);
         _ = GameEntry.Instance;
         _ = GameEntry.Instance;
-        Equal("storage,input,scenes,audio,config,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
+        Equal("storage,input,scenes,audio,data,ui,gpu,entities,worlds,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -427,7 +427,7 @@ internal static class Program
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("storage,input,scenes,audio,config,ui,gpu,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
+        Equal("storage,input,scenes,audio,data,ui,gpu,entities,worlds,network,module", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -467,19 +467,13 @@ internal static class Program
         ResetEntry();
     }
 
-    private sealed class OwnedData : IDisposable
-    {
-        public void Dispose() => ManagerContracts.Cleanup.Add("data");
-    }
-
     private static void EntryShutdownOrder()
     {
         ResetEntry();
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry(resources: true);
-        Game.Framework.Data.DataManager.Instance.Register(new OwnedData());
         Complete(entry.ShutdownAsync());
-        Equal("module,hot,network,worlds,entities,gpu,ui,config,audio,scenes,input,storage,data,resources", string.Join(",", ManagerContracts.Cleanup));
+        Equal("module,hot,network,worlds,entities,gpu,ui,audio,scenes,input,storage,data,resources", string.Join(",", ManagerContracts.Cleanup));
         Complete(entry.ShutdownAsync());
         True(!UI.UIManager.TryGetInstance(out _));
         True(!Game.Framework.Data.DataManager.IsCreated);
@@ -498,7 +492,7 @@ internal static class Program
         True(!ManagerContracts.Cleanup.Contains("audio") && !ManagerContracts.Cleanup.Contains("storage"));
         Complete(entry.ShutdownAsync());
         True(ManagerContracts.Cleanup.Contains("audio") && ManagerContracts.Cleanup.Contains("storage"));
-        True(!Game.Framework.Config.ConfigManager.IsCreated);
+        True(!Game.Framework.Data.DataManager.IsCreated);
         True(!Game.Framework.Scenes.SceneManager.IsCreated);
         ResetEntry();
     }
@@ -540,21 +534,19 @@ internal static class Program
     {
         ResetEntry();
         var ui = UI.UIManager.Instance;
-        var config = Game.Framework.Config.ConfigManager.Instance;
-        config.Initialize();
-        var input = Game.Framework.Input.InputManager.Instance;
         var data = Game.Framework.Data.DataManager.Instance;
+        data.Initialize();
+        var input = Game.Framework.Input.InputManager.Instance;
         var entry = CreateEntry();
         Complete(entry.ShutdownAsync());
         True(!UI.UIManager.TryGetInstance(out _));
-        True(!Game.Framework.Config.ConfigManager.IsCreated);
         True(!Game.Framework.Data.DataManager.IsCreated);
         True(!Game.Framework.Input.InputManager.IsCreated);
         True(ManagerContracts.Cleanup.Contains("input") && ManagerContracts.Cleanup.Contains("ui"));
         ResetEntry();
     }
 
-    private static void EntryInputAndBinaryConfig()
+    private static void EntryInputAndData()
     {
         ResetEntry();
         var asset = new UnityEngine.InputSystem.InputActionAsset();
@@ -564,9 +556,9 @@ internal static class Program
         var input = Game.Framework.Input.InputManager.Instance;
         True(ReferenceEquals(asset, input.Source));
         Equal("Gameplay", input.InitialMap);
-        var config = Game.Framework.Config.ConfigManager.Instance;
-        Complete(config.TextLoader("manifest", default));
-        Complete(config.BytesLoader("tbexample", default));
+        var data = Game.Framework.Data.DataManager.Instance;
+        Complete(data.Loader("manifest", default));
+        Complete(data.Loader("tbexample", default));
         Equal(2, ManagerContracts.LeasesReleased);
         Complete(entry.ShutdownAsync());
         True(ManagerContracts.Cleanup.Contains("input"));
