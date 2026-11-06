@@ -3,6 +3,7 @@
   "rootNamespace": "Game.HotUpdate",
   "references": [
     "GameStarter.Runtime",
+    "Game.Framework.Unity",
     "Game.Framework.HotUpdate"
   ],
   "autoReferenced": false,

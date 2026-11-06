@@ -7,9 +7,13 @@
     "Game.Framework.Network",
     "Game.Framework.Network.Unity",
     "Game.Framework.Resources.YooAsset",
+    "Game.Framework.Audio",
+    "Game.Framework.Config",
     "Game.Framework.UI",
     "ECS",
-    "GpuAnimator"
+    "GpuAnimator",
+    "Game.Framework.Input",
+    "Unity.InputSystem"
   ],
   "autoReferenced": true,
   "allowUnsafeCode": false

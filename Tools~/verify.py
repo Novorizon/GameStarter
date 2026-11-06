@@ -9,6 +9,7 @@ import re
 import subprocess
 import tarfile
 import tempfile
+import xml.etree.ElementTree as ET
 from urllib.parse import urlsplit, urlunsplit, parse_qs
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +26,12 @@ def validate_project(root=ROOT):
     for spec in catalog:
         assert manifest['dependencies'][spec['id']] == spec['source'], spec['id']
     assert not any(value.startswith('file:') for value in manifest['dependencies'].values())
+    assert manifest['dependencies']['com.unity.inputsystem'] == '1.11.2'
+    assert re.search(r'^  activeInputHandler: 2$', (root / 'ProjectSettings/ProjectSettings.asset').read_text(), re.M)
+    input_asset = json.loads((root / 'Assets/Resources/InputActions.inputactions').read_text())
+    assert input_asset['maps'][0]['name'] == 'Gameplay'
+    assert {action['name'] for action in input_asset['maps'][0]['actions']} == {'Move', 'Confirm'}
+    assert {scheme['name'] for scheme in input_asset['controlSchemes']} == {'KeyboardMouse', 'Gamepad'}
     for spec in catalog:
         assert re.fullmatch(r'https://github.com/[^/]+/[^#]+#(?:v[0-9][A-Za-z0-9.\-]*|[a-f0-9]{40})', spec['source']), spec['id']
         for dependency in spec['dependencies']:
@@ -32,7 +39,7 @@ def validate_project(root=ROOT):
     assert modules['com.code-philosophy.hybridclr']['embed']
     assert modules['com.novorizon.framework.hybridclr']['setupMethod'] == 'Configure'
     runtime = json.loads((root / 'Assets/Game/Runtime/GameStarter.Runtime.asmdef').read_text())
-    assert set(runtime['references']) == {'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Network', 'Game.Framework.Network.Unity', 'Game.Framework.Resources.YooAsset', 'Game.Framework.UI', 'ECS', 'GpuAnimator'}
+    assert set(runtime['references']) == {'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Network', 'Game.Framework.Network.Unity', 'Game.Framework.Resources.YooAsset', 'Game.Framework.Audio', 'Game.Framework.Config', 'Game.Framework.UI', 'ECS', 'GpuAnimator', 'Game.Framework.Input', 'Unity.InputSystem'}
     assert 'Editor' not in runtime.get('includePlatforms', [])
     hot_settings = json.loads((root / 'Assets/Resources/NovorizonHotUpdateSettings.json').read_text())
     hot = json.loads((root / 'Assets/HotUpdate/Game.HotUpdate.asmdef').read_text())
@@ -40,7 +47,18 @@ def validate_project(root=ROOT):
     assert hot_settings['entryAssembly'] == hot['name'] == 'Game.HotUpdate'
     assert hot_settings['entryType'] == 'Game.HotUpdate.GameModule'
     assert hot_settings['hotUpdateRoot'] == 'Assets/HotUpdate'
-    assert set(hot['references']) == {'GameStarter.Runtime', 'Game.Framework.HotUpdate'}
+    assert set(hot['references']) == {'GameStarter.Runtime', 'Game.Framework.HotUpdate', 'Game.Framework.Unity'}
+    hot_project = root / 'Verification~/HotUpdate/HotUpdate.csproj'
+    model = ET.parse(hot_project).getroot()
+    assert model.findtext('.//DisableTransitiveProjectReferences', '').lower() == 'true'
+    model_references = set()
+    for reference in model.findall('.//ProjectReference'):
+        project = (hot_project.parent / reference.attrib['Include']).resolve()
+        # Unity automatically supplies engine references unless noEngineReferences is enabled.
+        if project == (root / 'Verification~/Unity/Unity.csproj').resolve():
+            continue
+        model_references.add(ET.parse(project).getroot().findtext('.//AssemblyName'))
+    assert model_references == set(hot['references']), 'Verification must use the same direct references as the Unity asmdef'
     assert not hot['autoReferenced']
     assert hot['name'] not in runtime['references'], 'AOT cannot reference hot update assemblies'
     guids = set()
