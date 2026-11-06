@@ -321,7 +321,7 @@ namespace Game.Editor
 
     public sealed class GameDataFilterRule : IFilterRule
     {
-        public string FindAssetType => "t:TextAsset";
+        public string FindAssetType => "TextAsset";
 
         public bool IsCollectAsset(FilterRuleData data)
         {
