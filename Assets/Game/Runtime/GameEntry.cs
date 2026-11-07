@@ -9,197 +9,112 @@ using UnityEngine.InputSystem;
 
 namespace Game
 {
-    /// <summary>AOT 入口：选择发行并准备资源，再交给 HotGame 初始化系统与业务。</summary>
+    /// <summary>场景入口：配置开关，按顺序初始化 Manager，然后执行热更。</summary>
     public sealed partial class GameEntry : MonoSingleton<GameEntry>
     {
         [SerializeField]
-        private StartupModule[] startupModules = Array.Empty<StartupModule>();
+        private bool initializeHotUpdate = true;
+        [SerializeField]
+        private ResourceMode resourceMode = ResourceMode.Online;
+        [SerializeField]
+        private bool simulateResourcesInEditor = true;
         [SerializeField]
         private InputActionAsset inputActions;
         [SerializeField]
         private string initialInputMap = "Gameplay";
-        // 热更由本入口显式启动；配置直接写 C#，不读取启动 JSON。
-        [SerializeField]
-        private bool initializeHotUpdate = true;
-        private GameSession session;
+        private GameHotUpdate hotUpdate;
+        private CancellationTokenSource lifetime;
         private Task startupTask;
-        private bool startupFailed;
-        private bool startupReady;
-        public ResourceDownloadProgress DownloadProgress { get; private set; }
-        public string StartupMessage { get; private set; }
+        private string startupError;
 
-        public StartupState State
-        {
-            get
-            {
-                if (session == null)
-                {
-                    return StartupState.NotStarted;
-                }
-
-                if (startupFailed || session.State == StartupState.Failed)
-                {
-                    return StartupState.Failed;
-                }
-
-                if (session.State == StartupState.Ready && startupReady)
-                {
-                    return StartupState.Ready;
-                }
-
-                return session.State == StartupState.Stopped ? StartupState.Stopped : StartupState.Starting;
-            }
-        }
+        public StartupState State { get; private set; }
+        public ResourceDownloadProgress DownloadProgress => hotUpdate?.DownloadProgress ?? default;
+        public string StartupMessage => startupError ?? hotUpdate?.StartupMessage;
 
         protected override void OnStart()
         {
-            startupFailed = false;
-            startupReady = false;
-            session = new GameSession(Debug.LogException);
-            startupTask = InitializeAsync(session);
+            lifetime = new CancellationTokenSource();
+            hotUpdate = new GameHotUpdate(resourceMode, simulateResourcesInEditor);
+            startupError = null;
+            State = StartupState.Starting;
+            startupTask = InitializeAsync(hotUpdate, lifetime.Token);
+            ObserveNativeStartup(hotUpdate);
         }
 
-        protected override void OnExit()
+        private async Task InitializeAsync(GameHotUpdate current, CancellationToken token)
         {
-            Shutdown();
-        }
-
-        private void Shutdown()
-        {
-            var previous = session;
-            session = null;
-            previous?.Dispose();
-            HotUpdateManager.Release();
-            ResourceManager.Release();
-        }
-
-        private async Task InitializeAsync(GameSession current)
-        {
-            Task InitializeModulesAsync(CancellationToken token)
-            {
-                return TaskUtil.WaitAsync(current.StartAsync(startupModules), token);
-            }
-
             try
             {
-                StartupMessage = "Selecting code and resource versions";
-                var options = new GameStartupOptions(inputActions, initialInputMap, InitializeModulesAsync);
-                var settings = GameReleaseConfiguration.CreateSettings();
-                settings.loadFromCompiledAssemblies = !initializeHotUpdate;
-#if NOVORIZON_COMPILED_GAME
-                settings.loadFromCompiledAssemblies = true;
-#endif
-                settings.prepareContentAsync = PrepareResourcesAsync;
-                settings.loadCodeAsync = LoadCodeAsync;
-                await HotUpdateManager.Instance.InitializeAsync(settings, options, current.Token);
-                current.Token.ThrowIfCancellationRequested();
-                startupReady = true;
-                StartupMessage = "Ready";
+                // 先初始化资源文件系统；发行版本、清单和下载稍后由热更流程决定。
+                if (!await ResourceManager.Instance.InitializePackageAsync(current.CreateResourceParameters(), token))
+                {
+                    throw new InvalidOperationException("Resource system initialization failed.");
+                }
+
+                token.ThrowIfCancellationRequested();
+                var settings = current.CreateSettings(initializeHotUpdate);
+                var options = new GameStartupOptions(inputActions, initialInputMap);
+                HotUpdateManager.Instance.Initialize(settings, options, token);
+                await current.RunAsync(token);
+                token.ThrowIfCancellationRequested();
+                State = StartupState.Ready;
                 Debug.Log("GAME_STARTER_READY");
-                NativeSmokeExit(0);
             }
-            catch (OperationCanceledException) when (current.Token.IsCancellationRequested)
+            catch (OperationCanceledException) when (token.IsCancellationRequested)
             {
             }
             catch (Exception error)
             {
-                if (ReferenceEquals(session, current))
+                if (ReferenceEquals(hotUpdate, current))
                 {
-                    startupFailed = true;
-                    StartupMessage = error.Message;
+                    State = StartupState.Failed;
+                    startupError = error.Message;
                     Debug.LogException(error);
-                    NativeSmokeExit(1);
                 }
             }
         }
 
-        private async Task PrepareResourcesAsync(ReleaseContentContext content, CancellationToken token)
+        protected override void OnExit()
         {
-            StartupMessage = "Preparing resources " + content.PackageVersion;
-            var resources = ResourceManager.Instance;
-#if UNITY_EDITOR
-            if (resources.Initialized && resources.PackageVersion != content.PackageVersion)
+            var stopping = lifetime;
+            lifetime = null;
+            hotUpdate?.Dispose();
+            hotUpdate = null;
+            startupTask = null;
+            State = StartupState.NotStarted;
+            try
             {
-                await resources.ShutdownAsync();
+                stopping?.Cancel();
+            }
+            catch (Exception error)
+            {
+                Debug.LogException(error);
             }
 
-#endif
-
-            var options = new ResourceInitializationOptions
-            {
-                PackageVersion = content.PackageVersion,
-                DownloadAll = true,
-                ConcurrentDownloads = 4,
-                FailedTryAgain = 2,
-                Progress = new Progress<ResourceDownloadProgress>(value =>
-                {
-                    if (token.IsCancellationRequested || startupReady)
-                    {
-                        return;
-                    }
-
-                    DownloadProgress = value;
-                    StartupMessage = "Downloading resources " + value.CompletedCount + "/" + value.TotalCount;
-                })
-            };
-#if UNITY_EDITOR
-            options.Parameters = YooAssetsSettings.CreateEditorSimulateModeParameters();
-            options.PackageVersion = null;
-#else
-            await ConfigurePlayerResourcesAsync(resources, options, content, token);
-#endif
-            if (!await resources.InitializeAsync(options, token))
-            {
-                throw new InvalidOperationException("Resource initialization/download failed for version " + content.PackageVersion);
-            }
+            HotUpdateManager.Release();
+            ResourceManager.Release();
+            stopping?.Dispose();
         }
 
-        private static async Task<byte[]> LoadCodeAsync(
-            ReleaseContentContext content,
-            ReleaseFile file,
-            CancellationToken token)
+        public async Task WaitUntilReadyAsync(CancellationToken token = default)
         {
-            using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(content.CodeLocation(file), token))
+            var current = hotUpdate;
+            var startup = startupTask;
+            if (current == null || startup == null)
             {
-                return asset.Asset.bytes;
-            }
-        }
-
-        // 单独保留 Player 文件系统准备，Editor 模型验证也编译并测试该分支。
-        internal static async Task ConfigurePlayerResourcesAsync(
-            ResourceManager resources,
-            ResourceInitializationOptions options,
-            ReleaseContentContext content,
-            CancellationToken token)
-        {
-            // 此时尚未创建 HotGame，DefaultPackage 由入口独占。
-            // 回退时必须销毁旧 Host 文件系统，才能改用内置资源且不依赖下载站。
-            var previousPackage = YooAsset.YooAssets.TryGetPackage(GameDataPaths.PackageName);
-            if (previousPackage != null && previousPackage.InitializeStatus != YooAsset.EOperationStatus.None)
-            {
-                await resources.ShutdownAsync();
-                var destroy = previousPackage.DestroyAsync();
-                await destroy.Task;
-                token.ThrowIfCancellationRequested();
-                if (destroy.Status != YooAsset.EOperationStatus.Succeed)
-                {
-                    throw new InvalidOperationException("Could not reset the previous resource package: " + destroy.Error);
-                }
+                throw new InvalidOperationException("GameEntry startup has not begun.");
             }
 
-            if (content.IsPackaged || string.IsNullOrWhiteSpace(content.PackageVersion))
+            await TaskUtil.WaitAsync(startup, token);
+            token.ThrowIfCancellationRequested();
+            if (!ReferenceEquals(hotUpdate, current))
             {
-                options.Parameters = YooAssetsSettings.CreateOfflinePlayModeParameters();
+                throw new OperationCanceledException("GameEntry startup has ended.");
             }
-            else
-            {
-                if (content.PackageName != GameDataPaths.PackageName)
-                {
-                    throw new InvalidOperationException("The selected release uses another resource package.");
-                }
 
-                options.Parameters = YooAssetsSettings.CreateHostPlayModeParameters(
-                    GameReleaseConfiguration.ResourceUrl(content.Platform, content.PackageName));
+            if (State != StartupState.Ready)
+            {
+                throw new InvalidOperationException("Game startup failed. Check Console for initialization errors.");
             }
         }
 
@@ -219,36 +134,6 @@ namespace Game
             }
         }
 
-        public async Task WaitUntilReadyAsync(CancellationToken token = default)
-        {
-            var current = session;
-            if (current == null || startupTask == null)
-            {
-                throw new InvalidOperationException("GameEntry startup has not begun.");
-            }
-
-            await TaskUtil.WaitAsync(startupTask, token);
-            token.ThrowIfCancellationRequested();
-            if (!ReferenceEquals(session, current))
-            {
-                throw new OperationCanceledException("GameEntry startup has ended.");
-            }
-
-            if (State != StartupState.Ready)
-            {
-                throw new InvalidOperationException("GameEntry startup failed. Check Console for initialization errors.");
-            }
-        }
-
-        private void Update()
-        {
-            if (startupReady)
-            {
-                session?.Tick(Time.deltaTime, Time.unscaledDeltaTime);
-            }
-        }
-
-        /// <summary>主动退出入口。各 Manager 的异步释放在各自内部继续完成。</summary>
         public Task ShutdownAsync()
         {
             Dispose();
@@ -256,7 +141,7 @@ namespace Game
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void ResumeSession()
+        private static void ResumeEntry()
         {
             foreach (var entry in FindObjectsOfType<GameEntry>(true))
             {

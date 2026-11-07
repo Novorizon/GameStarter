@@ -1,0 +1,120 @@
+{
+    "success": true,
+    "sampleCount": 8,
+    "assemblies": [
+        {
+            "name": "ECS.QuickStart",
+            "definition": "Assets/NovorizonSamples/com_novorizon_ecs/QuickStart/ECS.QuickStart.asmdef",
+            "editorDll": "Library/ScriptAssemblies/ECS.QuickStart.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_ecs/QuickStart/QuickStartDemo.cs",
+                "Assets/NovorizonSamples/com_novorizon_ecs/QuickStart/QuickStartComponents.cs",
+                "Assets/NovorizonSamples/com_novorizon_ecs/QuickStart/QuickStartSession.cs",
+                "Assets/NovorizonSamples/com_novorizon_ecs/QuickStart/QuickStartMovementSystem.cs"
+            ],
+            "player": true
+        },
+        {
+            "name": "Game.Framework.Demo.Editor",
+            "definition": "Assets/NovorizonSamples/com_novorizon_framework/Demo/Editor/Game.Framework.Demo.Editor.asmdef",
+            "editorDll": "Library/ScriptAssemblies/Game.Framework.Demo.Editor.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_framework/Demo/Editor/FrameworkDemoSceneMenu.cs"
+            ],
+            "player": false
+        },
+        {
+            "name": "Game.Framework.Demo",
+            "definition": "Assets/NovorizonSamples/com_novorizon_framework/Demo/Runtime/Game.Framework.Demo.asmdef",
+            "editorDll": "Library/ScriptAssemblies/Game.Framework.Demo.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_framework/Demo/Runtime/DemoReferenceContext.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework/Demo/Runtime/DemoSession.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework/Demo/Runtime/CoreDemoPooledItem.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework/Demo/Runtime/FrameworkDemo.cs"
+            ],
+            "player": true
+        },
+        {
+            "name": "Game.Framework.UI.Demo.Editor",
+            "definition": "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Editor/Game.Framework.UI.Demo.Editor.asmdef",
+            "editorDll": "Library/ScriptAssemblies/Game.Framework.UI.Demo.Editor.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Editor/UIDemoSceneMenu.cs"
+            ],
+            "player": false
+        },
+        {
+            "name": "Game.Framework.UI.Demo",
+            "definition": "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/Game.Framework.UI.Demo.asmdef",
+            "editorDll": "Library/ScriptAssemblies/Game.Framework.UI.Demo.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoPanel.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoInventoryPage.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoAssetLoader.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoWidgets.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoToast.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoConfirmPopup.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoLoadingOverlay.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoPopup.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoHomePage.cs",
+                "Assets/NovorizonSamples/com_novorizon_framework_ui/Demo/Runtime/UIDemoLauncher.cs"
+            ],
+            "player": true
+        },
+        {
+            "name": "Game.Framework.Resources.Demo.Editor",
+            "definition": "Assets/NovorizonSamples/com_novorizon_framework_yooasset/Demo/Editor/Game.Framework.Resources.Demo.Editor.asmdef",
+            "editorDll": "Library/ScriptAssemblies/Game.Framework.Resources.Demo.Editor.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_framework_yooasset/Demo/Editor/ResourceDemoSceneMenu.cs"
+            ],
+            "player": false
+        },
+        {
+            "name": "Game.Framework.Resources.Demo",
+            "definition": "Assets/NovorizonSamples/com_novorizon_framework_yooasset/Demo/Runtime/Game.Framework.Resources.Demo.asmdef",
+            "editorDll": "Library/ScriptAssemblies/Game.Framework.Resources.Demo.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_framework_yooasset/Demo/Runtime/ResourceDemoController.cs"
+            ],
+            "player": true
+        },
+        {
+            "name": "GpuAnimator.Samples.BasicPlayback",
+            "definition": "Assets/NovorizonSamples/com_novorizon_gpuanimator/BasicPlayback/GpuAnimator.Samples.BasicPlayback.asmdef",
+            "editorDll": "Library/ScriptAssemblies/GpuAnimator.Samples.BasicPlayback.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_gpuanimator/BasicPlayback/GpuAnimatorBasicExample.cs"
+            ],
+            "player": true
+        },
+        {
+            "name": "GpuAnimator.Samples.ManualCrowd",
+            "definition": "Assets/NovorizonSamples/com_novorizon_gpuanimator/ManualCrowd/GpuAnimator.Samples.ManualCrowd.asmdef",
+            "editorDll": "Library/ScriptAssemblies/GpuAnimator.Samples.ManualCrowd.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_gpuanimator/ManualCrowd/GpuAnimatorCrowdExample.cs"
+            ],
+            "player": true
+        },
+        {
+            "name": "GpuAnimator.Samples.FrameworkPool",
+            "definition": "Assets/NovorizonSamples/com_novorizon_gpuanimator/FrameworkPool/GpuAnimator.Samples.FrameworkPool.asmdef",
+            "editorDll": "Library/ScriptAssemblies/GpuAnimator.Samples.FrameworkPool.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_gpuanimator/FrameworkPool/GpuAnimatorPool.cs"
+            ],
+            "player": true
+        },
+        {
+            "name": "RTree.Samples",
+            "definition": "Assets/NovorizonSamples/com_novorizon_rtree/SpatialQueries/RTree.Samples.asmdef",
+            "editorDll": "Library/ScriptAssemblies/RTree.Samples.dll",
+            "sourceFiles": [
+                "Assets/NovorizonSamples/com_novorizon_rtree/SpatialQueries/SpatialQueryExample.cs"
+            ],
+            "player": true
+        }
+    ]
+}

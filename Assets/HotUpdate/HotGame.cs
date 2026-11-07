@@ -85,13 +85,8 @@ namespace Game.HotUpdate
 
         private async Task StartGameAsync(CancellationToken token)
         {
-            // 先把完整 cfg.Tables 交给 DataManager，再允许模块和业务访问表。
+            // 先把完整 cfg.Tables 交给 DataManager，再启动业务。
             await LoadTablesAsync(token);
-            if (options.InitializeModulesAsync != null)
-            {
-                await options.InitializeModulesAsync(token);
-            }
-
             token.ThrowIfCancellationRequested();
             var tables = DataManager.Instance.Get<cfg.Tables>();
             ValidateNativeSchema(tables);

@@ -456,14 +456,17 @@ namespace Game.HotUpdate.TowerDefense.Domain
         {
             Require(value.InitialGold >= 0 && value.BaseHealth > 0, "Invalid initial currency/base health.");
             Require(value.Routes != null && value.Routes.Length > 0, "At least one route is required.");
-            Require(value.BuildSlots != null && value.Towers != null && value.Enemies != null && value.Cards != null,
-                "Configuration arrays cannot be null.");
-            Require(value.Routes.Length <= 64 && value.BuildSlots.Length <= 512 && value.Towers.Length <= 256
-                && value.Enemies.Length <= 256 && value.Cards.Length <= 1000, "Definition count exceeds supported limits.");
+            Require(value.BuildSlots != null && value.Towers != null && value.Enemies != null && value.Cards != null, "Configuration arrays cannot be null.");
+            Require(
+                value.Routes.Length <= 64 && value.BuildSlots.Length <= 512 && value.Towers.Length <= 256
+                    && value.Enemies.Length <= 256 && value.Cards.Length <= 1000,
+                "Definition count exceeds supported limits.");
             Require(value.Waves != null && value.Waves.Length > 0 && value.Waves.Length <= 1000, "Expected 1–1000 waves.");
-            Require(value.Routes.All(item => item != null) && value.BuildSlots.All(item => item != null)
-                && value.Towers.All(item => item != null) && value.Enemies.All(item => item != null)
-                && value.Waves.All(item => item != null) && value.Cards.All(item => item != null), "Definition rows cannot be null.");
+            Require(
+                value.Routes.All(item => item != null) && value.BuildSlots.All(item => item != null)
+                    && value.Towers.All(item => item != null) && value.Enemies.All(item => item != null)
+                    && value.Waves.All(item => item != null) && value.Cards.All(item => item != null),
+                "Definition rows cannot be null.");
             Unique(value.Routes.Select(item => item.Id));
             Unique(value.BuildSlots.Select(item => item.Id));
             Unique(value.Towers.Select(item => item.Id));
@@ -488,43 +491,44 @@ namespace Game.HotUpdate.TowerDefense.Domain
 
             foreach (var tower in value.Towers)
             {
-                Require(tower.BuildCost > 0 && tower.UpgradeCost > 0 && tower.UpgradeCost <= 1000000,
-                    "Tower costs must be positive and bounded.");
-                Require(tower.Damage > 0 && tower.Damage <= 1000000 && tower.Range > 0 && tower.Range <= 1000000,
-                    "Invalid tower damage/range.");
-                Require(tower.MaxLevel >= 1 && tower.MaxLevel <= 20 && tower.AttackIntervalTicks > 0 && tower.AttackIntervalTicks <= 1000000,
+                Require(tower.BuildCost > 0 && tower.UpgradeCost > 0 && tower.UpgradeCost <= 1000000, "Tower costs must be positive and bounded.");
+                Require(tower.Damage > 0 && tower.Damage <= 1000000 && tower.Range > 0 && tower.Range <= 1000000, "Invalid tower damage/range.");
+                Require(
+                    tower.MaxLevel >= 1 && tower.MaxLevel <= 20 && tower.AttackIntervalTicks > 0 && tower.AttackIntervalTicks <= 1000000,
                     "Invalid tower level/cooldown.");
-                Require(tower.UpgradeDamage >= 0 && tower.UpgradeDamage <= 1000000 && tower.UpgradeRange >= 0 && tower.UpgradeRange <= 1000000,
+                Require(
+                    tower.UpgradeDamage >= 0 && tower.UpgradeDamage <= 1000000 && tower.UpgradeRange >= 0 && tower.UpgradeRange <= 1000000,
                     "Invalid tower upgrade modifiers.");
             }
 
             foreach (var enemy in value.Enemies)
             {
-                Require(enemy.Health > 0 && enemy.SpeedPerTick > 0 && enemy.SpeedPerTick <= 1000000,
-                    "Invalid enemy health/speed.");
+                Require(enemy.Health > 0 && enemy.SpeedPerTick > 0 && enemy.SpeedPerTick <= 1000000, "Invalid enemy health/speed.");
                 Require(enemy.GoldReward >= 0 && enemy.BaseDamage > 0, "Invalid enemy rewards/base damage.");
             }
 
             foreach (var wave in value.Waves)
             {
-                Require(wave.RewardGold >= 0 && wave.Groups != null && wave.Groups.Length > 0 && wave.Groups.Length <= 1000,
-                    "Invalid wave.");
-                Require(wave.Groups.All(item => item != null) && wave.Groups.Sum(item => (long)item.Count) <= 10000,
+                Require(wave.RewardGold >= 0 && wave.Groups != null && wave.Groups.Length > 0 && wave.Groups.Length <= 1000, "Invalid wave.");
+                Require(
+                    wave.Groups.All(item => item != null) && wave.Groups.Sum(item => (long)item.Count) <= 10000,
                     "Wave spawn rows/count exceed supported limits.");
                 foreach (var group in wave.Groups)
                 {
-                    Require(value.Enemies.Any(enemy => enemy.Id == group.EnemyId) && value.Routes.Any(route => route.Id == group.RouteId),
+                    Require(
+                        value.Enemies.Any(enemy => enemy.Id == group.EnemyId) && value.Routes.Any(route => route.Id == group.RouteId),
                         "Spawn references missing enemy/route.");
-                    Require(group.Count > 0 && group.Count <= 10000 && group.StartTick >= 0 && group.IntervalTicks > 0
-                        && (long)group.StartTick + (long)group.Count * group.IntervalTicks <= 10000000, "Invalid spawn timing/count.");
+                    Require(
+                        group.Count > 0 && group.Count <= 10000 && group.StartTick >= 0 && group.IntervalTicks > 0
+                            && (long)group.StartTick + (long)group.Count * group.IntervalTicks <= 10000000,
+                        "Invalid spawn timing/count.");
                 }
             }
 
             Require(value.Cards.Count(card => card.MaxStacks == 0) >= 3, "Three repeatable cards are required for a full draft.");
             foreach (var card in value.Cards)
             {
-                Require(Enum.IsDefined(typeof(CardEffect), card.Effect) && card.Value > 0 && card.Value <= 1000000,
-                    "Invalid card effect/value.");
+                Require(Enum.IsDefined(typeof(CardEffect), card.Effect) && card.Value > 0 && card.Value <= 1000000, "Invalid card effect/value.");
                 Require(card.Weight > 0 && card.Weight <= 1000000 && card.MaxStacks >= 0, "Invalid card weight/stack limit.");
             }
 

@@ -98,7 +98,9 @@ namespace Game.Editor
                             || !File.Exists(assembly.outputPath)
                             || !assembly.sourceFiles.Any(file => Path.GetFullPath(file).StartsWith(prefix, StringComparison.Ordinal)))
                         {
-                            throw new InvalidOperationException("Sample assembly was not compiled from its imported sources: " + expected.name + " (" + target + "). Import samples, then restart Unity before compiling.");
+                            throw new InvalidOperationException(
+                                "Sample assembly was not compiled from its imported sources: " + expected.name + " (" + target
+                                    + "). Import samples, then restart Unity before compiling.");
                         }
 
                         bool editorOnly = expected.includePlatforms != null && expected.includePlatforms.SequenceEqual(new[] { "Editor" });

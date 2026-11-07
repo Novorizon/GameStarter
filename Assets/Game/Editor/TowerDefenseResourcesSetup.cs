@@ -33,12 +33,7 @@ namespace Game.Editor
             }
         }
 
-        private static bool SetGroup(
-            AssetBundleCollectorPackage package,
-            string name,
-            string tag,
-            string path,
-            string packRule)
+        private static bool SetGroup(AssetBundleCollectorPackage package, string name, string tag, string path, string packRule)
         {
             var group = package.Groups.SingleOrDefault(value => value.GroupName == name);
             bool changed = false;

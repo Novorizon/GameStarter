@@ -79,11 +79,12 @@ internal static partial class Program
                     packageName = "DefaultPackage",
                     version = "baseline-resources"
                 }, true);
-                var options = new Game.Resource.ResourceInitializationOptions { PackageVersion = content.PackageVersion };
-                Complete(GameEntry.ConfigurePlayerResourcesAsync(Game.Resource.ResourceManager.Instance, options, content, System.Threading.CancellationToken.None));
+                using var startup = new GameHotUpdate(ResourceMode.Online, false);
+                var configuring = startup.ConfigureResourceModeAsync(content, System.Threading.CancellationToken.None);
+                Complete(configuring);
                 Equal(1, previous.Destroyed);
-                Equal("baseline-resources", options.PackageVersion);
-                True(options.Parameters is YooAsset.OfflinePlayModeParameters);
+                Equal("baseline-resources", content.PackageVersion);
+                True(configuring.GetAwaiter().GetResult() is YooAsset.OfflinePlayModeParameters);
             }
             finally
             {

@@ -150,8 +150,17 @@ namespace Game.Editor
                 string cli = string.IsNullOrWhiteSpace(settings.lubanDll)
                     ? await LubanExporter.EnsureToolAsync(root, settings.dotnetExecutable)
                     : Path.GetFullPath(settings.lubanDll);
-                await LubanExporter.GenerateAsync(root, settings.configFile, settings.target, settings.codeOutput,
-                    settings.dataOutput, settings.locationPrefix, settings.dotnetExecutable, cli, settings.generatedAssembly, settings.generatedAutoReferenced);
+                await LubanExporter.GenerateAsync(
+                    root,
+                    settings.configFile,
+                    settings.target,
+                    settings.codeOutput,
+                    settings.dataOutput,
+                    settings.locationPrefix,
+                    settings.dotnetExecutable,
+                    cli,
+                    settings.generatedAssembly,
+                    settings.generatedAutoReferenced);
                 RecordGeneratedSources();
                 AssetDatabase.Refresh();
                 Debug.Log("LUBAN_GENERATED. YooAsset collector and runtime table loading are already configured.");
@@ -196,7 +205,8 @@ namespace Game.Editor
         {
             if (generating || !File.Exists(GameDataPaths.SourceStamp) || File.ReadAllText(GameDataPaths.SourceStamp) != SourceFingerprint())
             {
-                throw new InvalidOperationException("Luban sources have changed. Run Tools/Novorizon/GameStarter/1. Generate Tables, then wait for compilation.");
+                throw new InvalidOperationException(
+                    "Luban sources have changed. Run Tools/Novorizon/GameStarter/1. Generate Tables, then wait for compilation.");
             }
 
             if (!File.Exists(GameDataPaths.DataOutput + "/manifest.json") || !File.Exists(GameDataPaths.CodeOutput + "/Tables.cs"))
@@ -283,8 +293,10 @@ namespace Game.Editor
         private static string BuiltinFingerprint()
         {
             string package = Path.Combine(AssetBundleBuilderHelper.GetStreamingAssetsRoot(), GameDataPaths.PackageName);
-            return DirectoryFingerprint(package, file => file.EndsWith(".version", StringComparison.Ordinal)
-                || file.EndsWith(".hash", StringComparison.Ordinal));
+            return DirectoryFingerprint(
+                package,
+                file => file.EndsWith(".version", StringComparison.Ordinal)
+                    || file.EndsWith(".hash", StringComparison.Ordinal));
         }
 
         private static string BuildFingerprint()

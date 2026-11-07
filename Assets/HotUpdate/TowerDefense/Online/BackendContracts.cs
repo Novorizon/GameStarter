@@ -45,12 +45,7 @@ namespace Game.HotUpdate.TowerDefense.Online
         public DateTimeOffset AccessExpiresAtUtc { get; }
         public DateTimeOffset RefreshExpiresAtUtc { get; }
 
-        public SessionTokens(
-            string playerId,
-            string accessToken,
-            string refreshToken,
-            DateTimeOffset accessExpiresAtUtc,
-            DateTimeOffset refreshExpiresAtUtc)
+        public SessionTokens(string playerId, string accessToken, string refreshToken, DateTimeOffset accessExpiresAtUtc, DateTimeOffset refreshExpiresAtUtc)
         {
             PlayerId = LoginRequest.Required(playerId, nameof(playerId));
             AccessToken = LoginRequest.Required(accessToken, nameof(accessToken));

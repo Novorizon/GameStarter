@@ -1,6 +1,6 @@
 # GameStarter
 
-独立 Unity 2022.3.62f1 启动工程。本分支实现塔防业务原型，依赖 UnityPackages 固定提交 `afc98c6424844d0032e3138f31b7c994e6722470`，包含 Timer 更新驱动生命周期修复（SDK PR #14）；包元数据预备版本 preview.27 尚未发布标签。工程通过固定 Git 来源管理依赖，不依赖相邻仓库或本地 file: 路径。
+独立 Unity 2022.3.62f1 启动工程。GameEntry 配置开关并顺序初始化，GameHotUpdate 执行更新步骤，HotGame 组织业务。依赖 UnityPackages 固定提交 `a3e531d0ed3ac11748324bc655f1b29cc3113821`；包元数据预备版本 preview.28 尚未发布标签。工程使用固定 Git 来源，不依赖相邻仓库或本地 file: 路径。
 
 ## 从哪里开始
 
@@ -15,23 +15,38 @@
 
 打开 Assets/Scenes/Bootstrap.unity 后 Play，日志包含 LUBAN_EXAMPLE、HOT_UPDATE_READY、GAME_STARTER_READY。
 
+Player 的热更路径如下；Editor 使用已编译程序集，默认启用 YooAsset 编辑器模拟模式。
+
 ```text
-GameEntry
-  → HotUpdateManager 选择并验证发行
-  → 准备精确版本资源；内置发行读取离线资源
-  → 加载 AOT 元数据与热更 DLL（Editor 使用已编译程序集）
-  → HotGame.InitializeManagersAsync
-  → HotGame.StartGameAsync：加载 Luban 表、可选模块、业务
-  → ReportReady
+Unity 场景中的 GameEntry
+  → await ResourceManager.InitializePackageAsync：仅初始化资源包文件系统
+  → HotUpdateManager.Initialize：仅配置热更 Manager
+  → await GameHotUpdate.RunAsync
+      → HotUpdateManager.StartAsync 选择发行、下载资源、校验和加载代码
+      → HotGame 初始化其余 Manager、读取 Luban 表、进入具体业务
 ```
 
-GameEntry 是 AOT 入口，不引用生成表。HotGame 是普通 C# 游戏入口；业务写在 Assets/HotUpdate，由 StartGameAsync 组织。关闭 Initialize Hot Update 时使用编译源入口，Manager 初始化仍在 HotGame。普通编译源 Player 使用 Native Validation → Build Local Source Player 菜单。
+`GameEntry` 是场景入口和启动顺序的 owner：在 Inspector 配置输入、初始 Map、热更与资源模式开关，持有启动 CTS、task 和 State，并直接初始化资源与热更两个 Manager。先等待资源文件系统初始化成功，再配置 `HotUpdateManager`，最后调用 `GameHotUpdate.RunAsync` 开始具体更新。资源包初始化失败就停止，不提前进入热更步骤。
 
-StartupModule 是可选扩展，默认空列表；GameSession 只协调这些模块。普通 Manager 在 HotGame 直接 Initialize，退出时调用 Release，不需要在业务层登记 Manager 所有权或失败回滚。
+| GameEntry 开关 | 默认值 | 作用 |
+| --- | --- | --- |
+| `initializeHotUpdate` | `true` | Player 使用热更代码入口；关闭时使用编译源入口。Editor 仍使用已编译程序集 |
+| `resourceMode` | `Game.ResourceMode.Online` | Player 热更模式下在线检查已配置的可信发行，准备对应资源；可改为 `Offline` 只使用匹配的内置发行 |
+| `simulateResourcesInEditor` | `true` | Editor 优先使用资源模拟；关闭后执行真实资源文件系统配置，内置/远端来源还取决于模式和所选发行上下文。Player 不使用此模拟开关 |
 
-GameStartupOptions 只传输入配置和可选模块启动回调；资源就绪后，HotGame 直接创建场景加载器和热更侧 YooAssetUIAssetLoader，不通过 object 工厂传递。正常退出由现有集中释放列表清理 Manager（包括事件与定时器），不再通过全局生命周期注册表；关闭 Domain Reload 时，基类与 Source Generator 共用已有 EditorStaticReset 恢复编辑器状态。
+`Offline` 直接选择匹配的内置发行，禁止远端检查，并跳过联网发行缓存，不将合法联网缓存标记为损坏；切回 `Online` 后这些缓存仍可使用。`Online` 保留可信公钥、签名和精确版本要求，准备失败仍可成对回退到内置发行。资源模式不代表账号服务器已经登录，也不会自动连接业务服务器。
 
-命令行 Player 退出探针与表结构检查分别集中在 GameEntry.NativeValidation.cs、HotGame.NativeValidation.cs，供验收脚本使用；正常业务按生成类型直接查询表。共享 Game.Startup 构造签名和 AOT 程序集引用发生变化，已有 IL2CPP 主包需要重建基线后再发布补丁。
+`GameHotUpdate` 只放具体的 settings、资源模式参数工厂、资源版本准备、DLL 字节读取和进度接线。它不初始化 Manager、不创建启动 CTS，也不做中央 Release；`RunAsync` 调用已经配置好的 `HotUpdateManager.StartAsync` 执行发行选择、下载、校验和代码加载。
+
+`GameEntry` 退出时先取消启动，再按 `HotUpdateManager → ResourceManager` 顺序释放，并转发应用暂停/焦点事件及保留验收探针。`HotUpdateManager` 关闭 `HotGame`，后者集中释放其业务与其余 Manager；资源下载、日常租约仍由 `ResourceManager` 管理。
+
+资源包初始化只是文件系统 warmup，不会选资源版本、加载版本清单或下载资源。实际下载在后面的热更步骤中阻塞等待该版本全部缺失资源，完成校验后才进入 `HotGame`。当前仅有 `StartupMessage/DownloadProgress` 数据，没有可见下载进度条；进度 UI 仍是后续计划，不算本轮已实现功能。
+
+`HotGame` 是真正的游戏业务入口，位于 `Assets/HotUpdate`：初始化公共 Manager、加载 Luban 表，再直接调用塔防等业务模块。新增业务就在这里显式调用初始化和关闭，不需要额外的 Session 或模块注册器。无生产使用的 `GameSession`、`IStartupModule` 和 `StartupModule` 已移除。
+
+`GameStartupOptions` 现在只传输入资源和初始 Map，不包含 Manager、运行状态或模块启动回调。场景/UI 加载器直接在 `HotGame` 装配；两个更新基础 Manager 由 Entry 释放，其余由 HotGame 集中释放。Editor 使用已编译程序集；关闭 Initialize Hot Update 也使用编译源入口，业务初始化顺序相同。普通编译源 Player 使用 Native Validation → Build Local Source Player 菜单。
+
+命令行退出和表结构探针仍集中在 `GameEntry.NativeValidation.cs`、`HotGame.NativeValidation.cs`。本次 `Game.Startup` 中 `GameStartupOptions` 构造签名变化，并把更新/资源流程移到新的 AOT 类型 `GameHotUpdate`；已有 IL2CPP 主包必须重建基线，不能只发布业务 DLL。本次已通过实际 Unity Player 脚本编译和两轮 Editor 模拟启动/退出；两轮之间重新打开 Bootstrap，不声明同一入口跨停止保留。详见[本轮报告](Documentation/Validation/EntryStartup/)。
 
 ## 本分支的塔防业务原型
 
@@ -43,7 +58,7 @@ GameStartupOptions 只传输入配置和可选模块启动回调；资源就绪�
 
 地图是 imagegen 生成的 2D 底图，塔、基地和 NPC 暂用 3D primitives；所有文字使用 TMP。图片与动态 SDF 字体通过 YooAsset 租约加载，按 maps/ui/fonts 分类；字体许可随包保留在 `Assets/StreamingAssets/ThirdPartyLicenses/Noto-CJK.txt`。PC 与手机横屏、触控共同入口已配置，移动真机和最终 3D 美术尚未验收。
 
-本轮已在真实 Unity 2022.3.62f1 / Linux / OpenGLCore 的 llvmpipe 软件渲染环境跑通 6 波胜利，验证实际 Button 事件、重复操作拒绝、TMP 文字及停止 Play 清理，保留 4 张实际渲染截图；72 项完整模型、12 项领域、13 项账号协调回归通过。当前没有真实登录或发奖后端；失败/重开、手机真机、IL2CPP 和声音仍未执行原生验收。具体指标、日志与补验状态见[交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)。
+塔防初次接入时，已在真实 Unity 2022.3.62f1 / Linux / OpenGLCore 的 llvmpipe 软件渲染环境跑通 6 波胜利、胜利后重开、第 2 波无塔防守失败及失败后重开，验证实际 Unity Button `onClick.Invoke` 事件、重复操作拒绝、TMP 文字及停止 Play 清理，保留 4 张实际渲染截图；当时 72 项完整模型、12 项领域、13 项账号协调回归通过。该记录不代表本次入口/热更职责重构已经通过验证，也不是设备鼠标/触摸点击验收。当前没有真实登录或发奖后端；手机真机、IL2CPP 和声音仍未执行原生验收。具体历史指标、日志与补验状态见[交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)。
 
 ## Luban 与设置
 
@@ -83,7 +98,7 @@ Tools → Novorizon → GameStarter：
 ## 更新与维护
 
 ```sh
-python3 Tools~/sync-packages.py --ref afc98c6424844d0032e3138f31b7c994e6722470
+python3 Tools~/sync-packages.py --ref a3e531d0ed3ac11748324bc655f1b29cc3113821
 python3 Tools~/verify.py --dotnet /path/to/dotnet
 ```
 

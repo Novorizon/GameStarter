@@ -1,0 +1,11 @@
+{
+  "sdkCommit": "a3e531d0ed3ac11748324bc655f1b29cc3113821",
+  "models": 69,
+  "domain": 12,
+  "accountSession": 13,
+  "nativeUnity": "2022.3.62f1",
+  "graphics": "OpenGLCore software rendering (llvmpipe)",
+  "sceneReopenedBetweenPlaySessions": true,
+  "scope": "Editor resource simulation in Online and Offline entry configurations; no native offline-bundle/HTTP/IL2CPP/device validation",
+  "progressUIImplemented": false
+}
