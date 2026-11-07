@@ -11,12 +11,13 @@ Novorizon SDK 包由 manifest 固定 Git 提交，不在 `Packages` 下重复嵌
 - [更新站部署](Deployment/README.md)：Nginx、目录与上传顺序。
 - [验证范围](VALIDATION.md)：模型回归与原生验收分别记录。
 - [SDK 协作](Documentation/SDKCoordination.zh-CN.md)：包维护分工、接口需求和固定提交交付。
-- [塔防业务原型](Documentation/TowerDefense/README.zh-CN.md)：本分支的玩法、9 张业务表、逻辑/表现分层、账号与结算契约、UI 与地图方案。
+- [塔防业务原型](Documentation/TowerDefense/README.zh-CN.md)：当前玩法、业务表、逻辑/表现分层、账号与结算契约、UI 与地图方案。
+- [Meshy 模型制作清单](Documentation/Game/MeshyBrief.zh-CN.md)：模型优先级、尺寸、坐标轴、动作和挂点。
 - [塔防本轮交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)：实际 Unity 画面/通关结果、已实现边界和仍待补验的项目。
 
 ## 启动与业务
 
-打开 Assets/Scenes/Bootstrap.unity 后 Play，日志包含 LUBAN_EXAMPLE、HOT_UPDATE_READY、GAME_STARTER_READY。
+打开 Assets/Scenes/Bootstrap.unity 后 Play，先显示启动进度，再进入玩家页面。点击“出征 · 守卫哨站”进入塔防；完成后可返回营地查看战绩与旅程任务。
 
 Player 的热更路径如下；Editor 使用已编译程序集，默认启用 YooAsset 编辑器模拟模式。
 
@@ -26,7 +27,8 @@ Unity 场景中的 GameEntry
   → HotUpdateManager.Initialize：仅配置热更 Manager
   → await GameHotUpdate.RunAsync
       → HotUpdateManager.StartAsync 选择发行、下载资源、校验和加载代码
-      → HotGame 初始化其余 Manager、读取 Luban 表、进入具体业务
+      → HotGame 初始化公共 Manager、读取 Luban 表、调用 ClientFlow
+      → ClientFlow 打开玩家页面，出征后进入塔防，结算后返回玩家页面
 ```
 
 `GameEntry` 是场景入口和启动顺序的 owner：在 Inspector 配置输入、初始 Map、热更与资源模式开关，持有启动 CTS、task 和 State，并直接初始化资源与热更两个 Manager。先等待资源文件系统初始化成功，再配置 `HotUpdateManager`，最后调用 `GameHotUpdate.RunAsync` 开始具体更新。资源包初始化失败就停止，不提前进入热更步骤。
@@ -43,26 +45,26 @@ Unity 场景中的 GameEntry
 
 `GameEntry` 退出时先取消启动，再按 `HotUpdateManager → ResourceManager` 顺序释放，并转发应用暂停/焦点事件及保留验收探针。`HotUpdateManager` 关闭 `HotGame`，后者集中释放其业务与其余 Manager；资源下载、日常租约仍由 `ResourceManager` 管理。
 
-资源包初始化只是文件系统 warmup，不会选资源版本、加载版本清单或下载资源。实际下载在后面的热更步骤中阻塞等待该版本全部缺失资源，完成校验后才进入 `HotGame`。当前仅有 `StartupMessage/DownloadProgress` 数据，没有可见下载进度条；进度 UI 仍是后续计划，不算本轮已实现功能。
+资源包初始化只是文件系统 warmup，不会选资源版本、加载版本清单或下载资源。实际下载在后面的热更步骤中阻塞等待该版本全部缺失资源，完成校验后才进入 `HotGame`。启动界面显示已完成步骤的进度；有下载时显示 YooAsset 实际字节进度。启动背景及已知控件的布局、颜色和文案通过资源更新缓存，下次启动使用；首次启动使用独立的内置图片、JSON 和 TMP 字体。
 
 
-`HotGame` 是真正的游戏业务入口，位于 `Assets/HotUpdate`：初始化公共 Manager、加载 Luban 表，再直接调用塔防等业务模块。新增业务就在这里显式调用初始化和关闭，不需要额外的 Session 或模块注册器。无生产使用的 `GameSession`、`IStartupModule` 和 `StartupModule` 已移除。
+`HotGame` 是热更业务入口：初始化公共 Manager、加载 Luban 表，然后调用 `ClientFlow.StartAsync`；退出调用模块的 Dispose。`ClientFlow` 协调玩家页面和塔防，档案/任务计算由 `JourneyProgress` 处理，视图只发命令和展示。入口不包含 UI 组件、任务计算或玩家存档逻辑。详见[业务模块与数据规划](Documentation/Game/ClientPlan.zh-CN.md)。
 
 `GameStartupOptions` 现在只传输入资源和初始 Map，不包含 Manager、运行状态或模块启动回调。场景/UI 加载器直接在 `HotGame` 装配；两个更新基础 Manager 由 Entry 释放，其余由 HotGame 集中释放。Editor 使用已编译程序集；关闭 Initialize Hot Update 也使用编译源入口，业务初始化顺序相同。普通编译源 Player 使用 Native Validation → Build Local Source Player 菜单。
 
-命令行退出和表结构探针仍集中在 `GameEntry.NativeValidation.cs`、`HotGame.NativeValidation.cs`。本次 `Game.Startup` 中 `GameStartupOptions` 构造签名变化，并把更新/资源流程移到新的 AOT 类型 `GameHotUpdate`；已有 IL2CPP 主包必须重建基线，不能只发布业务 DLL。本次已通过实际 Unity Player 脚本编译和两轮 Editor 模拟启动/退出；两轮之间重新打开 Bootstrap，不声明同一入口跨停止保留。详见[本轮报告](Documentation/Validation/EntryStartup/)。
+命令行退出和表结构探针集中在 `GameEntry.NativeValidation.cs`、`HotGame.NativeValidation.cs`。`Game.Startup` 中的共享契约、更新步骤和启动展示必须配套主包基线；已有 IL2CPP 主包必须重建，不能只发布业务 DLL。本次已通过实际 Unity Player 脚本编译和两轮 Editor 模拟启动/退出；两轮之间重新打开 Bootstrap，不声明同一入口跨停止保留。详见[本轮报告](Documentation/Validation/EntryStartup/)。
 
-## 本分支的塔防业务原型
+## 玩家页面与塔防
 
-塔防是这个项目在 `Assets/HotUpdate/TowerDefense` 下实现的业务示例，不是 UnityPackages 通用框架新增的固定玩法。`HotGame.StartGameAsync` 加载 Luban 后，通过[塔防业务装配](Assets/HotUpdate/TowerDefense/Presentation/HotGame.TowerDefense.cs)创建纯 C# 战斗会话和表现；换其他游戏时替换该业务入口，继续复用资源、UI、数据和网络能力。
+塔防是这个项目在 `Assets/HotUpdate/TowerDefense` 下实现的业务示例，不是 UnityPackages 通用框架新增的固定玩法。`HotGame.StartGameAsync` 加载 Luban 后，通过[业务流程](Assets/HotUpdate/Client/ClientFlow.cs)打开玩家页面并按出征操作创建战斗会话和表现；换其他游戏时替换该业务入口，继续复用资源、UI、数据和网络能力。
 
-首次打开执行 `Tools → Novorizon → Tower Defense → Prepare TMP Font`，等待 `TOWER_DEFENSE_TMP_FONT_READY`；需要的 TMP Essentials 会由该配置流程导入。随后打开 `Assets/Scenes/Bootstrap.unity` 并 Play，日志应出现 `TOWER_DEFENSE_READY prototype-1` 和原有 Ready 标记。也可用 `Create Prototype Scene` 创建独立场景，它仍通过 AOT GameEntry 进入同一业务流程。
+首次打开可执行 `Tools → Novorizon → GameStarter → Prepare Startup Font` 同步启动及公共 TMP 字体。打开 `Assets/Scenes/Bootstrap.unity` 并 Play，日志先出现 `PLAYER_PAGE_READY`，出征后出现 `TOWER_DEFENSE_READY forest-diorama-1`。也可用 `Create Prototype Scene` 创建独立场景，它仍通过 AOT GameEntry 进入同一业务流程。
 
-当前真实表内容为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡，使用 9 张新增业务表，加原示例共加载 10 张表。选建造点和塔型、升级、开始波次，在波间三选一，守到通关或基地归零。主流程使用真实表，5 波的 `DemoConfiguration` 只用于独立领域测试 fallback。
+当前加载 12 张表：8 张战斗配置、主题/任务/等级 3 张配置和原 Example。关卡有 6 波、7 个固定建造位置、3 塔型、4 怪物型和 7 张强化卡。先选塔卡，才显示可建区域；部署后点击已有塔查看实际射程和升级。平时地面没有特殊建造标记。
 
-地图是 imagegen 生成的 2D 底图，塔、基地和 NPC 暂用 3D primitives；所有文字使用 TMP。图片与动态 SDF 字体通过 YooAsset 租约加载，按 maps/ui/fonts 分类；字体许可随包保留在 `Assets/StreamingAssets/ThirdPartyLicenses/Noto-CJK.txt`。PC 与手机横屏、触控共同入口已配置，移动真机和最终 3D 美术尚未验收。
+地图是 imagegen 生成的低多边形台地式 2D 预渲染图，包含砂岩道路、池塘、木桥和七个固定建造位置；18 个路线点和建造点随 Luban 表一起发布。固定 55° 正交相机呈现 3D 石塔、蓝顶基地和怪物，UI 使用松绿/铜金九宫格面板和 3×3 图标图集；所有文字使用 TMP。图片与动态 SDF 字体通过 YooAsset 租约加载，按 maps/ui/fonts 分类；字体许可随包保留在 `Assets/StreamingAssets/ThirdPartyLicenses/Noto-CJK.txt`。当前模型是共享网格的程序化低模，正式角色动画、移动真机和最终性能尚未验收。
 
-塔防初次接入时，已在真实 Unity 2022.3.62f1 / Linux / OpenGLCore 的 llvmpipe 软件渲染环境跑通 6 波胜利、胜利后重开、第 2 波无塔防守失败及失败后重开，验证实际 Unity Button `onClick.Invoke` 事件、重复操作拒绝、TMP 文字及停止 Play 清理，保留 4 张实际渲染截图；当时 72 项完整模型、12 项领域、13 项账号协调回归通过。该记录不代表本次入口/热更职责重构已经通过验证，也不是设备鼠标/触摸点击验收。当前没有真实登录或发奖后端；手机真机、IL2CPP 和声音仍未执行原生验收。具体历史指标、日志与补验状态见[交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)。
+当前玩法、输入链路、布局截图和真实 Unity 验收范围见[交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)。原生表现由 `Game.Editor.TowerDefenseValidation.Run` 验证；带 `--novorizon-phone-layout` 可检查 19.5:9 编辑器横屏布局。当前没有真实登录或发奖后端，Editor 图形验收不代表手机真机、IL2CPP 或声音已通过。
 
 ## Luban 与设置
 
@@ -71,7 +73,7 @@ Unity 场景中的 GameEntry
 | Excel 与表定义 | Config/Luban/Data、Config/Luban/Defines |
 | 热更表代码 | Assets/HotUpdate/Generated/Data，Game.Data.Generated 程序集 |
 | YooAsset 数据 | Assets/GameAssets/Data/Luban |
-| 设置保存/恢复 | Assets/HotUpdate/GameSettings.cs |
+| 音量/按键设置 | Assets/HotUpdate/GameSettings.cs |
 
 生成表关闭 autoReferenced，AOT 不引用 cfg.Tables。表结构可在现有 AOT 能力与程序集拓扑范围内随补丁更新。表已通过 YooAsset 字节加载器接好，不需逐表注册：
 

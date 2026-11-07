@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 namespace Game
 {
     /// <summary>场景入口：配置开关，按顺序初始化 Manager，然后执行热更。</summary>
-    public sealed partial class GameEntry : MonoSingleton<GameEntry>
+    public sealed partial class GameEntry : MonoSingleton<GameEntry>, IStartupProgressSource
     {
         [SerializeField]
         private bool initializeHotUpdate = true;
@@ -26,6 +26,7 @@ namespace Game
         private CancellationTokenSource cts;
         private Task startupTask;
         private string startupError;
+        private StartupScreen startupScreen;
 
         public StartupState State { get; private set; }
         public ResourceDownloadProgress DownloadProgress => hotUpdate?.DownloadProgress ?? default;
@@ -36,6 +37,7 @@ namespace Game
             cts = new CancellationTokenSource();
             startupError = null;
             State = StartupState.Starting;
+            startupScreen = StartupScreen.Open(this);
             startupTask = InitializeAsync();
             ObserveNativeStartup();
         }
@@ -81,6 +83,8 @@ namespace Game
         {
             var stopping = cts;
             cts = null;
+            startupScreen?.Dispose();
+            startupScreen = null;
             hotUpdate?.Dispose();
             hotUpdate = null;
             startupTask = null;
@@ -119,6 +123,21 @@ namespace Game
         {
             Dispose();
             return Task.CompletedTask;
+        }
+
+        public StartupSnapshot ReadStartup()
+        {
+            var download = DownloadProgress;
+            return new StartupSnapshot
+            {
+                Fraction = State == StartupState.Ready ? 1 : hotUpdate?.Progress ?? 0,
+                Message = StartupMessage,
+                Ready = State == StartupState.Ready,
+                Failed = State == StartupState.Failed,
+                Downloading = download.TotalBytes > 0 && download.CompletedBytes < download.TotalBytes,
+                CompletedBytes = download.CompletedBytes,
+                TotalBytes = download.TotalBytes
+            };
         }
     }
 }

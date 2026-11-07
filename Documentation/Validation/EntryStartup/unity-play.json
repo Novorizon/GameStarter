@@ -7,6 +7,8 @@
     "runs": 2,
     "disableReloads": true,
     "readyAndShutdown": true,
+    "startupProgressVerified": true,
+    "startupThemeCacheVerified": true,
     "modes": [
         "Online",
         "Offline"
@@ -22,33 +24,33 @@
         {
             "mode": "Online",
             "editorSimulation": true,
-            "entryInstanceId": 21156,
-            "viewInstanceId": -1454,
-            "viewName": "TowerDefensePrototype",
+            "entryInstanceId": 21198,
+            "viewInstanceId": -1638,
+            "viewName": "PlayerPage",
             "gameReadyMarker": true,
-            "towerDefenseReadyMarker": true,
+            "playerPageReadyMarker": true,
             "ready": true,
             "shutdown": true,
             "sameEntry": true,
             "entryDestroyedOnStop": true,
             "freshModule": true,
-            "tmpCount": 22,
+            "tmpCount": 21,
             "legacyTextCount": 0
         },
         {
             "mode": "Offline",
             "editorSimulation": true,
-            "entryInstanceId": 21234,
-            "viewInstanceId": -2338,
-            "viewName": "TowerDefensePrototype",
+            "entryInstanceId": 21294,
+            "viewInstanceId": -2544,
+            "viewName": "PlayerPage",
             "gameReadyMarker": true,
-            "towerDefenseReadyMarker": true,
+            "playerPageReadyMarker": true,
             "ready": true,
             "shutdown": true,
             "sameEntry": true,
             "entryDestroyedOnStop": true,
             "freshModule": true,
-            "tmpCount": 22,
+            "tmpCount": 21,
             "legacyTextCount": 0
         }
     ]

@@ -12,9 +12,9 @@ namespace Game.Editor
     /// <summary>从随项目分发的 Noto 子集生成 TMP 动态 SDF；字体、材质和图集一起进入资源包。</summary>
     public static class TowerDefenseFontSetup
     {
-        public const string SourceFontPath = "Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.otf";
-        public const string FontAssetPath = "Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.asset";
-        private const string LicensePath = "Assets/GameAssets/TowerDefense/Fonts/LICENSE-Noto.txt";
+        public const string SourceFontPath = "Assets/GameAssets/Common/Fonts/GameUI.otf";
+        public const string FontAssetPath = "Assets/GameAssets/Common/Fonts/GameUI.asset";
+        private const string LicensePath = "Assets/GameAssets/Common/Fonts/LICENSE-Noto.txt";
         private const string MobileShaderName = "TextMeshPro/Mobile/Distance Field";
         private const string SettingsPath = "Assets/TextMesh Pro/Resources/TMP Settings.asset";
         private const int PointSize = 48;
@@ -326,7 +326,8 @@ namespace Game.Editor
         private static string WarmCharacters()
         {
             const string labels = "塔防肉鸽三选一选择本局强化基地金币波次开始战斗暂停继续升级已满级伤害射程攻速建造点防御塔查看确认返回重试胜利失败守护成功失守离线原型账号登录结算设置音量敌人来袭空点击下方圆圈显示实际攻击范围无法检查当前完成解除状态恭喜获得卡牌组合生命地图路线剩余冷却训练挑战准备 →·×：，。！";
-            var characters = new SortedSet<char>(labels);
+            const string client = "翠林守卫森林旅人见习探索经验最高波次累计击败名敌防线旅程任务首战告捷赢得一次哨站防守筑起累计建造三座防御塔战地祝福选择张强化卡本地档案进度保存在此设备已达成出征准备营确认返回未完成的当前记录等级满资源初始化系统检查版本载入玩家页面游戏代码更新完成网络重新绿色区域部署按键取消请选择金币不足实际攻击范围";
+            var characters = new SortedSet<char>(labels + client);
             for (char c = ' '; c <= '~'; c++)
             {
                 characters.Add(c);

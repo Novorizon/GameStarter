@@ -32,14 +32,15 @@ namespace Game.Editor
         public static void ConfigureArt()
         {
             ConfigureSprite(ArtRoot + "Map.png");
-            ConfigureSprite(ArtRoot + "CardFrame.png");
-            var atlas = AssetImporter.GetAtPath(ArtRoot + "CardIcons.png") as TextureImporter;
+            ConfigureSprite("Assets/GameAssets/Common/UI/Panel.png");
+            var atlas = AssetImporter.GetAtPath("Assets/GameAssets/Common/UI/Icons.png") as TextureImporter;
             if (atlas != null)
             {
                 atlas.textureType = TextureImporterType.Default;
                 atlas.textureShape = TextureImporterShape.Texture2D;
                 atlas.alphaIsTransparency = true;
                 atlas.mipmapEnabled = false;
+                atlas.npotScale = TextureImporterNPOTScale.None;
                 atlas.maxTextureSize = 2048;
                 atlas.SaveAndReimport();
             }
@@ -57,6 +58,7 @@ namespace Game.Editor
             importer.textureShape = TextureImporterShape.Texture2D;
             importer.spriteImportMode = SpriteImportMode.Single;
             importer.spritePixelsPerUnit = 100;
+            importer.spriteBorder = path.EndsWith("Panel.png", System.StringComparison.Ordinal) ? new Vector4(180, 180, 180, 180) : Vector4.zero;
             importer.alphaIsTransparency = true;
             importer.mipmapEnabled = false;
             importer.maxTextureSize = 2048;

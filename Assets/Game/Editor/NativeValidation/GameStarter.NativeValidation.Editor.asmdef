@@ -12,6 +12,7 @@
     "Game.HotUpdate",
     "Game.Data.Generated",
     "Unity.TextMeshPro",
+    "Unity.InputSystem",
     "Unity.ugui"
   ],
   "includePlatforms": [

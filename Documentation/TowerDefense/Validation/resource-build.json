@@ -2,14 +2,14 @@
     "Summary": {
         "YooVersion": "2.3.18",
         "UnityVersion": "2022.3.62f1",
-        "BuildDate": "11/06/2026 18:48:19",
-        "BuildSeconds": 29,
+        "BuildDate": "11/07/2026 15:52:21",
+        "BuildSeconds": 14,
         "BuildTarget": 24,
         "BuildPipeline": "BuiltinBuildPipeline",
         "BuildBundleType": 2,
         "BuildPackageName": "DefaultPackage",
-        "BuildPackageVersion": "20261106184748902",
-        "BuildPackageNote": "11/06/2026 18:47:48",
+        "BuildPackageVersion": "20261107155205821",
+        "BuildPackageNote": "11/07/2026 15:52:05",
         "UniqueBundleName": false,
         "EnableAddressable": true,
         "SupportExtensionless": true,
@@ -34,14 +34,98 @@
         "CacheServerPort": 0,
         "BuiltinShadersBundleName": "",
         "MonoScriptsBundleName": "",
-        "AssetFileTotalCount": 17,
-        "MainAssetTotalCount": 15,
+        "AssetFileTotalCount": 22,
+        "MainAssetTotalCount": 20,
         "AllBundleTotalCount": 7,
-        "AllBundleTotalSize": 14113797,
+        "AllBundleTotalSize": 15461955,
         "EncryptedBundleTotalCount": 0,
         "EncryptedBundleTotalSize": 0
     },
     "AssetInfos": [
+        {
+            "Address": "Common/Fonts/GameUI",
+            "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.asset",
+            "AssetGUID": "2db005800a75d85d9a1b61a0e17c7939",
+            "AssetTags": [
+                "fonts"
+            ],
+            "MainBundleName": "assets_gameassets_common_fonts_gameui.bundle",
+            "MainBundleSize": 409174,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.otf",
+                    "AssetGUID": "e618d9f271d648bfa2782938be53f1b2"
+                },
+                {
+                    "AssetPath": "Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader",
+                    "AssetGUID": "fe393ace9b354375a9cb14cdbbc28be4"
+                }
+            ],
+            "DependBundles": [
+                "share_assets_gameassets_common_fonts.bundle",
+                "unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "Common/Startup/Background",
+            "AssetPath": "Assets/GameAssets/Common/Startup/Background.bytes",
+            "AssetGUID": "da35bece6db24f78b6a04f92dbb1e622",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "assets_gameassets_common_startup.bundle",
+            "MainBundleSize": 2179986,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Common/Startup/Layout",
+            "AssetPath": "Assets/GameAssets/Common/Startup/Layout.json",
+            "AssetGUID": "13b74e1bcede4c34bee0e7e2154a8111",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "assets_gameassets_common_startup.bundle",
+            "MainBundleSize": 2179986,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Common/UI/Avatar",
+            "AssetPath": "Assets/GameAssets/Common/UI/Avatar.png",
+            "AssetGUID": "6ce694bfc5d54105a13b8e30b0c5ef5f",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "assets_gameassets_common_ui.bundle",
+            "MainBundleSize": 5773049,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Common/UI/Icons",
+            "AssetPath": "Assets/GameAssets/Common/UI/Icons.png",
+            "AssetGUID": "ebf9157f72494c27943d06238e5160e1",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "assets_gameassets_common_ui.bundle",
+            "MainBundleSize": 5773049,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Common/UI/Panel",
+            "AssetPath": "Assets/GameAssets/Common/UI/Panel.png",
+            "AssetGUID": "6fd828ae53c44f1087e6db1e0953e9f7",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "assets_gameassets_common_ui.bundle",
+            "MainBundleSize": 5773049,
+            "DependAssets": [],
+            "DependBundles": []
+        },
         {
             "Address": "Data/Luban/manifest",
             "AssetPath": "Assets/GameAssets/Data/Luban/manifest.json",
@@ -50,7 +134,19 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Data/Luban/tbclienttheme",
+            "AssetPath": "Assets/GameAssets/Data/Luban/tbclienttheme.bytes",
+            "AssetGUID": "dcb7230b0caf4ef0be9b2f3db3b98ee7",
+            "AssetTags": [
+                "data"
+            ],
+            "MainBundleName": "assets_gameassets_data_luban.bundle",
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -62,7 +158,31 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Data/Luban/tbjourneytask",
+            "AssetPath": "Assets/GameAssets/Data/Luban/tbjourneytask.bytes",
+            "AssetGUID": "ff119812b9484ffca26e4694c8d112a2",
+            "AssetTags": [
+                "data"
+            ],
+            "MainBundleName": "assets_gameassets_data_luban.bundle",
+            "MainBundleSize": 3185,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Data/Luban/tbplayerlevel",
+            "AssetPath": "Assets/GameAssets/Data/Luban/tbplayerlevel.bytes",
+            "AssetGUID": "550c343baa014c0f8d06f19154a3924d",
+            "AssetTags": [
+                "data"
+            ],
+            "MainBundleName": "assets_gameassets_data_luban.bundle",
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -74,7 +194,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -86,7 +206,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -98,7 +218,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -110,7 +230,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -122,7 +242,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -134,7 +254,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -146,19 +266,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
-            "DependAssets": [],
-            "DependBundles": []
-        },
-        {
-            "Address": "Data/Luban/tbtdviewasset",
-            "AssetPath": "Assets/GameAssets/Data/Luban/tbtdviewasset.bytes",
-            "AssetGUID": "9879d09c9adc4467916af8884a68194e",
-            "AssetTags": [
-                "data"
-            ],
-            "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -170,31 +278,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
-            "DependAssets": [],
-            "DependBundles": []
-        },
-        {
-            "Address": "TowerDefense/Art/CardFrame",
-            "AssetPath": "Assets/GameAssets/TowerDefense/Art/CardFrame.png",
-            "AssetGUID": "6fd828ae53c44f1087e6db1e0953e9f7",
-            "AssetTags": [
-                "ui"
-            ],
-            "MainBundleName": "assets_gameassets_towerdefense_art_cardframe.bundle",
-            "MainBundleSize": 3433510,
-            "DependAssets": [],
-            "DependBundles": []
-        },
-        {
-            "Address": "TowerDefense/Art/CardIcons",
-            "AssetPath": "Assets/GameAssets/TowerDefense/Art/CardIcons.png",
-            "AssetGUID": "ebf9157f72494c27943d06238e5160e1",
-            "AssetTags": [
-                "ui"
-            ],
-            "MainBundleName": "assets_gameassets_towerdefense_art_cardicons.bundle",
-            "MainBundleSize": 3718539,
+            "MainBundleSize": 3185,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -206,42 +290,90 @@
                 "maps"
             ],
             "MainBundleName": "assets_gameassets_towerdefense_art_map.bundle",
-            "MainBundleSize": 3451389,
+            "MainBundleSize": 3944544,
             "DependAssets": [],
             "DependBundles": []
-        },
-        {
-            "Address": "TowerDefense/Fonts/TowerDefenseUI",
-            "AssetPath": "Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.asset",
-            "AssetGUID": "2db005800a75d85d9a1b61a0e17c7939",
-            "AssetTags": [
-                "fonts"
-            ],
-            "MainBundleName": "assets_gameassets_towerdefense_fonts_towerdefenseui.bundle",
-            "MainBundleSize": 355642,
-            "DependAssets": [
-                {
-                    "AssetPath": "Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.otf",
-                    "AssetGUID": "e618d9f271d648bfa2782938be53f1b2"
-                },
-                {
-                    "AssetPath": "Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader",
-                    "AssetGUID": "fe393ace9b354375a9cb14cdbbc28be4"
-                }
-            ],
-            "DependBundles": [
-                "share_assets_gameassets_towerdefense_fonts.bundle",
-                "unityshaders.bundle"
-            ]
         }
     ],
     "BundleInfos": [
         {
+            "BundleName": "assets_gameassets_common_fonts_gameui.bundle",
+            "FileName": "25fa624a711e8b6def7de631cb7c6d16.bundle",
+            "FileHash": "25fa624a711e8b6def7de631cb7c6d16",
+            "FileCRC": 884565755,
+            "FileSize": 409174,
+            "Encrypted": false,
+            "Tags": [
+                "fonts"
+            ],
+            "DependBundles": [
+                "share_assets_gameassets_common_fonts.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.asset",
+                    "AssetGUID": "2db005800a75d85d9a1b61a0e17c7939"
+                }
+            ]
+        },
+        {
+            "BundleName": "assets_gameassets_common_startup.bundle",
+            "FileName": "d2e8388a21c0ff2742aac087599271f3.bundle",
+            "FileHash": "d2e8388a21c0ff2742aac087599271f3",
+            "FileCRC": 1180912318,
+            "FileSize": 2179986,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GameAssets/Common/Startup/Background.bytes",
+                    "AssetGUID": "da35bece6db24f78b6a04f92dbb1e622"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Common/Startup/Layout.json",
+                    "AssetGUID": "13b74e1bcede4c34bee0e7e2154a8111"
+                }
+            ]
+        },
+        {
+            "BundleName": "assets_gameassets_common_ui.bundle",
+            "FileName": "c9eadad0bc1be749f24be0414e57725b.bundle",
+            "FileHash": "c9eadad0bc1be749f24be0414e57725b",
+            "FileCRC": 937288350,
+            "FileSize": 5773049,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GameAssets/Common/UI/Avatar.png",
+                    "AssetGUID": "6ce694bfc5d54105a13b8e30b0c5ef5f"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Common/UI/Icons.png",
+                    "AssetGUID": "ebf9157f72494c27943d06238e5160e1"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Common/UI/Panel.png",
+                    "AssetGUID": "6fd828ae53c44f1087e6db1e0953e9f7"
+                }
+            ]
+        },
+        {
             "BundleName": "assets_gameassets_data_luban.bundle",
-            "FileName": "90ad04d2952ed25887e0da398a7d47ad.bundle",
-            "FileHash": "90ad04d2952ed25887e0da398a7d47ad",
-            "FileCRC": 38735509,
-            "FileSize": 2695,
+            "FileName": "536e6c0a00fd7ef88ebb531e63ac34f7.bundle",
+            "FileHash": "536e6c0a00fd7ef88ebb531e63ac34f7",
+            "FileCRC": 2545045547,
+            "FileSize": 3185,
             "Encrypted": false,
             "Tags": [
                 "data"
@@ -254,8 +386,20 @@
                     "AssetGUID": "651d1371ea8647258a6579243559a58e"
                 },
                 {
+                    "AssetPath": "Assets/GameAssets/Data/Luban/tbclienttheme.bytes",
+                    "AssetGUID": "dcb7230b0caf4ef0be9b2f3db3b98ee7"
+                },
+                {
                     "AssetPath": "Assets/GameAssets/Data/Luban/tbexample.bytes",
                     "AssetGUID": "087a4fd770474ca6b81cf6fec6be8215"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Data/Luban/tbjourneytask.bytes",
+                    "AssetGUID": "ff119812b9484ffca26e4694c8d112a2"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Data/Luban/tbplayerlevel.bytes",
+                    "AssetGUID": "550c343baa014c0f8d06f19154a3924d"
                 },
                 {
                     "AssetPath": "Assets/GameAssets/Data/Luban/tbtdbuildslot.bytes",
@@ -286,59 +430,17 @@
                     "AssetGUID": "b4b5edfd55504aaba3c310d4669e93d4"
                 },
                 {
-                    "AssetPath": "Assets/GameAssets/Data/Luban/tbtdviewasset.bytes",
-                    "AssetGUID": "9879d09c9adc4467916af8884a68194e"
-                },
-                {
                     "AssetPath": "Assets/GameAssets/Data/Luban/tbtdwave.bytes",
                     "AssetGUID": "8a1c8f153bbe447ea7dea7aabe221ee5"
                 }
             ]
         },
         {
-            "BundleName": "assets_gameassets_towerdefense_art_cardframe.bundle",
-            "FileName": "4146f980c10f2d432dd18d496d171024.bundle",
-            "FileHash": "4146f980c10f2d432dd18d496d171024",
-            "FileCRC": 1035714843,
-            "FileSize": 3433510,
-            "Encrypted": false,
-            "Tags": [
-                "ui"
-            ],
-            "DependBundles": [],
-            "ReferenceBundles": [],
-            "BundleContents": [
-                {
-                    "AssetPath": "Assets/GameAssets/TowerDefense/Art/CardFrame.png",
-                    "AssetGUID": "6fd828ae53c44f1087e6db1e0953e9f7"
-                }
-            ]
-        },
-        {
-            "BundleName": "assets_gameassets_towerdefense_art_cardicons.bundle",
-            "FileName": "8ff3ef5f81aa8bc9086234112521e9c4.bundle",
-            "FileHash": "8ff3ef5f81aa8bc9086234112521e9c4",
-            "FileCRC": 2302469292,
-            "FileSize": 3718539,
-            "Encrypted": false,
-            "Tags": [
-                "ui"
-            ],
-            "DependBundles": [],
-            "ReferenceBundles": [],
-            "BundleContents": [
-                {
-                    "AssetPath": "Assets/GameAssets/TowerDefense/Art/CardIcons.png",
-                    "AssetGUID": "ebf9157f72494c27943d06238e5160e1"
-                }
-            ]
-        },
-        {
             "BundleName": "assets_gameassets_towerdefense_art_map.bundle",
-            "FileName": "d282b92b58ae42720f2032ac669835e9.bundle",
-            "FileHash": "d282b92b58ae42720f2032ac669835e9",
-            "FileCRC": 3962982146,
-            "FileSize": 3451389,
+            "FileName": "fcc20d5c8cc3f8926eb3b927b4ec33f4.bundle",
+            "FileHash": "fcc20d5c8cc3f8926eb3b927b4ec33f4",
+            "FileCRC": 856501706,
+            "FileSize": 3944544,
             "Encrypted": false,
             "Tags": [
                 "maps"
@@ -353,44 +455,22 @@
             ]
         },
         {
-            "BundleName": "assets_gameassets_towerdefense_fonts_towerdefenseui.bundle",
-            "FileName": "fac03118426dc487ca4f012f26d7d3ab.bundle",
-            "FileHash": "fac03118426dc487ca4f012f26d7d3ab",
-            "FileCRC": 969507496,
-            "FileSize": 355642,
-            "Encrypted": false,
-            "Tags": [
-                "fonts"
-            ],
-            "DependBundles": [
-                "share_assets_gameassets_towerdefense_fonts.bundle",
-                "unityshaders.bundle"
-            ],
-            "ReferenceBundles": [],
-            "BundleContents": [
-                {
-                    "AssetPath": "Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.asset",
-                    "AssetGUID": "2db005800a75d85d9a1b61a0e17c7939"
-                }
-            ]
-        },
-        {
-            "BundleName": "share_assets_gameassets_towerdefense_fonts.bundle",
-            "FileName": "0e16fd2131d8e334f355228cebdd4ab8.bundle",
-            "FileHash": "0e16fd2131d8e334f355228cebdd4ab8",
-            "FileCRC": 3833934032,
-            "FileSize": 3127302,
+            "BundleName": "share_assets_gameassets_common_fonts.bundle",
+            "FileName": "bda15dd213eefe5095bb4722f187f388.bundle",
+            "FileHash": "bda15dd213eefe5095bb4722f187f388",
+            "FileCRC": 2728880237,
+            "FileSize": 3127297,
             "Encrypted": false,
             "Tags": [
                 "fonts"
             ],
             "DependBundles": [],
             "ReferenceBundles": [
-                "assets_gameassets_towerdefense_fonts_towerdefenseui.bundle"
+                "assets_gameassets_common_fonts_gameui.bundle"
             ],
             "BundleContents": [
                 {
-                    "AssetPath": "Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.otf",
+                    "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.otf",
                     "AssetGUID": "e618d9f271d648bfa2782938be53f1b2"
                 }
             ]
@@ -407,7 +487,7 @@
             ],
             "DependBundles": [],
             "ReferenceBundles": [
-                "assets_gameassets_towerdefense_fonts_towerdefenseui.bundle"
+                "assets_gameassets_common_fonts_gameui.bundle"
             ],
             "BundleContents": [
                 {

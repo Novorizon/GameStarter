@@ -23,7 +23,7 @@ stateDiagram-v2
 
 ## 当前领域配置与后续拆表
 
-本轮已生成的 schema 是 [towerdefense.xml](../../Config/Luban/Defines/towerdefense.xml)，对应 9 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表。当前关卡为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡；静态 `DemoConfiguration` 仍是测试用的 5 波版本。
+战斗 schema 是 [towerdefense.xml](../../Config/Luban/Defines/towerdefense.xml)，对应 8 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表；[client.xml](../../Config/Luban/Defines/client.xml) 定义主题、旅程任务、玩家等级 3 张表。加上 Example 共 12 张表。当前关卡为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡；静态 `DemoConfiguration` 仍是测试用的 5 波版本。
 
 | 已有表 / bean | 主键和关系 | 关键字段 |
 | --- | --- | --- |
@@ -35,7 +35,9 @@ stateDiagram-v2
 | `TbTdWave / TdWave` | `id`；`stageId → TdStage`，`sequence` 决定波次顺序 | `rewardGold,giveCard` |
 | `TbTdSpawn / TdSpawn` | `id`；`waveId → TdWave`，`enemyId → TdEnemy`，`routeId` 必须属于该波关卡 | `count,startTick,intervalTicks` |
 | `TbTdCard / TdCard` | `id` | `name,description,effect,value,weight,maxStacks,iconIndex,rarity` |
-| `TbTdViewAsset / TdViewAsset` | `id`；`key` 唯一 | `asset` 为 YooAsset 地址，当前用于地图、卡图、卡框与 TMP 字体 |
+| `TbClientTheme / ClientTheme` | `id` | 字体、面板、图标、头像、背景与启动布局地址 |
+| `TbJourneyTask / JourneyTask` | `id` | 长期目标指标、目标数量与本地探索经验；正式奖励走服务器 |
+| `TbPlayerLevel / PlayerLevel` | `id` | 累计探索经验门槛与称号 |
 
 表中的外键/排序/资源地址还需要在配置适配边界校验；普通 `int` 字段不是写了名字就自动获得 Luban 外键约束。`iconIndex/rarity` 属于表现数据；现有抽牌仍用卡牌单池权重，不因写入 `rarity` 就产生分层稀有度抽取。
 
@@ -51,7 +53,7 @@ stateDiagram-v2
 | `WaveDefinition` | `Id`、清波金币、`GiveCard`、刷怪组数组 | `TbTdWave`，`id` | 归属于关卡或由关卡引用；空组和最终波规则必须明确 |
 | `SpawnGroup` | `EnemyId/RouteId/Count/StartTick/IntervalTicks` | `TbTdSpawn`，按 `waveId` 组合 | 外键指向敌人和关卡路线；数量、间隔和起始 tick 有上限；不得整数溢出 |
 | `CardDefinition` | `Id/Name/Description`、效果类型和值、抽取权重、最大叠层 | `TbTdCard`，`id` | 稳定 ID；权重为正；已满层或无效卡不应进入候选集 |
-| 表现绑定 | 原型可选地图 Sprite 和卡牌图标，其余 3D 占位 | `TbTdViewAsset`，`id/key` | `prefabAddress/iconAddress/audioId/scale/anchor`；领域只持 ID，不读取资源 |
+| 表现绑定 | 公共 UI、地图、卡牌图标，当前 3D 由代码生成 | `TbClientTheme` 的公共 UI 地址、`TdStage.mapAsset` 和 `TdCard.iconIndex` | 正式模型/动画地址由对应塔/敌人定义关联；领域只持 ID，不读取资源 |
 
 原型效果集合为 `DamagePercent`、`AttackSpeedPercent`、`RangePercent`、`Gold`、`HealBase`。它们适合先验证选卡与叠加体验，不能据此认定燃烧、冰冻、连锁、召唤或主动技能已实现。
 
@@ -59,7 +61,7 @@ stateDiagram-v2
 
 ## 正式数据结构建议
 
-当内容开始增长，再增加下列定义，避免把所有分支写成 `if(cardId == ...)`：
+当内容开始增长，按下列结构扩充，避免把所有分支写成 `if(cardId == ...)`。这些是职责与 Bean 结构建议，并非要求每项都新开一张表：卡牌效果、抽取池条目、塔等级优先作为所属配置的列表；只有独立复用、独立版本管理的内容才拆表。整体分组以[客户端与数据规划](../Game/ClientPlan.zh-CN.md)为准。
 
 | 表/bean | 关键结构 | 用途 |
 | --- | --- | --- |

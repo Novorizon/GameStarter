@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "widgets": [
+    {
+      "name": "Eyebrow",
+      "left": 0.61,
+      "bottom": 0.58,
+      "right": 0.93,
+      "top": 0.64,
+      "size": 23,
+      "text": "FOREST WARDENS",
+      "color": "#F2C76E"
+    },
+    {
+      "name": "Title",
+      "left": 0.6,
+      "bottom": 0.44,
+      "right": 0.94,
+      "top": 0.59,
+      "size": 82,
+      "text": "翠林守卫",
+      "color": "#FAF5D9"
+    },
+    {
+      "name": "Subtitle",
+      "left": 0.61,
+      "bottom": 0.37,
+      "right": 0.94,
+      "top": 0.44,
+      "size": 25,
+      "text": "在林间筑起防线，守住每一束星光",
+      "color": "#C7D9BF"
+    },
+    {
+      "name": "ProgressTrack",
+      "left": 0.61,
+      "bottom": 0.18,
+      "right": 0.94,
+      "top": 0.194
+    },
+    {
+      "name": "Message",
+      "left": 0.61,
+      "bottom": 0.21,
+      "right": 0.89,
+      "top": 0.26,
+      "size": 23
+    },
+    {
+      "name": "Percent",
+      "left": 0.89,
+      "bottom": 0.21,
+      "right": 0.94,
+      "top": 0.26,
+      "size": 23
+    },
+    {
+      "name": "Hint",
+      "left": 0.61,
+      "bottom": 0.11,
+      "right": 0.94,
+      "top": 0.16,
+      "size": 19,
+      "text": "选择防御塔，组合强化，守护林间哨站",
+      "color": "#AEC4A8"
+    }
+  ]
+}

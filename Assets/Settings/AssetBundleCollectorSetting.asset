@@ -64,36 +64,60 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags:
         UserData:
-    - GroupName: TowerDefenseUI
+    - GroupName: ClientUI
       GroupDesc:
       AssetTags: ui
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameAssets/TowerDefense/Art/CardIcons.png
+      - CollectPath: Assets/GameAssets/Common/UI/Icons.png
         CollectorGUID: ebf9157f72494c27943d06238e5160e1
         CollectorType: 0
-        AddressRuleName: TowerDefenseAddressRule
-        PackRuleName: PackSeparately
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags:
         UserData:
-      - CollectPath: Assets/GameAssets/TowerDefense/Art/CardFrame.png
+      - CollectPath: Assets/GameAssets/Common/UI/Panel.png
         CollectorGUID: 6fd828ae53c44f1087e6db1e0953e9f7
         CollectorType: 0
-        AddressRuleName: TowerDefenseAddressRule
-        PackRuleName: PackSeparately
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags:
         UserData:
-    - GroupName: TowerDefenseFonts
+      - CollectPath: Assets/GameAssets/Common/UI/Avatar.png
+        CollectorGUID: 6ce694bfc5d54105a13b8e30b0c5ef5f
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+      - CollectPath: Assets/GameAssets/Common/Startup/Background.bytes
+        CollectorGUID: da35bece6db24f78b6a04f92dbb1e622
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+      - CollectPath: Assets/GameAssets/Common/Startup/Layout.json
+        CollectorGUID: 13b74e1bcede4c34bee0e7e2154a8111
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+    - GroupName: ClientFonts
       GroupDesc:
       AssetTags: fonts
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.asset
+      - CollectPath: Assets/GameAssets/Common/Fonts/GameUI.asset
         CollectorGUID: 2db005800a75d85d9a1b61a0e17c7939
         CollectorType: 0
-        AddressRuleName: TowerDefenseAddressRule
+        AddressRuleName: ClientAddressRule
         PackRuleName: PackSeparately
         FilterRuleName: CollectAll
         AssetTags:

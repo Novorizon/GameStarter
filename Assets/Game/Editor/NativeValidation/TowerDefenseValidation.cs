@@ -4,12 +4,17 @@ using System.IO;
 using System.Linq;
 using Game.Framework.Event;
 using Game.Framework.Timing;
+using Game.Framework.Storage;
+using Game.HotUpdate.Client;
 using Game.HotUpdate.TowerDefense.Domain;
 using Game.HotUpdate.TowerDefense.Presentation;
 using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
@@ -18,7 +23,8 @@ namespace Game.Editor
     /// <summary>Real-Unity prototype acceptance. Run in batch mode without -quit; rendering requires a graphics device.</summary>
     public static class TowerDefenseValidation
     {
-        private const string Output = "Artifacts/TowerDefense";
+        private static bool PhoneLayout => Array.IndexOf(Environment.GetCommandLineArgs(), "--novorizon-phone-layout") >= 0;
+        private static string Output => PhoneLayout ? "Artifacts/TowerDefense/Phone" : "Artifacts/TowerDefense";
         private static readonly List<Shot> shots = new List<Shot>();
         private static bool previousEnabled;
         private static EnterPlayModeOptions previousOptions;
@@ -49,6 +55,13 @@ namespace Game.Editor
         private static int failedCreationFrame;
         private static GameObject failedCreationRoot;
         private static CountingLease failedCreationLease;
+        private static bool pointerBuildPending;
+        private static bool enteredFromPlayerPage;
+        private static int pointerGold;
+        private static int rangePhase;
+        private static int previousVictories;
+        private static int pointerFrame;
+        private static Vector2 pointerPosition;
         private static Shot pendingShot;
         private static Action afterCapture;
         private static EditorWindow gameView;
@@ -99,6 +112,9 @@ namespace Game.Editor
             pendingRestartVisuals = false;
             defeatRestartPending = false;
             failedCreationPending = false;
+            pointerBuildPending = false;
+            enteredFromPlayerPage = false;
+            rangePhase = 0;
             failedCreationRoot = null;
             failedCreationLease = null;
             failure = null;
@@ -119,7 +135,7 @@ namespace Game.Editor
                 }
 
                 gameView = EditorWindow.GetWindow(type);
-                gameView.position = new Rect(20, 20, 1440, 810);
+                gameView.position = new Rect(20, 20, 1440, PhoneLayout ? 686 : 810);
                 gameView.Show();
                 gameView.Focus();
             }
@@ -192,8 +208,19 @@ namespace Game.Editor
                     if (defeatRestartPending)
                     {
                         result.restartVerified = firstRestartVerified;
-                        stage = "defeat-restarted";
-                        Finish(true, "Six-wave victory, actual card buttons, victory/defeat restart buttons and central shutdown verified.");
+                        var pageData = LocalStorageManager.Instance.LoadJson<LocalJourneyData>("local-journey.json");
+                        Require(pageData.victories == previousVictories + 1, "The completed local victory was not recorded exactly once.");
+                        Require(pageData.completedTasks.Count == 3, "The real local battle did not complete the configured journey goals.");
+                        result.journeyVerified = true;
+                        view.GetComponentsInChildren<Button>().Single(button => button.name == "营地").onClick.Invoke();
+                        game = null;
+                        view = null;
+                        Capture("player-page-returned", () =>
+                        {
+                            Require(UnityEngine.Object.FindObjectOfType<PlayerHubView>() != null, "Returning did not restore the player page.");
+                            result.playerPageReturnVerified = true;
+                            Finish(true, "Player page, deployment/range input, six waves, journey updates and return/cleanup verified.");
+                        });
                         return;
                     }
 
@@ -216,12 +243,37 @@ namespace Game.Editor
                         "Failed view creation left an extra prototype component.");
                     result.failedCreationCleanupVerified = true;
                     failedCreationPending = false;
-                    BuildAndUpgrade();
-                    Capture("planning", () =>
+                    BeginPointerBuild();
+                    return;
+                }
+
+                if (pointerBuildPending)
+                {
+                    if (Time.frameCount - pointerFrame < 3)
                     {
-                        Require(game.StartNextWave(), "Could not start the first wave.");
-                        stage = "fighting";
-                    });
+                        return;
+                    }
+
+                    InputSystem.QueueStateEvent(Mouse.current, new MouseState { position = pointerPosition });
+                    var definition = game.Configuration.Towers[0];
+                    var button = view.GetComponentsInChildren<Button>(true).Single(value => value.name == "Build 0");
+                    Require(game.Towers.Count == 1, "Native pointer deployment did not create one tower.");
+                    Require(game.Gold == pointerGold - definition.BuildCost, "Native deployment charged the wrong cost.");
+                    button.onClick.Invoke();
+                    Require(game.Towers.Count == 1, "Native pointer selection followed by the build button did not create one tower.");
+                    Require(game.Towers[0].SlotId == game.Configuration.BuildSlots[0].Id, "The native pointer selected the wrong building pad.");
+                    Require(game.Gold == pointerGold - definition.BuildCost, "Selecting a tower card charged another build cost.");
+                    result.pointerBuildVerified = true;
+                    pointerBuildPending = false;
+                    BuildAndUpgrade();
+                    rangePhase = 1;
+                    pointerFrame = Time.frameCount;
+                    return;
+                }
+
+                if (rangePhase > 0)
+                {
+                    PollRangeSelection();
                     return;
                 }
 
@@ -238,8 +290,30 @@ namespace Game.Editor
                         return;
                     }
 
+                    if (UnityEngine.Object.FindObjectOfType<StartupScreen>() != null)
+                    {
+                        return;
+                    }
+
+                    if (!enteredFromPlayerPage)
+                    {
+                        var page = UnityEngine.Object.FindObjectOfType<PlayerHubView>();
+                        Require(page != null, "Startup did not open the player page.");
+                        previousVictories = LocalStorageManager.Instance.Exists("local-journey.json")
+                            ? LocalStorageManager.Instance.LoadJson<LocalJourneyData>("local-journey.json").victories : 0;
+                        Capture("player-page", () =>
+                        {
+                            enteredFromPlayerPage = true;
+                            page.GetComponentsInChildren<Button>().Single(button => button.name == "EnterTowerDefense").onClick.Invoke();
+                        });
+                        return;
+                    }
+
                     view = UnityEngine.Object.FindObjectOfType<TowerDefensePrototypeView>();
-                    Require(view != null, "Ready entry did not create the tower defense view.");
+                    if (view == null)
+                    {
+                        return;
+                    }
                     game = view.Session;
                     var labels = view.GetComponentsInChildren<TMP_Text>(true);
                     result.tmpCount = labels.Length;
@@ -303,7 +377,7 @@ namespace Game.Editor
                 }
 
                 game.Step(10);
-                if (!battleCaptured && game.Enemies.Count > 0 && game.Phase == BattlePhase.Fighting)
+                if (!battleCaptured && game.Enemies.Count >= 3 && game.Phase == BattlePhase.Fighting)
                 {
                     battleCaptured = true;
                     Capture("battle", () => stage = "fighting");
@@ -337,6 +411,93 @@ namespace Game.Editor
                     result.upgrades++;
                 }
             }
+        }
+
+        private static void BeginPointerBuild()
+        {
+            Physics.SyncTransforms();
+            var hits = new List<RaycastResult>();
+            foreach (var slot in game.Configuration.BuildSlots)
+            {
+                var target = view.GetComponentsInChildren<PrototypeWorldTarget>().Single(value => value.SlotId == slot.Id);
+                Vector2 screen = view.WorldCamera.WorldToScreenPoint(target.transform.position);
+                Require(view.WorldCamera.pixelRect.Contains(screen), "A building pad is outside the visible camera.");
+                hits.Clear();
+                EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = screen }, hits);
+                Require(hits.Count == 0, "The HUD blocks building pad " + slot.Id);
+                Require(Physics.Raycast(view.WorldCamera.ScreenPointToRay(screen), out var hit, 100), "Building pad has no raycast target.");
+                Require(hit.collider.GetComponent<PrototypeWorldTarget>()?.SlotId == slot.Id, "A building pad's center hits another object.");
+                if (slot.Id == game.Configuration.BuildSlots[0].Id)
+                {
+                    pointerPosition = screen;
+                }
+            }
+
+            result.padHitAreasVerified = true;
+            var pause = view.GetComponentsInChildren<Button>(true).Single(value => value.name == "Pause");
+            pause.onClick.Invoke();
+            Require(game.IsPaused, "The actual pause button did not pause the fight.");
+            pause.onClick.Invoke();
+            Require(!game.IsPaused, "The actual pause button did not resume the fight.");
+            result.pauseButtonVerified = true;
+            pointerGold = game.Gold;
+            Require(
+                view.GetComponentsInChildren<PrototypeWorldTarget>().Where(value => value.SlotId != 0)
+                    .All(value => !value.GetComponent<LineRenderer>().enabled),
+                "Idle gameplay permanently shows special building markers.");
+            view.GetComponentsInChildren<Button>(true).Single(value => value.name == "Build 0").onClick.Invoke();
+            Require(Mouse.current != null, "Native Input System mouse is unavailable.");
+            Capture("deployment-mode", () =>
+            {
+                Require(
+                    view.GetComponentsInChildren<PrototypeWorldTarget>().Where(value => value.SlotId != 0)
+                        .All(value => value.GetComponent<LineRenderer>().enabled),
+                    "Selecting a tower card did not reveal the available building regions.");
+                InputSystem.QueueStateEvent(Mouse.current, new MouseState { position = pointerPosition }.WithButton(MouseButton.Left));
+                pointerFrame = Time.frameCount;
+                pointerBuildPending = true;
+                stage = "pointer-build";
+            });
+        }
+
+        private static void PollRangeSelection()
+        {
+            if (Time.frameCount - pointerFrame < 3)
+            {
+                return;
+            }
+
+            var tower = game.Towers[1];
+            if (rangePhase == 1)
+            {
+                var target = view.GetComponentsInChildren<PrototypeWorldTarget>().Single(value => value.TowerId == tower.Id);
+                pointerPosition = view.WorldCamera.WorldToScreenPoint(target.transform.position);
+                InputSystem.QueueStateEvent(Mouse.current, new MouseState { position = pointerPosition }.WithButton(MouseButton.Left));
+                rangePhase = 2;
+                pointerFrame = Time.frameCount;
+                return;
+            }
+
+            InputSystem.QueueStateEvent(Mouse.current, new MouseState { position = pointerPosition });
+            var ring = view.GetComponentsInChildren<LineRenderer>().Single(value => value.name == "SelectedTowerRange");
+            Require(ring.enabled, "Clicking a built tower did not show its attack range.");
+            var center = Vector3.zero;
+            for (int index = 0; index < ring.positionCount; index++)
+            {
+                center += ring.GetPosition(index);
+            }
+
+            center /= ring.positionCount;
+            Require(Mathf.Abs(center.x - tower.Position.X / 1000f) < .02f, "The range circle belongs to another tower.");
+            Require(Mathf.Abs(center.z - tower.Position.Y / 1000f) < .02f, "The range circle is not centered on the selected tower.");
+            Require(Mathf.Abs(Vector3.Distance(center, ring.GetPosition(0)) - tower.Range / 1000f) < .02f, "The circle does not use actual combat range.");
+            result.rangeSelectionVerified = true;
+            rangePhase = 0;
+            Capture("planning", () =>
+            {
+                Require(game.StartNextWave(), "Could not start the first wave.");
+                stage = "fighting";
+            });
         }
 
         private static void BeginFailedCreationCheck(TMP_FontAsset font)
@@ -502,7 +663,7 @@ namespace Game.Editor
         {
             stage = name;
             // Planning, draft and result phases already stop combat; keep their normal interactive UI.
-            game.SetPaused(game.Phase == BattlePhase.Fighting);
+            game?.SetPaused(game.Phase == BattlePhase.Fighting);
             pendingShot = new Shot
             {
                 stage = name,
@@ -564,7 +725,7 @@ namespace Game.Editor
 
             shots.Add(pendingShot);
             pendingShot = null;
-            game.SetPaused(false);
+            game?.SetPaused(false);
             var callback = afterCapture;
             afterCapture = null;
             callback();
@@ -594,11 +755,11 @@ namespace Game.Editor
             result.success = success;
             result.stage = stage;
             result.detail = detail;
-            result.renderingValidated = CanRender && shots.Count == 4 && shots.All(shot => shot.captured);
+            result.renderingValidated = CanRender && shots.Count >= 6 && shots.All(shot => shot.captured);
             if (success && CanRender && !result.renderingValidated)
             {
                 result.success = false;
-                result.detail += " Graphical validation requires all four real screenshots.";
+                result.detail += " Graphical validation requires player-page, battle and return screenshots.";
             }
 
             if (pendingShot != null)
@@ -676,6 +837,12 @@ namespace Game.Editor
             public bool restartVerified;
             public bool defeatVerified;
             public bool failedCreationCleanupVerified;
+            public bool padHitAreasVerified;
+            public bool pointerBuildVerified;
+            public bool pauseButtonVerified;
+            public bool rangeSelectionVerified;
+            public bool journeyVerified;
+            public bool playerPageReturnVerified;
             public int tmpCount;
             public int legacyTextCount;
             public uint seed;

@@ -13,6 +13,9 @@ namespace cfg
 {
 public partial class Tables
 {
+    public TbClientTheme TbClientTheme {get; }
+    public TbJourneyTask TbJourneyTask {get; }
+    public TbPlayerLevel TbPlayerLevel {get; }
     public TbExample TbExample {get; }
     public TbTdStage TbTdStage {get; }
     public TbTdRoutePoint TbTdRoutePoint {get; }
@@ -22,10 +25,12 @@ public partial class Tables
     public TbTdWave TbTdWave {get; }
     public TbTdSpawn TbTdSpawn {get; }
     public TbTdCard TbTdCard {get; }
-    public TbTdViewAsset TbTdViewAsset {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
+        TbClientTheme = new TbClientTheme(loader("tbclienttheme"));
+        TbJourneyTask = new TbJourneyTask(loader("tbjourneytask"));
+        TbPlayerLevel = new TbPlayerLevel(loader("tbplayerlevel"));
         TbExample = new TbExample(loader("tbexample"));
         TbTdStage = new TbTdStage(loader("tbtdstage"));
         TbTdRoutePoint = new TbTdRoutePoint(loader("tbtdroutepoint"));
@@ -35,12 +40,14 @@ public partial class Tables
         TbTdWave = new TbTdWave(loader("tbtdwave"));
         TbTdSpawn = new TbTdSpawn(loader("tbtdspawn"));
         TbTdCard = new TbTdCard(loader("tbtdcard"));
-        TbTdViewAsset = new TbTdViewAsset(loader("tbtdviewasset"));
         ResolveRef();
     }
 
     private void ResolveRef()
     {
+        TbClientTheme.ResolveRef(this);
+        TbJourneyTask.ResolveRef(this);
+        TbPlayerLevel.ResolveRef(this);
         TbExample.ResolveRef(this);
         TbTdStage.ResolveRef(this);
         TbTdRoutePoint.ResolveRef(this);
@@ -50,7 +57,6 @@ public partial class Tables
         TbTdWave.ResolveRef(this);
         TbTdSpawn.ResolveRef(this);
         TbTdCard.ResolveRef(this);
-        TbTdViewAsset.ResolveRef(this);
     }
 }
 

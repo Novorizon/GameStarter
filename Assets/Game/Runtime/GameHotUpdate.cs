@@ -33,7 +33,8 @@ namespace Game
         private bool disposed;
 
         public ResourceDownloadProgress DownloadProgress { get; private set; }
-        public string StartupMessage { get; private set; } = "Initializing resource system";
+        public string StartupMessage { get; private set; } = "初始化资源系统";
+        public float Progress { get; private set; } = .03f;
 
         public GameHotUpdate(ResourceMode resourceMode, bool simulateResourcesInEditor = true)
         {
@@ -101,12 +102,14 @@ namespace Game
                 throw new InvalidOperationException("Initialize HotUpdateManager in GameEntry before running updates.");
             }
 
-            StartupMessage = "Selecting code and resource versions";
+            StartupMessage = "检查游戏版本";
+            Progress = .12f;
             try
             {
                 await TaskUtil.WaitAsync(update.StartAsync(), token);
                 token.ThrowIfCancellationRequested();
-                StartupMessage = "Ready";
+                StartupMessage = "准备完成";
+                Progress = 1;
             }
             finally
             {
@@ -117,7 +120,8 @@ namespace Game
         private async Task PrepareResourcesAsync(ReleaseContentContext content, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
-            StartupMessage = "Preparing resources " + content.PackageVersion;
+            StartupMessage = "准备游戏资源";
+            Progress = .20f;
             var resources = ResourceManager.Instance;
             if (resources.Initialized && resources.PackageVersion != content.PackageVersion)
             {
@@ -147,6 +151,10 @@ namespace Game
             {
                 throw new InvalidOperationException("Resource initialization/download failed for version " + content.PackageVersion);
             }
+
+            token.ThrowIfCancellationRequested();
+            StartupMessage = "载入玩家页面";
+            Progress = .80f;
         }
 
         private void ReportProgress(ResourceDownloadProgress value)
@@ -158,12 +166,15 @@ namespace Game
             }
 
             DownloadProgress = value;
-            StartupMessage = "Downloading resources " + value.CompletedCount + "/" + value.TotalCount;
+            StartupMessage = "更新资源 " + value.CompletedCount + "/" + value.TotalCount;
+            Progress = .20f + .55f * value.Fraction;
         }
 
-        private static async Task<byte[]> LoadCodeAsync(ReleaseContentContext content, ReleaseFile file, CancellationToken token)
+        private async Task<byte[]> LoadCodeAsync(ReleaseContentContext content, ReleaseFile file, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
+            StartupMessage = "载入游戏代码";
+            Progress = .86f;
             using (var asset = await ResourceManager.Instance.AcquireAsync<TextAsset>(content.CodeLocation(file), token))
             {
                 return asset.Asset.bytes;

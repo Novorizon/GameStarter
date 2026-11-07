@@ -1,0 +1,28 @@
+<module name="">
+    <bean name="ClientTheme">
+        <var name="id" type="int" />
+        <var name="title" type="string" />
+        <var name="font" type="string" />
+        <var name="panel" type="string" />
+        <var name="icons" type="string" />
+        <var name="avatar" type="string" />
+        <var name="background" type="string" />
+        <var name="startupLayout" type="string" />
+    </bean>
+    <table name="TbClientTheme" value="ClientTheme" input="clienttheme.xlsx" index="id" />
+    <bean name="JourneyTask">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+        <var name="description" type="string" />
+        <var name="metric" type="int" />
+        <var name="target" type="int" />
+        <var name="experience" type="int" />
+    </bean>
+    <table name="TbJourneyTask" value="JourneyTask" input="journeytask.xlsx" index="id" />
+    <bean name="PlayerLevel">
+        <var name="id" type="int" />
+        <var name="experience" type="int" />
+        <var name="title" type="string" />
+    </bean>
+    <table name="TbPlayerLevel" value="PlayerLevel" input="playerlevel.xlsx" index="id" />
+</module>

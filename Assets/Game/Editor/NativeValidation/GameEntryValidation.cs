@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Game.Framework.Event;
 using Game.Framework.Timing;
-using Game.HotUpdate.TowerDefense.Presentation;
+using Game.HotUpdate.Client;
 using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -23,7 +23,7 @@ namespace Game.Editor
         private static readonly FieldInfo ModuleField = typeof(GameEntry).GetField("hotUpdate", BindingFlags.Instance | BindingFlags.NonPublic);
         private static GameEntry entry;
         private static object previousModule;
-        private static TowerDefensePrototypeView previousView;
+        private static PlayerHubView previousView;
         private static Result result;
         private static bool previousOptionsEnabled;
         private static EnterPlayModeOptions previousOptions;
@@ -45,6 +45,10 @@ namespace Game.Editor
         private static bool exited;
         private static string stage;
         private static string failure;
+        private static StartupScreen progressProbe;
+        private static ProgressSource progressSource;
+        private static int progressPhase;
+        private static int progressFrame;
 
         public static void Run()
         {
@@ -61,6 +65,8 @@ namespace Game.Editor
             entry = null;
             previousModule = null;
             previousView = null;
+            progressProbe = null;
+            progressPhase = 0;
             failure = null;
             runIndex = 0;
             runs.Clear();
@@ -82,6 +88,16 @@ namespace Game.Editor
             previousOptionsEnabled = EditorSettings.enterPlayModeOptionsEnabled;
             previousOptions = EditorSettings.enterPlayModeOptions;
             optionsCaptured = true;
+            if (SystemInfo.graphicsDeviceType != UnityEngine.Rendering.GraphicsDeviceType.Null)
+            {
+                var type = AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.GetType("UnityEditor.GameView", false))
+                    .First(value => value != null);
+                var gameView = EditorWindow.GetWindow(type);
+                gameView.position = new Rect(20, 20, 1440, 810);
+                gameView.Show();
+                gameView.Focus();
+            }
+
             deadline = EditorApplication.timeSinceStartup + 120;
             EditorSettings.enterPlayModeOptionsEnabled = true;
             EditorSettings.enterPlayModeOptions = EnterPlayModeOptions.DisableDomainReload | EnterPlayModeOptions.DisableSceneReload;
@@ -185,6 +201,43 @@ namespace Game.Editor
                 return;
             }
 
+            if (progressProbe != null)
+            {
+                PollProgressProbe();
+                return;
+            }
+
+            var startupScreen = UnityEngine.Object.FindObjectOfType<StartupScreen>();
+            if (startupScreen != null)
+            {
+                if (runIndex == 1)
+                {
+                    var title = startupScreen.GetComponentsInChildren<TMP_Text>().Single(label => label.name == "Title");
+                    Require(title.text == "林间哨站", "The next startup did not apply the cached UI layout.");
+                    result.startupThemeCacheVerified = true;
+                }
+
+                return;
+            }
+
+            if (runIndex == 0 && !result.startupProgressVerified)
+            {
+                progressSource = new ProgressSource
+                {
+                    Snapshot = new StartupSnapshot
+                    {
+                        Downloading = true,
+                        Fraction = .90f,
+                        CompletedBytes = 25 * 1048576L,
+                        TotalBytes = 100 * 1048576L
+                    }
+                };
+                progressProbe = StartupScreen.Open(progressSource);
+                progressPhase = 1;
+                progressFrame = Time.frameCount;
+                return;
+            }
+
             if (readyAt == 0)
             {
                 readyAt = EditorApplication.timeSinceStartup;
@@ -199,8 +252,8 @@ namespace Game.Editor
 
             object module = ModuleField.GetValue(entry);
             Require(module != null && !ReferenceEquals(module, previousModule), "Each retained Entry lifetime must create a fresh hot-update module.");
-            var views = UnityEngine.Object.FindObjectsOfType<TowerDefensePrototypeView>(true);
-            Require(views.Length == 1 && views[0].gameObject.activeInHierarchy, "Ready Entry must own exactly one active tower-defense view.");
+            var views = UnityEngine.Object.FindObjectsOfType<PlayerHubView>(true);
+            Require(views.Length == 1 && views[0].gameObject.activeInHierarchy, "Ready Entry must own exactly one active player page.");
             var view = views[0];
             Require(!ReferenceEquals(view, previousView), "The second run reused the previous native view.");
             var labels = view.GetComponentsInChildren<TMP_Text>(true);
@@ -213,7 +266,7 @@ namespace Game.Editor
             var serialized = new SerializedObject(entry);
             Require(Property(serialized, "resourceMode").intValue == (int)Modes[runIndex], "Entry did not preserve the selected resource mode.");
             Require(Property(serialized, "simulateResourcesInEditor").boolValue, "This probe must use Editor resource simulation.");
-            Require(run.gameReadyMarker && run.towerDefenseReadyMarker, "The real game and tower-defense startup markers were not observed in this round.");
+            Require(run.gameReadyMarker && run.playerPageReadyMarker, "The real game and player-page startup markers were not observed in this round.");
             run.ready = true;
             run.viewName = view.name;
             run.viewInstanceId = view.GetInstanceID();
@@ -221,9 +274,46 @@ namespace Game.Editor
             run.sameEntry = true;
             previousModule = module;
             previousView = view;
+            if (runIndex == 0)
+            {
+                string layout = File.ReadAllText("Assets/GameAssets/Common/Startup/Layout.json").Replace("翠林守卫", "林间哨站");
+                StartupArtwork.CacheTheme(File.ReadAllBytes("Assets/GameAssets/Common/Startup/Background.bytes"), layout);
+            }
             stage = "waiting-shutdown";
             stopRequested = EditorApplication.timeSinceStartup;
             EditorApplication.isPlaying = false;
+        }
+
+        private static void PollProgressProbe()
+        {
+            if (Time.frameCount - progressFrame < 3)
+            {
+                return;
+            }
+
+            var percent = progressProbe.GetComponentsInChildren<TMP_Text>().Single(label => label.name == "Percent");
+            if (progressPhase == 1)
+            {
+                Require(percent.text == "25%", "Download UI did not use the actual byte fraction.");
+                Directory.CreateDirectory(Path.GetDirectoryName(Output));
+                ScreenCapture.CaptureScreenshot("Artifacts/NativeValidation/startup-download-probe.png");
+                progressPhase = 2;
+                progressFrame = Time.frameCount;
+                return;
+            }
+
+            if (progressPhase == 2)
+            {
+                progressSource.Snapshot = new StartupSnapshot { Fraction = .60f, Message = "载入玩家页面" };
+                progressPhase = 3;
+                progressFrame = Time.frameCount;
+                return;
+            }
+
+            Require(percent.text == "60%", "Normal startup UI did not use the reported step fraction.");
+            progressProbe.Dispose();
+            progressProbe = null;
+            result.startupProgressVerified = true;
         }
 
         private static void PollShutdown()
@@ -246,7 +336,7 @@ namespace Game.Editor
                 "Stopping Play retained Entry module/state.");
             runs[runIndex].entryDestroyedOnStop = entry == null;
             Require(previousView == null, "The preceding native prototype component survived stopping Play.");
-            Require(UnityEngine.Object.FindObjectsOfType<TowerDefensePrototypeView>(true).Length == 0, "A prototype view survived stopping Play.");
+            Require(UnityEngine.Object.FindObjectsOfType<PlayerHubView>(true).Length == 0, "A prototype view survived stopping Play.");
             Require(!TimerManager.IsCreated && !EventManager.IsCreated, "Central shutdown retained Timer/Event manager instances.");
             runs[runIndex].shutdown = true;
             result.runs = runs.Count(run => run.ready && run.shutdown);
@@ -263,6 +353,8 @@ namespace Game.Editor
             result.readyAndShutdown = result.runs == 2;
             result.sameEntryRetained = false;
             result.freshModules = runs.All(run => run.freshModule);
+            Require(result.startupProgressVerified, "Startup/download progress presentation was not verified.");
+            Require(result.startupThemeCacheVerified, "The second startup did not verify the cached layout.");
             Finish(true, "Two real Play sessions verified fresh modules, TMP views and central shutdown; Bootstrap was reopened between rounds.");
         }
 
@@ -307,7 +399,7 @@ namespace Game.Editor
             if (runIndex < runs.Count)
             {
                 runs[runIndex].gameReadyMarker |= message.Contains("GAME_STARTER_READY");
-                runs[runIndex].towerDefenseReadyMarker |= message.Contains("TOWER_DEFENSE_READY");
+                runs[runIndex].playerPageReadyMarker |= message.Contains("PLAYER_PAGE_READY");
             }
         }
 
@@ -350,6 +442,8 @@ namespace Game.Editor
 
         private static void Exit()
         {
+            progressProbe?.Dispose();
+            progressProbe = null;
             if (exited)
             {
                 return;
@@ -400,6 +494,12 @@ namespace Game.Editor
             EditorApplication.Exit(result.success ? 0 : 1);
         }
 
+        private sealed class ProgressSource : IStartupProgressSource
+        {
+            internal StartupSnapshot Snapshot;
+            public StartupSnapshot ReadStartup() => Snapshot;
+        }
+
         [Serializable]
         private sealed class Result
         {
@@ -411,6 +511,8 @@ namespace Game.Editor
             public int runs;
             public bool disableReloads;
             public bool readyAndShutdown;
+            public bool startupProgressVerified;
+            public bool startupThemeCacheVerified;
             public string[] modes;
             public bool sameEntryRetained;
             public bool sceneReopenedBetweenRounds;
@@ -431,7 +533,7 @@ namespace Game.Editor
             public int viewInstanceId;
             public string viewName;
             public bool gameReadyMarker;
-            public bool towerDefenseReadyMarker;
+            public bool playerPageReadyMarker;
             public bool ready;
             public bool shutdown;
             public bool sameEntry;

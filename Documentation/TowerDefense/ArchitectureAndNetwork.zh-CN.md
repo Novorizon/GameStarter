@@ -23,7 +23,7 @@ flowchart LR
 | Presentation | 鼠标/触控、对象池、插值、特效、相机、UI Presenter | 改实体血量或金币、决定卡牌抽取、通过动画事件偷偷结算伤害 |
 | Infrastructure | Luban 适配、YooAsset、网络协议、持久化、时钟接口 | 依赖具体窗口实例、把整个战斗写成 SDK Manager |
 
-`HotGame.StartGameAsync` 在 Luban 表加载完成后直接初始化并调用具体业务，退出时显式关闭；不再使用模块启动回调或额外 Session 注册器。AOT `GameEntry` 提供场景配置并启动 `GameHotUpdate`，后者处理代码与资源准备，玩法留在热更业务中。一次战斗由一个明确的 owner 创建、驱动和 Dispose；应用退出时先结束业务和取消任务，再走现有集中 Manager Release。
+`HotGame.StartGameAsync` 在 Luban 表加载完成后调用 `ClientFlow`，由它打开玩家页面、进入塔防和返回营地；退出时显式关闭业务模块。AOT `GameEntry` 提供场景配置并启动 `GameHotUpdate`，后者处理代码与资源准备，玩法留在热更业务中。一次战斗由一个明确的 owner 创建、驱动和 Dispose；应用退出时先结束业务和取消任务，再走现有集中 Manager Release。
 
 当前领域入口为 `FightSession(FightConfiguration, uint seed)`；命令为 `StartNextWave`、`BuildTower(slotId,towerTypeId)`、`UpgradeTower(instanceId)`、`ChooseCard(index)` 和 `SetPaused`，返回值表明是否被当前规则接受。`Step(ticks)` 推进模拟，`Phase/Gold/BaseHp/WaveIndex`、塔/怪状态和候选卡供表现读取。配置加载层负责把 `cfg.Tables` 转成领域配置，领域不直接依赖生成表类型。
 

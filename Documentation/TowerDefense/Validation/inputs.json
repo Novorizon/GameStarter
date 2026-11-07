@@ -1,0 +1,29 @@
+{
+  "stage": "forest-diorama-1",
+  "sdkCommit": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
+  "unity": "2022.3.62f1",
+  "platform": "Linux / llvmpipe OpenGLCore",
+  "resourceMode": "EditorSimulate for Play; separate YooAsset bundle build",
+  "reference": "User-provided low-poly raised diorama; first screenshot used only for overhead camera direction",
+  "desktopViewport": [
+    1440,
+    789
+  ],
+  "phoneLayoutViewport": [
+    1440,
+    665
+  ],
+  "phoneDeviceTested": false,
+  "il2cppTested": false,
+  "serverTested": false,
+  "modelSuites": {
+    "project": 73,
+    "domain": 12,
+    "accountSession": 13
+  },
+  "tables": 12,
+  "startupOwner": "AOT Game.Startup",
+  "businessFlow": "ClientFlow: player page -> tower defense -> player page",
+  "serverProfile": "Not connected; explicit local journey profile",
+  "startupDownloadUIProbe": "Synthetic native UI input25MiB/100MiB, not HTTP download acceptance"
+}
