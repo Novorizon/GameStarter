@@ -24,7 +24,7 @@
         {
             "mode": "Online",
             "editorSimulation": true,
-            "entryInstanceId": 24894,
+            "entryInstanceId": 24912,
             "viewInstanceId": -1778,
             "viewName": "IslandCampHall",
             "gameReadyMarker": true,
@@ -34,14 +34,14 @@
             "sameEntry": true,
             "entryDestroyedOnStop": true,
             "freshModule": true,
-            "tmpCount": 44,
+            "tmpCount": 70,
             "legacyTextCount": 0
         },
         {
             "mode": "Offline",
             "editorSimulation": true,
-            "entryInstanceId": 25372,
-            "viewInstanceId": -3796,
+            "entryInstanceId": 25390,
+            "viewInstanceId": -4320,
             "viewName": "IslandCampHall",
             "gameReadyMarker": true,
             "playerPageReadyMarker": true,
@@ -50,7 +50,7 @@
             "sameEntry": true,
             "entryDestroyedOnStop": true,
             "freshModule": true,
-            "tmpCount": 44,
+            "tmpCount": 70,
             "legacyTextCount": 0
         }
     ]

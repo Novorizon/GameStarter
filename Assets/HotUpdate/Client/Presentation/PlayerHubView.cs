@@ -19,6 +19,8 @@ namespace Game.HotUpdate.Client
         private CampSceneView scene;
         private CampMissionView missions;
         private CampArrivalView arrival;
+        private PlayerProfileView archive;
+        private ExpeditionView preparation;
         private RectTransform safe;
         private TMP_Text profile;
         private TMP_Text resources;
@@ -28,8 +30,10 @@ namespace Game.HotUpdate.Client
         private Button upgrade;
         private Button expedition;
         private Button missionButton;
+        private Button arrivalRetry;
         private Rect previousSafeArea;
         private bool previousArrival;
+        private bool previousArrivalPlaying;
         private int previousLevel;
         private bool stopping;
         private CampProgress Camp => owner.Journey.Camp;
@@ -65,6 +69,9 @@ namespace Game.HotUpdate.Client
             hud.AddComponent<GraphicRaycaster>();
             safe = CampUI.Area("SafeArea", hud.transform, 0, 0, 1, 1);
             var profilePanel = ui.Panel("PlayerProfile", safe, .025f, .865f, .315f, .975f);
+            var profileButton = profilePanel.gameObject.AddComponent<Button>();
+            profileButton.targetGraphic = profilePanel.GetComponent<Image>();
+            profileButton.onClick.AddListener(OpenProfile);
             var avatar = CampUI.Area("Avatar", profilePanel, .025f, .08f, .23f, .92f).gameObject.AddComponent<Image>();
             avatar.sprite = owner.Art.Avatar;
             avatar.preserveAspect = true;
@@ -72,7 +79,7 @@ namespace Game.HotUpdate.Client
             profile = ui.Text("Profile", profilePanel, .25f, .13f, .95f, .89f, 25, "", CampUI.Cream);
             var materials = ui.Panel("CampMaterials", safe, .40f, .895f, .715f, .975f);
             resources = ui.Text("Materials", materials, .05f, .18f, .95f, .82f, 27, "", CampUI.Gold);
-            missionButton = ui.ActionButton("OpenCampMissions", safe, .78f, .88f, .975f, .975f, "海岛手记", () => missions.Show());
+            missionButton = ui.ActionButton("OpenCampMissions", safe, .78f, .88f, .975f, .975f, "海岛手记", OpenMissions);
             ui.Text("CampTitle", safe, .35f, .77f, .69f, .85f, 38, "潮汐营地", CampUI.Cream).alignment = TextAlignmentOptions.Center;
             var chapter = ui.Text("Chapter", safe, .38f, .73f, .65f, .78f, 18, "漂流之地  /  ISLAND HOMESTEAD", CampUI.Cream);
             chapter.alignment = TextAlignmentOptions.Center;
@@ -80,15 +87,18 @@ namespace Game.HotUpdate.Client
             campName = ui.Text("CampStage", construction, .045f, .68f, .95f, .93f, 30, "", CampUI.Gold);
             upgradeInfo = ui.Text("UpgradeInfo", construction, .045f, .31f, .95f, .68f, 21, "", CampUI.Cream);
             upgrade = ui.ActionButton("UpgradeCamp", construction, .045f, .065f, .64f, .30f, "建设营地", UpgradeCamp);
-            ui.ActionButton("CampJournalShortcut", construction, .67f, .065f, .955f, .30f, "任务", () => missions.Show());
+            ui.ActionButton("CampJournalShortcut", construction, .67f, .065f, .955f, .30f, "任务", OpenMissions);
             var route = ui.Panel("ExpeditionInfo", safe, .745f, .04f, .975f, .255f);
-            ui.Text("Destination", route, .08f, .62f, .94f, .90f, 25, "林间哨站 · 六波防守", CampUI.Cream);
+            ui.Text("Destination", route, .08f, .62f, .94f, .90f, 25, owner.Stage.Name + " · 单人防守", CampUI.Cream);
             ui.Text("Supplies", route, .08f, .42f, .94f, .65f, 18, "赢取建设补给，回到海岛安家", CampUI.Muted);
-            expedition = ui.ActionButton("EnterTowerDefense", route, .07f, .08f, .94f, .41f, "出征 · 守卫哨站", EnterBattle);
+            expedition = ui.ActionButton("EnterTowerDefense", route, .07f, .08f, .94f, .41f, "出征 · 守卫哨站", OpenExpedition);
             notice = ui.Text("CampNotice", safe, .44f, .05f, .73f, .23f, 23, "", CampUI.Cream);
             notice.alignment = TextAlignmentOptions.Center;
+            arrivalRetry = ui.ActionButton("RetryArrival", safe, .44f, .26f, .72f, .33f, "重试抵达序章", owner.RetryArrival);
             ui.Text("LocalProfile", safe, .72f, .27f, .975f, .315f, 17, "本地营地档案 · 建设进度自动保存", CampUI.Cream);
             missions = new CampMissionView(safe, owner.Art, owner.Journey, ClaimTask);
+            archive = new PlayerProfileView(safe, owner.Art, owner.Journey);
+            preparation = new ExpeditionView(safe, owner);
             arrival = CampArrivalView.Create(safe, owner.Art);
         }
 
@@ -114,9 +124,23 @@ namespace Game.HotUpdate.Client
             Refresh();
         }
 
-        private async void EnterBattle()
+        private void OpenProfile()
         {
-            await owner.EnterBattleAsync();
+            missions.Hide();
+            archive.Show();
+        }
+
+        private void OpenMissions()
+        {
+            archive.Hide();
+            missions.Show();
+        }
+
+        private void OpenExpedition()
+        {
+            missions.Hide();
+            archive.Hide();
+            preparation.Show();
         }
 
         private void UpgradeCamp()
@@ -166,9 +190,13 @@ namespace Game.HotUpdate.Client
             int ready = Camp.Tasks.Count(task => !Camp.Claimed(task.Id) && Camp.Progress(task) >= task.Target);
             missionButton.GetComponentInChildren<TMP_Text>().text = "海岛手记" + (ready > 0 ? "  ·  " + ready : "");
             missions.Refresh();
+            archive.Refresh();
+            preparation.Refresh();
+            arrivalRetry.gameObject.SetActive(!Camp.ArrivalSeen && !ArrivalPlaying);
             scene.Refresh(Camp);
             previousLevel = Camp.Level.Id;
             previousArrival = Camp.ArrivalSeen;
+            previousArrivalPlaying = ArrivalPlaying;
         }
 
         public void ShowError(string message)
@@ -183,14 +211,25 @@ namespace Game.HotUpdate.Client
                 return;
             }
 
-            if (previousLevel != Camp.Level.Id || previousArrival != Camp.ArrivalSeen)
+            if (previousLevel != Camp.Level.Id || previousArrival != Camp.ArrivalSeen || previousArrivalPlaying != ArrivalPlaying)
             {
                 Refresh();
             }
 
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && missions.Visible)
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                missions.Hide();
+                if (preparation.Visible)
+                {
+                    preparation.Hide();
+                }
+                else if (archive.Visible)
+                {
+                    archive.Hide();
+                }
+                else if (missions.Visible)
+                {
+                    missions.Hide();
+                }
             }
 
             if (previousSafeArea != Screen.safeArea && Screen.width > 0 && Screen.height > 0)

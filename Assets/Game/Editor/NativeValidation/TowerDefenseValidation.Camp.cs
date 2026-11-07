@@ -227,7 +227,7 @@ namespace Game.Editor
                 verifyingDefeat = false;
                 game = null;
                 view = null;
-                CampButton(page, "EnterTowerDefense").onClick.Invoke();
+                BeginPreparedExpedition(page);
             });
         }
 

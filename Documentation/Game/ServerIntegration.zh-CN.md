@@ -15,7 +15,7 @@
 
 默认沙盒最初返回 Operation not permitted，重试取得网络权限后才得到上述 TCP 结果。云环境的普通 HTTP 通过受管代理，公网原始 TCP 与 Tailscale 有各自的路由/策略限制。北京时间 01:01 再次读取本实例实时状态，VPN 仍为 configured=false / disabled；proxy:8088 在代理入口处拒绝，尚未到达尾网服务器。用户截图中的完整登录/心跳是在服务器本机执行，云端部分验证 TCPA 握手，二者不混为一次云端账号验收。
 
-当前接入阻塞位于本实例的云端 VPN 路径，需在 Codex 云环境设置启用并应用 Tailscale，确认节点/路由/ACL 与该服务匹配。当前工具仅能读取状态和诊断，不能修改或切换本对话环境；其他对话已配置不等于本实例已启用。保存配置后按平台要求发布/应用，直到实时状态 ready，并实际取得 CONNECT 200 + TCPA 握手。不在执行器内另装 VPN 绕过受管路径。
+当前接入阻塞位于本实例的云端 VPN 路径。按[官方环境文档](https://developers.openai.com/codex/environments/cloud-environments#private-networking-vpn)，入口为 Settings → Codex Cloud → Environments → 对应环境的 … → Edit；在 Tailscale 旁的铅笔中设置连接，auth key 启用 Reusable 与 Ephemeral，确认路由/DNS/ACL，保存并 Republish。VPN 变更需要替换运行环境或新建任务，发布不会自动更新旧任务。当前工具仅能读取状态和诊断，不能修改或切换本对话环境。新实例需实际取得 CONNECT 200 + TCPA 握手；已发布配置/准备快照可以复用，运行实例、未提交文件和许可证状态分别管理。不在执行器内另装 VPN 绕过受管路径。
 
 以下仅作为新部署/排障参考，不是认定当前服务器仍使用默认值，也不要求在已有成功证据时再重启或改放行规则。服务器的[默认配置](https://github.com/Novorizon/GameServer/blob/97538a12b7907fb8c7f2a6f723936ade9928d74d/src/GameServer.Host/appsettings.json)为 `ListenAddress=127.0.0.1`、`Port=1236`，地址和端口是两个字段。运维侧可只读检查：
 

@@ -165,11 +165,17 @@ namespace Game.HotUpdate.Camp
             return true;
         }
 
-        internal LocalCampData BattleLoot(bool victory)
+        internal LocalCampData BattleLoot(bool victory, int campLevelId)
         {
+            var level = campLevelId == 0 ? Level : levels.FirstOrDefault(value => value.Id == campLevelId);
+            if (level == null)
+            {
+                throw new ArgumentOutOfRangeException(nameof(campLevelId));
+            }
+
             var changed = State.Copy();
-            changed.wood = checked(changed.wood + (victory ? Level.VictoryWood : Level.DefeatWood));
-            changed.stone = checked(changed.stone + (victory ? Level.VictoryStone : Level.DefeatStone));
+            changed.wood = checked(changed.wood + (victory ? level.VictoryWood : level.DefeatWood));
+            changed.stone = checked(changed.stone + (victory ? level.VictoryStone : level.DefeatStone));
             return changed;
         }
     }

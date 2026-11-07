@@ -47,6 +47,34 @@ namespace Game.HotUpdate.Camp
             return area;
         }
 
+        public static RectTransform ScrollList(string label, Transform parent, float left, float bottom, float right, float top, float height)
+        {
+            var viewport = Area(label, parent, left, bottom, right, top);
+            viewport.gameObject.AddComponent<Image>().color = Color.clear;
+            viewport.gameObject.AddComponent<RectMask2D>();
+            var content = Area("Content", viewport, 0, 1, .96f, 1);
+            content.pivot = new Vector2(.5f, 1);
+            content.sizeDelta = new Vector2(0, height);
+            var scroll = viewport.gameObject.AddComponent<ScrollRect>();
+            scroll.viewport = viewport;
+            scroll.content = content;
+            scroll.horizontal = false;
+            scroll.movementType = ScrollRect.MovementType.Clamped;
+            scroll.scrollSensitivity = 35;
+            var track = Area("Scrollbar", viewport, .978f, 0, 1, 1);
+            track.gameObject.AddComponent<Image>().color = new Color(.38f, .48f, .39f, .30f);
+            var handle = Area("Handle", track, 0, 0, 1, 1);
+            var handleImage = handle.gameObject.AddComponent<Image>();
+            handleImage.color = Gold;
+            var scrollbar = track.gameObject.AddComponent<Scrollbar>();
+            scrollbar.handleRect = handle;
+            scrollbar.targetGraphic = handleImage;
+            scrollbar.direction = Scrollbar.Direction.BottomToTop;
+            scroll.verticalScrollbar = scrollbar;
+            scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
+            return content;
+        }
+
         public TMP_Text Text(string label, Transform parent, float left, float bottom, float right, float top, int size, string value, Color color)
         {
             var area = Area(label, parent, left, bottom, right, top);

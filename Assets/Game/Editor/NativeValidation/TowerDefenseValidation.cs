@@ -311,7 +311,7 @@ namespace Game.Editor
                         Capture("player-page", () =>
                         {
                             enteredFromPlayerPage = true;
-                            page.GetComponentsInChildren<Button>().Single(button => button.name == "EnterTowerDefense").onClick.Invoke();
+                            OpenPlayerArchive(page);
                         });
                         return;
                     }
@@ -328,7 +328,15 @@ namespace Game.Editor
                     Require(labels.Length > 0 && labels.All(label => label.font != null), "TMP controls/font assets are missing.");
                     Require(result.legacyTextCount == 0, "Legacy UI.Text found in the battle view.");
                     Require(game.Configuration.Waves.Length == 6, "Expected the six-wave Luban stage, not a static demo fixture.");
-                    result.seed = game.Seed;
+                    Require(game.Seed == acceptedExpeditionSeed, "The battle did not use the seed accepted in preparation.");
+                    if (campSecondRun)
+                    {
+                        result.secondSeed = game.Seed;
+                    }
+                    else
+                    {
+                        result.seed = game.Seed;
+                    }
                     BeginFailedCreationCheck(labels[0].font);
                     return;
                 }
@@ -384,6 +392,10 @@ namespace Game.Editor
                 {
                     BuildAndUpgrade();
                     Require(game.StartNextWave(), "Could not start wave " + (game.WaveIndex + 1));
+                    if (!result.applicationPauseCallbacksVerified)
+                    {
+                        VerifyBattlePauseAndForecast();
+                    }
                     stage = "fighting";
                     return;
                 }
@@ -855,6 +867,12 @@ namespace Game.Editor
             public bool campConstructionVerified;
             public bool campTasksVerified;
             public bool campHomeVerified;
+            public bool playerArchiveVerified;
+            public bool expeditionPreparationVerified;
+            public bool waveForecastVerified;
+            public bool waveListScrollVerified;
+            public bool applicationPauseCallbacksVerified;
+            public bool nestedPauseVerified;
             public bool originalProfileRestored;
             public bool failedCreationCleanupVerified;
             public bool padHitAreasVerified;
@@ -866,6 +884,7 @@ namespace Game.Editor
             public int tmpCount;
             public int legacyTextCount;
             public uint seed;
+            public uint secondSeed;
             public int waves;
             public int kills;
             public int leaks;
