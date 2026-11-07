@@ -6,17 +6,18 @@ namespace Game
     // 命令行 Player 验收接线；普通启动不主动退出游戏。
     public sealed partial class GameEntry
     {
-        private async void ObserveNativeStartup(GameHotUpdate current)
+        private async void ObserveNativeStartup()
         {
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--novorizon-native-smoke") < 0)
             {
                 return;
             }
 
+            var current = startupTask;
             try
             {
-                await startupTask;
-                if (ReferenceEquals(hotUpdate, current))
+                await current;
+                if (ReferenceEquals(startupTask, current))
                 {
                     NativeSmokeExit(State == StartupState.Ready ? 0 : 1);
                 }
@@ -26,7 +27,7 @@ namespace Game
             }
             catch
             {
-                if (ReferenceEquals(hotUpdate, current))
+                if (ReferenceEquals(startupTask, current))
                 {
                     NativeSmokeExit(1);
                 }
