@@ -23,7 +23,7 @@ namespace Game
         [SerializeField]
         private string initialInputMap = "Gameplay";
         private GameHotUpdate hotUpdate;
-        private CancellationTokenSource lifetime;
+        private CancellationTokenSource cts;
         private Task startupTask;
         private string startupError;
 
@@ -33,7 +33,7 @@ namespace Game
 
         protected override void OnStart()
         {
-            lifetime = new CancellationTokenSource();
+            cts = new CancellationTokenSource();
             startupError = null;
             State = StartupState.Starting;
             startupTask = InitializeAsync();
@@ -42,7 +42,7 @@ namespace Game
 
         private async Task InitializeAsync()
         {
-            var token = lifetime.Token;
+            var token = cts.Token;
             GameHotUpdate current = null;
             try
             {
@@ -79,8 +79,8 @@ namespace Game
 
         protected override void OnExit()
         {
-            var stopping = lifetime;
-            lifetime = null;
+            var stopping = cts;
+            cts = null;
             hotUpdate?.Dispose();
             hotUpdate = null;
             startupTask = null;
