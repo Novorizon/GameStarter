@@ -47,6 +47,23 @@ namespace Game.HotUpdate.Camp
             return area;
         }
 
+        public static RectTransform ScrollList(string label, Transform parent, float left, float bottom, float right, float top, float height)
+        {
+            var viewport = Area(label, parent, left, bottom, right, top);
+            viewport.gameObject.AddComponent<Image>().color = Color.clear;
+            viewport.gameObject.AddComponent<RectMask2D>();
+            var content = Area("Content", viewport, 0, 1, 1, 1);
+            content.pivot = new Vector2(.5f, 1);
+            content.sizeDelta = new Vector2(0, height);
+            var scroll = viewport.gameObject.AddComponent<ScrollRect>();
+            scroll.viewport = viewport;
+            scroll.content = content;
+            scroll.horizontal = false;
+            scroll.movementType = ScrollRect.MovementType.Clamped;
+            scroll.scrollSensitivity = 35;
+            return content;
+        }
+
         public TMP_Text Text(string label, Transform parent, float left, float bottom, float right, float top, int size, string value, Color color)
         {
             var area = Area(label, parent, left, bottom, right, top);
