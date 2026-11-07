@@ -24,6 +24,7 @@ public sealed partial class ClientTheme : Luban.BeanBase
         Avatar = _buf.ReadString();
         Background = _buf.ReadString();
         StartupLayout = _buf.ReadString();
+        CampMap = _buf.ReadString();
     }
 
     public static ClientTheme DeserializeClientTheme(ByteBuf _buf)
@@ -39,6 +40,7 @@ public sealed partial class ClientTheme : Luban.BeanBase
     public readonly string Avatar;
     public readonly string Background;
     public readonly string StartupLayout;
+    public readonly string CampMap;
 
     public const int __ID__ = 1483661470;
     public override int GetTypeId() => __ID__;
@@ -58,6 +60,7 @@ public sealed partial class ClientTheme : Luban.BeanBase
         + "avatar:" + Avatar + ","
         + "background:" + Background + ","
         + "startupLayout:" + StartupLayout + ","
+        + "campMap:" + CampMap + ","
         + "}";
     }
 }

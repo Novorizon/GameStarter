@@ -30,6 +30,7 @@ internal static partial class Program
         GameDataScenarios();
         TowerDefenseDataScenarios();
         JourneyScenarios();
+        CampScenarios();
         RemoteReleaseScenarios();
         Check("entry uses actual Framework singleton and rejects duplicates", EntrySingleton);
         Check("a recreated scene entry starts through Awake after editor reset", EntryRestart);
@@ -362,8 +363,8 @@ internal static partial class Program
         var data = Game.Framework.Data.DataManager.Instance;
         Equal("示例配置", data.Get<cfg.Tables>().TbExample.Get(1).Name);
         True(ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdstage") && ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdcard"));
-        Equal(13, ManagerContracts.DataAcquisitions.Count);
-        Equal(13, ManagerContracts.LeasesReleased);
+        Equal(15, ManagerContracts.DataAcquisitions.Count);
+        Equal(15, ManagerContracts.LeasesReleased);
         Complete(entry.ShutdownAsync());
         True(ManagerContracts.Cleanup.Contains("input"));
         ResetEntry();

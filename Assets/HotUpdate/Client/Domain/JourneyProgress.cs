@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Game.HotUpdate.Camp;
 
 namespace Game.HotUpdate.Client
 {
     [Serializable]
     public sealed class LocalJourneyData
     {
-        public int version = 1;
+        public int version = 2;
         public string nickname = "森林旅人";
         public int experience;
         public int highestWave;
@@ -17,6 +18,7 @@ namespace Game.HotUpdate.Client
         public int cardsChosen;
         public string lastRunId = "";
         public List<int> completedTasks = new List<int>();
+        public LocalCampData camp;
     }
 
     public struct JourneyBattle
@@ -42,6 +44,8 @@ namespace Game.HotUpdate.Client
         private readonly cfg.PlayerLevel[] levels;
         private readonly cfg.JourneyTask[] tasks;
         private LocalJourneyData data;
+        internal LocalCampData CampData => data.camp;
+        public CampProgress Camp { get; }
 
         public string Nickname => data.nickname;
         public int Experience => data.experience;
@@ -65,12 +69,24 @@ namespace Game.HotUpdate.Client
                 throw new ArgumentException("Player level/task configuration is invalid.");
             }
 
-            data = store.Load() ?? new LocalJourneyData();
-            if (data.version != 1 || string.IsNullOrWhiteSpace(data.nickname) || data.experience < 0 || data.highestWave < 0
+            var loaded = store.Load();
+            data = loaded ?? new LocalJourneyData();
+            if ((data.version != 1 && data.version != 2) || string.IsNullOrWhiteSpace(data.nickname) || data.experience < 0 || data.highestWave < 0
                 || data.victories < 0 || data.enemiesKilled < 0 || data.towersBuilt < 0 || data.cardsChosen < 0 || data.completedTasks == null)
             {
                 throw new InvalidOperationException("The local journey profile is invalid; the original file was preserved.");
             }
+
+            Camp = new CampProgress(tables, this);
+            if (data.version == 1 || loaded == null)
+            {
+                // 旧档案保留战绩；新档案与迁移只领取一次初始营地材料。
+                data = Copy(data);
+                data.camp = Camp.CreateInitial();
+            }
+
+            Camp.Validate(data.camp);
+            data.version = 2;
         }
 
         public int Progress(cfg.JourneyTask task)
@@ -105,7 +121,8 @@ namespace Game.HotUpdate.Client
                 towersBuilt = checked(data.towersBuilt + battle.Towers),
                 cardsChosen = checked(data.cardsChosen + battle.Cards),
                 completedTasks = new List<int>(data.completedTasks),
-                lastRunId = battle.RunId
+                lastRunId = battle.RunId,
+                camp = Camp.BattleLoot(battle.Victory)
             };
             foreach (var task in tasks)
             {
@@ -120,6 +137,33 @@ namespace Game.HotUpdate.Client
             store.Save(next);
             data = next;
             return true;
+        }
+
+        internal void SaveCamp(LocalCampData camp, int experience = 0)
+        {
+            Camp.Validate(camp);
+            var next = Copy(data);
+            next.camp = camp;
+            next.experience = checked(next.experience + experience);
+            store.Save(next);
+            data = next;
+        }
+
+        private static LocalJourneyData Copy(LocalJourneyData source)
+        {
+            return new LocalJourneyData
+            {
+                nickname = source.nickname,
+                experience = source.experience,
+                highestWave = source.highestWave,
+                victories = source.victories,
+                enemiesKilled = source.enemiesKilled,
+                towersBuilt = source.towersBuilt,
+                cardsChosen = source.cardsChosen,
+                lastRunId = source.lastRunId,
+                completedTasks = new List<int>(source.completedTasks),
+                camp = source.camp?.Copy()
+            };
         }
 
         private static int Metric(LocalJourneyData value, int metric)

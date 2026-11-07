@@ -1,6 +1,6 @@
 {
-  "stage": "forest-diorama-1",
-  "sdkCommit": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
+  "stage": "island-camp-hall",
+  "sdkCommit": "5bf37118c412ce6f188340fe75661e54c0d91515",
   "unity": "2022.3.62f1",
   "platform": "Linux / llvmpipe OpenGLCore",
   "resourceMode": "EditorSimulate for Play; separate YooAsset bundle build",
@@ -17,13 +17,16 @@
   "il2cppTested": false,
   "serverTested": false,
   "modelSuites": {
-    "project": 73,
+    "project": 80,
     "domain": 12,
     "accountSession": 13
   },
-  "tables": 12,
+  "tables": 14,
   "startupOwner": "AOT Game.Startup",
-  "businessFlow": "ClientFlow: player page -> tower defense -> player page",
-  "serverProfile": "Not connected; explicit local journey profile",
-  "startupDownloadUIProbe": "Synthetic native UI input25MiB/100MiB, not HTTP download acceptance"
+  "businessFlow": "ClientFlow: first arrival Story -> island camp hall -> tower defense -> island camp hall",
+  "serverProfile": "Not connected; explicit local journey and camp profile",
+  "startupDownloadUIProbe": "Synthetic native UI input25MiB/100MiB, not HTTP download acceptance",
+  "sdkRelease": "v0.1.0-preview.35",
+  "renderPipeline": "URP 14.0.12",
+  "models": "Simple geometry placeholders; final Meshy assets supplied by user"
 }

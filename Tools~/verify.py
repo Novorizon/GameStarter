@@ -70,7 +70,7 @@ def validate_project(root=ROOT):
     assert not (root / 'Assets/Resources/NovorizonHotUpdateSettings.json').exists()
     hot = json.loads((root / 'Assets/HotUpdate/Game.HotUpdate.asmdef').read_text())
     assert hot['name'] == 'Game.HotUpdate'
-    assert set(hot['references']) == {'ECS', 'Game.Startup', 'Game.Data.Generated', 'Luban.Runtime', 'Game.Framework.Data', 'Game.Framework.Resources.YooAsset', 'Game.Framework.Network', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Input', 'Game.Framework.UI', 'Game.Framework.Network.Unity', 'Unity.InputSystem', 'Game.Framework.HotUpdate', 'Unity.ugui', 'Unity.TextMeshPro'}
+    assert set(hot['references']) == {'ECS', 'Game.Startup', 'Game.Data.Generated', 'Luban.Runtime', 'Game.Framework.Data', 'Game.Framework.Resources.YooAsset', 'Game.Framework.Network', 'Game.Framework.Story', 'GpuAnimator', 'Game.Framework.Core', 'Game.Framework.Unity', 'Game.Framework.Audio', 'Game.Framework.Input', 'Game.Framework.UI', 'Game.Framework.Network.Unity', 'Unity.InputSystem', 'Game.Framework.HotUpdate', 'Unity.ugui', 'Unity.TextMeshPro'}
     hot_project = root / 'Verification~/HotUpdate/HotUpdate.csproj'
     model = ET.parse(hot_project).getroot()
     assert model.findtext('.//DisableTransitiveProjectReferences', '').lower() == 'true'
@@ -124,7 +124,7 @@ def main():
             subprocess.run(['git', 'init', '-q', str(checkout)], env=git_env, check=True)
             subprocess.run(['git', '-C', str(checkout), 'remote', 'add', 'origin', origin], env=git_env, check=True)
             subprocess.run(['git', '-C', str(checkout), 'fetch', '--depth', '1', '--filter=blob:none', 'origin', source.fragment], env=git_env, check=True)
-            subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder, 'Packages/com.novorizon.framework.hybridclr', 'Packages/com.novorizon.data', 'Packages/com.novorizon.framework.yooasset'], env=git_env, check=True)
+            subprocess.run(['git', '-C', str(checkout), 'sparse-checkout', 'set', subfolder, 'Packages/com.novorizon.framework.hybridclr', 'Packages/com.novorizon.data', 'Packages/com.novorizon.framework.yooasset', 'Packages/com.novorizon.story'], env=git_env, check=True)
             subprocess.run(['git', '-C', str(checkout), 'checkout', '--detach', '-q', 'FETCH_HEAD'], env=git_env, check=True)
             framework = checkout / subfolder
         framework = framework.resolve()

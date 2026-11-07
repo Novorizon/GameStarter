@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Game.HotUpdate.TowerDefense.Data;
@@ -24,6 +25,8 @@ namespace Game.HotUpdate.Client
         private bool artTransferred;
         private bool disposed;
         private bool entering;
+        private Task arrivalTask;
+        private readonly Queue<JourneyBattle> pendingResults = new Queue<JourneyBattle>();
         public ClientArt Art { get; private set; }
         public JourneyProgress Journey { get; private set; }
         public cfg.TdStage Stage => tables.TbTdStage.Get(1);
@@ -43,12 +46,6 @@ namespace Game.HotUpdate.Client
                 root = new GameObject("GameClient");
                 root.AddComponent<PrototypeAssetLifetime>().Own(new List<IDisposable> { Art });
                 artTransferred = true;
-                var camera = new GameObject("PlayerPageCamera").AddComponent<Camera>();
-                camera.transform.SetParent(root.transform, false);
-                camera.tag = "MainCamera";
-                camera.clearFlags = CameraClearFlags.SolidColor;
-                camera.backgroundColor = new Color(.08f, .14f, .11f);
-                camera.depth = -20;
                 if (EventSystem.current == null)
                 {
                     var input = new GameObject("ClientEventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
@@ -57,6 +54,7 @@ namespace Game.HotUpdate.Client
                 }
 
                 hub = PlayerHubView.Create(this, root.transform);
+                arrivalTask = ShowArrivalAsync();
                 Debug.Log("PLAYER_PAGE_READY");
             }
             catch
@@ -73,12 +71,19 @@ namespace Game.HotUpdate.Client
 
         public async Task EnterBattleAsync()
         {
-            if (disposed || entering || battle != null)
+            if (disposed || entering || battle != null || !Journey.Camp.ArrivalSeen || hub.ArrivalPlaying)
             {
                 return;
             }
 
             entering = true;
+            if (!SaveBattleProgress())
+            {
+                entering = false;
+                hub.ShowError("上一场补给尚未保存，请稍后再次出征重试。");
+                return;
+            }
+
             hub.Refresh();
             var leases = new List<IDisposable>();
             try
@@ -128,6 +133,26 @@ namespace Game.HotUpdate.Client
             }
         }
 
+        private async Task ShowArrivalAsync()
+        {
+            try
+            {
+                await hub.PlayArrivalAsync(lifetime.Token);
+            }
+            catch (OperationCanceledException) when (disposed)
+            {
+            }
+            catch (Exception error)
+            {
+                if (!disposed)
+                {
+                    hub.ShowError("序章未能完成，请重新进入营地后重试。");
+                }
+
+                Debug.LogException(error);
+            }
+        }
+
         private void RecordBattle(FightSession completed)
         {
             if (disposed || battle == null || !ReferenceEquals(battle.Session, completed))
@@ -135,7 +160,7 @@ namespace Game.HotUpdate.Client
                 return;
             }
 
-            Journey.Record(new JourneyBattle
+            pendingResults.Enqueue(new JourneyBattle
             {
                 RunId = battle.RunId,
                 Victory = completed.Phase == BattlePhase.Victory,
@@ -144,6 +169,30 @@ namespace Game.HotUpdate.Client
                 Towers = completed.Towers.Count,
                 Cards = completed.ChosenCardStacks.Values.Sum()
             });
+            SaveBattleProgress();
+        }
+
+        private bool SaveBattleProgress()
+        {
+            if (pendingResults.Count == 0)
+            {
+                return true;
+            }
+
+            try
+            {
+                while (pendingResults.Count > 0)
+                {
+                    Journey.Record(pendingResults.Peek());
+                    pendingResults.Dequeue();
+                }
+                return true;
+            }
+            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException)
+            {
+                Debug.LogWarning("Local battle progress could not be saved: " + error.Message);
+                return false;
+            }
         }
 
         public void ReturnToPlayerPage()
@@ -158,7 +207,12 @@ namespace Game.HotUpdate.Client
             battle.Dispose();
             battle = null;
             hub.gameObject.SetActive(true);
+            bool saved = SaveBattleProgress();
             hub.Refresh();
+            if (!saved)
+            {
+                hub.ShowError("本次战绩与补给尚未保存，下次出征时会重试。");
+            }
             Debug.Log("PLAYER_PAGE_RETURNED");
         }
 
@@ -171,6 +225,7 @@ namespace Game.HotUpdate.Client
 
             disposed = true;
             lifetime?.Cancel();
+            hub?.Stop();
             if (battle != null)
             {
                 battle.Dispose();

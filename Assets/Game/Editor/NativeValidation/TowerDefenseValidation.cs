@@ -21,7 +21,7 @@ using UnityEngine.UI;
 namespace Game.Editor
 {
     /// <summary>Real-Unity prototype acceptance. Run in batch mode without -quit; rendering requires a graphics device.</summary>
-    public static class TowerDefenseValidation
+    public static partial class TowerDefenseValidation
     {
         private static bool PhoneLayout => Array.IndexOf(Environment.GetCommandLineArgs(), "--novorizon-phone-layout") >= 0;
         private static string Output => PhoneLayout ? "Artifacts/TowerDefense/Phone" : "Artifacts/TowerDefense";
@@ -92,6 +92,7 @@ namespace Game.Editor
 
             Directory.CreateDirectory(Output);
             shots.Clear();
+            PrepareCampProfile();
             previousEnabled = EditorSettings.enterPlayModeOptionsEnabled;
             previousOptions = EditorSettings.enterPlayModeOptions;
             result = new Result
@@ -101,6 +102,7 @@ namespace Game.Editor
                 renderingValidated = false
             };
             result.graphicsDevice = SystemInfo.graphicsDeviceType.ToString();
+            result.renderPipeline = GraphicsSettings.currentRenderPipeline != null ? GraphicsSettings.currentRenderPipeline.GetType().Name : "BuiltIn";
             result.noGraphicsRequested = Array.IndexOf(Environment.GetCommandLineArgs(), "-nographics") >= 0;
             stage = "waiting-startup";
             finishing = false;
@@ -121,7 +123,7 @@ namespace Game.Editor
             pendingShot = null;
             view = null;
             game = null;
-            deadline = EditorApplication.timeSinceStartup + 180;
+            deadline = EditorApplication.timeSinceStartup + 240;
             EditorSettings.enterPlayModeOptionsEnabled = true;
             EditorSettings.enterPlayModeOptions = EnterPlayModeOptions.DisableDomainReload;
             EditorSceneManager.OpenScene("Assets/Scenes/Bootstrap.unity");
@@ -174,7 +176,7 @@ namespace Game.Editor
                 }
 
                 Require(failure == null, failure);
-                Require(EditorApplication.timeSinceStartup < deadline, "180-second acceptance deadline exceeded at " + stage);
+                Require(EditorApplication.timeSinceStartup < deadline, "240-second acceptance deadline exceeded at " + stage);
                 if (!EditorApplication.isPlaying)
                 {
                     return;
@@ -217,9 +219,10 @@ namespace Game.Editor
                         view = null;
                         Capture("player-page-returned", () =>
                         {
-                            Require(UnityEngine.Object.FindObjectOfType<PlayerHubView>() != null, "Returning did not restore the player page.");
+                            var page = UnityEngine.Object.FindObjectOfType<PlayerHubView>();
+                            Require(page != null, "Returning did not restore the player page.");
                             result.playerPageReturnVerified = true;
-                            Finish(true, "Player page, deployment/range input, six waves, journey updates and return/cleanup verified.");
+                            BeginCampReturn(page);
                         });
                         return;
                     }
@@ -299,6 +302,10 @@ namespace Game.Editor
                     {
                         var page = UnityEngine.Object.FindObjectOfType<PlayerHubView>();
                         Require(page != null, "Startup did not open the player page.");
+                        if (!PrepareCampBeforeBattle(page))
+                        {
+                            return;
+                        }
                         previousVictories = LocalStorageManager.Instance.Exists("local-journey.json")
                             ? LocalStorageManager.Instance.LoadJson<LocalJourneyData>("local-journey.json").victories : 0;
                         Capture("player-page", () =>
@@ -335,6 +342,11 @@ namespace Game.Editor
                 Require(game.Phase != BattlePhase.Defeat, "Automated build policy lost the real configured stage.");
                 if (game.Phase == BattlePhase.Victory)
                 {
+                    if (campSecondRun)
+                    {
+                        CompleteIslandHome();
+                        return;
+                    }
                     Capture("victory", () =>
                     {
                         Require(battleCaptured && cardsCaptured, "Required battle/card stages were not observed.");
@@ -812,6 +824,7 @@ namespace Game.Editor
 
         private static void Exit()
         {
+            RestoreCampProfile();
             EditorApplication.update -= Poll;
             EditorApplication.playModeStateChanged -= OnPlayState;
             Application.logMessageReceived -= CaptureError;
@@ -830,12 +843,19 @@ namespace Game.Editor
             public string stage;
             public string detail;
             public string graphicsDevice;
+            public string renderPipeline;
             public bool graphicsDeviceNull;
             public bool noGraphicsRequested;
             public bool renderingValidated;
             public bool shutdownVerified;
             public bool restartVerified;
             public bool defeatVerified;
+            public bool campStoryVerified;
+            public bool campMigrationVerified;
+            public bool campConstructionVerified;
+            public bool campTasksVerified;
+            public bool campHomeVerified;
+            public bool originalProfileRestored;
             public bool failedCreationCleanupVerified;
             public bool padHitAreasVerified;
             public bool pointerBuildVerified;

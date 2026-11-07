@@ -1,6 +1,6 @@
 {
-  "sdkCommit": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
-  "models": 73,
+  "sdkCommit": "5bf37118c412ce6f188340fe75661e54c0d91515",
+  "models": 80,
   "domain": 12,
   "accountSession": 13,
   "nativeUnity": "2022.3.62f1",
@@ -11,5 +11,7 @@
   "smokeMarkerVerifiedInEditor": true,
   "startupThemeCacheVerified": true,
   "startupDownloadUIProbe": "Synthetic native UI input 25MiB/100MiB, not HTTP download acceptance",
-  "clientFlow": "Player page -> tower defense -> player page"
+  "clientFlow": "First arrival Story -> island camp hall -> tower defense -> island camp hall",
+  "sdkRelease": "v0.1.0-preview.35",
+  "renderPipeline": "URP 14.0.12"
 }

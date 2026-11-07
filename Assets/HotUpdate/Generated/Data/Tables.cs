@@ -16,6 +16,8 @@ public partial class Tables
     public TbClientTheme TbClientTheme {get; }
     public TbJourneyTask TbJourneyTask {get; }
     public TbPlayerLevel TbPlayerLevel {get; }
+    public TbCampLevel TbCampLevel {get; }
+    public TbCampTask TbCampTask {get; }
     public TbExample TbExample {get; }
     public TbTdStage TbTdStage {get; }
     public TbTdRoutePoint TbTdRoutePoint {get; }
@@ -31,6 +33,8 @@ public partial class Tables
         TbClientTheme = new TbClientTheme(loader("tbclienttheme"));
         TbJourneyTask = new TbJourneyTask(loader("tbjourneytask"));
         TbPlayerLevel = new TbPlayerLevel(loader("tbplayerlevel"));
+        TbCampLevel = new TbCampLevel(loader("tbcamplevel"));
+        TbCampTask = new TbCampTask(loader("tbcamptask"));
         TbExample = new TbExample(loader("tbexample"));
         TbTdStage = new TbTdStage(loader("tbtdstage"));
         TbTdRoutePoint = new TbTdRoutePoint(loader("tbtdroutepoint"));
@@ -48,6 +52,8 @@ public partial class Tables
         TbClientTheme.ResolveRef(this);
         TbJourneyTask.ResolveRef(this);
         TbPlayerLevel.ResolveRef(this);
+        TbCampLevel.ResolveRef(this);
+        TbCampTask.ResolveRef(this);
         TbExample.ResolveRef(this);
         TbTdStage.ResolveRef(this);
         TbTdRoutePoint.ResolveRef(this);

@@ -14,12 +14,12 @@
     <ProjectReference Include="Runtime/Runtime.csproj" />
     <ProjectReference Include="HotUpdateContracts/HotUpdateContracts.csproj" />
     <ProjectReference Include="HotUpdate/HotUpdate.csproj" />
-    <Compile Include="../Assets/Game/Editor/**/*.cs" Exclude="../Assets/Game/Editor/NativeValidation/**/*.cs;../Assets/Game/Editor/TowerDefense*Setup.cs;../Assets/Game/Editor/StartupFontSetup.cs" />
+    <Compile Include="../Assets/Game/Editor/**/*.cs" Exclude="../Assets/Game/Editor/NativeValidation/**/*.cs;../Assets/Game/Editor/TowerDefense*Setup.cs;../Assets/Game/Editor/StartupFontSetup.cs;../Assets/Game/Editor/ClientRenderSetup.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ManagerContracts.cs" />
     <ProjectReference Include="YooAssetRuntime/YooAssetRuntime.csproj" />
     <Compile Include="GameDataScenarios.cs" />
-    <Compile Include="TowerDefenseDataScenarios.cs" /><Compile Include="JourneyScenarios.cs" />
+    <Compile Include="TowerDefenseDataScenarios.cs" /><Compile Include="JourneyScenarios.cs" /><Compile Include="CampScenarios.cs" />
     <Compile Include="RemoteReleaseScenarios.cs" />
     <Compile Include="GameDataEditorContracts.cs" />
     <Compile Include="$(YooAssetPackageRoot)/Editor/AssetBundleCollector/CollectRules/IAddressRule.cs" />

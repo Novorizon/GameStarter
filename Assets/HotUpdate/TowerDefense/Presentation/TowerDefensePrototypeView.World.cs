@@ -345,11 +345,12 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private Material MakeMaterial(Color color, bool unlit = false)
         {
-            var material = new Material(Shader.Find(unlit ? "Sprites/Default" : "Standard"));
+            bool urp = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null;
+            var material = new Material(Shader.Find(unlit ? "Sprites/Default" : urp ? "Universal Render Pipeline/Lit" : "Standard"));
             material.color = color;
             if (!unlit)
             {
-                material.SetFloat("_Glossiness", 0);
+                material.SetFloat(material.HasProperty("_Smoothness") ? "_Smoothness" : "_Glossiness", 0);
             }
 
             materials.Add(material);

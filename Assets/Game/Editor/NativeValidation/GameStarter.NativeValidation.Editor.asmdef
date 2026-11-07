@@ -13,7 +13,9 @@
     "Game.Data.Generated",
     "Unity.TextMeshPro",
     "Unity.InputSystem",
-    "Unity.ugui"
+    "Unity.ugui",
+    "Game.Framework.Story",
+    "Game.Framework.Data"
   ],
   "includePlatforms": [
     "Editor"

@@ -327,7 +327,14 @@ namespace Game.Editor
         {
             const string labels = "塔防肉鸽三选一选择本局强化基地金币波次开始战斗暂停继续升级已满级伤害射程攻速建造点防御塔查看确认返回重试胜利失败守护成功失守离线原型账号登录结算设置音量敌人来袭空点击下方圆圈显示实际攻击范围无法检查当前完成解除状态恭喜获得卡牌组合生命地图路线剩余冷却训练挑战准备 →·×：，。！";
             const string client = "翠林守卫森林旅人见习探索经验最高波次累计击败名敌防线旅程任务首战告捷赢得一次哨站防守筑起累计建造三座防御塔战地祝福选择张强化卡本地档案进度保存在此设备已达成出征准备营确认返回未完成的当前记录等级满资源初始化系统检查版本载入玩家页面游戏代码更新完成网络重新绿色区域部署按键取消请选择金币不足实际攻击范围";
-            var characters = new SortedSet<char>(labels + client);
+            string camp = File.ReadAllText("Assets/GameAssets/Camp/Story/Arrival.json");
+            foreach (string file in Directory.GetFiles("Assets/HotUpdate/Camp", "*.cs", SearchOption.AllDirectories))
+            {
+                camp += File.ReadAllText(file);
+            }
+
+            camp += "潮汐营地临时帐篷围栏石砌庭院海岛家园木材石料材料不足完成任务获取建设领取补给首战告捷";
+            var characters = new SortedSet<char>(labels + client + camp);
             for (char c = ' '; c <= '~'; c++)
             {
                 characters.Add(c);

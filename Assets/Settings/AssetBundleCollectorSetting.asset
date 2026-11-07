@@ -122,3 +122,50 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags:
         UserData:
+    - GroupName: CampMaps
+      GroupDesc:
+      AssetTags: maps
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/Camp/Art/Island.png
+        CollectorGUID: dfa997b7ff0146fe852a486b3d661ca0
+        CollectorType: 0
+        AddressRuleName: CampAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+    - GroupName: CampStory
+      GroupDesc:
+      AssetTags: story
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/Camp/Story/Arrival.json
+        CollectorGUID: ec406e6c16694246b51f0ec08b281836
+        CollectorType: 0
+        AddressRuleName: CampAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+    - GroupName: ClientRendering
+      GroupDesc:
+      AssetTags: rendering
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/Common/Rendering/WorldLit.mat
+        CollectorGUID: f5e141cca192940a693d67e7a1452de2
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+      - CollectPath: Assets/GameAssets/Common/Rendering/WorldSprite.mat
+        CollectorGUID: 15de7b4d4541cd4c297cbbf5a1305abd
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:

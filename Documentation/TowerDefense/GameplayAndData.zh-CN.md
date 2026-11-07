@@ -23,7 +23,7 @@ stateDiagram-v2
 
 ## 当前领域配置与后续拆表
 
-战斗 schema 是 [towerdefense.xml](../../Config/Luban/Defines/towerdefense.xml)，对应 8 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表；[client.xml](../../Config/Luban/Defines/client.xml) 定义主题、旅程任务、玩家等级 3 张表。加上 Example 共 12 张表。当前关卡为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡；静态 `DemoConfiguration` 仍是测试用的 5 波版本。
+战斗 schema 是 [towerdefense.xml](../../Config/Luban/Defines/towerdefense.xml)，对应 8 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表；[client.xml](../../Config/Luban/Defines/client.xml) 定义主题、旅程任务、玩家等级以及营地等级/任务 5 张表。加上 Example 共 14 张表。当前关卡为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡；静态 `DemoConfiguration` 仍是测试用的 5 波版本。营地配置与存档规则见[海岛说明](../Game/IslandCamp.zh-CN.md)。
 
 | 已有表 / bean | 主键和关系 | 关键字段 |
 | --- | --- | --- |

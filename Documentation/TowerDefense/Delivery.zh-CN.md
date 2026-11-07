@@ -1,46 +1,47 @@
 # 当前客户端流程与验收
 
-打开 `Assets/Scenes/Bootstrap.unity`：启动界面 → 玩家页面 → 出征 → 塔防 → 返回营地。SDK 固定提交以项目 manifest 为准。当前地图为 `forest-diorama-1`，6 波、7 个固定建造位置、18 个路线点、3 塔型、4 怪物型、7 张强化卡。
+打开 `Assets/Scenes/Bootstrap.unity`：启动界面 → 首次漂流序章 → 海岛营地大厅 → 出征塔防 → 返回营地。SDK 使用 `v0.1.0-preview.35` 对应固定 SHA `5bf37118c412ce6f188340fe75661e54c0d91515`；聚合包默认配置 URP 14，项目材质与资源依赖配套适配。
 
 ## 已实现
 
-- AOT 独立启动展示：普通启动使用步骤进度，有更新时使用 YooAsset 实际下载字节。`GameEntry` 只调用展示和 Manager API。
-- 启动图片、已知控件布局/文案/颜色走 YooAsset，成功加载后缓存供下次启动；首次启动有独立内置图片、布局和 TMP 字体。新增控件或行为仍须匹配 AOT 代码。
-- 热更 `ClientFlow` 协调玩家页面和战斗，`HotGame` 只调用模块。玩家页面显示头像、名称、等级、经验、战绩和三项旅程目标。
-- `JourneyProgress` 负责本地目标/等级和统计，保存成功后发布状态，同一局不会重复结算。界面明确标识本地档案；没有伪造服务器货币或正式领奖。
-- 12 张真实 Luban 表：8 张战斗、主题/任务/等级 3 张配置和 Example。具体结构与后续分组见[客户端与数据规划](../Game/ClientPlan.zh-CN.md)。
-- 地图是低多边形台地式 2D 预渲染图，保留统一格尺的砂岩路、桥梁、池塘和台地；平时不显示特殊建造格，选择塔卡后才描出未占用区域。
-- 塔、基地和怪物为共享网格的程序化 3D 低模。点塔退出建造并显示来自实际战斗数值的射程圈，升级和强化后同步变化。
-- 松绿/铜金面板、3×3 图标、守卫头像与森林城堡背景；文字全部 TMP。公共 UI/字体位于 `Assets/GameAssets/Common`，地图位于 TowerDefense，按 ui/fonts/maps 分组。
+- 海岛大厅：独立固定场景、玩家摘要、木材/石料、营地建设和海岛手记；替代原城堡背景玩家页，GameEntry/HotGame 仍只装配和调用业务模块。
+- 建设四级：临时帐篷 → 围栏营地 → 石砌庭院 → 海岛家园。材料、胜利条件与任务奖励来自 Luban，建设后更新真实 3D 外观。
+- SDK StoryPlayer 驱动三段漂流抵达对白，TMP 呈现；正文以 YooAsset story 资源发布。完成或主动跳过记录已抵达，取消/失败不冒充完成，奖励在任务页另行领取。
+- 本地建设、任务领取、战斗统计和补给使用同一份档案原子提交；失败不先扣材料/发奖励，同一当前战报不重复入账。旧档案保留战绩并初始化营地，真实 JsonUtility 的缺字段行为有单独验证。
+- 14 张真实 Luban 表：8 张战斗、主题/旅程任务/等级 3 张、营地等级/任务 2 张及 Example。结构与合理分组见[客户端规划](../Game/ClientPlan.zh-CN.md)。
+- 固定路线塔防：6 波、7 建造位置、18 路线点、3 塔型、4 怪物型、7 强化卡；闲置隐藏建造标记，选塔后显示可建位置，点塔显示实际领域射程。
+- 卡牌基础品级/颜色与表内图标已接通，抽牌仍为单池权重。飞入、粒子和主题扩展未在本轮制作。
+- AOT 启动展示继续保留：无下载显示步骤，有下载显示实际字节；图片/已知布局/文案缓存供下次启动。资源下载完成仍等业务就绪才退出展示。
+- imagegen 海岛底图、低模塔防地图、公共面板/图标/头像；文字全部 TMP。公共图像/字体和营地 maps/story/rendering 分类由 YooAsset 管理；运行时材质所需 Shader 有实际资源依赖。
 
 ## 当前验证
 
 | 项目 | 证据 |
 | --- | --- |
-| 项目回归 | 73 项；含真实 Luban 解码、关卡可通关、任务等级、重复结算与保存失败重试 |
-| 领域 / 账号协调 | 12 / 13 项；账号使用测试后端 |
-| Unity 脚本 | Unity 2022.3.62f1；8 Demo，11 Editor / 8 Player 程序集 |
-| 桌面实际渲染 | Linux / llvmpipe OpenGLCore，1440×789 |
-| 宽屏布局 | 同一 Editor 在 1440×665（约 19.5:9）渲染与操作验收，不是真机测试 |
-| 点击与建造 | 七个区域均未被 HUD 遮挡；真实 Input System 注入鼠标事件点选，塔卡回调与实际扣费/落点通过；闲置隐藏、建造时显示区域通过 |
-| 射程 | 点击另一座已建塔后，检查圆圈中心和半径与该塔领域状态一致 |
-| 战斗和玩家页 | 6 波胜利，126 击杀、0 漏怪、2178 tick、13 次升级、5 次选卡；胜败重开、旅程写入与返回页面刷新通过 |
-| 字体 | 战斗 TMP 46 / Legacy Text 0；玩家页面和启动展示也使用独立 TMP 字体 |
-| 启动展示 | 两轮真实 Play，普通启动/下载控件分支以及下一次启动读取缓存布局分别验证；下载控件使用25/100MiB的验证输入，不作为真实 HTTP 证据 |
-| 生命周期 | 进入/返回/重开及停止 Play 清理通过，业务模块使用独立于初始化操作令牌的生命周期 |
+| 项目回归 | 80 项；含真实 Luban 解码、旧档案迁移、四级建设、任务领取防重复、保存失败重试及战绩/材料共同提交 |
+| 领域 / 账号协调 | 12 / 13 项；账号使用测试后端，不代表正式登录/结算 |
+| Unity 脚本 | Unity 2022.3.62f1；9 Demo，13 Editor / 9 Player 程序集，包含新增 Story 示例 |
+| 包安装 | 聚合包安装、HybridCLR 嵌入、URP/热更配置完成；报告见 packages.json |
+| 原生流程 | Linux / llvmpipe OpenGLCore；1440×789 桌面与 1440×665 宽屏，报告明确实际渲染管线 |
+| 序章与营地 | 实际 SDK 三段对白、手记按钮、四级建造/外观、两场完整塔防胜利后返营地；测试恢复原有档案及存储备份 |
+| 迁移 | 真实 Unity JsonUtility 读取缺营地字段的旧 JSON；战绩保留/初始材料/新格式标记与损坏新格式拒绝 |
+| 战斗 | 每场 6 波、126 击杀、0 漏怪、2178 tick；两场共 26 次升级、10 次选卡，另含失败重开/胜利重开 |
+| 输入/射程 | 实际 Input System 鼠标事件和按钮路径验证部署/扣费、选卡防重入、塔选中射程、暂停和返回 |
+| 字体 | 战斗 TMP 46 / Legacy Text 0；营地/任务/剧情/启动展示也全部为 TMP |
+| 启动 | 两轮 Play 的就绪和退出、实际启动控件与缓存布局；25/100 MiB 下载控件验证输入不作为 HTTP 下载证据 |
 
-资源包实际输出以[资源报告](Validation/resource-build.json)为准，启动/界面代码改变后必须重建匹配的 AOT 主包基线，图片、表和热更代码需要配套发行。
+资源输出以[资源报告](Validation/resource-build.json)为准；上述 Editor 宽屏不是真机触控/物理尺寸/性能验收。SDK 和程序集引用变化需要重建匹配主包基线，图片、表和热更 DLL 要配套发行。
 
-## 画面与报告
+## 实际画面与报告
 
-[玩家页面](player-page.png) · [部署与射程](planning.png) · [战斗](battle.png) · [三选一卡](three-cards.png) · [返回后的任务](player-page-returned.png) · [宽屏建造模式](phone-deployment-mode.png) · [宽屏玩家页](phone-player-page.png)。全部是实际 Unity 渲染帧。
+[漂流序章](arrival-story.png) · [帐篷营地](camp-tent.png) · [海岛手记](camp-missions.png) · [围栏](camp-fence.png) · [庭院](camp-courtyard.png) · [家园](camp-home.png) · [塔防](battle.png) · [品级卡牌](three-cards.png)。这些为 Unity 实际渲染帧。
 
-[桌面](Validation/prototype.json)、[宽屏](Validation/phone-layout.json)、[编译](Validation/player-compile.json)、[程序集](Validation/sample-assemblies.json)、[资源包](Validation/resource-build.json)、[输入范围](Validation/inputs.json)。启动生命周期报告见项目的 [EntryStartup](../Validation/EntryStartup/)。
+[桌面](Validation/prototype.json)、[宽屏](Validation/phone-layout.json)、[脚本编译](Validation/player-compile.json)、[程序集](Validation/sample-assemblies.json)、[包安装](Validation/packages.json)、[资源包](Validation/resource-build.json)、[输入范围](Validation/inputs.json)。启动生命周期报告见 [EntryStartup](../Validation/EntryStartup/)。
 
-主界面/战斗验收入口为 `Game.Editor.TowerDefenseValidation.Run`；带 `--novorizon-phone-layout` 检查宽屏。启动与缓存验收入口为 `Game.Editor.GameEntryValidation.Run`。这些 Play 验收不传 `-quit`，由完成回调退出。
+验收入口：`Game.Editor.TowerDefenseValidation.Run`，加 `--novorizon-phone-layout` 检查宽屏；`Game.Editor.GameEntryValidation.Run` 验证启动与退出。这些 Play 验收不加 `-quit`。
 
-## 规划与边界
+## 规划与范围
 
-[Meshy 清单](../Game/MeshyBrief.zh-CN.md)说明模型优先级、尺寸、坐标轴、动作和挂点。[业务规划](../Game/ClientPlan.zh-CN.md)说明正式账号/任务协议、合理表分组、近战/远程 NPC 状态机与避让。固定路线阶段先考虑队列间距和走廊内有限偏移，当前没有引入 RVO 或动态堵路。
+[海岛说明](../Game/IslandCamp.zh-CN.md)记录模块、数据、存档与玩法规则。[Meshy 清单](../Game/MeshyBrief.zh-CN.md)包含帐篷/围栏/庭院/小屋和战斗模型制作要求；当前仅保留 Cube/简单几何体占位，正式模型、动画与 LOD 由用户通过 Meshy 提供。
 
-正式服务登录、服务器经济/任务领奖、IL2CPP、硬件 GPU、手机触控/性能、声音、正式角色动画和 LOD 尚未作通过声明。当前炮塔仍为单体即时命中，台地/阶梯是图像表现，不运行 3D 地形导航。
+[网络核对](../Game/ServerIntegration.zh-CN.md)已补用户的成功交叉验证与本实例 VPN disabled 的实时证据。本项目仍未执行正式服务器登录/经济/领奖，当前材料是本地玩法。IL2CPP、手机设备/性能、硬件 GPU、声音与完整媒体播放未作为通过声明。地图台地是 2D 表现，当前未引入 RVO 或动态堵路。
