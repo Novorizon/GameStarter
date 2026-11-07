@@ -8,6 +8,7 @@
 - [Demo 入口](Documentation/Demos.zh-CN.md)：示例前置条件和预期结果。
 - [更新站部署](Deployment/README.md)：Nginx、目录与上传顺序。
 - [验证范围](VALIDATION.md)：模型回归与原生验收分别记录。
+- [SDK 协作](Documentation/SDKCoordination.zh-CN.md)：包维护分工、接口需求和固定提交交付。
 - [塔防业务原型](Documentation/TowerDefense/README.zh-CN.md)：本分支的玩法、9 张业务表、逻辑/表现分层、账号与结算契约、UI 与地图方案。
 - [塔防本轮交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)：实际 Unity 画面/通关结果、已实现边界和仍待补验的项目。
 
