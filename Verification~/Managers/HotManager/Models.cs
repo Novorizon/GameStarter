@@ -8,13 +8,12 @@ using Game.Framework;
 // 这里只验证 GameEntry 的调用顺序；真实加载器由包仓库的独立用例验证。
 namespace Game.Framework.HotUpdate
 {
-    public sealed class HotUpdateManager : ConfigurableSingleton<HotUpdateManager>, IDisposable
+    public sealed class HotUpdateManager : Singleton<HotUpdateManager>, IDisposable
     {
         private CancellationTokenSource lifetime;
         private Task startup;
         private bool disposed;
         private IGameModule hotGame;
-        public static HotUpdateManager Instance => GetOrCreateInstance(() => new HotUpdateManager());
         private UpdateSettings settings;
         private object startupContext;
         public static string GetPlatformId() => "windows-x64";

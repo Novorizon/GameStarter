@@ -15,10 +15,10 @@ namespace Game
 
             try
             {
-                await WaitUntilReadyAsync();
+                await startupTask;
                 if (ReferenceEquals(hotUpdate, current))
                 {
-                    NativeSmokeExit(0);
+                    NativeSmokeExit(State == StartupState.Ready ? 0 : 1);
                 }
             }
             catch (OperationCanceledException)

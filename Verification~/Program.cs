@@ -79,6 +79,30 @@ internal static partial class Program
         Console.WriteLine($"PASS {passed} lifecycle, package planning and installer scenarios (Unity/UPM API models; not native Unity).");
     }
 
+    // Test orchestration only: production startup is driven by GameEntry.OnStart.
+    private static async Task WaitForEntryReadyAsync(GameEntry entry)
+    {
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        var ownerField = typeof(GameEntry).GetField("hotUpdate", flags);
+        var owner = ownerField.GetValue(entry);
+        var task = (Task)typeof(GameEntry).GetField("startupTask", flags).GetValue(entry);
+        if (owner == null || task == null)
+        {
+            throw new InvalidOperationException("Entry has not started.");
+        }
+
+        await task;
+        if (!ReferenceEquals(owner, ownerField.GetValue(entry)))
+        {
+            throw new OperationCanceledException("Entry lifetime ended.");
+        }
+
+        if (entry.State != StartupState.Ready)
+        {
+            throw new InvalidOperationException("Entry did not become ready.");
+        }
+    }
+
     private static void Check(string name, Action test)
     {
         try
@@ -167,7 +191,7 @@ internal static partial class Program
         Equal(StartupState.NotStarted, entry.State);
         typeof(GameEntry).GetMethod("ResumeEntry", Static).Invoke(null, null);
         True(ReferenceEquals(entry, GameEntry.Instance));
-        Complete(entry.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(entry));
         Equal(StartupState.Ready, entry.State);
         ResetEntry();
     }
@@ -451,7 +475,7 @@ internal static partial class Program
         ResetEntry();
         ManagerContracts.HotGameFactory = () => new BareHotGame();
         var entry = CreateEntry();
-        Complete(entry.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(entry));
         Equal(StartupState.Ready, entry.State);
         True(!ManagerContracts.Calls.Contains("ui") && !ManagerContracts.Calls.Contains("input"));
         Complete(entry.ShutdownAsync());
@@ -493,7 +517,7 @@ internal static partial class Program
         Equal("start", string.Join(",", ManagerContracts.HotCalls));
         True(!ManagerContracts.Calls.Contains("ui"));
         pending.SetResult(true);
-        Complete(entry.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(entry));
         Equal("start", string.Join(",", ManagerContracts.HotCalls));
         ResetEntry();
     }
@@ -516,7 +540,7 @@ internal static partial class Program
         ResetEntry();
         ManagerContracts.UIFailure = new InvalidOperationException("UI initialization failed");
         var entry = CreateEntry();
-        Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
+        Throws<InvalidOperationException>(() => Complete(WaitForEntryReadyAsync(entry)));
         Equal("start", string.Join(",", ManagerContracts.HotCalls));
         ResetEntry();
     }
@@ -543,7 +567,7 @@ internal static partial class Program
         };
         var entry = CreateEntry();
         Equal(StartupState.Starting, entry.State);
-        Task ready = entry.WaitUntilReadyAsync();
+        Task ready = WaitForEntryReadyAsync(entry);
         True(!ready.IsCompleted);
         _ = GameEntry.Instance;
         Equal("start", string.Join(",", ManagerContracts.HotCalls));
@@ -588,7 +612,7 @@ internal static partial class Program
         ManagerContracts.HotInitialization = _ => Task.FromException(new InvalidOperationException("hot failed"));
         var entry = CreateEntry();
         Equal(StartupState.Failed, entry.State);
-        Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
+        Throws<InvalidOperationException>(() => Complete(WaitForEntryReadyAsync(entry)));
         True(!UI.UIManager.TryGetInstance(out _));
         Complete(entry.ShutdownAsync());
         Equal("hot", ManagerContracts.Cleanup.First());
@@ -610,7 +634,7 @@ internal static partial class Program
             Equal("hot", ManagerContracts.Cleanup.First());
             True(!UI.UIManager.TryGetInstance(out _));
             typeof(GameEntry).GetMethod("ResumeEntry", Static).Invoke(null, null);
-            Complete(entry.WaitUntilReadyAsync());
+            Complete(WaitForEntryReadyAsync(entry));
             True(ReferenceEquals(entry, GameEntry.Instance));
         }
 
@@ -660,7 +684,7 @@ internal static partial class Program
         int errors = Debug.Exceptions.Count;
         var entry = CreateEntry();
         Equal(StartupState.Failed, entry.State);
-        Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
+        Throws<InvalidOperationException>(() => Complete(WaitForEntryReadyAsync(entry)));
         Equal(errors + 1, Debug.Exceptions.Count);
         Equal("resources-initialize", string.Join(",", ManagerContracts.StartupSteps));
         Equal(0, ManagerContracts.Calls.Count);
@@ -682,7 +706,7 @@ internal static partial class Program
         True(ManagerContracts.LastUpdateSettings == null);
         Equal(0, ManagerContracts.Calls.Count);
         pending.SetResult(true);
-        Complete(entry.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(entry));
         Equal(StartupState.Ready, entry.State);
         Equal("resources-initialize,hot-configure,hot-start,content-prepare,hot-game", string.Join(",", ManagerContracts.StartupSteps));
         ResetEntry();
@@ -705,7 +729,7 @@ internal static partial class Program
         ManagerContracts.ResourcePackageInitialization = pending.Task;
         var first = CreateEntry();
         Equal(StartupState.Starting, first.State);
-        var ready = first.WaitUntilReadyAsync();
+        var ready = WaitForEntryReadyAsync(first);
         True(!HotUpdateManager.IsCreated);
         Complete(first.ShutdownAsync());
         pending.SetResult(true);
@@ -715,7 +739,7 @@ internal static partial class Program
         True(!UI.UIManager.TryGetInstance(out _));
         ManagerContracts.ResourcePackageInitialization = Task.FromResult(true);
         var next = CreateEntry();
-        Complete(next.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(next));
         Equal(StartupState.Ready, next.State);
         Complete(next.ShutdownAsync());
         ResetEntry();
@@ -725,7 +749,7 @@ internal static partial class Program
     {
         ResetEntry();
         var first = CreateEntry();
-        Complete(first.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(first));
         var progress = Game.Resource.ResourceManager.Instance.LastOptions.Progress;
         string readyMessage = first.StartupMessage;
         int totalCount = first.DownloadProgress.TotalCount;
@@ -737,7 +761,7 @@ internal static partial class Program
         Complete(first.ShutdownAsync());
         progress.Report(new Game.Resource.ResourceDownloadProgress(9, 4, 200, 70));
         var next = CreateEntry();
-        Complete(next.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(next));
         FlushModelCallbacks();
         Equal(StartupState.Ready, next.State);
         Equal("Ready", next.StartupMessage);
@@ -759,7 +783,7 @@ internal static partial class Program
         InstallModelUpdateKey();
         using var workflow = new GameHotUpdate(ResourceMode.Offline, false);
         var entry = CreateEntry(resourceMode: ResourceMode.Offline);
-        Complete(entry.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(entry));
         Equal(StartupState.Ready, entry.State);
         True(!ManagerContracts.LastUpdateSettings.enableRemote);
         True(ManagerContracts.LastUpdateSettings.usePackagedReleaseOnly);
@@ -781,7 +805,7 @@ internal static partial class Program
         // Model release selection switches its prepared candidate before constructing the hot game.
         ManagerContracts.HotInitialization = token => ManagerContracts.LastUpdateSettings.prepareContentAsync(online, token);
         var entry = CreateEntry(resourceMode: ResourceMode.Online);
-        Complete(entry.WaitUntilReadyAsync());
+        Complete(WaitForEntryReadyAsync(entry));
         Equal(StartupState.Ready, entry.State);
         True(ManagerContracts.LastUpdateSettings.enableRemote);
         True(!ManagerContracts.LastUpdateSettings.usePackagedReleaseOnly);

@@ -11,9 +11,8 @@ namespace Game.Framework.Scenes
     {
     }
 
-    public sealed class SceneManager : ConfigurableSingleton<SceneManager>, IDisposable
+    public sealed class SceneManager : Singleton<SceneManager>, IDisposable
     {
-        public static SceneManager Instance => GetOrCreateInstance(() => new SceneManager());
         public bool Initialized
         {
             get;

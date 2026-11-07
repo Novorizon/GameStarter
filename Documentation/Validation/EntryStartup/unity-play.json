@@ -22,8 +22,8 @@
         {
             "mode": "Online",
             "editorSimulation": true,
-            "entryInstanceId": 21160,
-            "viewInstanceId": -1466,
+            "entryInstanceId": 21156,
+            "viewInstanceId": -1454,
             "viewName": "TowerDefensePrototype",
             "gameReadyMarker": true,
             "towerDefenseReadyMarker": true,
@@ -38,8 +38,8 @@
         {
             "mode": "Offline",
             "editorSimulation": true,
-            "entryInstanceId": 21238,
-            "viewInstanceId": -2350,
+            "entryInstanceId": 21234,
+            "viewInstanceId": -2338,
             "viewName": "TowerDefensePrototype",
             "gameReadyMarker": true,
             "towerDefenseReadyMarker": true,

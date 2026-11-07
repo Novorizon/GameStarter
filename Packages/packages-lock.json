@@ -14,54 +14,54 @@
       "hash": "061314200e2f03307c4d90b448e1de7b85431905"
     },
     "com.novorizon.ability": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ability#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ability#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.audio": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.audio#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.audio#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.novorizon.framework": "0.18.0-preview.5",
+        "com.novorizon.framework": "0.18.0-preview.6",
         "com.unity.modules.audio": "1.0.0"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.data": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.data#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.data#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.novorizon.framework": "0.18.0-preview.5",
+        "com.novorizon.framework": "0.18.0-preview.6",
         "com.unity.modules.jsonserialize": "1.0.0",
         "com.code-philosophy.luban": "1.2.0"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.ecs": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ecs#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ecs#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.novorizon.framework": "0.18.0-preview.5",
+        "com.novorizon.framework": "0.18.0-preview.6",
         "com.unity.mathematics": "1.2.6"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.framework": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.modules.jsonserialize": "1.0.0"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.framework.all": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.all#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -80,66 +80,66 @@
         "com.unity.inputsystem": "1.11.2",
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.framework.hybridclr": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.hybridclr#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.hybridclr#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.novorizon.framework": "0.18.0-preview.5",
+        "com.novorizon.framework": "0.18.0-preview.6",
         "com.code-philosophy.hybridclr": "9.0.3",
         "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.framework.ui": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.ui#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.ui#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
-        "com.novorizon.framework": "0.18.0-preview.5"
+        "com.novorizon.framework": "0.18.0-preview.6"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.framework.yooasset": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.yooasset#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework.yooasset#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.novorizon.framework": "0.18.0-preview.5",
+        "com.novorizon.framework": "0.18.0-preview.6",
         "com.tuyoogame.yooasset": "2.3.18"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.gpuanimator": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.gpuanimator#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.gpuanimator#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.novorizon.framework": "0.18.0-preview.5"
+        "com.novorizon.framework": "0.18.0-preview.6"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.input": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.input#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.input#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.novorizon.framework": "0.18.0-preview.5",
+        "com.novorizon.framework": "0.18.0-preview.6",
         "com.unity.inputsystem": "1.11.2",
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.novorizon.rtree": {
-      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.rtree#a3e531d0ed3ac11748324bc655f1b29cc3113821",
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.rtree#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a3e531d0ed3ac11748324bc655f1b29cc3113821"
+      "hash": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf"
     },
     "com.tuyoogame.yooasset": {
       "version": "https://github.com/tuyoogame/YooAsset.git?path=/Assets/YooAsset#4b6a8ca4064d7a59ba129acec8fecf134e86236e",
