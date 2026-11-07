@@ -65,7 +65,7 @@ namespace Game.HotUpdate.Client
                 Object.Destroy(child.gameObject);
             }
 
-            var list = CampUI.ScrollList("WaveList", waveArea, 0, 0, 1, 1, plan.Briefing.Waves.Count * 83);
+            var list = CampUI.ScrollList("WaveList", waveArea, 0, 0, 1, 1, plan.Briefing.Waves.Count * 100);
             var ui = new CampUI(owner.Art);
             for (int i = 0; i < plan.Briefing.Waves.Count; i++)
             {
@@ -73,7 +73,7 @@ namespace Game.HotUpdate.Client
                 float top = 1 - (float)i / plan.Briefing.Waves.Count;
                 string enemies = string.Join(" · ", wave.Enemies.Select(enemy => enemy.Name + " ×" + enemy.Count));
                 var row = ui.Panel("Wave " + wave.Number, list, 0, top - .95f / plan.Briefing.Waves.Count, 1, top);
-                ui.Text("WaveSummary", row, .055f, .10f, .95f, .90f, 20, "第 " + wave.Number + " 波 · " + wave.EnemyCount + " 名\n" + enemies, CampUI.Cream);
+                ui.Text("WaveSummary", row, .055f, .14f, .95f, .86f, 22, "第 " + wave.Number + " 波 · " + wave.EnemyCount + " 名\n" + enemies, CampUI.Cream);
             }
 
             Refresh();

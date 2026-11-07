@@ -40,7 +40,7 @@ namespace Game.HotUpdate.Client
             records = ui.Text("Records", panel, .06f, .49f, .94f, .60f, 23, "", CampUI.Cream);
             ui.Text("GoalsHeading", panel, .06f, .43f, .94f, .49f, 25, "旅程目标 · 达成后自动结算经验", CampUI.Gold);
             int count = journey.Tasks.Count;
-            var list = CampUI.ScrollList("JourneyGoals", panel, .05f, .105f, .95f, .43f, count * 83);
+            var list = CampUI.ScrollList("JourneyGoals", panel, .05f, .105f, .95f, .43f, count * 110);
             for (int i = 0; i < count; i++)
             {
                 var task = journey.Tasks[i];

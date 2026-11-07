@@ -2,14 +2,14 @@
     "Summary": {
         "YooVersion": "2.3.18",
         "UnityVersion": "2022.3.62f1",
-        "BuildDate": "11/07/2026 17:51:43",
-        "BuildSeconds": 45,
+        "BuildDate": "11/07/2026 19:51:10",
+        "BuildSeconds": 9,
         "BuildTarget": 24,
         "BuildPipeline": "BuiltinBuildPipeline",
         "BuildBundleType": 2,
         "BuildPackageName": "DefaultPackage",
-        "BuildPackageVersion": "20261107175056114",
-        "BuildPackageNote": "11/07/2026 17:50:56",
+        "BuildPackageVersion": "20261107195100154",
+        "BuildPackageNote": "11/07/2026 19:51:00",
         "UniqueBundleName": false,
         "EnableAddressable": true,
         "SupportExtensionless": true,
@@ -37,7 +37,7 @@
         "AssetFileTotalCount": 29,
         "MainAssetTotalCount": 26,
         "AllBundleTotalCount": 10,
-        "AllBundleTotalSize": 19930363,
+        "AllBundleTotalSize": 20106605,
         "EncryptedBundleTotalCount": 0,
         "EncryptedBundleTotalSize": 0
     },
@@ -74,7 +74,7 @@
                 "fonts"
             ],
             "MainBundleName": "assets_gameassets_common_fonts_gameui.bundle",
-            "MainBundleSize": 626624,
+            "MainBundleSize": 802866,
             "DependAssets": [
                 {
                     "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.otf",
@@ -415,10 +415,10 @@
         },
         {
             "BundleName": "assets_gameassets_common_fonts_gameui.bundle",
-            "FileName": "bbde552b23ab6f5ba5a015cf33a579cd.bundle",
-            "FileHash": "bbde552b23ab6f5ba5a015cf33a579cd",
-            "FileCRC": 3123856218,
-            "FileSize": 626624,
+            "FileName": "9a6533fe23f954337b361e40990140f0.bundle",
+            "FileHash": "9a6533fe23f954337b361e40990140f0",
+            "FileCRC": 270865387,
+            "FileSize": 802866,
             "Encrypted": false,
             "Tags": [
                 "fonts"

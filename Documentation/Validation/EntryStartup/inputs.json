@@ -1,6 +1,6 @@
 {
   "sdkCommit": "5bf37118c412ce6f188340fe75661e54c0d91515",
-  "models": 80,
+  "models": 92,
   "domain": 12,
   "accountSession": 13,
   "nativeUnity": "2022.3.62f1",
@@ -13,5 +13,9 @@
   "startupDownloadUIProbe": "Synthetic native UI input 25MiB/100MiB, not HTTP download acceptance",
   "clientFlow": "First arrival Story -> island camp hall -> tower defense -> island camp hall",
   "sdkRelease": "v0.1.0-preview.35",
-  "renderPipeline": "URP 14.0.12"
+  "renderPipeline": "URP 14.0.12",
+  "businessFlow": "First arrival Story -> island camp/profile/tasks -> expedition preparation -> tower defense -> island camp",
+  "expeditionSeedPolicy": "Fresh local seed per expedition; accepted plan retained for resource retry; in-battle restart retains seed",
+  "rewardPolicy": "Camp reward level captured at departure, including pending save retries",
+  "pauseValidation": "Unity SendMessage invokes real focus/pause callbacks with nested manual/return pauses; not OS or device event acceptance"
 }

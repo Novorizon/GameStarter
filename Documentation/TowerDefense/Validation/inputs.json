@@ -17,16 +17,19 @@
   "il2cppTested": false,
   "serverTested": false,
   "modelSuites": {
-    "project": 80,
+    "project": 92,
     "domain": 12,
     "accountSession": 13
   },
   "tables": 14,
   "startupOwner": "AOT Game.Startup",
-  "businessFlow": "ClientFlow: first arrival Story -> island camp hall -> tower defense -> island camp hall",
+  "businessFlow": "First arrival Story -> island camp/profile/tasks -> expedition preparation -> tower defense -> island camp",
   "serverProfile": "Not connected; explicit local journey and camp profile",
   "startupDownloadUIProbe": "Synthetic native UI input25MiB/100MiB, not HTTP download acceptance",
   "sdkRelease": "v0.1.0-preview.35",
   "renderPipeline": "URP 14.0.12",
-  "models": "Simple geometry placeholders; final Meshy assets supplied by user"
+  "models": 92,
+  "expeditionSeedPolicy": "Fresh local seed per expedition; accepted plan retained for resource retry; in-battle restart retains seed",
+  "rewardPolicy": "Camp reward level captured at departure, including pending save retries",
+  "pauseValidation": "Unity SendMessage invokes real focus/pause callbacks with nested manual/return pauses; not OS or device event acceptance"
 }
