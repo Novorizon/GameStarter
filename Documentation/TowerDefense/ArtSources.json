@@ -3,40 +3,56 @@
   "assets": [
     {
       "path": "Assets/GameAssets/TowerDefense/Art/Map.png",
-      "description": "Low-poly raised forest diorama with stone roads, bridge, ponds, terrace and seven empty square pads. The full map is a 2D pre-rendered sprite, not runtime 3D terrain.",
-      "promptSummary": "Use the supplied low-poly diorama reference, high overhead orthographic camera, slight yaw, a thick rectangular grass-tile island with one winding S road and seven empty pads; no units, buildings or UI; transparent outside.",
-      "import": "Single Sprite; 1672x941; original generated PNG, no pixel edits.",
+      "description": "Reference-2 low-poly raised diorama. No baked construction markers; grass and sandstone paving use comparable visual units.",
+      "promptSummary": "Retain the diorama road/bridge/pond geometry and camera; remove seven white construction pads and fill ordinary grass; enlarge road paving seams to grass-tile scale.",
+      "import": "1672x941 RGBA original imagegen edit, Single Sprite; no pixel post-processing.",
       "alignment": {
-        "logicalWidth": 22,
-        "logicalDepth": 15.12,
-        "cameraPitchDegrees": 55,
+        "width": 22,
+        "depth": 15.12,
+        "cameraPitch": 55,
         "routePoints": 18,
-        "buildPads": 7,
+        "buildRegions": 7,
         "pixelToLogical": "x=(pixelX/1672-0.5)*22000; y=(0.5-pixelY/941)*15120"
       },
-      "sha256": "6a0d183e3533ac8950b6606355e7778b21b0e29a0aa3c0256a2deef628456960"
+      "sha256": "13d335ec4e67c35f86dee3e4577ae3150dbfb47d06d08b9cd63d7b8774f9df83"
     },
     {
-      "path": "Assets/GameAssets/TowerDefense/Art/CardIcons.png",
-      "description": "3x3 transparent low-poly atlas: arrow tower, crystal tower, cannon, damage, attack speed, range, gold, repair, wave emblem.",
-      "promptSummary": "Nine isolated low-poly forest kingdom icons, equal 3x3 cells, warm upper-left light, sandstone/blue/teal/brass, transparent background, no text.",
-      "import": "Texture2D; NPOT scaling disabled; runtime Sprite cells, no pixel edits.",
+      "path": "Assets/GameAssets/Common/UI/Icons.png",
+      "description": "Nine consistent low-poly tower/combat/reward icons.",
+      "promptSummary": "3x3 transparent sprite sheet; arrow/crystal/cannon towers, damage/speed/range/gold/repair/wave; no text.",
+      "import": "NPOT scaling disabled; runtime sprite cells.",
       "sha256": "b2b7575069ae04f0570f9a133800594177317dfadb3d1bc751889dff7f735d59"
     },
     {
-      "path": "Assets/GameAssets/TowerDefense/Art/CardFrame.png",
-      "description": "Pine-green and antique-brass panel with faceted stone corner joints, used by HUD, buttons and upgrade cards.",
-      "promptSummary": "A square front-facing nine-slice UI panel; quiet deep forest green center, straight edges, small brass and stone corner joints, transparent outside; no text or symbols.",
-      "import": "Single Sprite; 180px borders; sliced Image, pixelsPerUnitMultiplier=7; original generated PNG.",
+      "path": "Assets/GameAssets/Common/UI/Panel.png",
+      "description": "Pine-green/antique-brass nine-slice UI skin.",
+      "promptSummary": "Front-facing square with quiet forest-green center, straight edges and small faceted brass/stone corners, transparent outside.",
+      "import": "Single Sprite, 180px borders, sliced Images at pixelsPerUnitMultiplier=7.",
       "sha256": "67c69dcbaf74563c53db064bcc1f8d20cdc527892f48cc11e77d067cba6baf6b"
+    },
+    {
+      "path": "Assets/GameAssets/Common/UI/Avatar.png",
+      "description": "Default local guardian avatar.",
+      "promptSummary": "Friendly low-poly guardian bust, chestnut hair, moss-green cloak and blue/ivory armor; warm studio light; transparent background, no text.",
+      "import": "Single Sprite; generated PNG unchanged.",
+      "sha256": "0ee607691495460a3fb53fe7f457c18e96a41eb887de80b5f80fb2383d6fbc24"
+    },
+    {
+      "path": "Assets/GameAssets/Common/Startup/Background.bytes",
+      "description": "Launch/player-page forest citadel background, also cached for next launch.",
+      "promptSummary": "Premium low-poly blue-roof forest citadel on left, sandstone courtyard and turquoise creek, warm cinematic light, calm dark valley on right for player/task UI; no baked interface or text.",
+      "import": "Original PNG stored as TextAsset bytes; runtime decode plus versioned resource delivery. Built-in Resources/Bootstrap/Background.png is the same source image imported at max1024 as fallback.",
+      "sha256": "a1871398a6bce2dc100b344beeaf5e0ba19f6fb0c7905c6f1d65ee810611dd45"
     }
   ],
   "font": {
     "family": "Tower Defense UI",
     "source": "Noto Sans CJK SC Regular (Debian fonts-noto-cjk)",
     "modification": "GB2312/Latin-1/punctuation subset, renamed family",
-    "license": "SIL Open Font License 1.1; see distributed Noto-CJK.txt"
+    "license": "SIL Open Font License 1.1; see distributed Noto-CJK.txt",
+    "runtimePath": "Assets/GameAssets/Common/Fonts/GameUI.asset",
+    "startupPath": "Assets/Resources/Bootstrap/StartupFont.asset (independent font/OTF, same licensed subset source)"
   },
-  "models": "Runtime faceted stone towers (crossbow/crystal/cannon), blue-roof keep and chibi forest raiders. Shared generated meshes and contact shadows, no authored character animation or production FBX assets.",
+  "models": "Shared procedural faceted stone/crossbow/crystal/cannon towers, blue-roof keep and raiders; Meshy replacement specifications in Documentation/Game/MeshyBrief.zh-CN.md. Authored animation/LOD are pending.",
   "generatedDate": "2026-11-07"
 }

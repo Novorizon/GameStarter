@@ -25,8 +25,8 @@ internal static partial class Program
             Equal(StartupState.Ready, entry.State);
             Equal(1, ManagerContracts.Calls.Count(name => name == "tables"));
             True(ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdstage") && ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdcard"));
-            Equal(11, ManagerContracts.DataAcquisitions.Count);
-            Equal(11, ManagerContracts.LeasesReleased);
+            Equal(13, ManagerContracts.DataAcquisitions.Count);
+            Equal(13, ManagerContracts.LeasesReleased);
             Complete(entry.ShutdownAsync());
             True(!DataManager.IsCreated);
             ResetEntry();
@@ -46,7 +46,7 @@ internal static partial class Program
             Complete(ready);
             Equal(StartupState.Ready, entry.State);
             Equal(2, DataManager.Instance.Get<cfg.Tables>().TbExample.DataList.Count);
-            Equal(11, ManagerContracts.LeasesReleased);
+            Equal(13, ManagerContracts.LeasesReleased);
             ResetEntry();
         });
         Check("invalid table bytes fail startup without publishing a partial Tables snapshot", () =>

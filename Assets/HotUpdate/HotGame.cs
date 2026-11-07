@@ -13,6 +13,7 @@ using Game.Framework.Network.Unity;
 using Game.Framework.Storage;
 using Game.Framework.Timing;
 using Game.Resource;
+using Game.HotUpdate.Client;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,6 +29,7 @@ namespace Game.HotUpdate
         private GameStartupOptions options;
         private bool stopped;
         private bool managersStarted;
+        private ClientFlow client;
 
         public async Task InitializeAsync(IGameHost gameHost, CancellationToken token)
         {
@@ -93,7 +95,8 @@ namespace Game.HotUpdate
 
             var example = tables.TbExample.Get(1);
             host.Log("LUBAN_EXAMPLE " + example.Id + " " + example.Name);
-            await StartTowerDefenseAsync(tables, token);
+            client = new ClientFlow();
+            await client.StartAsync(tables, token);
         }
 
         private static async Task LoadTablesAsync(CancellationToken token)
@@ -143,7 +146,8 @@ namespace Game.HotUpdate
             stopped = true;
             if (managersStarted)
             {
-                StopTowerDefense();
+                client?.Dispose();
+                client = null;
                 ReleaseManagers();
                 managersStarted = false;
             }

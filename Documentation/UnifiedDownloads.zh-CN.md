@@ -14,11 +14,11 @@ GameEntry 负责 Inspector 场景参数和模式开关，持有本次启动的 C
 
 GameHotUpdate 只负责具体 settings、资源模式参数工厂、prepareContentAsync、loadCodeAsync 和进度接线。prepareContentAsync 在选定发行后准备精确资源版本并等待全部缺失资源下载完成；loadCodeAsync 通过 ResourceManager 的 TextAsset 租约读取 `HotUpdate/<baselineId>/<assembly>.dll.bytes`。读取结束立即归还租约，取得的托管字节仍用于后续校验和加载。
 
-GameHotUpdate 不初始化两个 Manager、不拥有启动 CTS，也不做中央 Release。退出由 GameEntry 先取消启动，再按 `HotUpdateManager → ResourceManager` 释放：先停止 HotGame 与业务对象，再结束资源管理。HotGame 仍初始化其余公共 Manager、读取数据表并直接创建/关闭具体业务，不通过额外 Session 注册器。
+GameHotUpdate 不初始化两个 Manager、不拥有启动 CTS，也不做中央 Release。退出由 GameEntry 先取消启动，再按 `HotUpdateManager → ResourceManager` 释放：先停止 HotGame 与业务对象，再结束资源管理。HotGame 初始化其余公共 Manager、读取数据表，通过 ClientFlow 打开玩家页面和进入战斗。
 
 SDK 的旧 `HotUpdateManager.InitializeAsync` 保留兼容调用；本工程采用上述“资源文件系统 warmup → 热更配置 → 显式 Start”顺序，避免把初始化与实际更新混在同一步。
 
-GameStartupOptions 只携带输入资源和初始 Map，已经移除模块启动回调。本次 Options 构造签名变化及新 AOT 类型 GameHotUpdate 的代码移动，会改变主包基线；已有 IL2CPP 主包需要重建，不能仅替换热更 DLL。本次脚本编译及两轮 Editor 模拟启动/退出已通过，详见[本轮报告](Validation/EntryStartup/)。
+GameStartupOptions 只携带输入资源和初始 Map。启动共享契约、更新流程和启动展示都属于 AOT，必须与主包基线一起构建；已有 IL2CPP 主包不能只替换业务 DLL。本次脚本编译及两轮 Editor 模拟启动/退出已通过，详见[本轮报告](Validation/EntryStartup/)。
 
 ## 离线、联网与 Editor 模拟
 
@@ -52,14 +52,14 @@ GameStartupOptions 只携带输入资源和初始 Map，已经移除模块启动
 
 ## 下载进度与界面
 
-当前只有 `StartupMessage` 和 `DownloadProgress` 数据出口，没有可见下载进度条、更新窗口或对应 Prefab。资源准备阶段会阻塞等待全部缺失资源，随后继续校验代码、加载 DLL 并初始化 HotGame；不会边下载尚缺的启动资源边进入业务。
+GameEntry 调用 AOT 模块 `StartupScreen.Open`，在资源初始化前创建可见启动界面；通过 `IStartupProgressSource` 读取快照。无下载时展示实际启动步骤进度，有下载时展示 YooAsset 已完成/总字节和百分比。资源准备阶段等待全部缺失资源，随后继续校验代码、加载 DLL 并初始化 HotGame。
 
-下载进度达到 100% 只表示下载阶段结束，仍要等待代码校验和业务初始化，不能直接显示“游戏已就绪”。可见进度 UI 仍是后续计划，本轮不将数据字段视为已实现界面。塔防战斗 UI 属于 HotGame 业务，与尚未制作的启动更新 UI 分开。
+下载完成后仍展示代码校验与业务初始化步骤；只有业务准备完成才淡出启动界面，进入热更 ClientFlow 的玩家页面。背景和已知控件的布局/颜色/文案通过 YooAsset 更新并缓存，下次启动读取；第一次启动使用独立内置图片、JSON 和 TMP 字体。新增控件或交互行为需匹配 AOT 实现。更新算法没有写入玩家页面或战斗模块。
 
 ## 入口职责重构的本轮验收
 
-69 项工程模型、12 项领域和 13 项账号会话回归通过。真实 Unity 2022.3.62f1 的 Player 脚本编译通过；8 个 Demo 的 11 个 Editor、8 个 Player 程序集逐项检查，包含 Framework Demo。
+73 项工程模型、12 项领域和 13 项账号会话回归通过。真实 Unity 2022.3.62f1 的 Player 脚本编译通过；8 个 Demo 的 11 个 Editor、8 个 Player 程序集逐项检查，包含 Framework Demo。
 
 Linux / OpenGLCore 软件渲染下完成 Online、Offline 两轮入口配置，均使用 Editor 资源模拟，实际加载表、TMP 界面并验证停止后的 Manager/视图清理。Unity 停止时会销毁 DontDestroyOnLoad 入口，因此轮间显式重新打开 Bootstrap；没有把结果写成“同一 Entry 跨停止保留”。原始报告见 [EntryStartup](Validation/EntryStartup/)。未重新执行真实离线 bundle、HTTP、IL2CPP 或手机验收。
 
-下载进度仍只是数据接口，本次没有新增可见进度条。资源文件系统初始阶段响应 Entry 的取消 token；发行准备超时预算从后续 StartAsync 阶段开始。
+启动进度展示与下一次启动读取缓存布局已在真实 Unity 中验证；下载控件使用 25/100 MiB 的验证输入，没有冒充真实 HTTP 下载。资源文件系统初始阶段响应 Entry 的取消 token；发行准备超时预算从后续 StartAsync 阶段开始。当前资源已单独构建，具体输出与业务范围见[客户端交付记录](TowerDefense/Delivery.zh-CN.md)。

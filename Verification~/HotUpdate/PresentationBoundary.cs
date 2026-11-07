@@ -1,16 +1,17 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-namespace Game.HotUpdate
+namespace Game.HotUpdate.Client
 {
-    // uGUI/TMP rendering and YooAsset UI leases are exercised in real Unity, not this API model.
-    public sealed partial class HotGame
+    // Native UI and leases are verified in real Unity, not this API model.
+    public sealed class ClientFlow : IDisposable
     {
-        private Task StartTowerDefenseAsync(cfg.Tables tables, CancellationToken token)
+        public Task StartAsync(cfg.Tables tables, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             _ = TowerDefense.Data.TowerDefenseTables.Create(tables, 1);
             return Task.CompletedTask;
         }
-        private void StopTowerDefense() { }
+        public void Dispose() { }
     }
 }

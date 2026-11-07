@@ -80,6 +80,19 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 var collider = pad.AddComponent<BoxCollider>();
                 collider.size = new Vector3(1.30f, .20f, 1.45f);
                 pad.AddComponent<PrototypeWorldTarget>().SlotId = slot.Id;
+                var outline = pad.AddComponent<LineRenderer>();
+                outline.sharedMaterial = lineMaterial;
+                outline.useWorldSpace = false;
+                outline.loop = true;
+                outline.startWidth = .035f;
+                outline.endWidth = .035f;
+                outline.positionCount = 4;
+                outline.SetPositions(new[]
+                {
+                    new Vector3(-.57f, .02f, -.65f), new Vector3(-.57f, .02f, .65f),
+                    new Vector3(.57f, .02f, .65f), new Vector3(.57f, .02f, -.65f)
+                });
+                outline.enabled = false;
                 slots.Add(slot.Id, pad);
             }
 
@@ -254,16 +267,15 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             }
 
             rangeRing.enabled = false;
-            if (selectedSlot != 0)
+            foreach (var pair in slots)
             {
-                foreach (var slot in configuration.BuildSlots)
+                bool occupied = false;
+                foreach (var tower in session.Towers)
                 {
-                    if (slot.Id == selectedSlot)
-                    {
-                        DrawRange(slot.Position, .65f);
-                        break;
-                    }
+                    occupied |= tower.SlotId == pair.Key;
                 }
+
+                pair.Value.GetComponent<LineRenderer>().enabled = buildMode && !occupied;
             }
 
             foreach (var state in session.Towers)
@@ -477,7 +489,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 if (target.TowerId != 0)
                 {
                     selectedTower = target.TowerId;
-                    selectedSlot = 0;
+                    buildMode = false;
                     SetNotice("已选择防御塔，圆圈显示实际攻击范围。可在下方升级。");
                 }
                 else
@@ -488,6 +500,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                         if (tower.SlotId == target.SlotId)
                         {
                             selectedTower = tower.Id;
+                            buildMode = false;
                             occupied = true;
                             break;
                         }
@@ -495,9 +508,14 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
                     if (!occupied)
                     {
-                        selectedSlot = target.SlotId;
-                        selectedTower = 0;
-                        SetNotice("已选中建造点。点击下方一种塔卡，花费金币建造。");
+                        if (buildMode)
+                        {
+                            BuildAt(target.SlotId);
+                        }
+                        else
+                        {
+                            SetNotice("先选择下方塔卡，再点击出现的绿色建造区域。");
+                        }
                     }
                 }
 

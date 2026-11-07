@@ -1,8 +1,8 @@
 {
     "unity": "2022.3.62f1",
     "success": true,
-    "stage": "defeat-restarted",
-    "detail": "Six-wave victory, actual card buttons, victory/defeat restart buttons and central shutdown verified.",
+    "stage": "player-page-returned",
+    "detail": "Player page, deployment/range input, six waves, journey updates and return/cleanup verified.",
     "graphicsDevice": "OpenGLCore",
     "graphicsDeviceNull": false,
     "noGraphicsRequested": false,
@@ -14,7 +14,10 @@
     "padHitAreasVerified": true,
     "pointerBuildVerified": true,
     "pauseButtonVerified": true,
-    "tmpCount": 40,
+    "rangeSelectionVerified": true,
+    "journeyVerified": true,
+    "playerPageReturnVerified": true,
+    "tmpCount": 46,
     "legacyTextCount": 0,
     "seed": 12345,
     "waves": 6,
@@ -27,6 +30,22 @@
     "defeatLeaks": 20,
     "phase": "Victory",
     "screenshots": [
+        {
+            "stage": "player-page",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/player-page.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "deployment-mode",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/deployment-mode.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
         {
             "stage": "planning",
             "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/planning.png",
@@ -54,6 +73,14 @@
         {
             "stage": "victory",
             "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/victory.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "player-page-returned",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/player-page-returned.png",
             "captured": true,
             "width": 1440,
             "height": 665,

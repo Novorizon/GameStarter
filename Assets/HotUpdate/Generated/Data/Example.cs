@@ -14,7 +14,7 @@ namespace cfg
 {
 public sealed partial class Example : Luban.BeanBase
 {
-    public Example(ByteBuf _buf) 
+    public Example(ByteBuf _buf)
     {
         Id = _buf.ReadInt();
         Name = _buf.ReadString();
@@ -27,7 +27,7 @@ public sealed partial class Example : Luban.BeanBase
 
     public readonly int Id;
     public readonly string Name;
-   
+
     public const int __ID__ = 341682506;
     public override int GetTypeId() => __ID__;
 

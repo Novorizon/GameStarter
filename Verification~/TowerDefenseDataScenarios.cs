@@ -9,13 +9,13 @@ internal static partial class Program
 {
     private static void TowerDefenseDataScenarios()
     {
-        Check("real Luban binaries decode all ten tables and map the nine business tables", () =>
+        Check("real Luban binaries decode all twelve tables and map the battle configuration", () =>
         {
             var loaded = new List<string>();
             var tables = ReadTowerDefenseTables(loaded);
-            Equal(10, loaded.Count);
-            Equal(10, loaded.Distinct().Count());
-            True(loaded.Contains("tbexample") && loaded.Contains("tbtdviewasset"));
+            Equal(12, loaded.Count);
+            Equal(12, loaded.Distinct().Count());
+            True(loaded.Contains("tbexample") && loaded.Contains("tbclienttheme"));
             var configuration = TowerDefenseTables.Create(tables, 1);
             Equal(6, configuration.Waves.Length);
             Equal(7, configuration.BuildSlots.Length);
@@ -26,8 +26,8 @@ internal static partial class Program
             True(configuration.Routes[0].Points.Length >= 2);
             Equal(tables.TbTdStage.Get(1).InitialGold, configuration.InitialGold);
             Equal(tables.TbTdStage.Get(1).BaseHealth, configuration.BaseHealth);
-            True(tables.TbTdViewAsset.DataList.Count > 0);
-            True(tables.TbTdViewAsset.DataList.All(row => !string.IsNullOrWhiteSpace(row.Key) && !string.IsNullOrWhiteSpace(row.Asset)));
+            var theme = tables.TbClientTheme.Get(1);
+            True(!string.IsNullOrWhiteSpace(theme.Font) && !string.IsNullOrWhiteSpace(theme.Panel) && !string.IsNullOrWhiteSpace(theme.Background));
             // Constructing the session validates every adapted spawn, route and card reference.
             var session = new FightSession(configuration, 12345);
             Equal(BattlePhase.Planning, session.Phase);

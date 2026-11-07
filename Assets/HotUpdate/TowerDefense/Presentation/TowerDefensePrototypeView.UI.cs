@@ -96,9 +96,10 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             stats[3] = Stat("Buffs", .775f, .885f, "强化", 3);
             var pause = MakeButton("Pause", safeArea, new Vector2(.90f, .895f), new Vector2(.978f, .978f), TogglePause);
             pauseLabel = pause.GetComponentInChildren<TMP_Text>();
+            MakeButton("营地", safeArea, new Vector2(.27f, .895f), new Vector2(.345f, .978f), RequestExit);
             var bottom = Panel("BuildBar", safeArea, new Vector2(.022f, .024f), new Vector2(.978f, .18f), Color.white);
             var caption = Label("BuildCaption", bottom, new Vector2(.025f, .77f), new Vector2(.49f, .94f), 20, TextAnchor.MiddleLeft);
-            caption.text = "部署防线  <color=#8BA498>·  选择空地后建造</color>";
+            caption.text = "部署防线  <color=#8BA498>·  选塔卡，再点区域</color>";
             caption.color = gold;
             int count = Math.Min(configuration.Towers.Length, 3);
             for (int index = 0; index < count; index++)
@@ -136,6 +137,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             notice.outlineWidth = .18f;
             CreateDraftInterface();
             CreateResultInterface();
+            CreateExitInterface();
             UpdateSafeArea();
         }
 
@@ -194,10 +196,22 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             resultModal = Panel("Result", safeArea, Vector2.zero, Vector2.one, new Color(.035f, .075f, .06f, .88f), false).gameObject;
             var panel = Panel("ResultPanel", resultModal.transform, new Vector2(.29f, .22f), new Vector2(.71f, .80f), Color.white);
             Icon("ResultEmblem", panel, new Vector2(.37f, .64f), new Vector2(.63f, .91f), 8);
-            resultText = Label("ResultText", panel, new Vector2(.10f, .32f), new Vector2(.90f, .65f), 39, TextAnchor.MiddleCenter);
-            var again = MakeButton("再试一次", panel, new Vector2(.20f, .12f), new Vector2(.80f, .28f), Restart);
+            resultText = Label("ResultText", panel, new Vector2(.10f, .40f), new Vector2(.90f, .65f), 39, TextAnchor.MiddleCenter);
+            var again = MakeButton("再试一次", panel, new Vector2(.20f, .23f), new Vector2(.80f, .37f), Restart);
             again.GetComponentInChildren<TMP_Text>().color = gold;
+            MakeButton("返回营地", panel, new Vector2(.20f, .07f), new Vector2(.80f, .20f), RequestExit);
             resultModal.SetActive(false);
+        }
+
+        private void CreateExitInterface()
+        {
+            exitConfirm = Panel("ConfirmReturn", safeArea, Vector2.zero, Vector2.one, new Color(.03f, .07f, .05f, .88f), false).gameObject;
+            var panel = Panel("ReturnPanel", exitConfirm.transform, new Vector2(.28f, .29f), new Vector2(.72f, .72f), Color.white);
+            Label("Title", panel, new Vector2(.10f, .65f), new Vector2(.90f, .86f), 36, TextAnchor.MiddleCenter).text = "返回营地？";
+            Label("Hint", panel, new Vector2(.10f, .42f), new Vector2(.90f, .63f), 24, TextAnchor.MiddleCenter).text = "当前防守将结束，未完成的战斗不会记入战绩。";
+            MakeButton("继续防守", panel, new Vector2(.07f, .13f), new Vector2(.47f, .35f), CancelExit);
+            MakeButton("确认返回", panel, new Vector2(.53f, .13f), new Vector2(.93f, .35f), () => ExitRequested?.Invoke());
+            exitConfirm.SetActive(false);
         }
 
         private void RefreshInterface()
@@ -220,14 +234,14 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 var definition = configuration.Towers[index];
                 buildTitles[index].text = definition.Name;
                 buildCosts[index].text = definition.BuildCost + " <size=70%>金币</size>";
-                buildButtons[index].GetComponent<Image>().color = selectedDefinition == definition.Id ? new Color(1, 1, .78f) : Color.white;
+                buildButtons[index].GetComponent<Image>().color = buildMode && selectedDefinition == definition.Id ? new Color(1, 1, .78f) : Color.white;
                 buildButtons[index].interactable = !session.IsPaused && session.Gold >= definition.BuildCost
                     && (session.Phase == BattlePhase.Planning || session.Phase == BattlePhase.Fighting);
             }
 
-            towerDetails.text = selectedSlot == 0
-                ? "选择防御塔\n<size=80%><color=#AEC4B1>查看属性与升级</color></size>"
-                : "建造点 " + selectedSlot + "\n<size=80%>选择左侧塔卡部署</size>";
+            towerDetails.text = buildMode
+                ? FindTower(selectedDefinition).Name + "\n<size=80%>点击绿色区域部署</size>"
+                : "选择防御塔\n<size=80%><color=#AEC4B1>查看属性与升级</color></size>";
             upgrade.interactable = false;
             upgrade.GetComponentInChildren<TMP_Text>().text = "选中防御塔后升级";
             foreach (var tower in session.Towers)
@@ -275,6 +289,12 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             resultText.text = session.Phase == BattlePhase.Victory
                 ? "<color=#F0C56B>防线守住了！</color>\n<size=60%>完成全部 " + configuration.Waves.Length + " 波防守</size>"
                 : "基地失守\n<size=60%>调整塔阵，再试一次</size>";
+            if (finished && !completedReported)
+            {
+                completedReported = true;
+                Finished?.Invoke(session);
+            }
+
         }
 
         private void UpdateSafeArea()
@@ -367,6 +387,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         {
             var panel = Panel(label, parent, minimum, maximum, Color.white);
             var button = panel.gameObject.AddComponent<Button>();
+            button.targetGraphic = panel.GetComponent<Image>();
             var colors = button.colors;
             colors.highlightedColor = new Color(1.12f, 1.16f, 1.04f);
             colors.pressedColor = new Color(.79f, .87f, .71f);

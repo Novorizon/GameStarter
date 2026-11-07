@@ -29,6 +29,7 @@ internal static partial class Program
             Path.Combine(Path.GetTempPath(), "novorizon-verification-keys", Guid.NewGuid().ToString("N") + ".xml"));
         GameDataScenarios();
         TowerDefenseDataScenarios();
+        JourneyScenarios();
         RemoteReleaseScenarios();
         Check("entry uses actual Framework singleton and rejects duplicates", EntrySingleton);
         Check("a recreated scene entry starts through Awake after editor reset", EntryRestart);
@@ -361,8 +362,8 @@ internal static partial class Program
         var data = Game.Framework.Data.DataManager.Instance;
         Equal("示例配置", data.Get<cfg.Tables>().TbExample.Get(1).Name);
         True(ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdstage") && ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdcard"));
-        Equal(11, ManagerContracts.DataAcquisitions.Count);
-        Equal(11, ManagerContracts.LeasesReleased);
+        Equal(13, ManagerContracts.DataAcquisitions.Count);
+        Equal(13, ManagerContracts.LeasesReleased);
         Complete(entry.ShutdownAsync());
         True(ManagerContracts.Cleanup.Contains("input"));
         ResetEntry();
@@ -769,7 +770,7 @@ internal static partial class Program
         Complete(WaitForEntryReadyAsync(next));
         FlushModelCallbacks();
         Equal(StartupState.Ready, next.State);
-        Equal("Ready", next.StartupMessage);
+        Equal("准备完成", next.StartupMessage);
         Equal(totalCount, next.DownloadProgress.TotalCount);
         Complete(next.ShutdownAsync());
         ResetEntry();

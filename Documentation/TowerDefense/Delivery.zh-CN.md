@@ -1,37 +1,46 @@
-# 当前塔防表现与验收
+# 当前客户端流程与验收
 
-启动场景为 `Assets/Scenes/Bootstrap.unity`，SDK 固定提交以 manifest 为准。当前地图配置 `forest-diorama-1`，由真实 Luban 表加载 6 波、7 建造点、18 个路线点、3 塔型、4 怪物型和 7 张卡。
+打开 `Assets/Scenes/Bootstrap.unity`：启动界面 → 玩家页面 → 出征 → 塔防 → 返回营地。SDK 固定提交以项目 manifest 为准。当前地图为 `forest-diorama-1`，6 波、7 个固定建造位置、18 个路线点、3 塔型、4 怪物型、7 张强化卡。
 
-## 表现与资源
+## 已实现
 
-- 地图为 imagegen 生成的低多边形台地式 2D 预渲染图；道路、桥梁、池塘和台地厚度已绘入图中。固定 55° 正交相机，逻辑坐标映射到 Unity XZ 平面；台阶不是运行时 3D 导航地形。
-- 塔、蓝顶基地和怪物使用程序化共享低模网格；当前没有正式骨骼动画、LOD 或外部模型资产。
-- 松绿/铜金九宫格面板、3×3 塔和强化图标、独立 TMP 文本。没有烘焙价格、血量或效果文案。
-- 地图、图标、面板和字体经 YooAsset 租约加载，继续按 maps/ui/fonts 分组。素材来源与校准方式见 [ArtSources.json](ArtSources.json) 和 [UIAndArt](UIAndArt.zh-CN.md)。
+- AOT 独立启动展示：普通启动使用步骤进度，有更新时使用 YooAsset 实际下载字节。`GameEntry` 只调用展示和 Manager API。
+- 启动图片、已知控件布局/文案/颜色走 YooAsset，成功加载后缓存供下次启动；首次启动有独立内置图片、布局和 TMP 字体。新增控件或行为仍须匹配 AOT 代码。
+- 热更 `ClientFlow` 协调玩家页面和战斗，`HotGame` 只调用模块。玩家页面显示头像、名称、等级、经验、战绩和三项旅程目标。
+- `JourneyProgress` 负责本地目标/等级和统计，保存成功后发布状态，同一局不会重复结算。界面明确标识本地档案；没有伪造服务器货币或正式领奖。
+- 12 张真实 Luban 表：8 张战斗、主题/任务/等级 3 张配置和 Example。具体结构与后续分组见[客户端与数据规划](../Game/ClientPlan.zh-CN.md)。
+- 地图是低多边形台地式 2D 预渲染图，保留统一格尺的砂岩路、桥梁、池塘和台地；平时不显示特殊建造格，选择塔卡后才描出未占用区域。
+- 塔、基地和怪物为共享网格的程序化 3D 低模。点塔退出建造并显示来自实际战斗数值的射程圈，升级和强化后同步变化。
+- 松绿/铜金面板、3×3 图标、守卫头像与森林城堡背景；文字全部 TMP。公共 UI/字体位于 `Assets/GameAssets/Common`，地图位于 TowerDefense，按 ui/fonts/maps 分组。
 
-## 已通过的范围
+## 当前验证
 
-| 项目 | 当前证据 |
+| 项目 | 证据 |
 | --- | --- |
-| 项目回归 | 69 项；包括真实 Luban 解码、编辑路线、配置关卡可通关与固定 tick 重放 |
-| 战斗 / 账号 | 12 项纯领域、13 项账号协调回归；账号使用测试后端 |
-| Unity 脚本编译 | Unity 2022.3.62f1；8 Demo、11 Editor / 8 Player 程序集 |
-| 桌面图形 | Linux / llvmpipe OpenGLCore，1440×789 实际渲染帧 |
-| 宽屏布局 | 同一 Editor 在 1440×665（约 19.5:9）渲染与验收，不是真机测试 |
-| 输入 | 七个建造点的中心均可被 Physics 射线命中且没有 HUD 遮挡；Input System 注入鼠标按下/抬起经过实际 Update 点选，再调用真实建塔 Button 回调，验证扣费与落点 |
-| 按钮与战斗 | 暂停/继续、三选一卡、拒绝重复选卡、胜利与失败重开、停止 Play 清理 |
-| 通关 | seed 12345，6 波、126 击杀、0 漏怪、2178 tick、13 次升级、5 次选卡 |
-| 字体 | 两种布局均 TMP 40 / Legacy Text 0，字体依赖完整 |
-| 资源包 | StandaloneLinux64，15 地址、7 bundle，资源版本 20261107141655999；包括新版地图、图标、面板、字体/OTF/TMP Shader 依赖 |
+| 项目回归 | 73 项；含真实 Luban 解码、关卡可通关、任务等级、重复结算与保存失败重试 |
+| 领域 / 账号协调 | 12 / 13 项；账号使用测试后端 |
+| Unity 脚本 | Unity 2022.3.62f1；8 Demo，11 Editor / 8 Player 程序集 |
+| 桌面实际渲染 | Linux / llvmpipe OpenGLCore，1440×789 |
+| 宽屏布局 | 同一 Editor 在 1440×665（约 19.5:9）渲染与操作验收，不是真机测试 |
+| 点击与建造 | 七个区域均未被 HUD 遮挡；真实 Input System 注入鼠标事件点选，塔卡回调与实际扣费/落点通过；闲置隐藏、建造时显示区域通过 |
+| 射程 | 点击另一座已建塔后，检查圆圈中心和半径与该塔领域状态一致 |
+| 战斗和玩家页 | 6 波胜利，126 击杀、0 漏怪、2178 tick、13 次升级、5 次选卡；胜败重开、旅程写入与返回页面刷新通过 |
+| 字体 | 战斗 TMP 46 / Legacy Text 0；玩家页面和启动展示也使用独立 TMP 字体 |
+| 启动展示 | 两轮真实 Play，普通启动/下载控件分支以及下一次启动读取缓存布局分别验证；下载控件使用25/100MiB的验证输入，不作为真实 HTTP 证据 |
+| 生命周期 | 进入/返回/重开及停止 Play 清理通过，业务模块使用独立于初始化操作令牌的生命周期 |
+
+资源包实际输出以[资源报告](Validation/resource-build.json)为准，启动/界面代码改变后必须重建匹配的 AOT 主包基线，图片、表和热更代码需要配套发行。
 
 ## 画面与报告
 
-[部署](planning.png) · [战斗](battle.png) · [三选一卡](three-cards.png) · [胜利](victory.png) · [宽屏战斗](phone-battle.png) · [宽屏选卡](phone-three-cards.png)。全部为实际 Unity 渲染帧。
+[玩家页面](player-page.png) · [部署与射程](planning.png) · [战斗](battle.png) · [三选一卡](three-cards.png) · [返回后的任务](player-page-returned.png) · [宽屏建造模式](phone-deployment-mode.png) · [宽屏玩家页](phone-player-page.png)。全部是实际 Unity 渲染帧。
 
-[桌面报告](Validation/prototype.json)、[宽屏报告](Validation/phone-layout.json)、[编译](Validation/player-compile.json)、[程序集](Validation/sample-assemblies.json)、[资源包](Validation/resource-build.json)、[输入范围](Validation/inputs.json)。
+[桌面](Validation/prototype.json)、[宽屏](Validation/phone-layout.json)、[编译](Validation/player-compile.json)、[程序集](Validation/sample-assemblies.json)、[资源包](Validation/resource-build.json)、[输入范围](Validation/inputs.json)。启动生命周期报告见项目的 [EntryStartup](../Validation/EntryStartup/)。
 
-原生运行入口为 `Game.Editor.TowerDefenseValidation.Run`；不传 `-quit`，由验收完成后退出。加 `--novorizon-phone-layout` 检查宽屏布局。完整构建和发布沿用项目的统一资源/DLL 发行流程，图片、表和代码需要配套发布。
+主界面/战斗验收入口为 `Game.Editor.TowerDefenseValidation.Run`；带 `--novorizon-phone-layout` 检查宽屏。启动与缓存验收入口为 `Game.Editor.GameEntryValidation.Run`。这些 Play 验收不传 `-quit`，由完成回调退出。
 
-## 尚未完成
+## 规划与边界
 
-正式账号服务、服务器结算与发奖、IL2CPP、硬件 GPU、手机触控/性能和声音未作通过声明。当前战斗采用固定路线、固定建造位置与单体即时命中；范围伤害、动态堵路、召唤、正式角色动画与长期性能优化属于后续工作。
+[Meshy 清单](../Game/MeshyBrief.zh-CN.md)说明模型优先级、尺寸、坐标轴、动作和挂点。[业务规划](../Game/ClientPlan.zh-CN.md)说明正式账号/任务协议、合理表分组、近战/远程 NPC 状态机与避让。固定路线阶段先考虑队列间距和走廊内有限偏移，当前没有引入 RVO 或动态堵路。
+
+正式服务登录、服务器经济/任务领奖、IL2CPP、硬件 GPU、手机触控/性能、声音、正式角色动画和 LOD 尚未作通过声明。当前炮塔仍为单体即时命中，台地/阶梯是图像表现，不运行 3D 地形导航。

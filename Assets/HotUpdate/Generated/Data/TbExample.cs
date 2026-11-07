@@ -16,7 +16,7 @@ public partial class TbExample
 {
     private readonly System.Collections.Generic.Dictionary<int, Example> _dataMap;
     private readonly System.Collections.Generic.List<Example> _dataList;
-    
+
     public TbExample(ByteBuf _buf)
     {
         int n = _buf.ReadSize();

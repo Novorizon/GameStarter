@@ -76,10 +76,4 @@
         <var name="rarity" type="int" />
     </bean>
     <table name="TbTdCard" value="TdCard" input="tdcard.xlsx" index="id" />
-    <bean name="TdViewAsset">
-        <var name="id" type="int" />
-        <var name="key" type="string" />
-        <var name="asset" type="string" />
-    </bean>
-    <table name="TbTdViewAsset" value="TdViewAsset" input="tdviewasset.xlsx" index="id" />
 </module>

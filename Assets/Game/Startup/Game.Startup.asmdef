@@ -1,7 +1,10 @@
 {
   "name": "Game.Startup",
   "rootNamespace": "Game",
-  "references": [],
+  "references": [
+    "Unity.TextMeshPro",
+    "Unity.ugui"
+  ],
   "autoReferenced": true,
   "allowUnsafeCode": false
 }

@@ -17,8 +17,13 @@
   "il2cppTested": false,
   "serverTested": false,
   "modelSuites": {
-    "project": 69,
+    "project": 73,
     "domain": 12,
     "accountSession": 13
-  }
+  },
+  "tables": 12,
+  "startupOwner": "AOT Game.Startup",
+  "businessFlow": "ClientFlow: player page -> tower defense -> player page",
+  "serverProfile": "Not connected; explicit local journey profile",
+  "startupDownloadUIProbe": "Synthetic native UI input25MiB/100MiB, not HTTP download acceptance"
 }

@@ -1,0 +1,57 @@
+{
+    "unity": "2022.3.62f1",
+    "success": true,
+    "stage": "waiting-shutdown",
+    "detail": "Two real Play sessions verified fresh modules, TMP views and central shutdown; Bootstrap was reopened between rounds.",
+    "scope": "Two actual Play sessions with Editor simulation; Bootstrap is reopened between rounds after Unity destroys DontDestroyOnLoad objects. No retained-Entry, offline-bundle or HTTP validation.",
+    "runs": 2,
+    "disableReloads": true,
+    "readyAndShutdown": true,
+    "startupProgressVerified": true,
+    "startupThemeCacheVerified": true,
+    "modes": [
+        "Online",
+        "Offline"
+    ],
+    "sameEntryRetained": false,
+    "sceneReopenedBetweenRounds": true,
+    "freshModules": true,
+    "originalSettingsRestored": true,
+    "originalSwitchesRestored": true,
+    "offlineBundleValidated": false,
+    "httpValidated": false,
+    "runDetails": [
+        {
+            "mode": "Online",
+            "editorSimulation": true,
+            "entryInstanceId": 21198,
+            "viewInstanceId": -1638,
+            "viewName": "PlayerPage",
+            "gameReadyMarker": true,
+            "playerPageReadyMarker": true,
+            "ready": true,
+            "shutdown": true,
+            "sameEntry": true,
+            "entryDestroyedOnStop": true,
+            "freshModule": true,
+            "tmpCount": 21,
+            "legacyTextCount": 0
+        },
+        {
+            "mode": "Offline",
+            "editorSimulation": true,
+            "entryInstanceId": 21294,
+            "viewInstanceId": -2544,
+            "viewName": "PlayerPage",
+            "gameReadyMarker": true,
+            "playerPageReadyMarker": true,
+            "ready": true,
+            "shutdown": true,
+            "sameEntry": true,
+            "entryDestroyedOnStop": true,
+            "freshModule": true,
+            "tmpCount": 21,
+            "legacyTextCount": 0
+        }
+    ]
+}

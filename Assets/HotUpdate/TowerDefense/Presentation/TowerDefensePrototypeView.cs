@@ -77,7 +77,13 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private readonly Image[] cardFrames = new Image[3];
         private LineRenderer rangeRing;
         private int selectedDefinition;
-        private int selectedSlot;
+        private bool buildMode;
+        private bool completedReported;
+        private bool pausedBeforeExit;
+        private GameObject exitConfirm;
+        public string RunId { get; private set; }
+        public event Action<FightSession> Finished;
+        public event Action ExitRequested;
         private int selectedTower;
         private float accumulator;
         private float uiTimer;
@@ -145,12 +151,14 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
             seed = randomSeed;
             session = new FightSession(configuration, seed);
+            RunId = Guid.NewGuid().ToString("N");
+            completedReported = false;
             font = uiFont != null ? uiFont : throw new ArgumentNullException(nameof(uiFont), "Load the YooAsset TMP font before creating battle UI.");
             initialized = true;
             CreateWorld(map);
             CreateInterface();
             selectedDefinition = configuration.Towers[0].Id;
-            SetNotice("选择方形空地，再点击塔卡建造。准备好后开始波次。");
+            SetNotice("选择下方塔卡，再点击绿色区域部署。点击防御塔查看射程。");
             SynchronizeWorld(0);
             RefreshInterface();
         }
@@ -166,7 +174,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             HandlePointer();
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                TogglePause();
+                HandleEscape();
             }
 
             if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -221,32 +229,77 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private void SelectDefinition(int id)
         {
+            var definition = FindTower(id);
+            if (session.IsPaused || session.Gold < definition.BuildCost)
+            {
+                SetNotice("金币不足或战斗已暂停，暂时无法建造。");
+                return;
+            }
+
+            buildMode = !buildMode || selectedDefinition != id;
             selectedDefinition = id;
             selectedTower = 0;
-            if (selectedSlot != 0)
+            SetNotice(buildMode ? "选择绿色建造区域部署" + definition.Name + "，按返回键可取消。" : "已取消建造。");
+            RefreshInterface();
+        }
+
+        private void BuildAt(int slot)
+        {
+            if (!session.BuildTower(slot, selectedDefinition))
             {
-                bool built = session.BuildTower(selectedSlot, selectedDefinition);
-                if (built)
+                SetNotice("无法建造，请检查金币与位置。");
+                return;
+            }
+
+            foreach (var tower in session.Towers)
+            {
+                if (tower.SlotId == slot)
                 {
-                    foreach (var tower in session.Towers)
-                    {
-                        if (tower.SlotId == selectedSlot)
-                        {
-                            selectedTower = tower.Id;
-                            break;
-                        }
-                    }
-
-                    selectedSlot = 0;
+                    selectedTower = tower.Id;
+                    break;
                 }
+            }
 
-                SetNotice(built ? "防御塔已建造。" : "无法建造：请检查金币、暂停状态和建造点。");
+            buildMode = false;
+            SetNotice("防御塔已建造，圆圈显示实际攻击范围。");
+        }
+
+        private void HandleEscape()
+        {
+            if (exitConfirm.activeSelf)
+            {
+                CancelExit();
+            }
+            else if (buildMode)
+            {
+                buildMode = false;
+                SetNotice("已取消建造。");
+                RefreshInterface();
             }
             else
             {
-                SetNotice("已选择 " + FindTower(id).Name + "。先点击一个空建造点，再点击塔卡确认建造。");
+                TogglePause();
+            }
+        }
+
+        private void RequestExit()
+        {
+            if (session.Phase == BattlePhase.Victory || session.Phase == BattlePhase.Defeat
+                || (session.Phase == BattlePhase.Planning && session.Towers.Count == 0))
+            {
+                ExitRequested?.Invoke();
+                return;
             }
 
+            pausedBeforeExit = session.IsPaused;
+            session.SetPaused(true);
+            exitConfirm.SetActive(true);
+        }
+
+        private void CancelExit()
+        {
+            exitConfirm.SetActive(false);
+            session.SetPaused(pausedBeforeExit);
             RefreshInterface();
         }
 
@@ -292,8 +345,10 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             enemies.Clear();
             towers.Clear();
             session = new FightSession(configuration, seed);
+            RunId = Guid.NewGuid().ToString("N");
+            completedReported = false;
             selectedTower = 0;
-            selectedSlot = 0;
+            buildMode = false;
             accumulator = 0;
             rangeRing.enabled = false;
             SetNotice("已使用相同种子重新开始，试试不同的建造和选卡。");

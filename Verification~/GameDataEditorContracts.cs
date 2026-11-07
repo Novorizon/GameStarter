@@ -81,6 +81,10 @@ namespace YooAsset.Editor
         public ECollectorType CollectorType;
     }
 
+    public sealed class CollectAll
+    {
+    }
+
     public sealed class PackDirectory
     {
     }
