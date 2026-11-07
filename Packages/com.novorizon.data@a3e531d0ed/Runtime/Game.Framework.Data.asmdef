@@ -1,0 +1,10 @@
+{
+  "name": "Game.Framework.Data",
+  "rootNamespace": "Game.Framework.Data",
+  "references": [
+    "Game.Framework.Core",
+    "Luban.Runtime"
+  ],
+  "autoReferenced": true,
+  "allowUnsafeCode": false
+}

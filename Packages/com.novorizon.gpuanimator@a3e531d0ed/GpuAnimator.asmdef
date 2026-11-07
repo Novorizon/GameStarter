@@ -1,0 +1,17 @@
+{
+  "name": "GpuAnimator",
+  "rootNamespace": "",
+  "references": [
+    "Game.Framework.Core",
+    "Game.Framework.Unity"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Game.Framework.HotUpdate",
+  "rootNamespace": "Game.Framework.HotUpdate",
+  "references": [
+    "Game.Framework.Core",
+    "HybridCLR.Runtime"
+  ],
+  "includePlatforms": [],
+  "autoReferenced": true,
+  "allowUnsafeCode": false
+}

@@ -1,0 +1,21 @@
+{
+  "name": "com.novorizon.framework",
+  "version": "0.18.0-preview.5",
+  "displayName": "Novorizon Framework",
+  "description": "Unity game foundation: shared services, events, timers, pools, scenes, local storage and networking.",
+  "unity": "2022.3",
+  "author": {
+    "name": "Novorizon",
+    "url": "https://github.com/Novorizon"
+  },
+  "samples": [
+    {
+      "displayName": "Framework Demo",
+      "description": "Offline interactive foundation demo; create a standalone scene from Tools / Novorizon / Demos.",
+      "path": "Samples~/Demo"
+    }
+  ],
+  "dependencies": {
+    "com.unity.modules.jsonserialize": "1.0.0"
+  }
+}
