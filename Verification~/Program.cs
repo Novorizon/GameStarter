@@ -31,7 +31,7 @@ internal static partial class Program
         TowerDefenseDataScenarios();
         RemoteReleaseScenarios();
         Check("entry uses actual Framework singleton and rejects duplicates", EntrySingleton);
-        Check("entry restarts when scene/domain reload is disabled", EntryRestart);
+        Check("a recreated scene entry starts through Awake after editor reset", EntryRestart);
         Check("entry delegates manager startup to the hot game and initializes once", EntryManagers);
         Check("entry initializes network only when NetworkSettings exists", EntryNetwork);
         Check("failed resource initialization blocks manager creation", EntryResourceFailure);
@@ -57,7 +57,7 @@ internal static partial class Program
         Check("GameEntry can select the compiled game module path", EntryHotDisabled);
         Check("GameEntry exit cancels hot startup before releasing services", EntryHotCancellation);
         Check("hot initialization failure fails GameEntry", EntryHotFailure);
-        Check("central entry shutdown precedes editor reset and restarts retained scenes", EntryAutomaticReset);
+        Check("central entry shutdown precedes editor reset and fresh scene startup", EntryAutomaticReset);
         Check("resource setup and hot manager configuration have no update or business side effects", IndependentHotUpdateStartup);
         Check("resource filesystem failure blocks hot manager creation", WarmupFailure);
         Check("resource filesystem completion precedes hot manager configuration and update work", WarmupOrdering);
@@ -185,14 +185,16 @@ internal static partial class Program
     {
         ResetEntry();
         var entry = new GameObject().AddComponent<GameEntry>();
-        // Unity Stop sends OnApplicationQuit before the next Play resets singleton references.
+        // Unity Stop destroys the DontDestroyOnLoad entry; reopening Bootstrap creates a fresh component.
         UObject.Invoke(entry, "OnApplicationQuit");
+        UObject.Destroy(entry.gameObject);
         UObject.ResetSingletonsForPlay();
-        Equal(StartupState.NotStarted, entry.State);
-        typeof(GameEntry).GetMethod("ResumeEntry", Static).Invoke(null, null);
-        True(ReferenceEquals(entry, GameEntry.Instance));
-        Complete(WaitForEntryReadyAsync(entry));
-        Equal(StartupState.Ready, entry.State);
+        True(entry == null);
+        var next = new GameObject().AddComponent<GameEntry>();
+        True(!ReferenceEquals(entry, next));
+        True(ReferenceEquals(next, GameEntry.Instance));
+        Complete(WaitForEntryReadyAsync(next));
+        Equal(StartupState.Ready, next.State);
         ResetEntry();
     }
 
@@ -628,14 +630,17 @@ internal static partial class Program
             Equal(StartupState.Ready, entry.State);
             ManagerContracts.Cleanup.Clear();
             UObject.Invoke(entry, "OnApplicationQuit");
+            UObject.Destroy(entry.gameObject);
             UObject.ResetSingletonsForPlay();
-            Equal(StartupState.NotStarted, entry.State);
+            True(entry == null);
             True(!GameEntry.TryGetInstance(out _));
             Equal("hot", ManagerContracts.Cleanup.First());
             True(!UI.UIManager.TryGetInstance(out _));
-            typeof(GameEntry).GetMethod("ResumeEntry", Static).Invoke(null, null);
-            Complete(WaitForEntryReadyAsync(entry));
-            True(ReferenceEquals(entry, GameEntry.Instance));
+            var next = CreateEntry();
+            Complete(WaitForEntryReadyAsync(next));
+            True(!ReferenceEquals(entry, next));
+            True(ReferenceEquals(next, GameEntry.Instance));
+            entry = next;
         }
 
         ResetEntry();

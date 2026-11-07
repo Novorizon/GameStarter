@@ -1,8 +1,0 @@
-{
-    "name": "GpuAnimator.Samples.ManualCrowd",
-    "rootNamespace": "GpuAnimatorSamples",
-    "references": ["GpuAnimator"],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "autoReferenced": true
-}
