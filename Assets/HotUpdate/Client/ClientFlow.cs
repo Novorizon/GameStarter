@@ -4,7 +4,6 @@ using System.Linq;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Game.HotUpdate.TowerDefense.Data;
 using Game.HotUpdate.TowerDefense.Domain;
 using Game.HotUpdate.TowerDefense.Presentation;
 using Game.Resource;
@@ -26,11 +25,13 @@ namespace Game.HotUpdate.Client
         private bool disposed;
         private bool entering;
         private Task arrivalTask;
+        private ExpeditionPlan preparedExpedition;
         private readonly Queue<JourneyBattle> pendingResults = new Queue<JourneyBattle>();
         public ClientArt Art { get; private set; }
         public JourneyProgress Journey { get; private set; }
         public cfg.TdStage Stage => tables.TbTdStage.Get(1);
         public bool Entering => entering;
+        public string ExpeditionError { get; private set; }
 
         public async Task StartAsync(cfg.Tables configuration, CancellationToken token)
         {
@@ -54,7 +55,7 @@ namespace Game.HotUpdate.Client
                 }
 
                 hub = PlayerHubView.Create(this, root.transform);
-                arrivalTask = ShowArrivalAsync();
+                RetryArrival();
                 Debug.Log("PLAYER_PAGE_READY");
             }
             catch
@@ -69,19 +70,48 @@ namespace Game.HotUpdate.Client
             }
         }
 
-        public async Task EnterBattleAsync()
+        public ExpeditionPlan PrepareExpedition()
         {
             if (disposed || entering || battle != null || !Journey.Camp.ArrivalSeen || hub.ArrivalPlaying)
             {
-                return;
+                return null;
             }
 
+            if (preparedExpedition == null)
+            {
+                uint seed = BitConverter.ToUInt32(Guid.NewGuid().ToByteArray(), 0);
+                preparedExpedition = new ExpeditionPlan(tables, Stage.Id, seed);
+                ExpeditionError = null;
+            }
+
+            return preparedExpedition;
+        }
+
+        public void CancelExpedition()
+        {
+            if (!entering)
+            {
+                preparedExpedition = null;
+                ExpeditionError = null;
+            }
+        }
+
+        public async Task<bool> EnterBattleAsync()
+        {
+            if (disposed || entering || battle != null || !Journey.Camp.ArrivalSeen || hub.ArrivalPlaying)
+            {
+                return false;
+            }
+
+            var plan = preparedExpedition ?? PrepareExpedition();
             entering = true;
+            ExpeditionError = null;
             if (!SaveBattleProgress())
             {
                 entering = false;
-                hub.ShowError("上一场补给尚未保存，请稍后再次出征重试。");
-                return;
+                ExpeditionError = "上一场补给尚未保存，请稍后再次确认出征重试。";
+                hub.ShowError(ExpeditionError);
+                return false;
             }
 
             hub.Refresh();
@@ -89,19 +119,22 @@ namespace Game.HotUpdate.Client
             try
             {
                 var token = lifetime.Token;
-                var map = await ResourceManager.Instance.AcquireAsync<Sprite>(Stage.MapAsset, token, true);
+                var map = await ResourceManager.Instance.AcquireAsync<Sprite>(plan.Stage.MapAsset, token, true);
                 leases.Add(map);
                 token.ThrowIfCancellationRequested();
-                battle = TowerDefensePrototypeView.Create(TowerDefenseTables.Create(tables, Stage.Id), Art.Font, map.Asset, 12345, leases);
+                battle = TowerDefensePrototypeView.Create(plan.Configuration, Art.Font, map.Asset, plan.Seed, leases);
                 battle.transform.SetParent(root.transform, false);
                 battle.SetArt(map.Asset, Art.Atlas, Art.Panel, Art.Font);
                 battle.Finished += RecordBattle;
                 battle.ExitRequested += ReturnToPlayerPage;
+                preparedExpedition = null;
                 hub.gameObject.SetActive(false);
-                Debug.Log("TOWER_DEFENSE_READY " + Stage.ConfigVersion);
+                Debug.Log("TOWER_DEFENSE_READY " + plan.Stage.ConfigVersion + " seed=" + plan.Seed);
+                return true;
             }
             catch (OperationCanceledException) when (lifetime == null || lifetime.IsCancellationRequested)
             {
+                return false;
             }
             catch (Exception error)
             {
@@ -113,10 +146,12 @@ namespace Game.HotUpdate.Client
 
                 if (!disposed)
                 {
-                    hub.ShowError("出征准备失败，请重试。");
+                    ExpeditionError = "战场资源准备失败，请再次确认出征重试。";
+                    hub.ShowError(ExpeditionError);
                 }
 
                 Debug.LogException(error);
+                return false;
             }
             finally
             {
@@ -133,23 +168,50 @@ namespace Game.HotUpdate.Client
             }
         }
 
+        public void RetryArrival()
+        {
+            if (disposed || hub == null || Journey.Camp.ArrivalSeen || (arrivalTask != null && !arrivalTask.IsCompleted))
+            {
+                return;
+            }
+
+            arrivalTask = ShowArrivalAsync();
+        }
+
         private async Task ShowArrivalAsync()
         {
             try
             {
-                await hub.PlayArrivalAsync(lifetime.Token);
+                var playback = hub.PlayArrivalAsync(lifetime.Token);
+                hub.Refresh();
+                await playback;
             }
             catch (OperationCanceledException) when (disposed)
             {
+            }
+            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException)
+            {
+                if (!disposed)
+                {
+                    hub.ShowError("抵达进度未能保存，请点击“重试抵达序章”。");
+                    Debug.LogWarning("Arrival save failed: " + error.Message);
+                }
             }
             catch (Exception error)
             {
                 if (!disposed)
                 {
-                    hub.ShowError("序章未能完成，请重新进入营地后重试。");
+                    hub.ShowError("序章未能完成，请点击“重试抵达序章”。");
                 }
 
                 Debug.LogException(error);
+            }
+            finally
+            {
+                if (!disposed)
+                {
+                    hub.Refresh();
+                }
             }
         }
 

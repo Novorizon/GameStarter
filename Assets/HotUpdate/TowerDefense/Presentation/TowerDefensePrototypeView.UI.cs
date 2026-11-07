@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Game.HotUpdate.TowerDefense.Domain;
 using TMPro;
 using UnityEngine;
@@ -141,6 +142,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             notice.fontMaterial.EnableKeyword("OUTLINE_ON");
             notice.outlineColor = new Color(.06f, .12f, .09f);
             notice.outlineWidth = .18f;
+            forecastPanel = Panel("WaveForecast", safeArea, new Vector2(.022f, .69f), new Vector2(.26f, .875f), Color.white).gameObject;
+            waveForecast = Label("WaveIntel", forecastPanel.transform, new Vector2(.07f, .09f), new Vector2(.94f, .92f), 22, TextAnchor.MiddleLeft);
             CreateDraftInterface();
             CreateResultInterface();
             CreateExitInterface();
@@ -166,8 +169,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             Label("CardTitle", cardModal.transform, new Vector2(.15f, .765f), new Vector2(.85f, .85f), 44, TextAnchor.MiddleCenter).text = "选择一张强化卡";
             cardResume = MakeButton("继续选卡", cardModal.transform, new Vector2(.83f, .86f), new Vector2(.97f, .95f), () =>
             {
-                session.SetPaused(false);
-                RefreshInterface();
+                pauseState.SetManualPaused(false);
+                ApplyPause();
             }).gameObject;
             for (int index = 0; index < 3; index++)
             {
@@ -306,6 +309,27 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 Finished?.Invoke(session);
             }
 
+            RefreshForecast();
+        }
+
+        private void RefreshForecast()
+        {
+            int index = session.Phase == BattlePhase.Fighting ? session.WaveIndex - 1 : session.WaveIndex;
+            bool visible = index >= 0 && index < briefing.Waves.Count
+                && session.Phase != BattlePhase.Victory && session.Phase != BattlePhase.Defeat;
+            forecastPanel.SetActive(visible);
+            if (!visible || (forecastIndex == index && forecastPhase == session.Phase))
+            {
+                return;
+            }
+
+            forecastIndex = index;
+            forecastPhase = session.Phase;
+            var wave = briefing.Waves[index];
+            string heading = session.Phase == BattlePhase.Fighting ? "当前进攻" : "下一波情报";
+            string enemies = string.Join(" · ", wave.Enemies.Select(enemy => enemy.Name + " ×" + enemy.Count));
+            waveForecast.text = "<color=#F0C56B>" + heading + "  ·  第 " + wave.Number + " 波</color>\n" + enemies
+                + "\n<size=80%>清波金币 +" + wave.RewardGold + (wave.OffersCard ? "  ·  强化三选一" : "") + "</size>";
         }
 
         private void UpdateSafeArea()

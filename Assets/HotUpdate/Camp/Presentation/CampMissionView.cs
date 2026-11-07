@@ -47,6 +47,7 @@ namespace Game.HotUpdate.Camp
         public void Show()
         {
             Refresh();
+            root.transform.SetAsLastSibling();
             root.SetActive(true);
         }
 

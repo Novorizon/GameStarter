@@ -20,6 +20,7 @@
     <ProjectReference Include="YooAssetRuntime/YooAssetRuntime.csproj" />
     <Compile Include="GameDataScenarios.cs" />
     <Compile Include="TowerDefenseDataScenarios.cs" /><Compile Include="JourneyScenarios.cs" /><Compile Include="CampScenarios.cs" />
+    <Compile Include="ExpeditionScenarios.cs" />
     <Compile Include="RemoteReleaseScenarios.cs" />
     <Compile Include="GameDataEditorContracts.cs" />
     <Compile Include="$(YooAssetPackageRoot)/Editor/AssetBundleCollector/CollectRules/IAddressRule.cs" />

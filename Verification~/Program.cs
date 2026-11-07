@@ -31,6 +31,7 @@ internal static partial class Program
         TowerDefenseDataScenarios();
         JourneyScenarios();
         CampScenarios();
+        ExpeditionScenarios();
         RemoteReleaseScenarios();
         Check("entry uses actual Framework singleton and rejects duplicates", EntrySingleton);
         Check("a recreated scene entry starts through Awake after editor reset", EntryRestart);

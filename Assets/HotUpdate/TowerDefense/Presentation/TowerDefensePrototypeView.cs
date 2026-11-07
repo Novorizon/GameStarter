@@ -41,6 +41,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private readonly Color cream = new Color(.98f, .95f, .84f);
         private FightConfiguration configuration;
         private FightSession session;
+        private BattleBriefing briefing;
+        private readonly BattlePauseState pauseState = new BattlePauseState();
         private uint seed;
         private Camera worldCamera;
         private readonly List<Mesh> generatedMeshes = new List<Mesh>();
@@ -72,6 +74,10 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private GameObject cardResume;
         private GameObject resultModal;
         private TMP_Text resultText;
+        private TMP_Text waveForecast;
+        private GameObject forecastPanel;
+        private int forecastIndex = -1;
+        private BattlePhase forecastPhase;
         private readonly TMP_Text[] cardNames = new TMP_Text[3];
         private readonly TMP_Text[] cardDescriptions = new TMP_Text[3];
         private readonly Image[] cardImages = new Image[3];
@@ -80,8 +86,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private int selectedDefinition;
         private bool buildMode;
         private bool completedReported;
-        private bool pausedBeforeExit;
         private GameObject exitConfirm;
+        private bool skipSimulationFrame;
         public string RunId { get; private set; }
         public event Action<FightSession> Finished;
         public event Action ExitRequested;
@@ -152,6 +158,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
             seed = randomSeed;
             session = new FightSession(configuration, seed);
+            briefing = new BattleBriefing(configuration);
+            session.SetPaused(pauseState.IsPaused);
             RunId = Guid.NewGuid().ToString("N");
             completedReported = false;
             font = uiFont != null ? uiFont : throw new ArgumentNullException(nameof(uiFont), "Load the YooAsset TMP font before creating battle UI.");
@@ -184,7 +192,9 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             }
 
             float elapsed = Mathf.Min(Time.unscaledDeltaTime, .25f);
-            if (session.Phase == BattlePhase.Fighting && !session.IsPaused)
+            bool skip = skipSimulationFrame;
+            skipSimulationFrame = false;
+            if (!skip && session.Phase == BattlePhase.Fighting && !session.IsPaused)
             {
                 accumulator += elapsed;
                 const float tickSeconds = FightSession.TickMilliseconds / 1000f;
@@ -285,6 +295,11 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private void RequestExit()
         {
+            if (pauseState.ReturnPending)
+            {
+                return;
+            }
+
             if (session.Phase == BattlePhase.Victory || session.Phase == BattlePhase.Defeat
                 || (session.Phase == BattlePhase.Planning && session.Towers.Count == 0))
             {
@@ -292,16 +307,16 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 return;
             }
 
-            pausedBeforeExit = session.IsPaused;
-            session.SetPaused(true);
+            pauseState.BeginReturn();
+            ApplyPause();
             exitConfirm.SetActive(true);
         }
 
         private void CancelExit()
         {
             exitConfirm.SetActive(false);
-            session.SetPaused(pausedBeforeExit);
-            RefreshInterface();
+            pauseState.CancelReturn();
+            ApplyPause();
         }
 
         private void UpgradeSelected()
@@ -327,8 +342,35 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private void TogglePause()
         {
-            session.SetPaused(!session.IsPaused);
-            RefreshInterface();
+            if (!pauseState.ReturnPending)
+            {
+                pauseState.SetManualPaused(!pauseState.ManualPaused);
+                ApplyPause();
+            }
+        }
+
+        private void ApplyPause()
+        {
+            accumulator = 0;
+            if (initialized && !disposed)
+            {
+                session.SetPaused(pauseState.IsPaused);
+                RefreshInterface();
+            }
+        }
+
+        private void OnApplicationPause(bool paused)
+        {
+            pauseState.SetApplicationPaused(paused);
+            skipSimulationFrame = true;
+            ApplyPause();
+        }
+
+        private void OnApplicationFocus(bool focused)
+        {
+            pauseState.SetApplicationFocused(focused);
+            skipSimulationFrame = true;
+            ApplyPause();
         }
 
         private void Restart()
@@ -346,6 +388,10 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             enemies.Clear();
             towers.Clear();
             session = new FightSession(configuration, seed);
+            pauseState.ResetForNewRun();
+            session.SetPaused(pauseState.IsPaused);
+            exitConfirm.SetActive(false);
+            forecastIndex = -1;
             RunId = Guid.NewGuid().ToString("N");
             completedReported = false;
             selectedTower = 0;
