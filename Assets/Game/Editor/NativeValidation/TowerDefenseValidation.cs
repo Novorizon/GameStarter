@@ -111,7 +111,8 @@ namespace Game.Editor
             EditorSceneManager.OpenScene("Assets/Scenes/Bootstrap.unity");
             if (CanRender)
             {
-                Type type = AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.GetType("UnityEditor.GameView", false)).FirstOrDefault(value => value != null);
+                Type type = AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.GetType("UnityEditor.GameView", false))
+                    .FirstOrDefault(value => value != null);
                 if (type == null)
                 {
                     throw new InvalidOperationException("Unity GameView type is unavailable.");
@@ -181,8 +182,12 @@ namespace Game.Editor
                         return;
                     }
 
-                    Require(view.GetComponentsInChildren<PrototypeWorldTarget>(true).All(target => target.TowerId == 0), "Restart retained old tower view objects after rendered frames.");
-                    Require(!view.GetComponentsInChildren<Transform>(true).Any(value => value.name.StartsWith("Enemy ", StringComparison.Ordinal)), "Restart retained old enemy view objects after rendered frames.");
+                    Require(
+                        view.GetComponentsInChildren<PrototypeWorldTarget>(true).All(target => target.TowerId == 0),
+                        "Restart retained old tower view objects after rendered frames.");
+                    Require(
+                        !view.GetComponentsInChildren<Transform>(true).Any(value => value.name.StartsWith("Enemy ", StringComparison.Ordinal)),
+                        "Restart retained old enemy view objects after rendered frames.");
                     pendingRestartVisuals = false;
                     if (defeatRestartPending)
                     {
@@ -202,9 +207,13 @@ namespace Game.Editor
                         return;
                     }
 
-                    Require(failedCreationLease.DisposeCount == 1, "Failed view creation did not return its owned lease exactly once after native destruction.");
+                    Require(
+                        failedCreationLease.DisposeCount == 1,
+                        "Failed view creation did not return its owned lease exactly once after native destruction.");
                     Require(failedCreationRoot == null, "Failed creation retained its native prototype root.");
-                    Require(UnityEngine.Object.FindObjectsOfType<TowerDefensePrototypeView>(true).Length == 1, "Failed view creation left an extra prototype component.");
+                    Require(
+                        UnityEngine.Object.FindObjectsOfType<TowerDefensePrototypeView>(true).Length == 1,
+                        "Failed view creation left an extra prototype component.");
                     result.failedCreationCleanupVerified = true;
                     failedCreationPending = false;
                     BuildAndUpgrade();
@@ -256,7 +265,9 @@ namespace Game.Editor
                     {
                         Require(battleCaptured && cardsCaptured, "Required battle/card stages were not observed.");
                         Require(result.upgrades > 0, "The automated policy did not exercise tower upgrades.");
-                        Require(result.cardChoices == game.Configuration.Waves.Take(game.Configuration.Waves.Length - 1).Count(wave => wave.GiveCard), "A wave's card decision was skipped.");
+                        Require(
+                            result.cardChoices == game.Configuration.Waves.Take(game.Configuration.Waves.Length - 1).Count(wave => wave.GiveCard),
+                            "A wave's card decision was skipped.");
                         RecordFirstWin();
                         RestartThroughButton();
                         verifyingDefeat = true;
@@ -348,8 +359,12 @@ namespace Game.Editor
 
             Require(rejected, "Empty tower configuration was not rejected before root creation.");
             Require(untransferred.Count == 1 && untransferredLease.DisposeCount == 0, "Precondition rejection changed caller lease ownership.");
-            Require(UnityEngine.Object.FindObjectsOfType<TowerDefensePrototypeView>(true).Length == before.Length, "Precondition rejection created a prototype root.");
-            Require(UnityEngine.Object.FindObjectsOfType<GameObject>(true).Count(value => value.name == "TowerDefensePrototype") == beforeRootCount, "Empty tower rejection leaked a root without a view component.");
+            Require(
+                UnityEngine.Object.FindObjectsOfType<TowerDefensePrototypeView>(true).Length == before.Length,
+                "Precondition rejection created a prototype root.");
+            Require(
+                UnityEngine.Object.FindObjectsOfType<GameObject>(true).Count(value => value.name == "TowerDefensePrototype") == beforeRootCount,
+                "Empty tower rejection leaked a root without a view component.");
             untransferredLease.Dispose();
             untransferred.Clear();
 
@@ -398,7 +413,9 @@ namespace Game.Editor
             Require(button.gameObject.activeInHierarchy && button.interactable, "The offered card button is not available.");
             int before = game.ChosenCardStacks.Values.Sum();
             button.onClick.Invoke();
-            Require(game.ChosenCardStacks.Values.Sum() == before + 1 && game.Phase == BattlePhase.Planning, "Actual card button did not apply exactly one choice.");
+            Require(
+                game.ChosenCardStacks.Values.Sum() == before + 1 && game.Phase == BattlePhase.Planning,
+                "Actual card button did not apply exactly one choice.");
             button.onClick.Invoke();
             Require(game.ChosenCardStacks.Values.Sum() == before + 1, "The same card button applied a choice twice.");
             if (!verifyingDefeat)

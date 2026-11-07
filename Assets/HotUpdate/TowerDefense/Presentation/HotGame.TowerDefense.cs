@@ -30,12 +30,7 @@ namespace Game.HotUpdate
                 var font = await ResourceManager.Instance.AcquireAsync<TMP_FontAsset>(assets["font"], token, true);
                 leases.Add(font);
                 token.ThrowIfCancellationRequested();
-                towerDefenseView = TowerDefensePrototypeView.Create(
-                    TowerDefenseTables.Create(tables, 1),
-                    font.Asset,
-                    map.Asset,
-                    12345,
-                    leases);
+                towerDefenseView = TowerDefensePrototypeView.Create(TowerDefenseTables.Create(tables, 1), font.Asset, map.Asset, 12345, leases);
                 towerDefenseView.SetArt(map.Asset, atlas.Asset, frame.Asset, font.Asset);
                 host.Log("TOWER_DEFENSE_READY " + tables.TbTdStage.Get(1).ConfigVersion);
             }

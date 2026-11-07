@@ -14,7 +14,9 @@ internal static class ManagerModels
         Game.Framework.HotUpdate.HotUpdateManager.Release();
         HotCalls.Clear();
         HotInitialization = _ => Task.CompletedTask;
+        LastUpdateSettings = null;
         Calls.Clear();
+        StartupSteps.Clear();
         LeasesReleased = 0;
         DataAcquisitions.Clear();
         LoadDataBytes = (location, token) => Task.FromResult(System.IO.File.ReadAllBytes(
@@ -31,6 +33,7 @@ internal static class ManagerModels
         Game.Framework.Storage.LocalStorageManager.Files.Clear();
         UIFailure = null;
         ResourceInitialization = Task.FromResult(true);
+        ResourcePackageInitialization = Task.FromResult(true);
         UnityEngine.Resources.Assets.Clear();
         Game.Framework.Network.NetworkManager.Reset();
         Game.Framework.Scenes.SceneManager.Reset();

@@ -47,8 +47,12 @@ namespace Game.Editor
             {
                 string configured = Environment.GetEnvironmentVariable("NOVORIZON_SIGNING_KEY_PATH");
                 string path = string.IsNullOrWhiteSpace(configured)
-                    ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Novorizon", "Signing",
-                        Application.identifier, "development.private.xml")
+                    ? Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "Novorizon",
+                        "Signing",
+                        Application.identifier,
+                        "development.private.xml")
                     : configured;
                 path = Path.GetFullPath(path);
                 string root = Path.GetFullPath(".").TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
@@ -74,7 +78,8 @@ namespace Game.Editor
             {
                 if (key != null)
                 {
-                    throw new InvalidOperationException("The public key already exists. Import its private key and set NOVORIZON_SIGNING_KEY_PATH; do not replace a shipped key.");
+                    throw new InvalidOperationException(
+                        "The public key already exists. Import its private key and set NOVORIZON_SIGNING_KEY_PATH; do not replace a shipped key.");
                 }
 
                 rsa.KeySize = 3072;

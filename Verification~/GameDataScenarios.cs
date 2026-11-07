@@ -14,7 +14,7 @@ internal static partial class Program
 {
     private static void GameDataScenarios()
     {
-        Check("compiled game startup loads Tables through YooAsset before modules", () =>
+        Check("compiled game startup publishes decoded YooAsset Tables before reporting Ready", () =>
         {
             ResetEntry();
             var entry = CreateEntry(hotUpdate: false);
@@ -22,7 +22,8 @@ internal static partial class Program
             var tables = DataManager.Instance.Get<cfg.Tables>();
             Equal("示例配置", tables.TbExample.Get(1).Name);
             Equal("Second entry", tables.TbExample.Get(2).Name);
-            True(ManagerContracts.Calls.IndexOf("tables") < ManagerContracts.Calls.IndexOf("module"));
+            Equal(StartupState.Ready, entry.State);
+            Equal(1, ManagerContracts.Calls.Count(name => name == "tables"));
             True(ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdstage") && ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdcard"));
             Equal(11, ManagerContracts.DataAcquisitions.Count);
             Equal(11, ManagerContracts.LeasesReleased);
@@ -38,16 +39,17 @@ internal static partial class Program
             ManagerContracts.LoadDataBytes = (path, token) => path == "Data/Luban/tbexample" ? pending.Task : read(path, token);
             var entry = CreateEntry();
             Equal(StartupState.Starting, entry.State);
-            True(!ManagerContracts.Calls.Contains("module"));
+            var ready = entry.WaitUntilReadyAsync();
+            True(!ready.IsCompleted);
             True(!DataManager.Instance.TryGet<cfg.Tables>(out _));
             pending.SetResult(File.ReadAllBytes(GameDataPaths.DataOutput + "/tbexample.bytes"));
-            Complete(entry.WaitUntilReadyAsync());
+            Complete(ready);
             Equal(StartupState.Ready, entry.State);
             Equal(2, DataManager.Instance.Get<cfg.Tables>().TbExample.DataList.Count);
             Equal(11, ManagerContracts.LeasesReleased);
             ResetEntry();
         });
-        Check("invalid table bytes fail startup before any business module runs", () =>
+        Check("invalid table bytes fail startup without publishing a partial Tables snapshot", () =>
         {
             ResetEntry();
             var read = ManagerContracts.LoadDataBytes;
@@ -55,7 +57,7 @@ internal static partial class Program
             var entry = CreateEntry();
             Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
             Equal(StartupState.Failed, entry.State);
-            True(!ManagerContracts.Calls.Contains("module"));
+            True(!DataManager.TryGetInstance(out var data) || !data.TryGet<cfg.Tables>(out _));
             ResetEntry();
         });
         Check("shutdown during a table load prevents late tables and ready acknowledgement", () =>
@@ -72,7 +74,7 @@ internal static partial class Program
             Throws<OperationCanceledException>(() => Complete(ready));
             Equal(StartupState.NotStarted, entry.State);
             True(!DataManager.IsCreated);
-            True(!ManagerContracts.Calls.Contains("module"));
+            True(!Game.Framework.HotUpdate.HotUpdateManager.IsCreated);
             ResetEntry();
         });
         Check("YooAsset addresses match the manifest and exclude generated marker/meta files", () =>

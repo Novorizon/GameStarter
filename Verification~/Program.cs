@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Game;
 using Game.Editor;
 using Game.Framework;
+using Game.Framework.HotUpdate;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -23,41 +24,26 @@ internal static partial class Program
     {
         SynchronizationContext.SetSynchronizationContext(context);
         Logger.Sink = new ModelLogger();
-        Environment.SetEnvironmentVariable("NOVORIZON_SIGNING_KEY_PATH", Path.Combine(Path.GetTempPath(), "novorizon-verification-keys", Guid.NewGuid().ToString("N") + ".xml"));
+        Environment.SetEnvironmentVariable(
+            "NOVORIZON_SIGNING_KEY_PATH",
+            Path.Combine(Path.GetTempPath(), "novorizon-verification-keys", Guid.NewGuid().ToString("N") + ".xml"));
         GameDataScenarios();
         TowerDefenseDataScenarios();
         RemoteReleaseScenarios();
-        Check("empty startup", () =>
-        {
-            using var s = Session();
-            Complete(s.StartAsync(Array.Empty<IStartupModule>()));
-            Equal(StartupState.Ready, s.State);
-        });
-        Check("ordered async startup and reverse shutdown", Ordered);
-        Check("partial initialization failure releases the failing module", StartupFailure);
-        Check("shutdown during initialization prevents later startup", CancelStartup);
-        Check("reentrant startup does not initialize twice", ReentrantStart);
-        Check("tick failure stops updates and cleans all modules", TickFailure);
-        Check("shutdown from update skips remaining updates", TickShutdown);
-        Check("cleanup continues after a shutdown exception", CleanupFailure);
-        Check("duplicate and null modules rejected before side effects", InvalidModules);
-        Check("normal updates do not allocate", NoFrameAllocations);
         Check("entry uses actual Framework singleton and rejects duplicates", EntrySingleton);
         Check("entry restarts when scene/domain reload is disabled", EntryRestart);
-        Check("entry prepares managers before optional startup modules and only once", EntryManagers);
+        Check("entry delegates manager startup to the hot game and initializes once", EntryManagers);
         Check("entry initializes network only when NetworkSettings exists", EntryNetwork);
-        Check("failed resource initialization blocks managers and modules", EntryResourceFailure);
+        Check("failed resource initialization blocks manager creation", EntryResourceFailure);
         Check("closing while resources initialize prevents later manager creation", EntryResourceCancellation);
-        Check("manager failure reports failed startup before modules run", EntryManagerFailure);
-        Check("OnExit releases global managers after modules", EntryShutdownOrder);
+        Check("manager failure reports failed startup before tables are loaded", EntryManagerFailure);
+        Check("OnExit releases hot game managers before resources", EntryShutdownOrder);
         Check("manager initialization failure does not roll back other managers in GameEntry", EntryRollback);
         Check("a cleanup failure cannot skip later manager releases", EntryCleanupFailure);
         Check("manager asynchronous cleanup stays inside managers", EntryRestartWaitsForCleanup);
         Check("entry releases global managers without ownership bookkeeping", EntryBorrowsManagers);
         Check("entry prepares project input asset and uses one byte loader and releases each data asset lease", EntryInputAndData);
         Check("UI adapter retains prefab leases until the UI factory releases them", UILeaseOwnership);
-        Check("startup module failure leaves manager cleanup to OnExit", EntryModuleFailure);
-        Check("module Tick failure leaves manager cleanup to OnExit", EntryTickFailure);
         Check("quit and destroy do not rerun OnExit or create unused managers", EntryCleanupAfterReferenceReset);
         Check("exit reentry does not run cleanup twice", EntryShutdownReentry);
         Check("hot startup owns ordinary manager creation", HotOwnsManagers);
@@ -72,6 +58,15 @@ internal static partial class Program
         Check("GameEntry exit cancels hot startup before releasing services", EntryHotCancellation);
         Check("hot initialization failure fails GameEntry", EntryHotFailure);
         Check("central entry shutdown precedes editor reset and restarts retained scenes", EntryAutomaticReset);
+        Check("resource setup and hot manager configuration have no update or business side effects", IndependentHotUpdateStartup);
+        Check("resource filesystem failure blocks hot manager creation", WarmupFailure);
+        Check("resource filesystem completion precedes hot manager configuration and update work", WarmupOrdering);
+        Check("hot workflow cannot create an uninitialized hot manager implicitly", UnconfiguredHotWorkflow);
+        Check("entry cancels pending filesystem setup before creating hot services and allows a fresh run", IndependentStartupCancellation);
+        Check("late download progress cannot replace Ready or alter a restarted startup owner", IndependentStartupProgress);
+        Check("offline startup disables remote releases and rejects cached online content", IndependentOfflinePolicy);
+        Check("online startup forwards remote policy and binds host resource parameters", IndependentOnlinePolicy);
+        Check("cancelled resource reconfiguration cannot destroy a newer package after delayed shutdown", CancelledResourceReconfiguration);
         Check("catalog resolves dependencies once and before consumers", CatalogOrder);
         Check("catalog detects missing and circular dependencies", InvalidCatalog);
         Check("installer resumes after request handles are lost on reload", InstallerReload);
@@ -130,190 +125,6 @@ internal static partial class Program
         throw new Exception("Expected " + typeof(T).Name);
     }
 
-    private static GameSession Session(List<Exception> errors = null) => new GameSession(e => errors?.Add(e));
-    private sealed class Module : IStartupModule
-    {
-        internal Func<CancellationToken, Task> Init = _ => Task.CompletedTask;
-        internal Action Update = () =>
-        {
-        }, Stop = () =>
-        {
-        };
-        public Task InitializeAsync(CancellationToken token) => Init(token);
-        public void Tick(float delta, float unscaled) => Update();
-        public void Shutdown() => Stop();
-    }
-
-    private static void Ordered()
-    {
-        var events = new List<string>();
-        var wait = new TaskCompletionSource<bool>();
-        var a = new Module
-        {
-            Init = _ =>
-            {
-                events.Add("a+");
-                return wait.Task;
-            },
-            Stop = () => events.Add("a-")
-        };
-        var b = new Module
-        {
-            Init = _ =>
-            {
-                events.Add("b+");
-                return Task.CompletedTask;
-            },
-            Stop = () => events.Add("b-")
-        };
-        using var s = Session();
-        Task start = s.StartAsync(new[] { a, b });
-        Equal("a+", string.Join(",", events));
-        Equal(StartupState.Starting, s.State);
-        wait.SetResult(true);
-        Complete(start);
-        s.Dispose();
-        s.Dispose();
-        Equal("a+,b+,b-,a-", string.Join(",", events));
-    }
-
-    private static void StartupFailure()
-    {
-        var events = new List<int>();
-        bool canceled = false;
-        var a = new Module
-        {
-            Init = t =>
-            {
-                t.Register(() => canceled = true);
-                return Task.CompletedTask;
-            },
-            Stop = () => events.Add(1)
-        };
-        var b = new Module
-        {
-            Init = _ => Task.FromException(new InvalidOperationException()),
-            Stop = () => events.Add(2)
-        };
-        var c = new Module
-        {
-            Init = _ => throw new Exception("must not start")
-        };
-        using var s = Session();
-        Throws<InvalidOperationException>(() => Complete(s.StartAsync(new[] { a, b, c })));
-        Equal(StartupState.Failed, s.State);
-        Equal("2,1", string.Join(",", events));
-        True(canceled);
-    }
-
-    private static void CancelStartup()
-    {
-        var wait = new TaskCompletionSource<bool>();
-        int stopped = 0, later = 0;
-        var a = new Module
-        {
-            Init = _ => wait.Task,
-            Stop = () => stopped++
-        };
-        var b = new Module
-        {
-            Init = _ =>
-            {
-                later++;
-                return Task.CompletedTask;
-            }
-        };
-        using var s = Session();
-        Task start = s.StartAsync(new[] { a, b });
-        s.Dispose();
-        wait.SetResult(true);
-        Throws<OperationCanceledException>(() => Complete(start));
-        Equal(StartupState.Stopped, s.State);
-        Equal(1, stopped);
-        Equal(0, later);
-    }
-
-    private static void ReentrantStart()
-    {
-        using var s = Session();
-        int count = 0;
-        Task inner = null;
-        var a = new Module
-        {
-            Init = _ =>
-            {
-                count++;
-                inner = s.StartAsync(Array.Empty<IStartupModule>());
-                return Task.CompletedTask;
-            }
-        };
-        Task outer = s.StartAsync(new[] { a });
-        Complete(outer);
-        True(ReferenceEquals(inner, outer));
-        Equal(1, count);
-    }
-
-    private static void TickFailure()
-    {
-        int stopped = 0, later = 0;
-        var errors = new List<Exception>();
-        using var s = Session(errors);
-        Complete(s.StartAsync(new[] { new Module { Update = () => throw new InvalidOperationException(), Stop = () => stopped++ }, new Module { Update = () => later++, Stop = () => stopped++ } }));
-        s.Tick(1, 1);
-        s.Tick(1, 1);
-        Equal(StartupState.Failed, s.State);
-        Equal(2, stopped);
-        Equal(0, later);
-        Equal(1, errors.Count);
-    }
-
-    private static void TickShutdown()
-    {
-        using var s = Session();
-        int later = 0;
-        Complete(s.StartAsync(new[] { new Module { Update = s.Dispose }, new Module { Update = () => later++ } }));
-        s.Tick(1, 1);
-        Equal(0, later);
-        Equal(StartupState.Stopped, s.State);
-    }
-
-    private static void CleanupFailure()
-    {
-        int stopped = 0;
-        var errors = new List<Exception>();
-        using var s = Session(errors);
-        Complete(s.StartAsync(new[] { new Module { Stop = () => stopped++ }, new Module { Stop = () => throw new Exception("cleanup") } }));
-        s.Dispose();
-        Equal(1, stopped);
-        Equal(1, errors.Count);
-    }
-
-    private static void InvalidModules()
-    {
-        using var s = Session();
-        var a = new Module
-        {
-            Init = _ => throw new Exception("must not start")
-        };
-        Throws<ArgumentException>(() => s.StartAsync(new[] { a, a }));
-        Throws<ArgumentException>(() => s.StartAsync(new Module[] { a, null }));
-        Equal(StartupState.NotStarted, s.State);
-    }
-
-    private static void NoFrameAllocations()
-    {
-        using var s = Session();
-        Complete(s.StartAsync(new[] { new Module() }));
-        s.Tick(1, 1);
-        long before = GC.GetAllocatedBytesForCurrentThread();
-        for (int i = 0; i < 1000; i++)
-        {
-            s.Tick(1, 1);
-        }
-
-        Equal(0L, GC.GetAllocatedBytesForCurrentThread() - before);
-    }
-
     private sealed class ModelLogger : ILogger
     {
         public void Info(string value) => Debug.Log(value);
@@ -354,56 +165,21 @@ internal static partial class Program
         UObject.Invoke(entry, "OnApplicationQuit");
         UObject.ResetSingletonsForPlay();
         Equal(StartupState.NotStarted, entry.State);
-        typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
+        typeof(GameEntry).GetMethod("ResumeEntry", Static).Invoke(null, null);
         True(ReferenceEquals(entry, GameEntry.Instance));
         Complete(entry.WaitUntilReadyAsync());
         Equal(StartupState.Ready, entry.State);
         ResetEntry();
     }
 
-    private sealed class RecordingStartupModule : StartupModule
+    private static GameEntry CreateEntry(bool hotUpdate = true, ResourceMode resourceMode = ResourceMode.Online)
     {
-        public RecordingStartupModule()
-        {
-        }
-
-        public override Task InitializeAsync(CancellationToken token)
-        {
-            ManagerContracts.Calls.Add("module");
-            if (ManagerContracts.ModuleFailure != null)
-            {
-                throw ManagerContracts.ModuleFailure;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public override void Shutdown()
-        {
-            ManagerContracts.Cleanup.Add("module");
-            ManagerContracts.ModuleShutdown?.Invoke();
-        }
-
-        public override void Tick(float delta, float unscaled)
-        {
-            if (ManagerContracts.ModuleTickFailure != null)
-            {
-                throw ManagerContracts.ModuleTickFailure;
-            }
-        }
-    }
-
-    private static GameEntry CreateEntry(bool hotUpdate = true)
-    {
-        var module = new GameObject().AddComponent<RecordingStartupModule>();
-        var go = new GameObject
-        {
-            activeInHierarchy = false
-        };
+        var go = new GameObject { activeInHierarchy = false };
         var entry = go.AddComponent<GameEntry>();
         var flags = BindingFlags.Instance | BindingFlags.NonPublic;
-        typeof(GameEntry).GetField("startupModules", flags).SetValue(entry, new StartupModule[] { module });
         typeof(GameEntry).GetField("initializeHotUpdate", flags).SetValue(entry, hotUpdate);
+        typeof(GameEntry).GetField("resourceMode", flags).SetValue(entry, resourceMode);
+        typeof(GameEntry).GetField("simulateResourcesInEditor", flags).SetValue(entry, false);
         go.activeInHierarchy = true;
         UObject.Invoke(entry, "Awake");
         return entry;
@@ -414,11 +190,11 @@ internal static partial class Program
         ResetEntry();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,tables,module", string.Join(",", ManagerContracts.Calls));
+        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,tables", string.Join(",", ManagerContracts.Calls));
         True(Game.Framework.Event.EventManager.IsCreated && Game.Framework.Timing.TimerManager.IsCreated);
         _ = GameEntry.Instance;
         _ = GameEntry.Instance;
-        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,tables,module", string.Join(",", ManagerContracts.Calls));
+        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,tables", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -428,7 +204,7 @@ internal static partial class Program
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,network,tables,module", string.Join(",", ManagerContracts.Calls));
+        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,network,tables", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -464,7 +240,7 @@ internal static partial class Program
         ManagerContracts.UIFailure = new InvalidOperationException("UI initialization failed");
         var entry = CreateEntry();
         Equal(StartupState.Failed, entry.State);
-        True(!ManagerContracts.Calls.Contains("module"));
+        True(!ManagerContracts.Calls.Contains("tables"));
         ResetEntry();
     }
 
@@ -474,7 +250,7 @@ internal static partial class Program
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Complete(entry.ShutdownAsync());
-        Equal("module,hot,network,worlds,entities,gpu,ui,audio,scenes,input,storage,resources", string.Join(",", ManagerContracts.Cleanup));
+        Equal("hot,network,worlds,entities,gpu,ui,audio,scenes,input,storage,resources", string.Join(",", ManagerContracts.Cleanup));
         Complete(entry.ShutdownAsync());
         True(!UI.UIManager.TryGetInstance(out _));
         True(!Game.Framework.Data.DataManager.IsCreated);
@@ -559,7 +335,7 @@ internal static partial class Program
         var data = Game.Framework.Data.DataManager.Instance;
         Equal("示例配置", data.Get<cfg.Tables>().TbExample.Get(1).Name);
         True(ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdstage") && ManagerContracts.DataAcquisitions.Contains("Data/Luban/tbtdcard"));
-            Equal(11, ManagerContracts.DataAcquisitions.Count);
+        Equal(11, ManagerContracts.DataAcquisitions.Count);
         Equal(11, ManagerContracts.LeasesReleased);
         Complete(entry.ShutdownAsync());
         True(ManagerContracts.Cleanup.Contains("input"));
@@ -582,36 +358,6 @@ internal static partial class Program
         ResetEntry();
     }
 
-    private static void EntryModuleFailure()
-    {
-        ResetEntry();
-        ManagerContracts.ModuleFailure = new InvalidOperationException("module init");
-        var entry = CreateEntry();
-        Equal(StartupState.Failed, entry.State);
-        True(UI.UIManager.TryGetInstance(out _));
-        True(!ManagerContracts.Cleanup.Contains("audio"));
-        Complete(entry.ShutdownAsync());
-        Equal("module", ManagerContracts.Cleanup.First());
-        Equal("resources", ManagerContracts.Cleanup.Last());
-        True(!UI.UIManager.TryGetInstance(out _));
-        ResetEntry();
-    }
-
-    private static void EntryTickFailure()
-    {
-        ResetEntry();
-        var entry = CreateEntry();
-        ManagerContracts.ModuleTickFailure = new InvalidOperationException("module tick");
-        UObject.Invoke(entry, "Update");
-        Equal(StartupState.Failed, entry.State);
-        True(UI.UIManager.TryGetInstance(out _));
-        True(!ManagerContracts.Cleanup.Contains("audio"));
-        Complete(entry.ShutdownAsync());
-        Equal("module", ManagerContracts.Cleanup.First());
-        Equal("resources", ManagerContracts.Cleanup.Last());
-        ResetEntry();
-    }
-
     private static void EntryCleanupAfterReferenceReset()
     {
         ResetEntry();
@@ -630,20 +376,37 @@ internal static partial class Program
     private static void EntryShutdownReentry()
     {
         ResetEntry();
+        var hotGame = new ReentrantHotGame();
+        ManagerContracts.HotGameFactory = () => hotGame;
         var entry = CreateEntry();
         Task reentered = null;
-        bool completed = true;
-        ManagerContracts.ModuleShutdown = () =>
-        {
-            reentered = entry.ShutdownAsync();
-            completed = reentered.IsCompleted;
-        };
-        var stopping = entry.ShutdownAsync();
-        True(ReferenceEquals(stopping, reentered));
-        True(completed);
-        Complete(stopping);
-        Equal(1, ManagerContracts.Cleanup.Count(name => name == "module"));
+        hotGame.OnShutdown = () => reentered = entry.ShutdownAsync();
+        Complete(entry.ShutdownAsync());
+        True(reentered != null && reentered.IsCompleted);
+        Equal(1, hotGame.ShutdownCount);
+        Equal(1, ManagerContracts.Cleanup.Count(name => name == "hot"));
+        Equal(1, ManagerContracts.Cleanup.Count(name => name == "ui"));
+        Equal(1, ManagerContracts.Cleanup.Count(name => name == "resources"));
         ResetEntry();
+    }
+
+    private sealed class ReentrantHotGame : Game.Framework.HotUpdate.IGameModule
+    {
+        private readonly Game.HotUpdate.HotGame inner = new Game.HotUpdate.HotGame();
+        internal Action OnShutdown;
+        internal int ShutdownCount;
+
+        public Task InitializeAsync(Game.Framework.HotUpdate.IGameHost host, CancellationToken token)
+        {
+            return inner.InitializeAsync(host, token);
+        }
+
+        public void Shutdown()
+        {
+            ShutdownCount++;
+            OnShutdown?.Invoke();
+            inner.Shutdown();
+        }
     }
 
     private sealed class HotHost : Game.Framework.HotUpdate.IGameHost
@@ -665,13 +428,17 @@ internal static partial class Program
 
     private sealed class BareHotGame : Game.Framework.HotUpdate.IGameModule
     {
-        public async Task InitializeAsync(Game.Framework.HotUpdate.IGameHost host, CancellationToken token)
+        internal GameStartupOptions ObservedOptions;
+
+        public Task InitializeAsync(Game.Framework.HotUpdate.IGameHost host, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             var contextHost = (Game.Framework.HotUpdate.IGameContextHost)host;
-            var options = (GameStartupOptions)contextHost.StartupContext;
+            ObservedOptions = contextHost.StartupContext as GameStartupOptions;
+            True(ObservedOptions != null);
             True(!ManagerContracts.Calls.Contains("ui") && !ManagerContracts.Calls.Contains("input"));
-            await options.InitializeModulesAsync(token);
             host.ReportReady("bare");
+            return Task.CompletedTask;
         }
 
         public void Shutdown()
@@ -771,7 +538,7 @@ internal static partial class Program
         var pending = new TaskCompletionSource<bool>();
         ManagerContracts.HotInitialization = token =>
         {
-            True(!ManagerContracts.Calls.Contains("ui") && !ManagerContracts.Calls.Contains("module"));
+            True(!ManagerContracts.Calls.Contains("ui") && !ManagerContracts.Calls.Contains("input"));
             return pending.Task;
         };
         var entry = CreateEntry();
@@ -840,14 +607,239 @@ internal static partial class Program
             UObject.ResetSingletonsForPlay();
             Equal(StartupState.NotStarted, entry.State);
             True(!GameEntry.TryGetInstance(out _));
-            Equal("module", ManagerContracts.Cleanup.First());
+            Equal("hot", ManagerContracts.Cleanup.First());
             True(!UI.UIManager.TryGetInstance(out _));
-            typeof(GameEntry).GetMethod("ResumeSession", Static).Invoke(null, null);
+            typeof(GameEntry).GetMethod("ResumeEntry", Static).Invoke(null, null);
             Complete(entry.WaitUntilReadyAsync());
             True(ReferenceEquals(entry, GameEntry.Instance));
         }
 
         ResetEntry();
+    }
+
+    private static void IndependentHotUpdateStartup()
+    {
+        ResetEntry();
+        var hotGame = new BareHotGame();
+        ManagerContracts.HotGameFactory = () => hotGame;
+        var input = new UnityEngine.InputSystem.InputActionAsset();
+        var options = new GameStartupOptions(input, "UI");
+        using var workflow = new GameHotUpdate(ResourceMode.Online, false);
+        var resources = Game.Resource.ResourceManager.Instance;
+        Complete(resources.InitializePackageAsync(workflow.CreateResourceParameters()));
+        True(resources.PackageInitialized && !resources.Initialized);
+        Equal(0, ManagerContracts.Calls.Count);
+        Equal(0, ManagerContracts.HotCalls.Count);
+        var settings = workflow.CreateSettings(true);
+        HotUpdateManager.Instance.Initialize(settings, options);
+        Equal(0, ManagerContracts.Calls.Count);
+        Equal(0, ManagerContracts.HotCalls.Count);
+        True(hotGame.ObservedOptions == null);
+        Equal("resources-initialize,hot-configure", string.Join(",", ManagerContracts.StartupSteps));
+        Complete(workflow.RunAsync(CancellationToken.None));
+        True(!GameEntry.TryGetInstance(out _));
+        True(ReferenceEquals(options, hotGame.ObservedOptions));
+        True(ReferenceEquals(input, hotGame.ObservedOptions.InputActions));
+        Equal("UI", hotGame.ObservedOptions.InitialInputMap);
+        Equal("resources-initialize,hot-configure,hot-start,content-prepare,hot-game", string.Join(",", ManagerContracts.StartupSteps));
+        workflow.Dispose();
+        workflow.Dispose();
+        True(HotUpdateManager.IsCreated && resources.Initialized);
+        Equal(0, ManagerContracts.Cleanup.Count);
+        HotUpdateManager.Release();
+        Game.Resource.ResourceManager.Release();
+        Equal(1, ManagerContracts.Cleanup.Count(name => name == "hot"));
+        Equal(1, ManagerContracts.Cleanup.Count(name => name == "resources"));
+        ResetEntry();
+    }
+
+    private static void WarmupFailure()
+    {
+        ResetEntry();
+        ManagerContracts.ResourcePackageInitialization = Task.FromResult(false);
+        int errors = Debug.Exceptions.Count;
+        var entry = CreateEntry();
+        Equal(StartupState.Failed, entry.State);
+        Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
+        Equal(errors + 1, Debug.Exceptions.Count);
+        Equal("resources-initialize", string.Join(",", ManagerContracts.StartupSteps));
+        Equal(0, ManagerContracts.Calls.Count);
+        Equal(0, ManagerContracts.HotCalls.Count);
+        True(!HotUpdateManager.IsCreated);
+        True(!UI.UIManager.TryGetInstance(out _));
+        ResetEntry();
+    }
+
+    private static void WarmupOrdering()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.ResourcePackageInitialization = pending.Task;
+        var entry = CreateEntry();
+        Equal(StartupState.Starting, entry.State);
+        Equal("resources-initialize", string.Join(",", ManagerContracts.StartupSteps));
+        True(!HotUpdateManager.IsCreated);
+        True(ManagerContracts.LastUpdateSettings == null);
+        Equal(0, ManagerContracts.Calls.Count);
+        pending.SetResult(true);
+        Complete(entry.WaitUntilReadyAsync());
+        Equal(StartupState.Ready, entry.State);
+        Equal("resources-initialize,hot-configure,hot-start,content-prepare,hot-game", string.Join(",", ManagerContracts.StartupSteps));
+        ResetEntry();
+    }
+
+    private static void UnconfiguredHotWorkflow()
+    {
+        ResetEntry();
+        using var workflow = new GameHotUpdate(ResourceMode.Online, false);
+        Throws<InvalidOperationException>(() => Complete(workflow.RunAsync(CancellationToken.None)));
+        True(!HotUpdateManager.IsCreated);
+        Equal(0, ManagerContracts.HotCalls.Count);
+        ResetEntry();
+    }
+
+    private static void IndependentStartupCancellation()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.ResourcePackageInitialization = pending.Task;
+        var first = CreateEntry();
+        Equal(StartupState.Starting, first.State);
+        var ready = first.WaitUntilReadyAsync();
+        True(!HotUpdateManager.IsCreated);
+        Complete(first.ShutdownAsync());
+        pending.SetResult(true);
+        Throws<OperationCanceledException>(() => Complete(ready));
+        FlushModelCallbacks();
+        True(!HotUpdateManager.IsCreated);
+        True(!UI.UIManager.TryGetInstance(out _));
+        ManagerContracts.ResourcePackageInitialization = Task.FromResult(true);
+        var next = CreateEntry();
+        Complete(next.WaitUntilReadyAsync());
+        Equal(StartupState.Ready, next.State);
+        Complete(next.ShutdownAsync());
+        ResetEntry();
+    }
+
+    private static void IndependentStartupProgress()
+    {
+        ResetEntry();
+        var first = CreateEntry();
+        Complete(first.WaitUntilReadyAsync());
+        var progress = Game.Resource.ResourceManager.Instance.LastOptions.Progress;
+        string readyMessage = first.StartupMessage;
+        int totalCount = first.DownloadProgress.TotalCount;
+        progress.Report(new Game.Resource.ResourceDownloadProgress(7, 3, 100, 30));
+        FlushModelCallbacks();
+        Equal(StartupState.Ready, first.State);
+        Equal(readyMessage, first.StartupMessage);
+        Equal(totalCount, first.DownloadProgress.TotalCount);
+        Complete(first.ShutdownAsync());
+        progress.Report(new Game.Resource.ResourceDownloadProgress(9, 4, 200, 70));
+        var next = CreateEntry();
+        Complete(next.WaitUntilReadyAsync());
+        FlushModelCallbacks();
+        Equal(StartupState.Ready, next.State);
+        Equal("Ready", next.StartupMessage);
+        Equal(totalCount, next.DownloadProgress.TotalCount);
+        Complete(next.ShutdownAsync());
+        ResetEntry();
+    }
+
+    private static void FlushModelCallbacks()
+    {
+        bool flushed = false;
+        context.Post(_ => flushed = true, null);
+        context.Until(() => flushed);
+    }
+
+    private static void IndependentOfflinePolicy()
+    {
+        ResetEntry();
+        InstallModelUpdateKey();
+        using var workflow = new GameHotUpdate(ResourceMode.Offline, false);
+        var entry = CreateEntry(resourceMode: ResourceMode.Offline);
+        Complete(entry.WaitUntilReadyAsync());
+        Equal(StartupState.Ready, entry.State);
+        True(!ManagerContracts.LastUpdateSettings.enableRemote);
+        True(ManagerContracts.LastUpdateSettings.usePackagedReleaseOnly);
+        True(Game.Resource.ResourceManager.Instance.LastOptions.Parameters is YooAsset.OfflinePlayModeParameters);
+        var content = new ReleaseContent { packageName = GameDataPaths.PackageName, version = "online-2" };
+        var online = new ReleaseContentContext("windows-x64", content, false);
+        Throws<InvalidOperationException>(() => Complete(workflow.ConfigureResourceModeAsync(online, CancellationToken.None)));
+        True(Game.Resource.ResourceManager.Instance.LastOptions.Parameters is YooAsset.OfflinePlayModeParameters);
+        Complete(entry.ShutdownAsync());
+        ResetEntry();
+    }
+
+    private static void IndependentOnlinePolicy()
+    {
+        ResetEntry();
+        InstallModelUpdateKey();
+        var content = new ReleaseContent { packageName = GameDataPaths.PackageName, version = "online-2" };
+        var online = new ReleaseContentContext("windows-x64", content, false);
+        // Model release selection switches its prepared candidate before constructing the hot game.
+        ManagerContracts.HotInitialization = token => ManagerContracts.LastUpdateSettings.prepareContentAsync(online, token);
+        var entry = CreateEntry(resourceMode: ResourceMode.Online);
+        Complete(entry.WaitUntilReadyAsync());
+        Equal(StartupState.Ready, entry.State);
+        True(ManagerContracts.LastUpdateSettings.enableRemote);
+        True(!ManagerContracts.LastUpdateSettings.usePackagedReleaseOnly);
+        var options = Game.Resource.ResourceManager.Instance.LastOptions;
+        True(options.Parameters is YooAsset.HostPlayModeParameters);
+        Equal("online-2", options.PackageVersion);
+        True(options.DownloadAll);
+        Complete(entry.ShutdownAsync());
+        ResetEntry();
+    }
+
+    private static void CancelledResourceReconfiguration()
+    {
+        ResetEntry();
+        var pending = new TaskCompletionSource<bool>();
+        ManagerContracts.ResourceInitialization = pending.Task;
+        var resources = Game.Resource.ResourceManager.Instance;
+        var contentLoading = resources.InitializeAsync();
+        var oldPackage = new YooAsset.ResourcePackage { InitializeStatus = YooAsset.EOperationStatus.Succeed };
+        var newPackage = new YooAsset.ResourcePackage { InitializeStatus = YooAsset.EOperationStatus.Succeed };
+        YooAsset.YooAssets.Package = oldPackage;
+        try
+        {
+            using var workflow = new GameHotUpdate(ResourceMode.Online, false);
+            using var stop = new CancellationTokenSource();
+            var content = new ReleaseContentContext("windows-x64", new ReleaseContent
+            {
+                packageName = GameDataPaths.PackageName,
+                version = "baseline-resources"
+            }, true);
+            var configuring = workflow.ConfigureResourceModeAsync(content, stop.Token);
+            True(!configuring.IsCompleted);
+            stop.Cancel();
+            YooAsset.YooAssets.Package = newPackage;
+            pending.SetResult(true);
+            Complete(contentLoading);
+            Throws<OperationCanceledException>(() => Complete(configuring));
+            Equal(0, oldPackage.Destroyed);
+            Equal(0, newPackage.Destroyed);
+            True(ReferenceEquals(newPackage, YooAsset.YooAssets.Package));
+        }
+        finally
+        {
+            pending.TrySetResult(true);
+            YooAsset.YooAssets.Package = null;
+            ResetEntry();
+        }
+    }
+
+    private static void InstallModelUpdateKey()
+    {
+        using var rsa = RSA.Create(3072);
+        var publicKey = rsa.ExportParameters(false);
+        var asset = ScriptableObject.CreateInstance<GameUpdateKey>();
+        asset.keyId = "startup-mode-probe";
+        asset.modulus = Convert.ToBase64String(publicKey.Modulus);
+        asset.exponent = Convert.ToBase64String(publicKey.Exponent);
+        UnityEngine.Resources.Assets["GameUpdateKey"] = asset;
     }
 
     private static ModuleSpec Spec(string id, params string[] dependencies) => new ModuleSpec
@@ -945,7 +937,8 @@ internal static partial class Program
         EditorApplication.TickForTest();
         EditorApplication.TickForTest(); // Add succeeded; its request handle is about to be lost.
         var job = typeof(ModuleInstaller).GetField("job", Static);
-        var reloaded = typeof(JsonUtility).GetMethod(nameof(JsonUtility.FromJson)).MakeGenericMethod(job.FieldType).Invoke(null, new object[] { SessionState.GetString("Novorizon.GameStarter.InstallJob", "") });
+        var reloaded = typeof(JsonUtility).GetMethod(nameof(JsonUtility.FromJson)).MakeGenericMethod(job.FieldType)
+            .Invoke(null, new object[] { SessionState.GetString("Novorizon.GameStarter.InstallJob", "") });
         job.SetValue(null, reloaded);
         typeof(ModuleInstaller).GetField("adding", Static).SetValue(null, null);
         typeof(ModuleInstaller).GetField("listing", Static).SetValue(null, null);

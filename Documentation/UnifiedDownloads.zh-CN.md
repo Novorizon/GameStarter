@@ -2,11 +2,38 @@
 
 DLL、AOT 补充元数据、Luban 数据及其他游戏资源使用同一个 DefaultPackage 的精确资源版本。默认通过 YooAsset 下载这个版本全部缺失的文件，完成后读取代码字节，按签名发行清单校验，再交给 HybridCLR/Assembly.Load。缓存中已有且有效的文件不重复下载；当前不按 code 标签单独安排第一批下载。
 
-## 管理器职责
+上述下载/加载顺序描述 Player 的在线热更路径；Editor 使用已编译程序集，并由单独的 `simulateResourcesInEditor` 开关决定是否模拟资源。默认开启模拟，不在 Editor 默认流程中下载或加载远端 DLL。
 
-ResourceManager 负责 YooAsset 初始化、下载、资源租约和释放。HotUpdateManager 负责代码发行选择、基线兼容、签名与字节校验、AOT 元数据及热更程序集加载、HotGame 启停；它通过项目回调等待完整资源准备，不接管场景、音频或 UI 等资源的日常管理。
+## 入口与模块职责
 
-GameEntry 提供 prepareContentAsync 和 loadCodeAsync：前者初始化并下载所选资源版本，后者通过 ResourceManager 的 TextAsset 租约读取 `HotUpdate/<baselineId>/<assembly>.dll.bytes`。必须先准备资源，再读取代码。读取结束立即归还资源租约；字节校验和程序集加载不受句柄释放影响。
+GameEntry 负责 Inspector 场景参数和模式开关，持有本次启动的 CTS、task 和 State，并直接按顺序初始化资源与热更两个 Manager。具体流程是：
+
+1. `await ResourceManager.Instance.InitializePackageAsync(initialParameters, token)`：只初始化 YooAsset 包的文件系统，不选版本、不加载版本清单、不下载。失败时不进入后续热更步骤。
+2. `HotUpdateManager.Instance.Initialize(settings, inputOptions, token)`：只配置 Manager，不启动发行选择或加载游戏。
+3. `await GameHotUpdate.RunAsync(token)`：调用已经配置的 `HotUpdateManager.StartAsync`，执行发行选择、资源准备/下载、字节校验、元数据与程序集加载，再进入 `HotGame`。
+
+GameHotUpdate 只负责具体 settings、资源模式参数工厂、prepareContentAsync、loadCodeAsync 和进度接线。prepareContentAsync 在选定发行后准备精确资源版本并等待全部缺失资源下载完成；loadCodeAsync 通过 ResourceManager 的 TextAsset 租约读取 `HotUpdate/<baselineId>/<assembly>.dll.bytes`。读取结束立即归还租约，取得的托管字节仍用于后续校验和加载。
+
+GameHotUpdate 不初始化两个 Manager、不拥有启动 CTS，也不做中央 Release。退出由 GameEntry 先取消启动，再按 `HotUpdateManager → ResourceManager` 释放：先停止 HotGame 与业务对象，再结束资源管理。HotGame 仍初始化其余公共 Manager、读取数据表并直接创建/关闭具体业务，不通过额外 Session 注册器。
+
+SDK 的旧 `HotUpdateManager.InitializeAsync` 保留兼容调用；本工程采用上述“资源文件系统 warmup → 热更配置 → 显式 Start”顺序，避免把初始化与实际更新混在同一步。
+
+GameStartupOptions 只携带输入资源和初始 Map，已经移除模块启动回调。本次 Options 构造签名变化及新 AOT 类型 GameHotUpdate 的代码移动，会改变主包基线；已有 IL2CPP 主包需要重建，不能仅替换热更 DLL。本次脚本编译及两轮 Editor 模拟启动/退出已通过，详见[本轮报告](Validation/EntryStartup/)。
+
+## 离线、联网与 Editor 模拟
+
+`GameEntry.resourceMode` 使用 `Game.ResourceMode`，默认 `Online`；`simulateResourcesInEditor` 默认 `true`，与资源离线/联网模式分开配置。
+
+| 配置 | 执行方式 | 版本约束 |
+| --- | --- | --- |
+| `Offline` | 直接选择内置发行，准备内置资源文件系统 | 不读取、拒绝或删除已缓存的联网发行；切回联网模式后缓存仍可使用 |
+| `Online` | Player 热更路径中按可信公钥与签名配置检查远端发行，准备其绑定的精确资源版本 | 更新资源准备失败仍成对退回内置代码/资源，不能拿新代码配旧资源 |
+| Editor 模拟开启 | 使用 YooAsset 编辑器模拟文件系统，读取工程内资产；程序集使用 Editor 已编译版本 | 不把这种结果当作真实下载、离线内置文件或 Player DLL 加载通过 |
+| Editor 模拟关闭 | 执行真实资源文件系统准备，按资源模式和发行上下文选择内置或远端来源 | Editor 代码仍是已编译程序集；此开关不会把 Editor 变成 IL2CPP Player |
+
+模块中的 `ConfigureResourceModeAsync(content, token)` 返回所需的 `InitializeParameters`，负责文件系统模式选择和回退前的旧包处理；离线模式在发行选择阶段就跳过联网缓存，防止将模式限制误记为损坏发行。准备函数再设置精确资源版本和统一下载策略；GameEntry 不需要理解 YooAsset 的 Host/Offline 参数类型。
+
+这些开关控制代码/资源更新来源，不控制玩家账号登录或服务器结算。无论模式如何，代码与资源仍由同一已验证发行配对，已有 AOT 元数据/程序集加载后不尝试进程内换版。本次已验证模拟模式下的入口配置、初始化顺序和退出；实际离线 bundle 与 HTTP 下载没有重跑，SDK 独立回归覆盖模式与缓存选择。
 
 ## 构建及发布
 
@@ -23,4 +50,16 @@ GameEntry 提供 prepareContentAsync 和 loadCodeAsync：前者初始化并下�
 
 新基线声明 codeInResources，缺少资源代码提供方时直接失败，不静默改用独立 DLL 下载。本次 AOT 接口、构建顺序和发行格式有变，已有游戏需要重建主包。旧流程见 [WR 备份](UnityWebRequestBackup.zh-CN.md)。
 
-当前工程提供启动状态与下载进度，尚无实际启动 UI；统一下载不会自动创建更新界面。
+## 下载进度与界面
+
+当前只有 `StartupMessage` 和 `DownloadProgress` 数据出口，没有可见下载进度条、更新窗口或对应 Prefab。资源准备阶段会阻塞等待全部缺失资源，随后继续校验代码、加载 DLL 并初始化 HotGame；不会边下载尚缺的启动资源边进入业务。
+
+下载进度达到 100% 只表示下载阶段结束，仍要等待代码校验和业务初始化，不能直接显示“游戏已就绪”。可见进度 UI 仍是后续计划，本轮不将数据字段视为已实现界面。塔防战斗 UI 属于 HotGame 业务，与尚未制作的启动更新 UI 分开。
+
+## 入口职责重构的本轮验收
+
+69 项工程模型、12 项领域和 13 项账号会话回归通过。真实 Unity 2022.3.62f1 的 Player 脚本编译通过；8 个 Demo 的 11 个 Editor、8 个 Player 程序集逐项检查，包含 Framework Demo。
+
+Linux / OpenGLCore 软件渲染下完成 Online、Offline 两轮入口配置，均使用 Editor 资源模拟，实际加载表、TMP 界面并验证停止后的 Manager/视图清理。Unity 停止时会销毁 DontDestroyOnLoad 入口，因此轮间显式重新打开 Bootstrap；没有把结果写成“同一 Entry 跨停止保留”。原始报告见 [EntryStartup](Validation/EntryStartup/)。未重新执行真实离线 bundle、HTTP、IL2CPP 或手机验收。
+
+下载进度仍只是数据接口，本次没有新增可见进度条。资源文件系统初始阶段响应 Entry 的取消 token；发行准备超时预算从后续 StartAsync 阶段开始。

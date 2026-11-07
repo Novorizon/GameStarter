@@ -15,6 +15,36 @@ namespace Game.Framework.HotUpdate
         private bool disposed;
         private IGameModule hotGame;
         public static HotUpdateManager Instance => GetOrCreateInstance(() => new HotUpdateManager());
+        private UpdateSettings settings;
+        private object startupContext;
+        public static string GetPlatformId() => "windows-x64";
+
+        public void Initialize(UpdateSettings settings, object startupContext = null, CancellationToken token = default)
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(HotUpdateManager));
+            }
+
+            if (this.settings != null)
+            {
+                if (!ReferenceEquals(this.settings, settings) || !ReferenceEquals(this.startupContext, startupContext))
+                {
+                    throw new InvalidOperationException("Hot manager is already configured.");
+                }
+
+                return;
+            }
+
+            settings.Validate();
+            token.ThrowIfCancellationRequested();
+            this.settings = settings;
+            this.startupContext = startupContext;
+            ManagerContracts.LastUpdateSettings = settings;
+            ManagerContracts.StartupSteps.Add("hot-configure");
+            lifetime = CancellationTokenSource.CreateLinkedTokenSource(token);
+        }
+
         public Task InitializeAsync(UpdateSettings settings, CancellationToken token)
         {
             return InitializeAsync(settings, null, token);
@@ -27,14 +57,35 @@ namespace Game.Framework.HotUpdate
                 return startup;
             }
 
-            settings.Validate();
+            Initialize(settings, startupContext, token);
+            return StartAsync();
+        }
+
+        public Task StartAsync()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(HotUpdateManager));
+            }
+
+            if (settings == null)
+            {
+                throw new InvalidOperationException("Initialize the hot manager first.");
+            }
+
+            if (startup != null)
+            {
+                return startup;
+            }
+
+            lifetime.Token.ThrowIfCancellationRequested();
             ManagerContracts.HotCalls.Add("start");
-            lifetime = CancellationTokenSource.CreateLinkedTokenSource(token);
-            startup = StartAsync(settings, startupContext, lifetime.Token);
+            ManagerContracts.StartupSteps.Add("hot-start");
+            startup = RunAsync(settings, startupContext, lifetime.Token);
             return startup;
         }
 
-        private async Task StartAsync(UpdateSettings settings, object startupContext, CancellationToken token)
+        private async Task RunAsync(UpdateSettings settings, object startupContext, CancellationToken token)
         {
             if (settings.prepareContentAsync != null)
             {
@@ -43,6 +94,7 @@ namespace Game.Framework.HotUpdate
 
             await ManagerContracts.HotInitialization(token);
             token.ThrowIfCancellationRequested();
+            ManagerContracts.StartupSteps.Add("hot-game");
             hotGame = ManagerContracts.HotGameFactory?.Invoke();
             if (hotGame != null)
             {

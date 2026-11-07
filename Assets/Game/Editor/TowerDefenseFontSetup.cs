@@ -199,7 +199,8 @@ namespace Game.Editor
             RequireEditMode();
             if (!EssentialsReady())
             {
-                throw new InvalidOperationException("TMP Essentials are not imported. Run TowerDefenseFontSetup.GenerateFont without -quit and wait for its import-completed continuation.");
+                throw new InvalidOperationException(
+                    "TMP Essentials are not imported. Run TowerDefenseFontSetup.GenerateFont without -quit and wait for its import-completed continuation.");
             }
 
             TMP_Settings.LoadDefaultSettings();
@@ -254,7 +255,8 @@ namespace Game.Editor
             if (font.sourceFontFile != source || font.atlasWidth != AtlasSize || font.atlasHeight != AtlasSize
                 || font.atlasPadding != Padding || Math.Abs(font.faceInfo.pointSize - PointSize) > .01f)
             {
-                throw new InvalidOperationException("The generated font uses different source/atlas settings; preserve its GUID when regenerating it in TMP Font Asset Creator.");
+                throw new InvalidOperationException(
+                    "The generated font uses different source/atlas settings; preserve its GUID when regenerating it in TMP Font Asset Creator.");
             }
 
             if (font.atlasTextures == null || font.atlasTextures.Length == 0 || font.atlasTextures[0] == null)

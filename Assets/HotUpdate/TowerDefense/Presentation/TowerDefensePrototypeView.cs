@@ -280,7 +280,13 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             enemyMaterials = new[] { MakeMaterial(new Color(.87f, .35f, .32f)), MakeMaterial(new Color(.65f, .40f, .76f)), MakeMaterial(new Color(.95f, .72f, .26f)) };
             routeMaterial = MakeMaterial(new Color(.96f, .79f, .45f), true);
             lineMaterial = MakeMaterial(new Color(.85f, 1, .75f), true);
-            var ground = Primitive("MapFallback", PrimitiveType.Cube, field, new Vector3(0, -.14f, 0), new Vector3(22, .2f, 12), MakeMaterial(new Color(.36f, .57f, .31f)));
+            var ground = Primitive(
+                "MapFallback",
+                PrimitiveType.Cube,
+                field,
+                new Vector3(0, -.14f, 0),
+                new Vector3(22, .2f, 12),
+                MakeMaterial(new Color(.36f, .57f, .31f)));
             Destroy(ground.GetComponent<Collider>());
             mapRenderer = new GameObject("MapArtwork").AddComponent<SpriteRenderer>();
             mapRenderer.transform.SetParent(field, false);
@@ -316,7 +322,13 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             Primitive("BaseRoof", PrimitiveType.Sphere, baseRoot, new Vector3(0, 1.5f, 0), new Vector3(1.6f, .65f, 1.4f), towerMaterials[2]);
             foreach (var slot in configuration.BuildSlots)
             {
-                var pad = Primitive("Build pad " + slot.Id, PrimitiveType.Cylinder, field, World(slot.Position, .06f), new Vector3(.94f, .07f, .94f), lineMaterial);
+                var pad = Primitive(
+                    "Build pad " + slot.Id,
+                    PrimitiveType.Cylinder,
+                    field,
+                    World(slot.Position, .06f),
+                    new Vector3(.94f, .07f, .94f),
+                    lineMaterial);
                 pad.AddComponent<PrototypeWorldTarget>().SlotId = slot.Id;
                 slots.Add(slot.Id, pad);
             }
@@ -426,7 +438,13 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 liveEnemies.Add(state.Id);
                 if (!enemies.TryGetValue(state.Id, out var view))
                 {
-                    var body = Primitive("Enemy " + state.Id + " - 3D placeholder", PrimitiveType.Capsule, field, World(state.Position, .45f), new Vector3(.48f, .48f, .48f), enemyMaterials[Math.Abs(state.DefinitionId) % enemyMaterials.Length]);
+                    var body = Primitive(
+                        "Enemy " + state.Id + " - 3D placeholder",
+                        PrimitiveType.Capsule,
+                        field,
+                        World(state.Position, .45f),
+                        new Vector3(.48f, .48f, .48f),
+                        enemyMaterials[Math.Abs(state.DefinitionId) % enemyMaterials.Length]);
                     Destroy(body.GetComponent<Collider>());
                     var bar = new GameObject("Health").AddComponent<LineRenderer>();
                     bar.transform.SetParent(body.transform, false);
@@ -475,9 +493,21 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                         }
                     }
 
-                    var body = Primitive("Body", PrimitiveType.Cylinder, root.transform, new Vector3(0, .50f, 0), new Vector3(.65f, .5f, .65f), towerMaterials[color]);
+                    var body = Primitive(
+                        "Body",
+                        PrimitiveType.Cylinder,
+                        root.transform,
+                        new Vector3(0, .50f, 0),
+                        new Vector3(.65f, .5f, .65f),
+                        towerMaterials[color]);
                     body.AddComponent<PrototypeWorldTarget>().TowerId = state.Id;
-                    var cap = Primitive("Turret", PrimitiveType.Sphere, root.transform, new Vector3(0, 1.05f, 0), new Vector3(.7f, .45f, .7f), towerMaterials[color]);
+                    var cap = Primitive(
+                        "Turret",
+                        PrimitiveType.Sphere,
+                        root.transform,
+                        new Vector3(0, 1.05f, 0),
+                        new Vector3(.7f, .45f, .7f),
+                        towerMaterials[color]);
                     cap.AddComponent<PrototypeWorldTarget>().TowerId = state.Id;
                     var beam = new GameObject("Shot").AddComponent<LineRenderer>();
                     beam.transform.SetParent(root.transform, false);

@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Game
@@ -10,16 +7,11 @@ namespace Game
     {
         public UnityEngine.Object InputActions { get; }
         public string InitialInputMap { get; }
-        public Func<CancellationToken, Task> InitializeModulesAsync { get; }
 
-        public GameStartupOptions(
-            UnityEngine.Object inputActions = null,
-            string initialInputMap = "Gameplay",
-            Func<CancellationToken, Task> initializeModulesAsync = null)
+        public GameStartupOptions(UnityEngine.Object inputActions = null, string initialInputMap = "Gameplay")
         {
             InputActions = inputActions;
             InitialInputMap = initialInputMap;
-            InitializeModulesAsync = initializeModulesAsync;
         }
     }
 }
