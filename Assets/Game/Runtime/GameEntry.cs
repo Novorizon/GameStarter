@@ -34,17 +34,20 @@ namespace Game
         protected override void OnStart()
         {
             lifetime = new CancellationTokenSource();
-            hotUpdate = new GameHotUpdate(resourceMode, simulateResourcesInEditor);
             startupError = null;
             State = StartupState.Starting;
-            startupTask = InitializeAsync(hotUpdate, lifetime.Token);
-            ObserveNativeStartup(hotUpdate);
+            startupTask = InitializeAsync();
+            ObserveNativeStartup();
         }
 
-        private async Task InitializeAsync(GameHotUpdate current, CancellationToken token)
+        private async Task InitializeAsync()
         {
+            var token = lifetime.Token;
+            GameHotUpdate current = null;
             try
             {
+                current = new GameHotUpdate(resourceMode, simulateResourcesInEditor);
+                hotUpdate = current;
                 // 先初始化资源文件系统；发行版本、清单和下载稍后由热更流程决定。
                 if (!await ResourceManager.Instance.InitializePackageAsync(current.CreateResourceParameters(), token))
                 {
