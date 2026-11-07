@@ -96,28 +96,6 @@ namespace Game
             stopping?.Dispose();
         }
 
-        public async Task WaitUntilReadyAsync(CancellationToken token = default)
-        {
-            var current = hotUpdate;
-            var startup = startupTask;
-            if (current == null || startup == null)
-            {
-                throw new InvalidOperationException("GameEntry startup has not begun.");
-            }
-
-            await TaskUtil.WaitAsync(startup, token);
-            token.ThrowIfCancellationRequested();
-            if (!ReferenceEquals(hotUpdate, current))
-            {
-                throw new OperationCanceledException("GameEntry startup has ended.");
-            }
-
-            if (State != StartupState.Ready)
-            {
-                throw new InvalidOperationException("Game startup failed. Check Console for initialization errors.");
-            }
-        }
-
         private void OnApplicationPause(bool paused)
         {
             if (HotUpdateManager.TryGetInstance(out var update))

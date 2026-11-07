@@ -1,6 +1,6 @@
 # GameStarter
 
-独立 Unity 2022.3.62f1 启动工程。GameEntry 配置开关并顺序初始化，GameHotUpdate 执行更新步骤，HotGame 组织业务。依赖 UnityPackages 固定提交 `a3e531d0ed3ac11748324bc655f1b29cc3113821`；包元数据预备版本 preview.28 尚未发布标签。工程使用固定 Git 来源，不依赖相邻仓库或本地 file: 路径。
+独立 Unity 2022.3.62f1 启动工程。GameEntry 配置开关并顺序初始化，GameHotUpdate 执行更新步骤，HotGame 组织业务。依赖 UnityPackages 固定提交 `5cc7dffd5eec36dad86b63aaec19838a191fa8cf`；包元数据预备版本 preview.29 尚未发布标签。工程使用固定 Git 来源，不依赖相邻仓库或本地 file: 路径。
 
 ## 从哪里开始
 
@@ -42,6 +42,7 @@ Unity 场景中的 GameEntry
 `GameEntry` 退出时先取消启动，再按 `HotUpdateManager → ResourceManager` 顺序释放，并转发应用暂停/焦点事件及保留验收探针。`HotUpdateManager` 关闭 `HotGame`，后者集中释放其业务与其余 Manager；资源下载、日常租约仍由 `ResourceManager` 管理。
 
 资源包初始化只是文件系统 warmup，不会选资源版本、加载版本清单或下载资源。实际下载在后面的热更步骤中阻塞等待该版本全部缺失资源，完成校验后才进入 `HotGame`。当前仅有 `StartupMessage/DownloadProgress` 数据，没有可见下载进度条；进度 UI 仍是后续计划，不算本轮已实现功能。
+
 
 `HotGame` 是真正的游戏业务入口，位于 `Assets/HotUpdate`：初始化公共 Manager、加载 Luban 表，再直接调用塔防等业务模块。新增业务就在这里显式调用初始化和关闭，不需要额外的 Session 或模块注册器。无生产使用的 `GameSession`、`IStartupModule` 和 `StartupModule` 已移除。
 
@@ -99,7 +100,7 @@ Tools → Novorizon → GameStarter：
 ## 更新与维护
 
 ```sh
-python3 Tools~/sync-packages.py --ref a3e531d0ed3ac11748324bc655f1b29cc3113821
+python3 Tools~/sync-packages.py --ref 5cc7dffd5eec36dad86b63aaec19838a191fa8cf
 python3 Tools~/verify.py --dotnet /path/to/dotnet
 ```
 

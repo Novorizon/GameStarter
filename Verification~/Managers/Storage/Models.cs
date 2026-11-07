@@ -7,9 +7,8 @@ using Game.Framework;
 
 namespace Game.Framework.Storage
 {
-    public sealed partial class LocalStorageManager : ConfigurableSingleton<LocalStorageManager>, IDisposable
+    public sealed partial class LocalStorageManager : Singleton<LocalStorageManager>, IDisposable
     {
-        public static LocalStorageManager Instance => GetOrCreateInstance(() => new LocalStorageManager());
         public string RootDirectory
         {
             get;

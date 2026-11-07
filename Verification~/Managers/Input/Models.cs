@@ -7,9 +7,8 @@ using Game.Framework;
 
 namespace Game.Framework.Input
 {
-    public sealed class InputManager : ConfigurableSingleton<InputManager>, IDisposable
+    public sealed class InputManager : Singleton<InputManager>, IDisposable
     {
-        public static InputManager Instance => GetOrCreateInstance(() => new InputManager());
         public bool Initialized
         {
             get;

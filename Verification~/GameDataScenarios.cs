@@ -18,7 +18,7 @@ internal static partial class Program
         {
             ResetEntry();
             var entry = CreateEntry(hotUpdate: false);
-            Complete(entry.WaitUntilReadyAsync());
+            Complete(WaitForEntryReadyAsync(entry));
             var tables = DataManager.Instance.Get<cfg.Tables>();
             Equal("示例配置", tables.TbExample.Get(1).Name);
             Equal("Second entry", tables.TbExample.Get(2).Name);
@@ -39,7 +39,7 @@ internal static partial class Program
             ManagerContracts.LoadDataBytes = (path, token) => path == "Data/Luban/tbexample" ? pending.Task : read(path, token);
             var entry = CreateEntry();
             Equal(StartupState.Starting, entry.State);
-            var ready = entry.WaitUntilReadyAsync();
+            var ready = WaitForEntryReadyAsync(entry);
             True(!ready.IsCompleted);
             True(!DataManager.Instance.TryGet<cfg.Tables>(out _));
             pending.SetResult(File.ReadAllBytes(GameDataPaths.DataOutput + "/tbexample.bytes"));
@@ -55,7 +55,7 @@ internal static partial class Program
             var read = ManagerContracts.LoadDataBytes;
             ManagerContracts.LoadDataBytes = (path, token) => path == GameDataPaths.ManifestLocation ? read(path, token) : Task.FromResult(Array.Empty<byte>());
             var entry = CreateEntry();
-            Throws<InvalidOperationException>(() => Complete(entry.WaitUntilReadyAsync()));
+            Throws<InvalidOperationException>(() => Complete(WaitForEntryReadyAsync(entry)));
             Equal(StartupState.Failed, entry.State);
             True(!DataManager.TryGetInstance(out var data) || !data.TryGet<cfg.Tables>(out _));
             ResetEntry();
@@ -68,7 +68,7 @@ internal static partial class Program
             ManagerContracts.LoadDataBytes = (path, token) => path == "Data/Luban/tbexample" ? pending.Task : read(path, token);
             var entry = CreateEntry();
             Equal(StartupState.Starting, entry.State);
-            Task ready = entry.WaitUntilReadyAsync();
+            Task ready = WaitForEntryReadyAsync(entry);
             Complete(entry.ShutdownAsync());
             pending.SetResult(File.ReadAllBytes(GameDataPaths.DataOutput + "/tbexample.bytes"));
             Throws<OperationCanceledException>(() => Complete(ready));

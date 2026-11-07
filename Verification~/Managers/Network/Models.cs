@@ -7,9 +7,8 @@ using Game.Framework;
 
 namespace Game.Framework.Network
 {
-    public sealed class NetworkManager : ConfigurableSingleton<NetworkManager>, IDisposable
+    public sealed class NetworkManager : Singleton<NetworkManager>, IDisposable
     {
-        public static NetworkManager Instance => GetOrCreateInstance(() => new NetworkManager());
         private bool initialized;
         public bool IsInitialized => initialized;
         public void Dispose()

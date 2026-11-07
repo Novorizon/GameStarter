@@ -20,13 +20,12 @@ namespace Game.HotUpdate
         public string bindings = "";
     }
 
-    public sealed class GameSettings : ConfigurableSingleton<GameSettings>, IDisposable
+    public sealed class GameSettings : Singleton<GameSettings>, IDisposable
     {
         private const string FileName = "user-settings.json";
         private bool initialized;
         private bool disposed;
         private bool restoreFailed;
-        public static GameSettings Instance => GetOrCreateInstance(() => new GameSettings());
 
         public override void Initialize()
         {

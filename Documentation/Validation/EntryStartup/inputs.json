@@ -1,5 +1,5 @@
 {
-  "sdkCommit": "a3e531d0ed3ac11748324bc655f1b29cc3113821",
+  "sdkCommit": "5cc7dffd5eec36dad86b63aaec19838a191fa8cf",
   "models": 69,
   "domain": 12,
   "accountSession": 13,
@@ -7,5 +7,6 @@
   "graphics": "OpenGLCore software rendering (llvmpipe)",
   "sceneReopenedBetweenPlaySessions": true,
   "scope": "Editor resource simulation in Online and Offline entry configurations; no native offline-bundle/HTTP/IL2CPP/device validation",
-  "progressUIImplemented": false
+  "progressUIImplemented": false,
+  "smokeMarkerVerifiedInEditor": true
 }
