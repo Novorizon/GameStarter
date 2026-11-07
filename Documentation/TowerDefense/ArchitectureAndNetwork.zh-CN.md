@@ -39,6 +39,8 @@ flowchart LR
 
 ## 已有网络能力的真实边界
 
+提供的实际服务器已完成源码核对，当前公网/域名与 VPN 观察、部署检查命令、已有消息和增改清单见[GameServer 接入核对](../Game/ServerIntegration.zh-CN.md)。该报告区分网站、TCP、加密、鉴权和业务；本轮没有把端口探测当作登录成功。
+
 目前 `NetworkManager` 提供 TCP 会话、可配置鉴权回调、心跳、请求超时、取消、重连、Protobuf 请求/订阅和 Unity 主线程派发。`Initialize()` 只初始化，不会连接服务器，也不会自动登录。必须显式等待 `ConnectAsync()`；“TCP Connected”不等于“账号鉴权成功”。
 
 `Initialize(authenticate)` 的鉴权回调必须在首次初始化前配置；已有 `HotGame` 在发现 `Resources/NetworkSettings` 时可能先调用无参 `Initialize()`，正式登录接线需要由账号业务协调首次初始化。鉴权回调使用其 `AuthenticationContext.RequestAsync`，不能在 Authenticate 内等待仅限 Connected 的普通业务调用。

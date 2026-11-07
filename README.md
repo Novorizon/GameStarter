@@ -13,6 +13,7 @@ Novorizon SDK 包由 manifest 固定 Git 提交，不在 `Packages` 下重复嵌
 - [SDK 协作](Documentation/SDKCoordination.zh-CN.md)：包维护分工、接口需求和固定提交交付。
 - [塔防业务原型](Documentation/TowerDefense/README.zh-CN.md)：当前玩法、业务表、逻辑/表现分层、账号与结算契约、UI 与地图方案。
 - [Meshy 模型制作清单](Documentation/Game/MeshyBrief.zh-CN.md)：模型优先级、尺寸、坐标轴、动作和挂点。
+- [业务接入规划](Documentation/Game/ClientPlan.zh-CN.md)：Cube 塔防参考、剧情模块、实际服务器核对、卡牌等级和演出设计。
 - [塔防本轮交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)：实际 Unity 画面/通关结果、已实现边界和仍待补验的项目。
 
 ## 启动与业务
