@@ -25,6 +25,7 @@ namespace Game.HotUpdate.Client
     {
         public string RunId;
         public bool Victory;
+        public int CampLevelId;
         public int Wave;
         public int Kills;
         public int Towers;
@@ -122,7 +123,7 @@ namespace Game.HotUpdate.Client
                 cardsChosen = checked(data.cardsChosen + battle.Cards),
                 completedTasks = new List<int>(data.completedTasks),
                 lastRunId = battle.RunId,
-                camp = Camp.BattleLoot(battle.Victory)
+                camp = Camp.BattleLoot(battle.Victory, battle.CampLevelId)
             };
             foreach (var task in tasks)
             {

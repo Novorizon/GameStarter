@@ -26,6 +26,7 @@ namespace Game.HotUpdate.Client
         private bool entering;
         private Task arrivalTask;
         private ExpeditionPlan preparedExpedition;
+        private int battleCampLevel;
         private readonly Queue<JourneyBattle> pendingResults = new Queue<JourneyBattle>();
         public ClientArt Art { get; private set; }
         public JourneyProgress Journey { get; private set; }
@@ -80,7 +81,7 @@ namespace Game.HotUpdate.Client
             if (preparedExpedition == null)
             {
                 uint seed = BitConverter.ToUInt32(Guid.NewGuid().ToByteArray(), 0);
-                preparedExpedition = new ExpeditionPlan(tables, Stage.Id, seed);
+                preparedExpedition = new ExpeditionPlan(tables, Stage.Id, seed, Journey.Camp.Level.Id);
                 ExpeditionError = null;
             }
 
@@ -125,6 +126,7 @@ namespace Game.HotUpdate.Client
                 battle = TowerDefensePrototypeView.Create(plan.Configuration, Art.Font, map.Asset, plan.Seed, leases);
                 battle.transform.SetParent(root.transform, false);
                 battle.SetArt(map.Asset, Art.Atlas, Art.Panel, Art.Font);
+                battleCampLevel = plan.CampLevel.Id;
                 battle.Finished += RecordBattle;
                 battle.ExitRequested += ReturnToPlayerPage;
                 preparedExpedition = null;
@@ -226,6 +228,7 @@ namespace Game.HotUpdate.Client
             {
                 RunId = battle.RunId,
                 Victory = completed.Phase == BattlePhase.Victory,
+                CampLevelId = battleCampLevel,
                 Wave = completed.WaveIndex,
                 Kills = completed.Kills,
                 Towers = completed.Towers.Count,

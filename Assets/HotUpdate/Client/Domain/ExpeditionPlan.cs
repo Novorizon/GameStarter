@@ -11,8 +11,9 @@ namespace Game.HotUpdate.Client
         public FightConfiguration Configuration { get; }
         public BattleBriefing Briefing { get; }
         public uint Seed { get; }
+        public cfg.CampLevel CampLevel { get; }
 
-        public ExpeditionPlan(cfg.Tables tables, int stageId, uint seed)
+        public ExpeditionPlan(cfg.Tables tables, int stageId, uint seed, int campLevelId)
         {
             if (tables == null)
             {
@@ -20,6 +21,7 @@ namespace Game.HotUpdate.Client
             }
 
             Stage = tables.TbTdStage.Get(stageId);
+            CampLevel = tables.TbCampLevel.Get(campLevelId);
             Configuration = TowerDefenseTables.Create(tables, stageId);
             Briefing = new BattleBriefing(Configuration);
             Seed = seed;

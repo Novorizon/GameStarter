@@ -37,10 +37,10 @@ namespace Game.HotUpdate.Client
             track.gameObject.AddComponent<Image>().color = new Color(.08f, .17f, .13f);
             experienceFill = CampUI.Area("ExperienceFill", track, 0, 0, 1, 1);
             experienceFill.gameObject.AddComponent<Image>().color = CampUI.Gold;
-            records = ui.Text("Records", panel, .06f, .47f, .94f, .59f, 23, "", CampUI.Cream);
-            ui.Text("GoalsHeading", panel, .06f, .405f, .94f, .47f, 25, "旅程目标 · 达成后自动结算经验", CampUI.Gold);
+            records = ui.Text("Records", panel, .06f, .49f, .94f, .60f, 23, "", CampUI.Cream);
+            ui.Text("GoalsHeading", panel, .06f, .43f, .94f, .49f, 25, "旅程目标 · 达成后自动结算经验", CampUI.Gold);
             int count = journey.Tasks.Count;
-            var list = CampUI.ScrollList("JourneyGoals", panel, .05f, .105f, .95f, .40f, count * 106);
+            var list = CampUI.ScrollList("JourneyGoals", panel, .05f, .105f, .95f, .43f, count * 83);
             for (int i = 0; i < count; i++)
             {
                 var task = journey.Tasks[i];

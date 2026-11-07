@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Linq;
 using Game.HotUpdate.Client;
+using Game.HotUpdate.Camp;
 using Game.HotUpdate.TowerDefense.Data;
 using Game.HotUpdate.TowerDefense.Domain;
 
@@ -10,12 +12,13 @@ internal static partial class Program
     {
         Check("expedition briefing uses the real stage and binds the accepted seed to the fight", () =>
         {
-            var plan = new ExpeditionPlan(ReadTowerDefenseTables(), 1, 4729);
+            var plan = new ExpeditionPlan(ReadTowerDefenseTables(), 1, 4729, 2);
             Equal("TowerDefense/Art/Map", plan.Stage.MapAsset);
             Equal(6, plan.Briefing.Waves.Count);
             Equal(126, plan.Briefing.EnemyCount);
             Equal(240, plan.Configuration.InitialGold);
             Equal(7, plan.Configuration.BuildSlots.Length);
+            Equal(2, plan.CampLevel.Id);
             var fight = new FightSession(plan.Configuration, plan.Seed);
             Equal(4729u, fight.Seed);
             Equal(0, fight.WaveIndex);
@@ -135,6 +138,39 @@ internal static partial class Program
                 Equal(BattlePhase.Victory, run.Session.Phase);
                 Equal(6, run.Session.WaveIndex);
             }
+        });
+        Check("retrying a battle after camp construction keeps the departure reward level", () =>
+        {
+            var store = new JourneyStore
+            {
+                Data = new LocalJourneyData
+                {
+                    victories = 1,
+                    camp = new LocalCampData { format = 1, level = 2, wood = 100, stone = 100, arrivalSeen = true }
+                }
+            };
+            var journey = new JourneyProgress(ReadTowerDefenseTables(), store);
+            var battle = new JourneyBattle { RunId = "bound-reward", CampLevelId = 2, Victory = true, Wave = 6 };
+            store.Fail = true;
+            Throws<IOException>(() => journey.Record(battle));
+            store.Fail = false;
+            True(journey.Camp.Upgrade());
+            Equal(3, journey.Camp.Level.Id);
+            int wood = journey.Camp.Wood;
+            True(journey.Record(battle));
+            Equal(wood + 35, journey.Camp.Wood);
+            True(!journey.Record(battle));
+            True(journey.Record(new JourneyBattle { RunId = "bound-defeat", CampLevelId = 2, Wave = 2 }));
+            Equal(wood + 35 + 8, journey.Camp.Wood);
+        });
+        Check("a result with an unknown departure reward level cannot publish partial progress", () =>
+        {
+            var store = new JourneyStore();
+            var journey = new JourneyProgress(ReadTowerDefenseTables(), store);
+            Throws<ArgumentOutOfRangeException>(() => journey.Record(new JourneyBattle { RunId = "bad-reward", CampLevelId = 99, Victory = true }));
+            Equal(0, store.Saves);
+            Equal(0, journey.Victories);
+            Equal(40, journey.Camp.Wood);
         });
     }
 }

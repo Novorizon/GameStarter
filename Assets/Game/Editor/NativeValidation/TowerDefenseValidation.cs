@@ -870,6 +870,7 @@ namespace Game.Editor
             public bool playerArchiveVerified;
             public bool expeditionPreparationVerified;
             public bool waveForecastVerified;
+            public bool waveListScrollVerified;
             public bool applicationPauseCallbacksVerified;
             public bool nestedPauseVerified;
             public bool originalProfileRestored;

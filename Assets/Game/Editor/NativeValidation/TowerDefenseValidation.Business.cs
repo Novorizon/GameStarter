@@ -31,7 +31,8 @@ namespace Game.Editor
         {
             CampButton(page, "EnterTowerDefense").onClick.Invoke();
             Require(FindCampPanel(page, "ExpeditionPreparation").activeSelf, "The expedition entry bypassed preparation.");
-            Require(UnityEngine.Object.FindObjectOfType<Game.HotUpdate.TowerDefense.Presentation.TowerDefensePrototypeView>() == null,
+            Require(
+                UnityEngine.Object.FindObjectOfType<Game.HotUpdate.TowerDefense.Presentation.TowerDefensePrototypeView>() == null,
                 "Battle resources/views were created before confirmation.");
             CampButton(page, "CancelExpedition").onClick.Invoke();
             Require(!FindCampPanel(page, "ExpeditionPreparation").activeSelf, "Cancelling preparation did not return to the camp.");
@@ -40,6 +41,14 @@ namespace Game.Editor
             Require(labels.Count(label => label.name == "WaveSummary") == 6, "The preparation page did not show six authored waves.");
             string identity = labels.Single(label => label.name == "Version").text;
             Require(uint.TryParse(identity.Split(' ').Last(), out acceptedExpeditionSeed), "Preparation did not display its accepted seed.");
+            Canvas.ForceUpdateCanvases();
+            var scroll = page.GetComponentsInChildren<ScrollRect>().Single(value => value.name == "WaveList");
+            scroll.verticalNormalizedPosition = 0;
+            Canvas.ForceUpdateCanvases();
+            var finalWave = scroll.content.GetComponentsInChildren<RectTransform>().Single(value => value.name == "Wave 6");
+            Vector3 center = finalWave.TransformPoint(finalWave.rect.center);
+            Require(RectTransformUtility.RectangleContainsScreenPoint(scroll.viewport, center), "The last wave cannot be scrolled into the viewport.");
+            result.waveListScrollVerified = true;
             Capture(campSecondRun ? "second-expedition" : "expedition-preparation", () =>
             {
                 var confirm = CampButton(page, "ConfirmExpedition");

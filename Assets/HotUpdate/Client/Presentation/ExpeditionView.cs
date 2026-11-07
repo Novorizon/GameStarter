@@ -55,7 +55,7 @@ namespace Game.HotUpdate.Client
                 + "\n初始金币 " + config.InitialGold + "  ·  基地耐久 " + config.BaseHealth
                 + "\n可建位置 " + config.BuildSlots.Length + "  ·  路线 " + config.Routes.Length
                 + "\n\n可用防御塔\n" + string.Join("\n", config.Towers.Select(tower => tower.Name + "  ·  " + tower.BuildCost + " 金币"));
-            var camp = owner.Journey.Camp.Level;
+            var camp = plan.CampLevel;
             supplies.text = "胜利补给  木材 +" + camp.VictoryWood + "  ·  石料 +" + camp.VictoryStone
                 + "\n失守补给  木材 +" + camp.DefeatWood + "  ·  石料 +" + camp.DefeatStone;
             version.text = "本地演练  /  配置 " + plan.Stage.ConfigVersion + "  /  种子 " + plan.Seed;
