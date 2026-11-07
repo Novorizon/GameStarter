@@ -10,6 +10,9 @@ using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
@@ -18,7 +21,8 @@ namespace Game.Editor
     /// <summary>Real-Unity prototype acceptance. Run in batch mode without -quit; rendering requires a graphics device.</summary>
     public static class TowerDefenseValidation
     {
-        private const string Output = "Artifacts/TowerDefense";
+        private static bool PhoneLayout => Array.IndexOf(Environment.GetCommandLineArgs(), "--novorizon-phone-layout") >= 0;
+        private static string Output => PhoneLayout ? "Artifacts/TowerDefense/Phone" : "Artifacts/TowerDefense";
         private static readonly List<Shot> shots = new List<Shot>();
         private static bool previousEnabled;
         private static EnterPlayModeOptions previousOptions;
@@ -49,6 +53,9 @@ namespace Game.Editor
         private static int failedCreationFrame;
         private static GameObject failedCreationRoot;
         private static CountingLease failedCreationLease;
+        private static bool pointerBuildPending;
+        private static int pointerFrame;
+        private static Vector2 pointerPosition;
         private static Shot pendingShot;
         private static Action afterCapture;
         private static EditorWindow gameView;
@@ -99,6 +106,7 @@ namespace Game.Editor
             pendingRestartVisuals = false;
             defeatRestartPending = false;
             failedCreationPending = false;
+            pointerBuildPending = false;
             failedCreationRoot = null;
             failedCreationLease = null;
             failure = null;
@@ -119,7 +127,7 @@ namespace Game.Editor
                 }
 
                 gameView = EditorWindow.GetWindow(type);
-                gameView.position = new Rect(20, 20, 1440, 810);
+                gameView.position = new Rect(20, 20, 1440, PhoneLayout ? 686 : 810);
                 gameView.Show();
                 gameView.Focus();
             }
@@ -216,6 +224,27 @@ namespace Game.Editor
                         "Failed view creation left an extra prototype component.");
                     result.failedCreationCleanupVerified = true;
                     failedCreationPending = false;
+                    BeginPointerBuild();
+                    return;
+                }
+
+                if (pointerBuildPending)
+                {
+                    if (Time.frameCount - pointerFrame < 3)
+                    {
+                        return;
+                    }
+
+                    InputSystem.QueueStateEvent(Mouse.current, new MouseState { position = pointerPosition });
+                    var definition = game.Configuration.Towers[0];
+                    int gold = game.Gold;
+                    var button = view.GetComponentsInChildren<Button>(true).Single(value => value.name == "Build 0");
+                    button.onClick.Invoke();
+                    Require(game.Towers.Count == 1, "Native pointer selection followed by the build button did not create one tower.");
+                    Require(game.Towers[0].SlotId == game.Configuration.BuildSlots[0].Id, "The native pointer selected the wrong building pad.");
+                    Require(game.Gold == gold - definition.BuildCost, "The build button charged the wrong cost.");
+                    result.pointerBuildVerified = true;
+                    pointerBuildPending = false;
                     BuildAndUpgrade();
                     Capture("planning", () =>
                     {
@@ -303,7 +332,7 @@ namespace Game.Editor
                 }
 
                 game.Step(10);
-                if (!battleCaptured && game.Enemies.Count > 0 && game.Phase == BattlePhase.Fighting)
+                if (!battleCaptured && game.Enemies.Count >= 3 && game.Phase == BattlePhase.Fighting)
                 {
                     battleCaptured = true;
                     Capture("battle", () => stage = "fighting");
@@ -337,6 +366,40 @@ namespace Game.Editor
                     result.upgrades++;
                 }
             }
+        }
+
+        private static void BeginPointerBuild()
+        {
+            Physics.SyncTransforms();
+            var hits = new List<RaycastResult>();
+            foreach (var slot in game.Configuration.BuildSlots)
+            {
+                var target = view.GetComponentsInChildren<PrototypeWorldTarget>().Single(value => value.SlotId == slot.Id);
+                Vector2 screen = view.WorldCamera.WorldToScreenPoint(target.transform.position);
+                Require(view.WorldCamera.pixelRect.Contains(screen), "A building pad is outside the visible camera.");
+                hits.Clear();
+                EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = screen }, hits);
+                Require(hits.Count == 0, "The HUD blocks building pad " + slot.Id);
+                Require(Physics.Raycast(view.WorldCamera.ScreenPointToRay(screen), out var hit, 100), "Building pad has no raycast target.");
+                Require(hit.collider.GetComponent<PrototypeWorldTarget>()?.SlotId == slot.Id, "A building pad's center hits another object.");
+                if (slot.Id == game.Configuration.BuildSlots[0].Id)
+                {
+                    pointerPosition = screen;
+                }
+            }
+
+            result.padHitAreasVerified = true;
+            var pause = view.GetComponentsInChildren<Button>(true).Single(value => value.name == "Pause");
+            pause.onClick.Invoke();
+            Require(game.IsPaused, "The actual pause button did not pause the fight.");
+            pause.onClick.Invoke();
+            Require(!game.IsPaused, "The actual pause button did not resume the fight.");
+            result.pauseButtonVerified = true;
+            Require(Mouse.current != null, "Native Input System mouse is unavailable.");
+            InputSystem.QueueStateEvent(Mouse.current, new MouseState { position = pointerPosition }.WithButton(MouseButton.Left));
+            pointerFrame = Time.frameCount;
+            pointerBuildPending = true;
+            stage = "pointer-build";
         }
 
         private static void BeginFailedCreationCheck(TMP_FontAsset font)
@@ -676,6 +739,9 @@ namespace Game.Editor
             public bool restartVerified;
             public bool defeatVerified;
             public bool failedCreationCleanupVerified;
+            public bool padHitAreasVerified;
+            public bool pointerBuildVerified;
+            public bool pauseButtonVerified;
             public int tmpCount;
             public int legacyTextCount;
             public uint seed;

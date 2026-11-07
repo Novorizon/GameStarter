@@ -1,0 +1,63 @@
+{
+    "unity": "2022.3.62f1",
+    "success": true,
+    "stage": "defeat-restarted",
+    "detail": "Six-wave victory, actual card buttons, victory/defeat restart buttons and central shutdown verified.",
+    "graphicsDevice": "OpenGLCore",
+    "graphicsDeviceNull": false,
+    "noGraphicsRequested": false,
+    "renderingValidated": true,
+    "shutdownVerified": true,
+    "restartVerified": true,
+    "defeatVerified": true,
+    "failedCreationCleanupVerified": true,
+    "padHitAreasVerified": true,
+    "pointerBuildVerified": true,
+    "pauseButtonVerified": true,
+    "tmpCount": 40,
+    "legacyTextCount": 0,
+    "seed": 12345,
+    "waves": 6,
+    "kills": 126,
+    "leaks": 0,
+    "tick": 2178,
+    "upgrades": 13,
+    "cardChoices": 5,
+    "defeatWave": 2,
+    "defeatLeaks": 20,
+    "phase": "Victory",
+    "screenshots": [
+        {
+            "stage": "planning",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/planning.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "battle",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/battle.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "three-cards",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/three-cards.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "victory",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/victory.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        }
+    ]
+}

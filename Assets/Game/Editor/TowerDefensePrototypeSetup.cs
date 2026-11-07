@@ -40,6 +40,7 @@ namespace Game.Editor
                 atlas.textureShape = TextureImporterShape.Texture2D;
                 atlas.alphaIsTransparency = true;
                 atlas.mipmapEnabled = false;
+                atlas.npotScale = TextureImporterNPOTScale.None;
                 atlas.maxTextureSize = 2048;
                 atlas.SaveAndReimport();
             }
@@ -57,6 +58,7 @@ namespace Game.Editor
             importer.textureShape = TextureImporterShape.Texture2D;
             importer.spriteImportMode = SpriteImportMode.Single;
             importer.spritePixelsPerUnit = 100;
+            importer.spriteBorder = path.EndsWith("CardFrame.png", System.StringComparison.Ordinal) ? new Vector4(180, 180, 180, 180) : Vector4.zero;
             importer.alphaIsTransparency = true;
             importer.mipmapEnabled = false;
             importer.maxTextureSize = 2048;

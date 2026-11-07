@@ -56,13 +56,13 @@ Unity 场景中的 GameEntry
 
 塔防是这个项目在 `Assets/HotUpdate/TowerDefense` 下实现的业务示例，不是 UnityPackages 通用框架新增的固定玩法。`HotGame.StartGameAsync` 加载 Luban 后，通过[塔防业务装配](Assets/HotUpdate/TowerDefense/Presentation/HotGame.TowerDefense.cs)创建纯 C# 战斗会话和表现；换其他游戏时替换该业务入口，继续复用资源、UI、数据和网络能力。
 
-首次打开执行 `Tools → Novorizon → Tower Defense → Prepare TMP Font`，等待 `TOWER_DEFENSE_TMP_FONT_READY`；需要的 TMP Essentials 会由该配置流程导入。随后打开 `Assets/Scenes/Bootstrap.unity` 并 Play，日志应出现 `TOWER_DEFENSE_READY prototype-1` 和原有 Ready 标记。也可用 `Create Prototype Scene` 创建独立场景，它仍通过 AOT GameEntry 进入同一业务流程。
+首次打开执行 `Tools → Novorizon → Tower Defense → Prepare TMP Font`，等待 `TOWER_DEFENSE_TMP_FONT_READY`；需要的 TMP Essentials 会由该配置流程导入。随后打开 `Assets/Scenes/Bootstrap.unity` 并 Play，日志应出现 `TOWER_DEFENSE_READY forest-diorama-1` 和原有 Ready 标记。也可用 `Create Prototype Scene` 创建独立场景，它仍通过 AOT GameEntry 进入同一业务流程。
 
 当前真实表内容为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡，使用 9 张新增业务表，加原示例共加载 10 张表。选建造点和塔型、升级、开始波次，在波间三选一，守到通关或基地归零。主流程使用真实表，5 波的 `DemoConfiguration` 只用于独立领域测试 fallback。
 
-地图是 imagegen 生成的 2D 底图，塔、基地和 NPC 暂用 3D primitives；所有文字使用 TMP。图片与动态 SDF 字体通过 YooAsset 租约加载，按 maps/ui/fonts 分类；字体许可随包保留在 `Assets/StreamingAssets/ThirdPartyLicenses/Noto-CJK.txt`。PC 与手机横屏、触控共同入口已配置，移动真机和最终 3D 美术尚未验收。
+地图是 imagegen 生成的低多边形台地式 2D 预渲染图，包含砂岩道路、池塘、木桥和七个方形建造区；18 个路线点和建造点随 Luban 表一起发布。固定 55° 正交相机呈现 3D 石塔、蓝顶基地和怪物，UI 使用松绿/铜金九宫格面板和 3×3 图标图集；所有文字使用 TMP。图片与动态 SDF 字体通过 YooAsset 租约加载，按 maps/ui/fonts 分类；字体许可随包保留在 `Assets/StreamingAssets/ThirdPartyLicenses/Noto-CJK.txt`。当前模型是共享网格的程序化低模，正式角色动画、移动真机和最终性能尚未验收。
 
-塔防初次接入时，已在真实 Unity 2022.3.62f1 / Linux / OpenGLCore 的 llvmpipe 软件渲染环境跑通 6 波胜利、胜利后重开、第 2 波无塔防守失败及失败后重开，验证实际 Unity Button `onClick.Invoke` 事件、重复操作拒绝、TMP 文字及停止 Play 清理，保留 4 张实际渲染截图；当时 72 项完整模型、12 项领域、13 项账号协调回归通过。该记录不代表本次入口/热更职责重构已经通过验证，也不是设备鼠标/触摸点击验收。当前没有真实登录或发奖后端；手机真机、IL2CPP 和声音仍未执行原生验收。具体历史指标、日志与补验状态见[交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)。
+当前玩法、输入链路、布局截图和真实 Unity 验收范围见[交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)。原生表现由 `Game.Editor.TowerDefenseValidation.Run` 验证；带 `--novorizon-phone-layout` 可检查 19.5:9 编辑器横屏布局。当前没有真实登录或发奖后端，Editor 图形验收不代表手机真机、IL2CPP 或声音已通过。
 
 ## Luban 与设置
 

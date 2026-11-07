@@ -2,14 +2,14 @@
     "Summary": {
         "YooVersion": "2.3.18",
         "UnityVersion": "2022.3.62f1",
-        "BuildDate": "11/06/2026 18:48:19",
-        "BuildSeconds": 29,
+        "BuildDate": "11/07/2026 14:17:45",
+        "BuildSeconds": 48,
         "BuildTarget": 24,
         "BuildPipeline": "BuiltinBuildPipeline",
         "BuildBundleType": 2,
         "BuildPackageName": "DefaultPackage",
-        "BuildPackageVersion": "20261106184748902",
-        "BuildPackageNote": "11/06/2026 18:47:48",
+        "BuildPackageVersion": "20261107141655999",
+        "BuildPackageNote": "11/07/2026 14:16:56",
         "UniqueBundleName": false,
         "EnableAddressable": true,
         "SupportExtensionless": true,
@@ -37,7 +37,7 @@
         "AssetFileTotalCount": 17,
         "MainAssetTotalCount": 15,
         "AllBundleTotalCount": 7,
-        "AllBundleTotalSize": 14113797,
+        "AllBundleTotalSize": 11323157,
         "EncryptedBundleTotalCount": 0,
         "EncryptedBundleTotalSize": 0
     },
@@ -50,7 +50,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -62,7 +62,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -74,7 +74,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -86,7 +86,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -98,7 +98,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -110,7 +110,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -122,7 +122,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -134,7 +134,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -146,7 +146,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -158,7 +158,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -170,7 +170,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 2695,
+            "MainBundleSize": 2828,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -182,7 +182,7 @@
                 "ui"
             ],
             "MainBundleName": "assets_gameassets_towerdefense_art_cardframe.bundle",
-            "MainBundleSize": 3433510,
+            "MainBundleSize": 1570181,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -194,7 +194,7 @@
                 "ui"
             ],
             "MainBundleName": "assets_gameassets_towerdefense_art_cardicons.bundle",
-            "MainBundleSize": 3718539,
+            "MainBundleSize": 1927567,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -206,7 +206,7 @@
                 "maps"
             ],
             "MainBundleName": "assets_gameassets_towerdefense_art_map.bundle",
-            "MainBundleSize": 3451389,
+            "MainBundleSize": 4302161,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -218,7 +218,7 @@
                 "fonts"
             ],
             "MainBundleName": "assets_gameassets_towerdefense_fonts_towerdefenseui.bundle",
-            "MainBundleSize": 355642,
+            "MainBundleSize": 368398,
             "DependAssets": [
                 {
                     "AssetPath": "Assets/GameAssets/TowerDefense/Fonts/TowerDefenseUI.otf",
@@ -238,10 +238,10 @@
     "BundleInfos": [
         {
             "BundleName": "assets_gameassets_data_luban.bundle",
-            "FileName": "90ad04d2952ed25887e0da398a7d47ad.bundle",
-            "FileHash": "90ad04d2952ed25887e0da398a7d47ad",
-            "FileCRC": 38735509,
-            "FileSize": 2695,
+            "FileName": "70ddb580edbced3f95fcee03105b5601.bundle",
+            "FileHash": "70ddb580edbced3f95fcee03105b5601",
+            "FileCRC": 2236588927,
+            "FileSize": 2828,
             "Encrypted": false,
             "Tags": [
                 "data"
@@ -297,10 +297,10 @@
         },
         {
             "BundleName": "assets_gameassets_towerdefense_art_cardframe.bundle",
-            "FileName": "4146f980c10f2d432dd18d496d171024.bundle",
-            "FileHash": "4146f980c10f2d432dd18d496d171024",
-            "FileCRC": 1035714843,
-            "FileSize": 3433510,
+            "FileName": "878c493dae41869d08b21af57c7507de.bundle",
+            "FileHash": "878c493dae41869d08b21af57c7507de",
+            "FileCRC": 968170085,
+            "FileSize": 1570181,
             "Encrypted": false,
             "Tags": [
                 "ui"
@@ -316,10 +316,10 @@
         },
         {
             "BundleName": "assets_gameassets_towerdefense_art_cardicons.bundle",
-            "FileName": "8ff3ef5f81aa8bc9086234112521e9c4.bundle",
-            "FileHash": "8ff3ef5f81aa8bc9086234112521e9c4",
-            "FileCRC": 2302469292,
-            "FileSize": 3718539,
+            "FileName": "8a2513e3b92437619afffeae7c7f0f80.bundle",
+            "FileHash": "8a2513e3b92437619afffeae7c7f0f80",
+            "FileCRC": 1256224706,
+            "FileSize": 1927567,
             "Encrypted": false,
             "Tags": [
                 "ui"
@@ -335,10 +335,10 @@
         },
         {
             "BundleName": "assets_gameassets_towerdefense_art_map.bundle",
-            "FileName": "d282b92b58ae42720f2032ac669835e9.bundle",
-            "FileHash": "d282b92b58ae42720f2032ac669835e9",
-            "FileCRC": 3962982146,
-            "FileSize": 3451389,
+            "FileName": "054183f54afd78faa38b3f603f606894.bundle",
+            "FileHash": "054183f54afd78faa38b3f603f606894",
+            "FileCRC": 3722936569,
+            "FileSize": 4302161,
             "Encrypted": false,
             "Tags": [
                 "maps"
@@ -354,10 +354,10 @@
         },
         {
             "BundleName": "assets_gameassets_towerdefense_fonts_towerdefenseui.bundle",
-            "FileName": "fac03118426dc487ca4f012f26d7d3ab.bundle",
-            "FileHash": "fac03118426dc487ca4f012f26d7d3ab",
-            "FileCRC": 969507496,
-            "FileSize": 355642,
+            "FileName": "aeb1ca35e0fe053a7741cf6e53d40a96.bundle",
+            "FileHash": "aeb1ca35e0fe053a7741cf6e53d40a96",
+            "FileCRC": 3239096065,
+            "FileSize": 368398,
             "Encrypted": false,
             "Tags": [
                 "fonts"

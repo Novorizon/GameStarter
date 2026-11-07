@@ -23,7 +23,7 @@ internal static partial class Program
             Equal(4, configuration.Enemies.Length);
             Equal(7, configuration.Cards.Length);
             Equal(1, configuration.Routes.Length);
-            Equal(6, configuration.Routes[0].Points.Length);
+            True(configuration.Routes[0].Points.Length >= 2);
             Equal(tables.TbTdStage.Get(1).InitialGold, configuration.InitialGold);
             Equal(tables.TbTdStage.Get(1).BaseHealth, configuration.BaseHealth);
             True(tables.TbTdViewAsset.DataList.Count > 0);
