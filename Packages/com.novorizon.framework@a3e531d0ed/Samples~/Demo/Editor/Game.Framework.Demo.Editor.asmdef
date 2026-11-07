@@ -1,8 +1,0 @@
-{
-  "name": "Game.Framework.Demo.Editor",
-  "rootNamespace": "Game.Framework.Samples.Demo.Editor",
-  "references": ["Game.Framework.Demo"],
-  "includePlatforms": ["Editor"],
-  "autoReferenced": true,
-  "allowUnsafeCode": false
-}

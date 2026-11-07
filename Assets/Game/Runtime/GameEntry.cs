@@ -120,18 +120,5 @@ namespace Game
             Dispose();
             return Task.CompletedTask;
         }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void ResumeEntry()
-        {
-            foreach (var entry in FindObjectsOfType<GameEntry>(true))
-            {
-                if (entry.gameObject.activeInHierarchy && !entry.IsDestroying)
-                {
-                    _ = Instance;
-                    break;
-                }
-            }
-        }
     }
 }

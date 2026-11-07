@@ -7,11 +7,10 @@
       "dependencies": {}
     },
     "com.code-philosophy.luban": {
-      "version": "https://github.com/focus-creative-games/luban_unity.git#061314200e2f03307c4d90b448e1de7b85431905",
+      "version": "file:com.code-philosophy.luban@061314200e",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "061314200e2f03307c4d90b448e1de7b85431905"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.novorizon.ability": {
       "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ability#5cc7dffd5eec36dad86b63aaec19838a191fa8cf",

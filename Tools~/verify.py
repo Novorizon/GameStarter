@@ -26,6 +26,13 @@ def validate_project(root=ROOT):
     for spec in catalog:
         assert manifest['dependencies'][spec['id']] == spec['source'], spec['id']
     assert not any(value.startswith('file:') for value in manifest['dependencies'].values())
+    sdk_overrides = []
+    for package_file in sorted((root / 'Packages').glob('*/package.json')):
+        package = json.loads(package_file.read_text(encoding='utf-8-sig'))
+        name = package.get('name', '')
+        if name.startswith('com.novorizon.') and name in manifest['dependencies']:
+            sdk_overrides.append(package_file.parent.relative_to(root).as_posix())
+    assert not sdk_overrides, 'Embedded SDK packages override the pinned Git sources; remove these local copies: ' + ', '.join(sdk_overrides)
     assert manifest['dependencies']['com.unity.inputsystem'] == '1.11.2'
     assert re.search(r'^  activeInputHandler: 2$', (root / 'ProjectSettings/ProjectSettings.asset').read_text(), re.M)
     input_asset = json.loads((root / 'Assets/Resources/InputActions.inputactions').read_text())

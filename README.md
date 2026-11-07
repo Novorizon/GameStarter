@@ -2,6 +2,8 @@
 
 独立 Unity 2022.3.62f1 启动工程。GameEntry 配置开关并顺序初始化，GameHotUpdate 执行更新步骤，HotGame 组织业务。依赖 UnityPackages 固定提交 `5cc7dffd5eec36dad86b63aaec19838a191fa8cf`；包元数据预备版本 preview.29 尚未发布标签。工程使用固定 Git 来源，不依赖相邻仓库或本地 file: 路径。
 
+Novorizon SDK 包由 manifest 固定 Git 提交，不在 `Packages` 下重复嵌入；嵌入包会优先于 Git 依赖，验证脚本会拒绝这类覆盖。HybridCLR 按模块配置保留嵌入安装。
+
 ## 从哪里开始
 
 - [Unity 云端编译与验收](Documentation/UnityValidation.zh-CN.md)：从 GitHub 获取、导入全部示例、Editor/Player 脚本编译、Play、IL2CPP 和补丁。
