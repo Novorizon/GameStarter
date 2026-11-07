@@ -10,6 +10,12 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 {
     public sealed partial class TowerDefensePrototypeView
     {
+        private static readonly string[] RarityNames = { "普通  ·  战地祝福", "优秀  ·  战地祝福", "稀有  ·  战地祝福", "史诗  ·  战地祝福", "传说  ·  战地祝福" };
+        private static readonly Color[] RarityColors =
+        {
+            new Color(.91f, .89f, .85f), new Color(.36f, .88f, .32f), new Color(.28f, .65f, 1),
+            new Color(.75f, .38f, .98f), new Color(1, .59f, .16f)
+        };
         private readonly Color gold = new Color(.94f, .77f, .42f);
         private readonly Color muted = new Color(.68f, .77f, .69f);
 
@@ -178,6 +184,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 var tag = Label("Rarity", card.transform, new Vector2(.12f, .85f), new Vector2(.88f, .93f), 19, TextAnchor.MiddleCenter);
                 tag.text = "战地祝福";
                 tag.color = gold;
+                cardRarities[index] = tag;
                 cardImages[index] = Icon("Icon", card.transform, new Vector2(.20f, .46f), new Vector2(.80f, .82f), 3);
                 cardNames[index] = Label("Name", card.transform, new Vector2(.10f, .36f), new Vector2(.90f, .46f), 30, TextAnchor.MiddleCenter);
                 cardDescriptions[index] = Label("Effect", card.transform, new Vector2(.12f, .22f), new Vector2(.88f, .35f), 25, TextAnchor.MiddleCenter);
@@ -279,7 +286,11 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 var card = session.CurrentCardOffers[index];
                 cardNames[index].text = card.Name;
                 cardDescriptions[index].text = card.Description;
-                int icon = (int)card.Effect + 2;
+                int rarity = Mathf.Clamp(card.Rarity, 1, 5) - 1;
+                cardRarities[index].text = RarityNames[rarity];
+                cardRarities[index].color = RarityColors[rarity];
+                cardFrames[index].color = Color.Lerp(Color.white, RarityColors[rarity], .18f);
+                int icon = card.IconIndex >= 0 ? card.IconIndex : (int)card.Effect + 2;
                 cardImages[index].enabled = icon >= 0 && icon < generatedIcons.Count;
                 cardImages[index].sprite = cardImages[index].enabled ? generatedIcons[icon] : null;
             }

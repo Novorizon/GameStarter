@@ -11,16 +11,19 @@
 | 公网游戏 TCP | 获得网络权限后，139.196.76.229:22370 与 15000.top:22370 都返回 ECONNREFUSED | TCP 尚未建立，没到登录或 JWT 校验；不能仅据此断言整台主机不可达、进程未启动或防火墙必然有错 |
 | 云端 VPN | 实时代理状态 configured=false、state=disabled；TCP CONNECT 代理 proxy:8088 入口连接拒绝 | 当前运行实例无法使用 Tailscale 备用路径；没有实际到达 100.106.202.63:22370，不能据此判断尾网服务器端口状态 |
 | 登录与结算 | 未执行 | 无有效连接、通信配置或测试凭证，不能宣称账号/结算通过 |
+| 用户提供的交叉验证 | 服务器通过 systemd 监听 0.0.0.0:22370；Windows/主机 6 公网收到 TCPA，另一云环境经 Tailscale CONNECT 200 收到完整握手 | 服务器已有正常监听和可用路径的证据；本对话的失败应继续定位云环境路径 |
 
-默认沙盒最初返回 Operation not permitted，重试取得网络权限后才得到上述 TCP 结果。云环境的普通 HTTP 通过受管代理，公网原始 TCP 与 Tailscale 有各自的路由/策略限制；从其他网络交叉测试，才能进一步区分云端路径与服务器监听问题。
+默认沙盒最初返回 Operation not permitted，重试取得网络权限后才得到上述 TCP 结果。云环境的普通 HTTP 通过受管代理，公网原始 TCP 与 Tailscale 有各自的路由/策略限制。北京时间 01:01 再次读取本实例实时状态，VPN 仍为 configured=false / disabled；proxy:8088 在代理入口处拒绝，尚未到达尾网服务器。用户截图中的完整登录/心跳是在服务器本机执行，云端部分验证 TCPA 握手，二者不混为一次云端账号验收。
 
-服务器的[默认配置](https://github.com/Novorizon/GameServer/blob/97538a12b7907fb8c7f2a6f723936ade9928d74d/src/GameServer.Host/appsettings.json)为 `ListenAddress=127.0.0.1`、`Port=1236`；地址和端口是两个字段。源码默认值不代表远端实际部署值。服务器运维侧先检查：
+当前接入阻塞位于本实例的云端 VPN 路径，需在 Codex 云环境设置启用并应用 Tailscale，确认节点/路由/ACL 与该服务匹配。当前工具仅能读取状态和诊断，不能修改或切换本对话环境；其他对话已配置不等于本实例已启用。保存配置后按平台要求发布/应用，直到实时状态 ready，并实际取得 CONNECT 200 + TCPA 握手。不在执行器内另装 VPN 绕过受管路径。
+
+以下仅作为新部署/排障参考，不是认定当前服务器仍使用默认值，也不要求在已有成功证据时再重启或改放行规则。服务器的[默认配置](https://github.com/Novorizon/GameServer/blob/97538a12b7907fb8c7f2a6f723936ade9928d74d/src/GameServer.Host/appsettings.json)为 `ListenAddress=127.0.0.1`、`Port=1236`，地址和端口是两个字段。运维侧可只读检查：
 
 ```sh
 ss -ltnp 'sport = :22370'
 ```
 
-应能看到对外接口的 22370 监听。若实际仍使用默认值，可在服务启动环境中分别配置以下两项并按部署方式重启；不把端口拼进 ListenAddress：
+应能看到对外接口的 22370 监听。新实例若仍使用默认值，可在服务启动环境中分别配置以下两项并按部署方式重启；不把端口拼进 ListenAddress：
 
 ```sh
 export GAMESERVER_Networking__ListenAddress=0.0.0.0

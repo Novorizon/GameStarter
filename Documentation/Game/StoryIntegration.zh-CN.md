@@ -1,12 +1,12 @@
 # 剧情包接入规划
 
-评估输入为 [UnityPackages PR #22](https://github.com/Novorizon/UnityPackages/pull/22)、`v0.1.0-preview.34` 固定提交 `ddd5324db578f7428c85b2bbacd6c9bdccade990`，具体接口见 [Story README](https://github.com/Novorizon/UnityPackages/blob/ddd5324db578f7428c85b2bbacd6c9bdccade990/Packages/com.novorizon.story/README.md)。当前 GameStarter 仍固定 SDK `5cc7dffd5eec36dad86b63aaec19838a191fa8cf`，本轮只做源码评估，没有升级依赖或宣称剧情已运行。
+已按用户授权升级至 [UnityPackages PR #24](https://github.com/Novorizon/UnityPackages/pull/24)、`v0.1.0-preview.35` 固定提交 `5bf37118c412ce6f188340fe75661e54c0d91515`，接口见 [Story README](https://github.com/Novorizon/UnityPackages/blob/5bf37118c412ce6f188340fe75661e54c0d91515/Packages/com.novorizon.story/README.md)。海岛首次抵达使用 SDK StoryPlayer、项目 CampArrivalView 与 YooAsset 中的三段故事 JSON；当前 TMP 呈现支持继续/跳过，取消和失败不会完成抵达标记。后续接入规划如下。
 
 ## 可用于当前游戏的内容
 
 | 场景 | 触发位置 | 规则 |
 | --- | --- | --- |
-| 首次进入营地 | 玩家档案准备后，由业务决定是否播放 | 简短介绍守卫与森林；正常完成才记录已看。主动跳过是否记录已看由业务单独规定 |
+| 首次进入营地 | 玩家档案准备后，由业务决定是否播放 | 已实现漂流上岛、搭帐篷和建设目标的三段对白；完成或主动跳过记录已抵达，补给另行领取 |
 | 首次进入关卡 | 战场资源准备完成、尚未允许开始第一波 | 介绍路线/基地/塔；对白结束再开放操作，不让战斗与对白争抢输入 |
 | 建造/选卡教学 | 稳定目标按钮出现时，由业务引导模块触发 | Story 可播放说明，按钮高亮/点击等待由业务负责；不能用固定秒数猜测玩家完成动作 |
 | 精英或章节介绍 | 备战阶段或清波安全边界 | 单人阻塞对白暂停领域；非阻塞短提示不覆盖选卡窗口 |

@@ -63,7 +63,8 @@ namespace Game.HotUpdate.TowerDefense.Data
                 Cards = tables.TbTdCard.DataList.Select(row => new CardDefinition
                 {
                     Id = row.Id, Name = row.Name, Description = row.Description, Effect = (CardEffect)row.Effect,
-                    Value = row.Value, Weight = row.Weight, MaxStacks = row.MaxStacks
+                    Value = row.Value, Weight = row.Weight, MaxStacks = row.MaxStacks,
+                    Rarity = row.Rarity, IconIndex = row.IconIndex
                 }).ToArray()
             };
         }

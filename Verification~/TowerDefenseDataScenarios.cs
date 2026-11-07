@@ -9,12 +9,12 @@ internal static partial class Program
 {
     private static void TowerDefenseDataScenarios()
     {
-        Check("real Luban binaries decode all twelve tables and map the battle configuration", () =>
+        Check("real Luban binaries decode all fourteen tables and map the battle configuration", () =>
         {
             var loaded = new List<string>();
             var tables = ReadTowerDefenseTables(loaded);
-            Equal(12, loaded.Count);
-            Equal(12, loaded.Distinct().Count());
+            Equal(14, loaded.Count);
+            Equal(14, loaded.Distinct().Count());
             True(loaded.Contains("tbexample") && loaded.Contains("tbclienttheme"));
             var configuration = TowerDefenseTables.Create(tables, 1);
             Equal(6, configuration.Waves.Length);
@@ -63,6 +63,8 @@ internal static partial class Program
                 Equal(row.Value, card.Value);
                 Equal(row.MaxStacks, card.MaxStacks);
                 Equal(row.Weight, card.Weight);
+                Equal(row.Rarity, card.Rarity);
+                Equal(row.IconIndex, card.IconIndex);
             }
         });
         Check("invalid stage and missing decoded table set cannot fall back to demo tuning", () =>

@@ -36,6 +36,16 @@ namespace Game.Editor
                 "Assets/GameAssets/Common/Fonts/GameUI.asset",
                 nameof(PackSeparately),
                 nameof(ClientAddressRule));
+            foreach (string material in new[] { "WorldLit", "WorldSprite" })
+            {
+                changed |= ResourceCollectorSetup.SetGroup(
+                    package,
+                    "ClientRendering",
+                    "rendering",
+                    "Assets/GameAssets/Common/Rendering/" + material + ".mat",
+                    nameof(PackDirectory),
+                    nameof(ClientAddressRule));
+            }
             if (changed)
             {
                 AssetBundleCollectorSettingData.SaveFile();

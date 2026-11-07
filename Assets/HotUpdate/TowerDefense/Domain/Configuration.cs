@@ -99,6 +99,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int Weight { get; set; } = 1;
         /// <summary>Zero means repeatable without a stack limit.</summary>
         public int MaxStacks { get; set; }
+        public int Rarity { get; set; } = 1;
+        public int IconIndex { get; set; } = -1;
     }
 
     public enum BattlePhase

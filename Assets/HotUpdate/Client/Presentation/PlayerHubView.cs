@@ -1,100 +1,117 @@
 using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Game.Framework.Story;
+using Game.HotUpdate.Camp;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Game.HotUpdate.Client
 {
+    /// <summary>海岛大厅 UI；建设规则、任务和故事推进由各自模块负责。</summary>
     public sealed class PlayerHubView : MonoBehaviour
     {
         private ClientFlow owner;
-        private ClientArt art;
+        private CampSceneView scene;
+        private CampMissionView missions;
+        private CampArrivalView arrival;
         private RectTransform safe;
-        private TMP_Text nameLabel;
-        private TMP_Text levelLabel;
-        private TMP_Text xpLabel;
-        private TMP_Text recordLabel;
-        private TMP_Text errorLabel;
-        private TMP_Text enterLabel;
-        private Image xpFill;
-        private Button enter;
-        private readonly List<TMP_Text> taskValues = new List<TMP_Text>();
-        private readonly List<Image> taskBars = new List<Image>();
+        private TMP_Text profile;
+        private TMP_Text resources;
+        private TMP_Text campName;
+        private TMP_Text upgradeInfo;
+        private TMP_Text notice;
+        private Button upgrade;
+        private Button expedition;
+        private Button missionButton;
         private Rect previousSafeArea;
-        private readonly Color cream = new Color(.97f, .95f, .85f);
-        private readonly Color gold = new Color(.95f, .77f, .41f);
-        private readonly Color muted = new Color(.66f, .77f, .68f);
+        private bool previousArrival;
+        private int previousLevel;
+        private bool stopping;
+        private CampProgress Camp => owner.Journey.Camp;
+
+        public CampSceneView Scene => scene;
+        public bool ArrivalPlaying => arrival != null && arrival.Playing;
 
         public static PlayerHubView Create(ClientFlow owner, Transform parent)
         {
-            var root = new GameObject("PlayerPage", typeof(RectTransform));
+            var root = new GameObject("IslandCampHall");
             root.transform.SetParent(parent, false);
             var view = root.AddComponent<PlayerHubView>();
             view.owner = owner;
-            view.art = owner.Art;
+            view.scene = CampSceneView.Create(root.transform, owner.Art.CampMap);
             view.CreateInterface();
+            view.scene.Selected = view.SelectCamp;
             view.Refresh();
             return view;
         }
 
         private void CreateInterface()
         {
-            var canvas = gameObject.AddComponent<Canvas>();
+            var ui = new CampUI(owner.Art);
+            var hud = new GameObject("CampHUD", typeof(RectTransform));
+            hud.transform.SetParent(transform, false);
+            var canvas = hud.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 100;
-            var scaler = gameObject.AddComponent<CanvasScaler>();
+            var scaler = hud.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920, 1080);
             scaler.matchWidthOrHeight = .5f;
-            gameObject.AddComponent<GraphicRaycaster>();
-            var backdrop = Area("ForestCitadel", transform, 0, 0, 1, 1).gameObject.AddComponent<RawImage>();
-            backdrop.texture = art.Background;
-            backdrop.raycastTarget = false;
-            var ratio = backdrop.gameObject.AddComponent<AspectRatioFitter>();
-            ratio.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
-            ratio.aspectRatio = (float)art.Background.width / art.Background.height;
-            var shade = Area("Shade", transform, 0, 0, 1, 1).gameObject.AddComponent<Image>();
-            shade.color = new Color(.02f, .065f, .04f, .14f);
-            shade.raycastTarget = false;
-            safe = Area("SafeArea", transform, 0, 0, 1, 1);
-            var titleShade = Area("TitleShade", safe, .035f, .07f, .57f, .32f).gameObject.AddComponent<Image>();
-            titleShade.color = new Color(.03f, .09f, .055f, .65f);
-            titleShade.raycastTarget = false;
-            Text("Brand", safe, .065f, .26f, .55f, .31f, 24, "FOREST WARDENS", gold);
-            Text("GameTitle", safe, .06f, .13f, .56f, .275f, 88, art.Title, cream);
-            Text("Tagline", safe, .065f, .08f, .55f, .14f, 25, "筑起防线 · 组合强化 · 守住林间哨站", cream);
-            var panel = Panel("PlayerDashboard", safe, .635f, .07f, .968f, .94f);
-            var avatar = Area("Avatar", panel, .055f, .77f, .285f, .963f).gameObject.AddComponent<Image>();
-            avatar.sprite = art.Avatar;
+            hud.AddComponent<GraphicRaycaster>();
+            safe = CampUI.Area("SafeArea", hud.transform, 0, 0, 1, 1);
+            var profilePanel = ui.Panel("PlayerProfile", safe, .025f, .865f, .315f, .975f);
+            var avatar = CampUI.Area("Avatar", profilePanel, .025f, .08f, .23f, .92f).gameObject.AddComponent<Image>();
+            avatar.sprite = owner.Art.Avatar;
             avatar.preserveAspect = true;
             avatar.raycastTarget = false;
-            nameLabel = Text("PlayerName", panel, .32f, .885f, .94f, .952f, 34, "", cream);
-            levelLabel = Text("PlayerLevel", panel, .32f, .822f, .94f, .883f, 23, "", gold);
-            xpLabel = Text("Experience", panel, .32f, .772f, .94f, .817f, 18, "", muted);
-            xpFill = Bar("LevelProgress", panel, .32f, .75f, .93f, .758f, gold);
-            Text("LocalProfile", panel, .065f, .694f, .94f, .735f, 17, "本地档案 · 探索进度保存在此设备", muted);
-            recordLabel = Text("BattleRecord", panel, .065f, .59f, .94f, .688f, 23, "", cream);
-            Divider(panel, .57f);
-            Text("MissionHeading", panel, .065f, .515f, .94f, .568f, 25, "旅程任务", gold);
-            for (int index = 0; index < owner.Journey.Tasks.Count; index++)
+            profile = ui.Text("Profile", profilePanel, .25f, .13f, .95f, .89f, 25, "", CampUI.Cream);
+            var materials = ui.Panel("CampMaterials", safe, .40f, .895f, .715f, .975f);
+            resources = ui.Text("Materials", materials, .05f, .18f, .95f, .82f, 27, "", CampUI.Gold);
+            missionButton = ui.ActionButton("OpenCampMissions", safe, .78f, .88f, .975f, .975f, "海岛手记", () => missions.Show());
+            ui.Text("CampTitle", safe, .35f, .77f, .69f, .85f, 38, "潮汐营地", CampUI.Cream).alignment = TextAlignmentOptions.Center;
+            var chapter = ui.Text("Chapter", safe, .38f, .73f, .65f, .78f, 18, "漂流之地  /  ISLAND HOMESTEAD", CampUI.Cream);
+            chapter.alignment = TextAlignmentOptions.Center;
+            var construction = ui.Panel("CampConstruction", safe, .025f, .035f, .43f, .255f);
+            campName = ui.Text("CampStage", construction, .045f, .68f, .95f, .93f, 30, "", CampUI.Gold);
+            upgradeInfo = ui.Text("UpgradeInfo", construction, .045f, .31f, .95f, .68f, 21, "", CampUI.Cream);
+            upgrade = ui.ActionButton("UpgradeCamp", construction, .045f, .065f, .64f, .30f, "建设营地", UpgradeCamp);
+            ui.ActionButton("CampJournalShortcut", construction, .67f, .065f, .955f, .30f, "任务", () => missions.Show());
+            var route = ui.Panel("ExpeditionInfo", safe, .745f, .04f, .975f, .255f);
+            ui.Text("Destination", route, .08f, .62f, .94f, .90f, 25, "林间哨站 · 六波防守", CampUI.Cream);
+            ui.Text("Supplies", route, .08f, .42f, .94f, .65f, 18, "赢取建设补给，回到海岛安家", CampUI.Muted);
+            expedition = ui.ActionButton("EnterTowerDefense", route, .07f, .08f, .94f, .41f, "出征 · 守卫哨站", EnterBattle);
+            notice = ui.Text("CampNotice", safe, .44f, .05f, .73f, .23f, 23, "", CampUI.Cream);
+            notice.alignment = TextAlignmentOptions.Center;
+            ui.Text("LocalProfile", safe, .72f, .27f, .975f, .315f, 17, "本地营地档案 · 建设进度自动保存", CampUI.Cream);
+            missions = new CampMissionView(safe, owner.Art, owner.Journey, ClaimTask);
+            arrival = CampArrivalView.Create(safe, owner.Art);
+        }
+
+        public async Task PlayArrivalAsync(CancellationToken token)
+        {
+            if (Camp.ArrivalSeen)
             {
-                var task = owner.Journey.Tasks[index];
-                float top = .50f - index * .085f;
-                Text("Mission " + task.Id, panel, .065f, top - .032f, .69f, top, 22, task.Name, cream);
-                Text("TaskGoal", panel, .065f, top - .064f, .94f, top - .034f, 17, task.Description, muted);
-                taskValues.Add(Text("MissionValue", panel, .70f, top - .032f, .94f, top, 20, "", gold));
-                taskBars.Add(Bar("MissionProgress", panel, .065f, top - .075f, .94f, top - .069f, new Color(.41f, .68f, .42f)));
+                return;
             }
 
-            Divider(panel, .22f);
-            Text("Campaign", panel, .065f, .164f, .94f, .215f, 21, "森林战役  /  " + owner.Stage.Name, muted);
-            var start = Panel("EnterTowerDefense", panel, .06f, .047f, .94f, .157f);
-            enter = start.gameObject.AddComponent<Button>();
-            enter.targetGraphic = start.GetComponent<Image>();
-            enter.onClick.AddListener(EnterBattle);
-            enterLabel = Text("EnterLabel", start, .06f, .15f, .94f, .85f, 33, "出征 · 守卫哨站", gold);
-            errorLabel = Text("Notice", safe, .635f, .015f, .968f, .065f, 20, "", cream);
+            var result = await arrival.PlayAsync(token);
+            token.ThrowIfCancellationRequested();
+            if (result.Status == StoryStatus.Completed || result.Status == StoryStatus.Skipped)
+            {
+                Camp.CompleteArrival();
+                ShowError("欢迎来到海岛。打开海岛手记，领取第一份补给。");
+            }
+            else if (result.Status == StoryStatus.Failed)
+            {
+                throw result.Error ?? new InvalidOperationException("Island arrival story failed.");
+            }
+
+            Refresh();
         }
 
         private async void EnterBattle()
@@ -102,101 +119,97 @@ namespace Game.HotUpdate.Client
             await owner.EnterBattleAsync();
         }
 
+        private void UpgradeCamp()
+        {
+            ApplyChange(() => Camp.Upgrade(), "营地建设完成。点击营地可查看下一步计划。");
+        }
+
+        private void ClaimTask(int id)
+        {
+            ApplyChange(() => Camp.Claim(id), "补给已收好，可以继续建设营地。");
+        }
+
+        private void ApplyChange(Func<bool> action, string message)
+        {
+            try
+            {
+                ShowError(action() ? message : Camp.UpgradeBlockedReason ?? "当前任务还不能领取。");
+                Refresh();
+            }
+            catch (Exception error) when (error is IOException || error is UnauthorizedAccessException)
+            {
+                ShowError("进度未能保存，材料没有扣除，请稍后重试。");
+                Debug.LogWarning("Camp save failed: " + error.Message);
+            }
+        }
+
+        private void SelectCamp()
+        {
+            ShowError(Camp.NextLevel == null ? Camp.Level.Description : "下一步：" + Camp.NextLevel.Name + "。在左下方确认建设。");
+        }
+
         public void Refresh()
         {
             var journey = owner.Journey;
-            nameLabel.text = journey.Nickname;
-            levelLabel.text = "Lv." + journey.Level.Id + "  " + journey.Level.Title;
-            var next = journey.NextLevel;
-            int start = journey.Level.Experience;
-            xpLabel.text = next == null ? "探索等级已满" : "探索经验  " + journey.Experience + " / " + next.Experience;
-            float fraction = next == null ? 1 : (float)(journey.Experience - start) / (next.Experience - start);
-            xpFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01(fraction), 1);
-            recordLabel.text = "最高波次  <color=#F0C46A>" + journey.HighestWave + "</color>   防守胜利  <color=#F0C46A>" + journey.Victories
-                + "</color>\n<size=80%><color=#B0C4B0>累计击败 " + journey.EnemiesKilled + " 名敌人</color></size>";
-            for (int index = 0; index < taskValues.Count; index++)
-            {
-                var task = journey.Tasks[index];
-                int value = journey.Progress(task);
-                taskValues[index].text = journey.Completed(task) ? "已达成" : value + " / " + task.Target;
-                taskBars[index].rectTransform.anchorMax = new Vector2((float)value / task.Target, 1);
-            }
-
-            enter.interactable = !owner.Entering;
-            enterLabel.text = owner.Entering ? "正在准备战场…" : "出征 · 守卫哨站";
+            profile.text = journey.Nickname + "  Lv." + journey.Level.Id + "\n<size=65%>最高波次 "
+                + journey.HighestWave + " · 防守胜利 " + journey.Victories + "</size>";
+            resources.text = "木材  " + Camp.Wood + "     石料  " + Camp.Stone;
+            campName.text = Camp.Level.Name + "  <size=65%>营地 Lv." + Camp.Level.Id + "</size>";
+            var next = Camp.NextLevel;
+            upgradeInfo.text = next == null ? Camp.Level.Description
+                : "下一步：" + next.Name + "\n木材 " + next.WoodCost + "  ·  石料 " + next.StoneCost
+                    + (Camp.UpgradeBlockedReason == null ? "  ·  可以建设" : "\n" + Camp.UpgradeBlockedReason);
+            upgrade.interactable = Camp.UpgradeBlockedReason == null && !ArrivalPlaying;
+            upgrade.GetComponentInChildren<TMP_Text>().text = next == null ? "家园已建成" : "建设 · " + next.Name;
+            expedition.interactable = Camp.ArrivalSeen && !owner.Entering && !ArrivalPlaying;
+            expedition.GetComponentInChildren<TMP_Text>().text = owner.Entering ? "正在准备战场…" : "出征 · 守卫哨站";
+            int ready = Camp.Tasks.Count(task => !Camp.Claimed(task.Id) && Camp.Progress(task) >= task.Target);
+            missionButton.GetComponentInChildren<TMP_Text>().text = "海岛手记" + (ready > 0 ? "  ·  " + ready : "");
+            missions.Refresh();
+            scene.Refresh(Camp);
+            previousLevel = Camp.Level.Id;
+            previousArrival = Camp.ArrivalSeen;
         }
 
-        public void ShowError(string value)
+        public void ShowError(string message)
         {
-            errorLabel.text = value;
+            notice.text = message;
         }
 
         private void Update()
         {
-            if (previousSafeArea == Screen.safeArea || Screen.width == 0 || Screen.height == 0)
+            if (stopping)
             {
                 return;
             }
 
-            previousSafeArea = Screen.safeArea;
-            safe.anchorMin = new Vector2(previousSafeArea.xMin / Screen.width, previousSafeArea.yMin / Screen.height);
-            safe.anchorMax = new Vector2(previousSafeArea.xMax / Screen.width, previousSafeArea.yMax / Screen.height);
+            if (previousLevel != Camp.Level.Id || previousArrival != Camp.ArrivalSeen)
+            {
+                Refresh();
+            }
+
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && missions.Visible)
+            {
+                missions.Hide();
+            }
+
+            if (previousSafeArea != Screen.safeArea && Screen.width > 0 && Screen.height > 0)
+            {
+                previousSafeArea = Screen.safeArea;
+                safe.anchorMin = new Vector2(previousSafeArea.xMin / Screen.width, previousSafeArea.yMin / Screen.height);
+                safe.anchorMax = new Vector2(previousSafeArea.xMax / Screen.width, previousSafeArea.yMax / Screen.height);
+            }
         }
 
-        private RectTransform Panel(string label, Transform parent, float left, float bottom, float right, float top)
+        public void Stop()
         {
-            var area = Area(label, parent, left, bottom, right, top);
-            var image = area.gameObject.AddComponent<Image>();
-            image.sprite = art.Panel;
-            image.type = Image.Type.Sliced;
-            image.pixelsPerUnitMultiplier = 7;
-            return area;
+            stopping = true;
+            arrival?.Dispose();
         }
 
-        private void Divider(Transform parent, float bottom)
+        private void OnDestroy()
         {
-            var line = Area("Divider", parent, .065f, bottom, .94f, bottom + .0015f).gameObject.AddComponent<Image>();
-            line.color = new Color(.60f, .52f, .29f, .65f);
-            line.raycastTarget = false;
-        }
-
-        private static Image Bar(string label, Transform parent, float left, float bottom, float right, float top, Color color)
-        {
-            var track = Area(label, parent, left, bottom, right, top).gameObject.AddComponent<Image>();
-            track.color = new Color(.025f, .07f, .04f, .8f);
-            track.raycastTarget = false;
-            var fill = Area("Fill", track.transform, 0, 0, 1, 1).gameObject.AddComponent<Image>();
-            fill.color = color;
-            fill.raycastTarget = false;
-            return fill;
-        }
-
-        private TMP_Text Text(string label, Transform parent, float left, float bottom, float right, float top, int size, string value, Color color)
-        {
-            var area = Area(label, parent, left, bottom, right, top);
-            area.gameObject.SetActive(false);
-            var text = area.gameObject.AddComponent<TextMeshProUGUI>();
-            text.font = art.Font;
-            text.fontSize = size;
-            text.enableAutoSizing = true;
-            text.fontSizeMin = size * .7f;
-            text.fontSizeMax = size;
-            text.text = value;
-            text.color = color;
-            text.raycastTarget = false;
-            area.gameObject.SetActive(true);
-            return text;
-        }
-
-        private static RectTransform Area(string label, Transform parent, float left, float bottom, float right, float top)
-        {
-            var area = new GameObject(label, typeof(RectTransform)).GetComponent<RectTransform>();
-            area.SetParent(parent, false);
-            area.anchorMin = new Vector2(left, bottom);
-            area.anchorMax = new Vector2(right, top);
-            area.offsetMin = Vector2.zero;
-            area.offsetMax = Vector2.zero;
-            return area;
+            Stop();
         }
     }
 }

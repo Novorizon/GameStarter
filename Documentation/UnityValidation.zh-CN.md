@@ -6,11 +6,11 @@
 
 | 内容 | 来源 |
 | --- | --- |
-| Unity 工程 | https://github.com/Novorizon/GameStarter，main；本次发行 v0.1.0-preview.26 |
-| 包仓库 | https://github.com/Novorizon/UnityPackages，manifest 固定提交 9502631577cc0ae31d335332d09bb91cebc83a48（待发行 preview.26） |
+| Unity 工程 | https://github.com/Novorizon/GameStarter，main；记录实际测试的工程提交 |
+| 包仓库 | https://github.com/Novorizon/UnityPackages，`v0.1.0-preview.35`；manifest 固定提交 `5bf37118c412ce6f188340fe75661e54c0d91515` |
 | Editor | Unity 2022.3.62f1，或先明确记录使用的兼容版本 |
 | 场景 | Assets/Scenes/Bootstrap.unity |
-| 运行入口 | GameEntry 准备发行/资源；HotGame 初始化 Manager、设置与 Luban 表 |
+| 运行入口 | GameEntry 初始化资源/热更 Manager；GameHotUpdate 执行更新；HotGame 初始化业务并启动 ClientFlow |
 | 验证输出 | Artifacts/NativeValidation，完整 Unity 日志和 JSON；测试另保留 XML |
 
 ```sh
@@ -45,7 +45,7 @@ $unity = "C:\Program Files\Unity\Hub\Editor\2022.3.62f1\Editor\Unity.exe"
 
 ImportSamples 从已解析包的 package.json 读取 samples，复制到 Assets/NovorizonSamples，并写 imported-samples.txt。包目录中的点替换为下划线，例如 com_novorizon_framework，避免 .framework 后缀被 Unity 识别为原生插件目录而跳过 C#。目录已存在时拒绝覆盖；重新验证使用新的 checkout，或先自行移走该验证目录。它只导入自有包公开示例，不复制第三方包源码。
 
-CompileScripts 在 Unity 完成 Editor 导入后，调用 HybridCLR 的脚本编译器检查 Player 程序集，核对热更 DLL 输出并写 compile.json。另按包中声明的全部示例 asmdef，逐一核对 Unity 实际发现的 Editor 程序集、DLL 文件、导入目录下的源文件以及非 Editor 示例是否进入当前 Player 编译列表，写 sample-assemblies.json；缺少任一项即失败。当前 8 个示例应有 11 个 Editor 编译程序集，其中 8 个 Runtime 程序集参与 Player 编译。此阶段不安装或替换原生 il2cpp，不构建 Player。宿主必须安装所选 Build Target 的支持模块；shell 保留工程当前目标，Windows 脚本使用 Win64。
+CompileScripts 在 Unity 完成 Editor 导入后，调用 HybridCLR 的脚本编译器检查 Player 程序集，核对热更 DLL 输出并写 compile.json。另按包中声明的全部示例 asmdef，逐一核对 Unity 实际发现的 Editor 程序集、DLL 文件、导入目录下的源文件以及非 Editor 示例是否进入当前 Player 编译列表，写 sample-assemblies.json；缺少任一项即失败。当前 9 个示例应有 13 个 Editor 编译程序集，其中 9 个 Runtime 程序集参与 Player 编译，包含 Story 示例。此阶段不安装或替换原生 il2cpp，不构建 Player。宿主必须安装所选 Build Target 的支持模块；shell 保留工程当前目标，Windows 脚本使用 Win64。
 
 也可直接调用入口：
 
@@ -67,6 +67,8 @@ Windows 使用 native-validate.ps1 的 Editor 阶段。该阶段不加 -quit，�
 Bootstrap 使用已提交的 Luban 生成物与 YooAsset 模拟模式，不需要连接游戏服务器或下载站。默认没有公钥时不启用远程 DLL 下载。重新生成所有表可另调用 Game.Editor.NativeValidation.GenerateTables；它是异步入口，不带 -quit，生成完成后自己退出。
 
 可交互 Demo 的入口和前置条件见 [Demo 索引](Demos.zh-CN.md)。Framework/UI 可以创建独立演示场景；资源和 GPU 示例需要匹配的采集/烘焙资源。批处理 C# 编译不作为界面、输入、音频和渲染通过的证明。
+
+本项目已完成的营地/战斗与启动连续 Play 验收分别使用 `Game.Editor.TowerDefenseValidation.Run`、`Game.Editor.GameEntryValidation.Run`，均不加 `-quit`；需要可渲染的桌面，Linux 云端可使用 Xvfb 与 OpenGLCore。塔防入口加 `--novorizon-phone-layout` 检查手机横屏比例。实际步骤、截图、资源报告与未执行范围见[交付记录](TowerDefense/Delivery.zh-CN.md)，不能将 Editor 宽屏当作手机真机。
 
 ## 3. GpuAnimator EditMode 测试
 

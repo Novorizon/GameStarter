@@ -16,6 +16,8 @@ namespace Game.HotUpdate.Client
         public Sprite Avatar { get; private set; }
         public Texture2D Atlas { get; private set; }
         public Texture2D Background { get; private set; }
+        public Sprite CampMap { get; private set; }
+        public string ArrivalScript { get; private set; }
         public string Title { get; private set; }
 
         public static async Task<ClientArt> LoadAsync(cfg.ClientTheme theme, CancellationToken token)
@@ -27,6 +29,11 @@ namespace Game.HotUpdate.Client
                 art.Panel = await art.Load<Sprite>(theme.Panel, token);
                 art.Avatar = await art.Load<Sprite>(theme.Avatar, token);
                 art.Atlas = await art.Load<Texture2D>(theme.Icons, token);
+                art.CampMap = await art.Load<Sprite>(theme.CampMap, token);
+                art.ArrivalScript = (await art.Load<TextAsset>("Camp/Story/Arrival", token)).text;
+                // 显式资源依赖保留运行时程序化模型/阴影所需 Shader，避免仅靠 Shader.Find 被构建裁剪。
+                await art.Load<Material>("Common/Rendering/WorldLit", token);
+                await art.Load<Material>("Common/Rendering/WorldSprite", token);
                 var picture = await art.Load<TextAsset>(theme.Background, token);
                 var layout = await art.Load<TextAsset>(theme.StartupLayout, token);
                 token.ThrowIfCancellationRequested();

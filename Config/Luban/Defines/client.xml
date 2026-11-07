@@ -8,6 +8,7 @@
         <var name="avatar" type="string" />
         <var name="background" type="string" />
         <var name="startupLayout" type="string" />
+        <var name="campMap" type="string" />
     </bean>
     <table name="TbClientTheme" value="ClientTheme" input="clienttheme.xlsx" index="id" />
     <bean name="JourneyTask">
@@ -25,4 +26,30 @@
         <var name="title" type="string" />
     </bean>
     <table name="TbPlayerLevel" value="PlayerLevel" input="playerlevel.xlsx" index="id" />
+    <bean name="CampLevel">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+        <var name="description" type="string" />
+        <var name="woodCost" type="int" />
+        <var name="stoneCost" type="int" />
+        <var name="requiredVictories" type="int" />
+        <var name="startingWood" type="int" />
+        <var name="startingStone" type="int" />
+        <var name="victoryWood" type="int" />
+        <var name="victoryStone" type="int" />
+        <var name="defeatWood" type="int" />
+        <var name="defeatStone" type="int" />
+    </bean>
+    <table name="TbCampLevel" value="CampLevel" input="camplevel.xlsx" index="id" />
+    <bean name="CampTask">
+        <var name="id" type="int" />
+        <var name="name" type="string" />
+        <var name="description" type="string" />
+        <var name="metric" type="int" />
+        <var name="target" type="int" />
+        <var name="wood" type="int" />
+        <var name="stone" type="int" />
+        <var name="experience" type="int" />
+    </bean>
+    <table name="TbCampTask" value="CampTask" input="camptask.xlsx" index="id" />
 </module>

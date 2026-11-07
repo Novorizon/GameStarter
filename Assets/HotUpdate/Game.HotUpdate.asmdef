@@ -19,7 +19,8 @@
     "Game.Data.Generated",
     "Luban.Runtime",
     "Unity.ugui",
-    "Unity.TextMeshPro"
+    "Unity.TextMeshPro",
+    "Game.Framework.Story"
   ],
   "autoReferenced": false,
   "allowUnsafeCode": false

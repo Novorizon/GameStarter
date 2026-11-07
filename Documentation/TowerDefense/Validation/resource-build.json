@@ -2,14 +2,14 @@
     "Summary": {
         "YooVersion": "2.3.18",
         "UnityVersion": "2022.3.62f1",
-        "BuildDate": "11/07/2026 15:52:21",
-        "BuildSeconds": 14,
+        "BuildDate": "11/07/2026 17:51:43",
+        "BuildSeconds": 45,
         "BuildTarget": 24,
         "BuildPipeline": "BuiltinBuildPipeline",
         "BuildBundleType": 2,
         "BuildPackageName": "DefaultPackage",
-        "BuildPackageVersion": "20261107155205821",
-        "BuildPackageNote": "11/07/2026 15:52:05",
+        "BuildPackageVersion": "20261107175056114",
+        "BuildPackageNote": "11/07/2026 17:50:56",
         "UniqueBundleName": false,
         "EnableAddressable": true,
         "SupportExtensionless": true,
@@ -34,14 +34,38 @@
         "CacheServerPort": 0,
         "BuiltinShadersBundleName": "",
         "MonoScriptsBundleName": "",
-        "AssetFileTotalCount": 22,
-        "MainAssetTotalCount": 20,
-        "AllBundleTotalCount": 7,
-        "AllBundleTotalSize": 15461955,
+        "AssetFileTotalCount": 29,
+        "MainAssetTotalCount": 26,
+        "AllBundleTotalCount": 10,
+        "AllBundleTotalSize": 19930363,
         "EncryptedBundleTotalCount": 0,
         "EncryptedBundleTotalSize": 0
     },
     "AssetInfos": [
+        {
+            "Address": "Camp/Art/Island",
+            "AssetPath": "Assets/GameAssets/Camp/Art/Island.png",
+            "AssetGUID": "dfa997b7ff0146fe852a486b3d661ca0",
+            "AssetTags": [
+                "maps"
+            ],
+            "MainBundleName": "assets_gameassets_camp_art.bundle",
+            "MainBundleSize": 4196800,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Camp/Story/Arrival",
+            "AssetPath": "Assets/GameAssets/Camp/Story/Arrival.json",
+            "AssetGUID": "ec406e6c16694246b51f0ec08b281836",
+            "AssetTags": [
+                "story"
+            ],
+            "MainBundleName": "assets_gameassets_camp_story.bundle",
+            "MainBundleSize": 1760,
+            "DependAssets": [],
+            "DependBundles": []
+        },
         {
             "Address": "Common/Fonts/GameUI",
             "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.asset",
@@ -50,7 +74,7 @@
                 "fonts"
             ],
             "MainBundleName": "assets_gameassets_common_fonts_gameui.bundle",
-            "MainBundleSize": 409174,
+            "MainBundleSize": 626624,
             "DependAssets": [
                 {
                     "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.otf",
@@ -65,6 +89,37 @@
                 "share_assets_gameassets_common_fonts.bundle",
                 "unityshaders.bundle"
             ]
+        },
+        {
+            "Address": "Common/Rendering/WorldLit",
+            "AssetPath": "Assets/GameAssets/Common/Rendering/WorldLit.mat",
+            "AssetGUID": "f5e141cca192940a693d67e7a1452de2",
+            "AssetTags": [
+                "rendering"
+            ],
+            "MainBundleName": "assets_gameassets_common_rendering.bundle",
+            "MainBundleSize": 3095,
+            "DependAssets": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "Common/Rendering/WorldSprite",
+            "AssetPath": "Assets/GameAssets/Common/Rendering/WorldSprite.mat",
+            "AssetGUID": "15de7b4d4541cd4c297cbbf5a1305abd",
+            "AssetTags": [
+                "rendering"
+            ],
+            "MainBundleName": "assets_gameassets_common_rendering.bundle",
+            "MainBundleSize": 3095,
+            "DependAssets": [],
+            "DependBundles": []
         },
         {
             "Address": "Common/Startup/Background",
@@ -134,7 +189,31 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Data/Luban/tbcamplevel",
+            "AssetPath": "Assets/GameAssets/Data/Luban/tbcamplevel.bytes",
+            "AssetGUID": "61357bb3cce14162a00e3ab7cbf3de7f",
+            "AssetTags": [
+                "data"
+            ],
+            "MainBundleName": "assets_gameassets_data_luban.bundle",
+            "MainBundleSize": 3845,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Data/Luban/tbcamptask",
+            "AssetPath": "Assets/GameAssets/Data/Luban/tbcamptask.bytes",
+            "AssetGUID": "335862d90d3f4f0390fd431020c23c6d",
+            "AssetTags": [
+                "data"
+            ],
+            "MainBundleName": "assets_gameassets_data_luban.bundle",
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -146,7 +225,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -158,7 +237,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -170,7 +249,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -182,7 +261,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -194,7 +273,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -206,7 +285,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -218,7 +297,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -230,7 +309,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -242,7 +321,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -254,7 +333,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -266,7 +345,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -278,7 +357,7 @@
                 "data"
             ],
             "MainBundleName": "assets_gameassets_data_luban.bundle",
-            "MainBundleSize": 3185,
+            "MainBundleSize": 3845,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -297,11 +376,49 @@
     ],
     "BundleInfos": [
         {
+            "BundleName": "assets_gameassets_camp_art.bundle",
+            "FileName": "3fc784a2b33e6ad34aba6e711f1a4385.bundle",
+            "FileHash": "3fc784a2b33e6ad34aba6e711f1a4385",
+            "FileCRC": 3574966830,
+            "FileSize": 4196800,
+            "Encrypted": false,
+            "Tags": [
+                "maps"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GameAssets/Camp/Art/Island.png",
+                    "AssetGUID": "dfa997b7ff0146fe852a486b3d661ca0"
+                }
+            ]
+        },
+        {
+            "BundleName": "assets_gameassets_camp_story.bundle",
+            "FileName": "ddae76d08c438af9475105d46d1d9bfe.bundle",
+            "FileHash": "ddae76d08c438af9475105d46d1d9bfe",
+            "FileCRC": 2618660611,
+            "FileSize": 1760,
+            "Encrypted": false,
+            "Tags": [
+                "story"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GameAssets/Camp/Story/Arrival.json",
+                    "AssetGUID": "ec406e6c16694246b51f0ec08b281836"
+                }
+            ]
+        },
+        {
             "BundleName": "assets_gameassets_common_fonts_gameui.bundle",
-            "FileName": "25fa624a711e8b6def7de631cb7c6d16.bundle",
-            "FileHash": "25fa624a711e8b6def7de631cb7c6d16",
-            "FileCRC": 884565755,
-            "FileSize": 409174,
+            "FileName": "bbde552b23ab6f5ba5a015cf33a579cd.bundle",
+            "FileHash": "bbde552b23ab6f5ba5a015cf33a579cd",
+            "FileCRC": 3123856218,
+            "FileSize": 626624,
             "Encrypted": false,
             "Tags": [
                 "fonts"
@@ -315,6 +432,31 @@
                 {
                     "AssetPath": "Assets/GameAssets/Common/Fonts/GameUI.asset",
                     "AssetGUID": "2db005800a75d85d9a1b61a0e17c7939"
+                }
+            ]
+        },
+        {
+            "BundleName": "assets_gameassets_common_rendering.bundle",
+            "FileName": "3ea190bac24716a89560623991a8834d.bundle",
+            "FileHash": "3ea190bac24716a89560623991a8834d",
+            "FileCRC": 1494534721,
+            "FileSize": 3095,
+            "Encrypted": false,
+            "Tags": [
+                "rendering"
+            ],
+            "DependBundles": [
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GameAssets/Common/Rendering/WorldLit.mat",
+                    "AssetGUID": "f5e141cca192940a693d67e7a1452de2"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Common/Rendering/WorldSprite.mat",
+                    "AssetGUID": "15de7b4d4541cd4c297cbbf5a1305abd"
                 }
             ]
         },
@@ -370,10 +512,10 @@
         },
         {
             "BundleName": "assets_gameassets_data_luban.bundle",
-            "FileName": "536e6c0a00fd7ef88ebb531e63ac34f7.bundle",
-            "FileHash": "536e6c0a00fd7ef88ebb531e63ac34f7",
-            "FileCRC": 2545045547,
-            "FileSize": 3185,
+            "FileName": "d42848319f83275086977aee848b73a8.bundle",
+            "FileHash": "d42848319f83275086977aee848b73a8",
+            "FileCRC": 2421375272,
+            "FileSize": 3845,
             "Encrypted": false,
             "Tags": [
                 "data"
@@ -384,6 +526,14 @@
                 {
                     "AssetPath": "Assets/GameAssets/Data/Luban/manifest.json",
                     "AssetGUID": "651d1371ea8647258a6579243559a58e"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Data/Luban/tbcamplevel.bytes",
+                    "AssetGUID": "61357bb3cce14162a00e3ab7cbf3de7f"
+                },
+                {
+                    "AssetPath": "Assets/GameAssets/Data/Luban/tbcamptask.bytes",
+                    "AssetGUID": "335862d90d3f4f0390fd431020c23c6d"
                 },
                 {
                     "AssetPath": "Assets/GameAssets/Data/Luban/tbclienttheme.bytes",
@@ -477,22 +627,28 @@
         },
         {
             "BundleName": "unityshaders.bundle",
-            "FileName": "1a3d720874f9a83a40ebcdcf47c4f8d6.bundle",
-            "FileHash": "1a3d720874f9a83a40ebcdcf47c4f8d6",
-            "FileCRC": 2622984389,
-            "FileSize": 24720,
+            "FileName": "541addb7327be5bff6c93c6152385f5c.bundle",
+            "FileHash": "541addb7327be5bff6c93c6152385f5c",
+            "FileCRC": 793320340,
+            "FileSize": 73363,
             "Encrypted": false,
             "Tags": [
-                "fonts"
+                "fonts",
+                "rendering"
             ],
             "DependBundles": [],
             "ReferenceBundles": [
-                "assets_gameassets_common_fonts_gameui.bundle"
+                "assets_gameassets_common_fonts_gameui.bundle",
+                "assets_gameassets_common_rendering.bundle"
             ],
             "BundleContents": [
                 {
                     "AssetPath": "Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader",
                     "AssetGUID": "fe393ace9b354375a9cb14cdbbc28be4"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
                 }
             ]
         }

@@ -39,10 +39,17 @@
     },
     {
       "path": "Assets/GameAssets/Common/Startup/Background.bytes",
-      "description": "Launch/player-page forest citadel background, also cached for next launch.",
+      "description": "Launch forest citadel background, also cached for next launch; the business hall uses its separate island map.",
       "promptSummary": "Premium low-poly blue-roof forest citadel on left, sandstone courtyard and turquoise creek, warm cinematic light, calm dark valley on right for player/task UI; no baked interface or text.",
       "import": "Original PNG stored as TextAsset bytes; runtime decode plus versioned resource delivery. Built-in Resources/Bootstrap/Background.png is the same source image imported at max1024 as fallback.",
       "sha256": "a1871398a6bce2dc100b344beeaf5e0ba19f6fb0c7905c6f1d65ee810611dd45"
+    },
+    {
+      "path": "Assets/GameAssets/Camp/Art/Island.png",
+      "description": "Fixed island camp hall: empty clearing, arrival beach, damaged rowboat, turquoise sea and island vegetation. Camp buildings render separately in 3D.",
+      "promptSummary": "Premium near-overhead 55-degree low-poly island settlement background; broad empty camp clearing, warm afternoon light, no buildings/pads/UI/text; calm HUD edges.",
+      "import": "1672x941 original imagegen PNG, Single Sprite, no pixel editing.",
+      "sha256": "9b51f6260891124998a4d285518489e1441343e5678ee45757a580d9d4e39e42"
     }
   ],
   "font": {
@@ -53,6 +60,6 @@
     "runtimePath": "Assets/GameAssets/Common/Fonts/GameUI.asset",
     "startupPath": "Assets/Resources/Bootstrap/StartupFont.asset (independent font/OTF, same licensed subset source)"
   },
-  "models": "Shared procedural faceted stone/crossbow/crystal/cannon towers, blue-roof keep and raiders; Meshy replacement specifications in Documentation/Game/MeshyBrief.zh-CN.md. Authored animation/LOD are pending.",
+  "models": "Simple geometry placeholders for towers, base, enemies and four-stage camp. Final models, animation and LOD will be provided by the user through Meshy; see Documentation/Game/MeshyBrief.zh-CN.md.",
   "generatedDate": "2026-11-07"
 }

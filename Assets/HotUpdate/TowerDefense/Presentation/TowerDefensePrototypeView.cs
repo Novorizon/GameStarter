@@ -61,6 +61,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private readonly TMP_Text[] stats = new TMP_Text[4];
         private readonly TMP_Text[] buildTitles = new TMP_Text[3];
         private readonly TMP_Text[] buildCosts = new TMP_Text[3];
+        private readonly TMP_Text[] cardRarities = new TMP_Text[3];
         private TMP_Text notice;
         private TMP_Text towerDetails;
         private TMP_Text nextWaveLabel;

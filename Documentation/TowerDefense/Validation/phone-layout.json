@@ -1,15 +1,22 @@
 {
     "unity": "2022.3.62f1",
     "success": true,
-    "stage": "player-page-returned",
-    "detail": "Player page, deployment/range input, six waves, journey updates and return/cleanup verified.",
+    "stage": "camp-home",
+    "detail": "SDK arrival Story, four camp stages, task claims, two real victories, battle restarts, return and cleanup verified.",
     "graphicsDevice": "OpenGLCore",
+    "renderPipeline": "UniversalRenderPipelineAsset",
     "graphicsDeviceNull": false,
     "noGraphicsRequested": false,
     "renderingValidated": true,
     "shutdownVerified": true,
     "restartVerified": true,
     "defeatVerified": true,
+    "campStoryVerified": true,
+    "campMigrationVerified": true,
+    "campConstructionVerified": true,
+    "campTasksVerified": true,
+    "campHomeVerified": true,
+    "originalProfileRestored": true,
     "failedCreationCleanupVerified": true,
     "padHitAreasVerified": true,
     "pointerBuildVerified": true,
@@ -24,12 +31,44 @@
     "kills": 126,
     "leaks": 0,
     "tick": 2178,
-    "upgrades": 13,
-    "cardChoices": 5,
+    "upgrades": 26,
+    "cardChoices": 10,
     "defeatWave": 2,
     "defeatLeaks": 20,
     "phase": "Victory",
     "screenshots": [
+        {
+            "stage": "arrival-story",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/arrival-story.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "camp-tent",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/camp-tent.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "camp-missions",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/camp-missions.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "camp-fence",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/camp-fence.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
         {
             "stage": "player-page",
             "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/player-page.png",
@@ -81,6 +120,38 @@
         {
             "stage": "player-page-returned",
             "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/player-page-returned.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "camp-courtyard",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/camp-courtyard.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "deployment-mode",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/deployment-mode.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "planning",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/planning.png",
+            "captured": true,
+            "width": 1440,
+            "height": 665,
+            "detail": "ScreenCapture after actual rendered frames, including overlay UI."
+        },
+        {
+            "stage": "camp-home",
+            "path": "/workspace/GameStarter/Artifacts/TowerDefense/Phone/camp-home.png",
             "captured": true,
             "width": 1440,
             "height": 665,
