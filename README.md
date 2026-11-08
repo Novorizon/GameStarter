@@ -17,6 +17,14 @@ Novorizon SDK 包由 manifest 固定 Git 提交，不在 `Packages` 下重复嵌
 - [海岛营地大厅](Documentation/Game/IslandCamp.zh-CN.md)：漂流序章、帐篷/围栏/庭院/家园建设、任务领取与塔防补给。
 - [塔防本轮交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)：实际 Unity 画面/通关结果、已实现边界和仍待补验的项目。
 
+## 本地与云端交接
+
+使用 GitHub 上的同一开发分支交接。离开当前电脑或云端任务前，先保存 Unity 场景、Prefab 和配置，再 commit 并 push；另一端接手时先确认分支与提交，再拉取最新内容。关闭本地电脑后，未推送的修改不会自动出现在云端。
+
+两端使用 Unity 2022.3.62f1，测试入口为 `Assets/Scenes/Bootstrap.unity`。接手先读 `AGENTS.md` 和[海岛营地约定](Documentation/Game/IslandCamp.zh-CN.md)：当前画面是大海岛中的营地区域，探索和全岛小地图暂不开发；3D 继续占位，正式模型由用户通过 Meshy 提供。SDK 固定版本与维护分工按仓库约定处理。
+
+Unity 安装、许可证和 VPN 按各自运行环境确认；玩家本地存档不随 Git 同步。代码与项目资源通过 GitHub 接续，不依赖两个环境共享磁盘。
+
 ## 启动与业务
 
 打开 Assets/Scenes/Bootstrap.unity 后 Play，先显示启动进度，再进入海岛营地大厅；首次进入播放漂流序章。打开“海岛手记”领取补给，逐步建设营地；点击“出征 · 守卫哨站”进入塔防，完成后返回营地刷新材料、任务和战绩。
