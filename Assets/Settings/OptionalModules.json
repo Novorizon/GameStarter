@@ -200,6 +200,58 @@
       "source": "https://github.com/focus-creative-games/luban_unity.git#061314200e2f03307c4d90b448e1de7b85431905",
       "dependencies": [],
       "embed": false
+    },
+    {
+      "id": "com.novorizon.payments",
+      "title": "Novorizon Payments",
+      "version": "0.1.0-preview.2",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.payments#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "dependencies": [
+        "com.novorizon.framework"
+      ],
+      "embed": false
+    },
+    {
+      "id": "com.novorizon.ads",
+      "title": "Novorizon Ads",
+      "version": "0.1.0-preview.2",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ads#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "dependencies": [
+        "com.novorizon.framework"
+      ],
+      "embed": false
+    },
+    {
+      "id": "com.novorizon.auth",
+      "title": "Novorizon Auth",
+      "version": "0.1.0-preview.2",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.auth#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "dependencies": [
+        "com.novorizon.framework"
+      ],
+      "embed": false
+    },
+    {
+      "id": "com.novorizon.analytics",
+      "title": "Novorizon Analytics",
+      "version": "0.1.0-preview.1",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.analytics#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "dependencies": [
+        "com.novorizon.framework"
+      ],
+      "embed": false
+    },
+    {
+      "id": "com.novorizon.firebase",
+      "title": "Novorizon Firebase",
+      "version": "0.1.0-preview.2",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.firebase#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "dependencies": [
+        "com.novorizon.framework",
+        "com.novorizon.auth",
+        "com.novorizon.analytics"
+      ],
+      "embed": false
     }
   ]
 }

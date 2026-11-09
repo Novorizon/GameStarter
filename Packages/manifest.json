@@ -35,6 +35,11 @@
     "com.novorizon.diagnostics": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.diagnostics#5bf37118c412ce6f188340fe75661e54c0d91515",
     "com.novorizon.gpuanimator.urp": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.gpuanimator.urp#5bf37118c412ce6f188340fe75661e54c0d91515",
     "com.novorizon.localization": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.localization#5bf37118c412ce6f188340fe75661e54c0d91515",
-    "com.novorizon.story": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.story#5bf37118c412ce6f188340fe75661e54c0d91515"
+    "com.novorizon.story": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.story#5bf37118c412ce6f188340fe75661e54c0d91515",
+    "com.novorizon.payments": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.payments#4ebef06437166d59bc8841b89f53c5ee140448e8",
+    "com.novorizon.ads": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ads#4ebef06437166d59bc8841b89f53c5ee140448e8",
+    "com.novorizon.auth": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.auth#4ebef06437166d59bc8841b89f53c5ee140448e8",
+    "com.novorizon.analytics": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.analytics#4ebef06437166d59bc8841b89f53c5ee140448e8",
+    "com.novorizon.firebase": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.firebase#4ebef06437166d59bc8841b89f53c5ee140448e8"
   }
 }

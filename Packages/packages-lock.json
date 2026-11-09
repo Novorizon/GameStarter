@@ -19,6 +19,25 @@
       "dependencies": {},
       "hash": "5bf37118c412ce6f188340fe75661e54c0d91515"
     },
+    "com.novorizon.ads": {
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.ads#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.novorizon.framework": "0.18.0-preview.8",
+        "com.unity.modules.androidjni": "1.0.0"
+      },
+      "hash": "4ebef06437166d59bc8841b89f53c5ee140448e8"
+    },
+    "com.novorizon.analytics": {
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.analytics#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.novorizon.framework": "0.18.0-preview.8"
+      },
+      "hash": "4ebef06437166d59bc8841b89f53c5ee140448e8"
+    },
     "com.novorizon.audio": {
       "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.audio#5bf37118c412ce6f188340fe75661e54c0d91515",
       "depth": 0,
@@ -28,6 +47,16 @@
         "com.unity.modules.audio": "1.0.0"
       },
       "hash": "5bf37118c412ce6f188340fe75661e54c0d91515"
+    },
+    "com.novorizon.auth": {
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.auth#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.novorizon.framework": "0.18.0-preview.8",
+        "com.unity.modules.androidjni": "1.0.0"
+      },
+      "hash": "4ebef06437166d59bc8841b89f53c5ee140448e8"
     },
     "com.novorizon.data": {
       "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.data#5bf37118c412ce6f188340fe75661e54c0d91515",
@@ -59,6 +88,17 @@
         "com.unity.mathematics": "1.2.6"
       },
       "hash": "5bf37118c412ce6f188340fe75661e54c0d91515"
+    },
+    "com.novorizon.firebase": {
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.firebase#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.novorizon.framework": "0.18.0-preview.8",
+        "com.novorizon.auth": "0.1.0-preview.2",
+        "com.novorizon.analytics": "0.1.0-preview.1"
+      },
+      "hash": "4ebef06437166d59bc8841b89f53c5ee140448e8"
     },
     "com.novorizon.framework": {
       "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.framework#5bf37118c412ce6f188340fe75661e54c0d91515",
@@ -165,6 +205,15 @@
         "com.novorizon.framework": "0.18.0-preview.8"
       },
       "hash": "5bf37118c412ce6f188340fe75661e54c0d91515"
+    },
+    "com.novorizon.payments": {
+      "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.payments#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.novorizon.framework": "0.18.0-preview.8"
+      },
+      "hash": "4ebef06437166d59bc8841b89f53c5ee140448e8"
     },
     "com.novorizon.rtree": {
       "version": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.rtree#5bf37118c412ce6f188340fe75661e54c0d91515",
@@ -325,6 +374,12 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unity.modules.androidjni": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
