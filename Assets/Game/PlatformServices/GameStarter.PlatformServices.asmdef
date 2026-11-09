@@ -1,0 +1,22 @@
+{
+  "name": "GameStarter.PlatformServices",
+  "rootNamespace": "Game.PlatformServices",
+  "references": [
+    "Game.Framework.Payments",
+    "Game.Framework.Payments.UnityIap",
+    "Game.Framework.Ads",
+    "Game.Framework.Ads.AppLovin",
+    "Game.Framework.Ads.Csj",
+    "Game.Framework.Firebase",
+    "Game.Framework.Firebase.App",
+    "Game.Framework.Firebase.Crashlytics"
+  ],
+  "autoReferenced": false,
+  "versionDefines": [
+    {
+      "name": "com.unity.purchasing",
+      "expression": "[5.5.0,5.6.0)",
+      "define": "GAMESTARTER_UNITY_IAP"
+    }
+  ]
+}
