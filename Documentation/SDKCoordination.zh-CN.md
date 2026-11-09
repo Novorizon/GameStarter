@@ -39,7 +39,7 @@ GameStarter 的业务 UI 使用 TMP，图片、字体和数据通过 YooAsset �
 
 ## 平台 SDK 第一阶段
 
-Google Play 和 App Store 发行 checkout 固定 Unity IAP `5.5.0`。共用工程保留 Android API 22，并按发行目标选装官方 SDK。Payments、Ads、Firebase 及 Firebase 所依赖的 Novorizon Auth、Analytics 封装固定为 UnityPackages `v0.1.0-preview.37` 的提交 `4ebef06437166d59bc8841b89f53c5ee140448e8`。现有 Framework 与聚合包继续使用原固定版本。Novorizon Auth 和 Analytics 在这里仅提供程序集依赖，厂商产品按各发行 checkout 安装。 [平台 SDK 接口与版本](https://github.com/Novorizon/UnityPackages/blob/4ebef06437166d59bc8841b89f53c5ee140448e8/Documentation/PlatformServices.zh-CN.md)
+Google Play 和 App Store 发行 checkout 固定 Unity IAP `5.5.0`。共用工程保留 Android API 22，并按发行目标选装官方 SDK。Payments `0.1.0-preview.3` 固定为 UnityPackages 提交 `0329061309bd2113b17aabbcf41777e5cbdf00bb`。Ads、Firebase 及 Firebase 所依赖的 Novorizon Auth、Analytics 封装固定为 UnityPackages `v0.1.0-preview.37` 的提交 `4ebef06437166d59bc8841b89f53c5ee140448e8`。现有 Framework 与聚合包继续使用原固定版本。Novorizon Auth 和 Analytics 在这里仅提供程序集依赖，厂商产品按各发行 checkout 安装。 [平台 SDK 接口与版本](https://github.com/Novorizon/UnityPackages/blob/4ebef06437166d59bc8841b89f53c5ee140448e8/Documentation/PlatformServices.zh-CN.md)
 
 `GameStarter.PlatformServices` 提供显式装配入口，调用方持有 Manager 并在 Unity 主线程初始化。当前启动与业务程序集没有引用该入口。未选渠道、未提供配置或不支持的平台上保持服务关闭，广告尚无加载、展示或奖励调用。
 

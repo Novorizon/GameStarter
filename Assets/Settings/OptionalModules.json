@@ -204,8 +204,8 @@
     {
       "id": "com.novorizon.payments",
       "title": "Novorizon Payments",
-      "version": "0.1.0-preview.2",
-      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.payments#4ebef06437166d59bc8841b89f53c5ee140448e8",
+      "version": "0.1.0-preview.3",
+      "source": "https://github.com/Novorizon/UnityPackages.git?path=/Packages/com.novorizon.payments#0329061309bd2113b17aabbcf41777e5cbdf00bb",
       "dependencies": [
         "com.novorizon.framework"
       ],
