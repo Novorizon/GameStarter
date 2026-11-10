@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>annotations</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="ThirdParty/RVO2/*.cs" />
+    <Compile Include="../../Verification~/TowerDefenseNavigation/Scenarios.cs" Link="Oracle/Scenarios.cs" />
+    <Compile Include="../../Verification~/TowerDefenseNavigation/GeometryChecks.cs" Link="Oracle/GeometryChecks.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/**/*.cs" Link="Domain/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>
