@@ -2,9 +2,13 @@
 
 默认验收真实森林地图的多门协调事务：先让 44 个 Big 全部实际就位并保持 200 tick，再从原 S 入口请求 2 个 Small；在让路过程中删除参与者，并从原 S 补回相同身体、射程和速度的单位。最终必须恢复 **46 = 44 Big + 2 Small、20 个攻击者、26 个候场者、0 队列**，并保持 200 tick。没有发生指定死亡注入不能算通过。
 
-B2 正式候选 `445a7db` 的完整矩阵 **30 / 30 通过**，见 [Evidence/ForestStress/summary.json](Evidence/ForestStress/summary.json)。默认 6 类是其强注入子集；默认入口仍由仓库总验收与 CI 单独执行。本次纯模型测试累计耗时 88.009 秒，各例最终 tick 为 9408–12430（包括初始填满、晚到、死亡与补兵和保持期）。所有源及测试文件在运行前后相同，完整命令序列和哈希在同目录。
+最终生产候选 `207d92b06eb9a5739be11d9008b151f7282e037f` 已完成 **森林 30 / 30 + 份额交换 3 / 3** 的最终绑定复验，分别见 [ForestB3Stress/summary.json](Evidence/ForestB3Stress/summary.json) 与 [QuotaLifecycle/summary.json](Evidence/QuotaLifecycle/summary.json)。默认森林入口包含 7 × 7 入口集合与缓存小回归；默认 6 类是 30 例的强注入子集，默认入口由总验收和 CI 单独执行。两次运行使用同一固定 DLL，源及测试文件前后不变。
 
-生产 Domain 的完整候选聚合 SHA-256 为 `a9ee55d0667eaea51207568e41c52c11aed2f78d1998af0031d78db656a24ef7`。本工程实际编译 `Configuration.cs` 与 9 个 Navigation 文件共 10 个，逐项匹配候选清单；生产清单中另有 4 个未由本工程编译的业务文件，不混称本测试覆盖了整个 Domain。测试 DLL SHA-256 为 `4e67196a16ff6bcb388dc9d94114f742782d428898cd8ec9e6d71f32b936a5c6`。
+最终生产 Domain 聚合 SHA-256 为 `b7ea41a6b70b7b6b7235926db543bf8d260c5477f202352f4b4917c58bb9b5db`。本工程实际编译 `Configuration.cs` 与 10 个 Navigation 文件，共 11 个，逐项匹配完整 15 文件清单；另外 4 个业务文件未由该纯导航工程编译，不混称覆盖了整个 Domain。最终测试 DLL SHA-256 为 `783699faf992ebfb52efb5cf0f830b08c0b7ac73db5d5884188af53ee1e97f83`。
+
+森林最终 tick 为 5724–8450，份额交换为 7496–7912；包括初始布阵、晚到、死亡补兵与保持期。两组累计模型耗时分别为 53.272 秒、8.083 秒；同机并行执行，这些数值不作为性能基准。完整压缩命令、实际终态、生产清单和哈希保存在各自证据目录。
+
+较早 B2 候选 `445a7db` 的 30 例对照证据仍在 [ForestStress/summary.json](Evidence/ForestStress/summary.json)，其源码、测试和 DLL 身份均属于当次冻结版本，不能混作最终候选的验证。
 
 Big 使用 250 mm 半径、550 mm 射程、55 mm/tick；Small 使用 180 mm 半径、450 mm 射程。地图、500 mm 逻辑格、原点和偏心基地均使用项目真实数据，不扩图、不缩身体、不提速、不瞬移。Small 最终必须占据仅适合小体型的 256 / 257 两格。
 
@@ -38,6 +42,23 @@ Big 使用 250 mm 半径、550 mm 射程、55 mm/tick；Small 使用 180 mm 半�
 全合法初稿中，Big 2 外撤途中被删除后，Small 46 占据 Big 兼容的 297 候场格，而 Small-only 256 仍空；Big 47 补兵被拒绝。到 tick 20001 仍为 45 活体、19 攻击者、1 排队。该例是算法未完成可行请求，不能记作容量通过，见 `Evidence/ForestBeforeCompatibilityFix/`。
 
 探索时，要求所有 Big 都曾静止等待的旧分类在一个不停车的 Big 上没有触发；此时虽然 46 人已全部到达，也没有算通过。测试改为覆盖实际发生的通行格心条件，静止检查保留给真实停车的三者。另一个草稿将后续新 job 的正常晋升请求者也锁在前一轮 Goal，属于测试假设错误，现已按真实 job 对象区分事务。
+
+## 攻击份额交换过程中的死亡
+
+`--quota` 另验 3 类历史攻击份额恢复事务。使用 35 × 35、1000 mm 格、半径 1000 mm 的基地，身体半径 250 mm；Short 射程 1000 mm，Long 射程 4000 mm，均预注册。为了确保真正的非格心注入，测试请求速度为 500 mm/tick，未在运行中修改任何活体的速度或 profile。
+
+先建立 16 Short + 84 Long 的 100 体阵容（16 Short、68 Long 攻击），显式移除 15 Short，等待 Long 补至 1 Short / 83 Long 攻击，再从原 S 补回 15 Short。在恢复第 16 份额的真实最后一轮交换任务中，分别对 Short 请求者、永久退往合法 Gather 的 Long、临时返原 Goal 的门单位执行非格心死亡并同 profile 补兵。最终必须为 **116 次实际准入 = 100 活体 + 16 次显式死亡，16 Short + 68 Long 攻击，0 队列**，保持 200 tick。
+
+参与者从实际已提交任务的原/新 Goal 与状态识别：永久退让者的终点必须是合法非攻击 Gather；临时门保持原 Goal；请求者取得攻击 Goal。不会要求永久退让者回旧攻击格。该 500 速轨迹中的临时门实际为 Long，报告明确记录其射程 4000；没有把它冒称为同 profile Short 门。
+
+初稿过度要求同一任务同时存在临时 Short 门，导致没有注入但阵容已恢复。这是测试准备不成立，未计为通过或算法失败。正式测试选择实际临时门；原方案的同 profile 临时开门能力由份额缩减、归零新波和再增长回归另行覆盖。
+
+还保留一个小型分类回归：先缓存一个 7 × 7 场景的严格灵活性关系，再通过正常 `TrySpawn` 增加唯一额外攻击格为入口；两种 profile 的实际攻击集合此时都为 8 格，严格 superset 必须为 false。它同时检查入口不能算最终攻击位置，以及新增入口时关系缓存失效。该小型回归通过调用真实关系函数检验缓存，不修改位置、时钟或 private 字段。
+
+```bash
+dotnet 'Verification~/NavigationGateLifecycle/bin/Release/net8.0/NavigationGateLifecycle.dll' --quota --output Artifacts/NavigationQuotaLifecycle
+dotnet 'Verification~/NavigationGateLifecycle/bin/Release/net8.0/NavigationGateLifecycle.dll' --quota --role permanent-yielder --output Artifacts/QuotaOne
+```
 
 ## 原方案的 8 例冻结审计
 

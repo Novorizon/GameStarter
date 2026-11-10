@@ -70,6 +70,7 @@ internal static class ForestGateLifecycle
         var results = new List<ForestResult>();
         Directory.CreateDirectory(output);
         GeometryChecks.VerifyOracle();
+        QuotaGateLifecycle.VerifySpawnExclusionAndCache();
         foreach (int smallSpeed in speeds)
         {
             var cases = Cases(stress);
@@ -104,6 +105,7 @@ internal static class ForestGateLifecycle
             testBinarySha256 = DigestFile(Assembly.GetExecutingAssembly().Location),
             sourceFilesUnchanged = sourceUnchanged,
             testSourceFilesUnchanged = testsUnchanged,
+            nonSpawnFlexibilityAndEntryCacheVerified = true,
             count = results.Count,
             passed = results.Count(result => result.Success),
             success = results.Count > 0 && results.All(result => result.Success) && sourceUnchanged && testsUnchanged,

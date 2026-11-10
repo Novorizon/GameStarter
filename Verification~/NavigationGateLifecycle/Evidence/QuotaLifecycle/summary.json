@@ -1,0 +1,158 @@
+{
+  "utc": "2026-11-10T21:29:38.7629057Z",
+  "domain": "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain",
+  "sourceHashes": {
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.AdmissionGates.cs": "3ceb12256653ec150f058e8be3e8db13c8d6f8523d23afc3f72c7f9cb084e767",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.AttackQuotas.cs": "9593d31afacf1dc8588f8a9c79f27b5e89c32847d6a9f181a55a174a08b3a64f",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.cs": "4b44f7a35c026cdd8b3a8c6431be314fc09e024c913b69b4b028329aef1be331",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.Planning.cs": "c16520d5f68fe786d3020679d590869aa9c31043fa8c2c22b6f134170141bc22",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.Recovery.cs": "79b81c362871d463664c17791b8aa0085861568ff5608ccae0f58c55fa56a68d",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "/workspace/navigation-experiments/lifecycle-audit-candidate-final/Domain/Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+  },
+  "testHashes": {
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/Audit.cs": "0d81278e7f076e10f5736cd974892eec1d8d9a8864cc151e0496f6be7398b9d2",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/ForestAudit.cs": "fdc1e5ad80bb9cb628bcf84bb8e916e670af0b27dd909c338d970c2b5b3834b7",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/Program.cs": "1d427262455a88489a68932e95ed86a16ec937e269e7a3091d82312590a3b860",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/QuotaAudit.cs": "772d551a309549b081deda0fc8ee94473d613ded25a0668e2efbcaaac27817f0",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigationChallenges/Challenges.cs": "18a702c653ab7b1dacf6a85a7e0c5478e523574ab1faedc250c2931ec6f0bf5e",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigationChallenges/GeometryTypes.cs": "b364940850dc2bf8453573da27f1bb2efc276ccf8bbcad989083c3de418a71c2",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigation/GeometryChecks.cs": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigation/Observations.cs": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800",
+    "/workspace/navigation-experiments/lifecycle-audit/Assets/HotUpdate/TowerDefense/Data/NavigationLayout.cs": "ed75fac4cce88a3572defb7e8dad2ae95e652fc45c25fe5c5866cac72cf8b7a7"
+  },
+  "testBinarySha256": "783699faf992ebfb52efb5cf0f830b08c0b7ac73db5d5884188af53ee1e97f83",
+  "sourceFilesUnchanged": true,
+  "testSourceFilesUnchanged": true,
+  "speedMillimetresPerTick": 500,
+  "nonSpawnFlexibilityAndEntryCacheVerified": true,
+  "count": 3,
+  "passed": 3,
+  "success": true,
+  "results": [
+    {
+      "role": "requester",
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 7062,
+        "role": "requester",
+        "id": 115,
+        "position": {
+          "x": 9000,
+          "y": 11500
+        },
+        "participants": [
+          45,
+          83,
+          84,
+          99,
+          115
+        ],
+        "nonCenter": true,
+        "jobActive": true
+      },
+      "requested": 116,
+      "admitted": 116,
+      "active": 100,
+      "pending": 0,
+      "explicitDeaths": 16,
+      "shortAttackers": 16,
+      "longAttackers": 68,
+      "finalTick": 7912,
+      "elapsedMilliseconds": 3739,
+      "quotaExchanges": 16,
+      "selectedQuotaRequester": 115,
+      "selectedPermanentYielder": 99,
+      "selectedTemporaryGate": 45,
+      "temporaryGateRange": 4000,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "inputCommandsSha256": "159979e650bb7848e59fbff6458c155367e0175145a536404767c35a170f2a03"
+    },
+    {
+      "role": "permanent-yielder",
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 7136,
+        "role": "permanent-yielder",
+        "id": 99,
+        "position": {
+          "x": 20000,
+          "y": 17500
+        },
+        "participants": [
+          45,
+          83,
+          84,
+          99,
+          115
+        ],
+        "nonCenter": true,
+        "jobActive": true
+      },
+      "requested": 116,
+      "admitted": 116,
+      "active": 100,
+      "pending": 0,
+      "explicitDeaths": 16,
+      "shortAttackers": 16,
+      "longAttackers": 68,
+      "finalTick": 7496,
+      "elapsedMilliseconds": 2160,
+      "quotaExchanges": 15,
+      "selectedQuotaRequester": 115,
+      "selectedPermanentYielder": 99,
+      "selectedTemporaryGate": 45,
+      "temporaryGateRange": 4000,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "inputCommandsSha256": "1206baa7bbb4b96d9f865cc88ec8b51e83f60abcefb44fd07de2063ecd2d6f8b"
+    },
+    {
+      "role": "temporary-gate",
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 7098,
+        "role": "temporary-gate",
+        "id": 45,
+        "position": {
+          "x": 21000,
+          "y": 17500
+        },
+        "participants": [
+          45,
+          83,
+          84,
+          99,
+          115
+        ],
+        "nonCenter": true,
+        "jobActive": true
+      },
+      "requested": 116,
+      "admitted": 116,
+      "active": 100,
+      "pending": 0,
+      "explicitDeaths": 16,
+      "shortAttackers": 16,
+      "longAttackers": 68,
+      "finalTick": 7648,
+      "elapsedMilliseconds": 2184,
+      "quotaExchanges": 15,
+      "selectedQuotaRequester": 115,
+      "selectedPermanentYielder": 99,
+      "selectedTemporaryGate": 45,
+      "temporaryGateRange": 4000,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "inputCommandsSha256": "ebf40001695a4540c179135e651fa33fe7bee9ecac368dc311e0eb7e6f5fdf17"
+    }
+  ]
+}

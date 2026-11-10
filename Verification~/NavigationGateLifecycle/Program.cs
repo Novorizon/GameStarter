@@ -8,6 +8,11 @@ internal static class Program
 
     public static int Main(string[] args)
     {
+        if (Array.IndexOf(args, "--quota") >= 0)
+        {
+            return QuotaGateLifecycle.Run(args);
+        }
+
         if (Array.IndexOf(args, "--legacy") < 0)
         {
             return ForestGateLifecycle.Run(args);
