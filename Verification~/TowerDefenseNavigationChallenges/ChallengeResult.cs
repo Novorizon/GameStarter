@@ -32,6 +32,13 @@ internal sealed class ChallengeResult
     public string OfferedFlowSha256 { get; set; } = "";
     public string InputCommandsSha256 { get; set; } = "";
     public string PhysicalCommandsSha256 { get; set; } = "";
+    public string PhysicalGeometrySha256 { get; set; } = "";
+    public string HoldingMaskSha256 { get; set; } = "";
+    public string PrescribedEndpointSetSha256 { get; set; } = "";
+    public int[] PrescribedEndpoints { get; set; } = Array.Empty<int>();
+    public int FinalPrescribedEndpointCount { get; set; }
+    public bool InitialAttackingGoalsMustReturn { get; set; }
+    public bool RecoveryActiveAtEnd { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
     public int CellSize { get; set; } = 1000;
