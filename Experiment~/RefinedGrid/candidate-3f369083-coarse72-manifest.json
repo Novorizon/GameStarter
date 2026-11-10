@@ -1,0 +1,32 @@
+{
+  "utc": "2026-11-10T20:07:37.3120261Z",
+  "candidateDomain": "/workspace/navigation-experiments/snapshots/domain-3f369083fba51f32/Domain",
+  "arguments": [
+    "--scenario",
+    "cross-junction-conservative-capacity-4m",
+    "--refinement",
+    "1",
+    "--all-attack-deaths",
+    "--shuffle-requests",
+    "--output",
+    "Artifacts/RefinedGridCandidate-3f369083-coarse72"
+  ],
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+    "BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+    "Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+    "FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+    "Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "Navigation/NavigationCrowd.Gates.cs": "7ac3e143823d859b16f81733594fe3662acbb25402dbead4c2c1ab6295f31313",
+    "Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "Navigation/NavigationCrowd.Planning.cs": "8be2d5c1beaee9e8e4b67d78e94cd5724cc5a68b05ae0f962ef5f440b2e2ffb1",
+    "Navigation/NavigationCrowd.Recovery.cs": "284555949fef9e4c0c7960bf21a839adf6d554d5c18a87211827a24b9bac8f44",
+    "Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "Navigation/NavigationCrowd.cs": "9dd2db10515544c76b593f9b5ae51c2e47009d330064d4bda2e48b96d5189f3f",
+    "Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+  },
+  "combinedSha256": "3f369083fba51f32c7817cf3084f4aa209ad6d2ed4a26c81d7f64e59645eace2",
+  "success": true
+}
