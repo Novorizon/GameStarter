@@ -1,0 +1,25 @@
+{
+  "width": 44,
+  "height": 30,
+  "cellSizeMm": 500,
+  "origin": [
+    -11000,
+    -7560
+  ],
+  "baseCenter": [
+    7553,
+    -3527
+  ],
+  "targetRadiusMm": 1100,
+  "walkableCells": 346,
+  "reachableForRadius250": 322,
+  "holdingCandidatesForRadius250": 44,
+  "oldRouteWaypointsVerified": 17,
+  "towerFootprintsReserved": 7,
+  "layoutSource": "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes",
+  "logicalMapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+  "visualMapSha256": "13d335ec4e67c35f86dee3e4577ae3150dbfb47d06d08b9cd63d7b8774f9df83",
+  "oldPolylineDistanceMm": 50497,
+  "shortestApproachToCandidateMm": 47000,
+  "note": "Capacity is candidate-cell count, not proof all can be occupied simultaneously without cutting access. Crowd tests determine admissible capacity."
+}

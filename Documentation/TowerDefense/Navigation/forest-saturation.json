@@ -1,0 +1,4548 @@
+{
+  "success": true,
+  "utc": "2026-11-10T22:38:59.5206026Z",
+  "elapsedMilliseconds": 29345,
+  "domain": "/workspace/GameStarter/Assets/HotUpdate/TowerDefense/Domain",
+  "sourceFilesUnchanged": true,
+  "sourceHashes": {
+    "BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+    "BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+    "Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+    "FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+    "Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "Navigation/NavigationCrowd.AdmissionGates.cs": "20ae2cc7647e4a06b2db45583c530a7ead8585a71955784e49047916a33ccee3",
+    "Navigation/NavigationCrowd.AttackQuotas.cs": "9593d31afacf1dc8588f8a9c79f27b5e89c32847d6a9f181a55a174a08b3a64f",
+    "Navigation/NavigationCrowd.cs": "878c304c118a59754b6463405edd33118d1ec39b208be9b0e2b73106f804e727",
+    "Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+    "Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "Navigation/NavigationCrowd.Planning.cs": "c16520d5f68fe786d3020679d590869aa9c31043fa8c2c22b6f134170141bc22",
+    "Navigation/NavigationCrowd.Recovery.cs": "79b81c362871d463664c17791b8aa0085861568ff5608ccae0f58c55fa56a68d",
+    "Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+  },
+  "testHashes": {
+    "/workspace/navigation-experiments/perf-b7/Experiment~/AllLegalSlots/Program.cs": "d68d08782ac3fed477d0e52aff99d841e911556a8ba9d81cbc08c2e79e4b5d57"
+  },
+  "testFilesUnchanged": true,
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+  "assemblySha256": "5820842f42432cd5e94d69030bc64d399ba10254638c7bd22c59f935fd56e548",
+  "records": [
+    {
+      "success": true,
+      "radius": 250,
+      "range": 550,
+      "speed": 55,
+      "expected": 44,
+      "active": 44,
+      "attacking": 18,
+      "waiting": 26,
+      "admissionTick": 2039,
+      "finalTick": 39951,
+      "deaths": [
+        {
+          "goal": 212,
+          "victim": 5,
+          "recoveryTicks": 3939,
+          "attacks": 18
+        },
+        {
+          "goal": 213,
+          "victim": 11,
+          "recoveryTicks": 3109,
+          "attacks": 18
+        },
+        {
+          "goal": 254,
+          "victim": 4,
+          "recoveryTicks": 1169,
+          "attacks": 18
+        },
+        {
+          "goal": 255,
+          "victim": 6,
+          "recoveryTicks": 1339,
+          "attacks": 18
+        },
+        {
+          "goal": 258,
+          "victim": 12,
+          "recoveryTicks": 3149,
+          "attacks": 18
+        },
+        {
+          "goal": 259,
+          "victim": 18,
+          "recoveryTicks": 3079,
+          "attacks": 18
+        },
+        {
+          "goal": 298,
+          "victim": 2,
+          "recoveryTicks": 1079,
+          "attacks": 18
+        },
+        {
+          "goal": 303,
+          "victim": 17,
+          "recoveryTicks": 4149,
+          "attacks": 18
+        },
+        {
+          "goal": 304,
+          "victim": 10,
+          "recoveryTicks": 1279,
+          "attacks": 18
+        },
+        {
+          "goal": 348,
+          "victim": 9,
+          "recoveryTicks": 1149,
+          "attacks": 18
+        },
+        {
+          "goal": 392,
+          "victim": 8,
+          "recoveryTicks": 1139,
+          "attacks": 18
+        },
+        {
+          "goal": 430,
+          "victim": 1,
+          "recoveryTicks": 1269,
+          "attacks": 18
+        },
+        {
+          "goal": 435,
+          "victim": 15,
+          "recoveryTicks": 3919,
+          "attacks": 18
+        },
+        {
+          "goal": 436,
+          "victim": 16,
+          "recoveryTicks": 2409,
+          "attacks": 18
+        },
+        {
+          "goal": 474,
+          "victim": 3,
+          "recoveryTicks": 1239,
+          "attacks": 18
+        },
+        {
+          "goal": 475,
+          "victim": 13,
+          "recoveryTicks": 1409,
+          "attacks": 18
+        },
+        {
+          "goal": 478,
+          "victim": 14,
+          "recoveryTicks": 1339,
+          "attacks": 18
+        },
+        {
+          "goal": 479,
+          "victim": 7,
+          "recoveryTicks": 1349,
+          "attacks": 18
+        }
+      ],
+      "checkedPairs": 108492440,
+      "checkedBodies": 5125606,
+      "minimumBodyGapMm": 0,
+      "StartedRecoveries": 23,
+      "CompletedRecoveries": 23,
+      "RecoveryMoveCount": 106,
+      "TrafficReplanCount": 0,
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "success": true,
+      "radius": 200,
+      "range": 450,
+      "speed": 100,
+      "expected": 45,
+      "active": 45,
+      "attacking": 12,
+      "waiting": 33,
+      "admissionTick": 1039,
+      "finalTick": 9822,
+      "deaths": [
+        {
+          "goal": 255,
+          "victim": 4,
+          "recoveryTicks": 599,
+          "attacks": 12
+        },
+        {
+          "goal": 256,
+          "victim": 5,
+          "recoveryTicks": 674,
+          "attacks": 12
+        },
+        {
+          "goal": 258,
+          "victim": 7,
+          "recoveryTicks": 1004,
+          "attacks": 12
+        },
+        {
+          "goal": 298,
+          "victim": 2,
+          "recoveryTicks": 549,
+          "attacks": 12
+        },
+        {
+          "goal": 303,
+          "victim": 9,
+          "recoveryTicks": 934,
+          "attacks": 12
+        },
+        {
+          "goal": 348,
+          "victim": 12,
+          "recoveryTicks": 694,
+          "attacks": 12
+        },
+        {
+          "goal": 392,
+          "victim": 10,
+          "recoveryTicks": 679,
+          "attacks": 12
+        },
+        {
+          "goal": 430,
+          "victim": 1,
+          "recoveryTicks": 534,
+          "attacks": 12
+        },
+        {
+          "goal": 435,
+          "victim": 11,
+          "recoveryTicks": 749,
+          "attacks": 12
+        },
+        {
+          "goal": 475,
+          "victim": 3,
+          "recoveryTicks": 644,
+          "attacks": 12
+        },
+        {
+          "goal": 478,
+          "victim": 6,
+          "recoveryTicks": 599,
+          "attacks": 12
+        },
+        {
+          "goal": 479,
+          "victim": 8,
+          "recoveryTicks": 724,
+          "attacks": 12
+        }
+      ],
+      "checkedPairs": 27235164,
+      "checkedBodies": 1255446,
+      "minimumBodyGapMm": 100,
+      "StartedRecoveries": 17,
+      "CompletedRecoveries": 17,
+      "RecoveryMoveCount": 64,
+      "TrafficReplanCount": 0,
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "success": true,
+      "bigArrived": 3499,
+      "requested": 3499,
+      "allArrived": 4934,
+      "finalTick": 44379,
+      "smallSpeed": 100,
+      "active": 46,
+      "attacking": 20,
+      "waiting": 26,
+      "admissionPlans": [
+        {
+          "tick": 3499,
+          "paths": [
+            {
+              "Id": 2,
+              "GoalCell": 298,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 298,
+                  "arrival": 3499,
+                  "departure": 3519
+                },
+                {
+                  "cell": 297,
+                  "arrival": 3529,
+                  "departure": 3519
+                },
+                {
+                  "cell": 341,
+                  "arrival": 3539,
+                  "departure": 3529
+                },
+                {
+                  "cell": 340,
+                  "arrival": 3549,
+                  "departure": 3539
+                },
+                {
+                  "cell": 384,
+                  "arrival": 3559,
+                  "departure": 3549
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4169,
+                  "departure": 4159
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4179,
+                  "departure": 4169
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4189,
+                  "departure": 4179
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4199,
+                  "departure": 4189
+                }
+              ]
+            },
+            {
+              "Id": 4,
+              "GoalCell": 254,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 254,
+                  "arrival": 3499,
+                  "departure": 3559
+                },
+                {
+                  "cell": 298,
+                  "arrival": 3569,
+                  "departure": 3559
+                },
+                {
+                  "cell": 297,
+                  "arrival": 3579,
+                  "departure": 3569
+                },
+                {
+                  "cell": 341,
+                  "arrival": 3589,
+                  "departure": 3579
+                },
+                {
+                  "cell": 340,
+                  "arrival": 3599,
+                  "departure": 3589
+                },
+                {
+                  "cell": 339,
+                  "arrival": 3609,
+                  "departure": 3599
+                },
+                {
+                  "cell": 383,
+                  "arrival": 3619,
+                  "departure": 3609
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4109,
+                  "departure": 4099
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4119,
+                  "departure": 4109
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4129,
+                  "departure": 4119
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4139,
+                  "departure": 4129
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4149,
+                  "departure": 4139
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4159,
+                  "departure": 4149
+                }
+              ]
+            },
+            {
+              "Id": 6,
+              "GoalCell": 255,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 255,
+                  "arrival": 3499,
+                  "departure": 3619
+                },
+                {
+                  "cell": 254,
+                  "arrival": 3629,
+                  "departure": 3619
+                },
+                {
+                  "cell": 298,
+                  "arrival": 3639,
+                  "departure": 3629
+                },
+                {
+                  "cell": 297,
+                  "arrival": 3649,
+                  "departure": 3639
+                },
+                {
+                  "cell": 341,
+                  "arrival": 3659,
+                  "departure": 3649
+                },
+                {
+                  "cell": 340,
+                  "arrival": 3669,
+                  "departure": 3659
+                },
+                {
+                  "cell": 339,
+                  "arrival": 3679,
+                  "departure": 3669
+                },
+                {
+                  "cell": 338,
+                  "arrival": 3689,
+                  "departure": 3679
+                },
+                {
+                  "cell": 382,
+                  "arrival": 3699,
+                  "departure": 3689
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4029,
+                  "departure": 4019
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4039,
+                  "departure": 4029
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4049,
+                  "departure": 4039
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4059,
+                  "departure": 4049
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4069,
+                  "departure": 4059
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4079,
+                  "departure": 4069
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4089,
+                  "departure": 4079
+                },
+                {
+                  "cell": 255,
+                  "arrival": 4099,
+                  "departure": 4089
+                }
+              ]
+            },
+            {
+              "Id": 39,
+              "GoalCell": 297,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 297,
+                  "arrival": 3499,
+                  "departure": 3499
+                },
+                {
+                  "cell": 341,
+                  "arrival": 3509,
+                  "departure": 3499
+                },
+                {
+                  "cell": 385,
+                  "arrival": 3519,
+                  "departure": 3509
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4209,
+                  "departure": 4199
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4219,
+                  "departure": 4209
+                }
+              ]
+            },
+            {
+              "Id": 45,
+              "GoalCell": 257,
+              "Speed": 100,
+              "cells": [
+                {
+                  "cell": 1058,
+                  "arrival": 3499,
+                  "departure": 3499
+                },
+                {
+                  "cell": 1059,
+                  "arrival": 3504,
+                  "departure": 3499
+                },
+                {
+                  "cell": 1060,
+                  "arrival": 3509,
+                  "departure": 3504
+                },
+                {
+                  "cell": 1016,
+                  "arrival": 3514,
+                  "departure": 3509
+                },
+                {
+                  "cell": 1017,
+                  "arrival": 3519,
+                  "departure": 3514
+                },
+                {
+                  "cell": 973,
+                  "arrival": 3524,
+                  "departure": 3519
+                },
+                {
+                  "cell": 974,
+                  "arrival": 3529,
+                  "departure": 3524
+                },
+                {
+                  "cell": 975,
+                  "arrival": 3534,
+                  "departure": 3529
+                },
+                {
+                  "cell": 976,
+                  "arrival": 3539,
+                  "departure": 3534
+                },
+                {
+                  "cell": 977,
+                  "arrival": 3544,
+                  "departure": 3539
+                },
+                {
+                  "cell": 978,
+                  "arrival": 3549,
+                  "departure": 3544
+                },
+                {
+                  "cell": 979,
+                  "arrival": 3554,
+                  "departure": 3549
+                },
+                {
+                  "cell": 980,
+                  "arrival": 3559,
+                  "departure": 3554
+                },
+                {
+                  "cell": 981,
+                  "arrival": 3564,
+                  "departure": 3559
+                },
+                {
+                  "cell": 982,
+                  "arrival": 3569,
+                  "departure": 3564
+                },
+                {
+                  "cell": 983,
+                  "arrival": 3574,
+                  "departure": 3569
+                },
+                {
+                  "cell": 984,
+                  "arrival": 3579,
+                  "departure": 3574
+                },
+                {
+                  "cell": 985,
+                  "arrival": 3584,
+                  "departure": 3579
+                },
+                {
+                  "cell": 986,
+                  "arrival": 3589,
+                  "departure": 3584
+                },
+                {
+                  "cell": 987,
+                  "arrival": 3594,
+                  "departure": 3589
+                },
+                {
+                  "cell": 988,
+                  "arrival": 3599,
+                  "departure": 3594
+                },
+                {
+                  "cell": 944,
+                  "arrival": 3604,
+                  "departure": 3599
+                },
+                {
+                  "cell": 945,
+                  "arrival": 3609,
+                  "departure": 3604
+                },
+                {
+                  "cell": 946,
+                  "arrival": 3614,
+                  "departure": 3609
+                },
+                {
+                  "cell": 947,
+                  "arrival": 3619,
+                  "departure": 3614
+                },
+                {
+                  "cell": 948,
+                  "arrival": 3624,
+                  "departure": 3619
+                },
+                {
+                  "cell": 949,
+                  "arrival": 3629,
+                  "departure": 3624
+                },
+                {
+                  "cell": 950,
+                  "arrival": 3634,
+                  "departure": 3629
+                },
+                {
+                  "cell": 951,
+                  "arrival": 3639,
+                  "departure": 3634
+                },
+                {
+                  "cell": 952,
+                  "arrival": 3644,
+                  "departure": 3639
+                },
+                {
+                  "cell": 953,
+                  "arrival": 3649,
+                  "departure": 3644
+                },
+                {
+                  "cell": 954,
+                  "arrival": 3654,
+                  "departure": 3649
+                },
+                {
+                  "cell": 955,
+                  "arrival": 3659,
+                  "departure": 3654
+                },
+                {
+                  "cell": 956,
+                  "arrival": 3664,
+                  "departure": 3659
+                },
+                {
+                  "cell": 912,
+                  "arrival": 3669,
+                  "departure": 3664
+                },
+                {
+                  "cell": 868,
+                  "arrival": 3674,
+                  "departure": 3669
+                },
+                {
+                  "cell": 824,
+                  "arrival": 3679,
+                  "departure": 3674
+                },
+                {
+                  "cell": 780,
+                  "arrival": 3684,
+                  "departure": 3679
+                },
+                {
+                  "cell": 736,
+                  "arrival": 3689,
+                  "departure": 3684
+                },
+                {
+                  "cell": 692,
+                  "arrival": 3694,
+                  "departure": 3689
+                },
+                {
+                  "cell": 648,
+                  "arrival": 3699,
+                  "departure": 3694
+                },
+                {
+                  "cell": 647,
+                  "arrival": 3704,
+                  "departure": 3699
+                },
+                {
+                  "cell": 646,
+                  "arrival": 3709,
+                  "departure": 3704
+                },
+                {
+                  "cell": 645,
+                  "arrival": 3714,
+                  "departure": 3709
+                },
+                {
+                  "cell": 644,
+                  "arrival": 3719,
+                  "departure": 3714
+                },
+                {
+                  "cell": 643,
+                  "arrival": 3724,
+                  "departure": 3719
+                },
+                {
+                  "cell": 642,
+                  "arrival": 3729,
+                  "departure": 3724
+                },
+                {
+                  "cell": 641,
+                  "arrival": 3734,
+                  "departure": 3729
+                },
+                {
+                  "cell": 640,
+                  "arrival": 3739,
+                  "departure": 3734
+                },
+                {
+                  "cell": 639,
+                  "arrival": 3744,
+                  "departure": 3739
+                },
+                {
+                  "cell": 638,
+                  "arrival": 3749,
+                  "departure": 3744
+                },
+                {
+                  "cell": 637,
+                  "arrival": 3754,
+                  "departure": 3749
+                },
+                {
+                  "cell": 636,
+                  "arrival": 3759,
+                  "departure": 3754
+                },
+                {
+                  "cell": 635,
+                  "arrival": 3764,
+                  "departure": 3759
+                },
+                {
+                  "cell": 634,
+                  "arrival": 3769,
+                  "departure": 3764
+                },
+                {
+                  "cell": 633,
+                  "arrival": 3774,
+                  "departure": 3769
+                },
+                {
+                  "cell": 632,
+                  "arrival": 3779,
+                  "departure": 3774
+                },
+                {
+                  "cell": 631,
+                  "arrival": 3784,
+                  "departure": 3779
+                },
+                {
+                  "cell": 630,
+                  "arrival": 3789,
+                  "departure": 3784
+                },
+                {
+                  "cell": 629,
+                  "arrival": 3794,
+                  "departure": 3789
+                },
+                {
+                  "cell": 628,
+                  "arrival": 3799,
+                  "departure": 3794
+                },
+                {
+                  "cell": 627,
+                  "arrival": 3804,
+                  "departure": 3799
+                },
+                {
+                  "cell": 626,
+                  "arrival": 3809,
+                  "departure": 3804
+                },
+                {
+                  "cell": 625,
+                  "arrival": 3814,
+                  "departure": 3809
+                },
+                {
+                  "cell": 624,
+                  "arrival": 3819,
+                  "departure": 3814
+                },
+                {
+                  "cell": 623,
+                  "arrival": 3824,
+                  "departure": 3819
+                },
+                {
+                  "cell": 579,
+                  "arrival": 3829,
+                  "departure": 3824
+                },
+                {
+                  "cell": 535,
+                  "arrival": 3834,
+                  "departure": 3829
+                },
+                {
+                  "cell": 491,
+                  "arrival": 3839,
+                  "departure": 3834
+                },
+                {
+                  "cell": 447,
+                  "arrival": 3844,
+                  "departure": 3839
+                },
+                {
+                  "cell": 403,
+                  "arrival": 3849,
+                  "departure": 3844
+                },
+                {
+                  "cell": 359,
+                  "arrival": 3854,
+                  "departure": 3849
+                },
+                {
+                  "cell": 315,
+                  "arrival": 3859,
+                  "departure": 3854
+                },
+                {
+                  "cell": 316,
+                  "arrival": 3864,
+                  "departure": 3859
+                },
+                {
+                  "cell": 317,
+                  "arrival": 3869,
+                  "departure": 3864
+                },
+                {
+                  "cell": 318,
+                  "arrival": 3874,
+                  "departure": 3869
+                },
+                {
+                  "cell": 319,
+                  "arrival": 3879,
+                  "departure": 3874
+                },
+                {
+                  "cell": 320,
+                  "arrival": 3884,
+                  "departure": 3879
+                },
+                {
+                  "cell": 321,
+                  "arrival": 3889,
+                  "departure": 3884
+                },
+                {
+                  "cell": 322,
+                  "arrival": 3894,
+                  "departure": 3889
+                },
+                {
+                  "cell": 323,
+                  "arrival": 3899,
+                  "departure": 3894
+                },
+                {
+                  "cell": 324,
+                  "arrival": 3904,
+                  "departure": 3899
+                },
+                {
+                  "cell": 325,
+                  "arrival": 3909,
+                  "departure": 3904
+                },
+                {
+                  "cell": 326,
+                  "arrival": 3914,
+                  "departure": 3909
+                },
+                {
+                  "cell": 327,
+                  "arrival": 3919,
+                  "departure": 3914
+                },
+                {
+                  "cell": 328,
+                  "arrival": 3924,
+                  "departure": 3919
+                },
+                {
+                  "cell": 329,
+                  "arrival": 3929,
+                  "departure": 3924
+                },
+                {
+                  "cell": 330,
+                  "arrival": 3934,
+                  "departure": 3929
+                },
+                {
+                  "cell": 331,
+                  "arrival": 3939,
+                  "departure": 3934
+                },
+                {
+                  "cell": 332,
+                  "arrival": 3944,
+                  "departure": 3939
+                },
+                {
+                  "cell": 333,
+                  "arrival": 3949,
+                  "departure": 3944
+                },
+                {
+                  "cell": 334,
+                  "arrival": 3954,
+                  "departure": 3949
+                },
+                {
+                  "cell": 335,
+                  "arrival": 3959,
+                  "departure": 3954
+                },
+                {
+                  "cell": 336,
+                  "arrival": 3964,
+                  "departure": 3959
+                },
+                {
+                  "cell": 337,
+                  "arrival": 3969,
+                  "departure": 3964
+                },
+                {
+                  "cell": 338,
+                  "arrival": 3974,
+                  "departure": 3969
+                },
+                {
+                  "cell": 339,
+                  "arrival": 3979,
+                  "departure": 3974
+                },
+                {
+                  "cell": 340,
+                  "arrival": 3984,
+                  "departure": 3979
+                },
+                {
+                  "cell": 341,
+                  "arrival": 3989,
+                  "departure": 3984
+                },
+                {
+                  "cell": 297,
+                  "arrival": 3994,
+                  "departure": 3989
+                },
+                {
+                  "cell": 298,
+                  "arrival": 3999,
+                  "departure": 3994
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4004,
+                  "departure": 3999
+                },
+                {
+                  "cell": 255,
+                  "arrival": 4009,
+                  "departure": 4004
+                },
+                {
+                  "cell": 256,
+                  "arrival": 4014,
+                  "departure": 4009
+                },
+                {
+                  "cell": 257,
+                  "arrival": 4019,
+                  "departure": 4014
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tick": 4219,
+          "paths": [
+            {
+              "Id": 2,
+              "GoalCell": 298,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 298,
+                  "arrival": 4219,
+                  "departure": 4239
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4249,
+                  "departure": 4239
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4259,
+                  "departure": 4249
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4269,
+                  "departure": 4259
+                },
+                {
+                  "cell": 384,
+                  "arrival": 4279,
+                  "departure": 4269
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4884,
+                  "departure": 4874
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4894,
+                  "departure": 4884
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4904,
+                  "departure": 4894
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4914,
+                  "departure": 4904
+                }
+              ]
+            },
+            {
+              "Id": 4,
+              "GoalCell": 254,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 254,
+                  "arrival": 4219,
+                  "departure": 4279
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4289,
+                  "departure": 4279
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4299,
+                  "departure": 4289
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4309,
+                  "departure": 4299
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4319,
+                  "departure": 4309
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4329,
+                  "departure": 4319
+                },
+                {
+                  "cell": 383,
+                  "arrival": 4339,
+                  "departure": 4329
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4824,
+                  "departure": 4814
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4834,
+                  "departure": 4824
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4844,
+                  "departure": 4834
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4854,
+                  "departure": 4844
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4864,
+                  "departure": 4854
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4874,
+                  "departure": 4864
+                }
+              ]
+            },
+            {
+              "Id": 6,
+              "GoalCell": 255,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 255,
+                  "arrival": 4219,
+                  "departure": 4339
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4349,
+                  "departure": 4339
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4359,
+                  "departure": 4349
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4369,
+                  "departure": 4359
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4379,
+                  "departure": 4369
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4389,
+                  "departure": 4379
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4399,
+                  "departure": 4389
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4409,
+                  "departure": 4399
+                },
+                {
+                  "cell": 382,
+                  "arrival": 4419,
+                  "departure": 4409
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4744,
+                  "departure": 4734
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4754,
+                  "departure": 4744
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4764,
+                  "departure": 4754
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4774,
+                  "departure": 4764
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4784,
+                  "departure": 4774
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4794,
+                  "departure": 4784
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4804,
+                  "departure": 4794
+                },
+                {
+                  "cell": 255,
+                  "arrival": 4814,
+                  "departure": 4804
+                }
+              ]
+            },
+            {
+              "Id": 39,
+              "GoalCell": 297,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 297,
+                  "arrival": 4219,
+                  "departure": 4219
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4229,
+                  "departure": 4219
+                },
+                {
+                  "cell": 385,
+                  "arrival": 4239,
+                  "departure": 4229
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4924,
+                  "departure": 4914
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4934,
+                  "departure": 4924
+                }
+              ]
+            },
+            {
+              "Id": 46,
+              "GoalCell": 256,
+              "Speed": 100,
+              "cells": [
+                {
+                  "cell": 1058,
+                  "arrival": 4219,
+                  "departure": 4219
+                },
+                {
+                  "cell": 1059,
+                  "arrival": 4224,
+                  "departure": 4219
+                },
+                {
+                  "cell": 1060,
+                  "arrival": 4229,
+                  "departure": 4224
+                },
+                {
+                  "cell": 1016,
+                  "arrival": 4234,
+                  "departure": 4229
+                },
+                {
+                  "cell": 1017,
+                  "arrival": 4239,
+                  "departure": 4234
+                },
+                {
+                  "cell": 973,
+                  "arrival": 4244,
+                  "departure": 4239
+                },
+                {
+                  "cell": 974,
+                  "arrival": 4249,
+                  "departure": 4244
+                },
+                {
+                  "cell": 975,
+                  "arrival": 4254,
+                  "departure": 4249
+                },
+                {
+                  "cell": 976,
+                  "arrival": 4259,
+                  "departure": 4254
+                },
+                {
+                  "cell": 977,
+                  "arrival": 4264,
+                  "departure": 4259
+                },
+                {
+                  "cell": 978,
+                  "arrival": 4269,
+                  "departure": 4264
+                },
+                {
+                  "cell": 979,
+                  "arrival": 4274,
+                  "departure": 4269
+                },
+                {
+                  "cell": 980,
+                  "arrival": 4279,
+                  "departure": 4274
+                },
+                {
+                  "cell": 981,
+                  "arrival": 4284,
+                  "departure": 4279
+                },
+                {
+                  "cell": 982,
+                  "arrival": 4289,
+                  "departure": 4284
+                },
+                {
+                  "cell": 983,
+                  "arrival": 4294,
+                  "departure": 4289
+                },
+                {
+                  "cell": 984,
+                  "arrival": 4299,
+                  "departure": 4294
+                },
+                {
+                  "cell": 985,
+                  "arrival": 4304,
+                  "departure": 4299
+                },
+                {
+                  "cell": 986,
+                  "arrival": 4309,
+                  "departure": 4304
+                },
+                {
+                  "cell": 987,
+                  "arrival": 4314,
+                  "departure": 4309
+                },
+                {
+                  "cell": 988,
+                  "arrival": 4319,
+                  "departure": 4314
+                },
+                {
+                  "cell": 944,
+                  "arrival": 4324,
+                  "departure": 4319
+                },
+                {
+                  "cell": 945,
+                  "arrival": 4329,
+                  "departure": 4324
+                },
+                {
+                  "cell": 946,
+                  "arrival": 4334,
+                  "departure": 4329
+                },
+                {
+                  "cell": 947,
+                  "arrival": 4339,
+                  "departure": 4334
+                },
+                {
+                  "cell": 948,
+                  "arrival": 4344,
+                  "departure": 4339
+                },
+                {
+                  "cell": 949,
+                  "arrival": 4349,
+                  "departure": 4344
+                },
+                {
+                  "cell": 950,
+                  "arrival": 4354,
+                  "departure": 4349
+                },
+                {
+                  "cell": 951,
+                  "arrival": 4359,
+                  "departure": 4354
+                },
+                {
+                  "cell": 952,
+                  "arrival": 4364,
+                  "departure": 4359
+                },
+                {
+                  "cell": 953,
+                  "arrival": 4369,
+                  "departure": 4364
+                },
+                {
+                  "cell": 954,
+                  "arrival": 4374,
+                  "departure": 4369
+                },
+                {
+                  "cell": 955,
+                  "arrival": 4379,
+                  "departure": 4374
+                },
+                {
+                  "cell": 956,
+                  "arrival": 4384,
+                  "departure": 4379
+                },
+                {
+                  "cell": 912,
+                  "arrival": 4389,
+                  "departure": 4384
+                },
+                {
+                  "cell": 868,
+                  "arrival": 4394,
+                  "departure": 4389
+                },
+                {
+                  "cell": 824,
+                  "arrival": 4399,
+                  "departure": 4394
+                },
+                {
+                  "cell": 780,
+                  "arrival": 4404,
+                  "departure": 4399
+                },
+                {
+                  "cell": 736,
+                  "arrival": 4409,
+                  "departure": 4404
+                },
+                {
+                  "cell": 692,
+                  "arrival": 4414,
+                  "departure": 4409
+                },
+                {
+                  "cell": 648,
+                  "arrival": 4419,
+                  "departure": 4414
+                },
+                {
+                  "cell": 647,
+                  "arrival": 4424,
+                  "departure": 4419
+                },
+                {
+                  "cell": 646,
+                  "arrival": 4429,
+                  "departure": 4424
+                },
+                {
+                  "cell": 645,
+                  "arrival": 4434,
+                  "departure": 4429
+                },
+                {
+                  "cell": 644,
+                  "arrival": 4439,
+                  "departure": 4434
+                },
+                {
+                  "cell": 643,
+                  "arrival": 4444,
+                  "departure": 4439
+                },
+                {
+                  "cell": 642,
+                  "arrival": 4449,
+                  "departure": 4444
+                },
+                {
+                  "cell": 641,
+                  "arrival": 4454,
+                  "departure": 4449
+                },
+                {
+                  "cell": 640,
+                  "arrival": 4459,
+                  "departure": 4454
+                },
+                {
+                  "cell": 639,
+                  "arrival": 4464,
+                  "departure": 4459
+                },
+                {
+                  "cell": 638,
+                  "arrival": 4469,
+                  "departure": 4464
+                },
+                {
+                  "cell": 637,
+                  "arrival": 4474,
+                  "departure": 4469
+                },
+                {
+                  "cell": 636,
+                  "arrival": 4479,
+                  "departure": 4474
+                },
+                {
+                  "cell": 635,
+                  "arrival": 4484,
+                  "departure": 4479
+                },
+                {
+                  "cell": 634,
+                  "arrival": 4489,
+                  "departure": 4484
+                },
+                {
+                  "cell": 633,
+                  "arrival": 4494,
+                  "departure": 4489
+                },
+                {
+                  "cell": 632,
+                  "arrival": 4499,
+                  "departure": 4494
+                },
+                {
+                  "cell": 631,
+                  "arrival": 4504,
+                  "departure": 4499
+                },
+                {
+                  "cell": 630,
+                  "arrival": 4509,
+                  "departure": 4504
+                },
+                {
+                  "cell": 629,
+                  "arrival": 4514,
+                  "departure": 4509
+                },
+                {
+                  "cell": 628,
+                  "arrival": 4519,
+                  "departure": 4514
+                },
+                {
+                  "cell": 627,
+                  "arrival": 4524,
+                  "departure": 4519
+                },
+                {
+                  "cell": 626,
+                  "arrival": 4529,
+                  "departure": 4524
+                },
+                {
+                  "cell": 625,
+                  "arrival": 4534,
+                  "departure": 4529
+                },
+                {
+                  "cell": 624,
+                  "arrival": 4539,
+                  "departure": 4534
+                },
+                {
+                  "cell": 623,
+                  "arrival": 4544,
+                  "departure": 4539
+                },
+                {
+                  "cell": 579,
+                  "arrival": 4549,
+                  "departure": 4544
+                },
+                {
+                  "cell": 535,
+                  "arrival": 4554,
+                  "departure": 4549
+                },
+                {
+                  "cell": 491,
+                  "arrival": 4559,
+                  "departure": 4554
+                },
+                {
+                  "cell": 447,
+                  "arrival": 4564,
+                  "departure": 4559
+                },
+                {
+                  "cell": 403,
+                  "arrival": 4569,
+                  "departure": 4564
+                },
+                {
+                  "cell": 359,
+                  "arrival": 4574,
+                  "departure": 4569
+                },
+                {
+                  "cell": 315,
+                  "arrival": 4579,
+                  "departure": 4574
+                },
+                {
+                  "cell": 316,
+                  "arrival": 4584,
+                  "departure": 4579
+                },
+                {
+                  "cell": 317,
+                  "arrival": 4589,
+                  "departure": 4584
+                },
+                {
+                  "cell": 318,
+                  "arrival": 4594,
+                  "departure": 4589
+                },
+                {
+                  "cell": 319,
+                  "arrival": 4599,
+                  "departure": 4594
+                },
+                {
+                  "cell": 320,
+                  "arrival": 4604,
+                  "departure": 4599
+                },
+                {
+                  "cell": 321,
+                  "arrival": 4609,
+                  "departure": 4604
+                },
+                {
+                  "cell": 322,
+                  "arrival": 4614,
+                  "departure": 4609
+                },
+                {
+                  "cell": 323,
+                  "arrival": 4619,
+                  "departure": 4614
+                },
+                {
+                  "cell": 324,
+                  "arrival": 4624,
+                  "departure": 4619
+                },
+                {
+                  "cell": 325,
+                  "arrival": 4629,
+                  "departure": 4624
+                },
+                {
+                  "cell": 326,
+                  "arrival": 4634,
+                  "departure": 4629
+                },
+                {
+                  "cell": 327,
+                  "arrival": 4639,
+                  "departure": 4634
+                },
+                {
+                  "cell": 328,
+                  "arrival": 4644,
+                  "departure": 4639
+                },
+                {
+                  "cell": 329,
+                  "arrival": 4649,
+                  "departure": 4644
+                },
+                {
+                  "cell": 330,
+                  "arrival": 4654,
+                  "departure": 4649
+                },
+                {
+                  "cell": 331,
+                  "arrival": 4659,
+                  "departure": 4654
+                },
+                {
+                  "cell": 332,
+                  "arrival": 4664,
+                  "departure": 4659
+                },
+                {
+                  "cell": 333,
+                  "arrival": 4669,
+                  "departure": 4664
+                },
+                {
+                  "cell": 334,
+                  "arrival": 4674,
+                  "departure": 4669
+                },
+                {
+                  "cell": 335,
+                  "arrival": 4679,
+                  "departure": 4674
+                },
+                {
+                  "cell": 336,
+                  "arrival": 4684,
+                  "departure": 4679
+                },
+                {
+                  "cell": 337,
+                  "arrival": 4689,
+                  "departure": 4684
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4694,
+                  "departure": 4689
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4699,
+                  "departure": 4694
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4704,
+                  "departure": 4699
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4709,
+                  "departure": 4704
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4714,
+                  "departure": 4709
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4719,
+                  "departure": 4714
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4724,
+                  "departure": 4719
+                },
+                {
+                  "cell": 255,
+                  "arrival": 4729,
+                  "departure": 4724
+                },
+                {
+                  "cell": 256,
+                  "arrival": 4734,
+                  "departure": 4729
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "small": 2,
+      "smallAttacking": 2,
+      "finalGoals": [
+        {
+          "Id": 1,
+          "GoalCell": 430,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 2,
+          "GoalCell": 298,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 3,
+          "GoalCell": 474,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 4,
+          "GoalCell": 254,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 5,
+          "GoalCell": 212,
+          "Status": 2,
+          "Position": {
+            "X": 7250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 6,
+          "GoalCell": 255,
+          "Status": 2,
+          "Position": {
+            "X": 6750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 7,
+          "GoalCell": 479,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 8,
+          "GoalCell": 392,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -3310
+          }
+        },
+        {
+          "Id": 9,
+          "GoalCell": 348,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -3810
+          }
+        },
+        {
+          "Id": 10,
+          "GoalCell": 304,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 11,
+          "GoalCell": 213,
+          "Status": 2,
+          "Position": {
+            "X": 7750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 12,
+          "GoalCell": 475,
+          "Status": 2,
+          "Position": {
+            "X": 6750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 13,
+          "GoalCell": 478,
+          "Status": 2,
+          "Position": {
+            "X": 8250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 14,
+          "GoalCell": 435,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 15,
+          "GoalCell": 436,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 16,
+          "GoalCell": 303,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 17,
+          "GoalCell": 259,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 18,
+          "GoalCell": 258,
+          "Status": 2,
+          "Position": {
+            "X": 8250,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 19,
+          "GoalCell": 293,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 20,
+          "GoalCell": 426,
+          "Status": 1,
+          "Position": {
+            "X": 4250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 21,
+          "GoalCell": 469,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 22,
+          "GoalCell": 249,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 23,
+          "GoalCell": 294,
+          "Status": 1,
+          "Position": {
+            "X": 4250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 24,
+          "GoalCell": 427,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 25,
+          "GoalCell": 295,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 26,
+          "GoalCell": 428,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 27,
+          "GoalCell": 296,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 28,
+          "GoalCell": 472,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 29,
+          "GoalCell": 208,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 30,
+          "GoalCell": 210,
+          "Status": 1,
+          "Position": {
+            "X": 6250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 31,
+          "GoalCell": 251,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 32,
+          "GoalCell": 471,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 33,
+          "GoalCell": 470,
+          "Status": 1,
+          "Position": {
+            "X": 4250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 34,
+          "GoalCell": 480,
+          "Status": 1,
+          "Position": {
+            "X": 9250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 35,
+          "GoalCell": 252,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 36,
+          "GoalCell": 211,
+          "Status": 1,
+          "Position": {
+            "X": 6750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 37,
+          "GoalCell": 209,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 38,
+          "GoalCell": 253,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 39,
+          "GoalCell": 297,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 40,
+          "GoalCell": 215,
+          "Status": 1,
+          "Position": {
+            "X": 8750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 41,
+          "GoalCell": 425,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 42,
+          "GoalCell": 214,
+          "Status": 1,
+          "Position": {
+            "X": 8250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 43,
+          "GoalCell": 473,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 44,
+          "GoalCell": 429,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 45,
+          "GoalCell": 257,
+          "Status": 2,
+          "Position": {
+            "X": 7750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 46,
+          "GoalCell": 256,
+          "Status": 2,
+          "Position": {
+            "X": 7250,
+            "Y": -4810
+          }
+        }
+      ],
+      "recovery": [
+        {
+          "goal": 212,
+          "victim": 5,
+          "wasSmall": false,
+          "replacement": 47,
+          "recoveryTicks": 3799
+        },
+        {
+          "goal": 213,
+          "victim": 11,
+          "wasSmall": false,
+          "replacement": 48,
+          "recoveryTicks": 3009
+        },
+        {
+          "goal": 254,
+          "victim": 4,
+          "wasSmall": false,
+          "replacement": 49,
+          "recoveryTicks": 1209
+        },
+        {
+          "goal": 255,
+          "victim": 6,
+          "wasSmall": false,
+          "replacement": 50,
+          "recoveryTicks": 1359
+        },
+        {
+          "goal": 256,
+          "victim": 46,
+          "wasSmall": true,
+          "replacement": 51,
+          "recoveryTicks": 734
+        },
+        {
+          "goal": 257,
+          "victim": 45,
+          "wasSmall": true,
+          "replacement": 52,
+          "recoveryTicks": 2439
+        },
+        {
+          "goal": 258,
+          "victim": 18,
+          "wasSmall": false,
+          "replacement": 53,
+          "recoveryTicks": 3109
+        },
+        {
+          "goal": 259,
+          "victim": 17,
+          "wasSmall": false,
+          "replacement": 54,
+          "recoveryTicks": 2939
+        },
+        {
+          "goal": 298,
+          "victim": 2,
+          "wasSmall": false,
+          "replacement": 55,
+          "recoveryTicks": 1099
+        },
+        {
+          "goal": 303,
+          "victim": 16,
+          "wasSmall": false,
+          "replacement": 56,
+          "recoveryTicks": 2789
+        },
+        {
+          "goal": 304,
+          "victim": 10,
+          "wasSmall": false,
+          "replacement": 57,
+          "recoveryTicks": 1159
+        },
+        {
+          "goal": 348,
+          "victim": 9,
+          "wasSmall": false,
+          "replacement": 58,
+          "recoveryTicks": 2429
+        },
+        {
+          "goal": 392,
+          "victim": 8,
+          "wasSmall": false,
+          "replacement": 59,
+          "recoveryTicks": 2559
+        },
+        {
+          "goal": 430,
+          "victim": 1,
+          "wasSmall": false,
+          "replacement": 60,
+          "recoveryTicks": 1109
+        },
+        {
+          "goal": 435,
+          "victim": 14,
+          "wasSmall": false,
+          "replacement": 61,
+          "recoveryTicks": 2779
+        },
+        {
+          "goal": 436,
+          "victim": 15,
+          "wasSmall": false,
+          "replacement": 62,
+          "recoveryTicks": 1389
+        },
+        {
+          "goal": 474,
+          "victim": 3,
+          "wasSmall": false,
+          "replacement": 63,
+          "recoveryTicks": 1419
+        },
+        {
+          "goal": 475,
+          "victim": 12,
+          "wasSmall": false,
+          "replacement": 64,
+          "recoveryTicks": 1269
+        },
+        {
+          "goal": 478,
+          "victim": 13,
+          "wasSmall": false,
+          "replacement": 65,
+          "recoveryTicks": 1359
+        },
+        {
+          "goal": 479,
+          "victim": 7,
+          "wasSmall": false,
+          "replacement": 66,
+          "recoveryTicks": 1089
+        }
+      ],
+      "checkedPairs": 131175149,
+      "checkedBodies": 5938622,
+      "StartedRecoveries": 27,
+      "CompletedRecoveries": 27,
+      "AdmissionGateRecoveries": 18,
+      "AdmissionGateYieldedActors": 61,
+      "AdmissionGateExpandedCells": 213443,
+      "AdmissionGateBudgetFailures": 0
+    },
+    {
+      "success": true,
+      "bigArrived": 3499,
+      "requested": 4000,
+      "allArrived": 5228,
+      "finalTick": 44570,
+      "smallSpeed": 165,
+      "active": 46,
+      "attacking": 20,
+      "waiting": 26,
+      "admissionPlans": [
+        {
+          "tick": 4000,
+          "paths": [
+            {
+              "Id": 2,
+              "GoalCell": 298,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 298,
+                  "arrival": 4000,
+                  "departure": 4020
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4030,
+                  "departure": 4020
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4040,
+                  "departure": 4030
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4050,
+                  "departure": 4040
+                },
+                {
+                  "cell": 384,
+                  "arrival": 4060,
+                  "departure": 4050
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4566,
+                  "departure": 4556
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4576,
+                  "departure": 4566
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4586,
+                  "departure": 4576
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4596,
+                  "departure": 4586
+                }
+              ]
+            },
+            {
+              "Id": 4,
+              "GoalCell": 254,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 254,
+                  "arrival": 4000,
+                  "departure": 4060
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4070,
+                  "departure": 4060
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4080,
+                  "departure": 4070
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4090,
+                  "departure": 4080
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4100,
+                  "departure": 4090
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4110,
+                  "departure": 4100
+                },
+                {
+                  "cell": 383,
+                  "arrival": 4120,
+                  "departure": 4110
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4506,
+                  "departure": 4496
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4516,
+                  "departure": 4506
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4526,
+                  "departure": 4516
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4536,
+                  "departure": 4526
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4546,
+                  "departure": 4536
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4556,
+                  "departure": 4546
+                }
+              ]
+            },
+            {
+              "Id": 6,
+              "GoalCell": 255,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 255,
+                  "arrival": 4000,
+                  "departure": 4120
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4130,
+                  "departure": 4120
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4140,
+                  "departure": 4130
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4150,
+                  "departure": 4140
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4160,
+                  "departure": 4150
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4170,
+                  "departure": 4160
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4180,
+                  "departure": 4170
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4190,
+                  "departure": 4180
+                },
+                {
+                  "cell": 382,
+                  "arrival": 4200,
+                  "departure": 4190
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4426,
+                  "departure": 4416
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4436,
+                  "departure": 4426
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4446,
+                  "departure": 4436
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4456,
+                  "departure": 4446
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4466,
+                  "departure": 4456
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4476,
+                  "departure": 4466
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4486,
+                  "departure": 4476
+                },
+                {
+                  "cell": 255,
+                  "arrival": 4496,
+                  "departure": 4486
+                }
+              ]
+            },
+            {
+              "Id": 39,
+              "GoalCell": 297,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 297,
+                  "arrival": 4000,
+                  "departure": 4000
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4010,
+                  "departure": 4000
+                },
+                {
+                  "cell": 385,
+                  "arrival": 4020,
+                  "departure": 4010
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4606,
+                  "departure": 4596
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4616,
+                  "departure": 4606
+                }
+              ]
+            },
+            {
+              "Id": 45,
+              "GoalCell": 257,
+              "Speed": 165,
+              "cells": [
+                {
+                  "cell": 1058,
+                  "arrival": 4000,
+                  "departure": 4000
+                },
+                {
+                  "cell": 1059,
+                  "arrival": 4004,
+                  "departure": 4000
+                },
+                {
+                  "cell": 1060,
+                  "arrival": 4008,
+                  "departure": 4004
+                },
+                {
+                  "cell": 1016,
+                  "arrival": 4012,
+                  "departure": 4008
+                },
+                {
+                  "cell": 1017,
+                  "arrival": 4016,
+                  "departure": 4012
+                },
+                {
+                  "cell": 973,
+                  "arrival": 4020,
+                  "departure": 4016
+                },
+                {
+                  "cell": 974,
+                  "arrival": 4024,
+                  "departure": 4020
+                },
+                {
+                  "cell": 975,
+                  "arrival": 4028,
+                  "departure": 4024
+                },
+                {
+                  "cell": 976,
+                  "arrival": 4032,
+                  "departure": 4028
+                },
+                {
+                  "cell": 977,
+                  "arrival": 4036,
+                  "departure": 4032
+                },
+                {
+                  "cell": 978,
+                  "arrival": 4040,
+                  "departure": 4036
+                },
+                {
+                  "cell": 979,
+                  "arrival": 4044,
+                  "departure": 4040
+                },
+                {
+                  "cell": 980,
+                  "arrival": 4048,
+                  "departure": 4044
+                },
+                {
+                  "cell": 981,
+                  "arrival": 4052,
+                  "departure": 4048
+                },
+                {
+                  "cell": 982,
+                  "arrival": 4056,
+                  "departure": 4052
+                },
+                {
+                  "cell": 983,
+                  "arrival": 4060,
+                  "departure": 4056
+                },
+                {
+                  "cell": 984,
+                  "arrival": 4064,
+                  "departure": 4060
+                },
+                {
+                  "cell": 985,
+                  "arrival": 4068,
+                  "departure": 4064
+                },
+                {
+                  "cell": 986,
+                  "arrival": 4072,
+                  "departure": 4068
+                },
+                {
+                  "cell": 987,
+                  "arrival": 4076,
+                  "departure": 4072
+                },
+                {
+                  "cell": 988,
+                  "arrival": 4080,
+                  "departure": 4076
+                },
+                {
+                  "cell": 944,
+                  "arrival": 4084,
+                  "departure": 4080
+                },
+                {
+                  "cell": 945,
+                  "arrival": 4088,
+                  "departure": 4084
+                },
+                {
+                  "cell": 946,
+                  "arrival": 4092,
+                  "departure": 4088
+                },
+                {
+                  "cell": 947,
+                  "arrival": 4096,
+                  "departure": 4092
+                },
+                {
+                  "cell": 948,
+                  "arrival": 4100,
+                  "departure": 4096
+                },
+                {
+                  "cell": 949,
+                  "arrival": 4104,
+                  "departure": 4100
+                },
+                {
+                  "cell": 950,
+                  "arrival": 4108,
+                  "departure": 4104
+                },
+                {
+                  "cell": 951,
+                  "arrival": 4112,
+                  "departure": 4108
+                },
+                {
+                  "cell": 952,
+                  "arrival": 4116,
+                  "departure": 4112
+                },
+                {
+                  "cell": 953,
+                  "arrival": 4120,
+                  "departure": 4116
+                },
+                {
+                  "cell": 954,
+                  "arrival": 4124,
+                  "departure": 4120
+                },
+                {
+                  "cell": 955,
+                  "arrival": 4128,
+                  "departure": 4124
+                },
+                {
+                  "cell": 956,
+                  "arrival": 4132,
+                  "departure": 4128
+                },
+                {
+                  "cell": 912,
+                  "arrival": 4136,
+                  "departure": 4132
+                },
+                {
+                  "cell": 868,
+                  "arrival": 4140,
+                  "departure": 4136
+                },
+                {
+                  "cell": 824,
+                  "arrival": 4144,
+                  "departure": 4140
+                },
+                {
+                  "cell": 780,
+                  "arrival": 4148,
+                  "departure": 4144
+                },
+                {
+                  "cell": 736,
+                  "arrival": 4152,
+                  "departure": 4148
+                },
+                {
+                  "cell": 692,
+                  "arrival": 4156,
+                  "departure": 4152
+                },
+                {
+                  "cell": 648,
+                  "arrival": 4160,
+                  "departure": 4156
+                },
+                {
+                  "cell": 647,
+                  "arrival": 4164,
+                  "departure": 4160
+                },
+                {
+                  "cell": 646,
+                  "arrival": 4168,
+                  "departure": 4164
+                },
+                {
+                  "cell": 645,
+                  "arrival": 4172,
+                  "departure": 4168
+                },
+                {
+                  "cell": 644,
+                  "arrival": 4176,
+                  "departure": 4172
+                },
+                {
+                  "cell": 643,
+                  "arrival": 4180,
+                  "departure": 4176
+                },
+                {
+                  "cell": 642,
+                  "arrival": 4184,
+                  "departure": 4180
+                },
+                {
+                  "cell": 641,
+                  "arrival": 4188,
+                  "departure": 4184
+                },
+                {
+                  "cell": 640,
+                  "arrival": 4192,
+                  "departure": 4188
+                },
+                {
+                  "cell": 639,
+                  "arrival": 4196,
+                  "departure": 4192
+                },
+                {
+                  "cell": 638,
+                  "arrival": 4200,
+                  "departure": 4196
+                },
+                {
+                  "cell": 637,
+                  "arrival": 4204,
+                  "departure": 4200
+                },
+                {
+                  "cell": 636,
+                  "arrival": 4208,
+                  "departure": 4204
+                },
+                {
+                  "cell": 635,
+                  "arrival": 4212,
+                  "departure": 4208
+                },
+                {
+                  "cell": 634,
+                  "arrival": 4216,
+                  "departure": 4212
+                },
+                {
+                  "cell": 633,
+                  "arrival": 4220,
+                  "departure": 4216
+                },
+                {
+                  "cell": 632,
+                  "arrival": 4224,
+                  "departure": 4220
+                },
+                {
+                  "cell": 631,
+                  "arrival": 4228,
+                  "departure": 4224
+                },
+                {
+                  "cell": 630,
+                  "arrival": 4232,
+                  "departure": 4228
+                },
+                {
+                  "cell": 629,
+                  "arrival": 4236,
+                  "departure": 4232
+                },
+                {
+                  "cell": 628,
+                  "arrival": 4240,
+                  "departure": 4236
+                },
+                {
+                  "cell": 627,
+                  "arrival": 4244,
+                  "departure": 4240
+                },
+                {
+                  "cell": 626,
+                  "arrival": 4248,
+                  "departure": 4244
+                },
+                {
+                  "cell": 625,
+                  "arrival": 4252,
+                  "departure": 4248
+                },
+                {
+                  "cell": 624,
+                  "arrival": 4256,
+                  "departure": 4252
+                },
+                {
+                  "cell": 623,
+                  "arrival": 4260,
+                  "departure": 4256
+                },
+                {
+                  "cell": 579,
+                  "arrival": 4264,
+                  "departure": 4260
+                },
+                {
+                  "cell": 535,
+                  "arrival": 4268,
+                  "departure": 4264
+                },
+                {
+                  "cell": 491,
+                  "arrival": 4272,
+                  "departure": 4268
+                },
+                {
+                  "cell": 447,
+                  "arrival": 4276,
+                  "departure": 4272
+                },
+                {
+                  "cell": 403,
+                  "arrival": 4280,
+                  "departure": 4276
+                },
+                {
+                  "cell": 359,
+                  "arrival": 4284,
+                  "departure": 4280
+                },
+                {
+                  "cell": 315,
+                  "arrival": 4288,
+                  "departure": 4284
+                },
+                {
+                  "cell": 316,
+                  "arrival": 4292,
+                  "departure": 4288
+                },
+                {
+                  "cell": 317,
+                  "arrival": 4296,
+                  "departure": 4292
+                },
+                {
+                  "cell": 318,
+                  "arrival": 4300,
+                  "departure": 4296
+                },
+                {
+                  "cell": 319,
+                  "arrival": 4304,
+                  "departure": 4300
+                },
+                {
+                  "cell": 320,
+                  "arrival": 4308,
+                  "departure": 4304
+                },
+                {
+                  "cell": 321,
+                  "arrival": 4312,
+                  "departure": 4308
+                },
+                {
+                  "cell": 322,
+                  "arrival": 4316,
+                  "departure": 4312
+                },
+                {
+                  "cell": 323,
+                  "arrival": 4320,
+                  "departure": 4316
+                },
+                {
+                  "cell": 324,
+                  "arrival": 4324,
+                  "departure": 4320
+                },
+                {
+                  "cell": 325,
+                  "arrival": 4328,
+                  "departure": 4324
+                },
+                {
+                  "cell": 326,
+                  "arrival": 4332,
+                  "departure": 4328
+                },
+                {
+                  "cell": 327,
+                  "arrival": 4336,
+                  "departure": 4332
+                },
+                {
+                  "cell": 328,
+                  "arrival": 4340,
+                  "departure": 4336
+                },
+                {
+                  "cell": 329,
+                  "arrival": 4344,
+                  "departure": 4340
+                },
+                {
+                  "cell": 330,
+                  "arrival": 4348,
+                  "departure": 4344
+                },
+                {
+                  "cell": 331,
+                  "arrival": 4352,
+                  "departure": 4348
+                },
+                {
+                  "cell": 332,
+                  "arrival": 4356,
+                  "departure": 4352
+                },
+                {
+                  "cell": 333,
+                  "arrival": 4360,
+                  "departure": 4356
+                },
+                {
+                  "cell": 334,
+                  "arrival": 4364,
+                  "departure": 4360
+                },
+                {
+                  "cell": 335,
+                  "arrival": 4368,
+                  "departure": 4364
+                },
+                {
+                  "cell": 336,
+                  "arrival": 4372,
+                  "departure": 4368
+                },
+                {
+                  "cell": 337,
+                  "arrival": 4376,
+                  "departure": 4372
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4380,
+                  "departure": 4376
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4384,
+                  "departure": 4380
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4388,
+                  "departure": 4384
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4392,
+                  "departure": 4388
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4396,
+                  "departure": 4392
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4400,
+                  "departure": 4396
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4404,
+                  "departure": 4400
+                },
+                {
+                  "cell": 255,
+                  "arrival": 4408,
+                  "departure": 4404
+                },
+                {
+                  "cell": 256,
+                  "arrival": 4412,
+                  "departure": 4408
+                },
+                {
+                  "cell": 257,
+                  "arrival": 4416,
+                  "departure": 4412
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tick": 4616,
+          "paths": [
+            {
+              "Id": 2,
+              "GoalCell": 298,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 298,
+                  "arrival": 4616,
+                  "departure": 4636
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4646,
+                  "departure": 4636
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4656,
+                  "departure": 4646
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4666,
+                  "departure": 4656
+                },
+                {
+                  "cell": 384,
+                  "arrival": 4676,
+                  "departure": 4666
+                },
+                {
+                  "cell": 340,
+                  "arrival": 5178,
+                  "departure": 5168
+                },
+                {
+                  "cell": 341,
+                  "arrival": 5188,
+                  "departure": 5178
+                },
+                {
+                  "cell": 297,
+                  "arrival": 5198,
+                  "departure": 5188
+                },
+                {
+                  "cell": 298,
+                  "arrival": 5208,
+                  "departure": 5198
+                }
+              ]
+            },
+            {
+              "Id": 4,
+              "GoalCell": 254,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 254,
+                  "arrival": 4616,
+                  "departure": 4676
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4686,
+                  "departure": 4676
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4696,
+                  "departure": 4686
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4706,
+                  "departure": 4696
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4716,
+                  "departure": 4706
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4726,
+                  "departure": 4716
+                },
+                {
+                  "cell": 383,
+                  "arrival": 4736,
+                  "departure": 4726
+                },
+                {
+                  "cell": 339,
+                  "arrival": 5118,
+                  "departure": 5108
+                },
+                {
+                  "cell": 340,
+                  "arrival": 5128,
+                  "departure": 5118
+                },
+                {
+                  "cell": 341,
+                  "arrival": 5138,
+                  "departure": 5128
+                },
+                {
+                  "cell": 297,
+                  "arrival": 5148,
+                  "departure": 5138
+                },
+                {
+                  "cell": 298,
+                  "arrival": 5158,
+                  "departure": 5148
+                },
+                {
+                  "cell": 254,
+                  "arrival": 5168,
+                  "departure": 5158
+                }
+              ]
+            },
+            {
+              "Id": 6,
+              "GoalCell": 255,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 255,
+                  "arrival": 4616,
+                  "departure": 4736
+                },
+                {
+                  "cell": 254,
+                  "arrival": 4746,
+                  "departure": 4736
+                },
+                {
+                  "cell": 298,
+                  "arrival": 4756,
+                  "departure": 4746
+                },
+                {
+                  "cell": 297,
+                  "arrival": 4766,
+                  "departure": 4756
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4776,
+                  "departure": 4766
+                },
+                {
+                  "cell": 340,
+                  "arrival": 4786,
+                  "departure": 4776
+                },
+                {
+                  "cell": 339,
+                  "arrival": 4796,
+                  "departure": 4786
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4806,
+                  "departure": 4796
+                },
+                {
+                  "cell": 382,
+                  "arrival": 4816,
+                  "departure": 4806
+                },
+                {
+                  "cell": 338,
+                  "arrival": 5038,
+                  "departure": 5028
+                },
+                {
+                  "cell": 339,
+                  "arrival": 5048,
+                  "departure": 5038
+                },
+                {
+                  "cell": 340,
+                  "arrival": 5058,
+                  "departure": 5048
+                },
+                {
+                  "cell": 341,
+                  "arrival": 5068,
+                  "departure": 5058
+                },
+                {
+                  "cell": 297,
+                  "arrival": 5078,
+                  "departure": 5068
+                },
+                {
+                  "cell": 298,
+                  "arrival": 5088,
+                  "departure": 5078
+                },
+                {
+                  "cell": 254,
+                  "arrival": 5098,
+                  "departure": 5088
+                },
+                {
+                  "cell": 255,
+                  "arrival": 5108,
+                  "departure": 5098
+                }
+              ]
+            },
+            {
+              "Id": 39,
+              "GoalCell": 297,
+              "Speed": 55,
+              "cells": [
+                {
+                  "cell": 297,
+                  "arrival": 4616,
+                  "departure": 4616
+                },
+                {
+                  "cell": 341,
+                  "arrival": 4626,
+                  "departure": 4616
+                },
+                {
+                  "cell": 385,
+                  "arrival": 4636,
+                  "departure": 4626
+                },
+                {
+                  "cell": 341,
+                  "arrival": 5218,
+                  "departure": 5208
+                },
+                {
+                  "cell": 297,
+                  "arrival": 5228,
+                  "departure": 5218
+                }
+              ]
+            },
+            {
+              "Id": 46,
+              "GoalCell": 256,
+              "Speed": 165,
+              "cells": [
+                {
+                  "cell": 1058,
+                  "arrival": 4616,
+                  "departure": 4616
+                },
+                {
+                  "cell": 1059,
+                  "arrival": 4620,
+                  "departure": 4616
+                },
+                {
+                  "cell": 1060,
+                  "arrival": 4624,
+                  "departure": 4620
+                },
+                {
+                  "cell": 1016,
+                  "arrival": 4628,
+                  "departure": 4624
+                },
+                {
+                  "cell": 1017,
+                  "arrival": 4632,
+                  "departure": 4628
+                },
+                {
+                  "cell": 973,
+                  "arrival": 4636,
+                  "departure": 4632
+                },
+                {
+                  "cell": 974,
+                  "arrival": 4640,
+                  "departure": 4636
+                },
+                {
+                  "cell": 975,
+                  "arrival": 4644,
+                  "departure": 4640
+                },
+                {
+                  "cell": 976,
+                  "arrival": 4648,
+                  "departure": 4644
+                },
+                {
+                  "cell": 977,
+                  "arrival": 4652,
+                  "departure": 4648
+                },
+                {
+                  "cell": 978,
+                  "arrival": 4656,
+                  "departure": 4652
+                },
+                {
+                  "cell": 979,
+                  "arrival": 4660,
+                  "departure": 4656
+                },
+                {
+                  "cell": 980,
+                  "arrival": 4664,
+                  "departure": 4660
+                },
+                {
+                  "cell": 981,
+                  "arrival": 4668,
+                  "departure": 4664
+                },
+                {
+                  "cell": 982,
+                  "arrival": 4672,
+                  "departure": 4668
+                },
+                {
+                  "cell": 983,
+                  "arrival": 4676,
+                  "departure": 4672
+                },
+                {
+                  "cell": 984,
+                  "arrival": 4680,
+                  "departure": 4676
+                },
+                {
+                  "cell": 985,
+                  "arrival": 4684,
+                  "departure": 4680
+                },
+                {
+                  "cell": 986,
+                  "arrival": 4688,
+                  "departure": 4684
+                },
+                {
+                  "cell": 987,
+                  "arrival": 4692,
+                  "departure": 4688
+                },
+                {
+                  "cell": 988,
+                  "arrival": 4696,
+                  "departure": 4692
+                },
+                {
+                  "cell": 944,
+                  "arrival": 4700,
+                  "departure": 4696
+                },
+                {
+                  "cell": 945,
+                  "arrival": 4704,
+                  "departure": 4700
+                },
+                {
+                  "cell": 946,
+                  "arrival": 4708,
+                  "departure": 4704
+                },
+                {
+                  "cell": 947,
+                  "arrival": 4712,
+                  "departure": 4708
+                },
+                {
+                  "cell": 948,
+                  "arrival": 4716,
+                  "departure": 4712
+                },
+                {
+                  "cell": 949,
+                  "arrival": 4720,
+                  "departure": 4716
+                },
+                {
+                  "cell": 950,
+                  "arrival": 4724,
+                  "departure": 4720
+                },
+                {
+                  "cell": 951,
+                  "arrival": 4728,
+                  "departure": 4724
+                },
+                {
+                  "cell": 952,
+                  "arrival": 4732,
+                  "departure": 4728
+                },
+                {
+                  "cell": 953,
+                  "arrival": 4736,
+                  "departure": 4732
+                },
+                {
+                  "cell": 954,
+                  "arrival": 4740,
+                  "departure": 4736
+                },
+                {
+                  "cell": 955,
+                  "arrival": 4744,
+                  "departure": 4740
+                },
+                {
+                  "cell": 956,
+                  "arrival": 4748,
+                  "departure": 4744
+                },
+                {
+                  "cell": 912,
+                  "arrival": 4752,
+                  "departure": 4748
+                },
+                {
+                  "cell": 868,
+                  "arrival": 4756,
+                  "departure": 4752
+                },
+                {
+                  "cell": 824,
+                  "arrival": 4760,
+                  "departure": 4756
+                },
+                {
+                  "cell": 780,
+                  "arrival": 4764,
+                  "departure": 4760
+                },
+                {
+                  "cell": 736,
+                  "arrival": 4768,
+                  "departure": 4764
+                },
+                {
+                  "cell": 692,
+                  "arrival": 4772,
+                  "departure": 4768
+                },
+                {
+                  "cell": 648,
+                  "arrival": 4776,
+                  "departure": 4772
+                },
+                {
+                  "cell": 647,
+                  "arrival": 4780,
+                  "departure": 4776
+                },
+                {
+                  "cell": 646,
+                  "arrival": 4784,
+                  "departure": 4780
+                },
+                {
+                  "cell": 645,
+                  "arrival": 4788,
+                  "departure": 4784
+                },
+                {
+                  "cell": 644,
+                  "arrival": 4792,
+                  "departure": 4788
+                },
+                {
+                  "cell": 643,
+                  "arrival": 4796,
+                  "departure": 4792
+                },
+                {
+                  "cell": 642,
+                  "arrival": 4800,
+                  "departure": 4796
+                },
+                {
+                  "cell": 641,
+                  "arrival": 4804,
+                  "departure": 4800
+                },
+                {
+                  "cell": 640,
+                  "arrival": 4808,
+                  "departure": 4804
+                },
+                {
+                  "cell": 639,
+                  "arrival": 4812,
+                  "departure": 4808
+                },
+                {
+                  "cell": 638,
+                  "arrival": 4816,
+                  "departure": 4812
+                },
+                {
+                  "cell": 637,
+                  "arrival": 4820,
+                  "departure": 4816
+                },
+                {
+                  "cell": 636,
+                  "arrival": 4824,
+                  "departure": 4820
+                },
+                {
+                  "cell": 635,
+                  "arrival": 4828,
+                  "departure": 4824
+                },
+                {
+                  "cell": 634,
+                  "arrival": 4832,
+                  "departure": 4828
+                },
+                {
+                  "cell": 633,
+                  "arrival": 4836,
+                  "departure": 4832
+                },
+                {
+                  "cell": 632,
+                  "arrival": 4840,
+                  "departure": 4836
+                },
+                {
+                  "cell": 631,
+                  "arrival": 4844,
+                  "departure": 4840
+                },
+                {
+                  "cell": 630,
+                  "arrival": 4848,
+                  "departure": 4844
+                },
+                {
+                  "cell": 629,
+                  "arrival": 4852,
+                  "departure": 4848
+                },
+                {
+                  "cell": 628,
+                  "arrival": 4856,
+                  "departure": 4852
+                },
+                {
+                  "cell": 627,
+                  "arrival": 4860,
+                  "departure": 4856
+                },
+                {
+                  "cell": 626,
+                  "arrival": 4864,
+                  "departure": 4860
+                },
+                {
+                  "cell": 625,
+                  "arrival": 4868,
+                  "departure": 4864
+                },
+                {
+                  "cell": 624,
+                  "arrival": 4872,
+                  "departure": 4868
+                },
+                {
+                  "cell": 623,
+                  "arrival": 4876,
+                  "departure": 4872
+                },
+                {
+                  "cell": 579,
+                  "arrival": 4880,
+                  "departure": 4876
+                },
+                {
+                  "cell": 535,
+                  "arrival": 4884,
+                  "departure": 4880
+                },
+                {
+                  "cell": 491,
+                  "arrival": 4888,
+                  "departure": 4884
+                },
+                {
+                  "cell": 447,
+                  "arrival": 4892,
+                  "departure": 4888
+                },
+                {
+                  "cell": 403,
+                  "arrival": 4896,
+                  "departure": 4892
+                },
+                {
+                  "cell": 359,
+                  "arrival": 4900,
+                  "departure": 4896
+                },
+                {
+                  "cell": 315,
+                  "arrival": 4904,
+                  "departure": 4900
+                },
+                {
+                  "cell": 316,
+                  "arrival": 4908,
+                  "departure": 4904
+                },
+                {
+                  "cell": 317,
+                  "arrival": 4912,
+                  "departure": 4908
+                },
+                {
+                  "cell": 318,
+                  "arrival": 4916,
+                  "departure": 4912
+                },
+                {
+                  "cell": 319,
+                  "arrival": 4920,
+                  "departure": 4916
+                },
+                {
+                  "cell": 320,
+                  "arrival": 4924,
+                  "departure": 4920
+                },
+                {
+                  "cell": 321,
+                  "arrival": 4928,
+                  "departure": 4924
+                },
+                {
+                  "cell": 322,
+                  "arrival": 4932,
+                  "departure": 4928
+                },
+                {
+                  "cell": 323,
+                  "arrival": 4936,
+                  "departure": 4932
+                },
+                {
+                  "cell": 324,
+                  "arrival": 4940,
+                  "departure": 4936
+                },
+                {
+                  "cell": 325,
+                  "arrival": 4944,
+                  "departure": 4940
+                },
+                {
+                  "cell": 326,
+                  "arrival": 4948,
+                  "departure": 4944
+                },
+                {
+                  "cell": 327,
+                  "arrival": 4952,
+                  "departure": 4948
+                },
+                {
+                  "cell": 328,
+                  "arrival": 4956,
+                  "departure": 4952
+                },
+                {
+                  "cell": 329,
+                  "arrival": 4960,
+                  "departure": 4956
+                },
+                {
+                  "cell": 330,
+                  "arrival": 4964,
+                  "departure": 4960
+                },
+                {
+                  "cell": 331,
+                  "arrival": 4968,
+                  "departure": 4964
+                },
+                {
+                  "cell": 332,
+                  "arrival": 4972,
+                  "departure": 4968
+                },
+                {
+                  "cell": 333,
+                  "arrival": 4976,
+                  "departure": 4972
+                },
+                {
+                  "cell": 334,
+                  "arrival": 4980,
+                  "departure": 4976
+                },
+                {
+                  "cell": 335,
+                  "arrival": 4984,
+                  "departure": 4980
+                },
+                {
+                  "cell": 336,
+                  "arrival": 4988,
+                  "departure": 4984
+                },
+                {
+                  "cell": 337,
+                  "arrival": 4992,
+                  "departure": 4988
+                },
+                {
+                  "cell": 338,
+                  "arrival": 4996,
+                  "departure": 4992
+                },
+                {
+                  "cell": 339,
+                  "arrival": 5000,
+                  "departure": 4996
+                },
+                {
+                  "cell": 340,
+                  "arrival": 5004,
+                  "departure": 5000
+                },
+                {
+                  "cell": 341,
+                  "arrival": 5008,
+                  "departure": 5004
+                },
+                {
+                  "cell": 297,
+                  "arrival": 5012,
+                  "departure": 5008
+                },
+                {
+                  "cell": 298,
+                  "arrival": 5016,
+                  "departure": 5012
+                },
+                {
+                  "cell": 254,
+                  "arrival": 5020,
+                  "departure": 5016
+                },
+                {
+                  "cell": 255,
+                  "arrival": 5024,
+                  "departure": 5020
+                },
+                {
+                  "cell": 256,
+                  "arrival": 5028,
+                  "departure": 5024
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "small": 2,
+      "smallAttacking": 2,
+      "finalGoals": [
+        {
+          "Id": 1,
+          "GoalCell": 430,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 2,
+          "GoalCell": 298,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 3,
+          "GoalCell": 474,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 4,
+          "GoalCell": 254,
+          "Status": 2,
+          "Position": {
+            "X": 6250,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 5,
+          "GoalCell": 212,
+          "Status": 2,
+          "Position": {
+            "X": 7250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 6,
+          "GoalCell": 255,
+          "Status": 2,
+          "Position": {
+            "X": 6750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 7,
+          "GoalCell": 479,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 8,
+          "GoalCell": 392,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -3310
+          }
+        },
+        {
+          "Id": 9,
+          "GoalCell": 348,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -3810
+          }
+        },
+        {
+          "Id": 10,
+          "GoalCell": 304,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 11,
+          "GoalCell": 213,
+          "Status": 2,
+          "Position": {
+            "X": 7750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 12,
+          "GoalCell": 475,
+          "Status": 2,
+          "Position": {
+            "X": 6750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 13,
+          "GoalCell": 478,
+          "Status": 2,
+          "Position": {
+            "X": 8250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 14,
+          "GoalCell": 435,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 15,
+          "GoalCell": 436,
+          "Status": 2,
+          "Position": {
+            "X": 9250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 16,
+          "GoalCell": 303,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 17,
+          "GoalCell": 259,
+          "Status": 2,
+          "Position": {
+            "X": 8750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 18,
+          "GoalCell": 258,
+          "Status": 2,
+          "Position": {
+            "X": 8250,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 19,
+          "GoalCell": 293,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 20,
+          "GoalCell": 426,
+          "Status": 1,
+          "Position": {
+            "X": 4250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 21,
+          "GoalCell": 469,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 22,
+          "GoalCell": 249,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 23,
+          "GoalCell": 294,
+          "Status": 1,
+          "Position": {
+            "X": 4250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 24,
+          "GoalCell": 427,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 25,
+          "GoalCell": 295,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 26,
+          "GoalCell": 428,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 27,
+          "GoalCell": 296,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 28,
+          "GoalCell": 472,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 29,
+          "GoalCell": 208,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 30,
+          "GoalCell": 210,
+          "Status": 1,
+          "Position": {
+            "X": 6250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 31,
+          "GoalCell": 251,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 32,
+          "GoalCell": 471,
+          "Status": 1,
+          "Position": {
+            "X": 4750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 33,
+          "GoalCell": 470,
+          "Status": 1,
+          "Position": {
+            "X": 4250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 34,
+          "GoalCell": 480,
+          "Status": 1,
+          "Position": {
+            "X": 9250,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 35,
+          "GoalCell": 252,
+          "Status": 1,
+          "Position": {
+            "X": 5250,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 36,
+          "GoalCell": 211,
+          "Status": 1,
+          "Position": {
+            "X": 6750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 37,
+          "GoalCell": 209,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 38,
+          "GoalCell": 253,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 39,
+          "GoalCell": 297,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -4310
+          }
+        },
+        {
+          "Id": 40,
+          "GoalCell": 215,
+          "Status": 1,
+          "Position": {
+            "X": 8750,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 41,
+          "GoalCell": 425,
+          "Status": 1,
+          "Position": {
+            "X": 3750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 42,
+          "GoalCell": 214,
+          "Status": 1,
+          "Position": {
+            "X": 8250,
+            "Y": -5310
+          }
+        },
+        {
+          "Id": 43,
+          "GoalCell": 473,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -2310
+          }
+        },
+        {
+          "Id": 44,
+          "GoalCell": 429,
+          "Status": 1,
+          "Position": {
+            "X": 5750,
+            "Y": -2810
+          }
+        },
+        {
+          "Id": 45,
+          "GoalCell": 257,
+          "Status": 2,
+          "Position": {
+            "X": 7750,
+            "Y": -4810
+          }
+        },
+        {
+          "Id": 46,
+          "GoalCell": 256,
+          "Status": 2,
+          "Position": {
+            "X": 7250,
+            "Y": -4810
+          }
+        }
+      ],
+      "recovery": [
+        {
+          "goal": 212,
+          "victim": 5,
+          "wasSmall": false,
+          "replacement": 47,
+          "recoveryTicks": 3799
+        },
+        {
+          "goal": 213,
+          "victim": 11,
+          "wasSmall": false,
+          "replacement": 48,
+          "recoveryTicks": 3009
+        },
+        {
+          "goal": 254,
+          "victim": 4,
+          "wasSmall": false,
+          "replacement": 49,
+          "recoveryTicks": 1209
+        },
+        {
+          "goal": 255,
+          "victim": 6,
+          "wasSmall": false,
+          "replacement": 50,
+          "recoveryTicks": 1359
+        },
+        {
+          "goal": 256,
+          "victim": 46,
+          "wasSmall": true,
+          "replacement": 51,
+          "recoveryTicks": 631
+        },
+        {
+          "goal": 257,
+          "victim": 45,
+          "wasSmall": true,
+          "replacement": 52,
+          "recoveryTicks": 2439
+        },
+        {
+          "goal": 258,
+          "victim": 18,
+          "wasSmall": false,
+          "replacement": 53,
+          "recoveryTicks": 3109
+        },
+        {
+          "goal": 259,
+          "victim": 17,
+          "wasSmall": false,
+          "replacement": 54,
+          "recoveryTicks": 2939
+        },
+        {
+          "goal": 298,
+          "victim": 2,
+          "wasSmall": false,
+          "replacement": 55,
+          "recoveryTicks": 1099
+        },
+        {
+          "goal": 303,
+          "victim": 16,
+          "wasSmall": false,
+          "replacement": 56,
+          "recoveryTicks": 2789
+        },
+        {
+          "goal": 304,
+          "victim": 10,
+          "wasSmall": false,
+          "replacement": 57,
+          "recoveryTicks": 1159
+        },
+        {
+          "goal": 348,
+          "victim": 9,
+          "wasSmall": false,
+          "replacement": 58,
+          "recoveryTicks": 2429
+        },
+        {
+          "goal": 392,
+          "victim": 8,
+          "wasSmall": false,
+          "replacement": 59,
+          "recoveryTicks": 2559
+        },
+        {
+          "goal": 430,
+          "victim": 1,
+          "wasSmall": false,
+          "replacement": 60,
+          "recoveryTicks": 1109
+        },
+        {
+          "goal": 435,
+          "victim": 14,
+          "wasSmall": false,
+          "replacement": 61,
+          "recoveryTicks": 2779
+        },
+        {
+          "goal": 436,
+          "victim": 15,
+          "wasSmall": false,
+          "replacement": 62,
+          "recoveryTicks": 1389
+        },
+        {
+          "goal": 474,
+          "victim": 3,
+          "wasSmall": false,
+          "replacement": 63,
+          "recoveryTicks": 1419
+        },
+        {
+          "goal": 475,
+          "victim": 12,
+          "wasSmall": false,
+          "replacement": 64,
+          "recoveryTicks": 1269
+        },
+        {
+          "goal": 478,
+          "victim": 13,
+          "wasSmall": false,
+          "replacement": 65,
+          "recoveryTicks": 1359
+        },
+        {
+          "goal": 479,
+          "victim": 7,
+          "wasSmall": false,
+          "replacement": 66,
+          "recoveryTicks": 1089
+        }
+      ],
+      "checkedPairs": 130700585,
+      "checkedBodies": 5918198,
+      "StartedRecoveries": 27,
+      "CompletedRecoveries": 27,
+      "AdmissionGateRecoveries": 18,
+      "AdmissionGateYieldedActors": 61,
+      "AdmissionGateExpandedCells": 213443,
+      "AdmissionGateBudgetFailures": 0
+    }
+  ]
+}

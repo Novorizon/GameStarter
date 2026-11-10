@@ -71,7 +71,9 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             mapRenderer.transform.position = worldCamera.transform.forward * 18;
             mapRenderer.transform.rotation = worldCamera.transform.rotation;
             ApplyMap(map);
-            CreateCastle(configuration.Routes[0].Points[configuration.Routes[0].Points.Length - 1]);
+            var basePosition = configuration.Navigation != null
+                ? configuration.Navigation.TargetCenter : configuration.Routes[0].Points[configuration.Routes[0].Points.Length - 1];
+            CreateCastle(basePosition);
             foreach (var slot in configuration.BuildSlots)
             {
                 var pad = new GameObject("Build pad " + slot.Id);
@@ -210,19 +212,23 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             return new TowerView { Root = root, Turret = turret, Beam = beam };
         }
 
-        private EnemyView CreateEnemy(int id, int definition)
+        private EnemyView CreateEnemy(int id, int definition, int radius)
         {
             var root = new GameObject("Enemy " + id + " - Forest Raider");
             root.transform.SetParent(field, false);
             var material = enemyMaterials[(Math.Abs(definition) - 1) % enemyMaterials.Length];
-            float size = definition == 3 ? 1.25f : .90f;
+            // Navigation bodies use the configured footprint, including their decorative ears.
+            float size = radius > 0 ? radius / 380f : definition == 3 ? 1.25f : .90f;
             root.transform.localScale = Vector3.one * size;
             AddShadow(root.transform, .38f);
             Prism("Body", root.transform, new Vector3(0, .29f, 0), .20f, .35f, 6, wood, .24f);
             Prism("Head", root.transform, new Vector3(0, .65f, 0), .26f, .34f, 7, material, .16f);
             for (int side = -1; side <= 1; side += 2)
             {
-                var ear = Prism("Ear", root.transform, new Vector3(side * .26f, .67f, 0), .10f, .30f, 4, material, 0);
+                float earOffset = radius > 0 ? .16f : .26f;
+                float earRadius = radius > 0 ? .06f : .10f;
+                float earHeight = radius > 0 ? .14f : .30f;
+                var ear = Prism("Ear", root.transform, new Vector3(side * earOffset, .67f, 0), earRadius, earHeight, 4, material, 0);
                 ear.transform.localRotation = Quaternion.Euler(0, 0, side * -55);
                 var pupil = Primitive("Eye", PrimitiveType.Cube, root.transform, new Vector3(side * .095f, .67f, .227f), new Vector3(.065f, .065f, .04f), eye);
                 Destroy(pupil.GetComponent<Collider>());
@@ -248,7 +254,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 liveEnemies.Add(state.Id);
                 if (!enemies.TryGetValue(state.Id, out var view))
                 {
-                    view = CreateEnemy(state.Id, state.DefinitionId);
+                    view = CreateEnemy(state.Id, state.DefinitionId, state.Radius);
                     view.Root.transform.localPosition = World(state.Position, .05f);
                     enemies.Add(state.Id, view);
                 }
@@ -264,6 +270,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 float health = state.MaxHealth == 0 ? 0 : Mathf.Clamp01((float)state.Health / state.MaxHealth);
                 view.Health.SetPosition(0, new Vector3(-.32f, 1.05f, 0));
                 view.Health.SetPosition(1, new Vector3(-.32f + health * .64f, 1.05f, 0));
+                SynchronizeEnemyNavigation(state, view, elapsed);
             }
 
             rangeRing.enabled = false;
@@ -325,7 +332,10 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             foreach (int id in removals)
             {
                 enemies.Remove(id);
+                enemyNavigationVisuals.Remove(id);
             }
+
+            SynchronizeNavigationDebug();
         }
 
         private void DrawRange(Position2 position, float radius)

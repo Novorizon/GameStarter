@@ -4,6 +4,8 @@ using System.Linq;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Game.HotUpdate.TowerDefense.Data;
+using Game.HotUpdate.TowerDefense.Domain.Navigation;
 using Game.HotUpdate.TowerDefense.Domain;
 using Game.HotUpdate.TowerDefense.Presentation;
 using Game.Resource;
@@ -27,6 +29,7 @@ namespace Game.HotUpdate.Client
         private Task arrivalTask;
         private ExpeditionPlan preparedExpedition;
         private int battleCampLevel;
+        private NavigationGrid navigation;
         private readonly Queue<JourneyBattle> pendingResults = new Queue<JourneyBattle>();
         public ClientArt Art { get; private set; }
         public JourneyProgress Journey { get; private set; }
@@ -44,6 +47,10 @@ namespace Game.HotUpdate.Client
             {
                 Journey = new JourneyProgress(tables, new LocalJourneyStore());
                 Art = await ClientArt.LoadAsync(tables.TbClientTheme.Get(1), openingToken);
+                using (var layout = await ResourceManager.Instance.AcquireAsync<TextAsset>("TowerDefense/Data/ForestNavigation", openingToken, true))
+                {
+                    navigation = NavigationLayout.Parse(layout.Asset.text);
+                }
                 openingToken.ThrowIfCancellationRequested();
                 root = new GameObject("GameClient");
                 root.AddComponent<PrototypeAssetLifetime>().Own(new List<IDisposable> { Art });
@@ -81,7 +88,7 @@ namespace Game.HotUpdate.Client
             if (preparedExpedition == null)
             {
                 uint seed = BitConverter.ToUInt32(Guid.NewGuid().ToByteArray(), 0);
-                preparedExpedition = new ExpeditionPlan(tables, Stage.Id, seed, Journey.Camp.Level.Id);
+                preparedExpedition = new ExpeditionPlan(tables, Stage.Id, seed, Journey.Camp.Level.Id, navigation);
                 ExpeditionError = null;
             }
 

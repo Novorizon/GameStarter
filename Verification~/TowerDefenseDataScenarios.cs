@@ -115,7 +115,8 @@ internal static partial class Program
 
     private static TowerDefenseDataRun RunTowerDefenseDataBattle(int batchTicks, uint seed)
     {
-        var session = new FightSession(TowerDefenseTables.Create(ReadTowerDefenseTables(), 1), seed);
+        var navigation = NavigationLayout.Parse(File.ReadAllText("Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes"));
+        var session = new FightSession(TowerDefenseTables.Create(ReadTowerDefenseTables(), 1, navigation), seed);
         var commands = new List<string>();
         int decisions = 0;
         while (session.Phase != BattlePhase.Victory && session.Phase != BattlePhase.Defeat

@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "utc": "2026-11-10T22:42:27.576126+00:00",
+  "sourceCommit": "e36bfa9feac08b9cb73da71d8f29e932ae443f9c",
+  "scope": "97 API-model/data integration checks; actual Luban content and navigation business adapter. Not native Unity, live server login or IL2CPP.",
+  "count": 97,
+  "actualStageNavigationBound": true,
+  "actualBattleSeeds": [
+    0,
+    1,
+    33,
+    4729,
+    12345,
+    987654,
+    2147483648,
+    4294967295
+  ],
+  "mergedWave": {
+    "requested": 126,
+    "safeAdmittedBeforeKills": 46,
+    "queued": 80,
+    "expandedWhileStable": 0,
+    "finalKills": 126,
+    "expandedWhileStable200Ticks": 0
+  },
+  "actualWaveMetrics": [
+    "NAV_AUTHORED_WAVE 1 units=8 tick=740 attacking=8 waiting=0 elapsedMs=14 maxStepMs=2.89",
+    "NAV_AUTHORED_WAVE 2 units=16 tick=793 attacking=13 waiting=3 elapsedMs=59 maxStepMs=32.11",
+    "NAV_AUTHORED_WAVE 3 units=18 tick=1099 attacking=14 waiting=4 elapsedMs=68 maxStepMs=26.64",
+    "NAV_AUTHORED_WAVE 4 units=25 tick=1148 attacking=15 waiting=10 elapsedMs=119 maxStepMs=31.53",
+    "NAV_AUTHORED_WAVE 5 units=30 tick=1175 attacking=15 waiting=15 elapsedMs=125 maxStepMs=45.93",
+    "NAV_AUTHORED_WAVE 6 units=29 tick=1398 attacking=15 waiting=14 elapsedMs=90 maxStepMs=7.27"
+  ],
+  "legacyDomainScenarios": 12,
+  "legacyDomainScope": "Reference polyline mechanics; not navigation proof.",
+  "accountModelScenarios": 13,
+  "accountScope": "Fake backend only; no live server authentication or settlement.",
+  "fullVerificationLogSha256": "81788ff2047895e82abec8b929fbccb3c95f2d7a00bd65235fd81bd0a6f3e4c9",
+  "domainAggregateSha256": "074502ae2c712a92094d4b851c451afba25ac300c063f78e28b605b767a72c2f"
+}

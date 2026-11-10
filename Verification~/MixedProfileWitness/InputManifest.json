@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "scope": "Frozen static poses extracted from original B2 failed runs; not a replay of omitted birth attempts.",
+  "fixtures": {
+    "mixed-profile-outer-before-inner-1.json": {
+      "fixtureSha256": "99eb56da1b3023da20c111e4e475f8816fd2d9b344987ca45ccf1e753a843cc7",
+      "sourceFailureLogSha256": "f6b793b491850f7db3e1787a60d283bb09ae78fe46a9d0bb89e0b5d28dcd8b26",
+      "sourceStaticFrameSha256": "415045cc6aa7b008e0bd0ae04f4ded310e963474040d67651a6e835a28d07586",
+      "sourceFailureFrameSha256": "1c2a20bc14738dd67b2e7b55aa1288f7c5b9219164f3e4c66b111f5eef6bd984",
+      "staticPoseTick": 180,
+      "sourceFailureTick": 5001,
+      "retainedBodies": 85
+    },
+    "mixed-profile-outer-before-inner-17.json": {
+      "fixtureSha256": "c1fa1ae67a49640ff02e57c42d1502e8824355fcc90106bdb6dd8a897aabf1e2",
+      "sourceFailureLogSha256": "f3928fdacba2f2a49d0c67eb4b182258f02ac2d68c99a83d15d1e2d089aa97f2",
+      "sourceStaticFrameSha256": "6277faa7f86c5cadd740c9a719437f6a3c40fd6fe26b2e670bc3550a33f613a7",
+      "sourceFailureFrameSha256": "b397efcce429e622db8f8c56861f03ccd949a54b93cafb15fd966d9b09a33c13",
+      "staticPoseTick": 180,
+      "sourceFailureTick": 5001,
+      "retainedBodies": 85
+    },
+    "mixed-profile-outer-before-inner-733.json": {
+      "fixtureSha256": "a350902fd5eeef938fe9a8055f19a001571f600bcc5494e45b07551a967a5940",
+      "sourceFailureLogSha256": "620e2b97a029660bdb1387afefe7bc0b5d66b954014c2fa7af54c1c5144c84c7",
+      "sourceStaticFrameSha256": "f24102e2b2c2942d0004ea440819b015aa92c6388ea86d22a40e7473e8ac96e3",
+      "sourceFailureFrameSha256": "0405db04c2b635f786665e147fc1da7848d6cbca9ffcb1e76798e72dbbad3f74",
+      "staticPoseTick": 180,
+      "sourceFailureTick": 5001,
+      "retainedBodies": 85
+    },
+    "mixed-profile-outer-before-inner-20261110.json": {
+      "fixtureSha256": "1d9605c9c021b63af90bbedb941c6d8676553775697dcf181990f640d1293dfc",
+      "sourceFailureLogSha256": "3f8b465535dfcb58d4ba9e1936464b21cfa0dd768baf6d69a9a57eacaddf5d59",
+      "sourceStaticFrameSha256": "e904c0dcfed6d6ef031bb293741fdfa77181f292465e78d73ccb28fa2571643c",
+      "sourceFailureFrameSha256": "6a787bac6371e548e3ab59a9aab6cfd0fe428c6496882befded797b1b141e80b",
+      "staticPoseTick": 180,
+      "sourceFailureTick": 5001,
+      "retainedBodies": 85
+    },
+    "mixed-profile-inner-before-outer-1.json": {
+      "fixtureSha256": "981de777e769be4f1ab699e35fcb7a7cb8005d8df022296068e526b025bebafb",
+      "sourceFailureLogSha256": "c66d6330687f3a0f938a7d9119f009f57b71fcf5fc566070013335b69b3a2669",
+      "sourceStaticFrameSha256": "26ee448c98972b7567db0c2e8c7ccdbde3f38abb4540944c253cce79808fdcc7",
+      "sourceFailureFrameSha256": "ef178ddf146ed08c9db53dc97ab6775e650cdc92bacca9a8cbea7d5490d63bbf",
+      "staticPoseTick": 220,
+      "sourceFailureTick": 2202,
+      "retainedBodies": 100
+    },
+    "mixed-profile-inner-before-outer-17.json": {
+      "fixtureSha256": "a857be4125c8b5bc84fc7d324c45ea693af944e159b2badff5aac8ef7f19149d",
+      "sourceFailureLogSha256": "0e0504c7d7691da6a735786d45004a9f7a460a036f349a4dc7cd43f0a257b783",
+      "sourceStaticFrameSha256": "f941c97c0a667b9b97de91dccb010e19fd91f651cb066b056d520ec3dc7b26ab",
+      "sourceFailureFrameSha256": "ee5e1a8249302916b88b8a8bfa8ab270cae285098e7f66db7a220d4bfb34adc3",
+      "staticPoseTick": 220,
+      "sourceFailureTick": 2203,
+      "retainedBodies": 100
+    },
+    "mixed-profile-inner-before-outer-733.json": {
+      "fixtureSha256": "ba5e4c9586aee6a24f09cc11446c7afd6bd7d37b0133d38b6f58107c425ddd54",
+      "sourceFailureLogSha256": "597667b1e5974b7c120a7476ed124fa8a674ddf516bb47705be095c582806afa",
+      "sourceStaticFrameSha256": "9f0b01fcfdee069e960338299a423493afefcb606eb937771b2f1996d35a3aa2",
+      "sourceFailureFrameSha256": "ea90a324e562fd0240424296aad75540db8e4cbee10d9ffcf4d24a9ea04d1c4e",
+      "staticPoseTick": 220,
+      "sourceFailureTick": 2202,
+      "retainedBodies": 100
+    },
+    "mixed-profile-inner-before-outer-20261110.json": {
+      "fixtureSha256": "437416a40782ec246b0ae42a05684ea17df93bead7d12488f31805e00b09d552",
+      "sourceFailureLogSha256": "9cbab51010f153671568600cb6bd1a1eb43d095a7454724867aed79624666b64",
+      "sourceStaticFrameSha256": "6d3346f31ccd8eff2dca29ed1642ceb18d136642934516e33b5d7e7e6b555882",
+      "sourceFailureFrameSha256": "71f342866353727015b97575d91ad6f627039f31d27e7a93802d11f05fb76780",
+      "staticPoseTick": 220,
+      "sourceFailureTick": 2201,
+      "retainedBodies": 100
+    }
+  }
+}

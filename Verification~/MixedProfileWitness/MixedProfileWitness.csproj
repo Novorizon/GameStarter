@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=/_/MixedProfileWitness</PathMap>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Oracle/*.cs" />
+    <Content Include="Inputs/*.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <Content Include="InputManifest.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <Content Include="Program.cs;Oracle/*.cs;MixedProfileWitness.csproj" TargetPath="Sources/%(Identity)"
+             CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <None Include="InputManifest.json" TargetPath="Sources/InputManifest.json"
+          CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <Content Include="SourceProvenance.json" Condition="Exists('SourceProvenance.json')"
+             CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+    <None Include="SourceProvenance.json" Condition="Exists('SourceProvenance.json')" TargetPath="Sources/SourceProvenance.json"
+          CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+  </ItemGroup>
+</Project>

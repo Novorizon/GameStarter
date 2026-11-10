@@ -1,0 +1,14 @@
+{
+  "productionCommit": "311c1fa88d5d149e847f277d4d9deeb3df4b2b67",
+  "productionDomainAggregateSha256": "d155d9838c07d7de133a3e1ef4424388bd441086f99f27968c4163bc1d7f2582",
+  "compiledDomainFileCount": 11,
+  "productionManifestIncludesAdditionalFilesNotCompiledByThisSuite": true,
+  "scope": "Pure navigation lifecycle model regression, not rendering, IL2CPP, device acceptance or a performance benchmark.",
+  "count": 3,
+  "passed": 3,
+  "nonSpawnFlexibilityAndEntryCacheVerified": true,
+  "sameCommandsFinalBodiesAndFinalTicksAsB7": true,
+  "comparisonProductionCommit": "207d92b06eb9a5739be11d9008b151f7282e037f",
+  "comparisonDomainAggregateSha256": "b7ea41a6b70b7b6b7235926db543bf8d260c5477f202352f4b4917c58bb9b5db",
+  "totalCaseElapsedMilliseconds": 10395
+}

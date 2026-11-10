@@ -1,6 +1,7 @@
 using System;
 using Game.HotUpdate.TowerDefense.Data;
 using Game.HotUpdate.TowerDefense.Domain;
+using Game.HotUpdate.TowerDefense.Domain.Navigation;
 
 namespace Game.HotUpdate.Client
 {
@@ -13,7 +14,7 @@ namespace Game.HotUpdate.Client
         public uint Seed { get; }
         public cfg.CampLevel CampLevel { get; }
 
-        public ExpeditionPlan(cfg.Tables tables, int stageId, uint seed, int campLevelId)
+        public ExpeditionPlan(cfg.Tables tables, int stageId, uint seed, int campLevelId, NavigationGrid navigation = null)
         {
             if (tables == null)
             {
@@ -22,7 +23,7 @@ namespace Game.HotUpdate.Client
 
             Stage = tables.TbTdStage.Get(stageId);
             CampLevel = tables.TbCampLevel.Get(campLevelId);
-            Configuration = TowerDefenseTables.Create(tables, stageId);
+            Configuration = TowerDefenseTables.Create(tables, stageId, navigation);
             Briefing = new BattleBriefing(Configuration);
             Seed = seed;
         }

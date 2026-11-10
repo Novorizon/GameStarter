@@ -1,0 +1,887 @@
+{
+  "success": true,
+  "scenarioCount": 56,
+  "scope": "Post-run independent reconciliation of all per-ID records, exact original endpoint sets, fixed offered inputs and actual terminal poses.",
+  "domainAggregateSha256": "074502ae2c712a92094d4b851c451afba25ac300c063f78e28b605b767a72c2f",
+  "testSnapshotAggregateSha256": "d6a62728cf2e415bf51d1811018d7dc9c8b4e5c0e8f2a4056550c822000a893d",
+  "testBinarySha256": "1d54a3241b676b733eb46aa5a883bd48d4259edd35dd821ffad05adef601c022",
+  "sourceFilesUnchanged": true,
+  "testFilesUnchanged": true,
+  "elapsedMilliseconds": 57894,
+  "originalInputSetsUnchangedFromB2": true,
+  "outcomeCounts": {
+    "all-requests-accounted-and-live-agents-arrived-after-recovery": 48,
+    "physical-overflow-proved-and-queue-preserved": 8
+  },
+  "terminalLiveRecords": 3280,
+  "terminalQueuedRecords": 1236,
+  "explicitDeathRecords": 528,
+  "allTerminalRecoveryInactive": true,
+  "original72Cases": [
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 1,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 1,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 1,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 1,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 1,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 1,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 17,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 17,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 17,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 17,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 17,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 17,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 733,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 733,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 733,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 733,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 733,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 733,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 20261110,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 20261110,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 20261110,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 20261110,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 20261110,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 20261110,
+      "count": 72,
+      "sameAsOriginalAEndpointSet": true,
+      "prescribedEndpointSetSha256": "23123a09200bd94ef0b0d524737a1b2f5a6c7a38d2e9d9bbd9c305c358aba0e1"
+    }
+  ],
+  "sameRangeAttackQuotas": [
+    {
+      "seed": 1,
+      "bigAttacking": 12,
+      "smallAttacking": 4,
+      "smallWaiting": 4
+    },
+    {
+      "seed": 17,
+      "bigAttacking": 12,
+      "smallAttacking": 4,
+      "smallWaiting": 4
+    },
+    {
+      "seed": 733,
+      "bigAttacking": 12,
+      "smallAttacking": 4,
+      "smallWaiting": 4
+    },
+    {
+      "seed": 20261110,
+      "bigAttacking": 12,
+      "smallAttacking": 4,
+      "smallWaiting": 4
+    }
+  ],
+  "noncenterInflightDeaths": [
+    {
+      "seed": 1,
+      "victimId": 72,
+      "deathTick": 25,
+      "diedWhileNavigating": true,
+      "diedBeforeAnyGoal": true,
+      "liveArrived": 72
+    },
+    {
+      "seed": 17,
+      "victimId": 14,
+      "deathTick": 25,
+      "diedWhileNavigating": true,
+      "diedBeforeAnyGoal": true,
+      "liveArrived": 72
+    },
+    {
+      "seed": 733,
+      "victimId": 39,
+      "deathTick": 25,
+      "diedWhileNavigating": true,
+      "diedBeforeAnyGoal": true,
+      "liveArrived": 72
+    },
+    {
+      "seed": 20261110,
+      "victimId": 57,
+      "deathTick": 25,
+      "diedWhileNavigating": true,
+      "diedBeforeAnyGoal": true,
+      "liveArrived": 72
+    }
+  ],
+  "inputDiversityNote": "Four seed values mostly change ID/prioritization, not four distinct offered physical flows; distinct hash counts below are reported separately.",
+  "inputDiversity": {
+    "original-4m-all-72-long-hold": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 4
+    },
+    "full-72-each-attack-slot-death": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 4
+    },
+    "full-72-all-attackers-die": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 4
+    },
+    "full-72-rear-and-side-deaths": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 4
+    },
+    "death-during-inflight-arrivals": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 4
+    },
+    "original-4m-four-spawns-mixed-speed-72": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 4
+    },
+    "mixed-range-full-outer-ring-inner-death": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 1
+    },
+    "mixed-radius-ranged-inner-vacancy": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 1
+    },
+    "mixed-range-multiple-spawns-inner-death": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 4
+    },
+    "same-range-big12-small8-inner-union16": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 1
+    },
+    "temporary-throat-blocker-removed": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 1
+    },
+    "long-no-tower-all-126": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 2,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 2,
+      "physicalCommandsSha256": 2
+    },
+    "true-physical-capacity-200-queue-retained": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 1
+    },
+    "true-capacity-queued-reinforcements-after-death": {
+      "requestPlanSha256": 4,
+      "offeredFlowSha256": 1,
+      "physicalGeometrySha256": 1,
+      "holdingMaskSha256": 1,
+      "prescribedEndpointSetSha256": 1,
+      "inputCommandsSha256": 4,
+      "physicalCommandsSha256": 1
+    }
+  },
+  "records": [
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 1,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 1,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 1,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 1,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 14,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 1,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 1,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 1,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-full-outer-ring-inner-death",
+      "seed": 1,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-radius-ranged-inner-vacancy",
+      "seed": 1,
+      "activeArrived": 36,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-multiple-spawns-inner-death",
+      "seed": 1,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "same-range-big12-small8-inner-union16",
+      "seed": 1,
+      "activeArrived": 20,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "temporary-throat-blocker-removed",
+      "seed": 1,
+      "activeArrived": 48,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "long-no-tower-all-126",
+      "seed": 1,
+      "activeArrived": 126,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-physical-capacity-200-queue-retained",
+      "seed": 1,
+      "activeArrived": 39,
+      "queued": 161,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-capacity-queued-reinforcements-after-death",
+      "seed": 1,
+      "activeArrived": 39,
+      "queued": 148,
+      "explicitDeaths": 13,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 17,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 17,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 17,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 17,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 14,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 17,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 1,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 17,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-full-outer-ring-inner-death",
+      "seed": 17,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-radius-ranged-inner-vacancy",
+      "seed": 17,
+      "activeArrived": 36,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-multiple-spawns-inner-death",
+      "seed": 17,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "same-range-big12-small8-inner-union16",
+      "seed": 17,
+      "activeArrived": 20,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "temporary-throat-blocker-removed",
+      "seed": 17,
+      "activeArrived": 48,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "long-no-tower-all-126",
+      "seed": 17,
+      "activeArrived": 126,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-physical-capacity-200-queue-retained",
+      "seed": 17,
+      "activeArrived": 39,
+      "queued": 161,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-capacity-queued-reinforcements-after-death",
+      "seed": 17,
+      "activeArrived": 39,
+      "queued": 148,
+      "explicitDeaths": 13,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 733,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 733,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 733,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 733,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 14,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 733,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 1,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 733,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-full-outer-ring-inner-death",
+      "seed": 733,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-radius-ranged-inner-vacancy",
+      "seed": 733,
+      "activeArrived": 36,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-multiple-spawns-inner-death",
+      "seed": 733,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "same-range-big12-small8-inner-union16",
+      "seed": 733,
+      "activeArrived": 20,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "temporary-throat-blocker-removed",
+      "seed": 733,
+      "activeArrived": 48,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "long-no-tower-all-126",
+      "seed": 733,
+      "activeArrived": 126,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-physical-capacity-200-queue-retained",
+      "seed": 733,
+      "activeArrived": 39,
+      "queued": 161,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-capacity-queued-reinforcements-after-death",
+      "seed": 733,
+      "activeArrived": 39,
+      "queued": 148,
+      "explicitDeaths": 13,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "original-4m-all-72-long-hold",
+      "seed": 20261110,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-each-attack-slot-death",
+      "seed": 20261110,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-all-attackers-die",
+      "seed": 20261110,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 12,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "full-72-rear-and-side-deaths",
+      "seed": 20261110,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 14,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "death-during-inflight-arrivals",
+      "seed": 20261110,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 1,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "original-4m-four-spawns-mixed-speed-72",
+      "seed": 20261110,
+      "activeArrived": 72,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-full-outer-ring-inner-death",
+      "seed": 20261110,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-radius-ranged-inner-vacancy",
+      "seed": 20261110,
+      "activeArrived": 36,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "mixed-range-multiple-spawns-inner-death",
+      "seed": 20261110,
+      "activeArrived": 40,
+      "queued": 0,
+      "explicitDeaths": 24,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "same-range-big12-small8-inner-union16",
+      "seed": 20261110,
+      "activeArrived": 20,
+      "queued": 0,
+      "explicitDeaths": 16,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "temporary-throat-blocker-removed",
+      "seed": 20261110,
+      "activeArrived": 48,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "long-no-tower-all-126",
+      "seed": 20261110,
+      "activeArrived": 126,
+      "queued": 0,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-physical-capacity-200-queue-retained",
+      "seed": 20261110,
+      "activeArrived": 39,
+      "queued": 161,
+      "explicitDeaths": 0,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    },
+    {
+      "name": "true-capacity-queued-reinforcements-after-death",
+      "seed": 20261110,
+      "activeArrived": 39,
+      "queued": 148,
+      "explicitDeaths": 13,
+      "recoveryActiveAtEnd": false,
+      "allLiveAtExactOwnedGoal": true
+    }
+  ],
+  "compatibilityCandidateSourceFilesVerified": 15,
+  "compatibilityCaseEvidenceIdenticalToD155ExceptElapsedMilliseconds": true
+}

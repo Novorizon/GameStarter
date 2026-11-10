@@ -1,0 +1,2441 @@
+{
+  "name": "mixed-profile-outer-before-inner",
+  "seed": 20261110,
+  "inputFile": "mixed-profile-outer-before-inner-20261110.json",
+  "inputSha256": "1d9605c9c021b63af90bbedb941c6d8676553775697dcf181990f640d1293dfc",
+  "fixtureSha256": "1d9605c9c021b63af90bbedb941c6d8676553775697dcf181990f640d1293dfc",
+  "sourceFailureLogName": "mixed-profile-outer-before-inner-20261110.json",
+  "sourceFailureLogSha256": "3f8b465535dfcb58d4ba9e1936464b21cfa0dd768baf6d69a9a57eacaddf5d59",
+  "executableFileName": "MixedProfileWitness.dll",
+  "executableSha256": "93e38a73f604da8c481c2723e03cf81dbce1d1a47063f1aa6301884e9c5b0fbd",
+  "scope": "Independent constructive compatibility-exchange witness, not the production planner.",
+  "success": true,
+  "error": "",
+  "historicalRequested": 85,
+  "historicalSpawned": 85,
+  "historicalRemoved": 0,
+  "retainedBodies": 85,
+  "earliestEquivalentSavedPoseTick": 180,
+  "originalDeadlineTick": 5000,
+  "sourceFailureTick": 5001,
+  "witnessMovementFinishTick": 243,
+  "witnessVerificationFinishTick": 443,
+  "stableTicks": 200,
+  "gridMoves": 63,
+  "actualRadiusMm": 250,
+  "maximumSpeedMmPerTick": 1000,
+  "bigAttackEndpoints": 84,
+  "shortAttackEndpoints": 16,
+  "shortAttackEndpointsSubsetOfBig": true,
+  "allIdentitiesAndBodiesRetained": true,
+  "continuousOracleVerified": true,
+  "withinOriginalDeadline": true,
+  "checkedTicks": 264,
+  "checkedPairSweeps": 942480,
+  "minimumBodyGapMm": 500,
+  "minimumBaseGapMm": 164.2135623730951,
+  "elapsedMilliseconds": 317,
+  "initialProfiles": [
+    {
+      "range": 1000,
+      "bodies": 1,
+      "attacking": 0,
+      "waiting": 1
+    },
+    {
+      "range": 4000,
+      "bodies": 84,
+      "attacking": 84,
+      "waiting": 0
+    }
+  ],
+  "finalProfiles": [
+    {
+      "range": 1000,
+      "bodies": 1,
+      "attacking": 1,
+      "waiting": 0
+    },
+    {
+      "range": 4000,
+      "bodies": 84,
+      "attacking": 83,
+      "waiting": 1
+    }
+  ],
+  "reservedShortIngressCells": [
+    997,
+    962,
+    927,
+    892,
+    857,
+    822
+  ],
+  "initialPose": [
+    {
+      "id": 1,
+      "cell": {
+        "x": 17,
+        "y": 22
+      },
+      "state": "Attacking",
+      "slotId": 787,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 22500,
+      "radius": 250
+    },
+    {
+      "id": 2,
+      "cell": {
+        "x": 16,
+        "y": 22
+      },
+      "state": "Attacking",
+      "slotId": 786,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 22500,
+      "radius": 250
+    },
+    {
+      "id": 3,
+      "cell": {
+        "x": 18,
+        "y": 22
+      },
+      "state": "Attacking",
+      "slotId": 788,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 22500,
+      "radius": 250
+    },
+    {
+      "id": 4,
+      "cell": {
+        "x": 15,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 750,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 5,
+      "cell": {
+        "x": 19,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 754,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 6,
+      "cell": {
+        "x": 14,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 749,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 7,
+      "cell": {
+        "x": 20,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 755,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 8,
+      "cell": {
+        "x": 13,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 713,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 9,
+      "cell": {
+        "x": 21,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 721,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 10,
+      "cell": {
+        "x": 12,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 642,
+      "moveTicks": 1,
+      "x": 12500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 11,
+      "cell": {
+        "x": 22,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 652,
+      "moveTicks": 1,
+      "x": 22500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 12,
+      "cell": {
+        "x": 13,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 678,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 13,
+      "cell": {
+        "x": 21,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 686,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 14,
+      "cell": {
+        "x": 12,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 607,
+      "moveTicks": 1,
+      "x": 12500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 15,
+      "cell": {
+        "x": 22,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 617,
+      "moveTicks": 1,
+      "x": 22500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 16,
+      "cell": {
+        "x": 12,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 572,
+      "moveTicks": 1,
+      "x": 12500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 17,
+      "cell": {
+        "x": 22,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 582,
+      "moveTicks": 1,
+      "x": 22500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 18,
+      "cell": {
+        "x": 13,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 538,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 19,
+      "cell": {
+        "x": 21,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 546,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 20,
+      "cell": {
+        "x": 13,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 503,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 21,
+      "cell": {
+        "x": 21,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 511,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 22,
+      "cell": {
+        "x": 14,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 469,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 23,
+      "cell": {
+        "x": 20,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 475,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 24,
+      "cell": {
+        "x": 16,
+        "y": 12
+      },
+      "state": "Attacking",
+      "slotId": 436,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 12500,
+      "radius": 250
+    },
+    {
+      "id": 25,
+      "cell": {
+        "x": 18,
+        "y": 12
+      },
+      "state": "Attacking",
+      "slotId": 438,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 12500,
+      "radius": 250
+    },
+    {
+      "id": 26,
+      "cell": {
+        "x": 15,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 470,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 27,
+      "cell": {
+        "x": 19,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 474,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 28,
+      "cell": {
+        "x": 16,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 471,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 29,
+      "cell": {
+        "x": 18,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 473,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 30,
+      "cell": {
+        "x": 16,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 506,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 31,
+      "cell": {
+        "x": 18,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 508,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 32,
+      "cell": {
+        "x": 16,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 541,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 33,
+      "cell": {
+        "x": 19,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 544,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 34,
+      "cell": {
+        "x": 19,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 614,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 35,
+      "cell": {
+        "x": 21,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 581,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 36,
+      "cell": {
+        "x": 21,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 616,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 37,
+      "cell": {
+        "x": 19,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 509,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 38,
+      "cell": {
+        "x": 20,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 510,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 39,
+      "cell": {
+        "x": 20,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 545,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 40,
+      "cell": {
+        "x": 19,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 649,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 41,
+      "cell": {
+        "x": 21,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 651,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 42,
+      "cell": {
+        "x": 19,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 684,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 43,
+      "cell": {
+        "x": 17,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 717,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 44,
+      "cell": {
+        "x": 18,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 753,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 45,
+      "cell": {
+        "x": 18,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 648,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 46,
+      "cell": {
+        "x": 16,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 646,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 47,
+      "cell": {
+        "x": 15,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 680,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 48,
+      "cell": {
+        "x": 17,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 752,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 49,
+      "cell": {
+        "x": 16,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 751,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 50,
+      "cell": {
+        "x": 14,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 609,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 51,
+      "cell": {
+        "x": 13,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 643,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 52,
+      "cell": {
+        "x": 15,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 540,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 53,
+      "cell": {
+        "x": 16,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 576,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 54,
+      "cell": {
+        "x": 13,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 608,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 55,
+      "cell": {
+        "x": 13,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 573,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 56,
+      "cell": {
+        "x": 15,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 505,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 57,
+      "cell": {
+        "x": 14,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 504,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 58,
+      "cell": {
+        "x": 14,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 539,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 59,
+      "cell": {
+        "x": 14,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 574,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 60,
+      "cell": {
+        "x": 15,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 575,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 61,
+      "cell": {
+        "x": 15,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 610,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 62,
+      "cell": {
+        "x": 15,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 645,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 63,
+      "cell": {
+        "x": 14,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 644,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 64,
+      "cell": {
+        "x": 14,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 679,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 65,
+      "cell": {
+        "x": 14,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 714,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 66,
+      "cell": {
+        "x": 15,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 715,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 67,
+      "cell": {
+        "x": 16,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 716,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 68,
+      "cell": {
+        "x": 16,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 681,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 69,
+      "cell": {
+        "x": 17,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 682,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 70,
+      "cell": {
+        "x": 18,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 683,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 71,
+      "cell": {
+        "x": 18,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 718,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 72,
+      "cell": {
+        "x": 19,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 719,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 73,
+      "cell": {
+        "x": 20,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 720,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 74,
+      "cell": {
+        "x": 20,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 685,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 75,
+      "cell": {
+        "x": 20,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 650,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 76,
+      "cell": {
+        "x": 20,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 615,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 77,
+      "cell": {
+        "x": 20,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 580,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 78,
+      "cell": {
+        "x": 19,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 579,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 79,
+      "cell": {
+        "x": 18,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 578,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 80,
+      "cell": {
+        "x": 18,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 543,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 81,
+      "cell": {
+        "x": 17,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 542,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 82,
+      "cell": {
+        "x": 17,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 507,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 83,
+      "cell": {
+        "x": 17,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 472,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 84,
+      "cell": {
+        "x": 17,
+        "y": 12
+      },
+      "state": "Attacking",
+      "slotId": 437,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 12500,
+      "radius": 250
+    },
+    {
+      "id": 85,
+      "cell": {
+        "x": 17,
+        "y": 28
+      },
+      "state": "Waiting",
+      "slotId": 997,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 28500,
+      "radius": 250
+    }
+  ],
+  "finalPose": [
+    {
+      "id": 1,
+      "cell": {
+        "x": 17,
+        "y": 22
+      },
+      "state": "Attacking",
+      "slotId": 787,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 22500,
+      "radius": 250
+    },
+    {
+      "id": 2,
+      "cell": {
+        "x": 16,
+        "y": 22
+      },
+      "state": "Attacking",
+      "slotId": 786,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 22500,
+      "radius": 250
+    },
+    {
+      "id": 3,
+      "cell": {
+        "x": 18,
+        "y": 22
+      },
+      "state": "Attacking",
+      "slotId": 788,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 22500,
+      "radius": 250
+    },
+    {
+      "id": 4,
+      "cell": {
+        "x": 15,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 750,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 5,
+      "cell": {
+        "x": 19,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 754,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 6,
+      "cell": {
+        "x": 14,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 749,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 7,
+      "cell": {
+        "x": 20,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 755,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 8,
+      "cell": {
+        "x": 13,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 713,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 9,
+      "cell": {
+        "x": 21,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 721,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 10,
+      "cell": {
+        "x": 12,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 642,
+      "moveTicks": 1,
+      "x": 12500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 11,
+      "cell": {
+        "x": 22,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 652,
+      "moveTicks": 1,
+      "x": 22500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 12,
+      "cell": {
+        "x": 13,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 678,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 13,
+      "cell": {
+        "x": 21,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 686,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 14,
+      "cell": {
+        "x": 12,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 607,
+      "moveTicks": 1,
+      "x": 12500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 15,
+      "cell": {
+        "x": 22,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 617,
+      "moveTicks": 1,
+      "x": 22500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 16,
+      "cell": {
+        "x": 12,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 572,
+      "moveTicks": 1,
+      "x": 12500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 17,
+      "cell": {
+        "x": 22,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 582,
+      "moveTicks": 1,
+      "x": 22500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 18,
+      "cell": {
+        "x": 13,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 538,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 19,
+      "cell": {
+        "x": 21,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 546,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 20,
+      "cell": {
+        "x": 13,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 503,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 21,
+      "cell": {
+        "x": 21,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 511,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 22,
+      "cell": {
+        "x": 14,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 469,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 23,
+      "cell": {
+        "x": 20,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 475,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 24,
+      "cell": {
+        "x": 16,
+        "y": 12
+      },
+      "state": "Attacking",
+      "slotId": 436,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 12500,
+      "radius": 250
+    },
+    {
+      "id": 25,
+      "cell": {
+        "x": 18,
+        "y": 12
+      },
+      "state": "Attacking",
+      "slotId": 438,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 12500,
+      "radius": 250
+    },
+    {
+      "id": 26,
+      "cell": {
+        "x": 15,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 470,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 27,
+      "cell": {
+        "x": 19,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 474,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 28,
+      "cell": {
+        "x": 16,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 471,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 29,
+      "cell": {
+        "x": 18,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 473,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 30,
+      "cell": {
+        "x": 16,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 506,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 31,
+      "cell": {
+        "x": 18,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 508,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 32,
+      "cell": {
+        "x": 16,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 541,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 33,
+      "cell": {
+        "x": 19,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 544,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 34,
+      "cell": {
+        "x": 19,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 614,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 35,
+      "cell": {
+        "x": 21,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 581,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 36,
+      "cell": {
+        "x": 21,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 616,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 37,
+      "cell": {
+        "x": 19,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 509,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 38,
+      "cell": {
+        "x": 20,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 510,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 39,
+      "cell": {
+        "x": 20,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 545,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 40,
+      "cell": {
+        "x": 19,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 649,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 41,
+      "cell": {
+        "x": 21,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 651,
+      "moveTicks": 1,
+      "x": 21500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 42,
+      "cell": {
+        "x": 19,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 684,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 43,
+      "cell": {
+        "x": 17,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 717,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 44,
+      "cell": {
+        "x": 18,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 753,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 45,
+      "cell": {
+        "x": 18,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 648,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 46,
+      "cell": {
+        "x": 16,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 646,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 47,
+      "cell": {
+        "x": 15,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 680,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 48,
+      "cell": {
+        "x": 17,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 752,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 49,
+      "cell": {
+        "x": 16,
+        "y": 21
+      },
+      "state": "Attacking",
+      "slotId": 751,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 21500,
+      "radius": 250
+    },
+    {
+      "id": 50,
+      "cell": {
+        "x": 14,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 609,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 51,
+      "cell": {
+        "x": 13,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 643,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 52,
+      "cell": {
+        "x": 15,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 540,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 53,
+      "cell": {
+        "x": 16,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 576,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 54,
+      "cell": {
+        "x": 13,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 608,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 55,
+      "cell": {
+        "x": 13,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 573,
+      "moveTicks": 1,
+      "x": 13500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 56,
+      "cell": {
+        "x": 15,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 505,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 57,
+      "cell": {
+        "x": 14,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 504,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 58,
+      "cell": {
+        "x": 14,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 539,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 59,
+      "cell": {
+        "x": 14,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 574,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 60,
+      "cell": {
+        "x": 15,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 575,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 61,
+      "cell": {
+        "x": 15,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 610,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 62,
+      "cell": {
+        "x": 15,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 645,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 63,
+      "cell": {
+        "x": 14,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 644,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 64,
+      "cell": {
+        "x": 14,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 679,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 65,
+      "cell": {
+        "x": 14,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 714,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 66,
+      "cell": {
+        "x": 15,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 715,
+      "moveTicks": 1,
+      "x": 15500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 67,
+      "cell": {
+        "x": 16,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 716,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 68,
+      "cell": {
+        "x": 16,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 681,
+      "moveTicks": 1,
+      "x": 16500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 69,
+      "cell": {
+        "x": 14,
+        "y": 26
+      },
+      "state": "Waiting",
+      "slotId": 924,
+      "moveTicks": 1,
+      "x": 14500,
+      "y": 26500,
+      "radius": 250
+    },
+    {
+      "id": 70,
+      "cell": {
+        "x": 18,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 683,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 71,
+      "cell": {
+        "x": 18,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 718,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 72,
+      "cell": {
+        "x": 19,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 719,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 73,
+      "cell": {
+        "x": 20,
+        "y": 20
+      },
+      "state": "Attacking",
+      "slotId": 720,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 20500,
+      "radius": 250
+    },
+    {
+      "id": 74,
+      "cell": {
+        "x": 20,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 685,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 19500,
+      "radius": 250
+    },
+    {
+      "id": 75,
+      "cell": {
+        "x": 20,
+        "y": 18
+      },
+      "state": "Attacking",
+      "slotId": 650,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 18500,
+      "radius": 250
+    },
+    {
+      "id": 76,
+      "cell": {
+        "x": 20,
+        "y": 17
+      },
+      "state": "Attacking",
+      "slotId": 615,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 17500,
+      "radius": 250
+    },
+    {
+      "id": 77,
+      "cell": {
+        "x": 20,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 580,
+      "moveTicks": 1,
+      "x": 20500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 78,
+      "cell": {
+        "x": 19,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 579,
+      "moveTicks": 1,
+      "x": 19500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 79,
+      "cell": {
+        "x": 18,
+        "y": 16
+      },
+      "state": "Attacking",
+      "slotId": 578,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 16500,
+      "radius": 250
+    },
+    {
+      "id": 80,
+      "cell": {
+        "x": 18,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 543,
+      "moveTicks": 1,
+      "x": 18500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 81,
+      "cell": {
+        "x": 17,
+        "y": 15
+      },
+      "state": "Attacking",
+      "slotId": 542,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 15500,
+      "radius": 250
+    },
+    {
+      "id": 82,
+      "cell": {
+        "x": 17,
+        "y": 14
+      },
+      "state": "Attacking",
+      "slotId": 507,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 14500,
+      "radius": 250
+    },
+    {
+      "id": 83,
+      "cell": {
+        "x": 17,
+        "y": 13
+      },
+      "state": "Attacking",
+      "slotId": 472,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 13500,
+      "radius": 250
+    },
+    {
+      "id": 84,
+      "cell": {
+        "x": 17,
+        "y": 12
+      },
+      "state": "Attacking",
+      "slotId": 437,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 12500,
+      "radius": 250
+    },
+    {
+      "id": 85,
+      "cell": {
+        "x": 17,
+        "y": 19
+      },
+      "state": "Attacking",
+      "slotId": 682,
+      "moveTicks": 1,
+      "x": 17500,
+      "y": 19500,
+      "radius": 250
+    }
+  ],
+  "actions": [
+    {
+      "kind": "withdraw-corridor",
+      "actor": 1,
+      "radius": 250,
+      "range": 4000,
+      "startTick": 180,
+      "endTick": 187,
+      "cells": [
+        787,
+        822,
+        823,
+        824,
+        825,
+        860,
+        895,
+        930
+      ]
+    },
+    {
+      "kind": "withdraw-corridor",
+      "actor": 48,
+      "radius": 250,
+      "range": 4000,
+      "startTick": 187,
+      "endTick": 194,
+      "cells": [
+        752,
+        787,
+        822,
+        823,
+        824,
+        859,
+        894,
+        929
+      ]
+    },
+    {
+      "kind": "withdraw-corridor",
+      "actor": 43,
+      "radius": 250,
+      "range": 4000,
+      "startTick": 194,
+      "endTick": 202,
+      "cells": [
+        717,
+        752,
+        787,
+        822,
+        857,
+        892,
+        891,
+        890,
+        889
+      ]
+    },
+    {
+      "kind": "withdraw-corridor",
+      "actor": 69,
+      "radius": 250,
+      "range": 4000,
+      "startTick": 202,
+      "endTick": 212,
+      "cells": [
+        682,
+        717,
+        752,
+        787,
+        822,
+        857,
+        892,
+        927,
+        926,
+        925,
+        924
+      ]
+    },
+    {
+      "kind": "short-range-enter",
+      "actor": 85,
+      "radius": 250,
+      "range": 1000,
+      "startTick": 212,
+      "endTick": 221,
+      "cells": [
+        997,
+        962,
+        927,
+        892,
+        857,
+        822,
+        787,
+        752,
+        717,
+        682
+      ]
+    },
+    {
+      "kind": "restore-corridor",
+      "actor": 43,
+      "radius": 250,
+      "range": 4000,
+      "startTick": 221,
+      "endTick": 229,
+      "cells": [
+        889,
+        890,
+        891,
+        892,
+        857,
+        822,
+        787,
+        752,
+        717
+      ]
+    },
+    {
+      "kind": "restore-corridor",
+      "actor": 48,
+      "radius": 250,
+      "range": 4000,
+      "startTick": 229,
+      "endTick": 236,
+      "cells": [
+        929,
+        928,
+        927,
+        892,
+        857,
+        822,
+        787,
+        752
+      ]
+    },
+    {
+      "kind": "restore-corridor",
+      "actor": 1,
+      "radius": 250,
+      "range": 4000,
+      "startTick": 236,
+      "endTick": 243,
+      "cells": [
+        930,
+        929,
+        928,
+        927,
+        892,
+        857,
+        822,
+        787
+      ]
+    }
+  ]
+}

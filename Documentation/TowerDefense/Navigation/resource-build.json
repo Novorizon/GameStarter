@@ -1,0 +1,251 @@
+{
+  "success": true,
+  "sourceCommit": "e36bfa9",
+  "scope": "YooAsset assets for StandaloneLinux64; not an IL2CPP Player or Windows/Android/iOS bundle build.",
+  "rawReportSha256": "93e25e8a7547891caeed1668e3299d67a9871591b2e5fac4c5b9a8de237d2dd4",
+  "summary": {
+    "YooVersion": "2.3.18",
+    "UnityVersion": "2022.3.62f1",
+    "BuildDate": "11/10/2026 22:43:48",
+    "BuildSeconds": 1,
+    "BuildTarget": 24,
+    "BuildPipeline": "BuiltinBuildPipeline",
+    "BuildBundleType": 2,
+    "BuildPackageName": "DefaultPackage",
+    "BuildPackageVersion": "20261110224345797",
+    "BuildPackageNote": "11/10/2026 22:43:45",
+    "UniqueBundleName": false,
+    "EnableAddressable": true,
+    "SupportExtensionless": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "AutoCollectShaders": true,
+    "IgnoreRuleName": "YooAsset.Editor.NormalIgnoreRule",
+    "ClearBuildCacheFiles": false,
+    "UseAssetDependencyDB": false,
+    "EnableSharePackRule": true,
+    "SingleReferencedPackAlone": true,
+    "EncryptionServicesClassName": "null",
+    "ManifestProcessServicesClassName": "null",
+    "ManifestRestoreServicesClassName": "null",
+    "FileNameStyle": 0,
+    "CompressOption": 2,
+    "DisableWriteTypeTree": false,
+    "IgnoreTypeTreeChanges": true,
+    "ReplaceAssetPathWithAddress": false,
+    "WriteLinkXML": true,
+    "CacheServerHost": "",
+    "CacheServerPort": 0,
+    "BuiltinShadersBundleName": "",
+    "MonoScriptsBundleName": "",
+    "AssetFileTotalCount": 30,
+    "MainAssetTotalCount": 27,
+    "AllBundleTotalCount": 11,
+    "AllBundleTotalSize": 20108606,
+    "EncryptedBundleTotalCount": 0,
+    "EncryptedBundleTotalSize": 0
+  },
+  "navigation": {
+    "Address": "TowerDefense/Data/ForestNavigation",
+    "AssetPath": "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes",
+    "AssetGUID": "77494a7633894b0483e489199c6fc70b",
+    "AssetTags": [
+      "navigation"
+    ],
+    "MainBundleName": "assets_gameassets_towerdefense_data_forestnavigation.bundle",
+    "MainBundleSize": 1976,
+    "DependAssets": [],
+    "DependBundles": []
+  },
+  "mainAssets": [
+    {
+      "address": "Camp/Art/Island",
+      "asset": "Assets/GameAssets/Camp/Art/Island.png",
+      "tags": [
+        "maps"
+      ]
+    },
+    {
+      "address": "Camp/Story/Arrival",
+      "asset": "Assets/GameAssets/Camp/Story/Arrival.json",
+      "tags": [
+        "story"
+      ]
+    },
+    {
+      "address": "Common/Fonts/GameUI",
+      "asset": "Assets/GameAssets/Common/Fonts/GameUI.asset",
+      "tags": [
+        "fonts"
+      ]
+    },
+    {
+      "address": "Common/Rendering/WorldLit",
+      "asset": "Assets/GameAssets/Common/Rendering/WorldLit.mat",
+      "tags": [
+        "rendering"
+      ]
+    },
+    {
+      "address": "Common/Rendering/WorldSprite",
+      "asset": "Assets/GameAssets/Common/Rendering/WorldSprite.mat",
+      "tags": [
+        "rendering"
+      ]
+    },
+    {
+      "address": "Common/Startup/Background",
+      "asset": "Assets/GameAssets/Common/Startup/Background.bytes",
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "address": "Common/Startup/Layout",
+      "asset": "Assets/GameAssets/Common/Startup/Layout.json",
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "address": "Common/UI/Avatar",
+      "asset": "Assets/GameAssets/Common/UI/Avatar.png",
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "address": "Common/UI/Icons",
+      "asset": "Assets/GameAssets/Common/UI/Icons.png",
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "address": "Common/UI/Panel",
+      "asset": "Assets/GameAssets/Common/UI/Panel.png",
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "address": "Data/Luban/manifest",
+      "asset": "Assets/GameAssets/Data/Luban/manifest.json",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbcamplevel",
+      "asset": "Assets/GameAssets/Data/Luban/tbcamplevel.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbcamptask",
+      "asset": "Assets/GameAssets/Data/Luban/tbcamptask.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbclienttheme",
+      "asset": "Assets/GameAssets/Data/Luban/tbclienttheme.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbexample",
+      "asset": "Assets/GameAssets/Data/Luban/tbexample.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbjourneytask",
+      "asset": "Assets/GameAssets/Data/Luban/tbjourneytask.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbplayerlevel",
+      "asset": "Assets/GameAssets/Data/Luban/tbplayerlevel.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdbuildslot",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdbuildslot.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdcard",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdcard.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdenemy",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdenemy.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdroutepoint",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdroutepoint.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdspawn",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdspawn.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdstage",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdstage.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdtower",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdtower.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "Data/Luban/tbtdwave",
+      "asset": "Assets/GameAssets/Data/Luban/tbtdwave.bytes",
+      "tags": [
+        "data"
+      ]
+    },
+    {
+      "address": "TowerDefense/Art/Map",
+      "asset": "Assets/GameAssets/TowerDefense/Art/Map.png",
+      "tags": [
+        "maps"
+      ]
+    },
+    {
+      "address": "TowerDefense/Data/ForestNavigation",
+      "asset": "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes",
+      "tags": [
+        "navigation"
+      ]
+    }
+  ]
+}

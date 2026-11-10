@@ -29,6 +29,13 @@ namespace Game.Editor
                 "Assets/GameAssets/TowerDefense/Art/Map.png",
                 nameof(PackSeparately),
                 nameof(TowerDefenseAddressRule));
+            changed |= ResourceCollectorSetup.SetGroup(
+                package,
+                "TowerDefenseNavigation",
+                "navigation",
+                "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes",
+                nameof(PackSeparately),
+                nameof(TowerDefenseAddressRule));
             if (changed)
             {
                 AssetBundleCollectorSettingData.SaveFile();

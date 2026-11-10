@@ -1,4 +1,5 @@
 using System;
+using Game.HotUpdate.TowerDefense.Domain.Navigation;
 
 namespace Game.HotUpdate.TowerDefense.Domain
 {
@@ -19,6 +20,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
     {
         public int InitialGold { get; set; }
         public int BaseHealth { get; set; }
+        public NavigationGrid Navigation { get; set; }
         public RouteDefinition[] Routes { get; set; } = Array.Empty<RouteDefinition>();
         public BuildSlotDefinition[] BuildSlots { get; set; } = Array.Empty<BuildSlotDefinition>();
         public TowerDefinition[] Towers { get; set; } = Array.Empty<TowerDefinition>();
@@ -61,6 +63,9 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int SpeedPerTick { get; set; }
         public int GoldReward { get; set; }
         public int BaseDamage { get; set; }
+        public int Radius { get; set; } = 220;
+        public int AttackRange { get; set; } = 450;
+        public int AttackIntervalTicks { get; set; } = 20;
     }
 
     public sealed class SpawnGroup
@@ -159,8 +164,23 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int Health { get; }
         public int MaxHealth { get; }
         public int Distance { get; }
+        public int Radius { get; }
+        public NavigationAgentStatus MovementState { get; }
+        public int AttackCooldownTicks { get; }
+        public int AttackSequence { get; }
 
-        internal EnemySnapshot(int id, int definitionId, int routeId, Position2 position, int health, int maxHealth, int distance)
+        internal EnemySnapshot(
+            int id,
+            int definitionId,
+            int routeId,
+            Position2 position,
+            int health,
+            int maxHealth,
+            int distance,
+            int radius = 0,
+            NavigationAgentStatus movementState = NavigationAgentStatus.Navigating,
+            int attackCooldownTicks = 0,
+            int attackSequence = 0)
         {
             Id = id;
             DefinitionId = definitionId;
@@ -169,6 +189,10 @@ namespace Game.HotUpdate.TowerDefense.Domain
             Health = health;
             MaxHealth = maxHealth;
             Distance = distance;
+            Radius = radius;
+            MovementState = movementState;
+            AttackCooldownTicks = attackCooldownTicks;
+            AttackSequence = attackSequence;
         }
     }
 }

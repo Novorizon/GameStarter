@@ -12,7 +12,7 @@
 - SDK StoryPlayer 驱动三段漂流抵达对白，TMP 呈现；正文以 YooAsset story 资源发布。完成或主动跳过记录已抵达，取消/失败不冒充完成，奖励在任务页另行领取。抵达保存未成功时可在当前大厅重试序章。
 - 本地建设、任务领取、战斗统计和补给使用同一份档案原子提交；失败不先扣材料/发奖励，同一当前战报不重复入账。旧档案保留战绩并初始化营地，真实 JsonUtility 的缺字段行为有单独验证。补给锁定出征时营地等级，保存失败后先建设营地再重试也不改变原战报奖励。
 - 14 张真实 Luban 表：8 张战斗、主题/旅程任务/等级 3 张、营地等级/任务 2 张及 Example。结构与合理分组见[客户端规划](../Game/ClientPlan.zh-CN.md)。
-- 固定路线塔防：6 波、7 建造位置、18 路线点、3 塔型、4 怪物型、7 强化卡；闲置隐藏建造标记，选塔后显示可建位置，点塔显示实际领域射程。
+- 固定通行区域塔防：6 波、7 建造位置、18 个参考路线点、3 塔型、4 怪物型、7 强化卡。敌人按显式逻辑格寻路、预约避让，在基地周围取得攻击/候场位置；闲置隐藏建造标记，选塔后显示可建位置，点塔显示实际领域射程。
 - 卡牌基础品级/颜色与表内图标已接通，抽牌仍为单池权重。飞入、粒子和主题扩展未在本轮制作。
 - AOT 启动展示继续保留：无下载显示步骤，有下载显示实际字节；图片/已知布局/文案缓存供下次启动。资源下载完成仍等业务就绪才退出展示。
 - imagegen 海岛底图、低模塔防地图、公共面板/图标/头像；文字全部 TMP。公共图像/字体和营地 maps/story/rendering 分类由 YooAsset 管理；运行时材质所需 Shader 有实际资源依赖。
@@ -21,8 +21,9 @@
 
 | 项目 | 证据 |
 | --- | --- |
-| 项目回归 | 92 项；含真实 Luban 解码、迁移、建设/任务、结算原子提交、奖励等级锁定、情报汇总、暂停叠加和 8 种种子策略通关 |
-| 领域 / 账号协调 | 12 / 13 项；账号使用测试后端，不代表正式登录/结算 |
+| 项目回归 | 97 项；含真实 Luban/导航解码、迁移、建设/任务、结算原子提交、奖励等级锁定、暂停叠加和 8 种种子实际导航策略通关 |
+| 导航 | 完整压力76/76、严格完整性56/56、过程死亡33/33；真实Unity10组无塔与满员围攻，逐ID核对到位、队列与死亡；详见导航验收 |
+| 领域 / 账号协调 | 12 / 13 项；12 项为旧折线参考检查，账号使用测试后端，不代表导航或正式登录/结算 |
 | Unity 脚本 | Unity 2022.3.62f1；9 Demo，13 Editor / 9 Player 程序集，包含新增 Story 示例 |
 | 包安装 | 聚合包安装、HybridCLR 嵌入、URP/热更配置完成；报告见 packages.json |
 | 原生流程 | Linux / llvmpipe OpenGLCore；1440×789 桌面与 1440×665 宽屏，报告明确实际渲染管线 |
@@ -33,13 +34,13 @@
 | 字体 | 战斗 TMP 47 / Legacy Text 0；营地/任务/剧情/启动展示也全部为 TMP |
 | 启动 | 两轮 Play 的就绪和退出、实际启动控件与缓存布局；25/100 MiB 下载控件验证输入不作为 HTTP 下载证据 |
 
-资源输出以[资源报告](Validation/resource-build.json)为准；上述 Editor 宽屏不是真机触控/物理尺寸/性能验收。SDK 和程序集引用变化需要重建匹配主包基线，图片、表和热更 DLL 要配套发行。
+本分支桌面完整流程和无塔围攻已重新执行；既有宽屏画面不是本次新增的真机或导航性能证明。当前资源输出为 [27 个 YooAsset 主资源](Navigation/resource-build.json)，含独立 `navigation` 分类。具体结果、复现命令、容量与性能边界见[导航验收](Navigation/Verification.zh-CN.md)。SDK 和程序集引用变化需要重建匹配主包基线，图片、表和热更 DLL 要配套发行。
 
 ## 实际画面与报告
 
 [玩家档案](player-profile.png) · [出征准备](expedition-preparation.png) · [手机档案](phone-player-profile.png) · [手机出征](phone-expedition-preparation.png) · [漂流序章](arrival-story.png) · [帐篷营地](camp-tent.png) · [海岛手记](camp-missions.png) · [围栏](camp-fence.png) · [庭院](camp-courtyard.png) · [家园](camp-home.png) · [塔防](battle.png) · [品级卡牌](three-cards.png)。这些为 Unity 实际渲染帧。
 
-[桌面](Validation/prototype.json)、[宽屏](Validation/phone-layout.json)、[脚本编译](Validation/player-compile.json)、[程序集](Validation/sample-assemblies.json)、[包安装](Validation/packages.json)、[资源包](Validation/resource-build.json)、[输入范围](Validation/inputs.json)。启动生命周期报告见 [EntryStartup](../Validation/EntryStartup/)。
+[桌面完整流程](Navigation/unity-gameplay.json)、[无塔围攻](Navigation/unity-navigation.json)、[围攻画面](Navigation/base-surround.png)、[F3 覆盖](Navigation/base-surround-debug.png)、[脚本编译](Navigation/player-compile.json)、[程序集](Navigation/sample-assemblies.json)、[既有宽屏](Validation/phone-layout.json)、[包安装](Validation/packages.json)、[资源包](Navigation/resource-build.json)、[输入范围](Validation/inputs.json)。启动生命周期报告见 [EntryStartup](../Validation/EntryStartup/)。
 
 验收入口：`Game.Editor.TowerDefenseValidation.Run`，加 `--novorizon-phone-layout` 检查宽屏；`Game.Editor.GameEntryValidation.Run` 验证启动与退出。这些 Play 验收不加 `-quit`。
 

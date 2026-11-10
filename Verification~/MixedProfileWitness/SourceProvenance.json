@@ -1,0 +1,79 @@
+{
+  "sourceCandidate": "B2 all-legal navigation, experiment/navigation-all-legal-slots commit 445a7db",
+  "sourceCandidateDomainAggregateSha256": "a9ee55d0667eaea51207568e41c52c11aed2f78d1998af0031d78db656a24ef7",
+  "sourceCandidateDomainFiles": {
+    "BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+    "BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+    "Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+    "FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+    "Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "Navigation/NavigationCrowd.AdmissionGates.cs": "d6de8f100f881ef14c21095a0b3277a0fda1c84a8b7d435fd8e1868c073d7269",
+    "Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+    "Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "Navigation/NavigationCrowd.Planning.cs": "73222d29bdee7e3a747ec88a5c19fc6de858bfcbc50967dead4cde1ac40bd557",
+    "Navigation/NavigationCrowd.Recovery.cs": "61de7dba5436f9ae825c8d9ba34e4a1f99f0510a83dbc2e22b98e6cc5c2b8fa6",
+    "Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "Navigation/NavigationCrowd.cs": "05a0f8fa1d2a76b415df42e621a2be6cf3bf6300b67e79b3da55c72c8ece1618",
+    "Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+  },
+  "originalFailureRunUtc": "2026-11-10T20:42:45.2869188Z",
+  "originalFailureSummarySha256": "235f6a2e0e488b41b99c07abff1fe61be1fba7a561cfb8632d325d3a344510fb",
+  "originalFailureRunCount": 76,
+  "originalFailureRunPassed": 68,
+  "originalFailureRunFailed": 8,
+  "originalFailureRunSourceFilesUnchanged": true,
+  "originalFailureRunSourceHashes": {
+    "Assets/HotUpdate/TowerDefense/Data/NavigationLayout.cs": "ed75fac4cce88a3572defb7e8dad2ae95e652fc45c25fe5c5866cac72cf8b7a7",
+    "Assets/HotUpdate/TowerDefense/Domain/BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+    "Assets/HotUpdate/TowerDefense/Domain/BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+    "Assets/HotUpdate/TowerDefense/Domain/Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "Assets/HotUpdate/TowerDefense/Domain/DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+    "Assets/HotUpdate/TowerDefense/Domain/FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.AdmissionGates.cs": "d6de8f100f881ef14c21095a0b3277a0fda1c84a8b7d435fd8e1868c073d7269",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Planning.cs": "73222d29bdee7e3a747ec88a5c19fc6de858bfcbc50967dead4cde1ac40bd557",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Recovery.cs": "61de7dba5436f9ae825c8d9ba34e4a1f99f0510a83dbc2e22b98e6cc5c2b8fa6",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.cs": "05a0f8fa1d2a76b415df42e621a2be6cf3bf6300b67e79b3da55c72c8ece1618",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e",
+    "Verification~/TowerDefenseNavigation/GeometryChecks.cs": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a",
+    "Verification~/TowerDefenseNavigation/GridContracts.cs": "a5d847d9483bb78099168648896f05135475e21d7f7816acd4a710e5763d189b",
+    "Verification~/TowerDefenseNavigation/LayoutContracts.cs": "b4f23a4c794373160c5744c8839dbbf41a20a1f88734d633194df7b4c1022228",
+    "Verification~/TowerDefenseNavigation/MixedProfiles.cs": "1478b3b3d6bd865617ff35abb150472cb009afc323549d2e9e5e9271ac8eb3bd",
+    "Verification~/TowerDefenseNavigation/NavigationAdapter.cs": "1801ac0c6875b753e680252c2f9cbbbd330e0989bae2b1e50b2cf7527fc58e4e",
+    "Verification~/TowerDefenseNavigation/Observations.cs": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800",
+    "Verification~/TowerDefenseNavigation/ParkingLaneCertificate.cs": "44b684f2ae3676efc08020851c48cd6b3a5d8d510bce9f55e3cd8f1c252af214",
+    "Verification~/TowerDefenseNavigation/PlanningContracts.cs": "d223a1f2fcb2fbc62cfa2d6339f7f717200faaa5765c714cf932d900eb16364a",
+    "Verification~/TowerDefenseNavigation/Program.cs": "ba0d73bed0cb4dca504212d37038e20ca2043ac098449240f6f2d3a038d81436",
+    "Verification~/TowerDefenseNavigation/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+    "Verification~/TowerDefenseNavigation/SourceSnapshot.cs": "2193c66b8a71db7e8a5b74943a037f6dbc39c99d596346c5dd2ef1dc4c8d15cf"
+  },
+  "extractionScript": "ExtractInputs.py",
+  "originalInputLogSha256": {
+    "mixed-profile-outer-before-inner-1.json": "f6b793b491850f7db3e1787a60d283bb09ae78fe46a9d0bb89e0b5d28dcd8b26",
+    "mixed-profile-outer-before-inner-17.json": "f3928fdacba2f2a49d0c67eb4b182258f02ac2d68c99a83d15d1e2d089aa97f2",
+    "mixed-profile-outer-before-inner-733.json": "620e2b97a029660bdb1387afefe7bc0b5d66b954014c2fa7af54c1c5144c84c7",
+    "mixed-profile-outer-before-inner-20261110.json": "3f8b465535dfcb58d4ba9e1936464b21cfa0dd768baf6d69a9a57eacaddf5d59",
+    "mixed-profile-inner-before-outer-1.json": "c66d6330687f3a0f938a7d9119f009f57b71fcf5fc566070013335b69b3a2669",
+    "mixed-profile-inner-before-outer-17.json": "0e0504c7d7691da6a735786d45004a9f7a460a036f349a4dc7cd43f0a257b783",
+    "mixed-profile-inner-before-outer-733.json": "597667b1e5974b7c120a7476ed124fa8a674ddf516bb47705be095c582806afa",
+    "mixed-profile-inner-before-outer-20261110.json": "9cbab51010f153671568600cb6bd1a1eb43d095a7454724867aed79624666b64"
+  },
+  "frozenOracleSources": {
+    "Oracle/GeometryTypes.cs": {
+      "originalRepositoryPath": "Verification~/TowerDefenseNavigationChallenges/GeometryTypes.cs",
+      "sha256": "ffe76601323bf8e5ac82936ebc7e8204f4d53f7509db618568b9c81e4be3facb"
+    },
+    "Oracle/GeometryChecks.cs": {
+      "originalRepositoryPath": "Verification~/TowerDefenseNavigation/GeometryChecks.cs",
+      "sha256": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a"
+    },
+    "Oracle/Observations.cs": {
+      "originalRepositoryPath": "Verification~/TowerDefenseNavigation/Observations.cs",
+      "sha256": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800"
+    }
+  }
+}
