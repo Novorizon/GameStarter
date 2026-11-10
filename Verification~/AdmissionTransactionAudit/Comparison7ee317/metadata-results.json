@@ -1,0 +1,38 @@
+[
+  {
+    "limit": 17200,
+    "speed": 500,
+    "metadataEqual": true,
+    "claimsEqual": true,
+    "removed44": true,
+    "remainingClaims": 0,
+    "remainingReservations": 0
+  },
+  {
+    "limit": 17200,
+    "speed": 250,
+    "metadataEqual": true,
+    "claimsEqual": true,
+    "removed44": true,
+    "remainingClaims": 0,
+    "remainingReservations": 0
+  },
+  {
+    "limit": 17500,
+    "speed": 500,
+    "metadataEqual": true,
+    "claimsEqual": true,
+    "removed44": true,
+    "remainingClaims": 0,
+    "remainingReservations": 0
+  },
+  {
+    "limit": 17500,
+    "speed": 250,
+    "metadataEqual": true,
+    "claimsEqual": true,
+    "removed44": true,
+    "remainingClaims": 0,
+    "remainingReservations": 0
+  }
+]
