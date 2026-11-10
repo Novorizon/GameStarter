@@ -48,3 +48,9 @@ dotnet run --project Verification~/NavigationPerformance/NavigationPerformance.c
 全程减少 71.78%，指定热窗减少 79.62%。`Evidence/Functional/comparison.json` 另记录实际 Forest 四类/70 轮死亡补位与需求生命周期八例，其完整物理和公开结果与 B7 逐字段完全相同。
 
 该改动没有消除所有冷运行峰值。Root 的独立 Mono 复测仍记录一次零展开的冷帧高 CPU；热运行与完整 Unity 功能/资源验收由 Root 另行归档，不能用这些 .NET 分配数据替代 Mono 或设备性能结论。
+
+## Root 编译兼容修复的额外复验
+
+Root 后续提交 `e36bfa9` 显式调用 `Enumerable.Reverse(layout.Owners)`，避免新 C#14 把数组的 Reverse 解析为 Span 原地操作。该修复未写入此性能分支，原 `d155` 仍作为精确性能对照候选。
+
+通过 `CandidateDomain` 单独编译 Root 最终 `074502ae2c712a92094d4b851c451afba25ac300c063f78e28b605b767a72c2f` 后，真实 Forest 四类/70 轮补位全部通过，源码与测试不漂移；其完整物理、时序与公开结果逐字段等于 `d155`。新源报告及对照索引在 `Evidence/RootReverseCompatibility`，不冒充原性能变体的源码摘要。
