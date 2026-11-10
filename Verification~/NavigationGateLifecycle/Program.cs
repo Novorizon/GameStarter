@@ -8,6 +8,11 @@ internal static class Program
 
     public static int Main(string[] args)
     {
+        if (Array.IndexOf(args, "--legacy") < 0)
+        {
+            return ForestGateLifecycle.Run(args);
+        }
+
         string output = Argument(args, "--output") ?? "Artifacts/NavigationGateLifecycle";
         string? seedText = Argument(args, "--seed");
         int[] seeds = seedText == null ? new[] { 1, 17, 733, 20261110 } : new[] { int.Parse(seedText) };

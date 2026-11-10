@@ -1,0 +1,18 @@
+{
+  "productionCommit": "445a7db56a5014954463b08d7a7d511dad5a80bb",
+  "productionDomainAggregateSha256": "a9ee55d0667eaea51207568e41c52c11aed2f78d1998af0031d78db656a24ef7",
+  "compiledDomainFileCount": 10,
+  "productionManifestIncludesAdditionalFilesNotCompiledByThisSuite": true,
+  "candidateCopy": "/workspace/navigation-experiments/lifecycle-audit-candidate-b2/Domain",
+  "scope": "Pure navigation model lifecycle audit. No Unity rendering, Player, IL2CPP, network or device claim.",
+  "count": 30,
+  "passed": 30,
+  "allRequiredDeathInjectionsExecuted": true,
+  "allFinalPopulation44Big2Small": true,
+  "allFinalAttacking20Waiting26": true,
+  "allQueuesEmpty": true,
+  "postRecoveryHoldTicks": 200,
+  "totalCaseElapsedMilliseconds": 88009,
+  "minimumFinalTick": 9408,
+  "maximumFinalTick": 12430
+}
