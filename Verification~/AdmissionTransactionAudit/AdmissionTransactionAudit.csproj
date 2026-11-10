@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NuGetAudit>false</NuGetAudit>
+    <NavigationDomainRoot Condition="'$(NavigationDomainRoot)' == '' and '$(CandidateDomain)' != ''">$(CandidateDomain)</NavigationDomainRoot>
+    <NavigationDomainRoot Condition="'$(NavigationDomainRoot)' == ''">$(MSBuildProjectDirectory)/../../Assets/HotUpdate/TowerDefense/Domain</NavigationDomainRoot>
+    <NavigationLayoutFile Condition="'$(NavigationLayoutFile)' == ''">$(NavigationDomainRoot)/../Data/NavigationLayout.cs</NavigationLayoutFile>
+    <NavigationMapFile Condition="'$(NavigationMapFile)' == ''">$(MSBuildProjectDirectory)/../../Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes</NavigationMapFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs;Audit.cs;CrowdSnapshot.cs;Fixtures.cs;CacheCases.cs;ForestCases.cs" />
+    <Compile Include="$(NavigationDomainRoot)/**/*.cs" Link="Domain/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="$(NavigationLayoutFile)" Link="Data/NavigationLayout.cs" />
+    <None Include="$(NavigationMapFile)" Link="ForestNavigation.bytes" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="ValidateCandidate" BeforeTargets="CoreCompile">
+    <Error Condition="!Exists('$(NavigationDomainRoot)/Navigation/NavigationCrowd.AdmissionGates.cs')" Text="Select the current admission-gate Domain with -p:NavigationDomainRoot=... or -p:CandidateDomain=... ." />
+    <Error Condition="!Exists('$(NavigationLayoutFile)')" Text="NavigationLayoutFile does not exist." />
+    <Error Condition="!Exists('$(NavigationMapFile)')" Text="NavigationMapFile does not exist." />
+  </Target>
+</Project>
