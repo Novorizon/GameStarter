@@ -45,4 +45,4 @@ dotnet run --project Experiment~/AllLegalSlots/AllLegalSlots.csproj -c Release -
 
 `Verification~/AttackQuotaRegression` 默认两例、完整八例覆盖四入口的 16→1→16、活体归零、新波及普通空位增长，最终快照均通过，证据按各自精确 test hash 归档。MixedProfiles 记录成功和失败的每次出生输入，重放必须得到相同结果；逐 ID 固定原请求半径/速度/range，各阶段明确检查 Short1/Long83 或 Short16/Long68。
 
-严格 14×4、Forest 过程死亡 30、quota 过程死亡 3、入口分类和缓存等由独立审计分支提供。旧快照报告压缩保存在 `Evidence` 并明确版本，不能当作新源验收。这些验证针对已列明输入，不构成任意地图多智能体重排或任意 profile 公平性的完备性证明。
+最终 `b7ea41` 已通过独立严格 14×4（56/56）、Forest 过程死亡 30、quota 过程死亡 3（33/33）及入口分类/缓存回归。33 项的审计提交为 `09cdcee60a285650e0edcaf236472afcc34b2212`，准确绑定生产 `207d92b`；完整验收与 Unity 记录由 Root 整合。旧快照报告压缩保存在 `Evidence` 并明确版本，不能当作新源验收。这些验证针对已列明输入，不构成任意地图多智能体重排或任意 profile 公平性的完备性证明。
