@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "scope": "Archived project and copied directory outside the workspace; independently built and executed both.",
+  "archivedRunPassed": 8,
+  "relocatedRunPassed": 8,
+  "sourceHashesIdentical": true,
+  "archivedExecutionDllSha256": "93e38a73f604da8c481c2723e03cf81dbce1d1a47063f1aa6301884e9c5b0fbd",
+  "relocatedExecutionDllSha256": "6c21439fabb608ddd357c3da143ebce6c39884d59a41e38d236a4b71d9d53145",
+  "executionIdentityNote": "Each build records its own actual DLL; physical records and source hashes agree across relocated builds.",
+  "allEightPhysicalEvidenceRecordsIdenticalExceptElapsedTimeAndExecutionDllIdentity": true,
+  "tamperedFixture": "mixed-profile-outer-before-inner-1.json",
+  "tamperedFixtureRejected": true,
+  "tamperExitCode": 1,
+  "tamperError": "InvalidOperationException: The input fixture bytes differ from the frozen manifest: mixed-profile-outer-before-inner-1.json",
+  "originalLogExtractionVerified": true,
+  "extractionVerifiedFiles": 8
+}
