@@ -13,6 +13,7 @@
   <ItemGroup>
     <Compile Include="$(NavigationDomainRoot)/Configuration.cs" Link="Candidate/Configuration.cs" />
     <Compile Include="$(NavigationDomainRoot)/Navigation/**/*.cs" Link="Candidate/Navigation/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Data/NavigationLayout.cs" Link="Candidate/NavigationLayout.cs" />
     <Compile Include="../TowerDefenseNavigationChallenges/Challenges.cs" Link="Oracle/Challenges.cs" />
     <Compile Include="../TowerDefenseNavigationChallenges/GeometryTypes.cs" Link="Oracle/GeometryTypes.cs" />
     <Compile Include="../TowerDefenseNavigation/GeometryChecks.cs" Link="Oracle/GeometryChecks.cs" />

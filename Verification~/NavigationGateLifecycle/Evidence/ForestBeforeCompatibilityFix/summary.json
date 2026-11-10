@@ -1,0 +1,73 @@
+{
+  "utc": "2026-11-10T20:33:01.2126495Z",
+  "domain": "/tmp/navigation-forest-gate-exploration/Domain",
+  "map": "/workspace/navigation-experiments/lifecycle-audit/Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes",
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+  "sourceHashes": {
+    "/tmp/navigation-forest-gate-exploration/Domain/Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationCrowd.AdmissionGates.cs": "e3f2310536531ece8a0da189cb75461095b2bce88285ac0bf89f20edfab97eca",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationCrowd.cs": "3e193b43926aeb609a3d6d25cd91bc476e127ad51bbc37c0ed2c3fa2211a0d39",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationCrowd.Planning.cs": "50daed2018e41a7d12e9bf1a8406bebf559cc9d473db1eececcd3469a1c1376b",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationCrowd.Recovery.cs": "61de7dba5436f9ae825c8d9ba34e4a1f99f0510a83dbc2e22b98e6cc5c2b8fa6",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "/tmp/navigation-forest-gate-exploration/Domain/Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+  },
+  "testHashes": {
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/Audit.cs": "0d81278e7f076e10f5736cd974892eec1d8d9a8864cc151e0496f6be7398b9d2",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/ForestAudit.cs": "6d61e22da5bd741118dfa0ff7abeb0626b2147426e2ec77173f38728d69fc46d",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/Program.cs": "ab6a37ebc6a6c6ee5fb9fa7111cc9b53b98013e06df25b6228632af1ed16fbe9",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigationChallenges/Challenges.cs": "18a702c653ab7b1dacf6a85a7e0c5478e523574ab1faedc250c2931ec6f0bf5e",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigationChallenges/GeometryTypes.cs": "b364940850dc2bf8453573da27f1bb2efc276ccf8bbcad989083c3de418a71c2",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigation/GeometryChecks.cs": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a",
+    "/workspace/navigation-experiments/lifecycle-audit/Verification~/TowerDefenseNavigation/Observations.cs": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800",
+    "/workspace/navigation-experiments/lifecycle-audit/Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+    "/workspace/navigation-experiments/lifecycle-audit/Assets/HotUpdate/TowerDefense/Data/NavigationLayout.cs": "ed75fac4cce88a3572defb7e8dad2ae95e652fc45c25fe5c5866cac72cf8b7a7"
+  },
+  "testBinarySha256": "06dc956f9b609821fd5cfcf2f1828febe4a87325f14172855355ab8995fe8260",
+  "sourceFilesUnchanged": true,
+  "testSourceFilesUnchanged": true,
+  "count": 1,
+  "passed": 0,
+  "success": false,
+  "results": [
+    {
+      "phase": "outbound-big",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": false,
+      "error": "System.InvalidOperationException: Deadline: feasible late-46 population was not fully restored, or the required phase injection did not execute.\n   at ForestGateLifecycle.Require(Boolean condition, String message) in /workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/ForestAudit.cs:line 462\n   at ForestGateLifecycle.Execute(String map, String phase, Int32 ordinal, Int32 smallSpeed) in /workspace/navigation-experiments/lifecycle-audit/Verification~/NavigationGateLifecycle/ForestAudit.cs:line 292",
+      "injection": {
+        "tick": 3492,
+        "phase": "outbound-big",
+        "removedIds": [
+          2
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 20001,
+      "elapsedMilliseconds": 5530,
+      "requested": 47,
+      "admitted": 46,
+      "active": 45,
+      "pending": 1,
+      "explicitDeaths": 1,
+      "attacking": 19,
+      "queueConserved": false,
+      "continuousOracleVerified": false,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "f55f163d43b70bb1586c7a619c3d9f199ab8c9d27fe1ed13ef65be07ae074b0f"
+    }
+  ]
+}
