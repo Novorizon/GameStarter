@@ -157,7 +157,7 @@ def main():
         env.setdefault('DOTNET_SKIP_FIRST_TIME_EXPERIENCE', '1')
         subprocess.run([args.dotnet, 'build', 'Verification~/GameStarter.Verification.csproj', '-c', 'Release', '-m:1', '--disable-build-servers', '--nologo', '-p:FrameworkPackageRoot=' + str(framework), '-p:HotUpdatePackageRoot=' + str(hot_package), '-p:DataPackageRoot=' + str(data_package), '-p:LubanPackageRoot=' + str(luban), '-p:YooAssetPackageRoot=' + str(yoo / 'Assets/YooAsset'), '-p:ResourcesPackageRoot=' + str(framework.parent / 'com.novorizon.framework.yooasset')], cwd=ROOT, env=env, check=True)
         subprocess.run([args.dotnet, 'Verification~/bin/Release/net8.0/GameStarter.Verification.dll'], cwd=ROOT, env=env, check=True)
-        for suite in ['TowerDefenseDomain', 'TowerDefenseOnline', 'TowerDefenseNavigation']:
+        for suite in ['TowerDefenseDomain', 'TowerDefenseOnline', 'TowerDefenseNavigation', 'TowerDefenseNavigationChallenges']:
             subprocess.run([args.dotnet, 'run', '--project', 'Verification~/' + suite + '/' + suite + '.csproj', '-c', 'Release'], cwd=ROOT, env=env, check=True)
 
 
