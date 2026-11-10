@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "scope": "Only this new self-contained witness directory; no production or older challenge files.",
+  "excluded": [
+    "ArchiveManifest.json",
+    "bin/",
+    "obj/",
+    "Results/",
+    "__pycache__/"
+  ],
+  "fileCount": 27,
+  "files": {
+    "Evidence/mixed-profile-inner-before-outer-1.witness.json": "8901195122ce64e8c584cedc95ba4378d74c63be0b143097548d59310476360a",
+    "Evidence/mixed-profile-inner-before-outer-17.witness.json": "1cd5403b3b91c4cbb6a3673f088e644dec280ddbb3f5ceb12d0394bd2b42b47e",
+    "Evidence/mixed-profile-inner-before-outer-20261110.witness.json": "6f9e9d8091503ff37e36b23b353ac5f61c87d731a298409ab811d4371107fc94",
+    "Evidence/mixed-profile-inner-before-outer-733.witness.json": "31b6774ad9598622a21b3abd618c20d15c7e2539067daa2450c1dc17b7595b78",
+    "Evidence/mixed-profile-outer-before-inner-1.witness.json": "59a04c5cea8176c3d6e5929f08c1ef16e47bdd280890ac507bf568eae541ef5f",
+    "Evidence/mixed-profile-outer-before-inner-17.witness.json": "d85cc70ddd468c2e27d2e955963fbfe080cd0075d78f2c5536b8716f8961d3ed",
+    "Evidence/mixed-profile-outer-before-inner-20261110.witness.json": "15c6cc03005695aa60b9113031cd194d797460b01579c5a6c2a0b633f0b8d993",
+    "Evidence/mixed-profile-outer-before-inner-733.witness.json": "4e1dc86b1edb7b8f98f4513016095d6f69b803276412689f4f8e29f95732e359",
+    "Evidence/summary.json": "aa7091278d02563f3bb416fbad53233d3cbab24dba832bee83e8baf55e3ef556",
+    "ExtractInputs.py": "0f4126245eca647c7e539d7e726111369da19a366023beb1b2a17a7c45975ec3",
+    "InputManifest.json": "346baee91f38b51a5e20da4978d41c1e3156f4e52c40695d4b85e03769cb0ced",
+    "Inputs/mixed-profile-inner-before-outer-1.json": "981de777e769be4f1ab699e35fcb7a7cb8005d8df022296068e526b025bebafb",
+    "Inputs/mixed-profile-inner-before-outer-17.json": "a857be4125c8b5bc84fc7d324c45ea693af944e159b2badff5aac8ef7f19149d",
+    "Inputs/mixed-profile-inner-before-outer-20261110.json": "437416a40782ec246b0ae42a05684ea17df93bead7d12488f31805e00b09d552",
+    "Inputs/mixed-profile-inner-before-outer-733.json": "ba5e4c9586aee6a24f09cc11446c7afd6bd7d37b0133d38b6f58107c425ddd54",
+    "Inputs/mixed-profile-outer-before-inner-1.json": "99eb56da1b3023da20c111e4e475f8816fd2d9b344987ca45ccf1e753a843cc7",
+    "Inputs/mixed-profile-outer-before-inner-17.json": "c1fa1ae67a49640ff02e57c42d1502e8824355fcc90106bdb6dd8a897aabf1e2",
+    "Inputs/mixed-profile-outer-before-inner-20261110.json": "1d9605c9c021b63af90bbedb941c6d8676553775697dcf181990f640d1293dfc",
+    "Inputs/mixed-profile-outer-before-inner-733.json": "a350902fd5eeef938fe9a8055f19a001571f600bcc5494e45b07551a967a5940",
+    "MixedProfileWitness.csproj": "cf9ba00ec02f665a0e58b56da0fe03558f14025f91890defc949e519e03e0b90",
+    "Oracle/GeometryChecks.cs": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a",
+    "Oracle/GeometryTypes.cs": "ffe76601323bf8e5ac82936ebc7e8204f4d53f7509db618568b9c81e4be3facb",
+    "Oracle/Observations.cs": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800",
+    "PortabilityVerification.json": "befb1322187f20911593249a79c3046b1119518eec4bcd7b437fe0725d650554",
+    "Program.cs": "0a1d877e1ad0c386085f801c5bee4e9925063ff1110b7bc260172972290690b6",
+    "README.md": "29a8019b3755ad1fa05c03be3a0fc58f6b41780b74dc502a4605a466dad15ff2",
+    "SourceProvenance.json": "1452706f6e2c9cd2086ba5c988c646faa4417895a5d6c9f889587667c9187fa6"
+  }
+}
