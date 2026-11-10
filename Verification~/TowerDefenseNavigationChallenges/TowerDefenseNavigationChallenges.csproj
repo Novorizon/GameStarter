@@ -19,5 +19,9 @@
       <_Parameter1>NavigationDomainRoot</_Parameter1>
       <_Parameter2>$(NavigationDomainRoot)</_Parameter2>
     </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>ChallengeProjectRoot</_Parameter1>
+      <_Parameter2>$(MSBuildThisFileDirectory)</_Parameter2>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>

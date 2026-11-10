@@ -23,7 +23,20 @@ internal static class ChallengeRunner
         };
         var stopwatch = Stopwatch.StartNew();
         var orders = challenge.Orders.ToDictionary(order => order.Id);
+        foreach (var order in challenge.Orders)
+        {
+            AddLifecycle(result, order, 0);
+        }
         var pending = challenge.Orders.ToList();
+        if (seed == 1 && challenge.FirstSeedAscending)
+        {
+            pending.Reverse();
+        }
+        if (seed != 1)
+        {
+            pending.Sort((first, second) => Priority(first.Id, seed).CompareTo(Priority(second.Id, seed)));
+        }
+        result.InitialInputPriority.AddRange(pending.AsEnumerable().Reverse().Select(order => order.Id));
         var admitted = new HashSet<int>();
         var deaths = new HashSet<int>();
         var previous = new Dictionary<int, UnitObservation>();
@@ -51,8 +64,7 @@ internal static class ChallengeRunner
             if (challenge.Blocker != null)
             {
                 bool blockerSpawned = TryBirth(crowd, challenge.Blocker);
-                Require(blockerSpawned,
-                    "The deliberate temporary blocker was not admitted: " + crowd.LastFailure);
+                Require(blockerSpawned, "The deliberate temporary blocker was not admitted: " + crowd.LastFailure);
                 Record(result, crowd, challenge.Blocker, "spawn", "blocker");
             }
 
@@ -60,6 +72,7 @@ internal static class ChallengeRunner
             for (int tick = 0; tick <= deadline; tick++)
             {
                 Validate(challenge, crowd, orders, previous);
+                UpdateLifecycles(result, challenge, crowd, orders);
                 if (!blockerRemoved && tick >= challenge.RemoveBlockerTick)
                 {
                     var follower = crowd.Agents.Where(agent => agent.Id != challenge.Blocker!.Id && agent.Position.X < 15500)
@@ -70,8 +83,9 @@ internal static class ChallengeRunner
                         followerStart = follower.Position;
                     }
 
+                    var blockerPosition = crowd.Agents.Single(agent => agent.Id == challenge.Blocker!.Id).Position;
                     Require(Remove(crowd, challenge.Blocker!.Id), "The temporary blocker disappeared without its explicit removal command.");
-                    Record(result, crowd, challenge.Blocker, "remove", "blocker");
+                    Record(result, crowd, challenge.Blocker, "remove", "blocker", removalPosition: blockerPosition);
                     blockerRemoved = true;
                 }
 
@@ -107,29 +121,26 @@ internal static class ChallengeRunner
                 }
 
                 Validate(challenge, crowd, orders, previous);
-                var regular = crowd.Agents.Where(agent => orders.ContainsKey(agent.Id)).ToArray();
-                Require(
-                    orders.Count == regular.Length + pending.Count + deaths.Count,
-                    "Request conservation failed: active + queued + explicit deaths != all requests.");
-                Require(admitted.Count == regular.Length + deaths.Count, "An admitted unit vanished or an unadmitted unit appeared.");
-                var activeIds = regular.Select(agent => agent.Id).ToHashSet();
-                Require(activeIds.Count == regular.Length && activeIds.SetEquals(admitted.Except(deaths)),
-                    "The active ID set differs from admitted IDs minus explicit deaths.");
-                Require(pending.All(order => !admitted.Contains(order.Id) && !deaths.Contains(order.Id)), "A queued request was counted as active or dead.");
-                result.QueueConserved = true;
+                UpdateLifecycles(result, challenge, crowd, orders);
+                var regular = VerifyConservation(result, crowd, orders, admitted, pending, deaths);
 
                 bool currentGroupReady = pending.All(order => order.Group > currentGroup) && regular.All(agent => Arrived(challenge, crowd, agent));
                 if (currentGroupReady && currentGroup < lastGroup)
                 {
                     Require(
-                        regular.Count(agent => agent.Status == NavigationAgentStatus.Attacking) >= 27,
+                        regular.Count(agent => agent.Status == NavigationAgentStatus.Attacking) >= challenge.AttackersBeforeNextGroup,
                         "The initial outer ring did not establish the intended dense attacking formation.");
+                    foreach (var agent in regular.Where(agent => orders[agent.Id].Group == 0 && agent.Status == NavigationAgentStatus.Attacking))
+                    {
+                        result.InitialGroupGoals[agent.Id] = agent.GoalCell;
+                    }
                     currentGroup++;
                     groupTicks[currentGroup] = tick;
                 }
 
                 bool ready = pending.Count == 0 && currentGroup == lastGroup && regular.All(agent => Arrived(challenge, crowd, agent))
-                    && AttackRequirement(challenge, crowd, regular);
+                    && AttackRequirement(challenge, crowd, regular) && InitialGoalsRestored(challenge, result, regular);
+                bool atProvenCapacity = OverflowReady(challenge, result, crowd, regular, pending);
                 if (blockerRemoved && challenge.Blocker != null && blockerFollower >= 0)
                 {
                     var follower = regular.FirstOrDefault(agent => agent.Id == blockerFollower);
@@ -146,26 +157,41 @@ internal static class ChallengeRunner
                     var phase = challenge.Recovery[startedRecovery];
                     bool duringArrival = phase.DuringArrival && regular.Any(agent => agent.Status == NavigationAgentStatus.Attacking)
                         && (pending.Count > 0 || regular.Any(agent => agent.Status == NavigationAgentStatus.Navigating));
-                    if (ready && !phase.DuringArrival || duringArrival)
+                    if (phase.Pattern == DeathPattern.InFlightNonCenter)
+                    {
+                        duringArrival &= regular.Any(InFlight);
+                    }
+                    bool readyForRecovery = ready || challenge.RefillFromExistingQueue && atProvenCapacity;
+                    if (readyForRecovery && !phase.DuringArrival || duringArrival)
                     {
                         var victims = SelectVictims(phase, regular, challenge.Geometry.Target);
                         Require(victims.Length > 0, "The requested death/recovery fixture selected no live victim.");
                         foreach (var victim in victims)
                         {
                             var prior = orders[victim.Id];
+                            bool wasNavigating = victim.Status == NavigationAgentStatus.Navigating;
+                            var deathPosition = victim.Position;
                             Require(Remove(crowd, victim.Id) && deaths.Add(victim.Id), "A death command failed or was applied twice.");
-                            Record(result, crowd, prior, "remove");
-                            var replacement = new AgentOrder
+                            Record(result, crowd, prior, "remove", diedWhileNavigating: wasNavigating, removalPosition: deathPosition);
+                            if (challenge.RefillFromExistingQueue)
                             {
-                                Id = nextId++,
-                                Spawn = prior.Spawn,
-                                Radius = prior.Radius,
-                                Range = prior.Range,
-                                Speed = prior.Speed,
-                                Group = currentGroup
-                            };
-                            orders.Add(replacement.Id, replacement);
-                            pending.Add(replacement);
+                                Require(pending.Count >= victims.Length, "The queued reinforcement fixture has no remaining requests to refill vacancies.");
+                            }
+                            else
+                            {
+                                var replacement = new AgentOrder
+                                {
+                                    Id = nextId++,
+                                    Spawn = prior.Spawn,
+                                    Radius = prior.Radius,
+                                    Range = prior.Range,
+                                    Speed = prior.Speed,
+                                    Group = currentGroup
+                                };
+                                orders.Add(replacement.Id, replacement);
+                                AddLifecycle(result, replacement, tick);
+                                pending.Add(replacement);
+                            }
                         }
 
                         startedRecovery++;
@@ -176,16 +202,18 @@ internal static class ChallengeRunner
                     }
                 }
 
-                if (ready && recovering)
+                regular = VerifyConservation(result, crowd, orders, admitted, pending, deaths);
+                ready = pending.Count == 0 && currentGroup == lastGroup && regular.All(agent => Arrived(challenge, crowd, agent))
+                    && AttackRequirement(challenge, crowd, regular) && InitialGoalsRestored(challenge, result, regular);
+                atProvenCapacity = OverflowReady(challenge, result, crowd, regular, pending);
+                if ((ready || challenge.RefillFromExistingQueue && atProvenCapacity) && recovering)
                 {
                     recovering = false;
                     completedRecovery++;
                     stableTicks = 0;
                 }
 
-                bool overflowComplete = challenge.PhysicalOverflow && regular.Length >= result.CapacityEvidence!.WitnessEndpointCount
-                    && pending.Count > 0 && regular.All(agent => Arrived(challenge, crowd, agent)) && AttackRequirement(challenge, crowd, regular);
-                bool complete = (ready && completedRecovery == challenge.Recovery.Length || overflowComplete) && blockerRemoved && followerMoved;
+                bool complete = (ready || atProvenCapacity) && completedRecovery == challenge.Recovery.Length && blockerRemoved && followerMoved;
                 stableTicks = complete ? stableTicks + 1 : 0;
                 Update(result, crowd, orders.Count, admitted.Count, deaths.Count, pending.Count, completedRecovery, regular, challenge);
                 if (tick % 25 == 0 || stableTicks == 1)
@@ -197,7 +225,8 @@ internal static class ChallengeRunner
                 {
                     Require(challenge.PhysicalOverflow || pending.Count == 0, "Unadmitted requests cannot count as successful gathering.");
                     result.Success = true;
-                    result.Outcome = challenge.PhysicalOverflow ? "physical-overflow-proved-and-queue-preserved" : "all-requested-arrived-after-every-recovery";
+                    result.Outcome = challenge.PhysicalOverflow ? "physical-overflow-proved-and-queue-preserved"
+                        : "all-requests-accounted-and-live-agents-arrived-after-recovery";
                     result.ContinuousOracleVerified = true;
                     result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                     result.Trajectory.Add(new TrajectoryFrame { Tick = tick, Units = Observe(crowd) });
@@ -250,6 +279,33 @@ internal static class ChallengeRunner
         return crowd;
     }
 
+    private static NavigationAgent[] VerifyConservation(
+        ChallengeResult result,
+        NavigationCrowd crowd,
+        Dictionary<int, AgentOrder> orders,
+        HashSet<int> admitted,
+        List<AgentOrder> pending,
+        HashSet<int> deaths)
+    {
+        var regular = crowd.Agents.Where(agent => orders.ContainsKey(agent.Id)).ToArray();
+        Require(
+            orders.Count == regular.Length + pending.Count + deaths.Count,
+            "Request conservation failed: active + queued + explicit deaths != all requests.");
+        Require(admitted.Count == regular.Length + deaths.Count, "An admitted unit vanished or an unadmitted unit appeared.");
+        var activeIds = regular.Select(agent => agent.Id).ToHashSet();
+        Require(activeIds.Count == regular.Length && activeIds.SetEquals(admitted.Except(deaths)),
+            "The active ID set differs from admitted IDs minus explicit deaths.");
+        Require(pending.All(order => !admitted.Contains(order.Id) && !deaths.Contains(order.Id)), "A queued request was counted as active or dead.");
+        result.QueueConserved = true;
+        return regular;
+    }
+
+    private static bool OverflowReady(Challenge challenge, ChallengeResult result, NavigationCrowd crowd, NavigationAgent[] regular, List<AgentOrder> pending)
+    {
+        return challenge.PhysicalOverflow && regular.Length >= result.CapacityEvidence!.WitnessEndpointCount && pending.Count > 0
+            && regular.All(agent => Arrived(challenge, crowd, agent)) && AttackRequirement(challenge, crowd, regular);
+    }
+
     private static bool Arrived(Challenge challenge, NavigationCrowd crowd, NavigationAgent agent)
     {
         if (agent.Status == NavigationAgentStatus.Navigating || agent.RemainingDistance != 0 || !crowd.Grid.HoldingAllowed(agent.GoalCell))
@@ -266,6 +322,14 @@ internal static class ChallengeRunner
 
     private static bool AttackRequirement(Challenge challenge, NavigationCrowd crowd, NavigationAgent[] regular)
     {
+        if (challenge.AttackQuotas.Length > 0)
+        {
+            bool profiles = challenge.AttackQuotas.All(quota => regular.Count(agent => agent.Radius == quota.Radius && agent.AttackRange == quota.Range
+                && agent.Status == NavigationAgentStatus.Attacking) >= quota.Minimum);
+            return profiles && (challenge.ExactTotalAttackers == 0
+                || regular.Count(agent => agent.Status == NavigationAgentStatus.Attacking) == challenge.ExactTotalAttackers);
+        }
+
         if (challenge.RequiredShortRangeAttackers > 0)
         {
             int attacking = regular.Count(agent => agent.AttackRange == 1000 && agent.Status == NavigationAgentStatus.Attacking);
@@ -290,6 +354,8 @@ internal static class ChallengeRunner
             DeathPattern.FarthestWaiting => waiting.Take(1).ToArray(),
             DeathPattern.MixedSix => attackers.Take(3).Concat(waiting.Take(3)).ToArray(),
             DeathPattern.AllShortRange => agents.Where(agent => agent.AttackRange == 1000).ToArray(),
+            DeathPattern.InFlightNonCenter => agents.Where(InFlight).OrderBy(agent => DistanceSquared(agent.Position, Center(target))).Take(1).ToArray(),
+            DeathPattern.AllSmallBodies => agents.Where(agent => agent.Radius == 140).ToArray(),
             _ => throw new ArgumentOutOfRangeException(nameof(phase))
         };
     }
@@ -297,12 +363,13 @@ internal static class ChallengeRunner
     private static void Validate(Challenge challenge, NavigationCrowd crowd, Dictionary<int, AgentOrder> orders, Dictionary<int, UnitObservation> previous)
     {
         var units = Observe(crowd);
+        var byId = crowd.Agents.ToDictionary(agent => agent.Id);
         GeometryChecks.VerifyUnitClearance(units, previous);
         foreach (var unit in units)
         {
             var order = orders.TryGetValue(unit.Id, out var request) ? request : challenge.Blocker;
             Require(order != null && order.Id == unit.Id, "An agent appeared without a regular request or explicit blocker command.");
-            var agent = crowd.Agents.Single(value => value.Id == unit.Id);
+            var agent = byId[unit.Id];
             Require(agent.Radius == order!.Radius && agent.AttackRange == order.Range && agent.Speed == order.Speed,
                 "An agent silently changed its requested body, range or speed profile.");
             var before = previous.TryGetValue(unit.Id, out var prior) ? prior : unit;
@@ -397,6 +464,7 @@ internal static class ChallengeRunner
         result.Pending = pending;
         result.ExplicitDeaths = deaths;
         result.Arrived = regular.Count(agent => Arrived(challenge, crowd, agent));
+        result.EverArrived = result.Agents.Count(agent => agent.FirstAssignedGoalArrivalTick.HasValue);
         result.Attacking = regular.Count(agent => agent.Status == NavigationAgentStatus.Attacking);
         result.Waiting = regular.Count(agent => agent.Status == NavigationAgentStatus.Waiting);
         result.Ticks = (int)crowd.CurrentTick;
@@ -405,8 +473,16 @@ internal static class ChallengeRunner
         result.Replans = crowd.ReplanCount;
     }
 
-    private static void Record(ChallengeResult result, NavigationCrowd crowd, AgentOrder order, string kind, string role = "regular")
+    private static void Record(
+        ChallengeResult result,
+        NavigationCrowd crowd,
+        AgentOrder order,
+        string kind,
+        string role = "regular",
+        bool diedWhileNavigating = false,
+        Position2? removalPosition = null)
     {
+        var position = removalPosition ?? Center(order.Spawn);
         result.Commands.Add(new ChallengeCommand
         {
             Tick = (int)crowd.CurrentTick,
@@ -416,8 +492,75 @@ internal static class ChallengeRunner
             Spawn = order.Spawn,
             Radius = order.Radius,
             Range = order.Range,
-            Speed = order.Speed
+            Speed = order.Speed,
+            X = position.X,
+            Y = position.Y
         });
+        if (role == "regular")
+        {
+            var agent = result.AgentIndex[order.Id];
+            if (kind == "spawn")
+            {
+                agent.BornTick = (int)crowd.CurrentTick;
+            }
+            else
+            {
+                agent.ExplicitDeathTick = (int)crowd.CurrentTick;
+                agent.DiedWhileNavigating = diedWhileNavigating;
+                agent.FinalStatus = "explicitly-dead";
+            }
+        }
+    }
+
+    private static void AddLifecycle(ChallengeResult result, AgentOrder order, int tick)
+    {
+        var value = new AgentLifecycle { Id = order.Id, Radius = order.Radius, Range = order.Range, Speed = order.Speed, CreatedTick = tick };
+        result.AgentIndex.Add(order.Id, value);
+        result.Agents.Add(value);
+    }
+
+    private static void UpdateLifecycles(ChallengeResult result, Challenge challenge, NavigationCrowd crowd, Dictionary<int, AgentOrder> orders)
+    {
+        foreach (var agent in crowd.Agents.Where(agent => orders.ContainsKey(agent.Id)))
+        {
+            var state = result.AgentIndex[agent.Id];
+            if (Arrived(challenge, crowd, agent) && !state.FirstAssignedGoalArrivalTick.HasValue)
+            {
+                state.FirstAssignedGoalArrivalTick = (int)crowd.CurrentTick;
+            }
+
+            if (agent.Status == NavigationAgentStatus.Attacking && !state.FirstAttackTick.HasValue)
+            {
+                state.FirstAttackTick = (int)crowd.CurrentTick;
+            }
+
+            state.FinalStatus = agent.Status.ToString();
+            state.FinalX = agent.Position.X;
+            state.FinalY = agent.Position.Y;
+            state.FinalGoalCell = agent.GoalCell;
+        }
+    }
+
+    private static bool InFlight(NavigationAgent agent)
+    {
+        return agent.Status == NavigationAgentStatus.Navigating && (agent.Position.X % 1000 != 500 || agent.Position.Y % 1000 != 500);
+    }
+
+    private static bool InitialGoalsRestored(Challenge challenge, ChallengeResult result, NavigationAgent[] regular)
+    {
+        return !challenge.InitialGoalsMustReturn || result.InitialGroupGoals.All(goal => regular.Any(agent => agent.Id == goal.Key
+            && agent.GoalCell == goal.Value && agent.Status == NavigationAgentStatus.Attacking));
+    }
+
+    private static uint Priority(int id, int seed)
+    {
+        unchecked
+        {
+            uint value = (uint)id ^ (uint)seed * 0x9e3779b9U;
+            value = (value ^ value >> 16) * 0x85ebca6bU;
+            value = (value ^ value >> 13) * 0xc2b2ae35U;
+            return value ^ value >> 16;
+        }
     }
 
     private static long DistanceSquared(Position2 first, Position2 second)
