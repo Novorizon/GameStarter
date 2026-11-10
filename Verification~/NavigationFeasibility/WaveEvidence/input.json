@@ -1,0 +1,1879 @@
+{
+  "scope": "Actual XLSX stage sources; independent geometry and typed full min-cost assignment.",
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+  "sourceSha256": {
+    "tdenemy": "8da6af18bd1d8a59e4e61e1471e026273b6ada430a64124da7228f19c7024618",
+    "tdspawn": "5722ea3e594c7f2f8cf75d8d25f5a7e7f964f8113972f3bb14c8210a1257bcaa",
+    "tdwave": "7d747d3475096094eeb824eaf22c004408dec43ef4f2ae58c737fba42f6ef549"
+  },
+  "enemies": [
+    {
+      "id": 1,
+      "name": "苔团",
+      "health": 55,
+      "speedPerTick": 100,
+      "goldReward": 8,
+      "baseDamage": 1,
+      "radius": 200,
+      "attackRange": 450,
+      "attackIntervalTicks": 20
+    },
+    {
+      "id": 2,
+      "name": "疾风团",
+      "health": 42,
+      "speedPerTick": 165,
+      "goldReward": 10,
+      "baseDamage": 1,
+      "radius": 180,
+      "attackRange": 450,
+      "attackIntervalTicks": 15
+    },
+    {
+      "id": 3,
+      "name": "石甲团",
+      "health": 160,
+      "speedPerTick": 65,
+      "goldReward": 16,
+      "baseDamage": 2,
+      "radius": 240,
+      "attackRange": 450,
+      "attackIntervalTicks": 28
+    },
+    {
+      "id": 4,
+      "name": "蘑菇领主",
+      "health": 900,
+      "speedPerTick": 55,
+      "goldReward": 90,
+      "baseDamage": 8,
+      "radius": 250,
+      "attackRange": 550,
+      "attackIntervalTicks": 35
+    }
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "waveId": 1,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 8,
+      "startTick": 0,
+      "intervalTicks": 15
+    },
+    {
+      "id": 2,
+      "waveId": 2,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 12,
+      "startTick": 0,
+      "intervalTicks": 12
+    },
+    {
+      "id": 3,
+      "waveId": 2,
+      "enemyId": 2,
+      "routeId": 1,
+      "count": 4,
+      "startTick": 60,
+      "intervalTicks": 20
+    },
+    {
+      "id": 4,
+      "waveId": 3,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 6,
+      "startTick": 0,
+      "intervalTicks": 22
+    },
+    {
+      "id": 5,
+      "waveId": 3,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 12,
+      "startTick": 15,
+      "intervalTicks": 10
+    },
+    {
+      "id": 6,
+      "waveId": 4,
+      "enemyId": 2,
+      "routeId": 1,
+      "count": 20,
+      "startTick": 0,
+      "intervalTicks": 9
+    },
+    {
+      "id": 7,
+      "waveId": 4,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 5,
+      "startTick": 80,
+      "intervalTicks": 20
+    },
+    {
+      "id": 8,
+      "waveId": 5,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 12,
+      "startTick": 0,
+      "intervalTicks": 18
+    },
+    {
+      "id": 9,
+      "waveId": 5,
+      "enemyId": 2,
+      "routeId": 1,
+      "count": 18,
+      "startTick": 30,
+      "intervalTicks": 8
+    },
+    {
+      "id": 10,
+      "waveId": 6,
+      "enemyId": 4,
+      "routeId": 1,
+      "count": 1,
+      "startTick": 0,
+      "intervalTicks": 1
+    },
+    {
+      "id": 11,
+      "waveId": 6,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 20,
+      "startTick": 50,
+      "intervalTicks": 8
+    },
+    {
+      "id": 12,
+      "waveId": 6,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 8,
+      "startTick": 70,
+      "intervalTicks": 16
+    }
+  ],
+  "waves": [
+    {
+      "id": 1,
+      "stageId": 1,
+      "sequence": 1,
+      "rewardGold": 25,
+      "giveCard": true
+    },
+    {
+      "id": 2,
+      "stageId": 1,
+      "sequence": 2,
+      "rewardGold": 30,
+      "giveCard": true
+    },
+    {
+      "id": 3,
+      "stageId": 1,
+      "sequence": 3,
+      "rewardGold": 35,
+      "giveCard": true
+    },
+    {
+      "id": 4,
+      "stageId": 1,
+      "sequence": 4,
+      "rewardGold": 40,
+      "giveCard": true
+    },
+    {
+      "id": 5,
+      "stageId": 1,
+      "sequence": 5,
+      "rewardGold": 45,
+      "giveCard": true
+    },
+    {
+      "id": 6,
+      "stageId": 1,
+      "sequence": 6,
+      "rewardGold": 50,
+      "giveCard": false
+    }
+  ],
+  "independentAttackCells": {
+    "1": [
+      255,
+      256,
+      258,
+      298,
+      303,
+      348,
+      392,
+      430,
+      435,
+      475,
+      478,
+      479
+    ],
+    "2": [
+      255,
+      256,
+      257,
+      258,
+      298,
+      303,
+      348,
+      392,
+      430,
+      435,
+      475,
+      478,
+      479
+    ],
+    "3": [
+      255,
+      258,
+      259,
+      298,
+      303,
+      348,
+      392,
+      430,
+      435,
+      474,
+      475,
+      478,
+      479
+    ],
+    "4": [
+      212,
+      213,
+      254,
+      255,
+      258,
+      259,
+      298,
+      303,
+      304,
+      348,
+      392,
+      430,
+      435,
+      436,
+      474,
+      475,
+      478,
+      479
+    ]
+  },
+  "cases": [
+    {
+      "name": "wave-1",
+      "expectedMaximumAttack": 8,
+      "units": [
+        {
+          "id": 1,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 0,
+          "goal": 255,
+          "attack": true
+        },
+        {
+          "id": 2,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 15,
+          "goal": 256,
+          "attack": true
+        },
+        {
+          "id": 3,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 30,
+          "goal": 258,
+          "attack": true
+        },
+        {
+          "id": 4,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 45,
+          "goal": 298,
+          "attack": true
+        },
+        {
+          "id": 5,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 60,
+          "goal": 303,
+          "attack": true
+        },
+        {
+          "id": 6,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 75,
+          "goal": 348,
+          "attack": true
+        },
+        {
+          "id": 7,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 90,
+          "goal": 392,
+          "attack": true
+        },
+        {
+          "id": 8,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 105,
+          "goal": 430,
+          "attack": true
+        }
+      ]
+    },
+    {
+      "name": "wave-2",
+      "expectedMaximumAttack": 13,
+      "units": [
+        {
+          "id": 1,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 0,
+          "goal": 255,
+          "attack": true
+        },
+        {
+          "id": 2,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 12,
+          "goal": 256,
+          "attack": true
+        },
+        {
+          "id": 3,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 24,
+          "goal": 258,
+          "attack": true
+        },
+        {
+          "id": 4,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 36,
+          "goal": 298,
+          "attack": true
+        },
+        {
+          "id": 5,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 48,
+          "goal": 303,
+          "attack": true
+        },
+        {
+          "id": 6,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 60,
+          "goal": 348,
+          "attack": true
+        },
+        {
+          "id": 7,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 72,
+          "goal": 392,
+          "attack": true
+        },
+        {
+          "id": 8,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 84,
+          "goal": 430,
+          "attack": true
+        },
+        {
+          "id": 9,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 96,
+          "goal": 435,
+          "attack": true
+        },
+        {
+          "id": 10,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 108,
+          "goal": 475,
+          "attack": true
+        },
+        {
+          "id": 11,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 120,
+          "goal": 478,
+          "attack": true
+        },
+        {
+          "id": 12,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 132,
+          "goal": 479,
+          "attack": true
+        },
+        {
+          "id": 13,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 60,
+          "goal": 257,
+          "attack": true
+        },
+        {
+          "id": 14,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 80,
+          "goal": 208,
+          "attack": false
+        },
+        {
+          "id": 15,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 100,
+          "goal": 209,
+          "attack": false
+        },
+        {
+          "id": 16,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 120,
+          "goal": 210,
+          "attack": false
+        }
+      ]
+    },
+    {
+      "name": "wave-3",
+      "expectedMaximumAttack": 14,
+      "units": [
+        {
+          "id": 1,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 474,
+          "attack": true
+        },
+        {
+          "id": 2,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 22,
+          "goal": 258,
+          "attack": true
+        },
+        {
+          "id": 3,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 44,
+          "goal": 259,
+          "attack": true
+        },
+        {
+          "id": 4,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 66,
+          "goal": 298,
+          "attack": true
+        },
+        {
+          "id": 5,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 88,
+          "goal": 303,
+          "attack": true
+        },
+        {
+          "id": 6,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 110,
+          "goal": 348,
+          "attack": true
+        },
+        {
+          "id": 7,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 15,
+          "goal": 256,
+          "attack": true
+        },
+        {
+          "id": 8,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 25,
+          "goal": 392,
+          "attack": true
+        },
+        {
+          "id": 9,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 35,
+          "goal": 430,
+          "attack": true
+        },
+        {
+          "id": 10,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 45,
+          "goal": 435,
+          "attack": true
+        },
+        {
+          "id": 11,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 55,
+          "goal": 475,
+          "attack": true
+        },
+        {
+          "id": 12,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 65,
+          "goal": 478,
+          "attack": true
+        },
+        {
+          "id": 13,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 75,
+          "goal": 479,
+          "attack": true
+        },
+        {
+          "id": 14,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 85,
+          "goal": 255,
+          "attack": true
+        },
+        {
+          "id": 15,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 95,
+          "goal": 208,
+          "attack": false
+        },
+        {
+          "id": 16,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 105,
+          "goal": 209,
+          "attack": false
+        },
+        {
+          "id": 17,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 115,
+          "goal": 210,
+          "attack": false
+        },
+        {
+          "id": 18,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 125,
+          "goal": 211,
+          "attack": false
+        }
+      ]
+    },
+    {
+      "name": "wave-4",
+      "expectedMaximumAttack": 15,
+      "units": [
+        {
+          "id": 1,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 255,
+          "attack": true
+        },
+        {
+          "id": 2,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 9,
+          "goal": 256,
+          "attack": true
+        },
+        {
+          "id": 3,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 18,
+          "goal": 257,
+          "attack": true
+        },
+        {
+          "id": 4,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 27,
+          "goal": 258,
+          "attack": true
+        },
+        {
+          "id": 5,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 36,
+          "goal": 298,
+          "attack": true
+        },
+        {
+          "id": 6,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 45,
+          "goal": 303,
+          "attack": true
+        },
+        {
+          "id": 7,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 54,
+          "goal": 348,
+          "attack": true
+        },
+        {
+          "id": 8,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 63,
+          "goal": 392,
+          "attack": true
+        },
+        {
+          "id": 9,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 72,
+          "goal": 430,
+          "attack": true
+        },
+        {
+          "id": 10,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 81,
+          "goal": 435,
+          "attack": true
+        },
+        {
+          "id": 11,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 90,
+          "goal": 475,
+          "attack": true
+        },
+        {
+          "id": 12,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 99,
+          "goal": 478,
+          "attack": true
+        },
+        {
+          "id": 13,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 108,
+          "goal": 479,
+          "attack": true
+        },
+        {
+          "id": 14,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 117,
+          "goal": 208,
+          "attack": false
+        },
+        {
+          "id": 15,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 126,
+          "goal": 209,
+          "attack": false
+        },
+        {
+          "id": 16,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 135,
+          "goal": 210,
+          "attack": false
+        },
+        {
+          "id": 17,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 144,
+          "goal": 211,
+          "attack": false
+        },
+        {
+          "id": 18,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 153,
+          "goal": 212,
+          "attack": false
+        },
+        {
+          "id": 19,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 162,
+          "goal": 213,
+          "attack": false
+        },
+        {
+          "id": 20,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 171,
+          "goal": 214,
+          "attack": false
+        },
+        {
+          "id": 21,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 80,
+          "goal": 259,
+          "attack": true
+        },
+        {
+          "id": 22,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 100,
+          "goal": 474,
+          "attack": true
+        },
+        {
+          "id": 23,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 120,
+          "goal": 215,
+          "attack": false
+        },
+        {
+          "id": 24,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 140,
+          "goal": 249,
+          "attack": false
+        },
+        {
+          "id": 25,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 160,
+          "goal": 251,
+          "attack": false
+        }
+      ]
+    },
+    {
+      "name": "wave-5",
+      "expectedMaximumAttack": 15,
+      "units": [
+        {
+          "id": 1,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 255,
+          "attack": true
+        },
+        {
+          "id": 2,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 18,
+          "goal": 258,
+          "attack": true
+        },
+        {
+          "id": 3,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 36,
+          "goal": 259,
+          "attack": true
+        },
+        {
+          "id": 4,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 54,
+          "goal": 298,
+          "attack": true
+        },
+        {
+          "id": 5,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 72,
+          "goal": 303,
+          "attack": true
+        },
+        {
+          "id": 6,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 90,
+          "goal": 348,
+          "attack": true
+        },
+        {
+          "id": 7,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 108,
+          "goal": 392,
+          "attack": true
+        },
+        {
+          "id": 8,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 126,
+          "goal": 430,
+          "attack": true
+        },
+        {
+          "id": 9,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 144,
+          "goal": 435,
+          "attack": true
+        },
+        {
+          "id": 10,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 162,
+          "goal": 474,
+          "attack": true
+        },
+        {
+          "id": 11,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 180,
+          "goal": 475,
+          "attack": true
+        },
+        {
+          "id": 12,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 198,
+          "goal": 478,
+          "attack": true
+        },
+        {
+          "id": 13,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 30,
+          "goal": 256,
+          "attack": true
+        },
+        {
+          "id": 14,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 38,
+          "goal": 257,
+          "attack": true
+        },
+        {
+          "id": 15,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 46,
+          "goal": 479,
+          "attack": true
+        },
+        {
+          "id": 16,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 54,
+          "goal": 208,
+          "attack": false
+        },
+        {
+          "id": 17,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 62,
+          "goal": 209,
+          "attack": false
+        },
+        {
+          "id": 18,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 70,
+          "goal": 210,
+          "attack": false
+        },
+        {
+          "id": 19,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 78,
+          "goal": 211,
+          "attack": false
+        },
+        {
+          "id": 20,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 86,
+          "goal": 212,
+          "attack": false
+        },
+        {
+          "id": 21,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 94,
+          "goal": 213,
+          "attack": false
+        },
+        {
+          "id": 22,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 102,
+          "goal": 214,
+          "attack": false
+        },
+        {
+          "id": 23,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 110,
+          "goal": 215,
+          "attack": false
+        },
+        {
+          "id": 24,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 118,
+          "goal": 249,
+          "attack": false
+        },
+        {
+          "id": 25,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 126,
+          "goal": 251,
+          "attack": false
+        },
+        {
+          "id": 26,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 134,
+          "goal": 252,
+          "attack": false
+        },
+        {
+          "id": 27,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 142,
+          "goal": 253,
+          "attack": false
+        },
+        {
+          "id": 28,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 150,
+          "goal": 254,
+          "attack": false
+        },
+        {
+          "id": 29,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 158,
+          "goal": 293,
+          "attack": false
+        },
+        {
+          "id": 30,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 166,
+          "goal": 294,
+          "attack": false
+        }
+      ]
+    },
+    {
+      "name": "wave-6",
+      "expectedMaximumAttack": 15,
+      "units": [
+        {
+          "id": 1,
+          "enemyId": 4,
+          "radius": 250,
+          "range": 550,
+          "speed": 55,
+          "release": 0,
+          "goal": 212,
+          "attack": true
+        },
+        {
+          "id": 2,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 50,
+          "goal": 255,
+          "attack": true
+        },
+        {
+          "id": 3,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 58,
+          "goal": 256,
+          "attack": true
+        },
+        {
+          "id": 4,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 66,
+          "goal": 258,
+          "attack": true
+        },
+        {
+          "id": 5,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 74,
+          "goal": 298,
+          "attack": true
+        },
+        {
+          "id": 6,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 82,
+          "goal": 303,
+          "attack": true
+        },
+        {
+          "id": 7,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 90,
+          "goal": 348,
+          "attack": true
+        },
+        {
+          "id": 8,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 98,
+          "goal": 392,
+          "attack": true
+        },
+        {
+          "id": 9,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 106,
+          "goal": 430,
+          "attack": true
+        },
+        {
+          "id": 10,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 114,
+          "goal": 435,
+          "attack": true
+        },
+        {
+          "id": 11,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 122,
+          "goal": 475,
+          "attack": true
+        },
+        {
+          "id": 12,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 130,
+          "goal": 478,
+          "attack": true
+        },
+        {
+          "id": 13,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 138,
+          "goal": 479,
+          "attack": true
+        },
+        {
+          "id": 14,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 146,
+          "goal": 208,
+          "attack": false
+        },
+        {
+          "id": 15,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 154,
+          "goal": 209,
+          "attack": false
+        },
+        {
+          "id": 16,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 162,
+          "goal": 210,
+          "attack": false
+        },
+        {
+          "id": 17,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 170,
+          "goal": 211,
+          "attack": false
+        },
+        {
+          "id": 18,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 178,
+          "goal": 213,
+          "attack": false
+        },
+        {
+          "id": 19,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 186,
+          "goal": 214,
+          "attack": false
+        },
+        {
+          "id": 20,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 194,
+          "goal": 215,
+          "attack": false
+        },
+        {
+          "id": 21,
+          "enemyId": 1,
+          "radius": 200,
+          "range": 450,
+          "speed": 100,
+          "release": 202,
+          "goal": 249,
+          "attack": false
+        },
+        {
+          "id": 22,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 70,
+          "goal": 259,
+          "attack": true
+        },
+        {
+          "id": 23,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 86,
+          "goal": 474,
+          "attack": true
+        },
+        {
+          "id": 24,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 102,
+          "goal": 251,
+          "attack": false
+        },
+        {
+          "id": 25,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 118,
+          "goal": 252,
+          "attack": false
+        },
+        {
+          "id": 26,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 134,
+          "goal": 253,
+          "attack": false
+        },
+        {
+          "id": 27,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 150,
+          "goal": 254,
+          "attack": false
+        },
+        {
+          "id": 28,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 166,
+          "goal": 293,
+          "attack": false
+        },
+        {
+          "id": 29,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 182,
+          "goal": 294,
+          "attack": false
+        }
+      ]
+    },
+    {
+      "name": "burst-30",
+      "expectedMaximumAttack": 15,
+      "units": [
+        {
+          "id": 1,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 255,
+          "attack": true
+        },
+        {
+          "id": 2,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 258,
+          "attack": true
+        },
+        {
+          "id": 3,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 259,
+          "attack": true
+        },
+        {
+          "id": 4,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 298,
+          "attack": true
+        },
+        {
+          "id": 5,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 303,
+          "attack": true
+        },
+        {
+          "id": 6,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 348,
+          "attack": true
+        },
+        {
+          "id": 7,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 392,
+          "attack": true
+        },
+        {
+          "id": 8,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 430,
+          "attack": true
+        },
+        {
+          "id": 9,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 435,
+          "attack": true
+        },
+        {
+          "id": 10,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 474,
+          "attack": true
+        },
+        {
+          "id": 11,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 475,
+          "attack": true
+        },
+        {
+          "id": 12,
+          "enemyId": 3,
+          "radius": 240,
+          "range": 450,
+          "speed": 65,
+          "release": 0,
+          "goal": 478,
+          "attack": true
+        },
+        {
+          "id": 13,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 256,
+          "attack": true
+        },
+        {
+          "id": 14,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 257,
+          "attack": true
+        },
+        {
+          "id": 15,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 479,
+          "attack": true
+        },
+        {
+          "id": 16,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 208,
+          "attack": false
+        },
+        {
+          "id": 17,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 209,
+          "attack": false
+        },
+        {
+          "id": 18,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 210,
+          "attack": false
+        },
+        {
+          "id": 19,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 211,
+          "attack": false
+        },
+        {
+          "id": 20,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 212,
+          "attack": false
+        },
+        {
+          "id": 21,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 213,
+          "attack": false
+        },
+        {
+          "id": 22,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 214,
+          "attack": false
+        },
+        {
+          "id": 23,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 215,
+          "attack": false
+        },
+        {
+          "id": 24,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 249,
+          "attack": false
+        },
+        {
+          "id": 25,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 251,
+          "attack": false
+        },
+        {
+          "id": 26,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 252,
+          "attack": false
+        },
+        {
+          "id": 27,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 253,
+          "attack": false
+        },
+        {
+          "id": 28,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 254,
+          "attack": false
+        },
+        {
+          "id": 29,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 293,
+          "attack": false
+        },
+        {
+          "id": 30,
+          "enemyId": 2,
+          "radius": 180,
+          "range": 450,
+          "speed": 165,
+          "release": 0,
+          "goal": 294,
+          "attack": false
+        }
+      ]
+    }
+  ]
+}

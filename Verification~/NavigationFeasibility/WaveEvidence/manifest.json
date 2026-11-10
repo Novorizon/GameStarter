@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "utc": "2026-11-10T20:32:12.340865+00:00",
+  "scope": "Only the new actual-wave analysis and constructive schedules. Earlier saturation/late-arrival evidence is unchanged.",
+  "maximumCompatibleAttack": [
+    8,
+    13,
+    14,
+    15,
+    15,
+    15,
+    15
+  ],
+  "sourceSha256": {
+    "Verification~/NavigationFeasibility/WaveAttackProgram.cs": "c58060fb16a603456e9083ca27bbaddc54bcd8cf2c54637074f571f22436427f",
+    "Verification~/NavigationFeasibility/WaveAttackFeasibility.csproj": "44071c800b63ca82d1e6915457e8233a8ce8f208a6ce8d36ee0760904506b6b7",
+    "Verification~/NavigationFeasibility/BuildWaveAttackInput.py": "4bd339e4b69ea5699f00ecf87940d8416fabb47b5d10c4c292d08d8aa0c53b37",
+    "Verification~/NavigationFeasibility/WaveEvidence/README.zh-CN.md": "38d750cda524b7872ae08c01ba59a8ec6822208a1af1df64cb2484b168f3ea2a"
+  },
+  "evidenceSha256": {
+    "burst-30.json": "c24154610b91fa501c81544a2252735777cb3ffbe494c70e485144a33bf6572b",
+    "input.json": "615332f3411c70534abc44b2d763f3f65edb3428258a361a398d8aae01e50dfb",
+    "summary.json": "64acbca6772ab1f5074c18cff724fc8d345cb5df1c55bb261c9b9edaf9073678",
+    "wave-1.json": "41c3c022c809617b448d96aa4629402aa06b205eff1788c772f4b94e3500f662",
+    "wave-2.json": "8348575cabab24f5bc0385fffa21ccb436870c9dedc94ce5de5ed6b70e1e3b4f",
+    "wave-3.json": "c43fa1c3c4191bc91387561bea0fb6c96825145aa85084616d55d59328bf66a2",
+    "wave-4.json": "75b3834b68a7b085b1e5bb5ac642545588f43d19170d972b7e42a6bde078d58a",
+    "wave-5.json": "f2091e2a119199017fd761749da6493d5046e7ea2c6f0eb580df5fc40ea42228",
+    "wave-6.json": "25f6666a7b43c6717aaeebc178453cc251f9b38ae424fdc5437d6de130eb45f7"
+  }
+}

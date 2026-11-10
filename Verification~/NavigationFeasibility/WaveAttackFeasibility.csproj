@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="WaveAttackProgram.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/**/*.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Data/NavigationLayout.cs" />
+  </ItemGroup>
+</Project>

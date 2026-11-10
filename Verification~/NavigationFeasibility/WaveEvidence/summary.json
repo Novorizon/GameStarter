@@ -1,0 +1,82 @@
+{
+  "success": true,
+  "utc": "2026-11-10T20:30:54.8675652Z",
+  "scope": "Maximum typed attack matching plus actual collision-free admission schedules; not production or Unity execution.",
+  "sourceTables": {
+    "tdenemy": "8da6af18bd1d8a59e4e61e1471e026273b6ada430a64124da7228f19c7024618",
+    "tdspawn": "5722ea3e594c7f2f8cf75d8d25f5a7e7f964f8113972f3bb14c8210a1257bcaa",
+    "tdwave": "7d747d3475096094eeb824eaf22c004408dec43ef4f2ae58c737fba42f6ef549"
+  },
+  "cases": [
+    {
+      "Name": "wave-1",
+      "UnitCount": 8,
+      "MaximumAttack": 8,
+      "AllArrivedTick": 640,
+      "CheckedRelativeSegments": 21448,
+      "MinimumBodyGap": 100,
+      "MinimumBaseGap": 3,
+      "MapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "Name": "wave-2",
+      "UnitCount": 16,
+      "MaximumAttack": 13,
+      "AllArrivedTick": 1070,
+      "CheckedRelativeSegments": 111620,
+      "MinimumBodyGap": 100,
+      "MinimumBaseGap": 3,
+      "MapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "Name": "wave-3",
+      "UnitCount": 18,
+      "MaximumAttack": 14,
+      "AllArrivedTick": 2581,
+      "CheckedRelativeSegments": 214268,
+      "MinimumBodyGap": 20,
+      "MinimumBaseGap": 3,
+      "MapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "Name": "wave-4",
+      "UnitCount": 25,
+      "MaximumAttack": 15,
+      "AllArrivedTick": 2636,
+      "CheckedRelativeSegments": 500360,
+      "MinimumBodyGap": 20,
+      "MinimumBaseGap": 18.036209048114415,
+      "MapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "Name": "wave-5",
+      "UnitCount": 30,
+      "MaximumAttack": 15,
+      "AllArrivedTick": 4770,
+      "CheckedRelativeSegments": 944231,
+      "MinimumBodyGap": 20,
+      "MinimumBaseGap": 18.036209048114415,
+      "MapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "Name": "wave-6",
+      "UnitCount": 29,
+      "MaximumAttack": 15,
+      "AllArrivedTick": 3752,
+      "CheckedRelativeSegments": 694533,
+      "MinimumBodyGap": 20,
+      "MinimumBaseGap": 3,
+      "MapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "Name": "burst-30",
+      "UnitCount": 30,
+      "MaximumAttack": 15,
+      "AllArrivedTick": 1148,
+      "CheckedRelativeSegments": 331703,
+      "MinimumBodyGap": 20,
+      "MinimumBaseGap": 18.036209048114415,
+      "MapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    }
+  ]
+}
