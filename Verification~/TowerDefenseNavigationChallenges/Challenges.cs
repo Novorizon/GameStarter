@@ -58,6 +58,7 @@ internal static class ChallengeCatalog
             4000,
             blocked: cell => !(cell.Y >= 17 && cell.Y <= 19) && !(cell.X >= 17 && cell.X <= 19)
                 && !(cell.X >= 22 && cell.Y >= 10 && cell.Y <= 26));
+        original = LockOriginalTargets(original);
         yield return Basic("original-4m-all-72-long-hold", original, seed, idle: 2000);
         yield return Basic(
             "full-72-each-attack-slot-death",
@@ -196,6 +197,29 @@ internal static class ChallengeCatalog
         }
 
         return result;
+    }
+
+    private static NavigationScenario LockOriginalTargets(NavigationScenario value)
+    {
+        var holding = (bool[])value.Walkable.Clone();
+        foreach (int dx in new[] { -1, 1 })
+        {
+            foreach (int dy in new[] { -1, 1 })
+            {
+                holding[(value.Target.Y + dy) * value.Width + value.Target.X + dx] = false;
+            }
+        }
+
+        return new NavigationScenario
+        {
+            Width = value.Width,
+            Height = value.Height,
+            Target = value.Target,
+            Walkable = value.Walkable,
+            HoldingAllowed = holding,
+            GatheringDistance = value.GatheringDistance,
+            SpawnCells = value.SpawnCells
+        };
     }
 
     private static NavigationScenario Copy(NavigationScenario value, Cell[] spawns)

@@ -247,6 +247,13 @@ internal static class ChallengeRunner
             crowd.RegisterProfile(profile.Radius, profile.Range);
         }
 
+        if (geometry.Width == 37 && geometry.Height == 37 && geometry.GatheringDistance == 4000)
+        {
+            Require(crowd.CountAttackSlots(250, 1000) == 12, "The original 4m attack target set changed.");
+            Require(crowd.CountAttackSlots(250, 1000) + crowd.CountGatherSlots(250, 1000) == 72,
+                "The original 72 parking targets were not kept fixed.");
+        }
+
         return crowd;
     }
 

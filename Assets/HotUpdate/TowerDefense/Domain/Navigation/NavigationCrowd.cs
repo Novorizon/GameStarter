@@ -20,6 +20,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             internal int Range;
             internal bool[] Stand;
             internal bool[] Attack;
+            internal bool[] PreferredAttack;
             internal bool[] Gather;
             internal bool[] Preferred;
             internal readonly Dictionary<int, int> CapacityRevisions = new Dictionary<int, int>();
@@ -34,6 +35,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             internal bool AttackGoal;
             internal int PromotionRevision = -1;
             internal long NextPromotionTick;
+            internal int TrafficRevision;
         }
 
         private sealed class TimedCell
@@ -60,6 +62,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
         private readonly Dictionary<int, int> goalOwners = new Dictionary<int, int>();
         private readonly HashSet<int> entries = new HashSet<int>();
         private int goalRevision;
+        private int trafficRevision;
         private bool parkingPrepared;
         public NavigationGrid Grid => grid;
         public IReadOnlyList<NavigationAgent> Agents { get; }
@@ -152,15 +155,43 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 }
             }
 
+            ReplanReleasedTraffic();
+            if (RecoveryActive || TryStartAttackRecovery())
+            {
+                return Reject(NavigationFailure.ReservationBlocked);
+            }
+
             if (IsReserved(start, CurrentTick, CurrentTick + 1, -1))
             {
                 return Reject(NavigationFailure.SpawnOccupied);
             }
 
-            if (profile.CapacityRevisions.TryGetValue(start, out int revision) && revision == goalRevision)
+            if (TryAdmitThroughGates(id, spawn, profile, start, speed))
             {
-                CachedAdmissionRejections++;
-                return Reject(NavigationFailure.CapacityExceeded);
+                return true;
+            }
+
+            if (RecoveryActive)
+            {
+                return Reject(NavigationFailure.ReservationBlocked);
+            }
+
+            if (admissionBudgetExceeded)
+            {
+                return Reject(NavigationFailure.SearchLimitExceeded);
+            }
+
+            if (!HasRecoveryAdmission(profile, start) && profile.CapacityRevisions.TryGetValue(start, out int revision) && revision == goalRevision)
+            {
+                if (TryStartAdmissionRecovery(profile, start) && RecoveryActive)
+                {
+                    return Reject(NavigationFailure.ReservationBlocked);
+                }
+                if (!HasRecoveryAdmission(profile, start))
+                {
+                    CachedAdmissionRejections++;
+                    return Reject(NavigationFailure.CapacityExceeded);
+                }
             }
 
             var reachable = Flood(profile, start, -1, -1, false);
@@ -171,15 +202,28 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
             var actor = new NavigationAgent { Id = id, Position = spawn, Radius = radius, AttackRange = attackRange, Speed = speed };
             var state = new Occupant { Agent = actor, Profile = profile };
-            var path = FindPlan(state, start, true);
+            if (!TryPlanRecoveryAdmission(state, start, out var path))
+            {
+                path = FindPlan(state, start, true);
+            }
             if (path == null)
             {
-                if (LastFailure == NavigationFailure.CapacityExceeded)
+                if ((LastFailure == NavigationFailure.CapacityExceeded || LastFailure == NavigationFailure.GoalAccessBlocked)
+                    && TryStartAdmissionRecovery(profile, start))
                 {
-                    profile.CapacityRevisions[start] = goalRevision;
+                    if (!TryPlanRecoveryAdmission(state, start, out path))
+                    {
+                        return Reject(NavigationFailure.ReservationBlocked);
+                    }
                 }
-
-                return Reject(LastFailure);
+                else
+                {
+                    if (LastFailure == NavigationFailure.CapacityExceeded)
+                    {
+                        profile.CapacityRevisions[start] = goalRevision;
+                    }
+                    return Reject(LastFailure);
+                }
             }
 
             AcceptPlan(state, path);
@@ -202,6 +246,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             occupants.Remove(id);
             agents.Remove(state.Agent);
             goalRevision++;
+            trafficRevision++;
             return true;
         }
 
@@ -218,34 +263,40 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 UpdatePosition(occupants[agent.Id], tick);
             }
 
-            // A revision is needed only after goal ownership changes. No frame-by-frame random shuffling or teleporting.
-            foreach (var state in occupants.Values.OrderBy(value => value.Agent.Id))
+            ReplanReleasedTraffic();
+            if (!AdvanceRecovery() && !TryStartAttackRecovery())
             {
-                if (state.Agent.Status != NavigationAgentStatus.Waiting
-                    || (state.PromotionRevision == goalRevision && tick < state.NextPromotionTick))
+                // A revision is needed only after goal ownership changes. No frame-by-frame random shuffling or teleporting.
+                foreach (var state in occupants.Values.OrderBy(value => value.Agent.Id))
                 {
-                    continue;
+                    if (state.Agent.Status != NavigationAgentStatus.Waiting
+                        || (state.PromotionRevision == goalRevision && tick < state.NextPromotionTick))
+                    {
+                        continue;
+                    }
+
+                    state.PromotionRevision = goalRevision;
+                    if (!Enumerable.Range(0, grid.CellCount)
+                        .Any(cell => state.Profile.Attack[cell] && !goalOwners.ContainsKey(cell) && !entries.Contains(cell)))
+                    {
+                        state.NextPromotionTick = Forever;
+                        continue;
+                    }
+
+                    state.NextPromotionTick = tick + Math.Max(4, grid.CellSize / state.Agent.Speed);
+                    var plan = FindPlan(state, state.Agent.GoalCell, false);
+                    if (plan != null)
+                    {
+                        AcceptPlan(state, plan);
+                        ReplanCount++;
+                        UpdatePosition(state, tick);
+                    }
+                    else if (LastFailure == NavigationFailure.GoalAccessBlocked || LastFailure == NavigationFailure.CapacityExceeded)
+                    {
+                        state.NextPromotionTick = Forever;
+                    }
                 }
 
-                state.PromotionRevision = goalRevision;
-                if (!Enumerable.Range(0, grid.CellCount).Any(cell => state.Profile.Attack[cell] && !goalOwners.ContainsKey(cell) && !entries.Contains(cell)))
-                {
-                    state.NextPromotionTick = Forever;
-                    continue;
-                }
-
-                state.NextPromotionTick = tick + Math.Max(4, grid.CellSize / state.Agent.Speed);
-                var plan = FindPlan(state, state.Agent.GoalCell, false);
-                if (plan != null)
-                {
-                    AcceptPlan(state, plan);
-                    ReplanCount++;
-                    UpdatePosition(state, tick);
-                }
-                else if (LastFailure == NavigationFailure.GoalAccessBlocked || LastFailure == NavigationFailure.CapacityExceeded)
-                {
-                    state.NextPromotionTick = Forever;
-                }
             }
 
             if ((tick & 63) == 0)
@@ -272,6 +323,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
             var profile = new Profile { Radius = radius, Range = attackRange, Stand = new bool[grid.CellCount] };
             profile.Attack = new bool[grid.CellCount];
+            profile.PreferredAttack = new bool[grid.CellCount];
             profile.Gather = new bool[grid.CellCount];
             var eligible = new bool[grid.CellCount];
             for (int cell = 0; cell < grid.CellCount; cell++)
@@ -289,8 +341,9 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     continue;
                 }
 
-                // Use the outward attack frontier: inner attack layers must not be sealed by other stationary attackers.
-                profile.Attack[cell] = eligible[cell] && grid.Neighbours(cell).Any(next => grid.CanTraverse(cell, next, radius)
+                // Prefer the outward frontier without discarding legal inner attack positions.
+                profile.Attack[cell] = eligible[cell];
+                profile.PreferredAttack[cell] = eligible[cell] && grid.Neighbours(cell).Any(next => grid.CanTraverse(cell, next, radius)
                     && NavigationGrid.DistanceSquared(grid.Center(next), grid.TargetCenter) > reach * reach);
                 profile.Gather[cell] = !eligible[cell]
                     && NavigationGrid.DistanceSquared(grid.Center(cell), grid.TargetCenter) <= gathering * gathering;
@@ -344,6 +397,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             queue.Enqueue(start);
             while (queue.Count > 0)
             {
+                if (admissionBudgetStart >= 0 && !SpendAdmissionCell())
+                {
+                    return visited;
+                }
+
                 int cell = queue.Dequeue();
                 foreach (int next in grid.Neighbours(cell))
                 {
@@ -455,13 +513,8 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     }
                 }
 
-                foreach (var exits in region.GoalExits)
-                {
-                    if (exits.Any(cell => region.Before[cell]) && !exits.Any(cell => after[cell]))
-                    {
-                        return false;
-                    }
-                }
+                // Experimental: packing may close an occupied endpoint's exit. Vacancies must be
+                // propagated cooperatively after a death instead of reserving an empty neighbour forever.
             }
 
             return true;
@@ -474,6 +527,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             if (state.Path != null)
             {
                 goalOwners.Remove(state.Agent.GoalCell);
+                trafficRevision++;
             }
 
             state.Path = path;
@@ -493,6 +547,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             Reserve(last.Cell, owner, last.Arrival, Forever);
             goalOwners.Add(last.Cell, owner);
             goalRevision++;
+            state.TrafficRevision = trafficRevision;
         }
 
         private void UpdatePosition(Occupant state, long tick)

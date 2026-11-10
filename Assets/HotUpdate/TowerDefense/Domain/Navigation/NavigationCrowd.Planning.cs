@@ -103,8 +103,10 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 PrepareParking();
             }
             var attacks = new bool[grid.CellCount];
+            var preferredAttacks = new bool[grid.CellCount];
             var gathering = new bool[grid.CellCount];
             bool anyAttack = false;
+            bool anyPreferredAttack = false;
             bool anyGather = false;
             for (int cell = 0; cell < grid.CellCount; cell++)
             {
@@ -114,6 +116,8 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 }
 
                 attacks[cell] = state.Profile.Attack[cell];
+                preferredAttacks[cell] = attacks[cell] && state.Profile.PreferredAttack[cell];
+                anyPreferredAttack |= preferredAttacks[cell];
                 gathering[cell] = allowGathering && state.Profile.Gather[cell];
                 anyAttack |= attacks[cell];
                 anyGather |= gathering[cell];
@@ -137,6 +141,17 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             var safety = new sbyte[grid.CellCount];
             var safeIntervals = new Dictionary<int, List<SafeInterval>>();
             NavigationFailure attackFailure = NavigationFailure.GoalAccessBlocked;
+            if (anyPreferredAttack)
+            {
+                var path = Search(state, start, preferredAttacks, regions, safety, safeIntervals);
+                if (path != null)
+                {
+                    return path;
+                }
+
+                attackFailure = LastFailure;
+            }
+
             if (anyAttack)
             {
                 var path = Search(state, start, attacks, regions, safety, safeIntervals);
@@ -145,7 +160,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     return path;
                 }
 
-                attackFailure = LastFailure;
+                attackFailure = MergeFailure(attackFailure, LastFailure);
             }
 
             if (anyPreferred)
@@ -207,9 +222,20 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             bool[] targets,
             List<AccessRegion> regions,
             sbyte[] safety,
-            Dictionary<int, List<SafeInterval>> safeIntervals)
+            Dictionary<int, List<SafeInterval>> safeIntervals,
+            long planningStart = -1)
         {
-            var distances = GoalDistances(state.Profile, targets, state.Agent.Id);
+            if (planningStart < 0)
+            {
+                planningStart = CurrentTick;
+            }
+
+            if (planningStart < CurrentTick)
+            {
+                throw new ArgumentOutOfRangeException(nameof(planningStart));
+            }
+
+            var distances = GoalDistances(state.Profile, targets);
             if (distances[start] < 0)
             {
                 LastFailure = NavigationFailure.GoalAccessBlocked;
@@ -220,7 +246,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             var open = new MinHeap();
             var best = new Dictionary<long, SearchNode>();
             var startIntervals = Intervals(start, state.Agent.Id, safeIntervals);
-            int initialInterval = startIntervals.FindIndex(value => value.Start <= CurrentTick && CurrentTick < value.End);
+            int initialInterval = startIntervals.FindIndex(value => value.Start <= planningStart && planningStart < value.End);
             if (initialInterval < 0)
             {
                 LastFailure = NavigationFailure.SpawnOccupied;
@@ -231,13 +257,13 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             {
                 Cell = start,
                 Interval = initialInterval,
-                Arrival = CurrentTick,
-                Departure = CurrentTick,
-                Estimate = CurrentTick + (long)distances[start] * moveTicks
+                Arrival = planningStart,
+                Departure = planningStart,
+                Estimate = planningStart + (long)distances[start] * moveTicks
             };
             open.Push(initial);
             best.Add(NodeKey(start, initialInterval), initial);
-            long deadline = CurrentTick + planningHorizon;
+            long deadline = planningStart + planningHorizon;
             bool exceededHorizon = false;
             while (open.Count > 0)
             {
@@ -245,6 +271,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 if (!ReferenceEquals(best[NodeKey(node.Cell, node.Interval)], node))
                 {
                     continue;
+                }
+
+                if (!AdmissionBudgetAvailable())
+                {
+                    return null;
                 }
 
                 LastExpandedNodes++;
@@ -331,7 +362,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             return null;
         }
 
-        private int[] GoalDistances(Profile profile, bool[] targets, int ignoreOwner)
+        private int[] GoalDistances(Profile profile, bool[] targets)
         {
             var distances = Enumerable.Repeat(-1, grid.CellCount).ToArray();
             var queue = new Queue<int>();
@@ -349,8 +380,9 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 int cell = queue.Dequeue();
                 foreach (int next in grid.Neighbours(cell))
                 {
-                    if (distances[next] < 0 && profile.Stand[next] && grid.CanTraverse(cell, next, profile.Radius)
-                        && (!goalOwners.TryGetValue(next, out int owner) || owner == ignoreOwner))
+                    // This is an optimistic terrain heuristic. A future goal claim is not a wall before its arrival;
+                    // the safe intervals and swept reservations decide when a cell can actually be traversed.
+                    if (distances[next] < 0 && profile.Stand[next] && grid.CanTraverse(cell, next, profile.Radius))
                     {
                         distances[next] = distances[cell] + 1;
                         queue.Enqueue(next);

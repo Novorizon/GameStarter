@@ -1,0 +1,94 @@
+{
+  "success": true,
+  "radius": 200,
+  "range": 450,
+  "speed": 100,
+  "expected": 45,
+  "active": 45,
+  "attacking": 12,
+  "waiting": 33,
+  "admissionTick": 1039,
+  "finalTick": 8132,
+  "deaths": [
+    {
+      "goal": 255,
+      "victim": 4,
+      "recoveryTicks": 529,
+      "attacks": 12
+    },
+    {
+      "goal": 256,
+      "victim": 5,
+      "recoveryTicks": 534,
+      "attacks": 12
+    },
+    {
+      "goal": 258,
+      "victim": 7,
+      "recoveryTicks": 624,
+      "attacks": 12
+    },
+    {
+      "goal": 298,
+      "victim": 46,
+      "recoveryTicks": 519,
+      "attacks": 12
+    },
+    {
+      "goal": 303,
+      "victim": 9,
+      "recoveryTicks": 594,
+      "attacks": 12
+    },
+    {
+      "goal": 348,
+      "victim": 12,
+      "recoveryTicks": 584,
+      "attacks": 12
+    },
+    {
+      "goal": 392,
+      "victim": 10,
+      "recoveryTicks": 579,
+      "attacks": 12
+    },
+    {
+      "goal": 430,
+      "victim": 1,
+      "recoveryTicks": 514,
+      "attacks": 12
+    },
+    {
+      "goal": 435,
+      "victim": 11,
+      "recoveryTicks": 579,
+      "attacks": 12
+    },
+    {
+      "goal": 475,
+      "victim": 3,
+      "recoveryTicks": 534,
+      "attacks": 12
+    },
+    {
+      "goal": 478,
+      "victim": 6,
+      "recoveryTicks": 549,
+      "attacks": 12
+    },
+    {
+      "goal": 479,
+      "victim": 8,
+      "recoveryTicks": 554,
+      "attacks": 12
+    }
+  ],
+  "checkedPairs": 22454124,
+  "checkedBodies": 1032711,
+  "minimumBodyGapMm": 100,
+  "StartedRecoveries": 12,
+  "CompletedRecoveries": 12,
+  "RecoveryMoveCount": 28,
+  "TrafficReplanCount": 0,
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+}

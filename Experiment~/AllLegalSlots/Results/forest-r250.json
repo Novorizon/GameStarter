@@ -1,0 +1,130 @@
+{
+  "success": true,
+  "radius": 250,
+  "range": 550,
+  "speed": 55,
+  "expected": 44,
+  "active": 44,
+  "attacking": 18,
+  "waiting": 26,
+  "admissionTick": 2039,
+  "finalTick": 22571,
+  "deaths": [
+    {
+      "goal": 212,
+      "victim": 5,
+      "recoveryTicks": 1239,
+      "attacks": 18
+    },
+    {
+      "goal": 213,
+      "victim": 42,
+      "recoveryTicks": 1229,
+      "attacks": 18
+    },
+    {
+      "goal": 254,
+      "victim": 4,
+      "recoveryTicks": 1029,
+      "attacks": 18
+    },
+    {
+      "goal": 255,
+      "victim": 6,
+      "recoveryTicks": 1039,
+      "attacks": 18
+    },
+    {
+      "goal": 258,
+      "victim": 12,
+      "recoveryTicks": 1229,
+      "attacks": 18
+    },
+    {
+      "goal": 259,
+      "victim": 18,
+      "recoveryTicks": 1219,
+      "attacks": 18
+    },
+    {
+      "goal": 298,
+      "victim": 47,
+      "recoveryTicks": 1019,
+      "attacks": 18
+    },
+    {
+      "goal": 303,
+      "victim": 17,
+      "recoveryTicks": 1169,
+      "attacks": 18
+    },
+    {
+      "goal": 304,
+      "victim": 49,
+      "recoveryTicks": 1159,
+      "attacks": 18
+    },
+    {
+      "goal": 348,
+      "victim": 9,
+      "recoveryTicks": 1149,
+      "attacks": 18
+    },
+    {
+      "goal": 392,
+      "victim": 8,
+      "recoveryTicks": 1139,
+      "attacks": 18
+    },
+    {
+      "goal": 430,
+      "victim": 1,
+      "recoveryTicks": 1009,
+      "attacks": 18
+    },
+    {
+      "goal": 435,
+      "victim": 15,
+      "recoveryTicks": 1139,
+      "attacks": 18
+    },
+    {
+      "goal": 436,
+      "victim": 54,
+      "recoveryTicks": 1129,
+      "attacks": 18
+    },
+    {
+      "goal": 474,
+      "victim": 3,
+      "recoveryTicks": 1019,
+      "attacks": 18
+    },
+    {
+      "goal": 475,
+      "victim": 13,
+      "recoveryTicks": 1049,
+      "attacks": 18
+    },
+    {
+      "goal": 478,
+      "victim": 14,
+      "recoveryTicks": 1079,
+      "attacks": 18
+    },
+    {
+      "goal": 479,
+      "victim": 7,
+      "recoveryTicks": 1089,
+      "attacks": 18
+    }
+  ],
+  "checkedPairs": 61459040,
+  "checkedBodies": 2884726,
+  "minimumBodyGapMm": 0,
+  "StartedRecoveries": 18,
+  "CompletedRecoveries": 18,
+  "RecoveryMoveCount": 42,
+  "TrafficReplanCount": 0,
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+}
