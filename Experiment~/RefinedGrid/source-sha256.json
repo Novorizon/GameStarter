@@ -1,0 +1,32 @@
+{
+  "utc": "2026-11-10T18:48:48.421331+00:00",
+  "baseCommit": "f67e8e6cdaea6b89c289433650a7ead8589ec692",
+  "branch": "experiment/navigation-refined-grid",
+  "success": false,
+  "exitCode": 1,
+  "comparisons": 40,
+  "succeeded": 28,
+  "failed": 12,
+  "fineCohortComparisons": 20,
+  "fineSucceeded": 16,
+  "fineFailed": 4,
+  "fineFailure": "All four seeds of the original 19x19 / 4m / 200-request case still admit only 177. This is an unresolved failure, not an accepted capacity outcome.",
+  "scope": "Actual C# navigation source; independent original-world continuous geometry oracle. No Unity, devices or generic completeness claim.",
+  "physicalOriginalTickMilliseconds": 50,
+  "fineMicrotickMilliseconds": 25,
+  "physicalPlanningHorizonMilliseconds": 204800,
+  "navigationCoreCombinedSha256": "aeb4e33527e95d6910c91060c50517e9c573708d6b17c415a05ab77d8fc202f8",
+  "sha256": {
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Planning.cs": "c0140efcd339d2777282d9e62af61dfe49e3b920ec188a5e3672377ef3bc9604",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.cs": "c07d73cdf1cc2817d23fb1944802f745838e91e3d5456e3b1a596f8e503bb606",
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e",
+    "Experiment~/RefinedGrid/Program.cs": "77fa4c86adfb183b2441ff9ac6b3e1c2b7eca8d9fafae84e71da92af0e4cbfdc",
+    "Experiment~/RefinedGrid/RefinedGrid.csproj": "fa37d922ce51867d9ae5d1c688fbeb5e3a5af5cde69980937b02629054b11651",
+    "Verification~/TowerDefenseNavigation/Scenarios.cs": "29f709cde5a1a478f3efb169c6122a4f50d24a515598688981d25babad102064",
+    "Verification~/TowerDefenseNavigation/GeometryChecks.cs": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a",
+    "Verification~/TowerDefenseNavigation/Observations.cs": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800"
+  },
+  "resultsSha256": "9c9ed0b6f72075c60c7729739cf10d18f197a800291d2193b4543f8c66f2574d"
+}
