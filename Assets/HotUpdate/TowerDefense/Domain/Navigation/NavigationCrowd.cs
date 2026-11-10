@@ -260,7 +260,8 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     }
 
                     state.PromotionRevision = goalRevision;
-                    if (!Enumerable.Range(0, grid.CellCount).Any(cell => state.Profile.Attack[cell] && !goalOwners.ContainsKey(cell) && !entries.Contains(cell)))
+                    if (!Enumerable.Range(0, grid.CellCount)
+                        .Any(cell => state.Profile.Attack[cell] && !goalOwners.ContainsKey(cell) && !entries.Contains(cell)))
                     {
                         state.NextPromotionTick = Forever;
                         continue;
