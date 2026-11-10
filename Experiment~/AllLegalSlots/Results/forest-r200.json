@@ -8,87 +8,87 @@
   "attacking": 12,
   "waiting": 33,
   "admissionTick": 1039,
-  "finalTick": 8132,
+  "finalTick": 9822,
   "deaths": [
     {
       "goal": 255,
       "victim": 4,
-      "recoveryTicks": 529,
+      "recoveryTicks": 599,
       "attacks": 12
     },
     {
       "goal": 256,
       "victim": 5,
-      "recoveryTicks": 534,
+      "recoveryTicks": 674,
       "attacks": 12
     },
     {
       "goal": 258,
       "victim": 7,
-      "recoveryTicks": 624,
+      "recoveryTicks": 1004,
       "attacks": 12
     },
     {
       "goal": 298,
-      "victim": 46,
-      "recoveryTicks": 519,
+      "victim": 2,
+      "recoveryTicks": 549,
       "attacks": 12
     },
     {
       "goal": 303,
       "victim": 9,
-      "recoveryTicks": 594,
+      "recoveryTicks": 934,
       "attacks": 12
     },
     {
       "goal": 348,
       "victim": 12,
-      "recoveryTicks": 584,
+      "recoveryTicks": 694,
       "attacks": 12
     },
     {
       "goal": 392,
       "victim": 10,
-      "recoveryTicks": 579,
+      "recoveryTicks": 679,
       "attacks": 12
     },
     {
       "goal": 430,
       "victim": 1,
-      "recoveryTicks": 514,
+      "recoveryTicks": 534,
       "attacks": 12
     },
     {
       "goal": 435,
       "victim": 11,
-      "recoveryTicks": 579,
+      "recoveryTicks": 749,
       "attacks": 12
     },
     {
       "goal": 475,
       "victim": 3,
-      "recoveryTicks": 534,
+      "recoveryTicks": 644,
       "attacks": 12
     },
     {
       "goal": 478,
       "victim": 6,
-      "recoveryTicks": 549,
+      "recoveryTicks": 599,
       "attacks": 12
     },
     {
       "goal": 479,
       "victim": 8,
-      "recoveryTicks": 554,
+      "recoveryTicks": 724,
       "attacks": 12
     }
   ],
-  "checkedPairs": 22454124,
-  "checkedBodies": 1032711,
+  "checkedPairs": 27235164,
+  "checkedBodies": 1255446,
   "minimumBodyGapMm": 100,
-  "StartedRecoveries": 12,
-  "CompletedRecoveries": 12,
-  "RecoveryMoveCount": 28,
+  "StartedRecoveries": 17,
+  "CompletedRecoveries": 17,
+  "RecoveryMoveCount": 64,
   "TrafficReplanCount": 0,
   "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
 }
