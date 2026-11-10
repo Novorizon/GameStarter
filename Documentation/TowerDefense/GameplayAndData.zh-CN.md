@@ -57,7 +57,7 @@ stateDiagram-v2
 
 原型效果集合为 `DamagePercent`、`AttackSpeedPercent`、`RangePercent`、`Gold`、`HealBase`。它们适合先验证选卡与叠加体验，不能据此认定燃烧、冰冻、连锁、召唤或主动技能已实现。
 
-导航几何独立保存在 YooAsset 的 `TowerDefense/Data/ForestNavigation`，随地图与表版本一起发布；不拆成一格一张表。`FightConfiguration.Navigation` 持有不可变几何，`FightSession` 内的 `NavigationCrowd` 持有单位路径、预约和站位。构造会话时预注册全部敌人的身体/射程组合，保证长射程外圈不会封死短射程内圈。编辑折线保留作入口与关卡制作参考，正式移动由逻辑地图决定。当前配置版本为 `forest-navigation-2`；旧配置的战斗结果不能混作新规则的重放证明。算法与验收见[寻路说明](Navigation.zh-CN.md)。
+导航几何独立保存在 YooAsset 的 `TowerDefense/Data/ForestNavigation`，随地图与表版本一起发布；不拆成一格一张表。`FightConfiguration.Navigation` 持有不可变几何，`FightSession` 内的 `NavigationCrowd` 持有单位路径、预约和站位。构造会话时预注册全部敌人的身体/射程组合；内外层通过真实让路、返场与攻击份额恢复协调，注册目录本身不等于动态可达证明。编辑折线保留作入口与关卡制作参考，正式移动由逻辑地图决定。当前配置版本为 `forest-navigation-2`；旧配置的战斗结果不能混作新规则的重放证明。算法与验收见[寻路说明](Navigation.zh-CN.md)。
 
 BattleBriefing 为准备页和局内情报汇总同一波各刷怪组的敌人数量、清波金币与是否选卡；最后一波不显示不存在的额外选卡。备战预告下一波，防守中显示当前进攻。
 

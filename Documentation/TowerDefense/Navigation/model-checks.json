@@ -1,7 +1,8 @@
 {
   "success": true,
-  "utc": "2026-11-10T18:09:05.933581+00:00",
-  "scope": "97 API-model/data integration checks, including actual navigation and real Luban content; not native Unity.",
+  "utc": "2026-11-10T22:29:36.879484+00:00",
+  "sourceCommit": "9686ac95f8c689ea652028068399158a6f6e2562",
+  "scope": "97 API-model/data integration checks; actual Luban content and navigation business adapter. Not native Unity, live server login or IL2CPP.",
   "count": 97,
   "actualStageNavigationBound": true,
   "actualBattleSeeds": [
@@ -16,21 +17,24 @@
   ],
   "mergedWave": {
     "requested": 126,
-    "safeAdmittedBeforeKills": 35,
-    "queued": 91,
-    "expandedWhileStable200Ticks": 0,
-    "finalKills": 126
+    "safeAdmittedBeforeKills": 46,
+    "queued": 80,
+    "expandedWhileStable": 0,
+    "finalKills": 126,
+    "expandedWhileStable200Ticks": 0
   },
   "actualWaveMetrics": [
-    "NAV_AUTHORED_WAVE 1 units=8 tick=740 attacking=8 waiting=0 elapsedMs=13 maxStepMs=4.43",
-    "NAV_AUTHORED_WAVE 2 units=16 tick=793 attacking=13 waiting=3 elapsedMs=10 maxStepMs=1.74",
-    "NAV_AUTHORED_WAVE 3 units=18 tick=1099 attacking=14 waiting=4 elapsedMs=20 maxStepMs=6.76",
-    "NAV_AUTHORED_WAVE 4 units=25 tick=1148 attacking=15 waiting=10 elapsedMs=20 maxStepMs=1.59",
-    "NAV_AUTHORED_WAVE 5 units=30 tick=1175 attacking=15 waiting=15 elapsedMs=34 maxStepMs=1.87",
-    "NAV_AUTHORED_WAVE 6 units=29 tick=1278 attacking=14 waiting=15 elapsedMs=24 maxStepMs=1.34"
+    "NAV_AUTHORED_WAVE 1 units=8 tick=740 attacking=8 waiting=0 elapsedMs=12 maxStepMs=1.85",
+    "NAV_AUTHORED_WAVE 2 units=16 tick=793 attacking=13 waiting=3 elapsedMs=44 maxStepMs=22.63",
+    "NAV_AUTHORED_WAVE 3 units=18 tick=1099 attacking=14 waiting=4 elapsedMs=42 maxStepMs=12.19",
+    "NAV_AUTHORED_WAVE 4 units=25 tick=1148 attacking=15 waiting=10 elapsedMs=71 maxStepMs=14.64",
+    "NAV_AUTHORED_WAVE 5 units=30 tick=1175 attacking=15 waiting=15 elapsedMs=75 maxStepMs=13.77",
+    "NAV_AUTHORED_WAVE 6 units=29 tick=1398 attacking=15 waiting=14 elapsedMs=68 maxStepMs=5.52"
   ],
   "legacyDomainScenarios": 12,
   "legacyDomainScope": "Reference polyline mechanics; not navigation proof.",
   "accountModelScenarios": 13,
-  "accountScope": "Fake backend only, not live server authentication or economic settlement."
+  "accountScope": "Fake backend only; no live server authentication or settlement.",
+  "fullVerificationLogSha256": "dbc0c1db01c462161ca7bfaf60e4e4f2475ff7278f45d914e9485bf18e0a3522",
+  "domainAggregateSha256": "d155d9838c07d7de133a3e1ef4424388bd441086f99f27968c4163bc1d7f2582"
 }

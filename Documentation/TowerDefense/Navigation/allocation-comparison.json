@@ -1,0 +1,96 @@
+{
+  "scope": "Independent .NET8 same-DTO allocation audit using actual linked b7 FightSession/Navigation sources; not Unity/Mono frame timing or full Luban import.",
+  "utc": "2026-11-10T22:22:10.393974+00:00",
+  "inputEnemyDefinitionOrder": [
+    {
+      "Id": 2,
+      "Radius": 180,
+      "AttackRange": 450,
+      "SpeedPerTick": 165
+    },
+    {
+      "Id": 4,
+      "Radius": 250,
+      "AttackRange": 550,
+      "SpeedPerTick": 55
+    }
+  ],
+  "groups": [
+    {
+      "EnemyId": 4,
+      "RouteId": 1,
+      "Count": 44,
+      "StartTick": 0,
+      "IntervalTicks": 1
+    },
+    {
+      "EnemyId": 2,
+      "RouteId": 1,
+      "Count": 2,
+      "StartTick": 4000,
+      "IntervalTicks": 1
+    }
+  ],
+  "seed": 64029,
+  "physicalTraceEqual": true,
+  "nodeTraceEqual": true,
+  "finalCountersEqual": true,
+  "allArrivedTick": 5228,
+  "hotFrameCount": 1487,
+  "baselineHotMeanAllocated": 313317.7619367855,
+  "cachedHotMeanAllocated": 66334.03631472764,
+  "baselineTotalAllocated": 515507392,
+  "cachedTotalAllocated": 145492536,
+  "harnessHashes": {
+    "AllocationAudit.csproj": "7042f82a991ac4426ed70d167fa9f6d0707854f165c002d148f64b5945eee326",
+    "Program.cs": "3ab203e83f1abd56b1ba026e69405163a95561c1034720b94a8e6f0fc763bb85"
+  },
+  "sources": {
+    "baseline-table-order": {
+      "sourceHashes": {
+        "BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+        "BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+        "Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+        "DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+        "FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+        "Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+        "Navigation/NavigationCrowd.AdmissionGates.cs": "3ceb12256653ec150f058e8be3e8db13c8d6f8523d23afc3f72c7f9cb084e767",
+        "Navigation/NavigationCrowd.AttackQuotas.cs": "9593d31afacf1dc8588f8a9c79f27b5e89c32847d6a9f181a55a174a08b3a64f",
+        "Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+        "Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+        "Navigation/NavigationCrowd.Planning.cs": "c16520d5f68fe786d3020679d590869aa9c31043fa8c2c22b6f134170141bc22",
+        "Navigation/NavigationCrowd.Recovery.cs": "79b81c362871d463664c17791b8aa0085861568ff5608ccae0f58c55fa56a68d",
+        "Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+        "Navigation/NavigationCrowd.cs": "4b44f7a35c026cdd8b3a8c6431be314fc09e024c913b69b4b028329aef1be331",
+        "Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+      },
+      "layoutSha256": "ed75fac4cce88a3572defb7e8dad2ae95e652fc45c25fe5c5866cac72cf8b7a7",
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+      "binarySha256": "b968f1c9a1254ffe052645e23d6288567abaec2b7f755f10ec7f6211f94e9deb",
+      "reportSha256": "8b7f59686270d038689b752ce1130ac5e4cf7d3d4407ecfd4952c0bdb75ad589"
+    },
+    "cached-table-order": {
+      "sourceHashes": {
+        "BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+        "BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+        "Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+        "DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+        "FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+        "Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+        "Navigation/NavigationCrowd.AdmissionGates.cs": "3ceb12256653ec150f058e8be3e8db13c8d6f8523d23afc3f72c7f9cb084e767",
+        "Navigation/NavigationCrowd.AttackQuotas.cs": "9593d31afacf1dc8588f8a9c79f27b5e89c32847d6a9f181a55a174a08b3a64f",
+        "Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+        "Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+        "Navigation/NavigationCrowd.Planning.cs": "c16520d5f68fe786d3020679d590869aa9c31043fa8c2c22b6f134170141bc22",
+        "Navigation/NavigationCrowd.Recovery.cs": "79b81c362871d463664c17791b8aa0085861568ff5608ccae0f58c55fa56a68d",
+        "Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+        "Navigation/NavigationCrowd.cs": "878c304c118a59754b6463405edd33118d1ec39b208be9b0e2b73106f804e727",
+        "Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+      },
+      "layoutSha256": "ed75fac4cce88a3572defb7e8dad2ae95e652fc45c25fe5c5866cac72cf8b7a7",
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+      "binarySha256": "63f51d6850cb0733101ca077da68fce7646f16e849cbb205e9d72cbb70718e77",
+      "reportSha256": "671837e974e6019c571e3b78122cd102856694fc98e7e2712c96bb394e3b4585"
+    }
+  }
+}
