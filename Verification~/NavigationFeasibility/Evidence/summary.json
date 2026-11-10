@@ -1,0 +1,237 @@
+{
+  "success": true,
+  "utc": "2026-11-10T19:02:56.312591+00:00",
+  "scope": "Constructive independent feasibility witnesses; no production solver or Unity acceptance claim.",
+  "referenceCommit": "f67e8e6cdaea6b89c289433650a7ead8589ec692",
+  "original72Cases": [
+    {
+      "file": "original-4m-72-witness-original-order.json",
+      "seed": 1,
+      "originalAdmissionOrder": true,
+      "units": 72,
+      "fillTicks": 2228,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 46,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106232,
+      "blockedBoxChecks": 2513592
+    },
+    {
+      "file": "original-4m-72-witness-seed17-original-order.json",
+      "seed": 17,
+      "originalAdmissionOrder": true,
+      "units": 72,
+      "fillTicks": 2222,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 47,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106174,
+      "blockedBoxChecks": 2509704
+    },
+    {
+      "file": "original-4m-72-witness-seed17.json",
+      "seed": 17,
+      "originalAdmissionOrder": false,
+      "units": 72,
+      "fillTicks": 2226,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 46,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106128,
+      "blockedBoxChecks": 2511648
+    },
+    {
+      "file": "original-4m-72-witness-seed20261110-original-order.json",
+      "seed": 20261110,
+      "originalAdmissionOrder": true,
+      "units": 72,
+      "fillTicks": 2228,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 46,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106232,
+      "blockedBoxChecks": 2513592
+    },
+    {
+      "file": "original-4m-72-witness-seed20261110.json",
+      "seed": 20261110,
+      "originalAdmissionOrder": false,
+      "units": 72,
+      "fillTicks": 2220,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 46,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106090,
+      "blockedBoxChecks": 2507760
+    },
+    {
+      "file": "original-4m-72-witness-seed733-original-order.json",
+      "seed": 733,
+      "originalAdmissionOrder": true,
+      "units": 72,
+      "fillTicks": 2228,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 46,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106232,
+      "blockedBoxChecks": 2513592
+    },
+    {
+      "file": "original-4m-72-witness-seed733.json",
+      "seed": 733,
+      "originalAdmissionOrder": false,
+      "units": 72,
+      "fillTicks": 2220,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 46,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106090,
+      "blockedBoxChecks": 2507760
+    },
+    {
+      "file": "original-4m-72-witness.json",
+      "seed": 1,
+      "originalAdmissionOrder": false,
+      "units": 72,
+      "fillTicks": 2220,
+      "attacking": 12,
+      "waiting": 60,
+      "deathCases": 12,
+      "maxRecoveryTicks": 46,
+      "minimumBodyGapMm": 500,
+      "continuousPairChecks": 106090,
+      "blockedBoxChecks": 2507760
+    }
+  ],
+  "forestCases": [
+    {
+      "file": "forest-r200-range450-all-legal-witness.json",
+      "profile": {
+        "Radius": 200,
+        "Range": 450,
+        "Speed": 100
+      },
+      "frontierPolicyApplied": false,
+      "rawValidHolding": 45,
+      "goals": 45,
+      "attacking": 12,
+      "waiting": 33,
+      "frontierExcludedInnerAttackCells": [],
+      "allArrivedTick": 920,
+      "deathCases": 12,
+      "maxRecoveryTicks": 555,
+      "stableAttackRestoredMaxTick": 555,
+      "continuousPairChecks": 871593,
+      "minimumBodyGapMm": 100,
+      "minimumBaseGapMm": 3,
+      "independentAttackVisibilityChecks": 12,
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "file": "forest-r200-range450-witness.json",
+      "profile": {
+        "Radius": 200,
+        "Range": 450,
+        "Speed": 100
+      },
+      "frontierPolicyApplied": true,
+      "rawValidHolding": 45,
+      "goals": 45,
+      "attacking": 12,
+      "waiting": 33,
+      "frontierExcludedInnerAttackCells": [],
+      "allArrivedTick": 920,
+      "deathCases": 12,
+      "maxRecoveryTicks": 555,
+      "stableAttackRestoredMaxTick": 555,
+      "continuousPairChecks": 871593,
+      "minimumBodyGapMm": 100,
+      "minimumBaseGapMm": 3,
+      "independentAttackVisibilityChecks": 12,
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "file": "forest-r250-range550-all-legal-witness.json",
+      "profile": {
+        "Radius": 250,
+        "Range": 550,
+        "Speed": 55
+      },
+      "frontierPolicyApplied": false,
+      "rawValidHolding": 44,
+      "goals": 44,
+      "attacking": 18,
+      "waiting": 26,
+      "frontierExcludedInnerAttackCells": [
+        303,
+        435,
+        475,
+        478
+      ],
+      "allArrivedTick": 1820,
+      "deathCases": 18,
+      "maxRecoveryTicks": 1110,
+      "stableAttackRestoredMaxTick": 120,
+      "continuousPairChecks": 1444634,
+      "minimumBodyGapMm": 0,
+      "minimumBaseGapMm": 45.312868141048966,
+      "independentAttackVisibilityChecks": 18,
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    },
+    {
+      "file": "forest-r250-range550-witness.json",
+      "profile": {
+        "Radius": 250,
+        "Range": 550,
+        "Speed": 55
+      },
+      "frontierPolicyApplied": true,
+      "rawValidHolding": 44,
+      "goals": 40,
+      "attacking": 14,
+      "waiting": 26,
+      "frontierExcludedInnerAttackCells": [
+        303,
+        435,
+        475,
+        478
+      ],
+      "allArrivedTick": 1740,
+      "deathCases": 14,
+      "maxRecoveryTicks": 1110,
+      "stableAttackRestoredMaxTick": 120,
+      "continuousPairChecks": 1160535,
+      "minimumBodyGapMm": 0,
+      "minimumBaseGapMm": 80.34890848352097,
+      "independentAttackVisibilityChecks": 18,
+      "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+    }
+  ],
+  "sourceSha256": {
+    "Verification~/NavigationFeasibility/ForestFeasibility.csproj": "01bda6f5e2c07a7036bc84d49db2ecd33546c76edfd306aae86cd896e62b6b1d",
+    "Verification~/NavigationFeasibility/ForestProgram.cs": "bc6f5aea4f4f94707971ab71ea8022ebfa106809ec7478d530136b69cfa2b285",
+    "Verification~/NavigationFeasibility/NavigationFeasibility.csproj": "b1f6d652802868d36aa91f22fcc53c03f5bc8c860b4ad048df0d7343c0d3ff56",
+    "Verification~/NavigationFeasibility/Program.cs": "39a7a6ef762ab7fbf4a810cd98bf21b821c9956e0aac092fad015a007b1be005",
+    "Verification~/NavigationFeasibility/README.zh-CN.md": "673e083adb7c00485bcac9abd9547e45f3a0a81772239253bcd88e99817d6b86"
+  },
+  "evidenceSha256": {
+    "original-4m-72-witness-original-order.json": "c165362e49fe0f6ed299a8f3d8621a9c4578c9ff443d9d1607899a3297dd724b",
+    "forest-r250-range550-witness.json": "300206b8192a42d616fa0aac9f0bdc08e97c8f08a940127cf866349ae0b41e4c",
+    "forest-r250-range550-all-legal-witness.json": "805fb33fdf30e4164380fb24f966cc42f6109c8769849503e82056e3c0ae31c5",
+    "forest-r200-range450-witness.json": "4a12874519609bd66f1f351a2623ba3503efea83730af3781f4c37ae9600640e"
+  }
+}
