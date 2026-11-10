@@ -1,0 +1,94 @@
+--- B2/NavigationCrowd.AdmissionGates.cs
++++ local/NavigationCrowd.AdmissionGates.cs
+@@ -158,12 +158,33 @@
+                 return false;
+             }
+ 
+-            var layout = BuildAdmissionGateLayout(profile, start, available);
+-            if (layout == null || layout.Owners.Length == 0 || !AdmissionBudgetAvailable())
+-            {
+-                return false;
+-            }
+-
++            foreach (bool conservative in new[] { false, true })
++            {
++                var layout = BuildAdmissionGateLayout(profile, start, available, conservative);
++                if (!AdmissionBudgetAvailable())
++                {
++                    return false;
++                }
++
++                if (layout != null && layout.Owners.Length > 0
++                    && TryExecuteAdmissionGateLayout(id, spawn, profile, start, speed, requester, layout))
++                {
++                    return true;
++                }
++            }
++
++            return false;
++        }
++
++        private bool TryExecuteAdmissionGateLayout(
++            int id,
++            Position2 spawn,
++            Profile profile,
++            int start,
++            int speed,
++            Occupant requester,
++            AdmissionGateLayout layout)
++        {
+             var actor = new NavigationAgent { Id = id, Position = spawn, Radius = profile.Radius, AttackRange = profile.Range, Speed = speed };
+             var state = requester ?? new Occupant { Agent = actor, Profile = profile };
+             var original = layout.Owners.ToDictionary(owner => owner, owner => occupants[owner].Path);
+@@ -387,7 +408,7 @@
+             return false;
+         }
+ 
+-        private AdmissionGateLayout BuildAdmissionGateLayout(Profile profile, int start, int[] goals)
++        private AdmissionGateLayout BuildAdmissionGateLayout(Profile profile, int start, int[] goals, bool conservative)
+         {
+             var occupied = occupants.Values.ToDictionary(state => state.Agent.GoalCell, state => state);
+             var sameProfile = occupied.Where(pair => ReferenceEquals(pair.Value.Profile, profile)).Select(pair => pair.Key).ToHashSet();
+@@ -445,7 +466,11 @@
+                             continue;
+                         }
+ 
+-                        protectedCells.UnionWith(AdmissionTrace(tree, start));
++                        if (conservative)
++                        {
++                            protectedCells.UnionWith(AdmissionTrace(tree, start));
++                        }
++
+                         order.Add(owner);
+                         remaining.Remove(owner);
+                         progressed = true;
+@@ -497,16 +522,19 @@
+                         break;
+                     }
+ 
+-                    if (grid.Neighbours(candidate).Any(buffers.Contains))
+-                    {
+-                        continue;
+-                    }
+-
+-                    var next = buffers.Append(candidate).ToHashSet();
+-                    if (AdmissionFlood(start, radius, initial.Concat(next).ToHashSet()).Count != outside.Count - next.Count
+-                        || AdmissionFlood(start, radius, next).Count != whole.Count - next.Count)
+-                    {
+-                        continue;
++                    if (conservative)
++                    {
++                        if (grid.Neighbours(candidate).Any(buffers.Contains))
++                        {
++                            continue;
++                        }
++
++                        var next = buffers.Append(candidate).ToHashSet();
++                        if (AdmissionFlood(start, radius, initial.Concat(next).ToHashSet()).Count != outside.Count - next.Count
++                            || AdmissionFlood(start, radius, next).Count != whole.Count - next.Count)
++                        {
++                            continue;
++                        }
+                     }
+ 
+                     buffers.Add(candidate);

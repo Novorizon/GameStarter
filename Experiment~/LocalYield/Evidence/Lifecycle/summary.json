@@ -1,0 +1,1129 @@
+{
+  "utc": "2026-11-10T21:12:55.1634329Z",
+  "domain": "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain",
+  "map": "/workspace/navigation-experiments/local-yield/Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes",
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+  "sourceHashes": {
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationCrowd.AdmissionGates.cs": "5b4255340f82c7dcda4167f449b02d0db4f1498f74d014e6feba5893cb3ddf12",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationCrowd.cs": "05a0f8fa1d2a76b415df42e621a2be6cf3bf6300b67e79b3da55c72c8ece1618",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationCrowd.Planning.cs": "73222d29bdee7e3a747ec88a5c19fc6de858bfcbc50967dead4cde1ac40bd557",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationCrowd.Recovery.cs": "61de7dba5436f9ae825c8d9ba34e4a1f99f0510a83dbc2e22b98e6cc5c2b8fa6",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "/workspace/navigation-experiments/local-yield-variants/e-local-with-fallback/Domain/Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+  },
+  "testHashes": {
+    "/workspace/navigation-experiments/local-yield/Verification~/NavigationGateLifecycle/Audit.cs": "0d81278e7f076e10f5736cd974892eec1d8d9a8864cc151e0496f6be7398b9d2",
+    "/workspace/navigation-experiments/local-yield/Verification~/NavigationGateLifecycle/ForestAudit.cs": "6d61e22da5bd741118dfa0ff7abeb0626b2147426e2ec77173f38728d69fc46d",
+    "/workspace/navigation-experiments/local-yield/Verification~/NavigationGateLifecycle/Program.cs": "ab6a37ebc6a6c6ee5fb9fa7111cc9b53b98013e06df25b6228632af1ed16fbe9",
+    "/workspace/navigation-experiments/local-yield/Verification~/TowerDefenseNavigationChallenges/Challenges.cs": "410c8bd9072dee2738ed458379a8fe44991877723f3dc215b5de120970c5c899",
+    "/workspace/navigation-experiments/local-yield/Verification~/TowerDefenseNavigationChallenges/GeometryTypes.cs": "ffe76601323bf8e5ac82936ebc7e8204f4d53f7509db618568b9c81e4be3facb",
+    "/workspace/navigation-experiments/local-yield/Verification~/TowerDefenseNavigation/GeometryChecks.cs": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a",
+    "/workspace/navigation-experiments/local-yield/Verification~/TowerDefenseNavigation/Observations.cs": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800",
+    "/workspace/navigation-experiments/local-yield/Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+    "/workspace/navigation-experiments/local-yield/Assets/HotUpdate/TowerDefense/Data/NavigationLayout.cs": "ed75fac4cce88a3572defb7e8dad2ae95e652fc45c25fe5c5866cac72cf8b7a7"
+  },
+  "testBinarySha256": "3fbe61b27871691817853642d9b0e3a59fa8e152d16ee8b0b34e83c9f8a8b9c1",
+  "sourceFilesUnchanged": true,
+  "testSourceFilesUnchanged": true,
+  "count": 30,
+  "passed": 30,
+  "success": true,
+  "results": [
+    {
+      "phase": "outbound-big",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "outbound-big",
+        "removedIds": [
+          2
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7385,
+      "elapsedMilliseconds": 4715,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "f2135524a244c7ecfec16fe3842a0f50a10fd4268a840bfbcd329913097ddfd7"
+    },
+    {
+      "phase": "outbound-big",
+      "ordinal": 1,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3472,
+        "phase": "outbound-big",
+        "removedIds": [
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7395,
+      "elapsedMilliseconds": 2235,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "fd8c2e52c2eb356459cf8567cc4a7c212c621d19593c2a7800757e982ae5904b"
+    },
+    {
+      "phase": "outbound-big",
+      "ordinal": 2,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3532,
+        "phase": "outbound-big",
+        "removedIds": [
+          6
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7405,
+      "elapsedMilliseconds": 2040,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "a0d0bfe8304f76a55f6f54e186691faee4be1f18e92209c29660c245e2d36704"
+    },
+    {
+      "phase": "outbound-big",
+      "ordinal": 3,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3412,
+        "phase": "outbound-big",
+        "removedIds": [
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7355,
+      "elapsedMilliseconds": 2003,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "fbfa640e154ee17886ff1314a98653e3383d3f98eb73de81f2a445730036070d"
+    },
+    {
+      "phase": "parked-big",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3472,
+        "phase": "parked-big",
+        "removedIds": [
+          2
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7385,
+      "elapsedMilliseconds": 1985,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "1aee81d3fd5f1c96602a6ef73773c0a7a4315b795145bccd685bc15f390f7daf"
+    },
+    {
+      "phase": "parked-big",
+      "ordinal": 1,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3532,
+        "phase": "parked-big",
+        "removedIds": [
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7395,
+      "elapsedMilliseconds": 2161,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "7c7d7ad41a57413828897f01815343b2068565c95e62ad50c9b3e9c3a7f2a1aa"
+    },
+    {
+      "phase": "parked-big",
+      "ordinal": 3,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "parked-big",
+        "removedIds": [
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7355,
+      "elapsedMilliseconds": 2125,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "eece68bb4ed8ffb8118b79c4fd4d631191da74e79d3fa1ce17afdae1b688d100"
+    },
+    {
+      "phase": "returning-big",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 4072,
+        "phase": "returning-big",
+        "removedIds": [
+          2
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7385,
+      "elapsedMilliseconds": 3531,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "1bb3f6dce4eb38a1d28477e0ae0d79b51d0f9fb495e655f3f296e16f7a0b8b4c"
+    },
+    {
+      "phase": "returning-big",
+      "ordinal": 1,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 4012,
+        "phase": "returning-big",
+        "removedIds": [
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7395,
+      "elapsedMilliseconds": 3379,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "c72d1877e744089ffcd58e9af1b2ca85baa13063f430cfe84aa247e9217694db"
+    },
+    {
+      "phase": "returning-big",
+      "ordinal": 3,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 4112,
+        "phase": "returning-big",
+        "removedIds": [
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7357,
+      "elapsedMilliseconds": 2420,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "c3c8b5bcee55face3ca26efb125385e73fb269d448336ace8c8e3965acb9ef57"
+    },
+    {
+      "phase": "moving-small",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3412,
+        "phase": "moving-small",
+        "removedIds": [
+          45
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 5765,
+      "elapsedMilliseconds": 2245,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "4f90d6a1d06b0abe172466936b9576f487c3eadbc8f82961932827186d0e85cf"
+    },
+    {
+      "phase": "arrived-small",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3931,
+        "phase": "arrived-small",
+        "removedIds": [
+          45
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 5765,
+      "elapsedMilliseconds": 3492,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "3811e14478fd5a09a457444d410c6e58248e156e594a5054122910b45d8e5fbd"
+    },
+    {
+      "phase": "all-gates",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "all-gates",
+        "removedIds": [
+          2,
+          4,
+          6,
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7785,
+      "elapsedMilliseconds": 2836,
+      "requested": 50,
+      "admitted": 50,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 4,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "6f5a4ff6ba9de5540330d69c09a4e11957089c4c8e96022bc25c297b277ec3c8"
+    },
+    {
+      "phase": "center-big",
+      "ordinal": 2,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3571,
+        "phase": "center-big",
+        "removedIds": [
+          6
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7405,
+      "elapsedMilliseconds": 2455,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "9146bfabbf76347b324f5e0805a2581bbbc10ea5f66fbdce9e85b3bf86eccc93"
+    },
+    {
+      "phase": "two-gates",
+      "ordinal": 0,
+      "smallSpeed": 100,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "two-gates",
+        "removedIds": [
+          2,
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 9345,
+      "elapsedMilliseconds": 2909,
+      "requested": 48,
+      "admitted": 48,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 2,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "dea759e957d2bb1119c198ec70e1dc030352a35d24a1af05f752f445900202bb"
+    },
+    {
+      "phase": "outbound-big",
+      "ordinal": 0,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "outbound-big",
+        "removedIds": [
+          2
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7174,
+      "elapsedMilliseconds": 2179,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "2ac070d95125833f4c10c58260ff3dc7135ae8cb5613a3fa0da4c2ebf4c8588b"
+    },
+    {
+      "phase": "outbound-big",
+      "ordinal": 1,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3472,
+        "phase": "outbound-big",
+        "removedIds": [
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7184,
+      "elapsedMilliseconds": 2438,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "74841f4ec851cabf2bae9c22150e911020056eabd122f481af5803f0aee7d9a8"
+    },
+    {
+      "phase": "outbound-big",
+      "ordinal": 2,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3532,
+        "phase": "outbound-big",
+        "removedIds": [
+          6
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7194,
+      "elapsedMilliseconds": 2114,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "25638d986f362f22dfa44cbcd26acf5383e03cb4a5c4f158f909acf533df7f85"
+    },
+    {
+      "phase": "outbound-big",
+      "ordinal": 3,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3412,
+        "phase": "outbound-big",
+        "removedIds": [
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7144,
+      "elapsedMilliseconds": 1994,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "eb4c9620ab46133caa9dc12755628ef549d58c05b0fc71914fdff93b62e62de5"
+    },
+    {
+      "phase": "parked-big",
+      "ordinal": 0,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3472,
+        "phase": "parked-big",
+        "removedIds": [
+          2
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7174,
+      "elapsedMilliseconds": 1899,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "3c16d4ad228970b4843004c615fb54d61be814fe00570701e723918b4581f04c"
+    },
+    {
+      "phase": "parked-big",
+      "ordinal": 1,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3532,
+        "phase": "parked-big",
+        "removedIds": [
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7184,
+      "elapsedMilliseconds": 2103,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "1e2e551553b324a3a423cc838fc891f3d1332d334926e60fb2c9ca937507490c"
+    },
+    {
+      "phase": "parked-big",
+      "ordinal": 3,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "parked-big",
+        "removedIds": [
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7144,
+      "elapsedMilliseconds": 1887,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "0f426a25bc5707a79422b901008a11eca2f826efa823a79e143c97427ae1dea1"
+    },
+    {
+      "phase": "returning-big",
+      "ordinal": 0,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3968,
+        "phase": "returning-big",
+        "removedIds": [
+          2
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7174,
+      "elapsedMilliseconds": 2727,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "86ea13610dfe50d4edcd5b0d46469ed05e8e91fb4e2f900784d542b8ac024835"
+    },
+    {
+      "phase": "returning-big",
+      "ordinal": 1,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3908,
+        "phase": "returning-big",
+        "removedIds": [
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7184,
+      "elapsedMilliseconds": 2879,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "7975209305e0b4f554276a84735686c1216f68214775765b5b8cbd6e6a349862"
+    },
+    {
+      "phase": "returning-big",
+      "ordinal": 3,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 4008,
+        "phase": "returning-big",
+        "removedIds": [
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7146,
+      "elapsedMilliseconds": 2911,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "b66630aa1e0514fdd6702cf042dec6eea62f2682062882550938a2641b3d3716"
+    },
+    {
+      "phase": "moving-small",
+      "ordinal": 0,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3412,
+        "phase": "moving-small",
+        "removedIds": [
+          45
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 5454,
+      "elapsedMilliseconds": 2625,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "27156f50480739ba7c70721c2b19af6d7f5765d0b71537409ac1bb5792fd7835"
+    },
+    {
+      "phase": "arrived-small",
+      "ordinal": 0,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3827,
+        "phase": "arrived-small",
+        "removedIds": [
+          45
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 5454,
+      "elapsedMilliseconds": 2601,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": true,
+      "inputCommandsSha256": "f4a9ba30797262d0a4a6122595f459183d7cac72f8180ee80a2465e79692a17b"
+    },
+    {
+      "phase": "all-gates",
+      "ordinal": 0,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "all-gates",
+        "removedIds": [
+          2,
+          4,
+          6,
+          39
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7668,
+      "elapsedMilliseconds": 3325,
+      "requested": 50,
+      "admitted": 50,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 4,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "f5129eeb74474757085b0c3830de8c17d28d58b9727d15dd8af5691ba89275b1"
+    },
+    {
+      "phase": "center-big",
+      "ordinal": 2,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3571,
+        "phase": "center-big",
+        "removedIds": [
+          6
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 7194,
+      "elapsedMilliseconds": 3065,
+      "requested": 47,
+      "admitted": 47,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 1,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "a68cca028a62d78dac6425de921e26e1438854e0e846217f996fc859fc0ae2ff"
+    },
+    {
+      "phase": "two-gates",
+      "ordinal": 0,
+      "smallSpeed": 165,
+      "success": true,
+      "error": "",
+      "injection": {
+        "tick": 3432,
+        "phase": "two-gates",
+        "removedIds": [
+          2,
+          4
+        ],
+        "gateActors": [
+          2,
+          4,
+          6,
+          39,
+          45
+        ],
+        "jobActive": true
+      },
+      "bigArrivedTick": 3210,
+      "smallRequestedTick": 3410,
+      "finalTick": 9228,
+      "elapsedMilliseconds": 3495,
+      "requested": 48,
+      "admitted": 48,
+      "active": 46,
+      "pending": 0,
+      "explicitDeaths": 2,
+      "attacking": 20,
+      "queueConserved": true,
+      "continuousOracleVerified": true,
+      "survivingBigGoalsRestored": false,
+      "inputCommandsSha256": "a62fb41f038f9154fa8824aacd7df42ed2fa30d2ab8a3ee8c200258e4f2b2665"
+    }
+  ]
+}

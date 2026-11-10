@@ -171,6 +171,16 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 return true;
             }
 
+            if (RecoveryActive)
+            {
+                return Reject(NavigationFailure.ReservationBlocked);
+            }
+
+            if (admissionBudgetExceeded)
+            {
+                return Reject(NavigationFailure.SearchLimitExceeded);
+            }
+
             if (!HasRecoveryAdmission(profile, start) && profile.CapacityRevisions.TryGetValue(start, out int revision) && revision == goalRevision)
             {
                 if (TryStartAdmissionRecovery(profile, start) && RecoveryActive)

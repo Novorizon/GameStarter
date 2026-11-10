@@ -1,0 +1,21 @@
+{
+  "baselineAggregateSha256": "a9ee55d0667eaea51207568e41c52c11aed2f78d1998af0031d78db656a24ef7",
+  "aggregateSha256": "6059186caba95bac993be18c792e7f8f1a7040124e880cf5fe9afdca757c535c",
+  "files": {
+    "BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+    "BattlePauseState.cs": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+    "Configuration.cs": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+    "DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+    "FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+    "Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+    "Navigation/NavigationCrowd.AdmissionGates.cs": "5b4255340f82c7dcda4167f449b02d0db4f1498f74d014e6feba5893cb3ddf12",
+    "Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+    "Navigation/NavigationCrowd.Parking.cs": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+    "Navigation/NavigationCrowd.Planning.cs": "73222d29bdee7e3a747ec88a5c19fc6de858bfcbc50967dead4cde1ac40bd557",
+    "Navigation/NavigationCrowd.Recovery.cs": "61de7dba5436f9ae825c8d9ba34e4a1f99f0510a83dbc2e22b98e6cc5c2b8fa6",
+    "Navigation/NavigationCrowd.Traffic.cs": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+    "Navigation/NavigationCrowd.cs": "05a0f8fa1d2a76b415df42e621a2be6cf3bf6300b67e79b3da55c72c8ece1618",
+    "Navigation/NavigationGrid.cs": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e"
+  },
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256"
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "variant": "a-no-gate-path-protection",
+    "success": true,
+    "bigArrived": 3229,
+    "requested": 4000,
+    "allArrived": 7120,
+    "checkedPairs": 17368715,
+    "attacking": 20,
+    "waiting": 26
+  },
+  {
+    "variant": "b-adjacent-buffers",
+    "success": true,
+    "bigArrived": 3229,
+    "requested": 4000,
+    "allArrived": 9840,
+    "checkedPairs": 25630715,
+    "attacking": 20,
+    "waiting": 26
+  },
+  {
+    "variant": "c-small-path-only-connectivity",
+    "success": false,
+    "error": "Unhandled exception. System.InvalidOperationException: Late small actors did not enter: big=44, small=0, tick=14000, last=CapacityExceeded"
+  },
+  {
+    "variant": "d-local-combined",
+    "success": true,
+    "bigArrived": 3229,
+    "requested": 4000,
+    "allArrived": 5228,
+    "checkedPairs": 11621495,
+    "attacking": 20,
+    "waiting": 26
+  }
+]
