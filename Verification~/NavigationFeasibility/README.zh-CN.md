@@ -7,6 +7,7 @@
 - 原始 37×37、1m 格、4m 集结范围、半径 250mm 的 72 人十字场景有可行解。4 个 seed、正序与原测试逆序入场共 8 组，全 72 抵达；每组分别删除 12 个攻击者，96 次恢复均重新得到 72 人、12 攻击/60 候场。
 - 真实林地原 500mm 格、原 holding mask、原身体与速度：r250/range550/speed55 的原 profile 40 个目标全部到位（14 攻击、26 候场）；r200/range450/speed100 的 45 个目标全部到位（12 攻击、33 候场）。逐个攻击者死亡后都可恢复原满员状态。
 - r250 的原 frontier 筛选排除了 4 个本来具备真实距离/视线条件的合法 holding 格。只放宽目标筛选、不改地图/单位，44 个位置可全部使用：18 攻击、26 候场，1820 tick 到位；18 个攻击者分别死亡后都可恢复。
+- 先让 44 个 r250/range550/speed55 的 Big 满员，再晚到 2 个 r180/range450/speed165 的 Small，也有合法解。撤离 4 个门口/依赖 Big 到非 holding 的 `+`/道路，Small 按 257 后 256 的顺序从原入口走入，随后 4 Big 沿原路逆序回精确旧格。最终 46 个身体、20 攻击、26 候场；未删除任何 Big，未改变地图、半径或输入速度。
 - 126 个单位无法同时占有当前至多 46 个合法、独占的目标格。这个结论仅适用于当前每格独占与 holding 规则，不能被写成连续物理空间绝对无解；也不能把本来能进的 72 个只接纳 52 个解释成空间不足。
 
 真实地图 SHA-256 为 `ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256`。r250 的目标格最小身体间隙为 0（相切，不相交），r200 为 100mm。原始 4m/72 见证最小身体间隙为 500mm。
@@ -29,8 +30,30 @@
 dotnet run --project Verification~/NavigationFeasibility/NavigationFeasibility.csproj -c Release -- --seed 1 --original-order
 dotnet run --project Verification~/NavigationFeasibility/ForestFeasibility.csproj -c Release
 dotnet run --project Verification~/NavigationFeasibility/ForestFeasibility.csproj -c Release -- --all-legal-attack-cells
+dotnet run --project Verification~/NavigationFeasibility/LateArrivalFeasibility.csproj -c Release
 ```
 
 原始场景的 seed 使用 `1,17,733,20261110`；省略 `--original-order` 则按 ID 正序入场。默认输出到 `Artifacts/NavigationFeasibility`，可用 `--output` 修改；`--root` 指定林地资源所在仓库根目录。失败时退出非零，并先删除本次目标 JSON，避免读取上一轮成功记录。
 
 `Evidence/summary.json` 保存本轮各见证、源文件及输入地图的指纹；代表性完整路径和死亡恢复动作也在同目录。真正在游戏中执行仍须由生产 crowd 与真实 Unity 再验收。
+
+## 异质晚到：44 Big + 2 Small
+
+起点引用同目录已验证的 44 Big 全满记录。1820 tick 全到位，继续保持 200 tick，Small 请求在 2020 tick 到来。Big 个体始终保留；临停不是最终抵达。原目标归属和临时位置须分别处理，Small 经过让开的门口后，Big 才能按原路线返回。
+
+| 动作 | 个体 | 起点格坐标 | 终点格坐标 | 开始/结束 tick |
+| --- | --- | --- | --- | --- |
+| 临时让路 | Big 24 | 33,6 | 28,9 | 2020 / 2100 |
+| 临时让路 | Big 23 | 34,6 | 29,3 | 2100 / 2220 |
+| 临时让路 | Big 29 | 34,5 | 33,14 | 2220 / 2840 |
+| 临时让路 | Big 28 | 35,5 | 33,16 | 2840 / 3490 |
+| 晚到入场 | Small 45 | S：2,24 | 37,5（257） | 3490 / 3906 |
+| 晚到入场 | Small 46 | S：2,24 | 36,5（256） | 3906 / 4318 |
+| 返回原位 | Big 28 | 33,16 | 35,5 | 4318 / 4968 |
+| 返回原位 | Big 29 | 33,14 | 34,5 | 4968 / 5588 |
+| 返回原位 | Big 23 | 29,3 | 34,6 | 5588 / 5708 |
+| 返回原位 | Big 24 | 28,9 | 33,6 | 5708 / 5788 |
+
+临停目标不在两条 Small 计划路线或必要的撤离通路上。程序逐动作计算身体扫掠、基地圆、阻塞格和世界边界，共检查 22,147 对身体/移动段和 487,974 个阻塞格距离；最小身体间隙为 0（Big 相切），最小基地间隙为 3mm。所有 Big 最终按 ID 回原格，Small 仅占 256/257。
+
+这是有限合法动作构造，临停选择与串行时序存在冗余，不声称最短让路或生产低延迟。它证明此已知晚到场景可达，不能因单空洞放不进 Big 而把它归为无解。生产实现仍需保持长期目标归属、开放临时通行窗口，并等待 Big 真正返场后才报告完成。

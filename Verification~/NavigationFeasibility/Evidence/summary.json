@@ -1,6 +1,6 @@
 {
   "success": true,
-  "utc": "2026-11-10T19:02:56.312591+00:00",
+  "utc": "2026-11-10T20:06:45.764017+00:00",
   "scope": "Constructive independent feasibility witnesses; no production solver or Unity acceptance claim.",
   "referenceCommit": "f67e8e6cdaea6b89c289433650a7ead8589ec692",
   "original72Cases": [
@@ -224,14 +224,55 @@
   "sourceSha256": {
     "Verification~/NavigationFeasibility/ForestFeasibility.csproj": "01bda6f5e2c07a7036bc84d49db2ecd33546c76edfd306aae86cd896e62b6b1d",
     "Verification~/NavigationFeasibility/ForestProgram.cs": "bc6f5aea4f4f94707971ab71ea8022ebfa106809ec7478d530136b69cfa2b285",
+    "Verification~/NavigationFeasibility/LateArrivalFeasibility.csproj": "f4b1bde5cd7bb8eddb47b6f750b02c88aa76c64f8273bfdd83abeffa5d764446",
+    "Verification~/NavigationFeasibility/LateArrivalProgram.cs": "bc48aefb610ed34b9630881260395e3514a7b774cb1b81838dd4112bbe9ca61a",
     "Verification~/NavigationFeasibility/NavigationFeasibility.csproj": "b1f6d652802868d36aa91f22fcc53c03f5bc8c860b4ad048df0d7343c0d3ff56",
     "Verification~/NavigationFeasibility/Program.cs": "39a7a6ef762ab7fbf4a810cd98bf21b821c9956e0aac092fad015a007b1be005",
-    "Verification~/NavigationFeasibility/README.zh-CN.md": "673e083adb7c00485bcac9abd9547e45f3a0a81772239253bcd88e99817d6b86"
+    "Verification~/NavigationFeasibility/README.zh-CN.md": "b60a42a7f08b9983ce8172a83815506b3a6680816e6cb860e32dc90d44165627"
   },
   "evidenceSha256": {
     "original-4m-72-witness-original-order.json": "c165362e49fe0f6ed299a8f3d8621a9c4578c9ff443d9d1607899a3297dd724b",
     "forest-r250-range550-witness.json": "300206b8192a42d616fa0aac9f0bdc08e97c8f08a940127cf866349ae0b41e4c",
     "forest-r250-range550-all-legal-witness.json": "805fb33fdf30e4164380fb24f966cc42f6109c8769849503e82056e3c0ae31c5",
-    "forest-r200-range450-witness.json": "4a12874519609bd66f1f351a2623ba3503efea83730af3781f4c37ae9600640e"
+    "forest-r200-range450-witness.json": "4a12874519609bd66f1f351a2623ba3503efea83730af3781f4c37ae9600640e",
+    "forest-44-big-2-late-small-witness.json": "310c07c6f068d60129187438d73d783f3ee605df13b67efc34535cd930b1a821"
+  },
+  "late44Big2Small": {
+    "success": true,
+    "utc": "2026-11-10T20:06:45.6106076Z",
+    "scope": "Constructive late-arrival witness; no production or Unity execution claim. All 44 initial Big actors are preserved and return to their original goals.",
+    "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+    "initialSaturationEvidenceSha256": "805fb33fdf30e4164380fb24f966cc42f6109c8769849503e82056e3c0ae31c5",
+    "initialBigCount": 44,
+    "initialBigArrivedTick": 1820,
+    "lateRequestsTick": 2020,
+    "finalTick": 5788,
+    "finalCount": 46,
+    "finalAttacking": 20,
+    "smallOnlyTargets": [
+      256,
+      257
+    ],
+    "originalGateOwners": [
+      23,
+      28,
+      29
+    ],
+    "evacuationOrder": [
+      24,
+      23,
+      29,
+      28
+    ],
+    "temporaryNonHoldingBuffers": [
+      161,
+      424,
+      649,
+      737
+    ],
+    "checkedPairs": 22147,
+    "checkedWalls": 487974,
+    "minimumBodyGap": 0,
+    "minimumBaseGap": 3
   }
 }
