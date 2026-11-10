@@ -2,12 +2,12 @@
   "success": true,
   "scenarioCount": 56,
   "scope": "Post-run independent reconciliation of all per-ID records, exact original endpoint sets, fixed offered inputs and actual terminal poses.",
-  "domainAggregateSha256": "d155d9838c07d7de133a3e1ef4424388bd441086f99f27968c4163bc1d7f2582",
+  "domainAggregateSha256": "074502ae2c712a92094d4b851c451afba25ac300c063f78e28b605b767a72c2f",
   "testSnapshotAggregateSha256": "d6a62728cf2e415bf51d1811018d7dc9c8b4e5c0e8f2a4056550c822000a893d",
-  "testBinarySha256": "17fecfe0d677c33092203477469818f485031c066977693786b7b87f1be2a0b1",
+  "testBinarySha256": "1d54a3241b676b733eb46aa5a883bd48d4259edd35dd821ffad05adef601c022",
   "sourceFilesUnchanged": true,
   "testFilesUnchanged": true,
-  "elapsedMilliseconds": 64751,
+  "elapsedMilliseconds": 57894,
   "originalInputSetsUnchangedFromB2": true,
   "outcomeCounts": {
     "all-requests-accounted-and-live-agents-arrived-after-recovery": 48,
@@ -882,6 +882,6 @@
       "allLiveAtExactOwnedGoal": true
     }
   ],
-  "performanceCandidateSourceFilesVerified": 15,
-  "cacheCandidateCaseEvidenceIdenticalToB7ExceptElapsedMilliseconds": true
+  "compatibilityCandidateSourceFilesVerified": 15,
+  "compatibilityCaseEvidenceIdenticalToD155ExceptElapsedMilliseconds": true
 }

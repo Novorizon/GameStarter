@@ -1,8 +1,8 @@
 {
   "success": true,
-  "utc": "2026-11-10T22:24:04.1058939Z",
-  "elapsedMilliseconds": 32917,
-  "domain": "/workspace/navigation-experiments/perf-b7/Assets/HotUpdate/TowerDefense/Domain",
+  "utc": "2026-11-10T22:38:59.5206026Z",
+  "elapsedMilliseconds": 29345,
+  "domain": "/workspace/GameStarter/Assets/HotUpdate/TowerDefense/Domain",
   "sourceFilesUnchanged": true,
   "sourceHashes": {
     "BattleBriefing.cs": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
@@ -11,7 +11,7 @@
     "DemoConfiguration.cs": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
     "FightSession.cs": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
     "Navigation/NavigationAgent.cs": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
-    "Navigation/NavigationCrowd.AdmissionGates.cs": "3ceb12256653ec150f058e8be3e8db13c8d6f8523d23afc3f72c7f9cb084e767",
+    "Navigation/NavigationCrowd.AdmissionGates.cs": "20ae2cc7647e4a06b2db45583c530a7ead8585a71955784e49047916a33ccee3",
     "Navigation/NavigationCrowd.AttackQuotas.cs": "9593d31afacf1dc8588f8a9c79f27b5e89c32847d6a9f181a55a174a08b3a64f",
     "Navigation/NavigationCrowd.cs": "878c304c118a59754b6463405edd33118d1ec39b208be9b0e2b73106f804e727",
     "Navigation/NavigationCrowd.Gates.cs": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
@@ -26,7 +26,7 @@
   },
   "testFilesUnchanged": true,
   "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
-  "assemblySha256": "bc93243c69e69815621ac22b31243a08293d059708e91dbf14a29bdb4335469a",
+  "assemblySha256": "5820842f42432cd5e94d69030bc64d399ba10254638c7bd22c59f935fd56e548",
   "records": [
     {
       "success": true,

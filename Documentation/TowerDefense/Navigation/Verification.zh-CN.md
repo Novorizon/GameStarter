@@ -2,7 +2,7 @@
 
 实现与方案来源见[设计说明](../Navigation.zh-CN.md)，关卡几何见[地图说明](ForestMap.zh-CN.md)，不同算法的实际对照见[实验分支](Experiments.zh-CN.md)。本任务保持在 `feat/navigation-cooperative-recovery` 分支，不合并 `main`。
 
-本轮生产提交为 `9686ac9`；15 份完整领域 C# 源的聚合 SHA-256 为 `d155d9838c07d7de133a3e1ef4424388bd441086f99f27968c4163bc1d7f2582`。纯导航工程实际编译其中 11 份配置/导航源，Unity 另编译完整热更程序集。[完整来源指纹](source-sha256.json)记录领域、测试、资源、原生日志与交付报告。地图 SHA-256 为 `ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256`，Luban 配置版本为 `forest-navigation-2`。
+本轮生产提交为 `e36bfa9`；15 份完整领域 C# 源的聚合 SHA-256 为 `074502ae2c712a92094d4b851c451afba25ac300c063f78e28b605b767a72c2f`。纯导航工程实际编译其中 11 份配置/导航源，Unity 另编译完整热更程序集。[完整来源指纹](source-sha256.json)记录领域、测试、资源、原生日志与交付报告。地图 SHA-256 为 `ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256`，Luban 配置版本为 `forest-navigation-2`。
 
 ## 领域与接入结果
 
@@ -58,9 +58,11 @@
 
 [完整业务](unity-gameplay.json)通过两场真实六波胜利（每场126击杀、0漏怪），另有失败/胜利重开、选卡、暂停叠加、射程、序章/建设/任务、返营地与退出清理。[Player脚本](player-compile.json)及[9个示例的13 Editor/9 Player程序集](sample-assemblies.json)通过；[YooAsset构建](resource-build.json)包含27主资源、11 Bundle，导航TextAsset以navigation分类发布。
 
-性能单独核对：未缓存版本曾出现约1777ms墙钟峰值；[诊断基线](step-profile-b7.json)确认零展开也在反复构建静态连通区。最终缓存仅复用同半径的静态地形结果，动态目标、额外堵格及预算内试探仍执行原计算。相同真实输入的[独立分配对照](allocation-comparison.json)中，1487个拥堵热tick平均分配313318→66334字节（减少78.8%），逐tick物理轨迹、节点数和最终状态完全一致；[56项逐字段对照](static-cache-equivalence.json)及52条事务结果也保持一致。
+最终版以显式 `Enumerable.Reverse` 固定LINQ遍历，兼容较新C#编译器对数组/Span重载的选择；其余14份Domain源不变。[56项逐字段兼容对照](compatibility-equivalence.json)核对轨迹、生命周期、命令、节点和失败分类；全部功能矩阵与Unity在此最终版重新运行。
 
-[Unity两次集中复测](step-profile-d155.json)均在tick5228到位，Step合计约1761/1558ms，基线为2913/3442ms；热重放峰值117→15.94ms。首次运行仍出现一次121.67ms CPU峰值，不能将分配下降说成所有卡顿已消失，也不据这台软件渲染云机承诺手机帧率。完整10组最终复验的Step峰值为6.08–60.56ms，其中44/45满员为6.08/8.53ms、晚到46为60.56ms；所有逐tick耗时与慢步事件保留在报告中。
+性能单独核对：未缓存版本曾出现约1777ms墙钟峰值；[诊断基线](step-profile-b7.json)确认零展开也在反复构建静态连通区。最终缓存仅复用同半径的静态地形结果，动态目标、额外堵格及预算内试探仍执行原计算。缓存变体d155（显式LINQ修正前）的相同真实输入[独立分配对照](allocation-comparison.json)中，1487个拥堵热tick平均分配313318→66334字节（减少78.8%），逐tick物理轨迹、节点数和最终状态完全一致；[56项逐字段对照](static-cache-equivalence.json)及52条事务结果也保持一致。
+
+[缓存变体的Unity两次集中复测](step-profile-d155.json)均在tick5228到位，Step合计约1761/1558ms，基线为2913/3442ms；热重放峰值117→15.94ms。首次运行仍出现一次121.67ms CPU峰值，不能将分配下降说成所有卡顿已消失，也不据这台软件渲染云机承诺手机帧率。最终0745的完整10组复验中，Step峰值为147.94ms；44/45满员分别为10.66/18.81ms，晚到46为103.74ms。所有逐tick耗时与慢步事件保留在报告中；本轮没有把临时分配降低等同于设备帧率已经达标。
 
 [正常围攻](base-surround.png) · [F3覆盖](base-surround-debug.png) · [46人满员](full-46-surround.png) · [46人逻辑覆盖](full-46-surround-debug.png)。原始逐组CSV与所有正常/F3帧在Artifacts中。
 
