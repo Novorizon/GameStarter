@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Game.Framework.Data;
 using Game.HotUpdate.Client;
@@ -271,6 +272,23 @@ namespace Game.Editor
                     }
                 }
             });
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--nav-profile-late-only") >= 0)
+            {
+                var late = scenarios[scenarios.Count - 1];
+                scenarios.Clear();
+                scenarios.Add(late);
+                scenarios.Add(new Scenario
+                {
+                    Name = late.Name + "-warm-replay",
+                    Description = late.Description,
+                    EnemyIds = late.EnemyIds,
+                    ExpectedAttackers = late.ExpectedAttackers,
+                    InitialLargeCount = late.InitialLargeCount,
+                    LateStartTick = late.LateStartTick,
+                    Wave = late.Wave
+                });
+            }
+
             result.authoredWaves = config.Waves.Length;
             result.expectedCases = scenarios.Count;
             foreach (var hub in UnityEngine.Object.FindObjectsOfType<PlayerHubView>())
@@ -350,6 +368,12 @@ namespace Game.Editor
             for (int iteration = 0; iteration < 25; iteration++)
             {
                 session.SetPaused(false);
+                long nodesBefore = session.Navigation.TotalExpandedNodes;
+                long gateBefore = session.Navigation.AdmissionGateExpandedCells;
+                long recoveryBefore = session.Navigation.RecoveryExpandedCells;
+                int gcBefore = GC.CollectionCount(0);
+                long heapBefore = GC.GetTotalMemory(false);
+                long cpuBefore = CurrentThreadCpuNanoseconds();
                 long started = Stopwatch.GetTimestamp();
                 try
                 {
@@ -360,6 +384,24 @@ namespace Game.Editor
                     long elapsed = Stopwatch.GetTimestamp() - started;
                     current.stepStopwatchTicks += elapsed;
                     current.maximumStepStopwatchTicks = Math.Max(current.maximumStepStopwatchTicks, elapsed);
+                    if (elapsed * 1000.0 / Stopwatch.Frequency >= 20)
+                    {
+                        current.slowSteps.Add(new SlowStep
+                        {
+                            tick = session.Tick,
+                            wallMilliseconds = elapsed * 1000.0 / Stopwatch.Frequency,
+                            threadCpuMilliseconds = (CurrentThreadCpuNanoseconds() - cpuBefore) / 1000000.0,
+                            expanded = session.Navigation.TotalExpandedNodes - nodesBefore,
+                            gateExpanded = session.Navigation.AdmissionGateExpandedCells - gateBefore,
+                            recoveryExpanded = session.Navigation.RecoveryExpandedCells - recoveryBefore,
+                            generationZeroCollections = GC.CollectionCount(0) - gcBefore,
+                            managedHeapDeltaBytes = GC.GetTotalMemory(false) - heapBefore,
+                            active = session.Enemies.Count,
+                            pending = session.PendingSpawns,
+                            recoveryActive = session.Navigation.RecoveryActive,
+                            failure = session.Navigation.LastFailure.ToString()
+                        });
+                    }
                 }
 
                 started = Stopwatch.GetTimestamp();
@@ -405,6 +447,29 @@ namespace Game.Editor
             }
 
             SynchronizePresentation();
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NativeTimespec
+        {
+            internal long Seconds;
+            internal long Nanoseconds;
+        }
+
+#if UNITY_EDITOR_LINUX
+        [DllImport("libc", EntryPoint = "clock_gettime")]
+        private static extern int ReadClock(int clock, out NativeTimespec value);
+#endif
+
+        private static long CurrentThreadCpuNanoseconds()
+        {
+#if UNITY_EDITOR_LINUX
+            if (ReadClock(3, out var value) == 0)
+            {
+                return value.Seconds * 1000000000L + value.Nanoseconds;
+            }
+#endif
+            return 0;
         }
 
         private static void ValidateTick()
@@ -920,6 +985,24 @@ namespace Game.Editor
             public long totalExpandedNodes;
             public string trace;
             public EnemyResult[] finalEnemies;
+            public List<SlowStep> slowSteps = new List<SlowStep>();
+        }
+
+        [Serializable]
+        private sealed class SlowStep
+        {
+            public long tick;
+            public double wallMilliseconds;
+            public double threadCpuMilliseconds;
+            public long expanded;
+            public long gateExpanded;
+            public long recoveryExpanded;
+            public int generationZeroCollections;
+            public long managedHeapDeltaBytes;
+            public int active;
+            public int pending;
+            public bool recoveryActive;
+            public string failure;
         }
 
         [Serializable]

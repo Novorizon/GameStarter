@@ -62,6 +62,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
         private readonly Dictionary<int, List<Reservation>> reservations = new Dictionary<int, List<Reservation>>();
         private readonly Dictionary<int, int> goalOwners = new Dictionary<int, int>();
         private readonly HashSet<int> entries = new HashSet<int>();
+        private readonly Dictionary<int, bool[]> geometryComponents = new Dictionary<int, bool[]>();
         private int goalRevision;
         private int trafficRevision;
         private bool parkingPrepared;
@@ -393,6 +394,15 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
         private bool[] Flood(Profile profile, int start, int ignoreOwner, int extraBlocked, bool includeGoals)
         {
+            // Static reachability depends only on this immutable grid and body radius. Reuse the last component
+            // per radius; callers only read this mask. Budgeted trials still perform and count the original flood.
+            bool geometryOnly = !includeGoals && extraBlocked < 0 && admissionBudgetStart < 0;
+            if (geometryOnly && start >= 0 && start < grid.CellCount
+                && geometryComponents.TryGetValue(profile.Radius, out var component) && component[start])
+            {
+                return component;
+            }
+
             var visited = new bool[grid.CellCount];
             if (start < 0 || !profile.Stand[start] || start == extraBlocked)
             {
@@ -425,6 +435,12 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     visited[next] = true;
                     queue.Enqueue(next);
                 }
+            }
+
+            if (geometryOnly)
+            {
+                // One component per radius bounds retained memory, even for maps with many disconnected cells.
+                geometryComponents[profile.Radius] = visited;
             }
 
             return visited;
