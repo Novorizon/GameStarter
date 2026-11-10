@@ -654,7 +654,9 @@ namespace Game.Editor
                     return;
                 }
 
-                Require(game.BaseHp == 0 && game.Leaks > 0, "Defeat did not follow real enemy leaks.");
+                Require(
+                    game.BaseHp == 0 && (game.Navigation == null ? game.Leaks > 0 : game.Enemies.Any(enemy => enemy.AttackSequence > 0)),
+                    "Defeat did not follow actual base damage.");
                 result.defeatWave = game.WaveIndex;
                 result.defeatLeaks = game.Leaks;
                 result.defeatVerified = true;

@@ -2,7 +2,7 @@
 
 ## 最小战斗循环
 
-出征前先显示准备页，使用实际关卡配置汇总波数、敌人、路线/建造点和胜负补给；确认后才申请战场资源。开始一局时固定关卡配置、配置版本和随机种子。每次新出征生成种子，局内重试保留该种子；加载失败重试也使用已确认的计划。玩家在建造点购买塔、观察下一波信息，再主动开始波次。怪物按编辑路线移动；塔在领域中选目标并结算命中。击杀给局内金币，漏怪扣基地生命。清波后给波次奖励，并在需要时暂停模拟、弹出三个互不相同的可选增益；选择一次后回到备战。基地生命归零则失败，最后一波结清则胜利。
+出征前先显示准备页，使用实际关卡配置汇总波数、敌人、路线/建造点和胜负补给；确认后才申请战场资源。开始一局时固定关卡配置、配置版本和随机种子。每次新出征生成种子，局内重试保留该种子；加载失败重试也使用已确认的计划。玩家在建造点购买塔、观察下一波信息，再主动开始波次。怪物从编辑入口进入显式逻辑地图，寻路并预约移动时间，抵达基地周围的攻击位置后按间隔持续扣血；外圈候场不能攻击。塔在领域中选目标并结算命中，击杀给局内金币。清波要求所有应生成敌人已经生成且全部被击杀，不以走到旧折线终点后移除敌人清波。清波后给波次奖励，并在需要时暂停模拟、弹出三个互不相同的可选增益；选择一次后回到备战。基地生命归零则失败，最后一波结清则胜利。
 
 战斗表现不决定伤害：当前原型使用即时命中规则，弹道、闪光和受击动画仅表现结果。以后若需要有飞行时间、穿透、爆炸或弹道阻挡，必须把相应规则移入领域模拟，而不是让 Unity 碰撞回调直接改血量。
 
@@ -31,7 +31,7 @@ stateDiagram-v2
 | `TbTdRoutePoint / TdRoutePoint` | `id`；`stageId → TdStage`，同关卡内 `routeId+sequence` 排序唯一 | `x,y`，整数毫米坐标；同一路线顺序组合为折线 |
 | `TbTdBuildSlot / TdBuildSlot` | `id`；`stageId → TdStage` | `x,y`，固定建造点 |
 | `TbTdTower / TdTower` | `id` | `buildCost,upgradeCost,damage,range,attackIntervalTicks,maxLevel,upgradeDamage,upgradeRange` |
-| `TbTdEnemy / TdEnemy` | `id` | `health,speedPerTick,goldReward,baseDamage` |
+| `TbTdEnemy / TdEnemy` | `id` | `health,speedPerTick,goldReward,baseDamage,radius,attackRange,attackIntervalTicks` |
 | `TbTdWave / TdWave` | `id`；`stageId → TdStage`，`sequence` 决定波次顺序 | `rewardGold,giveCard` |
 | `TbTdSpawn / TdSpawn` | `id`；`waveId → TdWave`，`enemyId → TdEnemy`，`routeId` 必须属于该波关卡 | `count,startTick,intervalTicks` |
 | `TbTdCard / TdCard` | `id` | `name,description,effect,value,weight,maxStacks,iconIndex,rarity` |
@@ -49,13 +49,15 @@ stateDiagram-v2
 | `RouteDefinition` | `Id`、`Position2[] Points` | `TbTdRoutePoint`，按 `stageId/routeId/sequence` 组合 | 至少两点，禁止相邻重复点；波次的 `RouteId` 必须存在 |
 | `BuildSlotDefinition` | `Id`、`Position2 Position` | `TbTdBuildSlot`，`id` | 关卡内唯一；不落在路径或基地碰撞占地中；不能依赖图片识别生成 |
 | `TowerDefinition` | `Id/Name`、建造/升级费用、伤害、射程、攻击间隔 tick、最大等级、每级伤害/射程增量 | `TbTdTower`，`id` | 费用非负、间隔大于零；正式升级曲线复杂时拆 `TbTowerLevel(towerId,level)` |
-| `EnemyDefinition` | `Id/Name`、生命、每 tick 速度、金币奖励、基地伤害 | `TbTdEnemy`，`id` | 生命和速度大于零，奖励/基地伤害非负；模型及动画由表现表关联 |
+| `EnemyDefinition` | `Id/Name`、生命、每 tick 速度、金币奖励、单次基地伤害、身体半径、攻击距离与间隔 | `TbTdEnemy`，`id` | 半径为正且不超过半格，速度不超过每 tick 一格；攻击间隔为正，攻击距离从身体边缘到基地边缘计算；模型及动画由表现表关联 |
 | `WaveDefinition` | `Id`、清波金币、`GiveCard`、刷怪组数组 | `TbTdWave`，`id` | 归属于关卡或由关卡引用；空组和最终波规则必须明确 |
 | `SpawnGroup` | `EnemyId/RouteId/Count/StartTick/IntervalTicks` | `TbTdSpawn`，按 `waveId` 组合 | 外键指向敌人和关卡路线；数量、间隔和起始 tick 有上限；不得整数溢出 |
 | `CardDefinition` | `Id/Name/Description`、效果类型和值、抽取权重、最大叠层 | `TbTdCard`，`id` | 稳定 ID；权重为正；已满层或无效卡不应进入候选集 |
 | 表现绑定 | 公共 UI、地图、卡牌图标，当前 3D 由代码生成 | `TbClientTheme` 的公共 UI 地址、`TdStage.mapAsset` 和 `TdCard.iconIndex` | 正式模型/动画地址由对应塔/敌人定义关联；领域只持 ID，不读取资源 |
 
 原型效果集合为 `DamagePercent`、`AttackSpeedPercent`、`RangePercent`、`Gold`、`HealBase`。它们适合先验证选卡与叠加体验，不能据此认定燃烧、冰冻、连锁、召唤或主动技能已实现。
+
+导航几何独立保存在 YooAsset 的 `TowerDefense/Data/ForestNavigation`，随地图与表版本一起发布；不拆成一格一张表。`FightConfiguration.Navigation` 持有不可变几何，`FightSession` 内的 `NavigationCrowd` 持有单位路径、预约和站位。构造会话时预注册全部敌人的身体/射程组合，保证长射程外圈不会封死短射程内圈。编辑折线保留作入口与关卡制作参考，正式移动由逻辑地图决定。当前配置版本为 `forest-navigation-1`；旧配置的战斗结果不能混作新规则的重放证明。算法与验收见[寻路说明](Navigation.zh-CN.md)。
 
 BattleBriefing 为准备页和局内情报汇总同一波各刷怪组的敌人数量、清波金币与是否选卡；最后一波不显示不存在的额外选卡。备战预告下一波，防守中显示当前进攻。
 

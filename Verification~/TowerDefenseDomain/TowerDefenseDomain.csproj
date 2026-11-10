@@ -9,6 +9,6 @@
     <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/*.cs" Link="Domain/%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/**/*.cs" Link="Domain/%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

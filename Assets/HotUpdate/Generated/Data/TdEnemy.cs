@@ -14,7 +14,7 @@ namespace cfg
 {
 public sealed partial class TdEnemy : Luban.BeanBase
 {
-    public TdEnemy(ByteBuf _buf)
+    public TdEnemy(ByteBuf _buf) 
     {
         Id = _buf.ReadInt();
         Name = _buf.ReadString();
@@ -22,6 +22,9 @@ public sealed partial class TdEnemy : Luban.BeanBase
         SpeedPerTick = _buf.ReadInt();
         GoldReward = _buf.ReadInt();
         BaseDamage = _buf.ReadInt();
+        Radius = _buf.ReadInt();
+        AttackRange = _buf.ReadInt();
+        AttackIntervalTicks = _buf.ReadInt();
     }
 
     public static TdEnemy DeserializeTdEnemy(ByteBuf _buf)
@@ -35,7 +38,10 @@ public sealed partial class TdEnemy : Luban.BeanBase
     public readonly int SpeedPerTick;
     public readonly int GoldReward;
     public readonly int BaseDamage;
-
+    public readonly int Radius;
+    public readonly int AttackRange;
+    public readonly int AttackIntervalTicks;
+   
     public const int __ID__ = 170913496;
     public override int GetTypeId() => __ID__;
 
@@ -52,6 +58,9 @@ public sealed partial class TdEnemy : Luban.BeanBase
         + "speedPerTick:" + SpeedPerTick + ","
         + "goldReward:" + GoldReward + ","
         + "baseDamage:" + BaseDamage + ","
+        + "radius:" + Radius + ","
+        + "attackRange:" + AttackRange + ","
+        + "attackIntervalTicks:" + AttackIntervalTicks + ","
         + "}";
     }
 }

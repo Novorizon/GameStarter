@@ -44,6 +44,9 @@
         <var name="speedPerTick" type="int" />
         <var name="goldReward" type="int" />
         <var name="baseDamage" type="int" />
+        <var name="radius" type="int" />
+        <var name="attackRange" type="int" />
+        <var name="attackIntervalTicks" type="int" />
     </bean>
     <table name="TbTdEnemy" value="TdEnemy" input="tdenemy.xlsx" index="id" />
     <bean name="TdWave">

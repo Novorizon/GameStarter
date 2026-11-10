@@ -64,6 +64,19 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags:
         UserData:
+    - GroupName: TowerDefenseNavigation
+      GroupDesc:
+      AssetTags: navigation
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes
+        CollectorGUID: 77494a7633894b0483e489199c6fc70b
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
     - GroupName: ClientUI
       GroupDesc:
       AssetTags: ui

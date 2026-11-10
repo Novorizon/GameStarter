@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Game.HotUpdate.TowerDefense.Domain.Navigation;
 
 namespace Game.HotUpdate.TowerDefense.Domain
 {
@@ -27,6 +28,9 @@ namespace Game.HotUpdate.TowerDefense.Domain
             internal Route Route;
             internal int Health;
             internal int Distance;
+            internal NavigationAgent Agent;
+            internal int AttackCooldown;
+            internal int AttackSequence;
         }
 
         private sealed class Route
@@ -86,6 +90,11 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public bool IsPaused { get; private set; }
         public int Kills { get; private set; }
         public int Leaks { get; private set; }
+        public int TotalSpawned => nextEnemyId - 1;
+        public int PendingSpawns => WaveIndex == 0 ? 0
+            : Configuration.Waves[WaveIndex - 1].Groups.Select((group, index) => group.Count - emitted[index]).Sum();
+        public long SpawnBlockedTicks { get; private set; }
+        public NavigationCrowd Navigation { get; }
         public IReadOnlyList<TowerSnapshot> Towers { get; }
         public IReadOnlyList<EnemySnapshot> Enemies { get; }
         public IReadOnlyList<CardDefinition> CurrentCardOffers { get; }
@@ -103,6 +112,14 @@ namespace Game.HotUpdate.TowerDefense.Domain
             routes = configuration.Routes.ToDictionary(value => value.Id, CreateRoute);
             Gold = configuration.InitialGold;
             BaseHp = configuration.BaseHealth;
+            Navigation = configuration.Navigation == null ? null : new NavigationCrowd(configuration.Navigation);
+            if (Navigation != null)
+            {
+                foreach (var definition in configuration.Enemies)
+                {
+                    Navigation.RegisterProfile(definition.Radius, definition.AttackRange);
+                }
+            }
             Towers = towerSnapshots.AsReadOnly();
             Enemies = enemySnapshots.AsReadOnly();
             CurrentCardOffers = offers.AsReadOnly();
@@ -201,26 +218,49 @@ namespace Game.HotUpdate.TowerDefense.Domain
             Tick++;
             var wave = Configuration.Waves[WaveIndex - 1];
             bool allSpawned = true;
+            bool spawnBlocked = false;
             for (int i = 0; i < wave.Groups.Length; i++)
             {
                 var group = wave.Groups[i];
-                if (emitted[i] < group.Count && waveTick >= group.StartTick
-                    && (waveTick - group.StartTick) % group.IntervalTicks == 0)
+                if (emitted[i] < group.Count && waveTick >= group.StartTick + emitted[i] * group.IntervalTicks)
                 {
                     var definition = enemyDefinitions[group.EnemyId];
-                    enemies.Add(new Enemy
+                    var route = routes[group.RouteId];
+                    var spawn = route.Definition.Points[0];
+                    if (Navigation != null)
                     {
-                        Id = nextEnemyId++,
-                        Definition = definition,
-                        Route = routes[group.RouteId],
-                        Health = definition.Health
-                    });
-                    emitted[i]++;
+                        // 表内入口定位逻辑出生格；单位只在准入成功后于格心生成。
+                        spawn = Configuration.Navigation.Center(Configuration.Navigation.CellAt(spawn));
+                    }
+                    int id = nextEnemyId;
+                    bool admitted = Navigation == null || Navigation.TrySpawn(id, spawn, definition.SpeedPerTick, definition.Radius, definition.AttackRange);
+                    if (admitted)
+                    {
+                        enemies.Add(new Enemy
+                        {
+                            Id = nextEnemyId++,
+                            Definition = definition,
+                            Route = route,
+                            Health = definition.Health,
+                            Agent = Navigation == null ? null : Navigation.Agents.Last()
+                        });
+                        emitted[i]++;
+                    }
+                    else
+                    {
+                        spawnBlocked = true;
+                    }
                 }
 
                 allSpawned &= emitted[i] == group.Count;
             }
 
+            if (spawnBlocked)
+            {
+                SpawnBlockedTicks++;
+            }
+
+            Navigation?.Step(Tick);
             foreach (var tower in towers)
             {
                 if (tower.Cooldown > 0)
@@ -247,6 +287,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 {
                     Gold = SaturatingAdd(Gold, target.Definition.GoldReward);
                     Kills++;
+                    Navigation?.Remove(target.Id);
                     enemies.Remove(target);
                 }
             }
@@ -254,6 +295,31 @@ namespace Game.HotUpdate.TowerDefense.Domain
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 var enemy = enemies[i];
+                if (enemy.Agent != null)
+                {
+                    enemy.Distance = enemy.Agent.DistanceTravelled;
+                    if (enemy.AttackCooldown > 0)
+                    {
+                        enemy.AttackCooldown--;
+                    }
+
+                    if (enemy.Agent.Status == NavigationAgentStatus.Attacking && enemy.AttackCooldown == 0)
+                    {
+                        // 就位与视线由导航层确认；外圈候场不能造成伤害。
+                        enemy.AttackCooldown = enemy.Definition.AttackIntervalTicks;
+                        enemy.AttackSequence++;
+                        BaseHp = Math.Max(0, BaseHp - enemy.Definition.BaseDamage);
+                    }
+
+                    if (BaseHp == 0)
+                    {
+                        Phase = BattlePhase.Defeat;
+                        return;
+                    }
+
+                    continue;
+                }
+
                 enemy.Distance += enemy.Definition.SpeedPerTick;
                 if (enemy.Distance < enemy.Route.Length)
                 {
@@ -294,18 +360,23 @@ namespace Game.HotUpdate.TowerDefense.Domain
         private Enemy Target(Tower tower)
         {
             Enemy best = null;
-            int remaining = int.MaxValue;
+            long remaining = long.MaxValue;
+            bool bestAttacking = false;
             long range = Range(tower);
             foreach (var enemy in enemies)
             {
-                var point = enemy.Route.Position(enemy.Distance);
+                var point = enemy.Agent == null ? enemy.Route.Position(enemy.Distance) : enemy.Agent.Position;
                 long dx = point.X - tower.Slot.Position.X;
                 long dy = point.Y - tower.Slot.Position.Y;
-                int distanceToBase = enemy.Route.Length - enemy.Distance;
-                if (dx * dx + dy * dy <= range * range && distanceToBase < remaining)
+                long distanceToBase = enemy.Agent == null ? enemy.Route.Length - enemy.Distance
+                    : NavigationGrid.DistanceSquared(point, Configuration.Navigation.TargetCenter);
+                bool attacking = enemy.Agent != null && enemy.Agent.Status == NavigationAgentStatus.Attacking;
+                if (dx * dx + dy * dy <= range * range && (best == null || (attacking && !bestAttacking)
+                    || (attacking == bestAttacking && distanceToBase < remaining)))
                 {
                     best = enemy;
                     remaining = distanceToBase;
+                    bestAttacking = attacking;
                 }
             }
 
@@ -417,10 +488,14 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     enemy.Id,
                     enemy.Definition.Id,
                     enemy.Route.Definition.Id,
-                    enemy.Route.Position(enemy.Distance),
+                    enemy.Agent == null ? enemy.Route.Position(enemy.Distance) : enemy.Agent.Position,
                     enemy.Health,
                     enemy.Definition.Health,
-                    enemy.Distance));
+                    enemy.Distance,
+                    enemy.Definition.Radius,
+                    enemy.Agent == null ? NavigationAgentStatus.Navigating : enemy.Agent.Status,
+                    enemy.AttackCooldown,
+                    enemy.AttackSequence));
             }
         }
 
@@ -482,6 +557,12 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
 
                 CreateRoute(route);
+                if (value.Navigation != null)
+                {
+                    int spawn = value.Navigation.CellAt(route.Points[0]);
+                    Require(spawn >= 0 && value.Navigation.IsWalkable(spawn), "The route entry must map to a walkable navigation spawn cell.");
+                    Require(value.Navigation.SpawnCells.Contains(spawn), "The route entry is not a declared navigation spawn gate.");
+                }
             }
 
             foreach (var slot in value.BuildSlots)
@@ -505,6 +586,14 @@ namespace Game.HotUpdate.TowerDefense.Domain
             {
                 Require(enemy.Health > 0 && enemy.SpeedPerTick > 0 && enemy.SpeedPerTick <= 1000000, "Invalid enemy health/speed.");
                 Require(enemy.GoldReward >= 0 && enemy.BaseDamage > 0, "Invalid enemy rewards/base damage.");
+                Require(
+                    enemy.Radius > 0 && enemy.AttackRange >= 0 && enemy.AttackRange <= 1000000 && enemy.AttackIntervalTicks > 0,
+                    "Invalid enemy body/attack geometry.");
+                if (value.Navigation != null)
+                {
+                    Require(enemy.Radius <= value.Navigation.CellSize / 2, "Enemy body is wider than the configured navigation cell clearance.");
+                    Require(enemy.SpeedPerTick <= value.Navigation.CellSize, "Enemy movement cannot cross more than one reserved navigation edge per tick.");
+                }
             }
 
             foreach (var wave in value.Waves)
@@ -522,6 +611,13 @@ namespace Game.HotUpdate.TowerDefense.Domain
                         group.Count > 0 && group.Count <= 10000 && group.StartTick >= 0 && group.IntervalTicks > 0
                             && (long)group.StartTick + (long)group.Count * group.IntervalTicks <= 10000000,
                         "Invalid spawn timing/count.");
+                    if (value.Navigation != null)
+                    {
+                        var definition = value.Enemies.Single(enemy => enemy.Id == group.EnemyId);
+                        var route = value.Routes.Single(candidate => candidate.Id == group.RouteId);
+                        int spawn = value.Navigation.CellAt(route.Points[0]);
+                        Require(value.Navigation.CanOccupy(spawn, definition.Radius), "A configured enemy body cannot occupy its spawn gate.");
+                    }
                 }
             }
 

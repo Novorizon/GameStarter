@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using Game.HotUpdate.TowerDefense.Domain;
+using Game.HotUpdate.TowerDefense.Domain.Navigation;
 
 namespace Game.HotUpdate.TowerDefense.Data
 {
     /// <summary>只在加载边界把 Luban 行转换为领域配置；战斗不依赖生成表或 Unity。</summary>
     public static class TowerDefenseTables
     {
-        public static FightConfiguration Create(cfg.Tables tables, int stageId)
+        public static FightConfiguration Create(cfg.Tables tables, int stageId, NavigationGrid navigation = null)
         {
             if (tables == null)
             {
@@ -30,6 +31,7 @@ namespace Game.HotUpdate.TowerDefense.Data
             {
                 InitialGold = stage.InitialGold,
                 BaseHealth = stage.BaseHealth,
+                Navigation = navigation,
                 Routes = points.GroupBy(row => row.RouteId).Select(group => new RouteDefinition
                 {
                     Id = group.Key,
@@ -49,7 +51,8 @@ namespace Game.HotUpdate.TowerDefense.Data
                 Enemies = tables.TbTdEnemy.DataList.Select(row => new EnemyDefinition
                 {
                     Id = row.Id, Name = row.Name, Health = row.Health, SpeedPerTick = row.SpeedPerTick,
-                    GoldReward = row.GoldReward, BaseDamage = row.BaseDamage
+                    GoldReward = row.GoldReward, BaseDamage = row.BaseDamage,
+                    Radius = row.Radius, AttackRange = row.AttackRange, AttackIntervalTicks = row.AttackIntervalTicks
                 }).ToArray(),
                 Waves = waves.Select(row => new WaveDefinition
                 {
