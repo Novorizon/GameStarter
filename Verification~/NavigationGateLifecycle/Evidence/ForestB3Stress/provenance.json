@@ -1,0 +1,15 @@
+{
+  "productionCommit": "207d92b06eb9a5739be11d9008b151f7282e037f",
+  "productionDomainAggregateSha256": "b7ea41a6b70b7b6b7235926db543bf8d260c5477f202352f4b4917c58bb9b5db",
+  "compiledDomainFileCount": 11,
+  "productionManifestIncludesAdditionalFilesNotCompiledByThisSuite": true,
+  "scope": "Pure navigation lifecycle model audit, not Unity rendering, Player, IL2CPP or device acceptance.",
+  "count": 30,
+  "passed": 30,
+  "postRecoveryHoldTicks": 200,
+  "allRequiredDeathInjectionsExecuted": true,
+  "nonSpawnFlexibilityAndEntryCacheVerified": true,
+  "totalCaseElapsedMilliseconds": 53272,
+  "minimumFinalTick": 5724,
+  "maximumFinalTick": 8450
+}
