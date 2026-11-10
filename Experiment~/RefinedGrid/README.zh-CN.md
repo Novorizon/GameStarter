@@ -1,6 +1,6 @@
 # 对照方案：细化逻辑格与导航时间步
 
-分支 `experiment/navigation-refined-grid`，基线 `f67e8e6`。这是独立的替代实验，未修改业务生产代码或 SDK，不作为最终修复交付。
+分支 `experiment/navigation-refined-grid`，基线 `f67e8e6`。这是独立的替代实验，未修改主 checkout 或 SDK。先记录单纯细化的剩余失败，再与冻结的协同恢复候选组合复验；纯 C# 组合验证不等于 Unity 业务集成已经交付。
 
 ## 实验目的
 
@@ -35,9 +35,9 @@ dotnet run --project Experiment~/RefinedGrid/RefinedGrid.csproj -c Release
 
 补位分阶段进行，**未证明大量新请求与死亡同时发生时的旧候场优先级或公平性**。基线会先给新出生者保留空攻击位；若测试同时投放增援，要求“六个位必须全由旧候场者占据”并不是当前 API 保证。此区别已反馈主任务。
 
-## 结论与剩余失败
+## 第一轮：单纯细化的结论与剩余失败
 
-结果见 [results.json](results.json) 和 [source-sha256.json](source-sha256.json)。
+结果见 [results.json](results.json) 和 [source-sha256.json](source-sha256.json)。这两份历史证据对应实验提交 `09c5999` 的源码字节，保留其中的失败；后续程序增加候选目录、筛选及逐位死亡参数，不用新源码指纹覆盖旧记录。
 
 - 原 4m/72 人场景：粗格 52/72，细格四 seed 均 72/72；细格 24 人攻击、48 人候场。没有扩大世界或候场距离。
 - 原单出生口 5m/72、原 12m/300、原单格窄口/48：两组均全请求抵达；细格及粗格的死亡补位与增援验证通过。
@@ -46,3 +46,43 @@ dotnet run --project Experiment~/RefinedGrid/RefinedGrid.csproj -c Release
 所以格细化能改善过粗离散带来的空间浪费，但不能解决永久保通路策略与站位分配的全部问题。它还增加可同时攻击的格数，改变围攻节奏；主任务若采用，需要另验业务数值与 Unity 表现。当前同半径实验未覆盖 490mm 大体型的细格方案、混合体型、实际 500mm 森林逻辑图、IL2CPP 或设备性能。
 
 主任务的逆向撤离入场见证及空位传播方案可以在原粗格上解决 72 人问题，优先级更高。保留本分支是为了保存实际尝试过的另一类方案及其明确失败，不能把它当作通用无死锁保证。
+
+## 第二轮：冻结 Root 候选与细格组合
+
+Root 候选移除占用目标的永久空出口要求，加入在线空位传播和交通协调。此处只读捕获整个 Domain，前后校验一致，冻结源码指纹为：
+
+```text
+3f369083fba51f32c7817cf3084f4aa209ad6d2ed4a26c81d7f64e59645eace2
+```
+
+源码快照打包在 [candidate-3f369083-source.zip](candidate-3f369083-source.zip)，不是继续读取 Root 正在变化的目录。复现实验时先在 worktree 根目录解压并核对：
+
+```bash
+python3 -m zipfile -e Experiment~/RefinedGrid/candidate-3f369083-source.zip Artifacts/RootCandidate3f
+python3 Experiment~/RefinedGrid/check-candidate.py Artifacts/RootCandidate3f
+dotnet run --project Experiment~/RefinedGrid/RefinedGrid.csproj -c Release \
+  -p:CandidateDomain="$PWD/Artifacts/RootCandidate3f/Domain" -- \
+  --scenario explicit-capacity-exhaustion --refinement 2 \
+  --all-attack-deaths --shuffle-requests --output Artifacts/RootCandidate3f/verification
+```
+
+`CandidateDomain` 为可选的只读源码目录，默认仍读取本分支基线 Domain。不要让候选运行过程中发生源码漂移；程序会输出并检查 Domain 的完整前后指纹。需要捕获更新的候选时，可使用：
+
+```bash
+python3 Experiment~/RefinedGrid/freeze-candidate.py /path/to/GameStarter/Assets/HotUpdate/TowerDefense/Domain /tmp/NavSnapshots
+```
+
+该命令不修改来源文件；在两次完整读取一致后才写入内容寻址的只读副本。把输出的 Domain 路径传给 `-p:CandidateDomain=...`，不要把运行中 Root 路径直接作为可变测试输入。
+
+### 组合结果
+
+[检查摘要](candidate-3f369083-checks.json) · [四组原始结果](candidate-3f369083-results.json) · [冻结来源](candidate-3f369083-manifest.json) · [原粗格对照](candidate-3f369083-coarse-control.json)
+
+- 原 19×19/4m 场景保持原障碍、边界、半径、出生点、速度与 200 个请求；细格 272 个候选中，**200/200 全部实际进入并抵达**，24 人攻击、176 人候场。
+- 4 个不同的 seed 驱动请求 ID 洗牌均成功，报告保存不同的请求顺序 SHA-256。原 fixture 单出生口、同速，单独改变旧 seed 原本不会改变实际输入；因此没有把四次相同输入包装成四种不同流量。
+- 全部 200 人实际抵达后持续静止 200 个原 tick。若中间恢复移动，会重置稳定计时；不会把间断稳定累计成连续稳定。
+- 每组对 **24 个实际攻击格逐一删除现占用者**，要求旧候场者填回原格，再逐次接入一个增援并恢复 200 人。共 96 次单格修复全部成功，最慢 4 微步；随后六前排同时死亡及六个增援也恢复完整人数。
+- 原世界连续圆盘、障碍矩形、基地圆、速度、攻击距离/视线、目标格中心检查贯穿每个微步。新增已准入身份守恒和固定身体半径断言，防止删除敌人或缩身体造成假通过。
+- 原 1m 粗格对照现在已填满 72 个兼容目标，200 请求中的其余 128 无处取得独立格心；这是该离散表示的目标数量上界。**不把该对照算成 200 人通过，也不把它解释为世界物理空间不足**；同世界的细格组合已给出 200 个身体的实际无碰撞进场过程。
+
+组合结果解决第一轮的 177/200，而不是保留拒绝就停止。它只对应上述冻结候选与同半径/同攻击距离场景；Root 后续的混合类型 Gate 修改需要另取快照复验。本分支未执行 Unity、实际森林资源或设备性能验收，也未证明所有 272 个候选都能同时驻留或任意参数的完备性。

@@ -3,19 +3,39 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text.Json;
 using Game.HotUpdate.TowerDefense.Domain;
 using Game.HotUpdate.TowerDefense.Domain.Navigation;
 
 internal static class Program
 {
-    private static int Main()
+    private static bool everyAttackDeath;
+    private static bool shuffleRequests;
+
+    private static int Main(string[] args)
     {
         GeometryChecks.VerifyOracle();
         var reports = new List<object>();
         bool success = true;
-        Directory.CreateDirectory("Artifacts/RefinedGrid");
-        foreach (int seed in new[] { 1, 17, 733, 20261110 })
+        string output = Argument(args, "--output") ?? "Artifacts/RefinedGrid";
+        string? filter = Argument(args, "--scenario");
+        string? selectedSeeds = Argument(args, "--seeds");
+        string? selectedRefinement = Argument(args, "--refinement");
+        everyAttackDeath = Array.IndexOf(args, "--all-attack-deaths") >= 0;
+        shuffleRequests = Array.IndexOf(args, "--shuffle-requests") >= 0;
+        int[] seeds = selectedSeeds == null ? new[] { 1, 17, 733, 20261110 } : selectedSeeds.Split(',').Select(int.Parse).ToArray();
+        int[] refinements = selectedRefinement == null ? new[] { 1, 2 } : selectedRefinement.Split(',').Select(int.Parse).ToArray();
+        if (seeds.Length == 0 || refinements.Length == 0 || refinements.Any(value => value != 1 && value != 2))
+        {
+            throw new ArgumentException("Select at least one seed and only refinements 1 or 2.");
+        }
+        string domain = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyMetadataAttribute>()
+            .Single(value => value.Key == "CandidateDomain").Value ?? throw new InvalidOperationException("Missing candidate source directory.");
+        var before = SourceHashes(domain);
+        Directory.CreateDirectory(output);
+        foreach (int seed in seeds)
         {
             foreach (string name in new[]
             {
@@ -26,13 +46,18 @@ internal static class Program
                 "single-cell-throat"
             })
             {
+                if (filter != null && !name.Contains(filter, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
                 var scenario = ScenarioCatalog.Create(seed).Single(value => value.Name == name);
-                foreach (int refinement in new[] { 1, 2 })
+                foreach (int refinement in refinements)
                 {
                     var report = Run(scenario, refinement);
                     reports.Add(report);
                     Console.WriteLine(JsonSerializer.Serialize(report));
-                    if (refinement == 2 && !report.Success)
+                    if (!report.Success)
                     {
                         success = false;
                     }
@@ -40,8 +65,38 @@ internal static class Program
             }
         }
 
-        File.WriteAllText("Artifacts/RefinedGrid/summary.json", JsonSerializer.Serialize(reports, new JsonSerializerOptions { WriteIndented = true }));
+        var after = SourceHashes(domain);
+        bool unchanged = before.Count == after.Count && before.All(pair => after.TryGetValue(pair.Key, out string? value) && value == pair.Value);
+        success &= unchanged && reports.Count > 0;
+        File.WriteAllText(Path.Combine(output, "summary.json"), JsonSerializer.Serialize(reports, new JsonSerializerOptions { WriteIndented = true }));
+        File.WriteAllText(Path.Combine(output, "source-manifest.json"), JsonSerializer.Serialize(new
+        {
+            utc = DateTime.UtcNow.ToString("O"), candidateDomain = domain, arguments = args,
+            sourceUnchanged = unchanged, sourceHashes = before,
+            combinedSha256 = Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(
+                string.Concat(before.Select(pair => pair.Key + "\0" + pair.Value + "\n"))))).ToLowerInvariant(),
+            success
+        }, new JsonSerializerOptions { WriteIndented = true }));
         return success ? 0 : 1;
+    }
+
+    private static string? Argument(string[] args, string name)
+    {
+        int index = Array.IndexOf(args, name);
+        return index >= 0 && index + 1 < args.Length ? args[index + 1] : null;
+    }
+
+    private static SortedDictionary<string, string> SourceHashes(string directory)
+    {
+        var hashes = new SortedDictionary<string, string>(StringComparer.Ordinal);
+        foreach (string file in Directory.GetFiles(directory, "*.cs", SearchOption.AllDirectories))
+        {
+            hashes.Add(
+                Path.GetRelativePath(directory, file).Replace('\\', '/'),
+                Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(file))).ToLowerInvariant());
+        }
+
+        return hashes;
     }
 
     private static Result Run(NavigationScenario scenario, int refinement)
@@ -54,6 +109,20 @@ internal static class Program
         report.AttackCandidates = crowd.CountAttackSlots(scenario.UnitRadius, 1000);
         report.GatherCandidates = crowd.CountGatherSlots(scenario.UnitRadius, 1000);
         var pending = Enumerable.Range(1, scenario.UnitCount).Reverse().ToList();
+        if (shuffleRequests)
+        {
+            uint state = (uint)scenario.Seed == 0 ? 1u : (uint)scenario.Seed;
+            for (int i = pending.Count - 1; i > 0; i--)
+            {
+                state ^= state << 13;
+                state ^= state >> 17;
+                state ^= state << 5;
+                int other = (int)(state % (uint)(i + 1));
+                (pending[i], pending[other]) = (pending[other], pending[i]);
+            }
+        }
+
+        report.RequestOrderSha256 = Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(string.Join(",", pending)))).ToLowerInvariant();
         var previous = new Dictionary<int, UnitObservation>();
         var speeds = new Dictionary<int, int>();
         int settled = 0;
@@ -78,7 +147,7 @@ internal static class Program
                         {
                             pending.Remove(id);
                             speeds.Add(id, speed);
-                            previous.Add(id, Observe(crowd.Agents.Last()));
+                            previous.Add(id, Observe(crowd.Agents.Single(agent => agent.Id == id)));
                         }
                     }
                 }
@@ -95,6 +164,10 @@ internal static class Program
                         break;
                     }
                 }
+                else
+                {
+                    settled = 0;
+                }
 
                 report.Microticks = microtick;
                 if (microtick > 2500 * refinement && observed.All(unit => unit.State != NavigationState.Moving)
@@ -107,6 +180,76 @@ internal static class Program
 
             if (report.Success)
             {
+                if (everyAttackDeath)
+                {
+                    var cells = crowd.Agents.Where(agent => agent.Status == NavigationAgentStatus.Attacking)
+                        .Select(agent => agent.GoalCell).OrderBy(cell => cell).ToArray();
+                    int nextId = 2001;
+                    foreach (int cell in cells)
+                    {
+                        int expectedAttackers = crowd.Agents.Count(agent => agent.Status == NavigationAgentStatus.Attacking);
+                        var victim = crowd.Agents.Single(agent => agent.GoalCell == cell && agent.Status == NavigationAgentStatus.Attacking);
+                        if (!crowd.Remove(victim.Id))
+                        {
+                            throw new InvalidOperationException("Could not remove the current occupant of an actual attack cell.");
+                        }
+
+                        previous.Remove(victim.Id);
+                        speeds.Remove(victim.Id);
+                        bool restored = false;
+                        for (int tick = 0; tick < 2000 * refinement; tick++)
+                        {
+                            previous = Advance(scenario, crowd, grid, speeds, previous);
+                            if (crowd.Agents.All(agent => agent.Status != NavigationAgentStatus.Navigating)
+                                && crowd.Agents.Count(agent => agent.Status == NavigationAgentStatus.Attacking) == expectedAttackers
+                                && crowd.Agents.Any(agent => agent.GoalCell == cell && agent.Status == NavigationAgentStatus.Attacking))
+                            {
+                                report.MaximumSingleDeathRecoveryMicroticks = Math.Max(report.MaximumSingleDeathRecoveryMicroticks, tick + 1);
+                                restored = true;
+                                break;
+                            }
+                        }
+
+                        if (!restored)
+                        {
+                            throw new InvalidOperationException("An existing waiting cohort could not refill actual attack cell " + cell);
+                        }
+
+                        int id = nextId++;
+                        var spawn = scenario.SpawnCells[(id + scenario.Seed % scenario.SpawnCells.Length) % scenario.SpawnCells.Length];
+                        int moveTicks = scenario.MoveTicks[(id + scenario.Seed % scenario.MoveTicks.Length) % scenario.MoveTicks.Length];
+                        int speed = 1000 / moveTicks / refinement;
+                        bool admitted = false;
+                        bool arrived = false;
+                        for (int tick = 0; tick < 2000 * refinement; tick++)
+                        {
+                            if (!admitted && tick % refinement == 0 && crowd.TrySpawn(id, Center(spawn), speed, scenario.UnitRadius, 1000))
+                            {
+                                admitted = true;
+                                previous.Add(id, Observe(crowd.Agents.Single(agent => agent.Id == id)));
+                                speeds.Add(id, speed);
+                            }
+
+                            previous = Advance(scenario, crowd, grid, speeds, previous);
+                            if (admitted && crowd.Agents.Count == scenario.UnitCount
+                                && crowd.Agents.All(agent => agent.Status != NavigationAgentStatus.Navigating)
+                                && crowd.Agents.Count(agent => agent.Status == NavigationAgentStatus.Attacking) == expectedAttackers)
+                            {
+                                report.MaximumSingleDeathReinforcementMicroticks = Math.Max(report.MaximumSingleDeathReinforcementMicroticks, tick + 1);
+                                arrived = true;
+                                break;
+                            }
+                        }
+
+                        if (!arrived)
+                        {
+                            throw new InvalidOperationException("A reinforcement could not restore the entire cohort after attack cell " + cell);
+                        }
+
+                        report.AttackCellsExercised++;
+                    }
+                }
+
                 int attackCount = crowd.Agents.Count(agent => agent.Status == NavigationAgentStatus.Attacking);
                 var waiting = crowd.Agents.Where(agent => agent.Status == NavigationAgentStatus.Waiting).Select(agent => agent.Id).ToHashSet();
                 var dead = crowd.Agents.Where(agent => agent.Status == NavigationAgentStatus.Attacking).Take(6).Select(agent => agent.Id).ToArray();
@@ -155,7 +298,7 @@ internal static class Program
                             if (crowd.TrySpawn(id, Center(spawn), speed, scenario.UnitRadius, 1000))
                             {
                                 reinforcements.Remove(id);
-                                previous.Add(id, Observe(crowd.Agents.Last()));
+                                previous.Add(id, Observe(crowd.Agents.Single(agent => agent.Id == id)));
                                 speeds.Add(id, speed);
                             }
                         }
@@ -210,9 +353,19 @@ internal static class Program
     {
         crowd.Step(crowd.CurrentTick + 1);
         var observed = crowd.Agents.Select(Observe).ToArray();
+        if (observed.Length != speeds.Count || observed.Any(unit => !speeds.ContainsKey(unit.Id)))
+        {
+            throw new InvalidOperationException("An admitted unit disappeared or an unrequested unit appeared.");
+        }
+
         GeometryChecks.VerifyUnitClearance(observed, previous);
         foreach (var unit in observed)
         {
+            if (unit.Radius != scenario.UnitRadius)
+            {
+                throw new InvalidOperationException("The implementation changed a configured physical body radius.");
+            }
+
             var before = previous[unit.Id];
             GeometryChecks.VerifyObstacleClearance(scenario, before, unit);
             GeometryChecks.VerifyTargetClearance(scenario, before, unit);
@@ -347,6 +500,10 @@ internal static class Program
         public int PromotedAfterDeaths { get; set; }
         public int PromotionMicroticks { get; set; }
         public int ReplacementMicroticks { get; set; }
+        public int AttackCellsExercised { get; set; }
+        public int MaximumSingleDeathRecoveryMicroticks { get; set; }
+        public int MaximumSingleDeathReinforcementMicroticks { get; set; }
+        public string RequestOrderSha256 { get; set; } = "";
         public int AttackCandidates { get; set; }
         public int GatherCandidates { get; set; }
         public string LastFailure { get; set; } = "";

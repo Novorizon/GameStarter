@@ -1,0 +1,62 @@
+{
+  "utc": "2026-11-10T19:30:39.950223+00:00",
+  "candidateCombinedSha256": "3f369083fba51f32c7817cf3084f4aa209ad6d2ed4a26c81d7f64e59645eace2",
+  "requiredFineCasesSucceeded": true,
+  "fineCaseCount": 4,
+  "distinctRequestOrders": 4,
+  "cohort": 200,
+  "attacking": 24,
+  "waiting": 176,
+  "initialContinuouslySettledOriginalTicks": 200,
+  "singleDeathCellsPerCase": 24,
+  "singleDeathCellsChecked": 96,
+  "simultaneousDeathsPerCase": 6,
+  "reinforcementRestorationVerified": true,
+  "coarseControlSucceeded": false,
+  "coarseControlInterpretation": "The original 1m representation has only 72 compatible target centres for 200 requests. Candidate fills all 72. This is a discrete representation bound, not a proof that 200 physical circles cannot fit. The unchanged-world 500mm representation succeeds with 200.",
+  "oldUncombinedFailureRetained": "results.json and source-sha256.json belong to experiment commit 09c5999; its 177/200 fine-grid failure is preserved.",
+  "scope": "Frozen Root candidate + grid/time refinement, pure C# only; independent original-world swept circle/box/target oracle. No Unity, live SDK, mixed-body/profile or mobile performance claim.",
+  "physicalWorld": {
+    "coarseGridWidth": 19,
+    "coarseGridHeight": 19,
+    "coarseCellMm": 1000,
+    "closedBorderCells": 1,
+    "baseCenterMm": [
+      12500,
+      9500
+    ],
+    "baseRadiusMm": 1000,
+    "spawnCentersMm": [
+      [
+        1500,
+        9500
+      ]
+    ],
+    "bodyRadiusMm": 250,
+    "attackRangeMm": 1000,
+    "gatheringDistanceMm": 4000,
+    "navigationFineCellMm": 500,
+    "navigationFineOriginMm": [
+      -250,
+      -250
+    ],
+    "originalTickMs": 50,
+    "fineMicrotickMs": 25,
+    "physicalPlanningHorizonMs": 204800,
+    "nodeBudget": 200000
+  },
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "Experiment~/RefinedGrid/Program.cs": "26f41a4f89586386f1bcc004cd2f1f30d0c56a34e8491a0a7f1b601795ab6f01",
+    "Experiment~/RefinedGrid/RefinedGrid.csproj": "337feaef93653a5e1924f10355fbd52256f44869d73f587116ebec9a987ba1ee",
+    "Verification~/TowerDefenseNavigation/Scenarios.cs": "29f709cde5a1a478f3efb169c6122a4f50d24a515598688981d25babad102064",
+    "Verification~/TowerDefenseNavigation/GeometryChecks.cs": "8578621225c99e49576620591f0297f9df9a7fef4e2161e860414bda4118451a",
+    "Verification~/TowerDefenseNavigation/Observations.cs": "07e48be4fddf6aa8387c9ec7170996d5283190cddff2ee3f0fee139dc93a0800"
+  },
+  "evidenceHashes": {
+    "candidate-3f369083-source.zip": "71c1fffa2c4ef4d67e3e0f0a19ce2a6ee193329a51653ad3d935f61230ccd68d",
+    "candidate-3f369083-results.json": "4604a49250b41a55322d17aae5672b0fb1af314f1323f672ba0463762ca349f8",
+    "candidate-3f369083-manifest.json": "93b1ef4d94ab4b6637607ef0f123ddd1ea97899e0cb6a85a6cf860178e4797fb",
+    "candidate-3f369083-coarse-control.json": "3dfb7bd84cf745c1bc533522dd5792bfc9bc9e2a2fafc7a59605119eee6b43ea"
+  }
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "Name": "explicit-capacity-exhaustion",
+    "Seed": 1,
+    "Refinement": 1,
+    "Requested": 200,
+    "Admitted": 72,
+    "Pending": 128,
+    "Attacking": 12,
+    "Waiting": 60,
+    "Success": false,
+    "Microticks": 2501,
+    "TotalMicroticks": 2501,
+    "AllArrivedMicrotick": 0,
+    "PhysicalArrivalMilliseconds": 0,
+    "ReplacementVerified": false,
+    "PromotedAfterDeaths": 0,
+    "PromotionMicroticks": 0,
+    "ReplacementMicroticks": 0,
+    "AttackCellsExercised": 0,
+    "MaximumSingleDeathRecoveryMicroticks": 0,
+    "MaximumSingleDeathReinforcementMicroticks": 0,
+    "RequestOrderSha256": "0be41fe76188c5a81610090017d846318c6d31b0bd202889d9f4130f679b6da0",
+    "AttackCandidates": 12,
+    "GatherCandidates": 60,
+    "LastFailure": "CapacityExceeded",
+    "Error": "Stable conservative refusal; all admitted actors are stationary but the complete cohort did not arrive.",
+    "ExpandedNodes": 4904,
+    "ElapsedMilliseconds": 2114
+  }
+]
