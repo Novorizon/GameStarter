@@ -15,6 +15,7 @@ internal sealed class ChallengeResult
     public int Pending { get; set; }
     public int ExplicitDeaths { get; set; }
     public int Arrived { get; set; }
+    public int EverArrived { get; set; }
     public int Attacking { get; set; }
     public int Waiting { get; set; }
     public int CompletedRecoveryPhases { get; set; }
@@ -27,6 +28,10 @@ internal sealed class ChallengeResult
     public bool ContinuousOracleVerified { get; set; }
     public bool SourceFilesUnchanged { get; set; }
     public CapacityEvidence? CapacityEvidence { get; set; }
+    public string RequestPlanSha256 { get; set; } = "";
+    public string OfferedFlowSha256 { get; set; } = "";
+    public string InputCommandsSha256 { get; set; } = "";
+    public string PhysicalCommandsSha256 { get; set; } = "";
     public int Width { get; set; }
     public int Height { get; set; }
     public int CellSize { get; set; } = 1000;
@@ -38,6 +43,29 @@ internal sealed class ChallengeResult
     public Dictionary<string, int> AdmissionFailures { get; } = new Dictionary<string, int>();
     public List<TrajectoryFrame> Trajectory { get; } = new List<TrajectoryFrame>();
     public List<ChallengeCommand> Commands { get; } = new List<ChallengeCommand>();
+    public List<AgentLifecycle> Agents { get; } = new List<AgentLifecycle>();
+    internal Dictionary<int, AgentLifecycle> AgentIndex { get; } = new Dictionary<int, AgentLifecycle>();
+    public List<int> InitialInputPriority { get; } = new List<int>();
+    public Dictionary<int, int> InitialGroupGoals { get; } = new Dictionary<int, int>();
+}
+
+internal sealed class AgentLifecycle
+{
+    public int Id { get; set; }
+    public int Radius { get; set; }
+    public int Range { get; set; }
+    public int Speed { get; set; }
+    public int CreatedTick { get; set; }
+    public int? BornTick { get; set; }
+    public int? FirstAssignedGoalArrivalTick { get; set; }
+    public int? FirstAttackTick { get; set; }
+    public int? ExplicitDeathTick { get; set; }
+    public bool DiedWhileNavigating { get; set; }
+    public bool DiedBeforeAnyGoal => ExplicitDeathTick.HasValue && !FirstAssignedGoalArrivalTick.HasValue;
+    public string FinalStatus { get; set; } = "queued";
+    public int? FinalX { get; set; }
+    public int? FinalY { get; set; }
+    public int? FinalGoalCell { get; set; }
 }
 
 internal sealed class ChallengeCommand
@@ -50,4 +78,6 @@ internal sealed class ChallengeCommand
     public int Radius { get; set; }
     public int Range { get; set; }
     public int Speed { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
 }

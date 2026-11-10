@@ -9,7 +9,9 @@ internal enum DeathPattern
     AlternatingAttackers,
     FarthestWaiting,
     MixedSix,
-    AllShortRange
+    AllShortRange,
+    InFlightNonCenter,
+    AllSmallBodies
 }
 
 internal sealed class RecoveryPhase
@@ -44,7 +46,15 @@ internal sealed class Challenge
     public int RemoveBlockerTick { get; init; } = 200;
     public int RecoveryAfterBlockerTicks { get; init; } = 1000;
     public bool PhysicalOverflow { get; init; }
+    public bool RefillFromExistingQueue { get; init; }
+    public int AttackersBeforeNextGroup { get; init; }
+    public AttackQuota[] AttackQuotas { get; init; } = Array.Empty<AttackQuota>();
+    public int ExactTotalAttackers { get; init; }
+    public bool InitialGoalsMustReturn { get; init; }
+    public bool FirstSeedAscending { get; init; }
 }
+
+internal readonly record struct AttackQuota(int Radius, int Range, int Minimum);
 
 internal static class ChallengeCatalog
 {
@@ -80,7 +90,8 @@ internal static class ChallengeCatalog
             "death-during-inflight-arrivals",
             original,
             seed,
-            recovery: new[] { new RecoveryPhase { Pattern = DeathPattern.AttackGoalOrdinal, DuringArrival = true } });
+            recovery: new[] { new RecoveryPhase { Pattern = DeathPattern.InFlightNonCenter, DuringArrival = true } },
+            mixedSpeed: true);
         var four = Copy(original, original.SpawnCells.Concat(new[] { new Cell(35, 18) }).ToArray());
         yield return Basic("original-4m-four-spawns-mixed-speed-72", four, seed, mixedSpeed: true);
 
@@ -89,6 +100,25 @@ internal static class ChallengeCatalog
         yield return Mixed("mixed-radius-ranged-inner-vacancy", open, seed, 490, 140, 8);
         var openFour = Copy(open, new[] { new Cell(1, 17), new Cell(17, 1), new Cell(33, 17), new Cell(17, 33) });
         yield return Mixed("mixed-range-multiple-spawns-inner-death", openFour, seed, 250, 250, 12);
+        var sameRange = Orders(12, open, seed);
+        sameRange.AddRange(Orders(8, open, seed, firstId: 13, radius: 140, group: 1));
+        yield return new Challenge
+        {
+            Name = "same-range-big12-small8-inner-union16",
+            Geometry = open,
+            Orders = sameRange,
+            AttackersBeforeNextGroup = 1,
+            AttackQuotas = new[] { new AttackQuota(250, 1000, 12), new AttackQuota(140, 1000, 4) },
+            ExactTotalAttackers = 16,
+            InitialGoalsMustReturn = true,
+            FirstSeedAscending = true,
+            Recovery = new[]
+            {
+                new RecoveryPhase { Pattern = DeathPattern.AllSmallBodies },
+                new RecoveryPhase { Pattern = DeathPattern.AllSmallBodies }
+            },
+            MaxTicks = 30000
+        };
 
         var throat = Open(
             39,
@@ -129,6 +159,20 @@ internal static class ChallengeCatalog
             PhysicalOverflow = true,
             IdleTicks = 1000
         };
+        yield return new Challenge
+        {
+            Name = "true-capacity-queued-reinforcements-after-death",
+            Geometry = tiny,
+            Orders = Orders(200, tiny, seed, radius: 490),
+            PhysicalOverflow = true,
+            RefillFromExistingQueue = true,
+            Recovery = new[]
+            {
+                new RecoveryPhase { Pattern = DeathPattern.AttackGoalOrdinal, Ordinal = 5 },
+                new RecoveryPhase { Pattern = DeathPattern.AllAttackers }
+            },
+            IdleTicks = 1000
+        };
     }
 
     private static Challenge Basic(
@@ -161,6 +205,9 @@ internal static class ChallengeCatalog
             Orders = orders,
             Recovery = new[] { new RecoveryPhase { Pattern = DeathPattern.AllShortRange }, new RecoveryPhase { Pattern = DeathPattern.AllShortRange } },
             RequiredShortRangeAttackers = innerCount,
+            AttackersBeforeNextGroup = 1,
+            AttackQuotas = new[] { new AttackQuota(outerRadius, 4000, 28), new AttackQuota(innerRadius, 1000, innerCount) },
+            ExactTotalAttackers = 28 + innerCount,
             MaxTicks = 30000
         };
     }

@@ -31,6 +31,7 @@ internal static class Program
         string domain = Path.GetFullPath(Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyMetadataAttribute>()
             .Single(value => value.Key == "NavigationDomainRoot").Value!);
         var hashes = Hashes(domain);
+        var testHashes = TestHashes();
         var results = new List<ChallengeResult>();
         var timer = Stopwatch.StartNew();
         Directory.CreateDirectory(output);
@@ -46,6 +47,7 @@ internal static class Program
                 }
 
                 var result = ChallengeRunner.Execute(challenge, currentSeed, timeout);
+                HashInputs(challenge, result);
                 result.SourceFilesUnchanged = Matches(domain, hashes);
                 if (!result.SourceFilesUnchanged)
                 {
@@ -61,13 +63,17 @@ internal static class Program
             }
         }
 
-        bool unchanged = Matches(domain, hashes);
+        bool testsUnchanged = DictionariesMatch(testHashes, TestHashes());
+        bool unchanged = Matches(domain, hashes) && testsUnchanged;
         var summary = new
         {
             utc = DateTime.UtcNow.ToString("O"),
             domain,
             scope = "Strict queue-preserving challenges; an admission rejection never completes a feasible request.",
             sourceHashes = hashes,
+            testSourceHashes = testHashes,
+            testBinarySha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location))).ToLowerInvariant(),
+            testSourceFilesUnchanged = testsUnchanged,
             sourceFilesUnchanged = unchanged,
             elapsedMilliseconds = timer.ElapsedMilliseconds,
             count = results.Count,
@@ -77,9 +83,10 @@ internal static class Program
             results = results.Select(value => new
             {
                 value.Name, value.Seed, value.Success, value.Outcome, value.Error, value.Stage, value.Requested,
-                value.Admitted, value.Active, value.Pending, value.ExplicitDeaths, value.Arrived, value.Attacking,
+                value.Admitted, value.Active, value.Pending, value.ExplicitDeaths, value.Arrived, value.EverArrived, value.Attacking,
                 value.Waiting, value.CompletedRecoveryPhases, value.PlannedRecoveryPhases, value.Ticks,
-                value.ElapsedMilliseconds, value.ExpandedNodes, value.Replans, value.QueueConserved, value.ContinuousOracleVerified
+                value.ElapsedMilliseconds, value.ExpandedNodes, value.Replans, value.QueueConserved, value.ContinuousOracleVerified,
+                value.RequestPlanSha256, value.OfferedFlowSha256, value.InputCommandsSha256, value.PhysicalCommandsSha256
             })
         };
         File.WriteAllText(Path.Combine(output, "summary.json"), JsonSerializer.Serialize(summary, JsonOptions));
@@ -92,6 +99,31 @@ internal static class Program
         return index >= 0 && index + 1 < args.Length ? args[index + 1] : null;
     }
 
+    private static void HashInputs(Challenge challenge, ChallengeResult result)
+    {
+        result.RequestPlanSha256 = Digest(new { requests = challenge.Orders, priority = result.InitialInputPriority });
+        var offered = challenge.Orders.GroupBy(order => (order.Group, order.ReleaseTick, order.Spawn.X, order.Spawn.Y, order.Radius, order.Range, order.Speed))
+            .OrderBy(group => group.Key.Group).ThenBy(group => group.Key.ReleaseTick).ThenBy(group => group.Key.X).ThenBy(group => group.Key.Y)
+            .ThenBy(group => group.Key.Radius).ThenBy(group => group.Key.Range).ThenBy(group => group.Key.Speed)
+            .Select(group => new
+            {
+                group.Key.Group, group.Key.ReleaseTick, group.Key.X, group.Key.Y,
+                group.Key.Radius, group.Key.Range, group.Key.Speed, count = group.Count()
+            });
+        result.OfferedFlowSha256 = Digest(offered);
+        result.InputCommandsSha256 = Digest(result.Commands);
+        result.PhysicalCommandsSha256 = Digest(result.Commands.Select(command => new
+        {
+            command.Tick, command.Kind, command.Role, command.Spawn,
+            command.Radius, command.Range, command.Speed, command.X, command.Y
+        }));
+    }
+
+    private static string Digest<T>(T value)
+    {
+        return Convert.ToHexString(SHA256.HashData(JsonSerializer.SerializeToUtf8Bytes(value, JsonOptions))).ToLowerInvariant();
+    }
+
     private static Dictionary<string, string> Hashes(string domain)
     {
         return Directory.GetFiles(Path.Combine(domain, "Navigation"), "*.cs", SearchOption.AllDirectories)
@@ -101,7 +133,23 @@ internal static class Program
 
     private static bool Matches(string domain, Dictionary<string, string> original)
     {
-        var current = Hashes(domain);
+        return DictionariesMatch(original, Hashes(domain));
+    }
+
+    private static Dictionary<string, string> TestHashes()
+    {
+        string root = Path.GetFullPath(Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyMetadataAttribute>()
+            .Single(value => value.Key == "ChallengeProjectRoot").Value!);
+        return Directory.GetFiles(root, "*.cs").Concat(new[]
+        {
+            Path.GetFullPath(Path.Combine(root, "../TowerDefenseNavigation/GeometryChecks.cs")),
+            Path.GetFullPath(Path.Combine(root, "../TowerDefenseNavigation/Observations.cs"))
+        }).OrderBy(path => path, StringComparer.Ordinal)
+            .ToDictionary(path => path, path => Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant());
+    }
+
+    private static bool DictionariesMatch(Dictionary<string, string> original, Dictionary<string, string> current)
+    {
         return current.Count == original.Count && original.All(file => current.TryGetValue(file.Key, out string? value) && value == file.Value);
     }
 }
