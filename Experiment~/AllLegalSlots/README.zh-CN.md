@@ -36,9 +36,17 @@ dotnet run --project Experiment~/AllLegalSlots/AllLegalSlots.csproj -c Release -
 
 晚到测试从一开始注册两种 profile。首次完成必须保证 44 Big 按 ID 回到精确原目标、2 Small 只占 256/257，不能将临时通行格算为到达。此后死亡补回允许合法目标重新分配，但人数、profile、真实攻击配额及队列必须保持。
 
+该 .NET 工程仅链接 `Configuration.cs` 与 `Navigation/**/*.cs`，共 10 份生产源码；完整 Domain 的其他文件只记录快照摘要，不声称此工程编译了全部 Unity 业务。
+
 Oracle 独立计算每 tick 连续相对运动圆盘间距、障碍矩形扫掠、基地与边界、速度上限、真实终点及攻击射线。生成 API 前后检查既有身体不移动、时钟不变。报告记录源码、测试、二进制、地图摘要，检查运行前后源和测试不变。
 
 `Results/` 保存上述四例和 70 次补回的完整报告。过程中死亡的独立正式矩阵和旧 72 个目标的 56 项挑战由独立验收分支提供，避免把重复运行计作新用例。
+
+## 独立过程死亡验收
+
+独立分支 `test/navigation-gate-lifecycle` 的提交 `dc05394e182169bb6e20462695f8c55b7febe72c` 保存正式 **30/30**：两种 Small 速度，Big 外撤、实际临停、返程、格心死亡，Small 途中/到达死亡，以及两门/四门同时死亡。全部最终恢复 44 Big + 2 Small、20 攻击、26 候场、0 排队，并保持 200 tick。
+
+其 `Verification~/NavigationGateLifecycle/Evidence/ForestStress/summary.json` 记录独立测试与源码摘要；所编译的 10 份生产源码逐项匹配本候选 `a9ee55d0667eaea51207568e41c52c11aed2f78d1998af0031d78db656a24ef7`。测试未修改身体、地图、速度、队列及连续碰撞判据。14 类×4 请求顺序的整体挑战由另一验收分支单独提供。
 
 ## 时序与边界
 
