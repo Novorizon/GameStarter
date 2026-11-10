@@ -1,0 +1,453 @@
+{
+  "SourceDllSha256": "d53d505b50821d3f901d3cd8a90cab84ccb7963f21d30346f9ac368c418fb9d4",
+  "ActualGeometrySha256": "2c787df9c49597b48455d0bdcc5a3758b2a5aa34b307f118206a359cac6047c3",
+  "WitnessSha256": "5f6ef8fdb9e33e9144f995439a7256afdbdf9eec2694ac4fc22b3a99978585ff",
+  "Case": "concurrent-funnel-repath-yield",
+  "BirthSeed": 17,
+  "GoalAssignmentSeed": 0,
+  "InitialPendingOrder": [
+    45,
+    69,
+    2,
+    38,
+    36,
+    31,
+    7,
+    62,
+    3,
+    27,
+    55,
+    15,
+    29,
+    12,
+    41,
+    16,
+    32,
+    23,
+    67,
+    24,
+    54,
+    63,
+    50,
+    42,
+    57,
+    71,
+    33,
+    25,
+    40,
+    61,
+    14,
+    49,
+    21,
+    9,
+    43,
+    5,
+    59,
+    47,
+    17,
+    65,
+    39,
+    68,
+    34,
+    11,
+    10,
+    26,
+    22,
+    18,
+    53,
+    72,
+    56,
+    4,
+    48,
+    8,
+    30,
+    1,
+    37,
+    52,
+    19,
+    20,
+    70,
+    51,
+    66,
+    6,
+    64,
+    35,
+    28,
+    60,
+    13,
+    46,
+    58,
+    44
+  ],
+  "Requests": [
+    {
+      "Id": 1,
+      "Spawn": 1276,
+      "Goal": 880
+    },
+    {
+      "Id": 2,
+      "Spawn": 668,
+      "Goal": 846
+    },
+    {
+      "Id": 3,
+      "Spawn": 92,
+      "Goal": 845
+    },
+    {
+      "Id": 4,
+      "Spawn": 1276,
+      "Goal": 844
+    },
+    {
+      "Id": 5,
+      "Spawn": 668,
+      "Goal": 843
+    },
+    {
+      "Id": 6,
+      "Spawn": 92,
+      "Goal": 842
+    },
+    {
+      "Id": 7,
+      "Spawn": 1276,
+      "Goal": 841
+    },
+    {
+      "Id": 8,
+      "Spawn": 668,
+      "Goal": 840
+    },
+    {
+      "Id": 9,
+      "Spawn": 92,
+      "Goal": 810
+    },
+    {
+      "Id": 10,
+      "Spawn": 1276,
+      "Goal": 809
+    },
+    {
+      "Id": 11,
+      "Spawn": 668,
+      "Goal": 808
+    },
+    {
+      "Id": 12,
+      "Spawn": 92,
+      "Goal": 807
+    },
+    {
+      "Id": 13,
+      "Spawn": 1276,
+      "Goal": 806
+    },
+    {
+      "Id": 14,
+      "Spawn": 668,
+      "Goal": 805
+    },
+    {
+      "Id": 15,
+      "Spawn": 92,
+      "Goal": 804
+    },
+    {
+      "Id": 16,
+      "Spawn": 1276,
+      "Goal": 803
+    },
+    {
+      "Id": 17,
+      "Spawn": 668,
+      "Goal": 802
+    },
+    {
+      "Id": 18,
+      "Spawn": 92,
+      "Goal": 773
+    },
+    {
+      "Id": 19,
+      "Spawn": 1276,
+      "Goal": 772
+    },
+    {
+      "Id": 20,
+      "Spawn": 668,
+      "Goal": 771
+    },
+    {
+      "Id": 21,
+      "Spawn": 92,
+      "Goal": 770
+    },
+    {
+      "Id": 22,
+      "Spawn": 1276,
+      "Goal": 769
+    },
+    {
+      "Id": 23,
+      "Spawn": 668,
+      "Goal": 768
+    },
+    {
+      "Id": 24,
+      "Spawn": 92,
+      "Goal": 767
+    },
+    {
+      "Id": 25,
+      "Spawn": 1276,
+      "Goal": 766
+    },
+    {
+      "Id": 26,
+      "Spawn": 668,
+      "Goal": 765
+    },
+    {
+      "Id": 27,
+      "Spawn": 92,
+      "Goal": 736
+    },
+    {
+      "Id": 28,
+      "Spawn": 1276,
+      "Goal": 735
+    },
+    {
+      "Id": 29,
+      "Spawn": 668,
+      "Goal": 734
+    },
+    {
+      "Id": 30,
+      "Spawn": 92,
+      "Goal": 730
+    },
+    {
+      "Id": 31,
+      "Spawn": 1276,
+      "Goal": 729
+    },
+    {
+      "Id": 32,
+      "Spawn": 668,
+      "Goal": 728
+    },
+    {
+      "Id": 33,
+      "Spawn": 92,
+      "Goal": 700
+    },
+    {
+      "Id": 34,
+      "Spawn": 1276,
+      "Goal": 699
+    },
+    {
+      "Id": 35,
+      "Spawn": 668,
+      "Goal": 698
+    },
+    {
+      "Id": 36,
+      "Spawn": 92,
+      "Goal": 697
+    },
+    {
+      "Id": 37,
+      "Spawn": 1276,
+      "Goal": 693
+    },
+    {
+      "Id": 38,
+      "Spawn": 668,
+      "Goal": 692
+    },
+    {
+      "Id": 39,
+      "Spawn": 92,
+      "Goal": 691
+    },
+    {
+      "Id": 40,
+      "Spawn": 1276,
+      "Goal": 690
+    },
+    {
+      "Id": 41,
+      "Spawn": 668,
+      "Goal": 662
+    },
+    {
+      "Id": 42,
+      "Spawn": 92,
+      "Goal": 661
+    },
+    {
+      "Id": 43,
+      "Spawn": 1276,
+      "Goal": 660
+    },
+    {
+      "Id": 44,
+      "Spawn": 668,
+      "Goal": 656
+    },
+    {
+      "Id": 45,
+      "Spawn": 92,
+      "Goal": 655
+    },
+    {
+      "Id": 46,
+      "Spawn": 1276,
+      "Goal": 654
+    },
+    {
+      "Id": 47,
+      "Spawn": 668,
+      "Goal": 625
+    },
+    {
+      "Id": 48,
+      "Spawn": 92,
+      "Goal": 624
+    },
+    {
+      "Id": 49,
+      "Spawn": 1276,
+      "Goal": 623
+    },
+    {
+      "Id": 50,
+      "Spawn": 668,
+      "Goal": 622
+    },
+    {
+      "Id": 51,
+      "Spawn": 92,
+      "Goal": 621
+    },
+    {
+      "Id": 52,
+      "Spawn": 1276,
+      "Goal": 620
+    },
+    {
+      "Id": 53,
+      "Spawn": 668,
+      "Goal": 619
+    },
+    {
+      "Id": 54,
+      "Spawn": 92,
+      "Goal": 618
+    },
+    {
+      "Id": 55,
+      "Spawn": 1276,
+      "Goal": 617
+    },
+    {
+      "Id": 56,
+      "Spawn": 668,
+      "Goal": 588
+    },
+    {
+      "Id": 57,
+      "Spawn": 92,
+      "Goal": 587
+    },
+    {
+      "Id": 58,
+      "Spawn": 1276,
+      "Goal": 586
+    },
+    {
+      "Id": 59,
+      "Spawn": 668,
+      "Goal": 585
+    },
+    {
+      "Id": 60,
+      "Spawn": 92,
+      "Goal": 584
+    },
+    {
+      "Id": 61,
+      "Spawn": 1276,
+      "Goal": 583
+    },
+    {
+      "Id": 62,
+      "Spawn": 668,
+      "Goal": 582
+    },
+    {
+      "Id": 63,
+      "Spawn": 92,
+      "Goal": 581
+    },
+    {
+      "Id": 64,
+      "Spawn": 1276,
+      "Goal": 580
+    },
+    {
+      "Id": 65,
+      "Spawn": 668,
+      "Goal": 550
+    },
+    {
+      "Id": 66,
+      "Spawn": 92,
+      "Goal": 549
+    },
+    {
+      "Id": 67,
+      "Spawn": 1276,
+      "Goal": 548
+    },
+    {
+      "Id": 68,
+      "Spawn": 668,
+      "Goal": 547
+    },
+    {
+      "Id": 69,
+      "Spawn": 92,
+      "Goal": 546
+    },
+    {
+      "Id": 70,
+      "Spawn": 1276,
+      "Goal": 545
+    },
+    {
+      "Id": 71,
+      "Spawn": 668,
+      "Goal": 544
+    },
+    {
+      "Id": 72,
+      "Spawn": 92,
+      "Goal": 510
+    }
+  ],
+  "ActualRadiusMm": 250,
+  "MaximumSpeedMmPerLogicalTick": 1000,
+  "LogicalTickSeconds": 0.05,
+  "LogicalSubsteps": 10,
+  "TimeHorizon": 0.5,
+  "TimeHorizonObstacle": 0.1,
+  "NeighborDistance": 5,
+  "AvoidanceGuardMm": 20,
+  "SpawnClearanceMetres": 1.5
+}

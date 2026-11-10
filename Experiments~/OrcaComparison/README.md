@@ -34,6 +34,20 @@ python3 Experiments~/OrcaComparison/run_matrix.py
 
 冻结结果及逐文件源码指纹见 `Evidence/matrix-summary.json`。逐组完整报告以 `.json.gz` 保存，可用 Python `gzip.decompress` 解压。汇总同时保留队列/到达数、让位请求/完成/超时、目标误差及原始报告 SHA-256。
 
+本次冻结代码为 `0daee2c`：候选 20/20 组合全部生成并抵达 72 个单位，均为 12 攻击、60 候场，最终目标误差为 0，并保持 200 步。实际执行总步数为 411–826（包含稳定观察），19 组触发了显式协商让位；合计 62 次请求、60 次完成、2 次超时后恢复，未把超时本身计为到达。
+
+同一冻结源码的独立基础对照（BFS+普通逐格路点+ORCA，保持相同物理配置）到第 3000 索引仅生成 65、抵达 14，明确失败；该失败保存在编号 20 的压缩报告，不计入候选成功数。串行见证路线对照 72/72 通过，末索引 4157，另行保存。由此能证明这些整体控制职责需要处理，不能把“用了 ORCA”本身当作完成围攻。
+
+候选 DLL SHA-256 为 `d53d505b50821d3f901d3cd8a90cab84ccb7963f21d30346f9ac368c418fb9d4`，输入见证 SHA-256 为 `5f6ef8fdb9e33e9144f995439a7256afdbdf9eec2694ac4fc22b3a99978585ff`。`Evidence/Inputs` 从该 DLL 反射调用实际场景工厂导出几何，并重建每个运行的完整请求/初始队列；导出的目标配对逐一核对实际轨迹。实际几何 SHA-256 为 `2c787df9c49597b48455d0bdcc5a3758b2a5aa34b307f118206a359cac6047c3`。导出工具位于 `Experiments~/OrcaInputDump`，不会修改候选源码或 DLL。复现实际输入导出：
+
+```bash
+dotnet run --project Experiments~/OrcaInputDump/OrcaInputDump.csproj -c Release -- \
+  Experiments~/OrcaComparison/bin/Release/net8.0/OrcaComparison.dll \
+  Experiments~/OrcaComparison/Evidence/matrix-summary.json \
+  Experiments~/OrcaComparison/witness.json \
+  Artifacts/OrcaInputReexport
+```
+
 ## 适用范围
 
 这是可运行的替代原型与严格对照，不是生产系统替换完成。尚未验证其他地图、混合体型/射程、死亡补位、多场战斗同时存在、Unity、IL2CPP 或移动设备性能。官方库当前暴露 `Simulator.Instance` 且没有删除 Agent API；生产接入需要独立 battle 实例和完整生命周期方案。外围让位/重路由是本项目实验代码，不宣称某商业游戏使用了同一实现，也不继承 ORCA 论文对不同模型的保证。

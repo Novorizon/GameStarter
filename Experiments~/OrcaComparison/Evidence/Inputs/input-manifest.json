@@ -1,0 +1,117 @@
+{
+  "Source": "ScenarioCatalog.Create and Program.GridFor invoked from the exact tested DLL; goals and queue reproduced with the reported .NET seeds.",
+  "SourceDllSha256": "d53d505b50821d3f901d3cd8a90cab84ccb7963f21d30346f9ac368c418fb9d4",
+  "ActualGeometrySha256": "2c787df9c49597b48455d0bdcc5a3758b2a5aa34b307f118206a359cac6047c3",
+  "Inputs": [
+    {
+      "File": "concurrent-funnel-repath-yield-birth-0-goal-0.json",
+      "ActualInputSha256": "fc68095884ad004ce26511692a981510cdfd2f9f6f1d60d792cd9c18df350c49",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-0-goal-1.json",
+      "ActualInputSha256": "359d95cdbce358b2e61eadf4c5c1a329d97263d61d14d0ddcc55a683795b5b26",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-0-goal-17.json",
+      "ActualInputSha256": "41eb711c50b586201ce72448fef64a3431f18b4eef515da9a4b440e6ee92cc2c",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-0-goal-733.json",
+      "ActualInputSha256": "571c867cde53643a0473b09ce51dad10cc50f42b857372ff54dcb44d876c569d",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-0-goal-20261110.json",
+      "ActualInputSha256": "8e31b969060b43a135f74a514532a74f58666ebbbd43923d7386464cdca89dd5",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-17-goal-0.json",
+      "ActualInputSha256": "a4c3d605fcc4defa6fb9f322a1e2440261b6ffe737cf566fc16efecce831610d",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-17-goal-1.json",
+      "ActualInputSha256": "d893c039b208c854efbb70f620c777406a15808ee0fe6575ad4e480fb94dda2c",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-17-goal-17.json",
+      "ActualInputSha256": "2f26267ba0abe847fbc8c6b29bfee6775a7db38b2a25ea2a7317b66ae3f5bb10",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-17-goal-733.json",
+      "ActualInputSha256": "c4112be96279ef65bd81eba3fb7102a9dfde8464200dad596e159da9e839335c",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-17-goal-20261110.json",
+      "ActualInputSha256": "47c6cba5f267f35202fe5eec5e1afc290ced0339b89da93344d6b33ac3eec783",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-733-goal-0.json",
+      "ActualInputSha256": "71dddbab750a3dd3198b76c3ea028342868b5c03e3efdcb3d649bd85f9c0f32f",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-733-goal-1.json",
+      "ActualInputSha256": "3de78d96a33ed781d73957aa7bc66ecbc216bf11a173255308010b0113636e6d",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-733-goal-17.json",
+      "ActualInputSha256": "44cd76b683ed51285f25184b011e567d7d252b4e7e3cf759e047b32357178d22",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-733-goal-733.json",
+      "ActualInputSha256": "162563380351065aef9184f1b91f6e65269726708bd24ee23b03d51bc1203a0e",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-733-goal-20261110.json",
+      "ActualInputSha256": "e9d7ae93c3e6ac4624466041999547690ef3985a87e931ad0261483ce33202a5",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-20261110-goal-0.json",
+      "ActualInputSha256": "5c0e7dbecf63e1b0a0fbf451f815795713927c2d4860ba4586a245851e68d8d5",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-20261110-goal-1.json",
+      "ActualInputSha256": "e84332dab20342794d6a4efc7e7207c53dc95845c7187e634b34685268a319ad",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-20261110-goal-17.json",
+      "ActualInputSha256": "2a559df355b7c10e877e907cf41e4a5738216cb9f994e8ac1375d0fa4580c675",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-20261110-goal-733.json",
+      "ActualInputSha256": "71f0a395e11eaa2595de39d620c3f05809d8f7d8ab8fcc420aebbfb064a4ce01",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-funnel-repath-yield-birth-20261110-goal-20261110.json",
+      "ActualInputSha256": "f3ed3f6baaf4b848e59a82840526af7eeaae86a8fcef9f40d2de184042ef2ca7",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "concurrent-short-obstacle-horizon-birth-17-goal-1.json",
+      "ActualInputSha256": "08fa7749b06d0c57494d4416e17361c3e5e498ce8e3af5c84fec551df59732a4",
+      "AssignmentMatchedExecutedTrace": true
+    },
+    {
+      "File": "serial-short-obstacle-horizon-birth-0-goal-0.json",
+      "ActualInputSha256": "4c62bceeeda1c5fffd2751f629fb02958f1995966521363de246c2aa9a602f42",
+      "AssignmentMatchedExecutedTrace": true
+    }
+  ]
+}
