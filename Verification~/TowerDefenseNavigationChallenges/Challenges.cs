@@ -58,7 +58,7 @@ internal readonly record struct AttackQuota(int Radius, int Range, int Minimum);
 
 internal static class ChallengeCatalog
 {
-    public static IEnumerable<Challenge> Create(int seed)
+    public static IEnumerable<Challenge> Create(int seed, bool allowCompatibleGoalReassignment = false)
     {
         var original = Open(
             37,
@@ -68,6 +68,7 @@ internal static class ChallengeCatalog
             4000,
             blocked: cell => !(cell.Y >= 17 && cell.Y <= 19) && !(cell.X >= 17 && cell.X <= 19)
                 && !(cell.X >= 22 && cell.Y >= 10 && cell.Y <= 26));
+        original = LockOriginalTargets(original);
         yield return Basic("original-4m-all-72-long-hold", original, seed, idle: 2000);
         yield return Basic(
             "full-72-each-attack-slot-death",
@@ -110,7 +111,7 @@ internal static class ChallengeCatalog
             AttackersBeforeNextGroup = 1,
             AttackQuotas = new[] { new AttackQuota(250, 1000, 12), new AttackQuota(140, 1000, 4) },
             ExactTotalAttackers = 16,
-            InitialGoalsMustReturn = true,
+            InitialGoalsMustReturn = !allowCompatibleGoalReassignment,
             FirstSeedAscending = true,
             Recovery = new[]
             {
@@ -255,7 +256,44 @@ internal static class ChallengeCatalog
             Walkable = value.Walkable,
             HoldingAllowed = value.HoldingAllowed,
             GatheringDistance = value.GatheringDistance,
+            PrescribedEndpoints = value.PrescribedEndpoints,
             SpawnCells = spawns
+        };
+    }
+
+    private static NavigationScenario LockOriginalTargets(NavigationScenario value)
+    {
+        var holding = (bool[])value.Walkable.Clone();
+        foreach (int dx in new[] { -1, 1 })
+        {
+            foreach (int dy in new[] { -1, 1 })
+            {
+                holding[(value.Target.Y + dy) * value.Width + value.Target.X + dx] = false;
+            }
+        }
+
+        var endpoints = Enumerable.Range(0, holding.Length).Where(cell =>
+        {
+            long dx = (cell % value.Width - value.Target.X) * 1000L;
+            long dy = (cell / value.Width - value.Target.Y) * 1000L;
+            long distance = dx * dx + dy * dy;
+            return holding[cell] && distance >= 1250L * 1250 && distance <= 5000L * 5000;
+        }).ToArray();
+        if (endpoints.Length != 72)
+        {
+            throw new InvalidOperationException("The original fixture must preserve exactly its original 72 endpoint centres.");
+        }
+
+        return new NavigationScenario
+        {
+            Width = value.Width,
+            Height = value.Height,
+            Target = value.Target,
+            Walkable = value.Walkable,
+            HoldingAllowed = holding,
+            GatheringDistance = value.GatheringDistance,
+            SpawnCells = value.SpawnCells,
+            PrescribedEndpoints = endpoints
         };
     }
 

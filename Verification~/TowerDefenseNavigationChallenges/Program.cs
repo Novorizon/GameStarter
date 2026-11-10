@@ -21,6 +21,7 @@ internal static class Program
     {
         string output = Argument(args, "--output") ?? "Artifacts/NavigationChallenges";
         string? filter = Argument(args, "--scenario");
+        bool allowCompatibleGoalReassignment = Array.IndexOf(args, "--allow-compatible-goal-reassignment") >= 0;
         int? timeout = int.TryParse(Argument(args, "--max-ticks"), out int parsedTicks) ? parsedTicks : null;
         int[] seeds = Array.IndexOf(args, "--stress") >= 0 ? new[] { 1, 17, 733, 20261110 } : new[] { 1 };
         if (int.TryParse(Argument(args, "--seed"), out int seed))
@@ -39,7 +40,7 @@ internal static class Program
         GeometryChecks.VerifyOracle();
         foreach (int currentSeed in seeds)
         {
-            foreach (var challenge in ChallengeCatalog.Create(currentSeed))
+            foreach (var challenge in ChallengeCatalog.Create(currentSeed, allowCompatibleGoalReassignment))
             {
                 if (filter != null && !challenge.Name.Contains(filter, StringComparison.Ordinal))
                 {
@@ -69,6 +70,7 @@ internal static class Program
         {
             utc = DateTime.UtcNow.ToString("O"),
             domain,
+            allowCompatibleGoalReassignment,
             scope = "Strict queue-preserving challenges; an admission rejection never completes a feasible request.",
             sourceHashes = hashes,
             testSourceHashes = testHashes,
@@ -86,7 +88,9 @@ internal static class Program
                 value.Admitted, value.Active, value.Pending, value.ExplicitDeaths, value.Arrived, value.EverArrived, value.Attacking,
                 value.Waiting, value.CompletedRecoveryPhases, value.PlannedRecoveryPhases, value.Ticks,
                 value.ElapsedMilliseconds, value.ExpandedNodes, value.Replans, value.QueueConserved, value.ContinuousOracleVerified,
-                value.RequestPlanSha256, value.OfferedFlowSha256, value.InputCommandsSha256, value.PhysicalCommandsSha256
+                value.RequestPlanSha256, value.OfferedFlowSha256, value.InputCommandsSha256, value.PhysicalCommandsSha256,
+                value.PhysicalGeometrySha256, value.HoldingMaskSha256, value.PrescribedEndpointSetSha256, value.FinalPrescribedEndpointCount,
+                value.InitialAttackingGoalsMustReturn
             })
         };
         File.WriteAllText(Path.Combine(output, "summary.json"), JsonSerializer.Serialize(summary, JsonOptions));
@@ -101,6 +105,17 @@ internal static class Program
 
     private static void HashInputs(Challenge challenge, ChallengeResult result)
     {
+        var geometry = challenge.Geometry;
+        result.PhysicalGeometrySha256 = Digest(new
+        {
+            geometry.Width, geometry.Height, geometry.Target, geometry.Walkable, geometry.SpawnCells, geometry.GatheringDistance
+        });
+        result.HoldingMaskSha256 = Digest(geometry.HoldingAllowed ?? geometry.Walkable);
+        result.PrescribedEndpointSetSha256 = Digest(result.PrescribedEndpoints.Select(cell => new
+        {
+            x = cell % geometry.Width * 1000 + 500,
+            y = cell / geometry.Width * 1000 + 500
+        }));
         result.RequestPlanSha256 = Digest(new { requests = challenge.Orders, priority = result.InitialInputPriority });
         var offered = challenge.Orders.GroupBy(order => (order.Group, order.ReleaseTick, order.Spawn.X, order.Spawn.Y, order.Radius, order.Range, order.Speed))
             .OrderBy(group => group.Key.Group).ThenBy(group => group.Key.ReleaseTick).ThenBy(group => group.Key.X).ThenBy(group => group.Key.Y)

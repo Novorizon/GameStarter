@@ -11,6 +11,7 @@ internal sealed class NavigationScenario
     public bool[]? HoldingAllowed { get; init; }
     public Cell[] SpawnCells { get; init; } = Array.Empty<Cell>();
     public int GatheringDistance { get; init; }
+    public int[]? PrescribedEndpoints { get; init; }
 
     public bool Open(Cell cell)
     {

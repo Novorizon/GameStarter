@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Game.HotUpdate.TowerDefense.Domain;
 using Game.HotUpdate.TowerDefense.Domain.Navigation;
 
 internal static class ChallengeRunner
 {
+    private static readonly PropertyInfo? RecoveryProperty = typeof(NavigationCrowd).GetProperty("RecoveryActive");
+
     public static ChallengeResult Execute(Challenge challenge, int seed, int? maxTicks)
     {
         var result = new ChallengeResult
@@ -19,7 +22,9 @@ internal static class ChallengeRunner
             Walkable = challenge.Geometry.Walkable,
             HoldingAllowed = challenge.Geometry.HoldingAllowed ?? challenge.Geometry.Walkable,
             GatheringDistance = challenge.Geometry.GatheringDistance,
-            PlannedRecoveryPhases = challenge.Recovery.Length
+            PlannedRecoveryPhases = challenge.Recovery.Length,
+            PrescribedEndpoints = challenge.Geometry.PrescribedEndpoints ?? Array.Empty<int>(),
+            InitialAttackingGoalsMustReturn = challenge.InitialGoalsMustReturn
         };
         var stopwatch = Stopwatch.StartNew();
         var orders = challenge.Orders.ToDictionary(order => order.Id);
@@ -213,7 +218,8 @@ internal static class ChallengeRunner
                     stableTicks = 0;
                 }
 
-                bool complete = (ready || atProvenCapacity) && completedRecovery == challenge.Recovery.Length && blockerRemoved && followerMoved;
+                bool complete = (ready || atProvenCapacity) && completedRecovery == challenge.Recovery.Length && blockerRemoved && followerMoved
+                    && !IsRecoveryActive(crowd);
                 stableTicks = complete ? stableTicks + 1 : 0;
                 Update(result, crowd, orders.Count, admitted.Count, deaths.Count, pending.Count, completedRecovery, regular, challenge);
                 if (tick % 25 == 0 || stableTicks == 1)
@@ -224,6 +230,8 @@ internal static class ChallengeRunner
                 if (stableTicks >= challenge.IdleTicks)
                 {
                     Require(challenge.PhysicalOverflow || pending.Count == 0, "Unadmitted requests cannot count as successful gathering.");
+                    Require(challenge.Geometry.PrescribedEndpoints == null || result.FinalPrescribedEndpointCount == 72,
+                        "The original 72 endpoint centres were replaced with a different goal set.");
                     result.Success = true;
                     result.Outcome = challenge.PhysicalOverflow ? "physical-overflow-proved-and-queue-preserved"
                         : "all-requests-accounted-and-live-agents-arrived-after-recovery";
@@ -317,7 +325,16 @@ internal static class ChallengeRunner
         long dx = (long)goal.X - crowd.Grid.TargetCenter.X;
         long dy = (long)goal.Y - crowd.Grid.TargetCenter.Y;
         long radius = 1000 + challenge.Geometry.GatheringDistance;
-        return agent.Position.X == goal.X && agent.Position.Y == goal.Y && dx * dx + dy * dy <= radius * radius;
+        bool prescribed = true;
+        if (challenge.Geometry.PrescribedEndpoints != null)
+        {
+            int x = agent.Position.X / 1000;
+            int y = agent.Position.Y / 1000;
+            prescribed = agent.Position.X == x * 1000 + 500 && agent.Position.Y == y * 1000 + 500
+                && Array.BinarySearch(challenge.Geometry.PrescribedEndpoints, y * challenge.Geometry.Width + x) >= 0;
+        }
+
+        return prescribed && agent.Position.X == goal.X && agent.Position.Y == goal.Y && dx * dx + dy * dy <= radius * radius;
     }
 
     private static bool AttackRequirement(Challenge challenge, NavigationCrowd crowd, NavigationAgent[] regular)
@@ -464,6 +481,11 @@ internal static class ChallengeRunner
         result.Pending = pending;
         result.ExplicitDeaths = deaths;
         result.Arrived = regular.Count(agent => Arrived(challenge, crowd, agent));
+        if (challenge.Geometry.PrescribedEndpoints != null)
+        {
+            result.FinalPrescribedEndpointCount = regular.Where(agent => Arrived(challenge, crowd, agent))
+                .Select(agent => agent.Position.Y / 1000 * challenge.Geometry.Width + agent.Position.X / 1000).Distinct().Count();
+        }
         result.EverArrived = result.Agents.Count(agent => agent.FirstAssignedGoalArrivalTick.HasValue);
         result.Attacking = regular.Count(agent => agent.Status == NavigationAgentStatus.Attacking);
         result.Waiting = regular.Count(agent => agent.Status == NavigationAgentStatus.Waiting);
@@ -471,6 +493,7 @@ internal static class ChallengeRunner
         result.CompletedRecoveryPhases = recovery;
         result.ExpandedNodes = crowd.TotalExpandedNodes;
         result.Replans = crowd.ReplanCount;
+        result.RecoveryActiveAtEnd = IsRecoveryActive(crowd);
     }
 
     private static void Record(
@@ -578,5 +601,10 @@ internal static class ChallengeRunner
         {
             throw new InvalidOperationException(message);
         }
+    }
+
+    private static bool IsRecoveryActive(NavigationCrowd crowd)
+    {
+        return RecoveryProperty != null && (bool)RecoveryProperty.GetValue(crowd)!;
     }
 }
