@@ -1,0 +1,50 @@
+{
+  "success": true,
+  "input": "Actual Forest; Small180/450 profile registered before Big250/550, Big44 first, Small2 from tick4000; speeds55/165.",
+  "baselineDomainSha256": "b7ea41a6b70b7b6b7235926db543bf8d260c5477f202352f4b4917c58bb9b5db",
+  "candidateCommit": "311c1fa88d5d149e847f277d4d9deeb3df4b2b67",
+  "candidateDomainSha256": "d155d9838c07d7de133a3e1ef4424388bd441086f99f27968c4163bc1d7f2582",
+  "allArrivalTick": 5228,
+  "finalTick": 5428,
+  "totalExpandedNodes": 22947,
+  "everyTickTrajectoryEqual": true,
+  "allBirthResultsEqual": true,
+  "allExistingPublicCountersEqual": true,
+  "nativeRowsEqual": 10840,
+  "trajectoryRows": 216732,
+  "trajectorySha256": "942a23c585f4e1030876b5dcf4db1ba704871730bae39920de79f305de6e1a0e",
+  "commandsSha256": "684b8852fc1b71cd8e38aa1bb437b53739756eadb5a57b3d73f7065307eb87ad",
+  "countersSha256": "e50042ed702f964bed7b3ea24dd9ecf6b366b4d68cd4352467a1e311191f1c37",
+  "wholeAllocatedBytes": {
+    "baseline": 515496488,
+    "candidate": 145487824,
+    "reductionPercent": 71.77714545360783
+  },
+  "hotWindow1400Through2099AllocatedBytes": {
+    "baseline": 444696352,
+    "candidate": 90622352,
+    "reductionPercent": 79.62152115877937
+  },
+  "timingScope": "Dotnet wall time is diagnostic only; oracle and trace are outside measured scopes but affect environment GC. Unity Mono CPU measured separately by Root.",
+  "artifacts": {
+    "Functional/comparison.json": "8adad51ab08ab6f5f58bfa97198811a4bd48c904103b4d5f891be4b88b15e5c4",
+    "Functional/demand-baseline-summary.json.gz": "7f279b315618f2863f184a9fb7728cb6dad152af8af94059a8b743a234ea6762",
+    "Functional/demand-candidate-summary.json.gz": "4d81c1d935e9074b95bd6a689c1e8d80026935de16dac30951f43e313b946a11",
+    "Functional/forest-baseline-summary.json.gz": "cb3d656c5a2a40d3088fe318fe9aa35381601d8e62035237a0728ec96974ca8a",
+    "Functional/forest-candidate-summary.json.gz": "ff3cdce7cfe8c6f3ecc44999f217c92c94bbf85d8eecb9ee48f3937a9916790f",
+    "baseline/commands.csv.gz": "a6d404991f0b38e756ceeaa94883a8357db1d473283a6731b7ef52bf6e6d71c3",
+    "baseline/counters.csv.gz": "93e32a606ddda5d13ade96f2fefd2c325390fbe0744599e0e27c8cef5533cf4f",
+    "baseline/measurements.csv.gz": "36407bc44bebfec2092de0ae12f0327b43c44da8a4115012d629a668c2337780",
+    "baseline/result.json.gz": "8ca64473698e35a8def5383dc7ccf64478d20bc615803367d2d56dc02beedecb",
+    "baseline/summary.json.gz": "6b4d9e188e1c2ba523a5c3586431f6a6ae5d98823388e882f5e9a15bec15ee8e",
+    "baseline/trajectory.csv.gz": "b133e42fd991b52d8dd3884c479a808637e2b6c48317431291fdbdcb31799424",
+    "candidate/commands.csv.gz": "a6d404991f0b38e756ceeaa94883a8357db1d473283a6731b7ef52bf6e6d71c3",
+    "candidate/counters.csv.gz": "93e32a606ddda5d13ade96f2fefd2c325390fbe0744599e0e27c8cef5533cf4f",
+    "candidate/measurements.csv.gz": "e147d62685ee89b222fbaa70e0a75a848794d7214136f7a4d47a47086533fdb9",
+    "candidate/result.json.gz": "d14970c79c78e55aee572eb6147a21d95a6d6680ad30c073b9af400f18abdb67",
+    "candidate/summary.json.gz": "76a6cba03ba6226379e8ce5abc62b9dadcefc4eef1ad39834318e9d381ab9eaa",
+    "candidate/trajectory.csv.gz": "b133e42fd991b52d8dd3884c479a808637e2b6c48317431291fdbdcb31799424",
+    "contracts/summary.json.gz": "75a73600b327e95c539e1418ad2d8d672daa7512b75af30404233eb7b92e0dd1",
+    "native-reference.csv.gz": "a53e28de7b9dea5a5c24075291ffe3a89692258167a7c951c1fa1013fb33937c"
+  }
+}

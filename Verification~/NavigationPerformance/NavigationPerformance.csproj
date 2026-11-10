@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <CandidateDomain Condition="'$(CandidateDomain)' == ''">$(MSBuildThisFileDirectory)../../Assets/HotUpdate/TowerDefense/Domain</CandidateDomain>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(CandidateDomain)/Configuration.cs" Link="Candidate/Configuration.cs" />
+    <Compile Include="$(CandidateDomain)/Navigation/**/*.cs" Link="Candidate/Navigation/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Data/NavigationLayout.cs" Link="Candidate/NavigationLayout.cs" />
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>CandidateDomain</_Parameter1>
+      <_Parameter2>$(CandidateDomain)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>VerificationProject</_Parameter1>
+      <_Parameter2>$(MSBuildThisFileDirectory)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>
