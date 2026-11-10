@@ -2,13 +2,15 @@
 
 默认验收真实森林地图的多门协调事务：先让 44 个 Big 全部实际就位并保持 200 tick，再从原 S 入口请求 2 个 Small；在让路过程中删除参与者，并从原 S 补回相同身体、射程和速度的单位。最终必须恢复 **46 = 44 Big + 2 Small、20 个攻击者、26 个候场者、0 队列**，并保持 200 tick。没有发生指定死亡注入不能算通过。
 
-最终生产候选 `207d92b06eb9a5739be11d9008b151f7282e037f` 已完成 **森林 30 / 30 + 份额交换 3 / 3** 的最终绑定复验，分别见 [ForestB3Stress/summary.json](Evidence/ForestB3Stress/summary.json) 与 [QuotaLifecycle/summary.json](Evidence/QuotaLifecycle/summary.json)。默认森林入口包含 7 × 7 入口集合与缓存小回归；默认 6 类是 30 例的强注入子集，默认入口由总验收和 CI 单独执行。两次运行使用同一固定 DLL，源及测试文件前后不变。
+当前静态连通缓存候选 `311c1fa88d5d149e847f277d4d9deeb3df4b2b67` 已完成 **森林 30 / 30 + 份额交换 3 / 3** 复验，分别见 [ForestStaticCache/summary.json](Evidence/ForestStaticCache/summary.json) 与 [QuotaStaticCache/summary.json](Evidence/QuotaStaticCache/summary.json)。默认入口和份额入口的 7 × 7 入口集合、缓存小回归均通过；默认森林 6 类是完整 30 例的强注入子集。两组使用同一固定 DLL，源及测试文件前后不变。
 
-最终生产 Domain 聚合 SHA-256 为 `b7ea41a6b70b7b6b7235926db543bf8d260c5477f202352f4b4917c58bb9b5db`。本工程实际编译 `Configuration.cs` 与 10 个 Navigation 文件，共 11 个，逐项匹配完整 15 文件清单；另外 4 个业务文件未由该纯导航工程编译，不混称覆盖了整个 Domain。最终测试 DLL SHA-256 为 `783699faf992ebfb52efb5cf0f830b08c0b7ac73db5d5884188af53ee1e97f83`。
+当前完整 15 文件 Domain 聚合 SHA-256 为 `d155d9838c07d7de133a3e1ef4424388bd441086f99f27968c4163bc1d7f2582`。模型实际编译 `Configuration.cs` 与 10 个 Navigation 文件，共 11 个，逐项匹配完整清单；另外 4 个业务文件未由该纯导航工程编译，不混称覆盖了整个 Domain。测试 DLL SHA-256 为 `648e0b714faec843b5e0e8580aefb08b7c00a8e37b6e42b1714e5bc9d998ddbd`。
 
-森林最终 tick 为 5724–8450，份额交换为 7496–7912；包括初始布阵、晚到、死亡补兵与保持期。两组累计模型耗时分别为 53.272 秒、8.083 秒；同机并行执行，这些数值不作为性能基准。完整压缩命令、实际终态、生产清单和哈希保存在各自证据目录。
+33 例的完整命令序列、最终单位状态与完成 tick 都逐项等于缓存前的 `207d92b` / `b7ea41…`。森林最终 tick 为 5724–8450，份额交换为 7496–7912，包括初始布阵、晚到、死亡补兵与保持期。这是行为回归结论；同机模型耗时不作为缓存性能收益的基准。完整压缩命令、实际终态、生产清单和哈希保存在各自证据目录。
 
-较早 B2 候选 `445a7db` 的 30 例对照证据仍在 [ForestStress/summary.json](Evidence/ForestStress/summary.json)，其源码、测试和 DLL 身份均属于当次冻结版本，不能混作最终候选的验证。
+缓存前候选 `207d92b06eb9a5739be11d9008b151f7282e037f` 的完整 33 例记录保留于 [ForestB3Stress](Evidence/ForestB3Stress/summary.json) 与 [QuotaLifecycle](Evidence/QuotaLifecycle/summary.json)。其完整 Domain SHA-256 为 `b7ea41a6b70b7b6b7235926db543bf8d260c5477f202352f4b4917c58bb9b5db`，当次测试 DLL 为 `783699faf992ebfb52efb5cf0f830b08c0b7ac73db5d5884188af53ee1e97f83`。
+
+较早 B2 候选 `445a7db` 的 30 例对照证据仍在 [ForestStress](Evidence/ForestStress/summary.json)。各报告只属于其记录的冻结源码与测试，不混用通过结论。
 
 Big 使用 250 mm 半径、550 mm 射程、55 mm/tick；Small 使用 180 mm 半径、450 mm 射程。地图、500 mm 逻辑格、原点和偏心基地均使用项目真实数据，不扩图、不缩身体、不提速、不瞬移。Small 最终必须占据仅适合小体型的 256 / 257 两格。
 
