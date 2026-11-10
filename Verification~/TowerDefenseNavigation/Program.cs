@@ -186,6 +186,14 @@ internal static class Program
                     bool admitted = crowd.TrySpawn(id, spawn, moveTicks);
                     if (!admitted)
                     {
+                        result.Commands.Add(new NavigationCommand
+                        {
+                            Tick = crowd.Tick,
+                            Kind = "spawn-rejected",
+                            Id = id,
+                            Cell = spawn,
+                            MoveTicks = moveTicks
+                        });
                         result.AdmissionFailures.TryGetValue(crowd.LastFailure, out int failures);
                         result.AdmissionFailures[crowd.LastFailure] = failures + 1;
                     }
@@ -437,6 +445,10 @@ internal static class Program
                 if (command.Kind == "spawn")
                 {
                     Require(crowd.TrySpawn(command.Id, command.Cell, command.MoveTicks), "Replay rejected an accepted spawn: " + crowd.LastFailure);
+                }
+                else if (command.Kind == "spawn-rejected")
+                {
+                    Require(!crowd.TrySpawn(command.Id, command.Cell, command.MoveTicks), "Replay admitted a previously queued request.");
                 }
                 else
                 {

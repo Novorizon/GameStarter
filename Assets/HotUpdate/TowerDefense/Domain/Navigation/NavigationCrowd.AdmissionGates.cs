@@ -123,7 +123,9 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             int start,
             int speed,
             Occupant requester = null,
-            int[] relocationGoals = null)
+            int[] relocationGoals = null,
+            int permanentYielder = -1,
+            bool existingAttackRecovery = false)
         {
             if (!SettledForRecovery())
             {
@@ -158,12 +160,43 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 return false;
             }
 
-            var layout = BuildAdmissionGateLayout(profile, start, available);
-            if (layout == null || layout.Owners.Length == 0 || !AdmissionBudgetAvailable())
+            foreach (bool conservative in new[] { false, true })
             {
-                return false;
+                var layout = BuildAdmissionGateLayout(profile, start, available, permanentYielder >= 0 || existingAttackRecovery, conservative);
+                if (!AdmissionBudgetAvailable())
+                {
+                    return false;
+                }
+
+                if (layout != null && layout.Owners.Length > 0 && TryExecuteAdmissionGateLayout(
+                    id,
+                    spawn,
+                    profile,
+                    start,
+                    speed,
+                    requester,
+                    layout,
+                    permanentYielder,
+                    existingAttackRecovery))
+                {
+                    return true;
+                }
             }
 
+            return false;
+        }
+
+        private bool TryExecuteAdmissionGateLayout(
+            int id,
+            Position2 spawn,
+            Profile profile,
+            int start,
+            int speed,
+            Occupant requester,
+            AdmissionGateLayout layout,
+            int permanentYielder,
+            bool existingAttackRecovery)
+        {
             var actor = new NavigationAgent { Id = id, Position = spawn, Radius = profile.Radius, AttackRange = profile.Range, Speed = speed };
             var state = requester ?? new Occupant { Agent = actor, Profile = profile };
             var original = layout.Owners.ToDictionary(owner => owner, owner => occupants[owner].Path);
@@ -176,6 +209,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             int originalTrafficRevision = trafficRevision;
             var originalTraffic = original.Keys.ToDictionary(owner => owner, owner => occupants[owner].TrafficRevision);
             var originalGoals = goalOwners.Keys.ToHashSet();
+            var originalQuotas = profiles.Values.ToDictionary(known => known, known => known.HistoricalAttackQuota);
             var outbound = new Dictionary<int, List<TimedCell>>();
             bool committed = false;
             try
@@ -187,7 +221,10 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     var gate = occupants[owner];
                     List<TimedCell> chosen = null;
                     int destination = -1;
-                    foreach (int buffer in unused.OrderBy(cell => NavigationGrid.DistanceSquared(grid.Center(cell), gate.Agent.Position)).ThenBy(cell => cell))
+                    var destinations = unused.Where(cell => owner != permanentYielder
+                        || CanHold(gate.Profile, cell) && !gate.Profile.Attack[cell]);
+                    var ranked = destinations.OrderBy(cell => NavigationGrid.DistanceSquared(grid.Center(cell), gate.Agent.Position));
+                    foreach (int buffer in ranked.ThenBy(cell => cell))
                     {
                         var plan = FindVacancyPath(gate, gate.Agent.GoalCell, buffer, departure);
                         if (!AdmissionBudgetAvailable())
@@ -221,7 +258,10 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 long passageAfter = stagedRequester ? departure : CurrentTick;
                 var targets = new bool[grid.CellCount];
                 targets[layout.Goal] = true;
-                var regions = AccessRegions(state, passageStart);
+                // Existing attack recovery certifies every current body's complete motion and final claim.
+                // Future empty targets may require another gate operation; the old static no-sealing promise
+                // cannot veto this completed cooperative rearrangement. New admission keeps that promise.
+                var regions = existingAttackRecovery ? new List<AccessRegion>() : AccessRegions(state, passageStart);
                 foreach (var region in regions)
                 {
                     foreach (int claim in originalGoals)
@@ -253,7 +293,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
                 AcceptPlan(state, passage);
                 long returningAfter = passage[passage.Count - 1].Arrival;
-                foreach (int owner in layout.Owners.Reverse().Where(owner => requester == null || owner != id))
+                foreach (int owner in layout.Owners.Reverse().Where(owner => owner != permanentYielder && (requester == null || owner != id)))
                 {
                     var gate = occupants[owner];
                     var first = outbound[owner];
@@ -315,6 +355,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     foreach (var marker in originalTraffic)
                     {
                         occupants[marker.Key].TrafficRevision = marker.Value;
+                    }
+
+                    foreach (var quota in originalQuotas)
+                    {
+                        quota.Key.HistoricalAttackQuota = quota.Value;
                     }
                 }
             }
@@ -387,10 +432,13 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             return false;
         }
 
-        private AdmissionGateLayout BuildAdmissionGateLayout(Profile profile, int start, int[] goals)
+        private AdmissionGateLayout BuildAdmissionGateLayout(Profile profile, int start, int[] goals, bool allowSameProfileGates, bool conservative)
         {
             var occupied = occupants.Values.ToDictionary(state => state.Agent.GoalCell, state => state);
-            var sameProfile = occupied.Where(pair => ReferenceEquals(pair.Value.Profile, profile)).Select(pair => pair.Key).ToHashSet();
+            // A quota exchange may need to reopen an inner ring already occupied by this same profile.
+            // Only the explicitly more flexible permanent yielder changes its final goal; these gates return.
+            var sameProfile = allowSameProfileGates ? new HashSet<int>()
+                : occupied.Where(pair => ReferenceEquals(pair.Value.Profile, profile)).Select(pair => pair.Key).ToHashSet();
             AdmissionGateLayout best = null;
             long bestScore = long.MaxValue;
             foreach (int goal in goals)
@@ -445,7 +493,10 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                             continue;
                         }
 
-                        protectedCells.UnionWith(AdmissionTrace(tree, start));
+                        if (conservative)
+                        {
+                            protectedCells.UnionWith(AdmissionTrace(tree, start));
+                        }
                         order.Add(owner);
                         remaining.Remove(owner);
                         progressed = true;
@@ -482,9 +533,9 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 int radius = order.Max(owner => occupants[owner].Profile.Radius);
                 var initial = occupied.Keys.ToHashSet();
                 var outside = AdmissionFlood(start, radius, initial).Keys.ToHashSet();
-                var whole = AdmissionFlood(start, radius, new HashSet<int>()).Keys.ToHashSet();
+                var whole = conservative ? AdmissionFlood(start, radius, new HashSet<int>()).Keys.ToHashSet() : null;
                 var buffers = new HashSet<int>();
-                foreach (int candidate in outside.Where(cell => !entries.Contains(cell) && !grid.HoldingAllowed(cell) && !protectedCells.Contains(cell))
+                foreach (int candidate in outside.Where(cell => !entries.Contains(cell) && !protectedCells.Contains(cell))
                     .OrderBy(cell => NavigationGrid.DistanceSquared(grid.Center(cell), grid.TargetCenter)).ThenBy(cell => cell))
                 {
                     if (!AdmissionBudgetAvailable())
@@ -497,16 +548,19 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                         break;
                     }
 
-                    if (grid.Neighbours(candidate).Any(buffers.Contains))
+                    if (conservative)
                     {
-                        continue;
-                    }
+                        if (grid.Neighbours(candidate).Any(buffers.Contains))
+                        {
+                            continue;
+                        }
 
-                    var next = buffers.Append(candidate).ToHashSet();
-                    if (AdmissionFlood(start, radius, initial.Concat(next).ToHashSet()).Count != outside.Count - next.Count
-                        || AdmissionFlood(start, radius, next).Count != whole.Count - next.Count)
-                    {
-                        continue;
+                        var next = buffers.Append(candidate).ToHashSet();
+                        if (AdmissionFlood(start, radius, initial.Concat(next).ToHashSet()).Count != outside.Count - next.Count
+                            || AdmissionFlood(start, radius, next).Count != whole.Count - next.Count)
+                        {
+                            continue;
+                        }
                     }
 
                     buffers.Add(candidate);
