@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 import tarfile
 import tempfile
 import xml.etree.ElementTree as ET
@@ -158,7 +159,11 @@ def main():
         subprocess.run([args.dotnet, 'build', 'Verification~/GameStarter.Verification.csproj', '-c', 'Release', '-m:1', '--disable-build-servers', '--nologo', '-p:FrameworkPackageRoot=' + str(framework), '-p:HotUpdatePackageRoot=' + str(hot_package), '-p:DataPackageRoot=' + str(data_package), '-p:LubanPackageRoot=' + str(luban), '-p:YooAssetPackageRoot=' + str(yoo / 'Assets/YooAsset'), '-p:ResourcesPackageRoot=' + str(framework.parent / 'com.novorizon.framework.yooasset')], cwd=ROOT, env=env, check=True)
         subprocess.run([args.dotnet, 'Verification~/bin/Release/net8.0/GameStarter.Verification.dll'], cwd=ROOT, env=env, check=True)
         for suite in ['TowerDefenseDomain', 'TowerDefenseOnline', 'TowerDefenseNavigation', 'TowerDefenseNavigationChallenges', 'NavigationGateLifecycle']:
-            subprocess.run([args.dotnet, 'run', '--project', 'Verification~/' + suite + '/' + suite + '.csproj', '-c', 'Release'], cwd=ROOT, env=env, check=True)
+            command = [args.dotnet, 'run', '--project', 'Verification~/' + suite + '/' + suite + '.csproj', '-c', 'Release']
+            if suite == 'TowerDefenseNavigationChallenges':
+                command.extend(['--', '--allow-compatible-goal-reassignment'])
+            subprocess.run(command, cwd=ROOT, env=env, check=True)
+        subprocess.run([sys.executable, 'Verification~/AdmissionTransactionAudit/run.py', '--dotnet', args.dotnet], cwd=ROOT, env=env, check=True)
 
 
 if __name__ == '__main__':

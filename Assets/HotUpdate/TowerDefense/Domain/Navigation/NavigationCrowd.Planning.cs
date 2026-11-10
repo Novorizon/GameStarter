@@ -235,7 +235,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 throw new ArgumentOutOfRangeException(nameof(planningStart));
             }
 
-            var distances = GoalDistances(state.Profile, targets, state.Agent.Id);
+            var distances = GoalDistances(state.Profile, targets);
             if (distances[start] < 0)
             {
                 LastFailure = NavigationFailure.GoalAccessBlocked;
@@ -362,7 +362,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             return null;
         }
 
-        private int[] GoalDistances(Profile profile, bool[] targets, int ignoreOwner)
+        private int[] GoalDistances(Profile profile, bool[] targets)
         {
             var distances = Enumerable.Repeat(-1, grid.CellCount).ToArray();
             var queue = new Queue<int>();
@@ -380,8 +380,9 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 int cell = queue.Dequeue();
                 foreach (int next in grid.Neighbours(cell))
                 {
-                    if (distances[next] < 0 && profile.Stand[next] && grid.CanTraverse(cell, next, profile.Radius)
-                        && (!goalOwners.TryGetValue(next, out int owner) || owner == ignoreOwner))
+                    // This is an optimistic terrain heuristic. A future goal claim is not a wall before its arrival;
+                    // the safe intervals and swept reservations decide when a cell can actually be traversed.
+                    if (distances[next] < 0 && profile.Stand[next] && grid.CanTraverse(cell, next, profile.Radius))
                     {
                         distances[next] = distances[cell] + 1;
                         queue.Enqueue(next);

@@ -69,7 +69,7 @@ namespace Game.Editor
         {
             previousOptionsEnabled = EditorSettings.enterPlayModeOptionsEnabled;
             previousOptions = EditorSettings.enterPlayModeOptions;
-            result = new Result { unity = Application.unityVersion };
+            result = new Result { unity = Application.unityVersion, tickMilliseconds = FightSession.TickMilliseconds };
             finishing = false;
             stage = "setup";
             try
@@ -204,6 +204,7 @@ namespace Game.Editor
         {
             tables = DataManager.Instance.Get<cfg.Tables>();
             Require(tables != null, "Bootstrap did not register actual Luban tables.");
+            result.configurationVersion = tables.TbTdStage.Get(1).ConfigVersion;
             var terrain = AssetDatabase.LoadAssetAtPath<TextAsset>(NavigationAsset);
             Require(terrain != null, "Actual logical navigation asset was not imported: " + NavigationAsset);
             grid = NavigationLayout.Parse(terrain.text);
@@ -674,7 +675,7 @@ namespace Game.Editor
             scenarioIndex++;
             if (scenarioIndex == scenarios.Count)
             {
-                Finish(true, "Every authored wave and maximum-wave fast-admission case gathered alive without towers, then kept attacking for 200 ticks.");
+                Finish(true, "All authored and stress cases gathered alive without towers and attacked for 200 uninterrupted ticks.");
                 return;
             }
 
@@ -864,6 +865,8 @@ namespace Game.Editor
             public string renderPipeline;
             public string assetSource;
             public string navigationSha256;
+            public string configurationVersion;
+            public int tickMilliseconds;
             public long stopwatchFrequency;
             public string timingScope;
             public int gridWidth;

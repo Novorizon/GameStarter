@@ -1,6 +1,6 @@
 # 塔防寻路、避障与围攻
 
-最终结果、运行命令和原始证据见[导航验收](Navigation/Verification.zh-CN.md)。
+当前修复进度见[分支状态](Navigation/WorkStatus.zh-CN.md)。最终验收完成前，旧的[导航验收](Navigation/Verification.zh-CN.md)只对应此前冻结版本。
 
 ## 本次任务与证据边界
 

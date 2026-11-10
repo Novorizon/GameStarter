@@ -36,6 +36,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--domain", "--candidate-domain", dest="domain", type=Path, default=REPOSITORY / "Assets/HotUpdate/TowerDefense/Domain")
     parser.add_argument("--layout", type=Path)
+    parser.add_argument("--dotnet", default="dotnet", help=".NET 8 executable")
     parser.add_argument("--map", type=Path, default=REPOSITORY / "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes")
     parser.add_argument("--output", type=Path, default=REPOSITORY / "Artifacts/AdmissionTransactionAudit")
     parser.add_argument("--expect-domain-sha256", help="Optional aggregate fingerprint to bind a run to an expected frozen candidate")
@@ -59,7 +60,7 @@ def main() -> int:
         shutil.rmtree(build)
     build.mkdir()
     command = [
-        "dotnet", "build", str(HERE / "AdmissionTransactionAudit.csproj"), "-c", "Release", "--nologo",
+        arguments.dotnet, "build", str(HERE / "AdmissionTransactionAudit.csproj"), "-c", "Release", "--nologo",
         f"-p:NavigationDomainRoot={domain}", f"-p:NavigationLayoutFile={layout}", f"-p:NavigationMapFile={game_map}",
         f"-p:BaseIntermediateOutputPath={build / 'obj'}/", f"-p:OutputPath={build / 'bin'}/",
     ]
@@ -71,7 +72,7 @@ def main() -> int:
             built = subprocess.run(command, cwd=REPOSITORY, stdout=log, stderr=subprocess.STDOUT, check=False)
             if built.returncode == 0:
                 result = subprocess.run(
-                    ["dotnet", str(build / "bin/AdmissionTransactionAudit.dll"), "--output", str(output / "results.json")],
+                    [arguments.dotnet, str(build / "bin/AdmissionTransactionAudit.dll"), "--output", str(output / "results.json")],
                     cwd=REPOSITORY, stdout=log, stderr=subprocess.STDOUT, check=False,
                 )
                 return_code = result.returncode
