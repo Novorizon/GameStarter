@@ -103,9 +103,14 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 return true;
             }
 
-            if (!agents.Any(agent => agent.Status == NavigationAgentStatus.Waiting) || vacancyAttackFailureRevision == goalRevision)
+            if (!agents.Any(agent => agent.Status == NavigationAgentStatus.Waiting))
             {
                 return false;
+            }
+
+            if (vacancyAttackFailureRevision == goalRevision)
+            {
+                return TryCoordinateWaitingAttacks();
             }
 
             var freeAttacks = profiles.Values.Where(profile => profile.Registered).ToDictionary(
@@ -114,6 +119,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     && !entries.Contains(cell) && !goalOwners.ContainsKey(cell)).ToArray());
             if (freeAttacks.Values.All(cells => cells.Length == 0))
             {
+                if (TryCoordinateWaitingAttacks())
+                {
+                    return true;
+                }
+
                 vacancyAttackFailureRevision = goalRevision;
                 return false;
             }
@@ -121,6 +131,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             if (!SettledForRecovery())
             {
                 return PromoteWaitingWithTraffic(freeAttacks);
+            }
+
+            if (TryCoordinateWaitingAttacks())
+            {
+                return true;
             }
 
             if (TryStartGateRecovery())

@@ -235,6 +235,42 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 throw new ArgumentOutOfRangeException(nameof(planningStart));
             }
 
+            if (regions.Count > 0)
+            {
+                int onlyTarget = -1;
+                for (int cell = 0; cell < targets.Length; cell++)
+                {
+                    if (!targets[cell])
+                    {
+                        continue;
+                    }
+
+                    if (onlyTarget >= 0)
+                    {
+                        onlyTarget = -1;
+                        break;
+                    }
+
+                    onlyTarget = cell;
+                }
+
+                // This predicate depends only on the committed goal layout, not arrival time. Exhaustively
+                // waiting through safe intervals cannot make a sole structurally rejected endpoint admissible.
+                if (onlyTarget >= 0)
+                {
+                    if (safety[onlyTarget] == 0)
+                    {
+                        safety[onlyTarget] = GoalPreservesAccess(regions, onlyTarget, state.Agent.Id) ? (sbyte)1 : (sbyte)-1;
+                    }
+
+                    if (safety[onlyTarget] < 0)
+                    {
+                        LastFailure = NavigationFailure.GoalAccessBlocked;
+                        return null;
+                    }
+                }
+            }
+
             var distances = GoalDistances(state.Profile, targets);
             if (distances[start] < 0)
             {

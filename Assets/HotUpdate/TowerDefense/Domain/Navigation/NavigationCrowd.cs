@@ -21,6 +21,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             internal bool[] Stand;
             internal bool[] Attack;
             internal bool[] PreferredAttack;
+            internal int HistoricalAttackQuota;
             internal bool[] Gather;
             internal bool[] Preferred;
             internal readonly Dictionary<int, int> CapacityRevisions = new Dictionary<int, int>();
@@ -149,6 +150,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             if (entries.Add(start))
             {
                 parkingPrepared = false;
+                profileFlexibility.Clear();
                 foreach (var known in profiles.Values)
                 {
                     known.CapacityRevisions.Clear();
@@ -245,6 +247,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             goalOwners.Remove(state.Agent.GoalCell);
             occupants.Remove(id);
             agents.Remove(state.Agent);
+            if (!occupants.Values.Any(other => ReferenceEquals(other.Profile, state.Profile)))
+            {
+                state.Profile.HistoricalAttackQuota = 0;
+            }
+
             goalRevision++;
             trafficRevision++;
             return true;
@@ -554,6 +561,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
         {
             var actor = state.Agent;
             var previous = actor.Position;
+            bool wasAttacking = actor.Status == NavigationAgentStatus.Attacking;
             var path = state.Path;
             while (state.Segment + 1 < path.Count && path[state.Segment + 1].Arrival <= tick)
             {
@@ -577,6 +585,13 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 actor.Status = NavigationAgentStatus.Navigating;
                 actor.RemainingDistance = checked((path.Count - state.Segment - 2) * grid.CellSize
                     + Math.Abs(to.X - actor.Position.X) + Math.Abs(to.Y - actor.Position.Y));
+            }
+
+            if (!wasAttacking && actor.Status == NavigationAgentStatus.Attacking)
+            {
+                int actualAttackers = agents.Count(other => other.Radius == actor.Radius && other.AttackRange == actor.AttackRange
+                    && other.Status == NavigationAgentStatus.Attacking);
+                state.Profile.HistoricalAttackQuota = Math.Max(state.Profile.HistoricalAttackQuota, actualAttackers);
             }
 
             actor.DistanceTravelled = checked(actor.DistanceTravelled + Math.Abs(previous.X - actor.Position.X) + Math.Abs(previous.Y - actor.Position.Y));

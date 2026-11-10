@@ -20,7 +20,7 @@ python Verification~/AdmissionTransactionAudit/run.py \
   --expect-domain-sha256 EXPECTED_AGGREGATE_SHA256
 ```
 
-`--candidate-domain` 是 `--domain` 的别名。默认解析器取 Domain 同级 `Data/NavigationLayout.cs`；可用 `--layout` 覆盖。地图默认取本仓库的 `Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes`，可用 `--map` 覆盖。`--output` 可指定报告目录。运行器不修改候选源码。
+`--candidate-domain` 是 `--domain` 的别名。默认解析器取 Domain 同级 `Data/NavigationLayout.cs`；可用 `--layout` 覆盖。地图默认取本仓库的 `Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes`，可用 `--map` 覆盖。`--output` 可指定报告目录，`--dotnet` 可指定 .NET 8 可执行文件。运行器不修改候选源码。
 
 也可直接运行最小 C# 工程：
 
@@ -34,20 +34,21 @@ MSBuild 的 `CandidateDomain` 可代替 `NavigationDomainRoot`；另有 `Navigat
 
 ## 硬断言
 
-- 9×9 固定地图填满 17 个 Big 后，预算 100/3200 的失败必须报告 `SearchLimitExceeded`，预算 6400 的稳定几何失败报告 `CapacityExceeded`。
+- 原 9×9 拥堵地图填入 17 个 Big 后，仅在明确的低预算 100 下要求 `SearchLimitExceeded`。这个请求在更大预算下可行，不能要求它持续失败。
+- 持久失败缓存使用另一张仅声明一个合法 holding 的地图，两种 profile 的公开攻击格数加等待格数均必须为 1，且唯一终点已被 Big 占用。第二个 Small 无法同时取得独占终点，因此报告 `CapacityExceeded`；允许首次判定零搜索。这个证书仅说明声明的逻辑终点容量已满，不声称整张平面只能站一个单位。
 - 同 tick、63 tick 时重试必须命中缓存且展开数为零。预算失败在第 64 tick 必须重新搜索；稳定几何失败在同一时刻仍使用缓存。
 - 真实公开 `Remove` 释放一个单位后，同 tick 的待入场 Small 必须立即获准，不能继续命中旧失败。另有一个明确标注的白盒案例仅改变 traffic revision，检查缓存失效。
 - 实际森林中先让 44 个 Big 完全停稳，再以 500/250 两种 Small 速度交替请求。每种速度第一次耗尽预算，后续六次必须全部零展开、命中各自缓存，不能因失败回滚的伪版本变化互相失效。
-- 每次失败均逐项比较实际单位、原 Occupant/Agent/Profile/Path 引用、每个 TimedCell 的原引用与字段、公开 Agent 属性、完整目标权、未来预约内容、时钟和语义版本；不是只比较单位数量或字符串散列。
+- 每次失败均逐项比较实际单位、原 Occupant/Agent/Profile/Path 引用、每个 TimedCell 的原引用与字段、公开 Agent 属性、全部 profile 元数据（包含历史攻击配额）、完整目标权、未来预约内容、时钟和语义版本；不是只比较单位数量或字符串散列。
 - 回滚后逐一公开移除 44 个真实单位，每一步检查所有目标权与预约都属于仍存在的单位；最终单位、目标权与预约均为空。
 - 成功事务不得推进模拟时钟或提前改变实际位置。紧接着的同 tick 第二次准入必须零展开报告 `ReservationBlocked`，并完整保留第一笔已提交事务。
 
-森林回滚预算先由同一候选的两次成功准入测定：分别取两种速度完成事务所需展开数减 1、减 128。不同预算重建的初态必须与成功校准的确定性摘要完全一致，门控布局展开数也必须相同，并确实进入带时间的路径规划。这样搜索优化后，不会把已经成功的请求错误地当成“回滚已验证”；校准和全部实际阈值保存在报告中。所有候选仍须满足相同的失败分类、零展开、严格状态恢复和无残留要求。
+森林先校准同一候选两种速度的成功事务成本，再实际探测一组有限预算。预算可能影响 fallback，成本减一并不保证失败：若探测请求成功，这是合法结果，不作为回滚证据。必须找到两个在两种速度下都实际报告预算耗尽、状态完整恢复、完成相同门控布局且进入时间路径规划的预算，再用新实例严格重放交替缓存、精确回滚和逐个 Remove 检查。找不到两个预算会失败，不能静默跳过覆盖。不同预算重建的初态必须与成功校准的确定性摘要完全一致，所有请求展开不得超过预算，完整候选结果保存在报告中。
 
 这些案例使用的 Big 为 r250/range550/speed500，Small 为 r180/range450/speed500 或 250；生产低速移动、两个晚到 Small 的最终占位及六波攻击人数另行验收。有限事务检查不声称能证明任意多单位重排问题总可解。
 
 ## 证据版本
 
-`EvidenceB2/` 是本工程对冻结 B2 Domain aggregate `a9ee55d0667eaea51207568e41c52c11aed2f78d1998af0031d78db656a24ef7` 的运行报告。
+`EvidenceB2/` 保存早前工程对冻结 B2 Domain aggregate `a9ee55d0667eaea51207568e41c52c11aed2f78d1998af0031d78db656a24ef7` 的历史运行报告；它不代表此后源码的执行结果。当前候选以本次 `run.py` 生成的输入摘要与结果为准。
 
 `Comparison7ee317/` 是更早的独立审计报告，准入源码 SHA 为 `7ee317ba7628d80ae920db7d1c9624c3016aced02937113a718b435fa27a9ca3`。它保留原始 12 个死亡时序及预算检查记录，不能作为 B2 的执行证据，也不作为本工程默认编译源。该历史报告的交替请求脚本以记录为主，本工程增加了明确的零展开与缓存命中断言。

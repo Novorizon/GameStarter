@@ -56,6 +56,7 @@ internal static class MixedProfiles
         var stopwatch = Stopwatch.StartNew();
         var crowd = CreateCrowd(scenario);
         var previous = new Dictionary<int, UnitObservation>();
+        var requestedRanges = new Dictionary<int, int>();
         int firstRange = tailExit ? 1000 : outerFirst ? 4000 : 1000;
         int laterRange = tailExit ? 1000 : outerFirst ? 1000 : 4000;
         int firstCount = tailExit ? 40 + seed % 4 : crowd.CountAttackSlots(250, firstRange);
@@ -80,6 +81,12 @@ internal static class MixedProfiles
                 if (next <= firstCount || secondPhase && next <= lastId)
                 {
                     int range = next >= laterId ? laterRange : firstRange;
+                    if (!requestedRanges.ContainsKey(next))
+                    {
+                        requestedRanges.Add(next, range);
+                    }
+
+                    Require(requestedRanges[next] == range, "An initial request changed its original profile.");
                     var spawn = scenario.SpawnCells[next >= laterId ? scenario.SpawnCells.Length - 1 : 0];
                     if (crowd.TrySpawn(next, Center(spawn), 1000, 250, range))
                     {
@@ -101,11 +108,21 @@ internal static class MixedProfiles
                         string failure = crowd.LastFailure.ToString();
                         result.AdmissionFailures.TryGetValue(failure, out int failures);
                         result.AdmissionFailures[failure] = failures + 1;
+                        result.Commands.Add(new NavigationCommand
+                        {
+                            Tick = tick,
+                            Kind = "spawn-rejected",
+                            Id = next,
+                            Cell = spawn,
+                            MoveTicks = 1,
+                            Radius = 250,
+                            AttackRange = range
+                        });
                         Require(failure == "SpawnOccupied" || failure == "ReservationBlocked", "Mixed-profile admission failed: " + failure);
                     }
                 }
 
-                Validate(scenario, crowd, previous);
+                Validate(scenario, crowd, previous, requestedRanges);
                 result.Ticks = tick;
                 result.ExpandedNodes = crowd.TotalExpandedNodes;
                 result.MaximumReservations = Math.Max(result.MaximumReservations, crowd.ReservationCount);
@@ -133,7 +150,8 @@ internal static class MixedProfiles
                     Require(crowd.Agents.Count == lastId, "An admitted mixed-profile unit disappeared.");
                     if (!tailExit)
                     {
-                        VerifyReplacements(scenario, crowd, result, previous, 4000, 1000, outerFirst ? laterId : 1);
+                        VerifyAttackShares(crowd, outerFirst ? 1 : crowd.CountAttackSlots(250, 1000));
+                        VerifyReplacements(scenario, crowd, result, previous, requestedRanges, 4000, 1000, outerFirst ? laterId : 1);
                     }
 
                     foreach (var profile in result.Profiles)
@@ -141,6 +159,11 @@ internal static class MixedProfiles
                         var matching = crowd.Agents.Where(agent => agent.AttackRange == profile.AttackRange).ToArray();
                         profile.Attacking = matching.Count(agent => agent.Status == NavigationAgentStatus.Attacking);
                         profile.Waiting = matching.Count(agent => agent.Status == NavigationAgentStatus.Waiting);
+                    }
+
+                    if (!tailExit)
+                    {
+                        VerifyAttackShares(crowd, outerFirst ? 1 : crowd.CountAttackSlots(250, 1000));
                     }
 
                     result.FinalState = Canonical(crowd);
@@ -203,11 +226,13 @@ internal static class MixedProfiles
         NavigationCrowd crowd,
         ScenarioResult result,
         Dictionary<int, UnitObservation> previous,
+        Dictionary<int, int> requestedRanges,
         int firstRange,
         int laterRange,
         int laterId)
     {
         int replacementId = crowd.Agents.Max(agent => agent.Id) + 1;
+        requestedRanges.Add(replacementId, laterRange);
         Require(crowd.Remove(laterId), "Cannot remove the later-profile attacker.");
         result.Removed++;
         result.Commands.Add(new NavigationCommand { Tick = (int)crowd.CurrentTick, Kind = "remove", Id = laterId });
@@ -234,10 +259,20 @@ internal static class MixedProfiles
                         Radius = 250,
                         AttackRange = laterRange
                     });
-                    Validate(scenario, crowd, previous);
+                    Validate(scenario, crowd, previous, requestedRanges);
                 }
                 else
                 {
+                    result.Commands.Add(new NavigationCommand
+                    {
+                        Tick = (int)crowd.CurrentTick,
+                        Kind = "spawn-rejected",
+                        Id = replacementId,
+                        Cell = spawn,
+                        MoveTicks = 1,
+                        Radius = 250,
+                        AttackRange = laterRange
+                    });
                     Require(crowd.LastFailure == NavigationFailure.SpawnOccupied || crowd.LastFailure == NavigationFailure.ReservationBlocked,
                         "Replacement profile cannot use the preserved ingress: " + crowd.LastFailure);
                 }
@@ -249,11 +284,12 @@ internal static class MixedProfiles
                 break;
             }
 
-            AdvanceChecked(scenario, crowd, result, previous);
+            AdvanceChecked(scenario, crowd, result, previous, requestedRanges);
         }
 
         Require(admitted && crowd.Agents.Any(agent => agent.Id == replacementId && agent.Status == NavigationAgentStatus.Attacking),
             "A removed mixed-profile attacker could not be replaced through the preserved ingress.");
+        VerifyAttackShares(crowd, result.Profiles.First(profile => profile.AttackRange == 1000).Requested - 1);
         var waiting = crowd.Agents.Where(agent => agent.AttackRange == firstRange && agent.Status == NavigationAgentStatus.Waiting)
             .Select(agent => agent.Id).ToHashSet();
         if (waiting.Count > 0)
@@ -270,11 +306,12 @@ internal static class MixedProfiles
                 int current = crowd.Agents.Count(agent => agent.AttackRange == firstRange && agent.Status == NavigationAgentStatus.Attacking);
                 if (promoted && current == attackers && crowd.Agents.All(agent => agent.Status != NavigationAgentStatus.Navigating))
                 {
+                    VerifyAttackShares(crowd, result.Profiles.First(profile => profile.AttackRange == 1000).Requested - 1);
                     result.ReplacementVerified = true;
                     return;
                 }
 
-                AdvanceChecked(scenario, crowd, result, previous);
+                AdvanceChecked(scenario, crowd, result, previous, requestedRanges);
             }
 
             throw new InvalidOperationException("An existing mixed-profile waiting body could not replace the removed attacker.");
@@ -283,10 +320,15 @@ internal static class MixedProfiles
         result.ReplacementVerified = true;
     }
 
-    private static void AdvanceChecked(NavigationScenario scenario, NavigationCrowd crowd, ScenarioResult result, Dictionary<int, UnitObservation> previous)
+    private static void AdvanceChecked(
+        NavigationScenario scenario,
+        NavigationCrowd crowd,
+        ScenarioResult result,
+        Dictionary<int, UnitObservation> previous,
+        Dictionary<int, int> requestedRanges)
     {
         crowd.Step(crowd.CurrentTick + 1);
-        Validate(scenario, crowd, previous);
+        Validate(scenario, crowd, previous, requestedRanges);
         result.MaximumReservations = Math.Max(result.MaximumReservations, crowd.ReservationCount);
         if (crowd.CurrentTick % 10 == 0)
         {
@@ -294,8 +336,13 @@ internal static class MixedProfiles
         }
     }
 
-    private static void Validate(NavigationScenario scenario, NavigationCrowd crowd, Dictionary<int, UnitObservation> previous)
+    private static void Validate(
+        NavigationScenario scenario,
+        NavigationCrowd crowd,
+        Dictionary<int, UnitObservation> previous,
+        Dictionary<int, int> requestedRanges)
     {
+        VerifyRequestedProfiles(crowd, requestedRanges);
         var units = Observe(crowd);
         GeometryChecks.VerifyUnitClearance(units, previous);
         var occupied = new HashSet<Cell>();
@@ -332,27 +379,60 @@ internal static class MixedProfiles
         }
     }
 
+    private static void VerifyAttackShares(NavigationCrowd crowd, int shortAttackers)
+    {
+        int longAttackers = crowd.CountAttackSlots(250, 4000) - shortAttackers;
+        Require(crowd.Agents.Count(actor => actor.AttackRange == 1000 && actor.Status == NavigationAgentStatus.Attacking) == shortAttackers,
+            "The established Short attack share was not restored.");
+        Require(crowd.Agents.Count(actor => actor.AttackRange == 4000 && actor.Status == NavigationAgentStatus.Attacking) == longAttackers,
+            "The compatible Long attack share was not restored.");
+    }
+
+    private static void VerifyRequestedProfiles(NavigationCrowd crowd, IReadOnlyDictionary<int, int> requestedRanges)
+    {
+        foreach (var actor in crowd.Agents)
+        {
+            Require(requestedRanges.TryGetValue(actor.Id, out int range), "An active body has no original request.");
+            Require(actor.Radius == 250 && actor.Speed == 1000 && actor.AttackRange == range,
+                "A mixed-profile body changed its requested radius, speed or attack range.");
+        }
+    }
+
     private static bool Replay(NavigationScenario scenario, ScenarioResult result)
     {
         var crowd = CreateCrowd(scenario);
+        var requestedRanges = new Dictionary<int, int>();
         foreach (var command in result.Commands)
         {
-            Advance(crowd, command.Tick);
+            Advance(crowd, command.Tick, requestedRanges);
             if (command.Kind == "remove")
             {
                 Require(crowd.Remove(command.Id), "Mixed-profile replay could not remove a body.");
             }
+            else if (command.Kind == "spawn" || command.Kind == "spawn-rejected")
+            {
+                if (!requestedRanges.ContainsKey(command.Id))
+                {
+                    requestedRanges.Add(command.Id, command.AttackRange);
+                }
+
+                Require(command.Radius == 250 && command.MoveTicks == 1 && requestedRanges[command.Id] == command.AttackRange,
+                    "A replay request changed its original profile.");
+                bool admitted = crowd.TrySpawn(command.Id, Center(command.Cell), 1000, command.Radius, command.AttackRange);
+                Require(admitted == (command.Kind == "spawn"), "Mixed-profile replay changed a birth result.");
+            }
             else
             {
-                Require(crowd.TrySpawn(command.Id, Center(command.Cell), 1000, command.Radius, command.AttackRange), "Mixed-profile replay rejected birth.");
+                throw new InvalidOperationException("Unknown mixed-profile replay command: " + command.Kind);
             }
         }
 
-        Advance(crowd, result.Ticks);
+        Advance(crowd, result.Ticks, requestedRanges);
+        VerifyRequestedProfiles(crowd, requestedRanges);
         return Canonical(crowd) == result.FinalState;
     }
 
-    private static void Advance(NavigationCrowd crowd, int target)
+    private static void Advance(NavigationCrowd crowd, int target, IReadOnlyDictionary<int, int> requestedRanges)
     {
         while (crowd.CurrentTick < target)
         {
@@ -360,6 +440,7 @@ internal static class MixedProfiles
             for (int step = 0; step < batch; step++)
             {
                 crowd.Step(crowd.CurrentTick + 1);
+                VerifyRequestedProfiles(crowd, requestedRanges);
             }
         }
     }

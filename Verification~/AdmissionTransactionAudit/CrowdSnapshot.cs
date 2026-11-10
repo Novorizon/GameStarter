@@ -17,6 +17,7 @@ internal sealed class CrowdSnapshot
     private readonly object? recovery;
     private readonly KeyValuePair<int, int>[] claims;
     private readonly Dictionary<int, OccupantSnapshot> occupants;
+    private readonly Dictionary<long, ObjectFields> profiles;
     private readonly ReservationValue[] futureReservations;
 
     private CrowdSnapshot(NavigationCrowd crowd)
@@ -28,6 +29,7 @@ internal sealed class CrowdSnapshot
         recovery = Field<object?>(crowd, "vacancyJob");
         claims = Claims(crowd);
         occupants = Entries(Field<IDictionary>(crowd, "occupants")).ToDictionary(entry => (int)entry.Key, entry => new OccupantSnapshot(entry.Value!));
+        profiles = Entries(Field<IDictionary>(crowd, "profiles")).ToDictionary(entry => (long)entry.Key, entry => new ObjectFields(entry.Value!));
         futureReservations = Reservations(crowd);
     }
 
@@ -77,6 +79,14 @@ internal sealed class CrowdSnapshot
         {
             Audit.Require(current.Contains(pair.Key), name + ": occupant disappeared " + pair.Key);
             pair.Value.AssertUnchanged(current[pair.Key]!, name + ": occupant " + pair.Key);
+        }
+
+        var currentProfiles = Field<IDictionary>(crowd, "profiles");
+        Audit.Require(currentProfiles.Count == profiles.Count, name + ": profile count changed");
+        foreach (var pair in profiles)
+        {
+            Audit.Require(currentProfiles.Contains(pair.Key), name + ": profile disappeared");
+            pair.Value.AssertUnchanged(currentProfiles[pair.Key]!, name + ": profile metadata " + pair.Key);
         }
 
         AssertNoGhosts(crowd);

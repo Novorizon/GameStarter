@@ -6,16 +6,13 @@ internal static class ForestCases
 {
     internal static void Run(Audit audit)
     {
-        // Derive late-transaction budgets from successful deterministic replays, so an improved search cannot
-        // silently turn a supposed rollback case into a successful transaction.
+        // A smaller budget can change fallback selection. Probe real outcomes rather than assuming cost - 1 fails.
         var fast = Calibrate(audit, 500);
         var slow = Calibrate(audit, 250);
         Audit.Require(fast.InitialState == slow.InitialState, "Successful calibration fixtures did not begin in the same state");
-        int common = checked((int)Math.Min(fast.Expanded, slow.Expanded));
-        foreach (int margin in new[] { 1, 128 })
+        int[] budgets = SelectRollbackBudgets(audit, fast, slow);
+        foreach (int limit in budgets)
         {
-            int limit = common - margin;
-            Audit.Require(limit > Math.Max(fast.GateExpanded, slow.GateExpanded), "Calibration did not leave a timed-search rollback budget");
             var crowd = Fixtures.Forest(limit);
             Audit.Require(CrowdSnapshot.InitialStateHash(crowd) == fast.InitialState, "Alternating budget changed the initial forest fixture");
             for (int attempt = 0; attempt < 8; attempt++)
@@ -39,9 +36,8 @@ internal static class ForestCases
 
         foreach (var baseline in new[] { fast, slow })
         {
-            foreach (int margin in new[] { 1, 128 })
+            foreach (int limit in budgets)
             {
-                int limit = checked((int)baseline.Expanded) - margin;
                 Audit.Require(limit > baseline.GateExpanded, "Rollback fixture did not reach transaction path planning");
                 var crowd = Fixtures.Forest(limit);
                 Audit.Require(CrowdSnapshot.InitialStateHash(crowd) == baseline.InitialState, "Rollback budget changed the initial forest fixture");
@@ -67,6 +63,76 @@ internal static class ForestCases
                 });
             }
         }
+    }
+
+    private static int[] SelectRollbackBudgets(Audit audit, Calibration fast, Calibration slow)
+    {
+        int common = checked((int)Math.Min(fast.Expanded, slow.Expanded));
+        var candidates = new[] { 6400, common - 1, common - 128, common - 64, common - 32, common - 16, common - 8, common - 4, common - 2, common - 256 };
+        var selected = new List<int>();
+        foreach (int limit in candidates.Where(value => value >= 100 && value < common).Distinct())
+        {
+            bool suitable = true;
+            foreach (var baseline in new[] { fast, slow })
+            {
+                var crowd = Fixtures.Forest(limit);
+                Audit.Require(CrowdSnapshot.InitialStateHash(crowd) == baseline.InitialState, "Probe budget changed the initial forest fixture");
+                var snapshot = CrowdSnapshot.Capture(crowd);
+                long expanded = crowd.TotalExpandedNodes;
+                long gateCells = crowd.AdmissionGateExpandedCells;
+                int budgetFailures = crowd.AdmissionGateBudgetFailures;
+                long tick = crowd.CurrentTick;
+                var positions = crowd.Agents.ToDictionary(actor => actor.Id, actor => actor.Position);
+                bool accepted = crowd.TrySpawn(45, crowd.Grid.Center(crowd.Grid.SpawnCells[0]), baseline.Speed, 180, 450);
+                long delta = crowd.TotalExpandedNodes - expanded;
+                long gateDelta = crowd.AdmissionGateExpandedCells - gateCells;
+                Audit.Require(delta <= limit, "Budget probe exceeded configured shared search budget");
+                bool rolledBack = !accepted && !crowd.RecoveryActive && crowd.LastFailure == NavigationFailure.SearchLimitExceeded;
+                if (rolledBack)
+                {
+                    snapshot.AssertUnchanged(crowd, "forest-budget-probe");
+                    Audit.Require(delta == limit && crowd.AdmissionGateBudgetFailures == budgetFailures + 1, "Probe did not exhaust its gate budget");
+                }
+                else if (accepted)
+                {
+                    // An improved/fallback search succeeding at this budget is valid; it is not rollback evidence.
+                    Audit.Require(crowd.CurrentTick == tick && crowd.Agents.Count == 45, "Accepted budget probe changed clock or actual actor count");
+                    foreach (var actor in crowd.Agents.Where(actor => actor.Id != 45))
+                    {
+                        Audit.Require(actor.Position.Equals(positions[actor.Id]), "Accepted probe moved a body before Step");
+                    }
+
+                    CrowdSnapshot.AssertNoGhosts(crowd);
+                }
+
+                bool reachesSameLayout = gateDelta == baseline.GateExpanded && delta > gateDelta;
+                suitable &= rolledBack && reachesSameLayout;
+                audit.Record(new
+                {
+                    test = "forest-budget-candidate-probe",
+                    limit,
+                    speed = baseline.Speed,
+                    accepted,
+                    failure = crowd.LastFailure.ToString(),
+                    expanded = delta,
+                    gateExpanded = gateDelta,
+                    exactRollback = rolledBack,
+                    reachesSameLayout,
+                    suitableForRollbackRegression = rolledBack && reachesSameLayout
+                });
+            }
+
+            if (suitable)
+            {
+                selected.Add(limit);
+                if (selected.Count == 2)
+                {
+                    return selected.ToArray();
+                }
+            }
+        }
+
+        throw new InvalidOperationException("Could not find two empirically failing timed-transaction budgets; rollback coverage is required.");
     }
 
     private static Calibration Calibrate(Audit audit, int speed)

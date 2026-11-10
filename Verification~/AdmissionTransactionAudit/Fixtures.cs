@@ -36,6 +36,26 @@ internal static class Fixtures
         return crowd;
     }
 
+    internal static NavigationCrowd SaturatedSingleSlot(int limit)
+    {
+        const int width = 9;
+        const int height = 9;
+        const int spawn = 4;
+        const int goal = 58;
+        var stand = Enumerable.Repeat(true, width * height).ToArray();
+        var holding = new bool[stand.Length];
+        holding[goal] = true;
+        var grid = new NavigationGrid(width, height, 500, new Position2(0, 0), stand, new Position2(2250, 2250), 500, holding, new[] { spawn });
+        var crowd = Create(grid, limit, 1000);
+        Fill(crowd, 1);
+        Audit.Require(crowd.CountAttackSlots(250, 550) + crowd.CountGatherSlots(250, 550) == 1, "Big fixture must have one legal holding cell");
+        Audit.Require(crowd.CountAttackSlots(180, 450) + crowd.CountGatherSlots(180, 450) == 1, "Small fixture must have one legal holding cell");
+        bool attackCompatible = crowd.CountAttackSlots(250, 550) == 1 && crowd.CountAttackSlots(180, 450) == 1;
+        Audit.Require(attackCompatible, "The unique holding cell must have real attack reach and clearance for both profiles");
+        Audit.Require(crowd.Agents[0].GoalCell == goal, "The only legal holding cell must already be occupied");
+        return crowd;
+    }
+
     private static NavigationCrowd Create(NavigationGrid grid, int limit, int horizon)
     {
         var crowd = new NavigationCrowd(grid, planningHorizon: horizon, searchLimit: limit);

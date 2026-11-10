@@ -21,7 +21,8 @@ internal sealed class Audit
         int limit,
         bool cached,
         NavigationFailure expectedFailure,
-        bool timedSearch = false)
+        bool timedSearch = false,
+        bool allowNoSearch = false)
     {
         var snapshot = CrowdSnapshot.Capture(crowd);
         long expanded = crowd.TotalExpandedNodes;
@@ -35,7 +36,8 @@ internal sealed class Audit
         int budgetDelta = crowd.AdmissionGateBudgetFailures - budgetFailures;
         Require(!accepted, name + ": request unexpectedly accepted");
         Require(crowd.LastFailure == expectedFailure, name + ": wrong failure classification " + crowd.LastFailure);
-        Require(cached ? delta == 0 && cacheDelta == 1 : delta > 0 && cacheDelta == 0, name + ": wrong cache/search work");
+        bool expectedWork = cached ? delta == 0 && cacheDelta == 1 : cacheDelta == 0 && (delta > 0 || allowNoSearch);
+        Require(expectedWork, name + ": wrong cache/search work");
         Require(delta <= limit, name + ": exceeded configured shared gate budget");
         bool budgetExpected = !cached && expectedFailure == NavigationFailure.SearchLimitExceeded;
         Require(budgetDelta == (budgetExpected ? 1 : 0), name + ": incorrect budget failure counter");
@@ -60,6 +62,7 @@ internal sealed class Audit
             cacheHits = cacheDelta,
             budgetFailures = budgetDelta,
             exactOccupantsAndReferences = true,
+            exactProfileMetadata = true,
             exactGoalClaims = true,
             exactFutureReservations = true,
             unchangedSemanticRevisions = true
