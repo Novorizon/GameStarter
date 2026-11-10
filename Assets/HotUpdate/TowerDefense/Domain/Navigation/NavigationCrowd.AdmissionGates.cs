@@ -293,7 +293,8 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
                 AcceptPlan(state, passage);
                 long returningAfter = passage[passage.Count - 1].Arrival;
-                foreach (int owner in layout.Owners.Reverse().Where(owner => owner != permanentYielder && (requester == null || owner != id)))
+                var returningOwners = Enumerable.Reverse(layout.Owners).Where(owner => owner != permanentYielder && (requester == null || owner != id));
+                foreach (int owner in returningOwners)
                 {
                     var gate = occupants[owner];
                     var first = outbound[owner];
