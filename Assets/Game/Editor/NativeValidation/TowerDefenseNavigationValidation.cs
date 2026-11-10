@@ -217,9 +217,13 @@ namespace Game.Editor
             result.cellMillimetres = grid.CellSize;
             result.targetRadius = grid.TargetRadius;
             var config = TowerDefenseTables.Create(tables, 1, grid);
+            // Independently matched and constructively witnessed for these exact authored waves; see Navigation/Experiments.
+            int[] expectedWaveAttackers = { 8, 13, 14, 15, 15, 15 };
+            Require(config.Waves.Length == expectedWaveAttackers.Length, "The authored-wave acceptance fixture must be updated after content changes.");
             foreach (var wave in config.Waves)
             {
-                scenarios.Add(new Scenario { Name = "wave-" + wave.Id, Wave = wave });
+                Require(wave.Id > 0 && wave.Id <= expectedWaveAttackers.Length, "Unexpected authored wave identifier.");
+                scenarios.Add(new Scenario { Name = "wave-" + wave.Id, Wave = wave, ExpectedAttackers = expectedWaveAttackers[wave.Id - 1] });
             }
 
             var burstSource = config.Waves.OrderByDescending(wave => wave.Groups.Sum(group => group.Count)).First();
@@ -228,6 +232,7 @@ namespace Game.Editor
             scenarios.Add(new Scenario
             {
                 Name = "burst-" + maximumWave,
+                ExpectedAttackers = expectedWaveAttackers[burstSource.Id - 1],
                 Wave = new WaveDefinition
                 {
                     Id = burstSource.Id,
@@ -242,6 +247,29 @@ namespace Game.Editor
                     }).ToArray()
                 }
             });
+            AddSaturationScenario(config, "full-44-large", 250, 550, 44, 18);
+            AddSaturationScenario(config, "full-45-medium", 200, 450, 45, 12);
+            var large = config.Enemies.Single(enemy => enemy.Radius == 250 && enemy.AttackRange == 550);
+            var small = config.Enemies.Single(enemy => enemy.Radius == 180 && enemy.AttackRange == 450);
+            scenarios.Add(new Scenario
+            {
+                Name = "full-44-large-two-late-small",
+                Description = "Stress override: actual large/small profiles, 44 large settled first, then 2 small from the original entrance at tick 4000.",
+                EnemyIds = new[] { large.Id, small.Id },
+                ExpectedAttackers = 20,
+                InitialLargeCount = 44,
+                LateStartTick = 4000,
+                Wave = new WaveDefinition
+                {
+                    Id = 1,
+                    GiveCard = false,
+                    Groups = new[]
+                    {
+                        new SpawnGroup { EnemyId = large.Id, RouteId = config.Routes[0].Id, Count = 44, IntervalTicks = 1 },
+                        new SpawnGroup { EnemyId = small.Id, RouteId = config.Routes[0].Id, Count = 2, StartTick = 4000, IntervalTicks = 1 }
+                    }
+                }
+            });
             result.authoredWaves = config.Waves.Length;
             result.expectedCases = scenarios.Count;
             foreach (var hub in UnityEngine.Object.FindObjectsOfType<PlayerHubView>())
@@ -250,11 +278,33 @@ namespace Game.Editor
             }
         }
 
+        private static void AddSaturationScenario(FightConfiguration config, string name, int radius, int range, int count, int attackers)
+        {
+            var enemy = config.Enemies.Single(value => value.Radius == radius && value.AttackRange == range);
+            scenarios.Add(new Scenario
+            {
+                Name = name,
+                Description = "Stress override: single actual enemy profile and rapid spawn count; original map, radius, range and speed are unchanged.",
+                EnemyIds = new[] { enemy.Id },
+                ExpectedAttackers = attackers,
+                Wave = new WaveDefinition
+                {
+                    Id = 1,
+                    GiveCard = false,
+                    Groups = new[] { new SpawnGroup { EnemyId = enemy.Id, RouteId = config.Routes[0].Id, Count = count, IntervalTicks = 1 } }
+                }
+            });
+        }
+
         private static void CreateScenario()
         {
             var scenario = scenarios[scenarioIndex];
             var config = TowerDefenseTables.Create(tables, 1, grid);
-            config.BaseHealth = 1000000;
+            config.BaseHealth = 100000000;
+            if (scenario.EnemyIds != null)
+            {
+                config.Enemies = config.Enemies.Where(enemy => scenario.EnemyIds.Contains(enemy.Id)).ToArray();
+            }
             config.Waves = new[] { scenario.Wave };
             var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/GameAssets/Common/Fonts/GameUI.asset");
             var map = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/GameAssets/TowerDefense/Art/Map.png");
@@ -272,6 +322,9 @@ namespace Game.Editor
             current = new CaseResult
             {
                 name = scenario.Name,
+                setup = scenario.Description ?? "Actual authored wave profiles and group counts.",
+                registeredEnemyIds = config.Enemies.Select(enemy => enemy.Id).ToArray(),
+                expectedAttackers = scenario.ExpectedAttackers,
                 expected = scenario.Wave.Groups.Sum(value => value.Count),
                 initialHp = config.BaseHealth,
                 minimumBodyGapMm = int.MaxValue,
@@ -320,8 +373,22 @@ namespace Game.Editor
                     current.maximumVerificationStopwatchTicks = Math.Max(current.maximumVerificationStopwatchTicks, elapsed);
                 }
                 Require(session.Tick <= MaximumTicks, "Arrival deadline exceeded; " + Diagnostics());
-                if (settledTick == 0 && session.TotalSpawned == current.expected
-                    && session.Enemies.All(enemy => enemy.MovementState != NavigationAgentStatus.Navigating))
+                var scenario = scenarios[scenarioIndex];
+                if (scenario.LateStartTick > 0 && session.Tick == scenario.LateStartTick - 1)
+                {
+                    Require(session.TotalSpawned == scenario.InitialLargeCount && session.Enemies.Count == scenario.InitialLargeCount
+                        && session.Enemies.All(enemy => enemy.MovementState != NavigationAgentStatus.Navigating),
+                        "Late-small stress must start from an actually settled full large-body crowd; " + Diagnostics());
+                    current.initialLargeSettledBeforeLateArrival = true;
+                }
+                bool allSettled = session.TotalSpawned == current.expected && !session.Navigation.RecoveryActive
+                    && session.Enemies.All(enemy => enemy.MovementState != NavigationAgentStatus.Navigating);
+                if (!allSettled)
+                {
+                    settledTick = 0;
+                }
+
+                if (settledTick == 0 && allSettled)
                 {
                     settledTick = session.Tick;
                     settledHp = session.BaseHp;
@@ -371,6 +438,7 @@ namespace Game.Editor
                 }
 
                 starts.Add(enemy.Id, start);
+                ValidateStaticSegment(start, enemy.Position, enemy.Radius);
                 Require(
                     DistanceSquared(start, enemy.Position) <= (long)(definition.SpeedPerTick + 1) * (definition.SpeedPerTick + 1),
                     "Movement exceeded configured speed, including birth: enemy " + enemy.Id + "; " + Diagnostics());
@@ -435,6 +503,37 @@ namespace Game.Editor
             }
         }
 
+        private static void ValidateStaticSegment(Position2 start, Position2 end, int radius)
+        {
+            Require(start.X == end.X || start.Y == end.Y, "The four-neighbour domain produced an unverified diagonal movement.");
+            long minimumX = Math.Min(start.X, end.X);
+            long maximumX = Math.Max(start.X, end.X);
+            long minimumY = Math.Min(start.Y, end.Y);
+            long maximumY = Math.Max(start.Y, end.Y);
+            int firstX = Math.Max(0, (int)((minimumX - radius - grid.Origin.X) / grid.CellSize));
+            int lastX = Math.Min(grid.Width - 1, (int)((maximumX + radius - grid.Origin.X) / grid.CellSize));
+            int firstY = Math.Max(0, (int)((minimumY - radius - grid.Origin.Y) / grid.CellSize));
+            int lastY = Math.Min(grid.Height - 1, (int)((maximumY + radius - grid.Origin.Y) / grid.CellSize));
+            for (int y = firstY; y <= lastY; y++)
+            {
+                for (int x = firstX; x <= lastX; x++)
+                {
+                    if (grid.IsWalkable(y * grid.Width + x))
+                    {
+                        continue;
+                    }
+
+                    long left = grid.Origin.X + (long)x * grid.CellSize;
+                    long bottom = grid.Origin.Y + (long)y * grid.CellSize;
+                    // One segment dimension is zero; rectangle-to-rectangle separation is its exact swept distance.
+                    long dx = Math.Max(0, Math.Max(left - maximumX, minimumX - (left + grid.CellSize)));
+                    long dy = Math.Max(0, Math.Max(bottom - maximumY, minimumY - (bottom + grid.CellSize)));
+                    Require(dx * dx + dy * dy >= (long)radius * radius, "A moving body crossed blocked terrain; " + Diagnostics());
+                    current.checkedStaticSegments++;
+                }
+            }
+        }
+
         private static void ValidateGeometry(EnemySnapshot enemy)
         {
             var point = enemy.Position;
@@ -479,6 +578,15 @@ namespace Game.Editor
             current.attacking = session.Enemies.Count(enemy => enemy.MovementState == NavigationAgentStatus.Attacking);
             current.waiting = session.Enemies.Count(enemy => enemy.MovementState == NavigationAgentStatus.Waiting);
             Require(current.attacking > 0, "No physical attacker reached the base.");
+            if (current.expectedAttackers > 0)
+            {
+                Require(current.attacking == current.expectedAttackers, "Not all independently witnessed attack positions are filled; " + Diagnostics());
+            }
+
+            if (scenarios[scenarioIndex].LateStartTick > 0)
+            {
+                Require(current.initialLargeSettledBeforeLateArrival, "Late-arrival prerequisite was not checked.");
+            }
             var coverage = new bool[4];
             foreach (var enemy in session.Enemies)
             {
@@ -738,6 +846,11 @@ namespace Game.Editor
         {
             internal string Name;
             internal WaveDefinition Wave;
+            internal string Description;
+            internal int[] EnemyIds;
+            internal int ExpectedAttackers;
+            internal int InitialLargeCount;
+            internal int LateStartTick;
         }
 
         [Serializable]
@@ -772,6 +885,10 @@ namespace Game.Editor
             public bool success;
             public string detail;
             public int expected;
+            public string setup;
+            public int[] registeredEnemyIds;
+            public int expectedAttackers;
+            public bool initialLargeSettledBeforeLateArrival;
             public int attacking;
             public int waiting;
             public long allArrivedTick;
@@ -786,6 +903,7 @@ namespace Game.Editor
             public double minimumBaseSurfaceGapMm;
             public long checkedSpawnSegments;
             public long checkedBaseSegments;
+            public long checkedStaticSegments;
             public long checkedRelativeSegments;
             public long stepStopwatchTicks;
             public long maximumStepStopwatchTicks;

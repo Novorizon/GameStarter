@@ -239,6 +239,19 @@ internal static class ScenarioCatalog
             }
         }
 
+        if (name == "cross-junction-conservative-capacity-4m" || name == "cross-junction-original-4m")
+        {
+            // Lock the exact original 72 parking targets: the four inner diagonals remain transit-only here.
+            holding = (bool[])cells.Clone();
+            foreach (int dx in new[] { -1, 1 })
+            {
+                foreach (int dy in new[] { -1, 1 })
+                {
+                    holding[(target.Y + dy) * width + target.X + dx] = false;
+                }
+            }
+        }
+
         var scenario = new NavigationScenario
         {
             Name = name,

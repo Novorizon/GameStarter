@@ -103,8 +103,10 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 PrepareParking();
             }
             var attacks = new bool[grid.CellCount];
+            var preferredAttacks = new bool[grid.CellCount];
             var gathering = new bool[grid.CellCount];
             bool anyAttack = false;
+            bool anyPreferredAttack = false;
             bool anyGather = false;
             for (int cell = 0; cell < grid.CellCount; cell++)
             {
@@ -114,6 +116,8 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 }
 
                 attacks[cell] = state.Profile.Attack[cell];
+                preferredAttacks[cell] = attacks[cell] && state.Profile.PreferredAttack[cell];
+                anyPreferredAttack |= preferredAttacks[cell];
                 gathering[cell] = allowGathering && state.Profile.Gather[cell];
                 anyAttack |= attacks[cell];
                 anyGather |= gathering[cell];
@@ -137,6 +141,17 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             var safety = new sbyte[grid.CellCount];
             var safeIntervals = new Dictionary<int, List<SafeInterval>>();
             NavigationFailure attackFailure = NavigationFailure.GoalAccessBlocked;
+            if (anyPreferredAttack)
+            {
+                var path = Search(state, start, preferredAttacks, regions, safety, safeIntervals);
+                if (path != null)
+                {
+                    return path;
+                }
+
+                attackFailure = LastFailure;
+            }
+
             if (anyAttack)
             {
                 var path = Search(state, start, attacks, regions, safety, safeIntervals);
@@ -145,7 +160,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     return path;
                 }
 
-                attackFailure = LastFailure;
+                attackFailure = MergeFailure(attackFailure, LastFailure);
             }
 
             if (anyPreferred)
@@ -256,6 +271,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 if (!ReferenceEquals(best[NodeKey(node.Cell, node.Interval)], node))
                 {
                     continue;
+                }
+
+                if (!AdmissionBudgetAvailable())
+                {
+                    return null;
                 }
 
                 LastExpandedNodes++;

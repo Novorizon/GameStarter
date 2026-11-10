@@ -20,6 +20,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             internal int Range;
             internal bool[] Stand;
             internal bool[] Attack;
+            internal bool[] PreferredAttack;
             internal bool[] Gather;
             internal bool[] Preferred;
             internal readonly Dictionary<int, int> CapacityRevisions = new Dictionary<int, int>();
@@ -165,6 +166,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 return Reject(NavigationFailure.SpawnOccupied);
             }
 
+            if (TryAdmitThroughGates(id, spawn, profile, start, speed))
+            {
+                return true;
+            }
+
             if (!HasRecoveryAdmission(profile, start) && profile.CapacityRevisions.TryGetValue(start, out int revision) && revision == goalRevision)
             {
                 if (TryStartAdmissionRecovery(profile, start) && RecoveryActive)
@@ -307,6 +313,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
             var profile = new Profile { Radius = radius, Range = attackRange, Stand = new bool[grid.CellCount] };
             profile.Attack = new bool[grid.CellCount];
+            profile.PreferredAttack = new bool[grid.CellCount];
             profile.Gather = new bool[grid.CellCount];
             var eligible = new bool[grid.CellCount];
             for (int cell = 0; cell < grid.CellCount; cell++)
@@ -324,8 +331,9 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     continue;
                 }
 
-                // Use the outward attack frontier: inner attack layers must not be sealed by other stationary attackers.
-                profile.Attack[cell] = eligible[cell] && grid.Neighbours(cell).Any(next => grid.CanTraverse(cell, next, radius)
+                // Prefer the outward frontier without discarding legal inner attack positions.
+                profile.Attack[cell] = eligible[cell];
+                profile.PreferredAttack[cell] = eligible[cell] && grid.Neighbours(cell).Any(next => grid.CanTraverse(cell, next, radius)
                     && NavigationGrid.DistanceSquared(grid.Center(next), grid.TargetCenter) > reach * reach);
                 profile.Gather[cell] = !eligible[cell]
                     && NavigationGrid.DistanceSquared(grid.Center(cell), grid.TargetCenter) <= gathering * gathering;
@@ -379,6 +387,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             queue.Enqueue(start);
             while (queue.Count > 0)
             {
+                if (admissionBudgetStart >= 0 && !SpendAdmissionCell())
+                {
+                    return visited;
+                }
+
                 int cell = queue.Dequeue();
                 foreach (int next in grid.Neighbours(cell))
                 {
