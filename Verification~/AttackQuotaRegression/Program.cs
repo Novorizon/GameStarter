@@ -40,13 +40,19 @@ if (!original.OrderBy(pair => pair.Key).SequenceEqual(Hashes().OrderBy(pair => p
     throw new InvalidOperationException("Production source changed during quota verification.");
 }
 
+bool testsUnchanged = testFiles.All(pair => pair.Value == Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(pair.Key))).ToLowerInvariant());
+if (!testsUnchanged)
+{
+    throw new InvalidOperationException("Test source changed during quota verification.");
+}
+
 File.WriteAllText(Path.Combine(output, "summary.json"), JsonSerializer.Serialize(new
 {
     success = true,
     sourceFilesUnchanged = true,
     sourceHashes = original,
     testHashes = testFiles,
-    testSourceFilesUnchanged = testFiles.All(pair => pair.Value == Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(pair.Key))).ToLowerInvariant()),
+    testSourceFilesUnchanged = testsUnchanged,
     binarySha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location))).ToLowerInvariant(),
     results
 }, new JsonSerializerOptions { WriteIndented = true }));
