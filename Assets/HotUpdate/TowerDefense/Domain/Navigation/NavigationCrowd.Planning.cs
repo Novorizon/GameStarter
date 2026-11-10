@@ -207,8 +207,19 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             bool[] targets,
             List<AccessRegion> regions,
             sbyte[] safety,
-            Dictionary<int, List<SafeInterval>> safeIntervals)
+            Dictionary<int, List<SafeInterval>> safeIntervals,
+            long planningStart = -1)
         {
+            if (planningStart < 0)
+            {
+                planningStart = CurrentTick;
+            }
+
+            if (planningStart < CurrentTick)
+            {
+                throw new ArgumentOutOfRangeException(nameof(planningStart));
+            }
+
             var distances = GoalDistances(state.Profile, targets, state.Agent.Id);
             if (distances[start] < 0)
             {
@@ -220,7 +231,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             var open = new MinHeap();
             var best = new Dictionary<long, SearchNode>();
             var startIntervals = Intervals(start, state.Agent.Id, safeIntervals);
-            int initialInterval = startIntervals.FindIndex(value => value.Start <= CurrentTick && CurrentTick < value.End);
+            int initialInterval = startIntervals.FindIndex(value => value.Start <= planningStart && planningStart < value.End);
             if (initialInterval < 0)
             {
                 LastFailure = NavigationFailure.SpawnOccupied;
@@ -231,13 +242,13 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             {
                 Cell = start,
                 Interval = initialInterval,
-                Arrival = CurrentTick,
-                Departure = CurrentTick,
-                Estimate = CurrentTick + (long)distances[start] * moveTicks
+                Arrival = planningStart,
+                Departure = planningStart,
+                Estimate = planningStart + (long)distances[start] * moveTicks
             };
             open.Push(initial);
             best.Add(NodeKey(start, initialInterval), initial);
-            long deadline = CurrentTick + planningHorizon;
+            long deadline = planningStart + planningHorizon;
             bool exceededHorizon = false;
             while (open.Count > 0)
             {

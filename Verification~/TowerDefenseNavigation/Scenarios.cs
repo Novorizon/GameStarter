@@ -95,7 +95,7 @@ internal static class ScenarioCatalog
             parkingLanes: true,
             parkingAllowed: cell => cell.X >= 24 && cell.Y >= 10 && cell.Y <= 34);
         yield return Build(
-            "cross-junction-conservative-capacity-4m",
+            "cross-junction-original-4m",
             37,
             37,
             new Cell(29, 18),
@@ -103,8 +103,7 @@ internal static class ScenarioCatalog
             72,
             seed,
             blocked: cell => !(cell.Y >= 17 && cell.Y <= 19) && !(cell.X >= 17 && cell.X <= 19) && !(cell.X >= 22 && cell.Y >= 10 && cell.Y <= 26),
-            gatheringDistance: 4000,
-            capacityRejection: true);
+            gatheringDistance: 4000);
         yield return Build(
             "cross-junction-original-5m",
             37,
