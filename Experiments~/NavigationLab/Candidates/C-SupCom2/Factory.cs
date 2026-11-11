@@ -55,6 +55,7 @@ namespace NavigationLab.CSupCom2
             1.0471975512, -1.0471975512, 1.5707963268, -1.5707963268
         };
         private long microstep;
+        private bool completedGroupSleeping;
         public IReadOnlyDictionary<string, long> Metrics => metrics;
         public string LastSpawnFailure { get; private set; } = "None";
 
@@ -68,6 +69,7 @@ namespace NavigationLab.CSupCom2
 
         public bool TrySpawn(SpawnRequest request)
         {
+            WakeCompletedGroup();
             if (actors.ContainsKey(request.Id) || request.Profile.RadiusMm <= 0 || request.Profile.SpeedMmPerTick <= 0)
             {
                 LastSpawnFailure = "InvalidIdentityOrProfile";
@@ -131,6 +133,22 @@ namespace NavigationLab.CSupCom2
         public void Step()
         {
             microstep++;
+            if (completedGroupSleeping)
+            {
+                Count("CompletedGroupSleepSteps");
+                return;
+            }
+            if (actors.Values.All(Completed))
+            {
+                // Service an available attack position before accepting the whole group's stable rest state.
+                PromoteWaiting();
+                if (actors.Values.All(Completed))
+                {
+                    completedGroupSleeping = true;
+                    Count("CompletedGroupSleepEntries");
+                    return;
+                }
+            }
             Actor[] ordered = actors.Values.OrderBy(actor => actor.Id).ToArray();
             foreach (var actor in ordered)
             {
@@ -203,6 +221,7 @@ namespace NavigationLab.CSupCom2
 
         public bool Remove(int id)
         {
+            WakeCompletedGroup();
             if (!actors.TryGetValue(id, out var actor))
             {
                 return false;
@@ -216,6 +235,7 @@ namespace NavigationLab.CSupCom2
 
         public bool ApplyWorldChange(WorldChange change)
         {
+            WakeCompletedGroup();
             WorldDefinition next = world.WithChange(change);
             if (actors.Values.Any(actor => !Geometry.Clear(next, actor.Position, actor.Profile.RadiusMm)))
             {
@@ -276,6 +296,19 @@ namespace NavigationLab.CSupCom2
         {
             actors.Clear();
             owners.Clear();
+            completedGroupSleeping = false;
+        }
+
+        private void WakeCompletedGroup()
+        {
+            completedGroupSleeping = false;
+            Count("CompletedGroupWakeCalls");
+        }
+
+        private bool Completed(Actor actor)
+        {
+            return State(actor) != MotionState.Moving && CanHold(actor, actor.Goal)
+                && Geometry.Clear(world, actor.Position, actor.Profile.RadiusMm);
         }
 
         private bool Assign(Actor actor, HashSet<int> seen, Dictionary<Actor, int> changes, int depth)
@@ -656,6 +689,9 @@ namespace NavigationLab.CSupCom2
                 }
                 int attackCount = AttackCells(actor).Count();
                 bool settled = State(actor) != MotionState.Moving;
+                var bodies = actors.Values.Where(other => other.Id != actor.Id && State(other) != MotionState.Moving)
+                    .Select(other => new CrowdBody(other.Position, other.Profile.RadiusMm)).ToArray();
+                double[] traffic = planner.TrafficCosts(actor.Position, actor.Profile.RadiusMm, bodies);
                 for (int column = 0; column < goals.Length; column++)
                 {
                     int goal = goals[column];
@@ -665,7 +701,12 @@ namespace NavigationLab.CSupCom2
                         costs[row, column] = impossible;
                         continue;
                     }
-                    double cost = Point2.Distance(actor.Position, world.Center(goal));
+                    double cost = traffic[goal];
+                    if (double.IsInfinity(cost))
+                    {
+                        costs[row, column] = impossible;
+                        continue;
+                    }
                     if (Attack(actor, world.Center(goal)))
                     {
                         cost -= 1e12 + 1e8 / Math.Max(1, attackCount);
@@ -703,13 +744,11 @@ namespace NavigationLab.CSupCom2
         private bool InSiegeArea(Actor actor)
         {
             TargetDefinition target = targets[actor.TargetId];
-            if (Point2.Distance(actor.Position, target.Center) > target.RadiusMm + world.GatheringDistanceMm)
+            if (Point2.Distance(actor.Position, target.Center) > target.RadiusMm + world.GatheringDistanceMm + world.CellSizeMm * 2)
             {
                 return false;
             }
-            int cell = world.CellAt(actor.Position);
-            return cell >= 0 && (world.HoldingAllowed(cell) || world.Neighbours(cell)
-                .Any(next => world.HoldingAllowed(next) && Geometry.Segment(world, actor.Position, world.Center(next), actor.Profile.RadiusMm)));
+            return planner.NearHolding(actor.Position, actor.Profile.RadiusMm, 4);
         }
 
         private bool BodyBlocksGoalDirection(Actor actor, Actor[] ordered)

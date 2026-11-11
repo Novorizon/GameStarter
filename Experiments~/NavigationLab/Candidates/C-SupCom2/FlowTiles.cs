@@ -70,6 +70,17 @@ namespace NavigationLab.CSupCom2
         internal int GraphVersion;
     }
 
+    internal readonly struct CrowdBody
+    {
+        internal Point2 Position { get; }
+        internal int Radius { get; }
+        internal CrowdBody(Point2 position, int radius)
+        {
+            Position = position;
+            Radius = radius;
+        }
+    }
+
     internal sealed class FlowTiles
     {
         private sealed class Portal
@@ -90,6 +101,7 @@ namespace NavigationLab.CSupCom2
             internal bool[] Edges = Array.Empty<bool>();
             internal double[] Costs = Array.Empty<double>();
             internal int[] Components = Array.Empty<int>();
+            internal int[] HoldingDepth = Array.Empty<int>();
             internal readonly List<Portal> Portals = new List<Portal>();
             internal readonly Dictionary<int, List<int>> SectorPortals = new Dictionary<int, List<int>>();
             internal readonly Dictionary<int, Dictionary<int, int[]>> MergedRoutes = new Dictionary<int, Dictionary<int, int[]>>();
@@ -156,6 +168,127 @@ namespace NavigationLab.CSupCom2
             RadiusGraph graph = Graph(radius);
             return source >= 0 && goal >= 0 && source < world.CellCount && goal < world.CellCount
                 && graph.Components[source] >= 0 && graph.Components[source] == graph.Components[goal];
+        }
+
+        internal bool NearHolding(Point2 position, int radius, int maximumSteps)
+        {
+            RadiusGraph graph = Graph(radius);
+            int cell = world.CellAt(position);
+            if (cell < 0)
+            {
+                return false;
+            }
+            if (graph.Stand[cell])
+            {
+                return graph.HoldingDepth[cell] <= maximumSteps;
+            }
+            int sx = cell % world.Width;
+            int sy = cell / world.Width;
+            for (int dy = -2; dy <= 2; dy++)
+            {
+                for (int dx = -2; dx <= 2; dx++)
+                {
+                    int x = sx + dx;
+                    int y = sy + dy;
+                    if (x < 0 || y < 0 || x >= world.Width || y >= world.Height)
+                    {
+                        continue;
+                    }
+                    int next = y * world.Width + x;
+                    if (graph.Stand[next] && graph.HoldingDepth[next] + Math.Abs(dx) + Math.Abs(dy) <= maximumSteps
+                        && Geometry.Segment(world, position, world.Center(next), radius))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        internal double[] TrafficCosts(Point2 position, int radius, IReadOnlyList<CrowdBody> bodies)
+        {
+            // Auxiliary siege-assignment diagnostics. These costs do not command motion or reserve future positions.
+            RadiusGraph graph = Graph(radius);
+            var occupancy = new double[world.CellCount];
+            const double penalty = 100000;
+            foreach (var body in bodies)
+            {
+                double clearance = radius + body.Radius;
+                int x0 = Math.Max(0, (int)((body.Position.X - clearance - world.Origin.X) / world.CellSizeMm));
+                int x1 = Math.Min(world.Width - 1, (int)((body.Position.X + clearance - world.Origin.X) / world.CellSizeMm));
+                int y0 = Math.Max(0, (int)((body.Position.Y - clearance - world.Origin.Y) / world.CellSizeMm));
+                int y1 = Math.Min(world.Height - 1, (int)((body.Position.Y + clearance - world.Origin.Y) / world.CellSizeMm));
+                for (int y = y0; y <= y1; y++)
+                {
+                    for (int x = x0; x <= x1; x++)
+                    {
+                        int next = y * world.Width + x;
+                        if (Point2.Distance(world.Center(next), body.Position) < clearance - SimulationProtocol.GeometryToleranceMm)
+                        {
+                            occupancy[next] += penalty;
+                        }
+                    }
+                }
+            }
+            var distances = Enumerable.Repeat(double.PositiveInfinity, world.CellCount).ToArray();
+            var heap = new MinHeap();
+            int cell = world.CellAt(position);
+            if (cell < 0)
+            {
+                return distances;
+            }
+            int sx = cell % world.Width;
+            int sy = cell / world.Width;
+            for (int dy = -2; dy <= 2; dy++)
+            {
+                for (int dx = -2; dx <= 2; dx++)
+                {
+                    int x = sx + dx;
+                    int y = sy + dy;
+                    if (x < 0 || y < 0 || x >= world.Width || y >= world.Height)
+                    {
+                        continue;
+                    }
+                    int start = y * world.Width + x;
+                    if (!graph.Stand[start] || !Geometry.Segment(world, position, world.Center(start), radius))
+                    {
+                        continue;
+                    }
+                    distances[start] = Point2.Distance(position, world.Center(start)) + occupancy[start];
+                    heap.Push(start, distances[start]);
+                }
+            }
+            while (heap.Count > 0)
+            {
+                var item = heap.Pop();
+                if (item.Value > distances[item.Key] + 1e-7)
+                {
+                    continue;
+                }
+                Count("SiegeTrafficDiagnosisExpanded");
+                int direction = 0;
+                foreach (int next in FourNeighbours(item.Key))
+                {
+                    bool valid = graph.Edges[item.Key * 4 + direction++];
+                    if (!valid)
+                    {
+                        continue;
+                    }
+                    double distance = item.Value + world.CellSizeMm + occupancy[next];
+                    if (distance + 1e-7 < distances[next])
+                    {
+                        distances[next] = distance;
+                        heap.Push(next, distance);
+                    }
+                }
+            }
+            for (int index = 0; index < distances.Length; index++)
+            {
+                // Ending where an incumbent stands can be a legitimate joint reassignment; crossing it remains costly.
+                distances[index] -= occupancy[index];
+            }
+            Count("SiegeTrafficDiagnosisRuns");
+            return distances;
         }
 
         internal void ChangeWorld(WorldDefinition next, WorldChange change)
@@ -517,6 +650,32 @@ namespace NavigationLab.CSupCom2
                     }
                 }
                 component++;
+            }
+            graph.HoldingDepth = Enumerable.Repeat(int.MaxValue, world.CellCount).ToArray();
+            int holdingFirst = 0;
+            int holdingEnd = 0;
+            for (int cell = 0; cell < world.CellCount; cell++)
+            {
+                if (graph.Stand[cell] && world.HoldingAllowed(cell))
+                {
+                    graph.HoldingDepth[cell] = 0;
+                    componentQueue[holdingEnd++] = cell;
+                }
+            }
+            while (holdingFirst < holdingEnd)
+            {
+                int cell = componentQueue[holdingFirst++];
+                int direction = 0;
+                foreach (int next in FourNeighbours(cell))
+                {
+                    bool valid = graph.Edges[cell * 4 + direction++];
+                    if (!valid || graph.HoldingDepth[next] <= graph.HoldingDepth[cell] + 1)
+                    {
+                        continue;
+                    }
+                    graph.HoldingDepth[next] = graph.HoldingDepth[cell] + 1;
+                    componentQueue[holdingEnd++] = next;
+                }
             }
             BuildPortals(graph);
             foreach (var portal in graph.Portals)
