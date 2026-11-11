@@ -1,0 +1,431 @@
+[
+  {
+    "name": "a-v2-final-stress",
+    "manifest": "/workspace/navigation-comparison/results/a-v2-final-stress/build-manifest.json",
+    "manifestSha256": "9e942b0d13ad81d0153ae349c6bf4b1f7c64898688e83a5b359074cc43392a49",
+    "identity": {
+      "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+      "sha256": "e17b632f65d9b62990907f10726b84af8d6fa3747c1aa6d20bc0dbd260195544",
+      "identityInput": {
+        "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+        "project": "Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj",
+        "projectSha256": "5018b49290d0aaf7935ca5d9d10e3ae8eaa283c0424a5f4d79046b98f0fa4d35",
+        "actualCompileProperties": {
+          "TargetFramework": "net8.0",
+          "LangVersion": "12"
+        },
+        "compilerInfoSha256": "46097210c65a8024cd1059ecf57280b7ae05147a6a5b95f43bf885c7cb11fd40",
+        "compileFiles": {
+          "Experiments~/NavigationLab/Runner/LabCases.cs": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "Experiments~/NavigationLab/Runner/Program.cs": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "Verification~/TowerDefenseNavigation/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917"
+        }
+      },
+      "rawRunnerAssemblySha256": "6d538db81d2ba337c1bbdbcbeb046b204762e49738bb782a9e852491fe8f16c9",
+      "recordedCompilePropertyNames": [
+        "LangVersion",
+        "TargetFramework"
+      ],
+      "repositoryRootMetadata": "/workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27/Experiments~/NavigationLab/Runner/../../../",
+      "resolvedRepositoryRoot": "/workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27",
+      "compileFileDetails": {
+        "Experiments~/NavigationLab/Runner/LabCases.cs": {
+          "sourceSha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "identitySha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/Program.cs": {
+          "sourceSha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "identitySha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "normalized": false
+        },
+        "Verification~/TowerDefenseNavigation/Scenarios.cs": {
+          "sourceSha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "identitySha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": {
+          "sourceSha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "identitySha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": {
+          "sourceSha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "identitySha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": {
+          "sourceSha256": "82e3de73151dd9015d0227874b7dba59e97e4b86da9148a1d4a0850013a98f85",
+          "identitySha256": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917",
+          "normalized": true
+        }
+      },
+      "normalizationScope": "Only the unique generated RepositoryRoot attribute is replaced after exact project-path and snapshot-resolution checks; every other source byte is retained. Runtime input equality still requires per-case InputSha256."
+    },
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+  },
+  {
+    "name": "b0-v2-stress",
+    "manifest": "/workspace/navigation-comparison/results/b0-v2-stress/build-manifest.json",
+    "manifestSha256": "1768ee6ee71022235c82a1f38273d13249207ba135eacfe5d5ab1e35886ff2ce",
+    "identity": {
+      "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+      "sha256": "e17b632f65d9b62990907f10726b84af8d6fa3747c1aa6d20bc0dbd260195544",
+      "identityInput": {
+        "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+        "project": "Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj",
+        "projectSha256": "5018b49290d0aaf7935ca5d9d10e3ae8eaa283c0424a5f4d79046b98f0fa4d35",
+        "actualCompileProperties": {
+          "TargetFramework": "net8.0",
+          "LangVersion": "12"
+        },
+        "compilerInfoSha256": "46097210c65a8024cd1059ecf57280b7ae05147a6a5b95f43bf885c7cb11fd40",
+        "compileFiles": {
+          "Experiments~/NavigationLab/Runner/LabCases.cs": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "Experiments~/NavigationLab/Runner/Program.cs": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "Verification~/TowerDefenseNavigation/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917"
+        }
+      },
+      "rawRunnerAssemblySha256": "6390554f1343180d0d17f9057696fe0a8cb2a6e475784cef44445de0835eb004",
+      "recordedCompilePropertyNames": [
+        "LangVersion",
+        "TargetFramework"
+      ],
+      "repositoryRootMetadata": "/workspace/navigation-comparison/frozen-b-final/snapshot-674777fd671bf4dadad70f9c/Experiments~/NavigationLab/Runner/../../../",
+      "resolvedRepositoryRoot": "/workspace/navigation-comparison/frozen-b-final/snapshot-674777fd671bf4dadad70f9c",
+      "compileFileDetails": {
+        "Experiments~/NavigationLab/Runner/LabCases.cs": {
+          "sourceSha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "identitySha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/Program.cs": {
+          "sourceSha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "identitySha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "normalized": false
+        },
+        "Verification~/TowerDefenseNavigation/Scenarios.cs": {
+          "sourceSha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "identitySha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": {
+          "sourceSha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "identitySha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": {
+          "sourceSha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "identitySha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": {
+          "sourceSha256": "c7a4b5acb6accaf99163f3e2bd8e17d8854f08c864ce393865518e7255e02572",
+          "identitySha256": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917",
+          "normalized": true
+        }
+      },
+      "normalizationScope": "Only the unique generated RepositoryRoot attribute is replaced after exact project-path and snapshot-resolution checks; every other source byte is retained. Runtime input equality still requires per-case InputSha256."
+    },
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "onlyRawCompileSourceDifferenceFromA": [
+      "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs"
+    ]
+  },
+  {
+    "name": "b1-v2-stress",
+    "manifest": "/workspace/navigation-comparison/results/b1-v2-stress/build-manifest.json",
+    "manifestSha256": "626779c936349a1d27c0461c4c6252d44785bb65bfb1aa0f149480a36f158f03",
+    "identity": {
+      "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+      "sha256": "e17b632f65d9b62990907f10726b84af8d6fa3747c1aa6d20bc0dbd260195544",
+      "identityInput": {
+        "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+        "project": "Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj",
+        "projectSha256": "5018b49290d0aaf7935ca5d9d10e3ae8eaa283c0424a5f4d79046b98f0fa4d35",
+        "actualCompileProperties": {
+          "TargetFramework": "net8.0",
+          "LangVersion": "12"
+        },
+        "compilerInfoSha256": "46097210c65a8024cd1059ecf57280b7ae05147a6a5b95f43bf885c7cb11fd40",
+        "compileFiles": {
+          "Experiments~/NavigationLab/Runner/LabCases.cs": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "Experiments~/NavigationLab/Runner/Program.cs": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "Verification~/TowerDefenseNavigation/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917"
+        }
+      },
+      "rawRunnerAssemblySha256": "9b27de296ca88b1b3911d642695f934e9c850d0980affcddf12c953be2c1272d",
+      "recordedCompilePropertyNames": [
+        "LangVersion",
+        "TargetFramework"
+      ],
+      "repositoryRootMetadata": "/workspace/navigation-comparison/frozen-b1-final/snapshot-90aa4b28e76ea49fcf1b1ad8/Experiments~/NavigationLab/Runner/../../../",
+      "resolvedRepositoryRoot": "/workspace/navigation-comparison/frozen-b1-final/snapshot-90aa4b28e76ea49fcf1b1ad8",
+      "compileFileDetails": {
+        "Experiments~/NavigationLab/Runner/LabCases.cs": {
+          "sourceSha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "identitySha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/Program.cs": {
+          "sourceSha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "identitySha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "normalized": false
+        },
+        "Verification~/TowerDefenseNavigation/Scenarios.cs": {
+          "sourceSha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "identitySha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": {
+          "sourceSha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "identitySha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": {
+          "sourceSha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "identitySha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": {
+          "sourceSha256": "4a36087f20c027f5e91592d0ebbbf1d4583f9f041b49eb6543a21c3933335b12",
+          "identitySha256": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917",
+          "normalized": true
+        }
+      },
+      "normalizationScope": "Only the unique generated RepositoryRoot attribute is replaced after exact project-path and snapshot-resolution checks; every other source byte is retained. Runtime input equality still requires per-case InputSha256."
+    },
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "onlyRawCompileSourceDifferenceFromA": [
+      "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs"
+    ]
+  },
+  {
+    "name": "c-final-v2-stress49",
+    "manifest": "/workspace/navigation-comparison/results/c-final-v2-stress49/build-manifest.json",
+    "manifestSha256": "024eb66ce7da0a1c20507e0d09e62b100b1e4cfc40aac54ec5e100b09f0d8705",
+    "identity": {
+      "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+      "sha256": "e17b632f65d9b62990907f10726b84af8d6fa3747c1aa6d20bc0dbd260195544",
+      "identityInput": {
+        "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+        "project": "Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj",
+        "projectSha256": "5018b49290d0aaf7935ca5d9d10e3ae8eaa283c0424a5f4d79046b98f0fa4d35",
+        "actualCompileProperties": {
+          "TargetFramework": "net8.0",
+          "LangVersion": "12"
+        },
+        "compilerInfoSha256": "46097210c65a8024cd1059ecf57280b7ae05147a6a5b95f43bf885c7cb11fd40",
+        "compileFiles": {
+          "Experiments~/NavigationLab/Runner/LabCases.cs": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "Experiments~/NavigationLab/Runner/Program.cs": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "Verification~/TowerDefenseNavigation/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917"
+        }
+      },
+      "rawRunnerAssemblySha256": "7efa288519088367bb83bc61c014aa213dad1fdf5f98125d5243eadb838c2170",
+      "recordedCompilePropertyNames": [
+        "LangVersion",
+        "TargetFramework"
+      ],
+      "repositoryRootMetadata": "/workspace/navigation-comparison/c-final-snapshots/snapshot-90eca89591770eff7e6dcf21/Experiments~/NavigationLab/Runner/../../../",
+      "resolvedRepositoryRoot": "/workspace/navigation-comparison/c-final-snapshots/snapshot-90eca89591770eff7e6dcf21",
+      "compileFileDetails": {
+        "Experiments~/NavigationLab/Runner/LabCases.cs": {
+          "sourceSha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "identitySha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/Program.cs": {
+          "sourceSha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "identitySha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "normalized": false
+        },
+        "Verification~/TowerDefenseNavigation/Scenarios.cs": {
+          "sourceSha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "identitySha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": {
+          "sourceSha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "identitySha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": {
+          "sourceSha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "identitySha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": {
+          "sourceSha256": "f62e9e84f69b4c847de9c77567b975a15bdf4164f891e454e5533500d5accc2f",
+          "identitySha256": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917",
+          "normalized": true
+        }
+      },
+      "normalizationScope": "Only the unique generated RepositoryRoot attribute is replaced after exact project-path and snapshot-resolution checks; every other source byte is retained. Runtime input equality still requires per-case InputSha256."
+    },
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "onlyRawCompileSourceDifferenceFromA": [
+      "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs"
+    ]
+  },
+  {
+    "name": "d-r9-build",
+    "manifest": "/workspace/navigation-comparison/results/d-r9-build/build-manifest.json",
+    "manifestSha256": "fca80909587450d9741aa4a1629891bdcf4b6ca4de53b360f0b351342be3b721",
+    "identity": {
+      "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+      "sha256": "e17b632f65d9b62990907f10726b84af8d6fa3747c1aa6d20bc0dbd260195544",
+      "identityInput": {
+        "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+        "project": "Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj",
+        "projectSha256": "5018b49290d0aaf7935ca5d9d10e3ae8eaa283c0424a5f4d79046b98f0fa4d35",
+        "actualCompileProperties": {
+          "TargetFramework": "net8.0",
+          "LangVersion": "12"
+        },
+        "compilerInfoSha256": "46097210c65a8024cd1059ecf57280b7ae05147a6a5b95f43bf885c7cb11fd40",
+        "compileFiles": {
+          "Experiments~/NavigationLab/Runner/LabCases.cs": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "Experiments~/NavigationLab/Runner/Program.cs": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "Verification~/TowerDefenseNavigation/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917"
+        }
+      },
+      "rawRunnerAssemblySha256": "eb4cdb14a547c81d2f6929e3ac43070134bb2429426241b79bd0b9709d135e45",
+      "recordedCompilePropertyNames": [
+        "LangVersion",
+        "TargetFramework"
+      ],
+      "repositoryRootMetadata": "/workspace/navigation-comparison/d-r9-snapshots/snapshot-999500e77a7b07c819436d94/Experiments~/NavigationLab/Runner/../../../",
+      "resolvedRepositoryRoot": "/workspace/navigation-comparison/d-r9-snapshots/snapshot-999500e77a7b07c819436d94",
+      "compileFileDetails": {
+        "Experiments~/NavigationLab/Runner/LabCases.cs": {
+          "sourceSha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "identitySha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/Program.cs": {
+          "sourceSha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "identitySha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "normalized": false
+        },
+        "Verification~/TowerDefenseNavigation/Scenarios.cs": {
+          "sourceSha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "identitySha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": {
+          "sourceSha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "identitySha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": {
+          "sourceSha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "identitySha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": {
+          "sourceSha256": "ea649075394c528439d93db6f1484c252733fddf508caf81a1a1884ec6598780",
+          "identitySha256": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917",
+          "normalized": true
+        }
+      },
+      "normalizationScope": "Only the unique generated RepositoryRoot attribute is replaced after exact project-path and snapshot-resolution checks; every other source byte is retained. Runtime input equality still requires per-case InputSha256."
+    },
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "onlyRawCompileSourceDifferenceFromA": [
+      "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs"
+    ]
+  },
+  {
+    "name": "e-v2-stress",
+    "manifest": "/workspace/navigation-comparison/results/e-v2-stress/build-manifest.json",
+    "manifestSha256": "36f6a582c8ee874e57e15ad721d21a8bea8b019a6d13c5c45cfe1b464afc0441",
+    "identity": {
+      "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+      "sha256": "e17b632f65d9b62990907f10726b84af8d6fa3747c1aa6d20bc0dbd260195544",
+      "identityInput": {
+        "scheme": "NavigationLab.Runner.CompileIdentity.v1",
+        "project": "Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj",
+        "projectSha256": "5018b49290d0aaf7935ca5d9d10e3ae8eaa283c0424a5f4d79046b98f0fa4d35",
+        "actualCompileProperties": {
+          "TargetFramework": "net8.0",
+          "LangVersion": "12"
+        },
+        "compilerInfoSha256": "46097210c65a8024cd1059ecf57280b7ae05147a6a5b95f43bf885c7cb11fd40",
+        "compileFiles": {
+          "Experiments~/NavigationLab/Runner/LabCases.cs": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "Experiments~/NavigationLab/Runner/Program.cs": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "Verification~/TowerDefenseNavigation/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917"
+        }
+      },
+      "rawRunnerAssemblySha256": "f0eb077a0178fd616e9c10b01dfa508b9a1f677a343881ab5c3c500da19bab10",
+      "recordedCompilePropertyNames": [
+        "LangVersion",
+        "TargetFramework"
+      ],
+      "repositoryRootMetadata": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/../../../",
+      "resolvedRepositoryRoot": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b",
+      "compileFileDetails": {
+        "Experiments~/NavigationLab/Runner/LabCases.cs": {
+          "sourceSha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "identitySha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/Program.cs": {
+          "sourceSha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "identitySha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+          "normalized": false
+        },
+        "Verification~/TowerDefenseNavigation/Scenarios.cs": {
+          "sourceSha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "identitySha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": {
+          "sourceSha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "identitySha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": {
+          "sourceSha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "identitySha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+          "normalized": false
+        },
+        "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": {
+          "sourceSha256": "d998b777376edc6c7c7b5a8867fcfb817fe9bdd47619eeeaba9ff3b2786803b6",
+          "identitySha256": "d50901541b2e9bb2f3ff2fb9084fad59626fd3af6246b12f6c32cf7eb7a40917",
+          "normalized": true
+        }
+      },
+      "normalizationScope": "Only the unique generated RepositoryRoot attribute is replaced after exact project-path and snapshot-resolution checks; every other source byte is retained. Runtime input equality still requires per-case InputSha256."
+    },
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "onlyRawCompileSourceDifferenceFromA": [
+      "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs"
+    ]
+  }
+]

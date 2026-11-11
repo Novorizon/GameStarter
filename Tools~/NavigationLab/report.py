@@ -121,6 +121,83 @@ def local_file(directory, name):
     return path
 
 
+RUNNER_IDENTITY_SCHEME = 'NavigationLab.Runner.CompileIdentity.v1'
+RUNNER_PROJECT = 'Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj'
+RUNNER_ASSEMBLY_INFO = 'Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs'
+
+
+def normalize_runner_metadata(raw, project, snapshot):
+    """Normalize one generated attribute only, after validating its exact value."""
+    text = raw.decode('utf-8')
+    literal = r'"(?:[^"\\]|\\.)*"'
+    pattern = (r'^\[assembly: System\.Reflection\.AssemblyMetadata\("RepositoryRoot", ('
+               + literal + r'(?:\s*\+\s*' + literal + r')*)\)\]$')
+    matches = list(re.finditer(pattern, text, re.MULTILINE))
+    require(len(matches) == 1, 'Runner AssemblyInfo 必须含唯一且形状准确的 RepositoryRoot 属性')
+    require(len(re.findall(r'"RepositoryRoot"', text)) == 1, 'Runner AssemblyInfo 有额外 RepositoryRoot 内容')
+    match = matches[0]
+    root_value = ''.join(json.loads(fragment) for fragment in re.findall(literal, match.group(1)))
+    expected = project.parent.as_posix() + '/../../../'
+    require(root_value == expected, 'Runner RepositoryRoot 不是该项目生成的精确根路径')
+    require(Path(root_value).resolve() == snapshot, 'Runner RepositoryRoot 未指向冻结 snapshot')
+    replacement = '[assembly: System.Reflection.AssemblyMetadata("RepositoryRoot", "<FROZEN_SNAPSHOT>/Experiments~/NavigationLab/Runner/../../../")]'
+    normalized = (text[:match.start()] + replacement + text[match.end():]).encode('utf-8')
+    return normalized, root_value
+
+
+def runner_identity(manifest):
+    """Identity of actual compile inputs, not a claim that raw Runner DLLs match.
+
+    RepositoryRoot is read at runtime. Its single normalized exception is valid
+    only with each snapshot's frozen input checks and equal per-case InputSha256.
+    """
+    snapshot = Path(manifest['snapshot']).resolve()
+    require(snapshot.is_dir(), 'Runner 冻结 snapshot 不存在')
+    projects = [item for item in manifest.get('compileItems', [])
+                if Path(item['project']).resolve() == snapshot / RUNNER_PROJECT]
+    require(len(projects) == 1, '构建清单缺少唯一实际 Runner Compile 项')
+    item = projects[0]
+    project = Path(item['project']).resolve()
+    properties = item.get('properties')
+    require(isinstance(properties, dict) and properties.get('TargetFramework') == 'net8.0'
+            and properties.get('LangVersion') == '12', '缺少受支持的 Runner 实际编译属性')
+    sources = manifest.get('sourceFiles', {})
+    project_hash = file_sha(project)
+    require(sources.get(str(project)) == project_hash, 'Runner csproj 未与实际冻结源绑定')
+    require(manifest.get('relativeOriginalSourceHashes', {}).get(RUNNER_PROJECT) == project_hash, 'Runner csproj 不匹配原始冻结源')
+    raw_dll_hash = checked_hash(manifest.get('runnerAssemblySha256'), 'Runner DLL')
+    require(file_sha(Path(manifest['runnerAssemblyPath'])) == raw_dll_hash, 'Runner 实际 DLL 与构建清单不符')
+    compile_files = item.get('compileFiles')
+    require(isinstance(compile_files, dict) and compile_files, '缺少 Runner 实际 Compile 文件清单')
+    identities = {}
+    file_details = {}
+    metadata_value = None
+    for filename, expected in compile_files.items():
+        path = Path(filename).resolve()
+        require(path.is_relative_to(snapshot), 'Runner Compile 文件在 snapshot 外: ' + filename)
+        relative = path.relative_to(snapshot).as_posix()
+        require(relative not in identities, 'Runner Compile 文件别名重复: ' + relative)
+        raw = path.read_bytes()
+        actual = sha(raw)
+        require(actual == expected and sources.get(filename) == actual, 'Runner Compile 文件已变更或未绑定: ' + filename)
+        normalized = raw
+        if relative == RUNNER_ASSEMBLY_INFO:
+            normalized, metadata_value = normalize_runner_metadata(raw, project, snapshot)
+        identities[relative] = sha(normalized)
+        file_details[relative] = {'sourceSha256': actual, 'identitySha256': identities[relative], 'normalized': normalized != raw}
+    require(metadata_value is not None, '实际 Runner Compile 项缺少生成 AssemblyInfo')
+    compiler_info = manifest.get('dotnetInfo')
+    require(isinstance(compiler_info, str) and compiler_info, '缺少实际 .NET SDK/编译器环境记录')
+    identity_input = {'scheme': RUNNER_IDENTITY_SCHEME, 'project': RUNNER_PROJECT, 'projectSha256': project_hash,
+                      'actualCompileProperties': properties, 'compilerInfoSha256': sha(compiler_info.encode('utf-8')),
+                      'compileFiles': identities}
+    digest = sha(json.dumps(identity_input, sort_keys=True, separators=(',', ':')).encode('utf-8'))
+    return {'scheme': RUNNER_IDENTITY_SCHEME, 'sha256': digest, 'identityInput': identity_input,
+            'rawRunnerAssemblySha256': raw_dll_hash, 'recordedCompilePropertyNames': sorted(properties), 'repositoryRootMetadata': metadata_value,
+            'resolvedRepositoryRoot': str(snapshot), 'compileFileDetails': file_details,
+            'normalizationScope': 'Only the unique generated RepositoryRoot attribute is replaced after exact project-path and snapshot-resolution checks; every other source byte is retained. Runtime input equality still requires per-case InputSha256.'}
+
+
 def load_report(label, path):
     require(path.is_absolute(), '--report 必须使用绝对路径')
     path = path.resolve()
@@ -148,6 +225,7 @@ def load_report(label, path):
     require(isinstance(manifest.get('sourceFiles'), dict) and manifest['sourceFiles'], prefix + '缺少冻结源文件清单')
     for name, expected in manifest['sourceFiles'].items():
         require(file_sha(Path(name)) == expected, prefix + '冻结源文件已变更: ' + name)
+    runner_compile_identity = runner_identity(manifest)
     cases = summary.get('cases')
     require(isinstance(cases, list) and cases, prefix + '没有案例')
     raw_cases = {parse_json(member)['Name']: member for member in array_members(raw, 'cases')}
@@ -205,7 +283,7 @@ def load_report(label, path):
     execution = read_json(execution_path)
     require(execution.get('frozenSourceAndBinariesUnchanged') is True, prefix + '冻结执行后验检查未通过')
     require(execution.get('buildManifestSha256') == manifest_hash, prefix + '冻结执行与构建清单不匹配')
-    require(execution.get('freshManifestBoundReport', True) is True and execution.get('diagnosticNoReplay') is False, prefix + '冻结执行为陈旧/无回放报告')
+    require(execution.get('freshManifestBoundReport') is True and execution.get('diagnosticNoReplay') is False, prefix + '冻结执行为陈旧/无回放报告')
     isolation = summary.get('isolationAndPauseVerified') is True
     expected_exit = 1 if counts['Failed'] or not isolation else 2 if counts['Unsupported'] else 0
     require(type(execution.get('returnCode')) is int and execution['returnCode'] == expected_exit, prefix + '冻结执行退出码与案例不一致')
@@ -214,7 +292,7 @@ def load_report(label, path):
     require(summary.get('allSuiteCasesSupported') is (counts['Unsupported'] == 0), prefix + 'allSuiteCasesSupported 与证据不一致')
     require(type(summary.get('isolationAndPauseVerified')) is bool, prefix + '缺少隔离验证结果')
     return {'label': label, 'path': str(path), 'sha256': sha(raw), 'summary': summary, 'manifestSha256': manifest_hash,
-            'manifest': manifest, 'cases': by_name, 'evidence': case_evidence, 'counts': counts}
+            'manifest': manifest, 'runnerIdentity': runner_compile_identity, 'cases': by_name, 'evidence': case_evidence, 'counts': counts}
 
 
 def applied_world(definition, full):
@@ -318,23 +396,34 @@ def slug(value):
     return prefix + '-' + sha(value.encode())[:8]
 
 
-def make_comparison(reports, diagrams):
+def validate_common_harness(reports):
     first = reports[0]
     for report in reports[1:]:
-        for field in ('schemaVersion', 'runnerAssemblySha256', 'coreAssemblySha256', 'oracleAssemblySha256', 'protocol', 'suite'):
+        for field in ('schemaVersion', 'coreAssemblySha256', 'oracleAssemblySha256', 'protocol', 'suite'):
             require(report['summary'].get(field) == first['summary'].get(field), '不能混合不同共同 harness/协议/套件: ' + field)
+        require(report['runnerIdentity']['sha256'] == first['runnerIdentity']['sha256'], '共同 Runner 实际 Compile/源/csproj/编译属性身份不同')
         require(report['cases'].keys() == first['cases'].keys(), '案例集合不同；请对全部候选运行相同套件/过滤条件')
         for name, case in report['cases'].items():
             require(case['InputSha256'] == first['cases'][name]['InputSha256'], '同名案例输入不一致: ' + name)
+
+
+def make_comparison(reports, diagrams):
+    validate_common_harness(reports)
+    first = reports[0]
     names = list(first['cases'])
     require(all(name in names for name in diagrams), '--diagram 案例不在报告中')
     result = {'schemaVersion': 1, 'generatedBy': 'NavigationLab/report.py', 'finiteCorpusOnly': True,
               'multipleAlgorithmsCompared': len(reports) > 1, 'performanceRankingPerformed': False,
               'scope': '有限共同输入的冻结 .NET 模型证据汇总；不代表全面普适、商业游戏原版源码、Unity/IL2CPP/设备验收。',
-              'commonHarness': {key: first['summary'][key] for key in ('runnerAssemblySha256', 'coreAssemblySha256', 'oracleAssemblySha256', 'protocol', 'suite')},
+              'commonHarness': {**{key: first['summary'][key] for key in ('coreAssemblySha256', 'oracleAssemblySha256', 'protocol', 'suite')},
+                                'runnerCompileIdentitySha256': first['runnerIdentity']['sha256'],
+                                'runnerCompileIdentityScheme': RUNNER_IDENTITY_SCHEME,
+                                'allRawRunnerDllHashesIdentical': len({report['summary']['runnerAssemblySha256'] for report in reports}) == 1,
+                                'repositoryRootException': first['runnerIdentity']['normalizationScope']},
               'reports': [], 'cases': [], 'diagrams': []}
     text = ['# 导航候选对照', '', result['scope'], '',
-            '证据核对：共同 Runner/Core/Oracle DLL、协议、套件、案例集合及同名输入一致；冻结源/二进制与构建清单一致；所有 PASS 已完成新实例回放。', '',
+            '证据核对：Core/Oracle DLL 字节一致；Runner 实际编译源、csproj、清单记录的编译属性与 SDK 记录的规范身份一致；协议、套件、案例集合及同名输入一致；每份原始 DLL 均独立与冻结构建绑定，所有 PASS 已完成新实例回放。', '',
+            'Runner DLL 的原始 SHA 可以不同：生成 AssemblyInfo 的唯一 RepositoryRoot 属性指向各自 snapshot，规范化仅限该精确属性，其余源码字节不变。该根路径会被运行时读取，故还必须验证各冻结源与逐例输入一致；这不等同于 DLL 字节相同或无条件语义等价。', '',
             '只列 PASS / FAIL / UNSUPPORTED；InvalidInput 或证据不完整会拒绝生成。未进行性能排名。', '']
     if len(reports) == 1:
         text += ['当前只有一份报告：这是单报告汇总/工具检验，不能据此得出算法间比较结论。', '']
@@ -345,12 +434,13 @@ def make_comparison(reports, diagrams):
         text.append(f'| {md(report["label"])} / {md(summary["algorithm"])} | {counts["Passed"]} | {counts["Failed"]} | {counts["Unsupported"]} | {"通过" if summary["isolationAndPauseVerified"] else "失败"} |')
         result['reports'].append({'label': report['label'], 'algorithm': summary['algorithm'], 'description': summary.get('description'),
                                   'factoryType': summary['actualFactoryType'], 'candidateAssemblySha256': summary['candidateAssemblySha256'],
+                                  'runnerAssemblySha256': summary['runnerAssemblySha256'], 'runnerCompileIdentity': report['runnerIdentity'],
                                   'sourceSummary': report['path'], 'sourceSummarySha256': report['sha256'], 'utc': summary.get('utc'),
                                   'buildManifestSha256': report['manifestSha256'], 'snapshotIdentitySha256': report['manifest'].get('snapshotIdentitySha256'),
                                   'originCandidate': report['manifest'].get('originCandidate'), 'originHarness': report['manifest'].get('originHarness'),
                                   'counts': counts, 'isolationAndPauseVerified': summary['isolationAndPauseVerified'],
                                   'isolationError': summary.get('isolationError'), 'timingScope': summary.get('timingScope')})
-    text += ['', '每格格式为“状态 · 活体数 · 待入队数 · 攻击数”。容量/不可达场景的 PASS 按其原始验收条件判断，并不表示所有请求都已入场。', '',
+    text += ['', '共同 Runner 编译输入身份：`' + first['runnerIdentity']['sha256'] + '`。各原始 Runner DLL hash 与根路径例外明细见 comparison.json。', '', '每格格式为“状态 · 活体数 · 待入队数 · 攻击数”。容量/不可达场景的 PASS 按其原始验收条件判断，并不表示所有请求都已入场。', '',
              '| 案例 | ' + ' | '.join(md(report['label']) for report in reports) + ' |',
              '| --- | ' + ' | '.join('---' for _ in reports) + ' |']
     outputs = {}
