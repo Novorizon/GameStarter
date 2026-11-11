@@ -392,6 +392,15 @@ internal static class Program
             result.Status = error.Message.StartsWith("INVALID TEST INPUT:", StringComparison.Ordinal) ? "InvalidInput" : "Failed";
             result.Error = error.Message;
             result.FinalTick = microstep / SimulationProtocol.Substeps;
+            result.Alive = current.Length;
+            result.Pending = pending.Count;
+            result.Attacking = current.Count(unit => unit.State == MotionState.Attacking);
+            result.Waiting = current.Count(unit => unit.State == MotionState.Waiting);
+            result.FinalState = Canonical(current);
+            result.ByRange = current.Where(unit => oracle.Live.ContainsKey(unit.Id))
+                .GroupBy(unit => oracle.Live[unit.Id].Profile.AttackRangeMm).ToDictionary(
+                    group => group.Key,
+                    group => new[] { group.Count(), group.Count(unit => unit.State == MotionState.Attacking) });
             result.FailureSnapshot = current.Select(unit => new object[]
             {
                 unit.Id, SafeNumber(unit.Position.X), SafeNumber(unit.Position.Y), (int)unit.State, unit.GoalCell, unit.TargetId
@@ -494,11 +503,22 @@ internal static class Program
         public IReadOnlyList<UnitSnapshot> Snapshot() => Measure(result, "Snapshot", () => inner.Snapshot());
         public IReadOnlyDictionary<string, long> Metrics => inner.Metrics;
         public string LastSpawnFailure => inner.LastSpawnFailure;
-        public void Dispose() => Measure(result, "Dispose", () =>
+        public void Dispose()
         {
-            inner.Dispose();
-            return true;
-        });
+            try
+            {
+                result.Metrics = inner.Metrics.ToDictionary(pair => pair.Key, pair => pair.Value);
+            }
+            catch (Exception error)
+            {
+                result.MetricsReadError = error.Message;
+            }
+            Measure(result, "Dispose", () =>
+            {
+                inner.Dispose();
+                return true;
+            });
+        }
     }
 
     private static bool VerifyIsolation(INavigationFactory factory)
@@ -535,7 +555,7 @@ internal static class Program
         var alternateProfile = new UnitProfile(300, 500, 2000);
         using var second = factory.Create(alternate, new[] { alternateProfile });
         Require(second.TrySpawn(new SpawnRequest(999, alternateProfile, alternate.SpawnCells[0])), "Second isolated spawn failed.");
-        for (int tick = 0; tick < 75; tick++)
+        for (int tick = 0; tick < 80; tick++)
         {
             second.Step();
         }
@@ -904,6 +924,7 @@ internal sealed class CaseResult
     public long ElapsedMilliseconds { get; set; }
     public Dictionary<string, int> Failures { get; set; } = new();
     public Dictionary<string, long> Metrics { get; set; } = new();
+    public string? MetricsReadError { get; set; }
     public Dictionary<int, int[]> ByRange { get; set; } = new();
     public List<object> Commands { get; set; } = new();
     public object[][]? FailureSnapshot { get; set; }
