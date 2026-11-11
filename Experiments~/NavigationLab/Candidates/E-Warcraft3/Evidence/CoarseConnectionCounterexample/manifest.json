@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "scope": "Read-only E frozen-DLL coarse-grid failure query and independently replayed feasible escape, not successful candidate execution",
+  "snapshotIdentitySha256": "99a0a7bb02ee8c476d77d76bc2728594d977b13fa8739eca7ac769d4f6a3f252",
+  "originalBuildDllChecks": {
+    "core": true,
+    "oracle": true,
+    "candidate": true
+  },
+  "files": {
+    "FrozenDlls/NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "FrozenDlls/NavigationLab.EWarcraft3.dll": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543",
+    "FrozenDlls/NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "Program.cs": "023c5832534c6cadb8a5f4a44021ba62008da7fadff27059a72979850d1bee79",
+    "README.zh-CN.md": "c7425baf91fdfa9c39bb8af0789408780433cc0f4aed829c2588f51bc3ec5172",
+    "Replay.csproj": "1bd65b81cf317ed7b512cf87f23e360589d839de46d046a664288406a6941d1a",
+    "frozen-source.zip": "1dcc703af335f0b8fc677225d3252c6888e72dae6a11554ea9fcd9dce0d32bbe",
+    "inputs/u-obstacle.json": "6c4d767e7ca3798130d890bd8a66a2af198096a13f48aa0462c7d03ce5b10688",
+    "original-build-manifest.json": "36f6a582c8ee874e57e15ad721d21a8bea8b019a6d13c5c45cfe1b464afc0441",
+    "original-report.json": "23774a06c682647573c78aa3f30fa28368e1c7387aadd222ed08cb1b07f4a535",
+    "query-execution.log": "a47352edf710e89ebc22e705d4801ee26eb8e3e2baa5259acfc77b4d1ac0f434",
+    "query-result.json": "a47352edf710e89ebc22e705d4801ee26eb8e3e2baa5259acfc77b4d1ac0f434",
+    "query.py": "fce07c7ec449bb8d8d76fa5dd3d795756d16ad5deb374de829cdcc067cc59d6c",
+    "replay-execution.log": "6d50362e00beef85a7bed6c3798d95cb272002f5476a0906d268e9c6877b01e4",
+    "replay-result.json": "6d50362e00beef85a7bed6c3798d95cb272002f5476a0906d268e9c6877b01e4",
+    "replay-states.json": "42f8e655abc80690c3809e90481eed9e898f794ebf652a50dac031df7c623cf2"
+  }
+}

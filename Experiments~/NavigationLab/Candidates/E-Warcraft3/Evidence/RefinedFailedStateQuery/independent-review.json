@@ -1,0 +1,29 @@
+{
+  "scope": "Independent read-only source/provenance review of E4 same-failed-state query, not a new matrix run",
+  "success": true,
+  "checks": {
+    "same-inputs/u-obstacle.json": true,
+    "same-original-report.json": true,
+    "bound-candidate": true,
+    "bound-core": true,
+    "bound-oracle": true,
+    "source-current": true,
+    "no-witness-file-read": true,
+    "path-from-frozen-find": true
+  },
+  "candidateSha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+  "reviewedRuntimeSources": {
+    "GlobalSearch.cs": "614c1e0314755371d817a57cc7a889ce4c508c15aedc6385f7f6f5a3f7fc4955",
+    "RefinedConnections.cs": "4d21c729afa99118a6ab1ce3cd5cccc534d66653954dea5a250daca4ba09c448",
+    "WarcraftNavigator.cs": "76c22ba65e2be89e6982dd10f58953dde786fad13c647d96e40eb06e8985c0e5",
+    "PathingGeometry.cs": "dc9e0a157fc7ad66a923ac4aaf9b974a88e461b9fff785ff7364c923b27ecaa9"
+  },
+  "findings": [
+    "Refined search only activates when dynamic coarse search fails and target is physically clear.",
+    "Grid is generic one-quarter original cell, bounded to six original cells; it checks every actual radius body and segment.",
+    "Refinement produces coarse reconnection prefixes from true current position, leaving original final holding goals unchanged.",
+    "Query reads identical original failed input/state, uses returned Find points directly, and passes them to shared Oracle at original speed/radius.",
+    "No hard-coded actor IDs, map coordinates or witness file references appear in runtime refinement source.",
+    "Reported same-state query remains narrower than full navigator/full49 coverage."
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "caseInputSha256": "6c4d767e7ca3798130d890bd8a66a2af198096a13f48aa0462c7d03ce5b10688",
+  "reportInputSha256": "ea159d7dde87e0e66bd57b5e216cbab2bf5d50e9a54d4ac0c9b45f0892542739",
+  "reportSha256": "23774a06c682647573c78aa3f30fa28368e1c7387aadd222ed08cb1b07f4a535",
+  "actor": 38,
+  "radiusMm": 250,
+  "start": [
+    31045.44858419952,
+    14272.72429209976
+  ],
+  "goalCell": 588,
+  "goal": [
+    33500.0,
+    15500.0
+  ],
+  "othersFixedAtActualFinalPositions": true,
+  "otherBodies": 55,
+  "original3x3Connections": [
+    {
+      "cell": 511,
+      "point": [
+        30500.0,
+        13500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 5,
+          "gapMm": -500.0
+        }
+      ]
+    },
+    {
+      "cell": 512,
+      "point": [
+        31500.0,
+        13500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 53,
+          "gapMm": -500.0
+        }
+      ]
+    },
+    {
+      "cell": 513,
+      "point": [
+        32500.0,
+        13500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 2,
+          "gapMm": -86.03504920219075
+        },
+        {
+          "id": 42,
+          "gapMm": -500.0
+        },
+        {
+          "id": 53,
+          "gapMm": -30.847684933466553
+        }
+      ]
+    },
+    {
+      "cell": 548,
+      "point": [
+        30500.0,
+        14500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 6,
+          "gapMm": -500.0
+        }
+      ]
+    },
+    {
+      "cell": 549,
+      "point": [
+        31500.0,
+        14500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 2,
+          "gapMm": -500.0
+        }
+      ]
+    },
+    {
+      "cell": 550,
+      "point": [
+        32500.0,
+        14500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 2,
+          "gapMm": -345.62176098159443
+        },
+        {
+          "id": 44,
+          "gapMm": -500.0
+        }
+      ]
+    },
+    {
+      "cell": 586,
+      "point": [
+        31500.0,
+        15500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 2,
+          "gapMm": -152.6823804545703
+        },
+        {
+          "id": 3,
+          "gapMm": -500.0
+        }
+      ]
+    },
+    {
+      "cell": 587,
+      "point": [
+        32500.0,
+        15500.0
+      ],
+      "dynamicClear": false,
+      "blockers": [
+        {
+          "id": 2,
+          "gapMm": -380.5782960418006
+        },
+        {
+          "id": 50,
+          "gapMm": -500.0
+        }
+      ]
+    }
+  ],
+  "original3x3DynamicConnections": 0,
+  "refinedWitnessSpacingMm": 250,
+  "refinedNodesExpanded": 200,
+  "witnessFound": true,
+  "path": [
+    [
+      31045.44858419952,
+      14272.72429209976
+    ],
+    [
+      31000.0,
+      14250.0
+    ],
+    [
+      31000.0,
+      14750.0
+    ],
+    [
+      31250.0,
+      15000.0
+    ],
+    [
+      33000.0,
+      15000.0
+    ],
+    [
+      33500.0,
+      15500.0
+    ]
+  ],
+  "pathLengthMm": 3361.4732336554453,
+  "minimumBodyGapMmAndId": [
+    0.0,
+    2
+  ],
+  "scope": "Independent stationary-neighbor feasibility witness from the actual failed final state; not a successful run of candidate E."
+}
