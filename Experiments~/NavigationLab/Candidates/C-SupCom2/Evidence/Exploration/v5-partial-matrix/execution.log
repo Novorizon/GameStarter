@@ -1,0 +1,18 @@
+PASSED open-arena admitted=48 alive=48 pending=0 attack=16 tick=281 
+PASSED mixed-speed-approach admitted=64 alive=64 pending=0 attack=16 tick=407 
+FAILED large-radius-turning-clearance admitted=48 alive=48 pending=0 attack=0 tick=345 Waiting outside target gathering radius.
+PASSED single-cell-throat admitted=48 alive=48 pending=0 attack=16 tick=271 
+PASSED u-obstacle admitted=56 alive=56 pending=0 attack=16 tick=794 
+PASSED right-angle-corridor admitted=32 alive=32 pending=0 attack=16 tick=276 
+PASSED cross-junction-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=267 
+FAILED cross-junction-original-4m admitted=72 alive=72 pending=0 attack=0 tick=50 Waiting outside target gathering radius.
+PASSED cross-junction-original-5m admitted=72 alive=72 pending=0 attack=16 tick=290 
+PASSED shared-spawn-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=303 
+PASSED shared-spawn-original-5m admitted=72 alive=72 pending=0 attack=16 tick=310 
+PASSED forest-wave-1 admitted=8 alive=8 pending=0 attack=8 tick=827 
+PASSED forest-wave-2 admitted=16 alive=16 pending=0 attack=13 tick=861 
+FAILED forest-wave-3 admitted=18 alive=18 pending=0 attack=7 tick=7000 Deadline: alive=18, pending=0, moving=8, attack=7, failure=None
+FAILED forest-wave-4 admitted=25 alive=25 pending=0 attack=7 tick=7000 Deadline: alive=25, pending=0, moving=13, attack=7, failure=None
+FAILED forest-wave-5 admitted=30 alive=30 pending=0 attack=8 tick=7000 Deadline: alive=30, pending=0, moving=20, attack=8, failure=None
+FAILED forest-wave-6 admitted=29 alive=29 pending=0 attack=9 tick=7000 Deadline: alive=29, pending=0, moving=12, attack=9, failure=None
+FAILED forest-full44-large admitted=44 alive=44 pending=0 attack=7 tick=12000 Deadline: alive=44, pending=0, moving=28, attack=7, failure=None
