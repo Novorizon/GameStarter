@@ -1,0 +1,117 @@
+{
+    "scope": "Unity Editor/Play smoke on one no-tower input per candidate; not the full 49-case regression or device acceptance.",
+    "result": "Passed",
+    "startedUtc": "2026-11-11T15:51:47.1651810Z",
+    "finishedUtc": "2026-11-11T15:52:20.6870220Z",
+    "unityVersion": "2022.3.62f1",
+    "lastPhase": "WaitFinalEdit",
+    "error": "",
+    "screenshot": "/workspace/navigation-comparison/playground-smoke.png",
+    "checks": [
+        {
+            "name": "pause",
+            "status": "Paused",
+            "microstep": 3576,
+            "units": 1,
+            "detail": "Local observation with continuous collision, lifecycle and settlement checks."
+        },
+        {
+            "name": "single-step-50ms",
+            "status": "Paused",
+            "microstep": 3586,
+            "units": 1,
+            "detail": "Local observation with continuous collision, lifecycle and settlement checks."
+        },
+        {
+            "name": "resume-and-camera-toggle",
+            "status": "Running",
+            "microstep": 3784,
+            "units": 1,
+            "detail": "Local observation with continuous collision, lifecycle and settlement checks."
+        },
+        {
+            "name": "stop-before-completion",
+            "status": "Stopped",
+            "microstep": 3833,
+            "units": 1,
+            "detail": "Observation stopped by the user. This is not a candidate failure."
+        },
+        {
+            "name": "A / SIPP/forest-single-medium",
+            "status": "Passed",
+            "microstep": 6950,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "B0 / ORCA/forest-single-medium",
+            "status": "Passed",
+            "microstep": 8050,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "B1 / ORCA + Yield/forest-single-medium",
+            "status": "Passed",
+            "microstep": 8050,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "C33 / Flow field/forest-single-medium",
+            "status": "Passed",
+            "microstep": 7420,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "D12 / Hierarchical + exchange/forest-single-medium",
+            "status": "Passed",
+            "microstep": 7130,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "E / A* + refinement/forest-single-medium",
+            "status": "Passed",
+            "microstep": 7240,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "A/dynamic-route-block-and-open",
+            "status": "Unsupported",
+            "microstep": 0,
+            "units": 0,
+            "detail": "Candidate does not advertise required capabilities: DynamicTerrain."
+        },
+        {
+            "name": "exit-play-disposes-worker-and-view",
+            "status": "Passed",
+            "microstep": -1,
+            "units": 0,
+            "detail": "Lifecycle check completed."
+        },
+        {
+            "name": "E/reenter-play/forest-single-medium",
+            "status": "Passed",
+            "microstep": 7240,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "game-camera-png",
+            "status": "Passed",
+            "microstep": 7240,
+            "units": 1,
+            "detail": "All required lifecycle events executed; final stationary crowd held for 200 logical ticks."
+        },
+        {
+            "name": "final-exit-and-idempotent-dispose",
+            "status": "Passed",
+            "microstep": -1,
+            "units": 0,
+            "detail": "Lifecycle check completed."
+        }
+    ]
+}

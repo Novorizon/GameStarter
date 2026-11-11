@@ -1,0 +1,12 @@
+NavigationLab.BOrca.dll contains unmodified RVO2 Library C# solver source.
+SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
+SPDX-License-Identifier: Apache-2.0
+
+Authors: Jur van den Berg, Stephen J. Guy, Jamie Snape, Ming C. Lin, Dinesh Manocha.
+Upstream: https://github.com/snape/RVO2-CS
+Fixed commit: de124a275d51d421bb9e2a77952210527ab60b04
+License: Apache License, Version 2.0; see LICENSE.txt.
+
+Project routing, steering constraints and coordination are separate adaptations.
+Source and original-file fingerprints: experiment/navigation-b-orca,
+Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/.

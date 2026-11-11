@@ -1,0 +1,20 @@
+{
+  "name": "NavigationLab.Playground.Editor",
+  "rootNamespace": "NavigationLab.UnityPlayground",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "NavigationLab.Core.dll",
+    "NavigationLab.Oracle.dll",
+    "NavigationLab.ASipp.dll",
+    "NavigationLab.BOrca.dll",
+    "NavigationLab.CSupCom2.dll",
+    "NavigationLab.DAoe4.dll",
+    "NavigationLab.EWarcraft3.dll"
+  ],
+  "allowUnsafeCode": false
+}
