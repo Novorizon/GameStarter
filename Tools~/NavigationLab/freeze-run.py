@@ -138,10 +138,12 @@ def main():
         target = snapshot / relative
         if target.exists() and target.read_bytes() != data:
             raise RuntimeError('Existing content-addressed snapshot changed: ' + str(target))
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(data)
+        if not target.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(data)
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
+    write_json(output / 'summary.json', {'success': False, 'stage': 'freezing-and-building', 'snapshotIdentitySha256': identity_sha})
     environment = os.environ.copy()
     environment.setdefault('DOTNET_PROCESSOR_COUNT', '2')
     environment.setdefault('DOTNET_SKIP_FIRST_TIME_EXPERIENCE', '1')
@@ -192,12 +194,18 @@ def main():
     if args.no_replay:
         command.append('--no-replay')
     exit_code = run_logged(command, snapshot, output / 'execution.log', environment)
+    summary_path = output / 'summary.json'
+    summary = json.loads(summary_path.read_text()) if summary_path.exists() else {}
+    fresh_report = summary.get('buildManifestSha256') == digest_file(manifest_path) and summary.get('buildProvenanceVerified') is True
     unchanged = all(digest_file(Path(name)) == digest for name, digest in source_files.items())
     unchanged &= all(digest_file(path) == manifest[role + 'AssemblySha256'] for role, path in assemblies.items())
     write_json(output / 'frozen-execution.json', {'returnCode': exit_code, 'frozenSourceAndBinariesUnchanged': unchanged,
-                                               'buildManifestSha256': digest_file(manifest_path), 'diagnosticNoReplay': args.no_replay})
+                                               'buildManifestSha256': digest_file(manifest_path), 'diagnosticNoReplay': args.no_replay,
+                                               'freshManifestBoundReport': fresh_report})
     if not unchanged:
         raise RuntimeError('Frozen source or DLL changed during execution.')
+    if not fresh_report:
+        raise RuntimeError('Execution did not produce a fresh report bound to this build manifest.')
     print('Experimental return code:', exit_code, '(0 pass, 1 failure, 2 unsupported)', flush=True)
     return exit_code
 

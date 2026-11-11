@@ -30,6 +30,9 @@ namespace NavigationLab.UnityValidation
         private static HashSet<int> worldEvents;
         private static HashSet<int> deaths;
         private static readonly Dictionary<int, GameObject> views = new Dictionary<int, GameObject>();
+        private static readonly Dictionary<int, GameObject> targetViews = new Dictionary<int, GameObject>();
+        private static Texture2D groundTexture;
+        private static WorldDefinition viewedWorld;
         private static readonly List<Object> resources = new List<Object>();
         private static GameObject sceneRoot;
         private static Camera camera;
@@ -37,6 +40,8 @@ namespace NavigationLab.UnityValidation
         private static int microstep;
         private static int stable;
         private static int nextId;
+        private static int issued;
+        private static HashSet<int> oldWaiting;
         private static int stableStart = -1;
         private static Dictionary<int, UnitSnapshot> stableAnchor;
         private static double deadline;
@@ -95,6 +100,7 @@ namespace NavigationLab.UnityValidation
                     Directory.CreateDirectory(output);
                     report = new NativeReport
                     {
+                        runId = manifest.runId,
                         unity = Application.unityVersion,
                         graphics = SystemInfo.graphicsDeviceType.ToString(),
                         device = SystemInfo.graphicsDeviceName,
@@ -102,6 +108,8 @@ namespace NavigationLab.UnityValidation
                         oracleSha256 = Hash(typeof(ContinuousOracle).Assembly.Location),
                         coreSha256 = Hash(typeof(INavigator).Assembly.Location)
                     };
+                    Require(report.coreSha256 == manifest.expectedCoreSha256 && report.oracleSha256 == manifest.expectedOracleSha256,
+                        "Loaded Core/Oracle DLL differs from the frozen build.");
                     deadline = EditorApplication.timeSinceStartup + manifest.wallDeadlineSeconds;
                     StartNext();
                     return;
@@ -150,7 +158,7 @@ namespace NavigationLab.UnityValidation
                 name = run.name,
                 inputSha256 = Hash(run.input),
                 modelInputSha256 = input.modelInputSha256,
-                candidateSha256 = Hash(run.assemblyPath),
+                candidateSha256 = run.expectedCandidateSha256,
                 factoryType = run.factory,
                 originalRequests = input.requests.Length
             };
@@ -158,7 +166,7 @@ namespace NavigationLab.UnityValidation
             var assembly = AppDomain.CurrentDomain.GetAssemblies().Single(item => item.GetName().Name == run.assemblyName);
             var factory = (INavigationFactory)Activator.CreateInstance(assembly.GetType(run.factory, true));
             current.factoryId = factory.Id;
-            Require(Hash(assembly.Location) == current.candidateSha256, "Loaded assembly differs from staged candidate DLL.");
+            Require(Hash(run.assemblyPath) == current.candidateSha256 && Hash(assembly.Location) == current.candidateSha256, "Loaded assembly differs from staged candidate DLL.");
             var required = (NavigationFeatures)Enum.Parse(typeof(NavigationFeatures), input.requiredFeatures);
             Require((required & ~factory.Features) == NavigationFeatures.None, "Selected native case has unsupported capabilities.");
             var world = input.world.ToWorld();
@@ -167,6 +175,8 @@ namespace NavigationLab.UnityValidation
             Require(navigator.Snapshot().Count == 0, "Factory created unrequested bodies.");
             pending = input.requests.ToList();
             nextId = pending.Max(request => request.id) + 1;
+            issued = pending.Count;
+            oldWaiting = new HashSet<int>();
             worldEvents = new HashSet<int>();
             deaths = new HashSet<int>();
             microstep = 0;
@@ -185,17 +195,18 @@ namespace NavigationLab.UnityValidation
                 for (int index = 0; index < input.worldEvents.Length; index++)
                 {
                     var planned = input.worldEvents[index];
-                    if (tick >= planned.tick && (!planned.afterSettlement || IsComplete(snapshot)) && worldEvents.Add(index))
+                    if (tick >= planned.tick && (!planned.afterSettlement || IsComplete(snapshot, true)) && worldEvents.Add(index))
                     {
                         var before = navigator.Snapshot().ToArray();
                         var change = planned.Change();
+                        oracle.ValidateWorldChangeInput(change, before);
                         Require(navigator.ApplyWorldChange(change.DeepClone()), "Advertised world change rejected.");
                         snapshot = navigator.Snapshot().ToArray();
                         oracle.ApplyChange(change, before, snapshot);
                         ResetStability();
                     }
                 }
-                bool settled = IsComplete(snapshot);
+                bool settled = IsComplete(snapshot, true);
                 for (int index = 0; index < input.deaths.Length; index++)
                 {
                     var planned = input.deaths[index];
@@ -203,7 +214,8 @@ namespace NavigationLab.UnityValidation
                     {
                         continue;
                     }
-                    var victims = snapshot.Where(unit => planned.range < 0 || oracle.Live[unit.Id].Profile.AttackRangeMm == planned.range)
+                    var victims = snapshot.Where(unit => !planned.attackersOnly || unit.State == MotionState.Attacking)
+                        .Where(unit => planned.range < 0 || oracle.Live[unit.Id].Profile.AttackRangeMm == planned.range)
                         .Where(unit => !planned.requireMoving || unit.State == MotionState.Moving
                             && Point2.Distance(unit.Position, oracle.World.Center(oracle.World.CellAt(unit.Position))) > .1)
                         .OrderBy(unit => unit.Id).Take(planned.count).ToArray();
@@ -213,6 +225,7 @@ namespace NavigationLab.UnityValidation
                         continue;
                     }
                     deaths.Add(index);
+                    oldWaiting.UnionWith(snapshot.Where(unit => unit.State == MotionState.Waiting).Select(unit => unit.Id));
                     foreach (var victim in victims)
                     {
                         var request = oracle.Live[victim.Id];
@@ -220,10 +233,12 @@ namespace NavigationLab.UnityValidation
                         Require(navigator.Remove(victim.Id), "Explicit live removal failed.");
                         snapshot = navigator.Snapshot().ToArray();
                         oracle.RegisterDeath(victim.Id, before, snapshot);
+                        oracle.ValidateTransition(snapshot, snapshot, 0);
                         current.deaths++;
                         if (planned.replace)
                         {
                             pending.Add(Request.Replacement(nextId++, tick, request));
+                            issued++;
                         }
                     }
                     ResetStability();
@@ -247,6 +262,7 @@ namespace NavigationLab.UnityValidation
                     else
                     {
                         oracle.VerifyRejectedBirth(before, snapshot);
+                        oracle.ValidateTransition(snapshot, snapshot, 0);
                         current.rejected++;
                     }
                 }
@@ -307,9 +323,10 @@ namespace NavigationLab.UnityValidation
             stableAnchor = null;
         }
 
-        private static bool IsComplete(UnitSnapshot[] snapshot)
+        private static bool IsComplete(UnitSnapshot[] snapshot, bool beforeLifecycle = false)
         {
-            if (snapshot.Length != input.expectedLive || snapshot.Any(unit => unit.State == MotionState.Moving))
+            int expected = beforeLifecycle && input.expectation == "FullArrival" ? issued - current.deaths : input.expectedLive;
+            if (snapshot.Length != expected || snapshot.Any(unit => unit.State == MotionState.Moving))
             {
                 return false;
             }
@@ -322,6 +339,10 @@ namespace NavigationLab.UnityValidation
                 return false;
             }
             if (input.expectedAttackers >= 0 && snapshot.Count(unit => unit.State == MotionState.Attacking) != input.expectedAttackers)
+            {
+                return false;
+            }
+            if (!beforeLifecycle && snapshot.Count(unit => unit.State == MotionState.Attacking && oldWaiting.Contains(unit.Id)) < input.minimumOldWaitingPromotions)
             {
                 return false;
             }
@@ -365,11 +386,23 @@ namespace NavigationLab.UnityValidation
             sceneRoot = new GameObject("NAVLAB_RUNTIME");
             double width = world.Width * world.CellSizeMm * .001;
             double height = world.Height * world.CellSizeMm * .001;
-            var ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var ground = new GameObject("NAVLAB_GROUND", typeof(MeshFilter), typeof(MeshRenderer));
             ground.transform.SetParent(sceneRoot.transform);
-            ground.transform.position = new Vector3((float)(world.Origin.X * .001 + width / 2), -.12f, (float)(world.Origin.Y * .001 + height / 2));
-            ground.transform.localScale = new Vector3((float)width, .1f, (float)height);
-            Paint(ground, new Color(.28f, .42f, .23f));
+            ground.transform.position = new Vector3((float)(world.Origin.X * .001), -.02f, (float)(world.Origin.Y * .001));
+            var mesh = new Mesh
+            {
+                vertices = new[] { Vector3.zero, new Vector3((float)width, 0, 0), new Vector3((float)width, 0, (float)height), new Vector3(0, 0, (float)height) },
+                triangles = new[] { 0, 2, 1, 0, 3, 2 },
+                uv = new[] { Vector2.zero, Vector2.right, Vector2.one, Vector2.up }
+            };
+            mesh.RecalculateNormals();
+            ground.GetComponent<MeshFilter>().sharedMesh = mesh;
+            resources.Add(mesh);
+            Paint(ground, Color.white);
+            groundTexture = new Texture2D(world.Width, world.Height, TextureFormat.RGB24, false) { filterMode = FilterMode.Point };
+            ground.GetComponent<Renderer>().sharedMaterial.mainTexture = groundTexture;
+            resources.Add(groundTexture);
+            RefreshWorldView(world);
             foreach (var target in world.Targets)
             {
                 var baseView = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -377,6 +410,7 @@ namespace NavigationLab.UnityValidation
                 baseView.transform.position = Position(target.Center) + Vector3.up * .4f;
                 baseView.transform.localScale = new Vector3(target.RadiusMm * .002f, .4f, target.RadiusMm * .002f);
                 Paint(baseView, new Color(.22f, .37f, .64f));
+                targetViews.Add(target.Id, baseView);
             }
             var cameraObject = new GameObject("NAVLAB_CAMERA");
             cameraObject.transform.SetParent(sceneRoot.transform);
@@ -384,7 +418,7 @@ namespace NavigationLab.UnityValidation
             camera.orthographic = true;
             camera.aspect = 1.6f;
             camera.orthographicSize = (float)Math.Max(height / 2, width / (2 * camera.aspect)) * 1.1f;
-            camera.transform.position = ground.transform.position + Vector3.up * 60;
+            camera.transform.position = ground.transform.position + new Vector3((float)(width / 2), 60, (float)(height / 2));
             camera.transform.rotation = Quaternion.Euler(90, 0, 0);
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(.08f, .11f, .12f);
@@ -395,6 +429,13 @@ namespace NavigationLab.UnityValidation
             if (navigator == null || sceneRoot == null)
             {
                 return;
+            }
+            RefreshWorldView(oracle.World);
+            foreach (var target in oracle.World.Targets)
+            {
+                var targetView = targetViews[target.Id];
+                targetView.transform.position = Position(target.Center) + Vector3.up * .4f;
+                targetView.transform.localScale = new Vector3(target.RadiusMm * .002f, .4f, target.RadiusMm * .002f);
             }
             var snapshot = navigator.Snapshot().ToArray();
             foreach (int removed in views.Keys.Except(snapshot.Select(unit => unit.Id)).ToArray())
@@ -413,8 +454,27 @@ namespace NavigationLab.UnityValidation
                     Paint(view, new Color(.87f, .71f, .28f));
                     views.Add(unit.Id, view);
                 }
-                view.transform.position = Position(unit.Position) + Vector3.up * .5f;
+                view.transform.position = Position(unit.Position) + Vector3.up * (view.transform.localScale.y / 2);
+                view.GetComponent<Renderer>().sharedMaterial.color = unit.State == MotionState.Moving ? new Color(.23f, .71f, .83f)
+                    : unit.State == MotionState.Attacking ? new Color(.9f, .28f, .22f) : new Color(.9f, .75f, .25f);
             }
+        }
+
+        private static void RefreshWorldView(WorldDefinition world)
+        {
+            if (viewedWorld == world)
+            {
+                return;
+            }
+            viewedWorld = world;
+            for (int cell = 0; cell < world.CellCount; cell++)
+            {
+                var colour = !world.IsWalkable(cell) ? new Color(.16f, .18f, .2f)
+                    : world.SpawnCells.Contains(cell) ? new Color(.62f, .4f, .82f)
+                    : world.HoldingAllowed(cell) ? new Color(.42f, .51f, .26f) : new Color(.68f, .59f, .4f);
+                groundTexture.SetPixel(cell % world.Width, cell / world.Width, colour);
+            }
+            groundTexture.Apply();
         }
 
         private static void FinishCapture()
@@ -495,6 +555,9 @@ namespace NavigationLab.UnityValidation
             }
             resources.Clear();
             views.Clear();
+            targetViews.Clear();
+            viewedWorld = null;
+            groundTexture = null;
             sceneRoot = null;
             camera = null;
         }
@@ -504,7 +567,7 @@ namespace NavigationLab.UnityValidation
             CleanupCurrent();
             if (report != null)
             {
-                report.success = report.cases.Count == manifest.runs.Length && report.cases.All(item => item.success);
+                report.success = report.cases.Count == manifest.runs.Length && report.cases.All(item => item.success && (!manifest.graphicsRequired || item.renderingValidated));
                 File.WriteAllText(Path.Combine(output, "validation.json"), JsonUtility.ToJson(report, true));
             }
             SessionState.SetString(Session + ".finishing", "yes");
@@ -551,7 +614,8 @@ namespace NavigationLab.UnityValidation
         [Serializable]
         public sealed class Manifest
         {
-            public string output;
+            public string output, runId, expectedCoreSha256, expectedOracleSha256;
+            public bool graphicsRequired;
             public int wallDeadlineSeconds = 1200;
             public int stepsPerEditorUpdate = 250;
             public RunInput[] runs;
@@ -559,7 +623,7 @@ namespace NavigationLab.UnityValidation
         [Serializable]
         public sealed class RunInput
         {
-            public string name, input, assemblyName, assemblyPath, factory;
+            public string name, input, assemblyName, assemblyPath, factory, expectedCandidateSha256;
         }
         [Serializable]
         public sealed class Input
@@ -570,7 +634,7 @@ namespace NavigationLab.UnityValidation
             public Terrain[] worldEvents;
             public Death[] deaths;
             public Minimum[] minimumAttackers;
-            public int expectedLive, expectedAttackers, deadlineTicks, holdTicks, initialSettledCheckTick;
+            public int expectedLive, expectedAttackers, deadlineTicks, holdTicks, initialSettledCheckTick, minimumOldWaitingPromotions;
         }
         [Serializable]
         public sealed class World
@@ -633,7 +697,7 @@ namespace NavigationLab.UnityValidation
         public sealed class Death
         {
             public int tick, count, range;
-            public bool afterSettlement, replace, requireMoving;
+            public bool afterSettlement, replace, requireMoving, attackersOnly;
         }
         [Serializable]
         public sealed class Minimum
@@ -650,7 +714,7 @@ namespace NavigationLab.UnityValidation
         public sealed class NativeReport
         {
             public bool success, shutdownVerified;
-            public string unity, graphics, device, manifestSha256, coreSha256, oracleSha256;
+            public string runId, unity, graphics, device, manifestSha256, coreSha256, oracleSha256;
             public string scope = "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.";
             public long stopwatchFrequency = Stopwatch.Frequency;
             public List<NativeCase> cases = new List<NativeCase>();

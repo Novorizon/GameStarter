@@ -12,6 +12,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import uuid
 
 
 def digest(path):
@@ -33,8 +34,9 @@ def convert_input(path):
     result.pop('minimumAttackersByRange')
     result['worldEvents'] = [{'tick': item['Tick'], 'blockCells': item['BlockCells'], 'openCells': item['OpenCells'],
                               'replaceTarget': item['replaceTarget'], 'afterSettlement': item.get('afterSettlement', item.get('AfterSettlement', False))} for item in original['worldEvents']]
+    result['minimumOldWaitingPromotions'] = original.get('minimumOldWaitingPromotions', 0)
     result['deaths'] = [{'tick': item['Tick'], 'count': item['Count'], 'afterSettlement': item['AfterSettlement'],
-                        'replace': item['Replace'], 'requireMoving': item['RequireMoving'], 'range': item['Range']}
+                        'replace': item['Replace'], 'requireMoving': item['RequireMoving'], 'range': item['Range'], 'attackersOnly': item.get('AttackersOnly', False)}
                        for item in original['deaths']]
     return result
 
@@ -105,21 +107,33 @@ def main():
                 runs.append({'name': source['factory'].split('.')[-1] + '-' + name, 'input': str(path),
                              'assemblyName': Path(source['candidateAssemblyPath']).stem,
                              'assemblyPath': str(destination / 'Plugins' / Path(source['candidateAssemblyPath']).name),
-                             'factory': source['factory']})
+                             'factory': source['factory'], 'expectedCandidateSha256': source['candidateAssemblySha256']})
         script = Path(__file__).with_name('UnityNavigationLab.cs')
         shutil.copyfile(script, destination / 'Editor/UnityNavigationLab.cs')
         dump(destination / 'Editor/NavigationLab.UnityValidation.Editor.asmdef',
              {'name': 'NavigationLab.UnityValidation.Editor', 'includePlatforms': ['Editor'], 'autoReferenced': False})
         manifest = output / 'native-manifest.json'
-        dump(manifest, {'output': str(output), 'wallDeadlineSeconds': args.wall_seconds,
+        run_id = uuid.uuid4().hex
+        dump(manifest, {'output': str(output), 'runId': run_id, 'expectedCoreSha256': manifests[0]['coreAssemblySha256'],
+                        'expectedOracleSha256': manifests[0]['oracleAssemblySha256'], 'graphicsRequired': args.graphics,
+                        'wallDeadlineSeconds': args.wall_seconds,
                         'stepsPerEditorUpdate': args.steps_per_update, 'runs': runs})
+        dump(output / 'validation.json', {'success': False, 'runId': run_id, 'stage': 'starting-unity'})
         command = [str(args.unity), '-batchmode', '-force-glcore' if args.graphics else '-nographics', '-projectPath', str(project),
                    '-executeMethod', 'NavigationLab.UnityValidation.UnityNavigationLab.Run', '--navlab-manifest', str(manifest),
                    '-logFile', str(output / 'unity.log')]
         with (output / 'console.log').open('w') as stream:
             exit_code = subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT, timeout=args.wall_seconds + 240).returncode
+        native_result = json.loads((output / 'validation.json').read_text())
+        fresh = native_result.get('runId') == run_id and native_result.get('manifestSha256') == digest(manifest)
+        staged_unchanged = all(digest(destination / 'Plugins' / name) == expected for name, expected in plugin_hashes.items())
+        frozen_unchanged = all(digest(Path(source[role + 'AssemblyPath'])) == source[role + 'AssemblySha256']
+                               for source in manifests for role in ['core', 'oracle', 'candidate', 'runner'])
+        if not fresh or not staged_unchanged or not frozen_unchanged:
+            exit_code = 3
         dump(output / 'native-provenance.json', {'exitCode': exit_code, 'originalModelInputFileSha256': original_hashes,
-                                               'stagedPluginHashes': plugin_hashes, 'nativeManifestSha256': digest(manifest),
+                                               'stagedPluginHashes': plugin_hashes, 'stagedAndFrozenBinariesUnchanged': staged_unchanged and frozen_unchanged,
+                                               'freshManifestBoundReport': fresh, 'runId': run_id, 'nativeManifestSha256': digest(manifest),
                                                'driverSourceSha256': digest(script),
                                                'buildManifests': {str(path): digest(path) for path in args.build_manifest},
                                                'scope': 'Unity Editor Play/Mono plugin experiment; no replacement of the default business backend.'})
@@ -136,7 +150,14 @@ def main():
                 urp.write_bytes(urp_bytes)
         remaining = subprocess.check_output(['git', '-C', str(project), 'status', '--porcelain', '--', 'Assets', 'Packages', 'ProjectSettings'], text=True)
         if remaining.strip():
+            exit_code = 3
             print('Unity left unexpected tracked changes; preserved for inspection:\n' + remaining, file=sys.stderr)
+        provenance = output / 'native-provenance.json'
+        if provenance.exists():
+            evidence = json.loads(provenance.read_text())
+            evidence['assetCleanupVerified'] = not remaining.strip()
+            evidence['exitCode'] = exit_code
+            dump(provenance, evidence)
     return exit_code
 
 
