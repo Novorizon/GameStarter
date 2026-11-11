@@ -1,0 +1,10 @@
+{
+  "fullTraceIncluded": true,
+  "archiveRelativePath": "traces/dynamic-route-block-and-open.jsonl.gz",
+  "originalVariantTrace": "/workspace/navigation-comparison/results/d-routecache-dynamic/traces/dynamic-route-block-and-open.jsonl.gz",
+  "variantCompressedSha256": "54c881deede48acdb48ec68da60183d8f65b11b050909c7f658911bb2a18786e",
+  "originalBaselineTrace": "/workspace/navigation-comparison/results/d-final-stress/traces/dynamic-route-block-and-open.jsonl.gz",
+  "baselineCompressedSha256": "54c881deede48acdb48ec68da60183d8f65b11b050909c7f658911bb2a18786e",
+  "compressedBytesIdenticalToBaseline": true,
+  "logicalTraceSha256": "18609b25ad80f0df375a92b2f609605185089150ba7ad96a5f8f99a7b691fb86"
+}

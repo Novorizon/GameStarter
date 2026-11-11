@@ -1,0 +1,7 @@
+{
+  "returnCode": 0,
+  "frozenSourceAndBinariesUnchanged": true,
+  "buildManifestSha256": "b0c02aeb5bbe910724f6cd2b1ee161311af65d86b132fbbf09aa86840dcee83f",
+  "diagnosticNoReplay": false,
+  "freshManifestBoundReport": true
+}

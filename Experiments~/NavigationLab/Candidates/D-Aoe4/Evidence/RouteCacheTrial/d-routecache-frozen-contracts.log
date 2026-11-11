@@ -1,0 +1,14 @@
+{
+  "scope": "Independent cache contracts; no common49 navigation simulation or performance acceptance.",
+  "passed": 6,
+  "cases": [
+    "Positive plan equals fresh control; returned objects/four arrays/runtime state are independent.",
+    "Repeated normal null is cached; directed queries preserve distinct exact routes.",
+    "Radius inputs and independent planner caches remain distinct.",
+    "Invalidate, world opening/closure and replacement body geometry do not reuse stale routes.",
+    "Revision key independently prevents a stale positive hit in the blocked-goal clearance guard.",
+    "Exceptions leave no entries; normal-result memo storage is bounded at4096."
+  ],
+  "candidateAssemblySha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+  "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73"
+}

@@ -1,0 +1,7 @@
+{
+  "scope": "Original FindRoute search body is byte-identical after moving only per-call HpaSearches to memo wrapper. No simulation proof is implied.",
+  "oldSourceSha256": "c24a4690b1bf6defac28a65ea39e70fce81e7c7d640b83e2986d3171cc789991",
+  "newSourceSha256": "4398b01ad9eeddaaa0161f4fed77134a2da7c7b11e17bfa1dbd84bab1f97d64b",
+  "searchBodySha256": "ed6c5cf6daf7b4417b973b5079d2a6fb444089e312096f946dad1dc19311cf98",
+  "byteIdentical": true
+}

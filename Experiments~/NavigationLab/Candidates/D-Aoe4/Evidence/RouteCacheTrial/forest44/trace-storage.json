@@ -1,0 +1,10 @@
+{
+  "fullTraceIncluded": true,
+  "archiveRelativePath": "traces/forest-full44-large.jsonl.gz",
+  "originalVariantTrace": "/workspace/navigation-comparison/results/d-routecache-forest44/traces/forest-full44-large.jsonl.gz",
+  "variantCompressedSha256": "fa304569eb6c9b3a1b572114feda096067df394ced8c52c65a8bd7d8adf4dadd",
+  "originalBaselineTrace": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-full44-large.jsonl.gz",
+  "baselineCompressedSha256": "fa304569eb6c9b3a1b572114feda096067df394ced8c52c65a8bd7d8adf4dadd",
+  "compressedBytesIdenticalToBaseline": true,
+  "logicalTraceSha256": "561f4f47be8400adf7520b968f03bc178ccf494aece273c10febf87deb6c4679"
+}

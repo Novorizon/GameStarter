@@ -1,0 +1,15 @@
+{
+  "scope": "Independent read-only review plus frozen-DLL contracts; no additional navigation simulation.",
+  "sourceCommit": "faa969b",
+  "reviewedSearchBodyByteIdentical": true,
+  "reviewedTemplateAndHitIsolation": true,
+  "reviewedInvalidationDirectionRadiusExceptionsCapacity": true,
+  "contractLoadedCandidateSha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+  "reviewCommentFixes": [
+    "hit-array mutation isolation added",
+    "independent revision guard added",
+    "single call fitting160 columns collapsed",
+    "over160 Require parameters split"
+  ],
+  "unresolvedSemanticFindings": []
+}

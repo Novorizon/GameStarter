@@ -1,0 +1,7 @@
+# 独立只读审查
+
+审查覆盖固定提交faa969b的完整路线结果memo与独立契约。未发现未解决的缓存语义缺陷：原FindRoute搜索体逐字保持，入口计数位于wrapper；四元有向key及Invalidate/new planner隔离正确；只缓存正常返回，异常不写入；首次miss模板深复制，hit新Route与四数组复制且运行状态复位；上限4096；指标未用于导航决策。
+
+6组契约额外覆盖miss与hit数组污染、返回标量污染、Direction修改一个返回对象不影响下一结果、独立Revision guard、Apply+Invalidate正常生命周期、方向、半径、实例及容量。独立Revision guard只测试blocked-goal净空短路，不宣称一般Apply可以省略原planner.Invalidate。
+
+正式冻结后契约再次引用bc6e候选及共同Core856fd3运行通过。源码包在独立目录清除bin/obj重建Candidate/Core/Oracle字节一致。该审查没有运行额外模型、没有宣布4例之外通过，也不作设备性能或唯一热点结论。四例实际等价由原始报告与seven-field比较给出。

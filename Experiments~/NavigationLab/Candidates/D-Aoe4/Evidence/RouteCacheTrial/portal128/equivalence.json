@@ -1,0 +1,39 @@
+{
+  "scope": "Separate frozen route-result memo variant, compared to closed original9e61 case files. Diagnostic performance only; original serial49 may still be running. Not a replacement or a mixed49 score.",
+  "candidateAssemblySha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+  "sourceRunSummary": "/workspace/navigation-comparison/results/d-routecache-portal128/summary.json",
+  "sourceSummarySha256": "d36e283987fd7af33279f3b85564465b54327eb7080a2d8712b472a171eda076",
+  "formalVariantSourceAndFreshReplayVerified": true,
+  "originalFrozenSourcesAndFourDllsCurrentlyUnchanged": true,
+  "coreOracleByteIdentical": true,
+  "runnerCompileIdentityEqual": true,
+  "cases": [
+    {
+      "name": "large-portal-grid-128",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/large-portal-grid-128.json.gz",
+      "originalReportFileSha256": "67270dfa7e0eb4689bef6bbf01e2d7c78c5357fcab751a74631d90d21fdf8022",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-portal128/large-portal-grid-128.json.gz",
+      "variantReportFileSha256": "86ea0d4b019be18ec5f945cea1ecc67b35e575e5ec6b564903d2683543d330a4",
+      "oldStatus": "Failed",
+      "newStatus": "Failed",
+      "oldElapsedMilliseconds": 540659,
+      "newElapsedMilliseconds": 418140,
+      "elapsedRatioOriginalOverVariant": 1.2930095183431387,
+      "oldCandidateApiAllocatedBytes": 212860447760,
+      "newCandidateApiAllocatedBytes": 146186816416,
+      "allocationRatioOriginalOverVariant": 1.4560851175133918,
+      "RouteCacheHits": 185916,
+      "HpaSearches": 191821
+    }
+  ]
+}

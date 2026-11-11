@@ -1,0 +1,12 @@
+["dotnet", "build", "/workspace/navigation-comparison/audit/d-routecache-rebuild/Experiments~/NavigationLab/Oracle/NavigationLab.Oracle.csproj", "-c", "Release", "-m:1", "--disable-build-servers", "--nologo", "-p:PathMap=/workspace/navigation-comparison/audit/d-routecache-rebuild=/navigation-lab", "-p:ContinuousIntegrationBuild=true", "-p:RestoreConfigFile=/workspace/navigation-comparison/audit/d-routecache-rebuild.NuGet.Config"]
+  Determining projects to restore...
+  Restored /workspace/navigation-comparison/audit/d-routecache-rebuild/Experiments~/NavigationLab/Oracle/NavigationLab.Oracle.csproj (in 145 ms).
+  1 of 2 projects are up-to-date for restore.
+  NavigationLab.Core -> /workspace/navigation-comparison/audit/d-routecache-rebuild/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll
+  NavigationLab.Oracle -> /workspace/navigation-comparison/audit/d-routecache-rebuild/Experiments~/NavigationLab/Oracle/bin/Release/netstandard2.1/NavigationLab.Oracle.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.97

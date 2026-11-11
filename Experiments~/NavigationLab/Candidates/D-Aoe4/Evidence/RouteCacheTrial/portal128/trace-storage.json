@@ -1,0 +1,10 @@
+{
+  "fullTraceIncluded": true,
+  "archiveRelativePath": "traces/large-portal-grid-128.jsonl.gz",
+  "originalVariantTrace": "/workspace/navigation-comparison/results/d-routecache-portal128/traces/large-portal-grid-128.jsonl.gz",
+  "variantCompressedSha256": "ce2c404717e7684c6239b76bf3d910085be859c99931e8737927dd39786ad929",
+  "originalBaselineTrace": "/workspace/navigation-comparison/results/d-final-stress/traces/large-portal-grid-128.jsonl.gz",
+  "baselineCompressedSha256": "ce2c404717e7684c6239b76bf3d910085be859c99931e8737927dd39786ad929",
+  "compressedBytesIdenticalToBaseline": true,
+  "logicalTraceSha256": "0066619d92d56fef445c6fd1a27cbb241efa20bf0effd7707a3f78e76e01803d"
+}

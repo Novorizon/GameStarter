@@ -1,0 +1,39 @@
+{
+  "scope": "Separate frozen route-result memo variant, compared to closed original9e61 case files. Diagnostic performance only; original serial49 may still be running. Not a replacement or a mixed49 score.",
+  "candidateAssemblySha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+  "sourceRunSummary": "/workspace/navigation-comparison/results/d-routecache-forest44/summary.json",
+  "sourceSummarySha256": "02a2cc9a1c36fa7b90205d807f63941cf5426411e77b93de774e9a1449ce973f",
+  "formalVariantSourceAndFreshReplayVerified": true,
+  "originalFrozenSourcesAndFourDllsCurrentlyUnchanged": true,
+  "coreOracleByteIdentical": true,
+  "runnerCompileIdentityEqual": true,
+  "cases": [
+    {
+      "name": "forest-full44-large",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/forest-full44-large.json.gz",
+      "originalReportFileSha256": "cf9a858b882d6970e073f056b9f6a302946f9303d4195f92399e33550fd37aae",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-forest44/forest-full44-large.json.gz",
+      "variantReportFileSha256": "b1e9cec294af9bd0580f43fe910f1a8b8056683ca2fae000ee494dcb8bd36ca3",
+      "oldStatus": "Failed",
+      "newStatus": "Failed",
+      "oldElapsedMilliseconds": 227268,
+      "newElapsedMilliseconds": 280858,
+      "elapsedRatioOriginalOverVariant": 0.8091918335956249,
+      "oldCandidateApiAllocatedBytes": 138463400568,
+      "newCandidateApiAllocatedBytes": 133102379896,
+      "allocationRatioOriginalOverVariant": 1.0402774216072534,
+      "RouteCacheHits": 122189,
+      "HpaSearches": 122910
+    }
+  ]
+}

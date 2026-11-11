@@ -1,0 +1,10 @@
+{
+  "fullTraceIncluded": true,
+  "archiveRelativePath": "traces/open-arena.jsonl.gz",
+  "originalVariantTrace": "/workspace/navigation-comparison/results/d-routecache-open/traces/open-arena.jsonl.gz",
+  "variantCompressedSha256": "031f976ac358ba94f36b7d66f00c3cbf13c11476a5c5b1e4ea5c8dcddaf72195",
+  "originalBaselineTrace": "/workspace/navigation-comparison/results/d-final-stress/traces/open-arena.jsonl.gz",
+  "baselineCompressedSha256": "031f976ac358ba94f36b7d66f00c3cbf13c11476a5c5b1e4ea5c8dcddaf72195",
+  "compressedBytesIdenticalToBaseline": true,
+  "logicalTraceSha256": "4ac63041f8222d54e69ce74e9a3376dcda2016ea5b7f2294a9e888955f8bcdcd"
+}

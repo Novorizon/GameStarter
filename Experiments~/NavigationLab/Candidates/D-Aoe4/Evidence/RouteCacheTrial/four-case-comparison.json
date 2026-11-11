@@ -1,0 +1,131 @@
+{
+  "scope": "Four original cases only, separate frozen complete-route memo variant. Not49, not selectedD, no original-run cancellation or outcome mixing, no device/FPS ranking.",
+  "sourceCommit": "faa969b",
+  "candidateAssemblySha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+  "requestedComparisonFields": [
+    "InputSha256",
+    "PhysicalInputSha256",
+    "GeometrySha256",
+    "Status",
+    "TraceSha256",
+    "CommandsSha256",
+    "FinalState"
+  ],
+  "allFourCasesIdentical": true,
+  "caseStatuses": {
+    "Passed": 2,
+    "Failed": 2
+  },
+  "fullStress49Started": false,
+  "selectedAsDefault": false,
+  "cases": [
+    {
+      "name": "open-arena",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/open-arena.json.gz",
+      "originalReportFileSha256": "270a08a32b55c6452bd107878d92c08f872bbd75c364c4295766c799060eb8eb",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-open/open-arena.json.gz",
+      "variantReportFileSha256": "b41d9d260613cc9c2e1fcb6ca0e4dbe630bb3b2c50e11a480821926eaf17e0cf",
+      "oldStatus": "Passed",
+      "newStatus": "Passed",
+      "oldElapsedMilliseconds": 5930,
+      "newElapsedMilliseconds": 7441,
+      "elapsedRatioOriginalOverVariant": 0.7969358957129418,
+      "oldCandidateApiAllocatedBytes": 1895132320,
+      "newCandidateApiAllocatedBytes": 1895429008,
+      "allocationRatioOriginalOverVariant": 0.9998434718479311,
+      "RouteCacheHits": 1,
+      "HpaSearches": 1012
+    },
+    {
+      "name": "dynamic-route-block-and-open",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/dynamic-route-block-and-open.json.gz",
+      "originalReportFileSha256": "b8d7929e20fe4f9dae3d3d9f146a49649414226583e25a1d77a3d9b77f8c4c62",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-dynamic/dynamic-route-block-and-open.json.gz",
+      "variantReportFileSha256": "288bb7b6ad71f3749a26ebb977fc91b09411fa7ca077083767aecaf15f45a54f",
+      "oldStatus": "Passed",
+      "newStatus": "Passed",
+      "oldElapsedMilliseconds": 1845,
+      "newElapsedMilliseconds": 9555,
+      "elapsedRatioOriginalOverVariant": 0.19309262166405022,
+      "oldCandidateApiAllocatedBytes": 1198369928,
+      "newCandidateApiAllocatedBytes": 1198483544,
+      "allocationRatioOriginalOverVariant": 0.999905200200229,
+      "RouteCacheHits": 0,
+      "HpaSearches": 309
+    },
+    {
+      "name": "forest-full44-large",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/forest-full44-large.json.gz",
+      "originalReportFileSha256": "cf9a858b882d6970e073f056b9f6a302946f9303d4195f92399e33550fd37aae",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-forest44/forest-full44-large.json.gz",
+      "variantReportFileSha256": "b1e9cec294af9bd0580f43fe910f1a8b8056683ca2fae000ee494dcb8bd36ca3",
+      "oldStatus": "Failed",
+      "newStatus": "Failed",
+      "oldElapsedMilliseconds": 227268,
+      "newElapsedMilliseconds": 280858,
+      "elapsedRatioOriginalOverVariant": 0.8091918335956249,
+      "oldCandidateApiAllocatedBytes": 138463400568,
+      "newCandidateApiAllocatedBytes": 133102379896,
+      "allocationRatioOriginalOverVariant": 1.0402774216072534,
+      "RouteCacheHits": 122189,
+      "HpaSearches": 122910
+    },
+    {
+      "name": "large-portal-grid-128",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/large-portal-grid-128.json.gz",
+      "originalReportFileSha256": "67270dfa7e0eb4689bef6bbf01e2d7c78c5357fcab751a74631d90d21fdf8022",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-portal128/large-portal-grid-128.json.gz",
+      "variantReportFileSha256": "86ea0d4b019be18ec5f945cea1ecc67b35e575e5ec6b564903d2683543d330a4",
+      "oldStatus": "Failed",
+      "newStatus": "Failed",
+      "oldElapsedMilliseconds": 540659,
+      "newElapsedMilliseconds": 418140,
+      "elapsedRatioOriginalOverVariant": 1.2930095183431387,
+      "oldCandidateApiAllocatedBytes": 212860447760,
+      "newCandidateApiAllocatedBytes": 146186816416,
+      "allocationRatioOriginalOverVariant": 1.4560851175133918,
+      "RouteCacheHits": 185916,
+      "HpaSearches": 191821
+    }
+  ]
+}

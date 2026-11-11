@@ -1,0 +1,39 @@
+{
+  "scope": "Separate frozen route-result memo variant, compared to closed original9e61 case files. Diagnostic performance only; original serial49 may still be running. Not a replacement or a mixed49 score.",
+  "candidateAssemblySha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+  "sourceRunSummary": "/workspace/navigation-comparison/results/d-routecache-dynamic/summary.json",
+  "sourceSummarySha256": "178a6661495aa3e5b7263afbc0e7c53c9d1ac0946201da96e4038f966fd6d0f7",
+  "formalVariantSourceAndFreshReplayVerified": true,
+  "originalFrozenSourcesAndFourDllsCurrentlyUnchanged": true,
+  "coreOracleByteIdentical": true,
+  "runnerCompileIdentityEqual": true,
+  "cases": [
+    {
+      "name": "dynamic-route-block-and-open",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/dynamic-route-block-and-open.json.gz",
+      "originalReportFileSha256": "b8d7929e20fe4f9dae3d3d9f146a49649414226583e25a1d77a3d9b77f8c4c62",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-dynamic/dynamic-route-block-and-open.json.gz",
+      "variantReportFileSha256": "288bb7b6ad71f3749a26ebb977fc91b09411fa7ca077083767aecaf15f45a54f",
+      "oldStatus": "Passed",
+      "newStatus": "Passed",
+      "oldElapsedMilliseconds": 1845,
+      "newElapsedMilliseconds": 9555,
+      "elapsedRatioOriginalOverVariant": 0.19309262166405022,
+      "oldCandidateApiAllocatedBytes": 1198369928,
+      "newCandidateApiAllocatedBytes": 1198483544,
+      "allocationRatioOriginalOverVariant": 0.999905200200229,
+      "RouteCacheHits": 0,
+      "HpaSearches": 309
+    }
+  ]
+}

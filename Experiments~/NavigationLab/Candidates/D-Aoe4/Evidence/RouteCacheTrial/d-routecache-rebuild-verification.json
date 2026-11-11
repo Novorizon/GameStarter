@@ -1,0 +1,34 @@
+{
+  "scope": "Independent source-package extraction and clean build only; no navigation simulation or snapshot/worktree edit.",
+  "sourcePackage": "/workspace/navigation-comparison/d-aoe4-routecache/Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/RouteCacheTrial/source-and-binaries.zip",
+  "sourcePackageSha256": "dfc33c2bfe8474dbe5d35bb0a107991708b540f4bbc5082923098e91d87df50f",
+  "sourcePackageMembers": 58,
+  "memberSha256Verified": true,
+  "freshBuildRoot": "/workspace/navigation-comparison/audit/d-routecache-rebuild",
+  "deletedCacheDirectories": [
+    "Experiments~/NavigationLab/Candidates/D-Aoe4/obj",
+    "Experiments~/NavigationLab/Candidates/D-Aoe4/bin",
+    "Experiments~/NavigationLab/Oracle/obj",
+    "Experiments~/NavigationLab/Oracle/bin",
+    "Experiments~/NavigationLab/Runner/obj",
+    "Experiments~/NavigationLab/Runner/bin",
+    "Experiments~/NavigationLab/Core/obj",
+    "Experiments~/NavigationLab/Core/bin"
+  ],
+  "sourceBuildManifest": "/workspace/navigation-comparison/d-aoe4-routecache/Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/RouteCacheTrial/build-manifest.json",
+  "sourceBuildManifestSha256": "689421420c057949dc9a1c751173eb188df30f7d84000eeb97980968150ef32e",
+  "startedUtc": "2026-11-11T11:35:53.719889+00:00",
+  "logs": {
+    "/workspace/navigation-comparison/audit/d-routecache-rebuild-candidate.log": "23d21d14b221ad60bf5c1f19046f8410ce450fd168fe4db30dcc9183fb0629c0",
+    "/workspace/navigation-comparison/audit/d-routecache-rebuild-oracle.log": "72a99593b666acb55c446a213067ef2d1d2f9869b65fbcf1e7a601df132daf18"
+  },
+  "assemblySha256": {
+    "candidate": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+    "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+  },
+  "candidateCoreOracleBitIdentical": true,
+  "finishedUtc": "2026-11-11T11:36:01.901996+00:00",
+  "simulationExecuted": false,
+  "runnerRebuiltOrByteEqualityClaimed": false
+}

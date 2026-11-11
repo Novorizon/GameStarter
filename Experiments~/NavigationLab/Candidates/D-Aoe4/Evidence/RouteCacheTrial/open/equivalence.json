@@ -1,0 +1,39 @@
+{
+  "scope": "Separate frozen route-result memo variant, compared to closed original9e61 case files. Diagnostic performance only; original serial49 may still be running. Not a replacement or a mixed49 score.",
+  "candidateAssemblySha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+  "sourceRunSummary": "/workspace/navigation-comparison/results/d-routecache-open/summary.json",
+  "sourceSummarySha256": "73ce75b6954a36d6a7cf2514c0614fee3d9232cf7fcea99ea55ca207cb5c0396",
+  "formalVariantSourceAndFreshReplayVerified": true,
+  "originalFrozenSourcesAndFourDllsCurrentlyUnchanged": true,
+  "coreOracleByteIdentical": true,
+  "runnerCompileIdentityEqual": true,
+  "cases": [
+    {
+      "name": "open-arena",
+      "allRequestedFieldsIdentical": true,
+      "fields": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "originalReport": "/workspace/navigation-comparison/results/d-final-stress/open-arena.json.gz",
+      "originalReportFileSha256": "270a08a32b55c6452bd107878d92c08f872bbd75c364c4295766c799060eb8eb",
+      "variantReport": "/workspace/navigation-comparison/results/d-routecache-open/open-arena.json.gz",
+      "variantReportFileSha256": "b41d9d260613cc9c2e1fcb6ca0e4dbe630bb3b2c50e11a480821926eaf17e0cf",
+      "oldStatus": "Passed",
+      "newStatus": "Passed",
+      "oldElapsedMilliseconds": 5930,
+      "newElapsedMilliseconds": 7441,
+      "elapsedRatioOriginalOverVariant": 0.7969358957129418,
+      "oldCandidateApiAllocatedBytes": 1895132320,
+      "newCandidateApiAllocatedBytes": 1895429008,
+      "allocationRatioOriginalOverVariant": 0.9998434718479311,
+      "RouteCacheHits": 1,
+      "HpaSearches": 1012
+    }
+  ]
+}
