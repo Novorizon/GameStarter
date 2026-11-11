@@ -1,0 +1,22 @@
+{
+  "scope": "Read-only c1c129e development R10 code/geometry/route queries; no full/fresh/Unity/device claim",
+  "commit": "c1c129e",
+  "files": {
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Program.cs": "fdbaff210007c924dd72bc8f61d95d3eb6ab5ecec11ce93cc14595b0616bc3e0",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Query.csproj": "c96d9551498ae0e908db599e26f4a16d4a6e66e689b528e6b88e76e68692ea71",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/README.md": "3a69b6bae538933d5190072acfd57cea339b88fbe3e9b15bc5d0b9c29fcbaed5",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/AoeNavigator.cs": "e77cbe8e486a07faea7b7f5748dbd0da58e2a35efda1204790564c759e2125ad",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/Contracts.cs": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/Goals.cs": "180c7fb65ea81524949787ca59d1cb0100ff26bc1d8edfafe524746d6559eb0e",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/GridGeometry.cs": "22a83be11f2b650e88e882f06c264dc25c6477e6dfcb4d50de32762f30242043",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/HierarchicalFlow.cs": "b2b072108b006de936822ac0b485a0a28ef7a828ddbf75945f7b2979dd516067",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/MinHeap.cs": "185716b58261e5d73a6683f9e5ec73487259153f8e1787b5891701573d1ea8b7",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/NavigationLab.Core.csproj": "8deb199fd7c331f9a9770948183ac6f7b7739c119054b8968b5311e73ede5bb5",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/NavigationLab.Core.dll": "d8bb97df35af3a09a2669ca036b9f32969b55a46cb89f3b86b1044a61151da75",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/NavigationLab.DAoe4.csproj": "09a9f9abcd87a294b163a9007cc87cd81510ad537fb6c964155e86cc2fd99180",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/NavigationLab.DAoe4.dll": "305d2b753ec92c7377004906b4c1675273bccf203ae71ca1445d660f5e209552",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/Snapshot/Steering.cs": "36929a624823e24c2297a2c41c3e51585812029e3f9e3492b6966fd2e42a0bf7",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/query.json": "7f62f569be1315568f5ebe713d6f78a0d882499064b29ffbcd8ac7dfc14946fc",
+    "/workspace/navigation-comparison/audit/d-r10-code-review/query.log": "7f62f569be1315568f5ebe713d6f78a0d882499064b29ffbcd8ac7dfc14946fc"
+  }
+}

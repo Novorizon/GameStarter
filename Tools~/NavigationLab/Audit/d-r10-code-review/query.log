@@ -1,0 +1,52 @@
+{
+  "scope": "Read-only development R10 geometry/route queries; no full benchmark, fresh replay or production acceptance claim.",
+  "candidateAssemblySha256": "305d2b753ec92c7377004906b4c1675273bccf203ae71ca1445d660f5e209552",
+  "coreAssemblySha256": "d8bb97df35af3a09a2669ca036b9f32969b55a46cb89f3b86b1044a61151da75",
+  "tests": [
+    {
+      "name": "closed-corner-diagonal-rejected",
+      "passed": true
+    },
+    {
+      "name": "base-chord-diagonal-rejected",
+      "passed": true
+    },
+    {
+      "name": "clear-diagonal-between-real-circles-accepted",
+      "passed": true,
+      "analyticMinimumGapMm": 207.10678118654755
+    },
+    {
+      "name": "large-radius-diagonal-margin-and-penetration",
+      "passed": true,
+      "radiusMm": 700
+    },
+    {
+      "name": "actual-hpa-metric-and-heuristic-consistency",
+      "passed": true,
+      "checkedEdges": 3458,
+      "nonintegerEdges": 2004
+    },
+    {
+      "name": "actual-segment-flow-fmm-and-diagonal-relaxation-executed",
+      "passed": true,
+      "metrics": {
+        "HpaSearches": 1,
+        "PortalGraphBuilds": 1,
+        "PortalGraphNodes": 172,
+        "PortalNodesExpanded": 66,
+        "TileConnectedComponents": 10,
+        "SegmentFlowBuilds": 1,
+        "LosIntegrationSeeds": 144,
+        "FmmAcceptedCells": 369,
+        "DiagonalFlowRelaxations": 616
+      }
+    },
+    {
+      "name": "four-neighbour-eikonal-quadratic-retained",
+      "passed": true,
+      "expected": 707.1067811865474,
+      "actual": 707.1067811865476
+    }
+  ]
+}
