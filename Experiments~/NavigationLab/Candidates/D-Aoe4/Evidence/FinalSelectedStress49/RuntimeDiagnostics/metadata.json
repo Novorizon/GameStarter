@@ -1,0 +1,17 @@
+{
+  "scope": "One minimal thread-stack crashreport-only diagnostic of existing experiment process; no heap/core dump, crash signal, restart, or logical tick change requested. Attachment may briefly pause target, so wall/API timings are diagnostic only.",
+  "targetPid": 119238,
+  "startedUtc": "2026-11-11T10:52:39.047332+00:00",
+  "stateBefore": "State:\tR (running)",
+  "command": [
+    "/workspace/.singleton-removal-env/dotnet/shared/Microsoft.NETCore.App/8.0.33/createdump",
+    "--crashreportonly",
+    "--name",
+    "/workspace/navigation-comparison/audit/d256-thread-stack/threads",
+    "119238"
+  ],
+  "durationSeconds": 0.6426491489983164,
+  "finishedUtc": "2026-11-11T10:52:39.690237+00:00",
+  "returnCode": 0,
+  "stateAfter": "State:\tR (running)"
+}

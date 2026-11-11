@@ -1,0 +1,5 @@
+[createdump] Gathering state for process 119238 dotnet
+[createdump] Writing crash report to file /workspace/navigation-comparison/audit/d256-thread-stack/threads-second.crashreport.json
+[createdump] Crash report successfully written
+[createdump] Target process is alive
+[createdump] Dump successfully written in 383ms

@@ -1,0 +1,72 @@
+{
+  "scope": "Diagnostic observations of original selected9e61 execution; no source, candidate DLL, tick duration, case deadline or validation-strength change. Not a device/FPS/performance ranking.",
+  "createdUtc": "2026-11-11T10:57:08.392022+00:00",
+  "stackOnlyAttachments": [
+    {
+      "scope": "One minimal thread-stack crashreport-only diagnostic of existing experiment process; no heap/core dump, crash signal, restart, or logical tick change requested. Attachment may briefly pause target, so wall/API timings are diagnostic only.",
+      "targetPid": 119238,
+      "startedUtc": "2026-11-11T10:52:39.047332+00:00",
+      "stateBefore": "State:\tR (running)",
+      "command": [
+        "/workspace/.singleton-removal-env/dotnet/shared/Microsoft.NETCore.App/8.0.33/createdump",
+        "--crashreportonly",
+        "--name",
+        "/workspace/navigation-comparison/audit/d256-thread-stack/threads",
+        "119238"
+      ],
+      "durationSeconds": 0.6426491489983164,
+      "finishedUtc": "2026-11-11T10:52:39.690237+00:00",
+      "returnCode": 0,
+      "stateAfter": "State:\tR (running)"
+    },
+    {
+      "scope": "Second explicitly authorized crashreport-only thread snapshot, separated by >10 seconds from first. No heap/core or crash signal. Brief attachment pause perturbs wall/API timings; not performance ranking.",
+      "targetPid": 119238,
+      "startedUtc": "2026-11-11T10:55:31.466629+00:00",
+      "stateBefore": "State:\tR (running)",
+      "command": [
+        "/workspace/.singleton-removal-env/dotnet/shared/Microsoft.NETCore.App/8.0.33/createdump",
+        "--crashreportonly",
+        "--name",
+        "/workspace/navigation-comparison/audit/d256-thread-stack/threads-second",
+        "119238"
+      ],
+      "durationSeconds": 0.3869295199983753,
+      "finishedUtc": "2026-11-11T10:55:31.853739+00:00",
+      "returnCode": 0,
+      "stateAfter": "State:\tR (running)"
+    }
+  ],
+  "sumHelperDurationSeconds": 1.0295786689966917,
+  "timingImpact": "Both crashreport-only helper intervals may briefly suspend target. Their approximately1.03s total elapsed is an upper-envelope diagnostic interval, not measured exact stop time. Original wall/API timing can include it.",
+  "eventPipe": "No diagnostic Unix socket or any socket FD was observed in target, so no EventPipe tool was installed or sampling attempted.",
+  "firstStackMeaning": "FindRoute IL0x2f6 is after successful A* edge relaxation cost/parent write, preparing open.Push and Heuristic. It is not parent-chain reconstruction.",
+  "secondStackMeaning": "Second stack is PointSegmentSquared > CanSegment > TileDistances > Graph > FindRoute > Step, a graph-build geometric computation.",
+  "progressObservation": "Later gzip prefix advanced beyond1432; two snapshots do not prove any infinite loop. Current last-case-progress.json records updated lower bound.",
+  "sourceReview": {
+    "existingCaches": [
+      "GridGeometry.Clearance(radius)",
+      "HierarchicalFlow component and portal graph per radius",
+      "Segment flows by(radius,exit,tiles), plus route LastFlow"
+    ],
+    "cacheLifetime": "PlanningBody[] and World cloned in GridGeometry. RefreshPlanningBodies replaces geometry+planner only when settled-body signature changes. Base Apply increments revision and clears Clearance. Any new memo must clear on Apply; replacement geometry naturally starts empty.",
+    "lowestRiskCandidate": "Memoize exact directed CanEdge(fromCell,toCell,radius) within a geometry instance; retain original computation, direction, epsilon and result. Cache both true/false. Do not round moving coordinates or merge reverse queries.",
+    "secondaryCandidate": "TileDistances exact(start,radius) has no cache and allocates full World.CellCount double[] despite8x8 local tile. Consider bounded exact memoization; do not cache unbounded whole-world arrays for all portals. Tile-local storage is a separate representation change requiring full equivalence validation.",
+    "notProven": "No CPU sample distribution was collected. Observations do not establish a single dominant hotspot or guarantee a cache speedup.",
+    "positiveCostAudit": "TileDistances initializes unreachable=-1 and Graph excludes distance<0; portal other!=i. Within-tile and cross-tile costs use Point2.Distance in mm. Heuristic also uses Point2.Distance in mm. On this finite128x96 integer-cell input no negative/nonfinite edge source was found."
+  },
+  "prior128ActualEvidence": {
+    "source": "/workspace/navigation-comparison/results/d-final-stress/large-portal-grid-128.json",
+    "sourceSha256": "ac1a10c8d563bed4822c6533001a66a791548f5dd72760dd52370df648ceac9a",
+    "ElapsedMilliseconds": 540659,
+    "TotalCandidateApiAllocatedBytes": 212860447760,
+    "Metrics": {
+      "ImmobileCircleRebuilds": 129,
+      "PortalGraphBuilds": 130,
+      "PortalGraphNodes": 588654,
+      "HpaSearches": 191821,
+      "RouteRefreshes": 174782,
+      "SegmentFlowBuilds": 5351
+    }
+  }
+}

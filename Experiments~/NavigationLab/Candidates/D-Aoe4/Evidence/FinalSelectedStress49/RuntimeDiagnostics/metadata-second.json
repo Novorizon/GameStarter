@@ -1,0 +1,17 @@
+{
+  "scope": "Second explicitly authorized crashreport-only thread snapshot, separated by >10 seconds from first. No heap/core or crash signal. Brief attachment pause perturbs wall/API timings; not performance ranking.",
+  "targetPid": 119238,
+  "startedUtc": "2026-11-11T10:55:31.466629+00:00",
+  "stateBefore": "State:\tR (running)",
+  "command": [
+    "/workspace/.singleton-removal-env/dotnet/shared/Microsoft.NETCore.App/8.0.33/createdump",
+    "--crashreportonly",
+    "--name",
+    "/workspace/navigation-comparison/audit/d256-thread-stack/threads-second",
+    "119238"
+  ],
+  "durationSeconds": 0.3869295199983753,
+  "finishedUtc": "2026-11-11T10:55:31.853739+00:00",
+  "returnCode": 0,
+  "stateAfter": "State:\tR (running)"
+}
