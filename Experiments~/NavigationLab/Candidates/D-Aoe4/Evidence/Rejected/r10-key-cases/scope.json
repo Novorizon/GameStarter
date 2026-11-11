@@ -1,0 +1,57 @@
+{
+  "scope": "D10 development key regressions only, no-replay; not a final49 matrix. All original inputs/radii/speeds retained; true completed failures retained, no capacity reinterpretation.",
+  "candidateCommit": "c1c129e",
+  "candidateDllSha256": "305d2b753ec92c7377004906b4c1675273bccf203ae71ca1445d660f5e209552",
+  "cases": [
+    {
+      "case": "open-arena",
+      "status": "Passed",
+      "error": null,
+      "alive": 48,
+      "attack": 16,
+      "waiting": 32,
+      "tick": 252,
+      "inputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b"
+    },
+    {
+      "case": "dynamic-route-block-and-open",
+      "status": "Passed",
+      "error": null,
+      "alive": 24,
+      "attack": 16,
+      "waiting": 8,
+      "tick": 800,
+      "inputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a"
+    },
+    {
+      "case": "forest-single-large",
+      "status": "Passed",
+      "error": null,
+      "alive": 1,
+      "attack": 1,
+      "waiting": 0,
+      "tick": 1126,
+      "inputSha256": "5f0f1e8352e84f5f48c50e2c4a5b28d298b0e2c40e051c8808d9bf3eb2a5507b"
+    },
+    {
+      "case": "forest-full44-large",
+      "status": "Failed",
+      "error": "Deadline: alive=44, pending=0, moving=29, attack=15, failure=None",
+      "alive": 44,
+      "attack": 15,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e"
+    },
+    {
+      "case": "single-cell-throat",
+      "status": "Failed",
+      "error": "Deadline: alive=48, pending=0, moving=45, attack=3, failure=None",
+      "alive": 48,
+      "attack": 3,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "d566c5ddbd26c3cdbced54c1174a2000fece1929bdeace48d6f925be17d728f7"
+    }
+  ]
+}
