@@ -12,10 +12,10 @@
 | [Blizzard：Unit Control](https://classic.battle.net/war3/basics/unitcontrol.shtml) | 单位围同一目标寻找攻击机会，友军/敌军混杂可能阻路，部分单位会绕行寻找空隙；官方建议玩家更换容易到达的目标 | 自动解开所有包围或堵塞的完备保证 |
 | [Blizzard：Siege Engine](https://classic.battle.net/war3/human/units/siegeengine.shtml) | 大型单位更难通行，可被其它单位包围堵路 | 原版内部碰撞半径及寻路代价公式 |
 | [Blizzard：Revisiting the Warcraft III Editor](https://news.blizzard.com/en-gb/article/23395649/revisiting-the-warcraft-iii-editor) | 地图几何、单位/建筑由编辑器管理；地面通行空间与瓶颈是官方地图制作关注点 | 具体寻路实现或自动修复不合理地图的能力 |
-| [Warsmash：CPathfindingProcessor](https://github.com/Retera/WarsmashModEngine/blob/main/core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/pathing/CPathfindingProcessor.java) | 一个公开 Warcraft III 重实现使用 A* 风格搜索，并分别检查静态通行与动态碰撞 | 暴雪原引擎使用同一算法；该文件作者明确将其描述为自己的初稿 |
-| [Warsmash：CBehaviorMove](https://github.com/Retera/WarsmashModEngine/blob/main/core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/behaviors/CBehaviorMove.java) | 该重实现把行走执行、碰撞与重新寻路放在移动行为层 | 原版对同类堵塞的内部状态机与重搜阈值 |
+| [Warsmash：CPathfindingProcessor](https://github.com/Retera/WarsmashModEngine/blob/f9e0aeed4be372d6016519d0e97b384aa873f374/core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/pathing/CPathfindingProcessor.java) | 一个公开 Warcraft III 重实现使用 A* 风格搜索，并分别检查静态通行与动态碰撞 | 暴雪原引擎使用同一算法；该文件作者明确将其描述为自己的初稿 |
+| [Warsmash：CBehaviorMove](https://github.com/Retera/WarsmashModEngine/blob/f9e0aeed4be372d6016519d0e97b384aa873f374/core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/behaviors/CBehaviorMove.java) | 该重实现把行走执行、碰撞与重新寻路放在移动行为层 | 原版对同类堵塞的内部状态机与重搜阈值 |
 
-读取时间：2026-11-11 UTC。Warsmash 仅作为公开重实现的身份与架构对照，不作为暴雪算法的证据。其许可证为 AGPL-3.0；本分支不复制、编译或链接其源文件。候选 C# 搜索、几何与调度代码独立编写，使用本项目许可。
+读取时间：2026-11-11 UTC。Warsmash 仅作为公开重实现的身份与架构对照，不作为暴雪算法的证据。固定参考提交为 `f9e0aeed4be372d6016519d0e97b384aa873f374`，三个文件的blob SHA均已逐一核对。其许可证为 AGPL-3.0；本分支不复制、编译或链接其源文件。候选 C# 搜索、几何与调度代码独立编写，使用本项目许可。
 
 ## 实验实现选择
 
@@ -28,7 +28,9 @@
 
 ## 测试状态
 
-公共 Core/Runner 正在由导航实验主分支建立。候选会使用相同输入、独立连续几何检查器与相同成功条件；正式命令、源码指纹及结果在可运行后补入本页。当前资料核对和设计不算测试通过。
+公共 Core/Oracle/Runner 已同步。候选使用相同输入、独立连续几何检查器与相同成功条件；来源核对本身不算测试通过。公开来源与自选策略的机器可读界定在 `Evidence/source-review.json`。
+
+本分支只通过实验 factory 运行 E；没有将 `Bootstrap`、业务 `FightSession` 或生产导航切换到 E。直接启动原游戏仍运行保留的 A 实现。
 
 ## 早期真实 Forest 排错记录
 
@@ -68,8 +70,8 @@ E3早期无条件backoff破坏了初始44人稳定；限定到空间专用Goal�
 
 所有临停、backoff、Goal排序和碰撞优先级都是本实验自行选择的控制策略，尚无证据证明暴雪原版使用相同策略。此处测试的仅是统一模型中的2D地面圆盘、固定速度上限、格心驻留/攻击目标；未涵盖原版单位转向、加速度、海空移动、阵营阻挡规则、技能位移或战争迷雾。
 
-## 绑定来源的公共7项smoke
+## 绑定来源的旧协议公共7项smoke
 
 共享harness `c882538`、默认运行时源`8a0a3cd`已通过freeze-run构建绑定、独立oracle与全新实例重放。结果为 **6 Passed / 1 Failed / 0 Unsupported**：open48、Forest8、非格心途中死亡补兵、动态堵路/重开、大体型r700、快速2200mm/tick通过，6项通过均重放一致；原72场景全部实际生成，但最终11人Moving、仅9攻击，deadline12000，明确失败。
 
-这7项只是正式绑定的smoke，不是完整普适性结论。暂停/实例隔离、源与DLL无漂移均通过；`formalEvidenceReady=true`表示来源完整，并不表示`success=true`（本轮success为false）。`Evidence/BoundSmoke7`保留summary、编译项、buildmanifest、实际输入、日志与压缩逐步轨迹；其中冻结DLL SHA为`ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543`，不能与未PathMap的live构建DLL指纹混用。后续同一公共full/stress仍须单独验证并记录真实失败。
+这7项是旧协议 `c882538` 下来源绑定的smoke，不计为最终共同 v2 矩阵。暂停/实例隔离、源与DLL无漂移均通过；`formalEvidenceReady=true`表示来源完整，并不表示`success=true`（本轮success为false）。`Evidence/BoundSmoke7`保留summary、编译项、buildmanifest、实际输入、日志与压缩逐步轨迹；其中冻结DLL SHA为`ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543`，不能与未PathMap的live构建DLL指纹混用。后续同一公共full/stress仍须单独验证并记录真实失败。

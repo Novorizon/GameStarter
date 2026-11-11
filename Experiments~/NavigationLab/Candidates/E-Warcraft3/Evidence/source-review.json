@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "reviewedOnUtc": "2026-11-11",
+  "claim": "Warcraft III style public behavior and independent reconstruction, not confirmed Blizzard original pathfinding algorithm.",
+  "scope": "2D circular ground bodies, continuous geometric safety, spatial grid routes and discrete holding endpoints.",
+  "primarySources": [
+    {
+      "url": "https://classic.battle.net/war3/basics/unitcommands.shtml",
+      "supportedObservation": "Public Move, Stop, Hold Position, Attack, Attack-Move and Patrol semantics; physical terrain barriers can prevent movement.",
+      "notEstablished": "Internal path search, grid resolution, collision solver and scheduling."
+    },
+    {
+      "url": "https://classic.battle.net/war3/basics/unitcontrol.shtml",
+      "supportedObservation": "Units trying to attack one target can be blocked by other units and may seek openings; players may need to select another reachable target.",
+      "notEstablished": "An automatic complete solution of every surround/body-block."
+    },
+    {
+      "url": "https://classic.battle.net/war3/human/units/siegeengine.shtml",
+      "supportedObservation": "Large units can be difficult to path and can be surrounded or blocked by other units.",
+      "notEstablished": "Exact collision sizes or search costs."
+    },
+    {
+      "url": "https://news.blizzard.com/en-gb/article/23395649/revisiting-the-warcraft-iii-editor",
+      "supportedObservation": "Editor terrain, doodads and buildings define game geometry; spacing and choke points affect movement.",
+      "notEstablished": "A complete engine pathfinding algorithm."
+    }
+  ],
+  "openReference": {
+    "repository": "https://github.com/Retera/WarsmashModEngine",
+    "identity": "Independent open-source Warcraft III reimplementation; not Blizzard engine source.",
+    "license": "AGPL-3.0",
+    "files": [
+      {
+        "path": "core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/pathing/CPathfindingProcessor.java",
+        "gitBlobSha1": "84225a4f03604ececa063f35093154f60e2d8208",
+        "observation": "Author explicitly describes the search as their naive first A* draft based on Wikipedia; it cannot identify the Blizzard algorithm.",
+        "permalink": "https://github.com/Retera/WarsmashModEngine/blob/f9e0aeed4be372d6016519d0e97b384aa873f374/core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/pathing/CPathfindingProcessor.java"
+      },
+      {
+        "path": "core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/behaviors/CBehaviorMove.java",
+        "gitBlobSha1": "c5b21ecba764634383efe7847c5b59f4a1a4dd8f",
+        "observation": "Movement behavior separates static pathing, current body collision and replanning.",
+        "permalink": "https://github.com/Retera/WarsmashModEngine/blob/f9e0aeed4be372d6016519d0e97b384aa873f374/core/src/com/etheller/warsmash/viewer5/handlers/w3x/simulation/behaviors/CBehaviorMove.java"
+      },
+      {
+        "path": "LICENSE",
+        "gitBlobSha1": "be3f7b28e564e7dd05eaf59d64adba1a4065ac0e",
+        "observation": "AGPL license of the open reference.",
+        "permalink": "https://github.com/Retera/WarsmashModEngine/blob/f9e0aeed4be372d6016519d0e97b384aa873f374/LICENSE"
+      }
+    ],
+    "reuse": "No source files copied, compiled or linked. C# search, geometry and controller were independently written.",
+    "verifiedCommit": "f9e0aeed4be372d6016519d0e97b384aa873f374",
+    "verification": "GitHub connector fetched the commit and each exact file at that commit on 2026-11-11; returned Git blob SHA1 matches all previously reviewed file identities."
+  },
+  "experimentChoicesNotAttributedToBlizzard": [
+    "8-neighbor A* and Euclidean heuristic",
+    "Radius-aware swept collision tests",
+    "Timed local rejoin search and global spatial replanning",
+    "Friendly side-pocket yielding and actual return",
+    "Spatial goal compatibility ranking",
+    "Waiting-to-attack promotion and death/refill handling",
+    "All thresholds, budgets and collision stop priorities"
+  ],
+  "knownLimit": "Finite test inputs can refute broad claims but passing them cannot prove all-map completeness. Shared .NET experiments and selected Unity Mono checks do not verify original game behavior or device frame rate."
+}
