@@ -37,6 +37,35 @@
 
 GameStarter 的业务 UI 使用 TMP，图片、字体和数据通过 YooAsset 管理。未来接入多语言等包时，需要核对 TMP 绑定与字体资源的适配；不能仅因为 SDK 提供 Legacy Text 示例就把业务 UI 改回 Legacy Text。
 
+## 平台 SDK 第一阶段
+
+Google Play 和 App Store 发行 checkout 固定 Unity IAP `5.5.0`。共用工程保留 Android API 22，并按发行目标选装官方 SDK。Payments `0.1.0-preview.3` 固定为 UnityPackages 提交 `0329061309bd2113b17aabbcf41777e5cbdf00bb`。Ads、Firebase 及 Firebase 所依赖的 Novorizon Auth、Analytics 封装固定为 UnityPackages `v0.1.0-preview.37` 的提交 `4ebef06437166d59bc8841b89f53c5ee140448e8`。现有 Framework 与聚合包继续使用原固定版本。Novorizon Auth 和 Analytics 在这里仅提供程序集依赖，厂商产品按各发行 checkout 安装。 [平台 SDK 接口与版本](https://github.com/Novorizon/UnityPackages/blob/4ebef06437166d59bc8841b89f53c5ee140448e8/Documentation/PlatformServices.zh-CN.md)
+
+`GameStarter.PlatformServices` 提供显式装配入口，调用方持有 Manager 并在 Unity 主线程初始化。当前启动与业务程序集没有引用该入口。未选渠道、未提供配置或不支持的平台上保持服务关闭，广告尚无加载、展示或奖励调用。
+
+| 发行目标 | 内购 | 广告 |
+| --- | --- | --- |
+| 国内 Android | 等待发行方确认目标商店和 `IPaymentStore` 适配。保持 `com.unity.purchasing` 未安装。 | 国内穿山甲，Android `com.pangle.cn:mediation-sdk:7.8.1.4` |
+| Google Play | `NativeStore.GooglePlay` | AppLovin MAX Unity `8.6.6` |
+| App Store | `NativeStore.Apple` | 根据 iOS 发行区域选择穿山甲 `Ads-CN/BUAdSDK:7.8.1.1` 或 MAX Unity `8.6.6` |
+
+### 内购与广告配置
+
+- 商店发行 checkout 在 Package Manager 中安装 `com.unity.purchasing@5.5.0` 并保留生成的 lock。Google Play 发行配置需将最低版本设为 API 23 或更高，因为 IAP 5.5.0 的构建处理会加入 Billing 9.0.0。
+- 内购需要平台应用标识、商店商品 ID 与商品类型、逻辑商品 ID 映射，以及绑定游戏会话的可信验单与持久化幂等发货实现 `IPurchaseFulfillment`。将商品表和该实现传给 `PlatformServiceManagers.CreateIap`。调用方初始化 IAP 后才能购买和补单。验单与持久化发货成功后才确认商店订单。 [Unity IAP 安装与初始化](https://docs.unity.com/en-us/iap/set-up-in-app-purchasing)
+- 每个发行 checkout 只安装一种广告原生依赖。编译符号只控制 C# 适配器，切换渠道时也要移除上一渠道的 SDK、解析产物、Gradle 依赖及 iOS 包声明，再检查导出依赖。
+- 国内发行安装 EDM4U，选择 Android 或 iOS 后执行 **Novorizon > Platform SDKs > Install domestic CSJ**，再解析 Maven 或 CocoaPods 依赖。桥接和依赖声明位于 `Assets/NovorizonPlatform/Ads`。 Android `7.8.1.4` 官方 AAR 声明最低 API 24，国内发行配置需相应设置。待提供每端穿山甲 App ID、各广告场景的广告位 ID、隐私同意来源，iOS 另需发行方确认 SKAdNetwork 和隐私清单。使用直连库存。 [穿山甲 Android](https://www.csjplatform.com/supportcenter/5397) · [穿山甲 iOS](https://www.csjplatform.com/supportcenter/28721)
+- 海外发行导入 MAX `8.6.6`，保留一份 EDM4U。通过 **AppLovin > Integration Manager** 写入真实 SDK Key，再执行 **Novorizon > Platform SDKs > Enable installed AppLovin MAX**。待提供对应应用的 SDK Key、广告位 ID 与隐私同意来源。仅在 Integration Manager 已配置、广告位有效且已有隐私同意时调用 `CreateMaxAds`。 [MAX 安装指南](https://support.applovin.com/en/max/unity/overview/integration) · [MAX 8.6.6](https://github.com/AppLovin/AppLovin-MAX-Unity-Plugin/releases/tag/release_8_6_6)
+
+### Crashlytics 发行配置
+
+- 只导入官方 `FirebaseCrashlytics.unitypackage`，或使用官方 UPM 存档安装 `com.google.firebase.app` 与 `com.google.firebase.crashlytics`（均为 `14.1.0`）以及 EDM4U `1.2.190`。两种导入方式选一种。所需版本要求 Android API 24+、iOS 15+。iOS Firebase 依赖走 Swift Package Manager，使用 Firebase Apple SDK `13.1.1`。 [Google Unity 包存档](https://developers.google.com/unity/archive) · [Firebase Unity 版本说明](https://firebase.google.com/support/release-notes/unity)
+- 需要 Firebase 项目为实际 Android application ID、iOS Bundle ID 注册的官方文件。分别放置于发行工程的 `Assets/google-services.json`、`Assets/GoogleService-Info.plist`。标准 Assets 安装用 **Novorizon > Platform SDKs > Synchronize installed Firebase SDKs**。UPM 安装仅在目标组启用 `NOVORIZON_FIREBASE_APP` 和 `NOVORIZON_FIREBASE_CRASHLYTICS`。完成配置后才可显式调用 `CreateCrashReporterAsync`。 [Crashlytics 安装指南](https://firebase.google.com/docs/crashlytics/unity/get-started)
+- 冷启动默认关闭上传。Android 在最终合并的 manifest 的 `<application>` 下设置 `<meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />`。iOS 在 Xcode 导出的应用 `Info.plist` 中设置布尔值 `FirebaseCrashlyticsCollectionEnabled = false`。SDK 的运行时启用状态会跨启动保留，发布前需验证冷启动及撤销同意的行为。第一阶段没有调用 `SetCollectionEnabled(true)`，也没有写入玩家 ID、自定义日志或异常上下文。 [Android 原生开关](https://firebase.google.com/docs/crashlytics/android/customize-crash-reports) · [iOS 原生开关](https://firebase.google.com/docs/crashlytics/ios/customize-crash-reports)
+- 官方 Firebase Unity `14.1.0` 的 `AppDependencies.xml` 和 `CrashlyticsDependencies.xml` 都声明了 Android `firebase-analytics:24.0.0`。Android 发行 checkout 导入后、Resolve 前运行 `python Tools~/prepare-crashlytics-android.py`。脚本支持标准 Assets 和嵌入到 `Packages/com.google.firebase.*` 的官方 UPM 包，只移除这两处声明。清理旧解析产物并重新 Resolve，在导出工程执行 `gradlew.bat :launcher:dependencies --configuration releaseRuntimeClasspath`，确认保留 Crashlytics、Crashlytics NDK 和所需的 `firebase-measurement-connector`、`firebase-config-interop`，同时排除 `firebase-analytics`、`play-services-measurement*`、Auth、Messaging 和 Remote Config 产品库。Android 真机崩溃上报通过前保持停用。
+
+发行验收需检查 Android 合并 manifest 与 Gradle 依赖、iOS Info.plist 与链接产物，再用渠道设备核对沙盒验单、测试广告和 Crashlytics 符号及入库。国内 Crashlytics 还需验证目标网络下的实际送达。
+
 ## 启动验收和退出
 
 命令行 Player 验收使用 `Tools~/native-validate.ps1` 构建的专用 Player。脚本只在验收副本中临时导入 `NativeFixtures~/RuntimeProbes`。运行验收 Player 时传入 `--novorizon-native-smoke`，启动完成后输出 Ready/Failed 标记并返回退出码。常规程序集由编译器省略无实现的探针调用。Editor 验收分别检查启动、界面和退出清理，Player、IL2CPP 和设备验收独立记录。
