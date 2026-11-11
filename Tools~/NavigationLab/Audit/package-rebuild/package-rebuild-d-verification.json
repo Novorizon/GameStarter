@@ -1,0 +1,25 @@
+{
+  "scope": "Independent D12 archive extraction and clean build/export only; no navigation simulations. Runner DLL root metadata is path-dependent and not asserted byte-identical. Stress49 model is still running and not claimed complete.",
+  "label": "D12",
+  "sourceRun": "/workspace/navigation-comparison/results/d-final-stress",
+  "sourcePackage": "/workspace/navigation-comparison/d-aoe4/Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/FinalSelectedStress49/source-and-binaries.zip",
+  "sourcePackageSha256": "be921875d7ee6b4ccb9eae6304a7ff1e0d799f31cad183ed7932012eda2c7625",
+  "freshBuildRoot": "/workspace/navigation-comparison/audit/package-rebuild-d",
+  "buildManifestSha256": "5b1b5e32f4688bbf667e5bc2fd23121a826c0ec99b3ef9a899b79968b0048213",
+  "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+  "candidateCoreOracleBitIdentical": true,
+  "assemblySha256": {
+    "candidate": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+    "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+  },
+  "exportedInputsByteIdentical": true,
+  "inputCount": 49,
+  "rebuiltRunnerAssemblySha256": "37ece7bdb0739521991da05ac0d43117a67afab5b64cb88349e26da0316a9548",
+  "sourceRunnerAssemblySha256": "17942c8b66237aa3f574895993d500bc0641add9a3297f0f7afcbbe589669789",
+  "logs": {
+    "/workspace/navigation-comparison/audit/package-rebuild-d-runner.log": "4bd7bf39f1b0490ff51e6cd12132ad8be9be7ebf1faf3fd3796f408a7d398588",
+    "/workspace/navigation-comparison/audit/package-rebuild-d-candidate.log": "b5a5f44ddb39e7173b6ae3b26a270f8f41c29cd6b0a4451cba0249dfa32f3cb7",
+    "/workspace/navigation-comparison/audit/package-rebuild-d-export.log": "1900437a6d309f3e15b52b04a36e28a85bbccf7fbe2e12ac9b21fb5341a9bd55"
+  }
+}

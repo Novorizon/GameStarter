@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "baselineCommit": "8c0dd50ad3717ba295c1a52ac96c491e07697ae1",
   "baselineDomainAggregateSha256": "074502ae2c712a92094d4b851c451afba25ac300c063f78e28b605b767a72c2f",
   "forestMapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
@@ -13,5 +13,184 @@
   },
   "mergeMain": false,
   "modifySdk": false,
-  "status": "implementing; no new algorithm acceptance claimed"
+  "status": "five complete stress49 reports; D12 full stress49 running; no new default game backend",
+  "updatedUtc": "2026-11-11T08:59:47.453860+00:00",
+  "evidenceScope": "Frozen manifest sourceFiles and actual DLLs are authoritative; origin commit may include unrelated dirty files. Evidence commit may follow implementation and does not change the bound DLL.",
+  "selectedRuns": {
+    "A": {
+      "factoryType": "NavigationLab.Candidates.ASipp.SippFactory",
+      "runDirectory": "a-v2-final-stress",
+      "originCandidate": {
+        "repository": "/workspace/navigation-comparison/comparison",
+        "commit": "6c8556915ad6a82f744284736fada3e48871bfb1",
+        "branch": "experiment/navigation-comparison",
+        "dirty": true
+      },
+      "snapshotIdentitySha256": "8f5764c5a7f84fa13a377a2755af740caf94e38c03da3a5fe63bbaffd84f82b1",
+      "buildManifestSha256": "9e942b0d13ad81d0153ae349c6bf4b1f7c64898688e83a5b359074cc43392a49",
+      "assemblySha256": {
+        "candidate": "2a7c9467f14826252c4af4ab369bb5abf056fa7ce816b8d403aaf732e22e1c7a",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+        "runner": "6d538db81d2ba337c1bbdbcbeb046b204762e49738bb782a9e852491fe8f16c9"
+      },
+      "evidenceBranch": "experiment/navigation-comparison",
+      "evidenceCommit": "f67ab78570828db53a18961f81b584e31a4b0525",
+      "evidencePath": "Experiments~/NavigationLab/Evidence/A-Sipp",
+      "modelStatus": "completed",
+      "modelSummarySha256": "cb58d6840a2196b91cfcc3f9bae8de945958f2c9c981e76a0c286e6a845a9889",
+      "counts": {
+        "passed": 41,
+        "failed": 0,
+        "unsupported": 8,
+        "invalidInputs": 0
+      },
+      "frozenBusinessBranch": "experiment/navigation-a-sipp",
+      "frozenBusinessCommit": "8c0dd50ad3717ba295c1a52ac96c491e07697ae1"
+    },
+    "B0": {
+      "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+      "runDirectory": "b0-v2-final-stress",
+      "originCandidate": {
+        "repository": "/workspace/navigation-comparison/b-orca",
+        "commit": "8c6a4a20158fd95ae2d4de7d4c50847d44bd8286",
+        "branch": "experiment/navigation-b-orca",
+        "dirty": false
+      },
+      "snapshotIdentitySha256": "a45e8ae3db636b272a94f5538d9ee0c59cd26e13055b3243f048c259b8946188",
+      "buildManifestSha256": "ab6d62819b1d6268b6f1842fd51e03b1dd5644da2809e54ae20ec54f69294dd8",
+      "assemblySha256": {
+        "candidate": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+        "runner": "da91ca36911ee8ea7d4d744b2bf211b2734c8cafd65b37e1f53f0d2a19fdb7e7"
+      },
+      "evidenceBranch": "experiment/navigation-b-orca",
+      "evidenceCommit": "81bde837443ff3f2e995b4a2a752d4d72005a15b",
+      "evidencePath": "Experiments~/NavigationLab/Candidates/B-Orca/Evidence/FinalStress/B0",
+      "modelStatus": "completed",
+      "modelSummarySha256": "1b0462c69c48bd3508fe0e6bf426fbaf6f8c7795e6d979fcff0ca6bdc653c460",
+      "counts": {
+        "passed": 28,
+        "failed": 21,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    },
+    "B1": {
+      "factoryType": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+      "runDirectory": "b1-v2-final-stress",
+      "originCandidate": {
+        "repository": "/workspace/navigation-comparison/b-orca",
+        "commit": "8c6a4a20158fd95ae2d4de7d4c50847d44bd8286",
+        "branch": "experiment/navigation-b-orca",
+        "dirty": false
+      },
+      "snapshotIdentitySha256": "d4a3d8433d1042eeefcc1cd5c843107e2fdbd11d70b7bf687d86f544eedee7ed",
+      "buildManifestSha256": "14178e073999a8bc6202c4f438b3d6a91b8b3a7b681bceff357b69f8d742b900",
+      "assemblySha256": {
+        "candidate": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+        "runner": "03f6d6d14d233d436796df4a8b370d26f4f1be114190e07e60af0f953308a145"
+      },
+      "evidenceBranch": "experiment/navigation-b-orca",
+      "evidenceCommit": "81bde837443ff3f2e995b4a2a752d4d72005a15b",
+      "evidencePath": "Experiments~/NavigationLab/Candidates/B-Orca/Evidence/FinalStress/B1",
+      "modelStatus": "completed",
+      "modelSummarySha256": "362909c45de54cb3888392e1f5b48c06e4e02fffc71aaa12f43354e74b70c96f",
+      "counts": {
+        "passed": 45,
+        "failed": 4,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    },
+    "C33": {
+      "factoryType": "NavigationLab.CSupCom2.Factory",
+      "runDirectory": "c-final2-v2-stress49",
+      "originCandidate": {
+        "repository": "/workspace/navigation-comparison/c-supcom2",
+        "commit": "69d778fe932900f013fbd2130cd2b1ebf241f84d",
+        "branch": "experiment/navigation-c-supcom2",
+        "dirty": false
+      },
+      "snapshotIdentitySha256": "b353b77565baa325c3839f6e79d63bbd44152ca46c75ffd7bfaa67d581ce6e87",
+      "buildManifestSha256": "f64af4da3f3cf873854ec825af2d08521d457c51b43cf5d878385a2973b4649e",
+      "assemblySha256": {
+        "candidate": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+        "runner": "2fc5fafc69a34d8b379fa042eb197e0b09b08592fafbec1e36efea5ebc77bee5"
+      },
+      "evidenceBranch": "experiment/navigation-c-supcom2",
+      "evidenceCommit": "a9a62129bfcea2f3e0c17079f24c03b64258f18d",
+      "evidencePath": "Experiments~/NavigationLab/Candidates/C-SupCom2/Evidence/Final-C33-v2-stress49",
+      "modelStatus": "completed",
+      "modelSummarySha256": "c36c045fe4d6d62c863a34e66a1288e6a8ac7479e916bc78cde76acfb0cd4649",
+      "counts": {
+        "passed": 46,
+        "failed": 3,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    },
+    "D12": {
+      "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+      "runDirectory": "d-final-stress",
+      "originCandidate": {
+        "repository": "/workspace/navigation-comparison/d-aoe4",
+        "commit": "81a79fae904d3f90312365e0d68f1dc185b5bafe",
+        "branch": "experiment/navigation-d-aoe4",
+        "dirty": false
+      },
+      "snapshotIdentitySha256": "6a218602356d48aafc2f99f7b64264686180c5e14f2511d267600768e943fcdf",
+      "buildManifestSha256": "5b1b5e32f4688bbf667e5bc2fd23121a826c0ec99b3ef9a899b79968b0048213",
+      "assemblySha256": {
+        "candidate": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+        "runner": "17942c8b66237aa3f574895993d500bc0641add9a3297f0f7afcbbe589669789"
+      },
+      "evidenceBranch": "experiment/navigation-d-aoe4",
+      "evidenceCommit": "8eefcee52298c8b80f07c6cc23f561e75e794507",
+      "evidencePath": "Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/FinalSelectedStress49",
+      "modelStatus": "running; source ZIP/native/supplementary only, no completed model archive",
+      "modelSummarySha256": null
+    },
+    "E": {
+      "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "runDirectory": "e-final-goal-safe-stress49",
+      "originCandidate": {
+        "repository": "/workspace/navigation-comparison/e-warcraft3",
+        "commit": "e6ae1dbc423a48280ac5613ae56f81fd87ec22b6",
+        "branch": "experiment/navigation-e-warcraft3",
+        "dirty": false
+      },
+      "snapshotIdentitySha256": "81195cda39fb04aa75ee3fb492663257551fa70a99e34b74addc9693f386f6c9",
+      "buildManifestSha256": "d209576e9e89da6455d447c25ac4beee15ca2bccb0524b87fe1a66eab04b774c",
+      "assemblySha256": {
+        "candidate": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+        "runner": "a736eb54795646241f1f88914a0632a4aacb2577308cc0da50d04cb5c4beeeaf"
+      },
+      "evidenceBranch": "experiment/navigation-e-warcraft3",
+      "evidenceCommit": "fc7a4829a7ad61228c7c4d2654322083b190fcbf",
+      "evidencePath": "Experiments~/NavigationLab/Candidates/E-Warcraft3/Evidence/FinalGoalSafeStress49",
+      "modelStatus": "completed",
+      "modelSummarySha256": "351a856caf5cf31c9f0d422c94a7e5aaac8a58cfc469187a6de9a5b67cb20b49",
+      "counts": {
+        "passed": 37,
+        "failed": 12,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    }
+  },
+  "auxiliaryD": [
+    "experiment/navigation-d-aoe4-d11",
+    "experiment/navigation-d-aoe4-progress",
+    "experiment/navigation-d-aoe4-deep-goals"
+  ]
 }

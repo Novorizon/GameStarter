@@ -25,13 +25,14 @@ python3 Tools~/NavigationLab/freeze-run.py \
 | B0 | `Experiments~/NavigationLab/Candidates/B-Orca/NavigationLab.BOrca.csproj` | `NavigationLab.Candidates.BOrca.OrcaFactory` |
 | B1 | 同B0 | `NavigationLab.Candidates.BOrca.OrcaYieldFactory` |
 | C | `Experiments~/NavigationLab/Candidates/C-SupCom2/NavigationLab.CSupCom2.csproj` | `NavigationLab.CSupCom2.Factory` |
-| D | `Experiments~/NavigationLab/Candidates/D-Aoe4/NavigationLab.DAoe4.csproj` | `NavigationLab.DAoe4.Aoe4Factory` |
+| D0 基础/历史 | `Experiments~/NavigationLab/Candidates/D-Aoe4/NavigationLab.DAoe4.csproj` | `NavigationLab.DAoe4.Aoe4Factory` |
+| D12 本轮选定 | 同D0 | `NavigationLab.DAoe4.Aoe4ProgressExchangeFactory` |
 | E 基础/历史 | `Experiments~/NavigationLab/Candidates/E-Warcraft3/NavigationLab.EWarcraft3.csproj` | `NavigationLab.Candidates.EWarcraft3.WarcraftFactory` |
 | E 精细连接 | 同E | `NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory` |
 
 退出码0表示该次所选场景全部通过；1表示真实失败；2表示包含事先声明的不支持能力；3表示构建或工具错误。应继续核对summary的分类和来源标志，不能只按非零退出码称为算法失败。`--no-replay`仅供开发诊断，不是正式验收；`--build-only`只构建，不产生通过结论。
 
-工厂名与源码指纹一起确定实际版本。同一工厂在后续修复中会生成新DLL，必须独立冻结与验证；不能用旧源码的完整报告拼成新源码成绩。D的终点交换、进展判定等增强位于各自实验分支，使用该分支明确声明的factory，最终对照须记录实际类型。
+工厂名与源码指纹一起确定实际版本。同一工厂在后续修复中会生成新DLL，必须独立冻结与验证；不能用旧源码的完整报告拼成新源码成绩。D12已集成到D实验分支，增加项目终点交换与路线进展判定；D11/D13辅助分支保留历史对照。选定D12实际DLL为`9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c`，不能用默认D0工厂复现D12成绩。
 
 `full`的41项逐字包含于`stress`的49项。正式stress完成后可按InputHash提取full子集；不要把重复运行算成新地图覆盖。长测会包含每5ms全身体的连续几何检查和压缩轨迹，完整wall time不等于候选Step时间或游戏帧率。
 
