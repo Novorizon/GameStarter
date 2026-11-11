@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NuGetAudit>false</NuGetAudit>
     <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
-    <NavigationLabRoot Condition="'$(NavigationLabRoot)' == ''">../../../..</NavigationLabRoot>
+    <NavigationLabRoot Condition="'$(NavigationLabRoot)' == ''">../../..</NavigationLabRoot>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../NavigationLab.EWarcraft3.csproj" />

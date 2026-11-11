@@ -122,7 +122,7 @@ var result = new
     minimumBodyGapMm = double.IsFinite(oracle.MinimumBodyGapMm) ? oracle.MinimumBodyGapMm : (double?)null,
     bodies = bodies.Select(body => new { body.Id, x = body.Position.X, y = body.Position.Y, body.State, body.GoalCell, body.TargetId })
 };
-File.WriteAllText(Path.Combine(output, name + (baseline ? "-baseline" : "-yield") + ".json"), JsonSerializer.Serialize(result, new JsonSerializerOptions
+File.WriteAllText(Path.Combine(output, name + (baseline ? "-baseline" : grouped ? "-grouped" : "-yield") + ".json"), JsonSerializer.Serialize(result, new JsonSerializerOptions
 {
     WriteIndented = true
 }));
