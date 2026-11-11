@@ -5,7 +5,7 @@ B 分支从冻结 A `8c0dd50` 分离。这里只增加独立候选和实验，�
 ## 实际实现
 
 - **B0 / `NavigationLab.Candidates.BOrca.OrcaFactory`**：官方 RVO2-CS ORCA 速度求解器，八邻 A* 全局路线，实际停止身体参与动态重寻路，精确静态扫掠和停止身体约束下的可见路点简化，死亡或目标移动后的空攻击位刷新。
-- **B1 / `NavigationLab.Candidates.BOrca.OrcaYieldFactory`**：B0 加显式临时让位、到位者返场、停滞移动同伴的有序让位，以及合法目标交换。移动同伴只向低ID请求者让路，且已有让位依赖的移动者不再接受请求；相同profile/target且没有显式assigned goal的移动单位可以交换交叉目标，要求总欧氏距离至少下降四分之一格且两条新路线静态可达。所有永久终点集合、实际体型、速度和目标身份保留。B1 的结果单独报告，不覆盖 B0 的失败。
+- **B1 / `NavigationLab.Candidates.BOrca.OrcaYieldFactory`**：B0 加显式临时让位、到位者返场，以及合法目标交换。相同profile/target且没有显式assigned goal的移动单位可以交换交叉目标，要求总欧氏距离至少下降四分之一格且两条新路线静态可达。所有永久终点集合、实际体型、速度和目标身份保留。B1 的结果单独报告，不覆盖 B0 的失败。
 
 路线节点为原格边长的一半，支持身体通过偶数宽走廊的中线。**最终站位仍只允许原世界的 holding cell**；路线节点不会增加最终目标数，也不修改地图、单位身体或速度。
 
@@ -66,3 +66,9 @@ dotnet run --project Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Navig
 独立Oracle的数值容差固定0.1mm。B的执行器最初几乎零容差：Y原点-60mm、500mm恰宽走廊、r250身体时，RVO将2190mm表示成2190.000057mm，导致7000微步全被静态门截回，身体始终停在出生点。这是适配层bug，不能计作ORCA的寻路能力边界。
 
 执行层现使用0.025mm数值容差，仍由原0.1mm独立Oracle核对原始半径/速度。静态Goal资格和世界输入不变。相同走廊已真实到位并稳定200tick，零射程接触、r250/490/700外包Goal、移动target、交错实例与异常恢复也重新通过；原源码/DLL/失败及修复后报告保存在 `Evidence/OffsetCorridorRegression`。指标 `ExecutionNumericalToleranceMicrometres=25` 公开该数值规则。
+
+## 策略对照边界
+
+`Evidence/StrategyDevelopment` 保存003至008轮已完成的开发结果摘要、冻结构建清单与SHA；这些使用`--no-replay`的结果不作为最终正式矩阵。007增加停滞移动同伴让位，Forest45从006通过退为1个Moving超时，因此已撤回。008同时加入交叉移动目标交换，Forest45通过但44仍未完成；009隔离目标交换本身，不借用逐场景最佳策略。007/008的`MovingPeerYieldRequests`是在进入Yielding后取样，混入原已到位者，不能据此推断真实移动同伴请求数。
+
+ORCA的[官方说明](https://gamma-web.iacs.umd.edu/ORCA/)和本项目所用[RVO2-CS](https://github.com/snape/RVO2-CS)提供局部速度选择；这里的全局A*、终点分配、让位与目标交换属于本实验适配。到达死锁不能仅凭一个失败样本归结为官方ORCA缺陷，模型通过也不证明任意地图和单位数上的普适收敛。

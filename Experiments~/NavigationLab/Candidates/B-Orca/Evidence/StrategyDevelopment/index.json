@@ -1,0 +1,969 @@
+{
+  "scope": "Development diagnostics only. Original failures retained; not formal stress49 evidence. 007/008 MovingPeerYieldRequests was sampled after entering Yielding and includes formerly arrived bodies; do not infer actual moving-peer counts from it.",
+  "runs": [
+    {
+      "run": "b0-full-003-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "1f8af91c823a40ca60a57e1c183be0ed5346eaa6e45bb152fea24731fea70172",
+      "candidateAssemblySha256": "a61445b88f51eb77560698da21b9e1847d24af506b931a520e3a769c6a751d78",
+      "passed": 26,
+      "failed": 11,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "open-arena",
+          "status": "Passed",
+          "error": null,
+          "tick": 533,
+          "admitted": 48,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "mixed-speed-approach",
+          "status": "Passed",
+          "error": null,
+          "tick": 637,
+          "admitted": 64,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "large-radius-turning-clearance",
+          "status": "Failed",
+          "error": "Deadline: alive=48, pending=0, moving=5, attack=8, failure=None",
+          "tick": 12000,
+          "admitted": 48,
+          "pending": 0,
+          "attacking": 8
+        },
+        {
+          "name": "single-cell-throat",
+          "status": "Passed",
+          "error": null,
+          "tick": 2453,
+          "admitted": 48,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "u-obstacle",
+          "status": "Passed",
+          "error": null,
+          "tick": 561,
+          "admitted": 56,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "right-angle-corridor",
+          "status": "Passed",
+          "error": null,
+          "tick": 573,
+          "admitted": 32,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "cross-junction-parking-lanes",
+          "status": "Passed",
+          "error": null,
+          "tick": 825,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 6
+        },
+        {
+          "name": "cross-junction-original-4m",
+          "status": "Failed",
+          "error": "Deadline: alive=72, pending=0, moving=1, attack=12, failure=None",
+          "tick": 12000,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "cross-junction-original-5m",
+          "status": "Passed",
+          "error": null,
+          "tick": 900,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "shared-spawn-parking-lanes",
+          "status": "Passed",
+          "error": null,
+          "tick": 508,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 6
+        },
+        {
+          "name": "shared-spawn-original-5m",
+          "status": "Passed",
+          "error": null,
+          "tick": 574,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "forest-single-small",
+          "status": "Passed",
+          "error": null,
+          "tick": 579,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "forest-single-medium",
+          "status": "Passed",
+          "error": null,
+          "tick": 792,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "forest-single-large",
+          "status": "Passed",
+          "error": null,
+          "tick": 1358,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "forest-wave-1",
+          "status": "Passed",
+          "error": null,
+          "tick": 985,
+          "admitted": 8,
+          "pending": 0,
+          "attacking": 8
+        },
+        {
+          "name": "forest-wave-2",
+          "status": "Failed",
+          "error": "Deadline: alive=16, pending=0, moving=3, attack=10, failure=None",
+          "tick": 7000,
+          "admitted": 16,
+          "pending": 0,
+          "attacking": 10
+        },
+        {
+          "name": "forest-wave-3",
+          "status": "Passed",
+          "error": null,
+          "tick": 1217,
+          "admitted": 18,
+          "pending": 0,
+          "attacking": 14
+        },
+        {
+          "name": "forest-wave-4",
+          "status": "Passed",
+          "error": null,
+          "tick": 1865,
+          "admitted": 25,
+          "pending": 0,
+          "attacking": 15
+        },
+        {
+          "name": "forest-wave-5",
+          "status": "Passed",
+          "error": null,
+          "tick": 1481,
+          "admitted": 30,
+          "pending": 0,
+          "attacking": 15
+        },
+        {
+          "name": "forest-wave-6",
+          "status": "Failed",
+          "error": "Deadline: alive=29, pending=0, moving=1, attack=14, failure=None",
+          "tick": 7000,
+          "admitted": 29,
+          "pending": 0,
+          "attacking": 14
+        },
+        {
+          "name": "forest-full44-large",
+          "status": "Failed",
+          "error": "Deadline: alive=44, pending=0, moving=24, attack=6, failure=None",
+          "tick": 12000,
+          "admitted": 44,
+          "pending": 0,
+          "attacking": 6
+        },
+        {
+          "name": "forest-full45-medium",
+          "status": "Failed",
+          "error": "Deadline: alive=45, pending=0, moving=17, attack=10, failure=None",
+          "tick": 12000,
+          "admitted": 45,
+          "pending": 0,
+          "attacking": 10
+        },
+        {
+          "name": "forest-full44-two-late-small",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 3999,
+          "admitted": 44,
+          "pending": 2,
+          "attacking": 0
+        },
+        {
+          "name": "static-unreachable-retains-pending",
+          "status": "Passed",
+          "error": null,
+          "tick": 200,
+          "admitted": 0,
+          "pending": 12,
+          "attacking": 0
+        },
+        {
+          "name": "physical-and-endpoint-overflow-200",
+          "status": "Failed",
+          "error": "Deadline: alive=27, pending=173, moving=16, attack=6, failure=SpawnOccupied",
+          "tick": 6000,
+          "admitted": 27,
+          "pending": 173,
+          "attacking": 6
+        },
+        {
+          "name": "capacity-death-refills-original-queue",
+          "status": "Failed",
+          "error": "Deadline: alive=27, pending=173, moving=12, attack=9, failure=SpawnOccupied",
+          "tick": 8000,
+          "admitted": 27,
+          "pending": 173,
+          "attacking": 9
+        },
+        {
+          "name": "moving-noncenter-death-and-reinforcement",
+          "status": "Passed",
+          "error": null,
+          "tick": 568,
+          "admitted": 25,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "settled-batch-death-and-reinforcement",
+          "status": "Passed",
+          "error": null,
+          "tick": 559,
+          "admitted": 54,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "ranged84-before-short1-fairness",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 1999,
+          "admitted": 84,
+          "pending": 1,
+          "attacking": 0
+        },
+        {
+          "name": "short16-before-ranged84-fairness",
+          "status": "Failed",
+          "error": "Deadline: alive=100, pending=0, moving=1, attack=83, failure=None",
+          "tick": 12000,
+          "admitted": 100,
+          "pending": 0,
+          "attacking": 83
+        },
+        {
+          "name": "dynamic-route-block-and-open",
+          "status": "Passed",
+          "error": null,
+          "tick": 800,
+          "admitted": 24,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "target-moves-before-arrival",
+          "status": "Passed",
+          "error": null,
+          "tick": 435,
+          "admitted": 24,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "opposing-flow-wide-arena",
+          "status": "Passed",
+          "error": null,
+          "tick": 275,
+          "admitted": 8,
+          "pending": 0,
+          "attacking": 2
+        },
+        {
+          "name": "large-body-wide-approach",
+          "status": "Passed",
+          "error": null,
+          "tick": 245,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "fast-per-tick-approach",
+          "status": "Passed",
+          "error": null,
+          "tick": 240,
+          "admitted": 4,
+          "pending": 0,
+          "attacking": 4
+        },
+        {
+          "name": "random-multigate-maze-11",
+          "status": "Passed",
+          "error": null,
+          "tick": 472,
+          "admitted": 32,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "random-multigate-maze-97",
+          "status": "Passed",
+          "error": null,
+          "tick": 484,
+          "admitted": 32,
+          "pending": 0,
+          "attacking": 16
+        }
+      ],
+      "snapshotIdentitySha256": "093b91a2ae084ea7f40ccda771ba72129f53b0fdae1233267116dace9a136646",
+      "snapshot": "/workspace/navigation-comparison/frozen-b003/snapshot-093b91a2ae084ea7f40ccda7"
+    },
+    {
+      "run": "b1-full-003-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "105d8e60bfa05e16969155a066422d34d6b64d676c07b10139ab0b808baf3613",
+      "candidateAssemblySha256": "a61445b88f51eb77560698da21b9e1847d24af506b931a520e3a769c6a751d78",
+      "passed": 33,
+      "failed": 4,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "open-arena",
+          "status": "Passed",
+          "error": null,
+          "tick": 496,
+          "admitted": 48,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "mixed-speed-approach",
+          "status": "Passed",
+          "error": null,
+          "tick": 1205,
+          "admitted": 64,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "large-radius-turning-clearance",
+          "status": "Passed",
+          "error": null,
+          "tick": 1348,
+          "admitted": 48,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "single-cell-throat",
+          "status": "Passed",
+          "error": null,
+          "tick": 2237,
+          "admitted": 48,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "u-obstacle",
+          "status": "Passed",
+          "error": null,
+          "tick": 687,
+          "admitted": 56,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "right-angle-corridor",
+          "status": "Passed",
+          "error": null,
+          "tick": 563,
+          "admitted": 32,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "cross-junction-parking-lanes",
+          "status": "Passed",
+          "error": null,
+          "tick": 545,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 6
+        },
+        {
+          "name": "cross-junction-original-4m",
+          "status": "Passed",
+          "error": null,
+          "tick": 1033,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "cross-junction-original-5m",
+          "status": "Passed",
+          "error": null,
+          "tick": 928,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "shared-spawn-parking-lanes",
+          "status": "Passed",
+          "error": null,
+          "tick": 453,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 6
+        },
+        {
+          "name": "shared-spawn-original-5m",
+          "status": "Passed",
+          "error": null,
+          "tick": 788,
+          "admitted": 72,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "forest-single-small",
+          "status": "Passed",
+          "error": null,
+          "tick": 579,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "forest-single-medium",
+          "status": "Passed",
+          "error": null,
+          "tick": 792,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "forest-single-large",
+          "status": "Passed",
+          "error": null,
+          "tick": 1358,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "forest-wave-1",
+          "status": "Passed",
+          "error": null,
+          "tick": 985,
+          "admitted": 8,
+          "pending": 0,
+          "attacking": 8
+        },
+        {
+          "name": "forest-wave-2",
+          "status": "Passed",
+          "error": null,
+          "tick": 1909,
+          "admitted": 16,
+          "pending": 0,
+          "attacking": 13
+        },
+        {
+          "name": "forest-wave-3",
+          "status": "Passed",
+          "error": null,
+          "tick": 1217,
+          "admitted": 18,
+          "pending": 0,
+          "attacking": 14
+        },
+        {
+          "name": "forest-wave-4",
+          "status": "Passed",
+          "error": null,
+          "tick": 2208,
+          "admitted": 25,
+          "pending": 0,
+          "attacking": 15
+        },
+        {
+          "name": "forest-wave-5",
+          "status": "Passed",
+          "error": null,
+          "tick": 1873,
+          "admitted": 30,
+          "pending": 0,
+          "attacking": 15
+        },
+        {
+          "name": "forest-wave-6",
+          "status": "Passed",
+          "error": null,
+          "tick": 3719,
+          "admitted": 29,
+          "pending": 0,
+          "attacking": 15
+        },
+        {
+          "name": "forest-full44-large",
+          "status": "Failed",
+          "error": "Deadline: alive=44, pending=0, moving=20, attack=11, failure=None",
+          "tick": 12000,
+          "admitted": 44,
+          "pending": 0,
+          "attacking": 11
+        },
+        {
+          "name": "forest-full45-medium",
+          "status": "Passed",
+          "error": null,
+          "tick": 5218,
+          "admitted": 45,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "forest-full44-two-late-small",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 3999,
+          "admitted": 44,
+          "pending": 2,
+          "attacking": 0
+        },
+        {
+          "name": "static-unreachable-retains-pending",
+          "status": "Passed",
+          "error": null,
+          "tick": 200,
+          "admitted": 0,
+          "pending": 12,
+          "attacking": 0
+        },
+        {
+          "name": "physical-and-endpoint-overflow-200",
+          "status": "Failed",
+          "error": "Deadline: alive=27, pending=173, moving=16, attack=6, failure=SpawnOccupied",
+          "tick": 6000,
+          "admitted": 27,
+          "pending": 173,
+          "attacking": 6
+        },
+        {
+          "name": "capacity-death-refills-original-queue",
+          "status": "Failed",
+          "error": "Deadline: alive=27, pending=173, moving=12, attack=9, failure=SpawnOccupied",
+          "tick": 8000,
+          "admitted": 27,
+          "pending": 173,
+          "attacking": 9
+        },
+        {
+          "name": "moving-noncenter-death-and-reinforcement",
+          "status": "Passed",
+          "error": null,
+          "tick": 568,
+          "admitted": 25,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "settled-batch-death-and-reinforcement",
+          "status": "Passed",
+          "error": null,
+          "tick": 579,
+          "admitted": 54,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "ranged84-before-short1-fairness",
+          "status": "Passed",
+          "error": null,
+          "tick": 2642,
+          "admitted": 86,
+          "pending": 0,
+          "attacking": 84
+        },
+        {
+          "name": "short16-before-ranged84-fairness",
+          "status": "Passed",
+          "error": null,
+          "tick": 3733,
+          "admitted": 101,
+          "pending": 0,
+          "attacking": 84
+        },
+        {
+          "name": "dynamic-route-block-and-open",
+          "status": "Passed",
+          "error": null,
+          "tick": 800,
+          "admitted": 24,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "target-moves-before-arrival",
+          "status": "Passed",
+          "error": null,
+          "tick": 369,
+          "admitted": 24,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "opposing-flow-wide-arena",
+          "status": "Passed",
+          "error": null,
+          "tick": 275,
+          "admitted": 8,
+          "pending": 0,
+          "attacking": 2
+        },
+        {
+          "name": "large-body-wide-approach",
+          "status": "Passed",
+          "error": null,
+          "tick": 245,
+          "admitted": 1,
+          "pending": 0,
+          "attacking": 1
+        },
+        {
+          "name": "fast-per-tick-approach",
+          "status": "Passed",
+          "error": null,
+          "tick": 240,
+          "admitted": 4,
+          "pending": 0,
+          "attacking": 4
+        },
+        {
+          "name": "random-multigate-maze-11",
+          "status": "Passed",
+          "error": null,
+          "tick": 467,
+          "admitted": 32,
+          "pending": 0,
+          "attacking": 16
+        },
+        {
+          "name": "random-multigate-maze-97",
+          "status": "Passed",
+          "error": null,
+          "tick": 523,
+          "admitted": 32,
+          "pending": 0,
+          "attacking": 16
+        }
+      ],
+      "snapshotIdentitySha256": "01ef772eaa9089a58c7e694d2c52b97c9bfe09b767551a64203ce959e5c1617d",
+      "snapshot": "/workspace/navigation-comparison/frozen-b003/snapshot-01ef772eaa9089a58c7e694d"
+    },
+    {
+      "run": "b1-forest-004-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "f7a8925a2baad4a607d8086a1bae7c482e86baac234fdd09ff5d70142548db61",
+      "candidateAssemblySha256": "d1501baba2cf3f9f0f8233cb534d7e3b556c105f2c6cf3da08bcc64f4686189b",
+      "passed": 0,
+      "failed": 3,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "forest-full44-large",
+          "status": "Failed",
+          "error": "Deadline: alive=44, pending=0, moving=33, attack=5, failure=None",
+          "tick": 12000,
+          "admitted": 44,
+          "pending": 0,
+          "attacking": 5
+        },
+        {
+          "name": "forest-full45-medium",
+          "status": "Failed",
+          "error": "Deadline: alive=45, pending=0, moving=6, attack=9, failure=None",
+          "tick": 12000,
+          "admitted": 45,
+          "pending": 0,
+          "attacking": 9
+        },
+        {
+          "name": "forest-full44-two-late-small",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 3999,
+          "admitted": 44,
+          "pending": 2,
+          "attacking": 0
+        }
+      ],
+      "snapshotIdentitySha256": "a3a1c831473e5e34dd8f6e2ff3b9131daa269b90697c9af19271c795d084fc15",
+      "snapshot": "/workspace/navigation-comparison/frozen-b004/snapshot-a3a1c831473e5e34dd8f6e2f"
+    },
+    {
+      "run": "b0-large-004-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "dd55cc149253f1974b31ecae4442a89c8d2a123d47f12284d5a18429110b697c",
+      "candidateAssemblySha256": "d1501baba2cf3f9f0f8233cb534d7e3b556c105f2c6cf3da08bcc64f4686189b",
+      "passed": 0,
+      "failed": 1,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "large-radius-turning-clearance",
+          "status": "Failed",
+          "error": "Deadline: alive=48, pending=0, moving=5, attack=8, failure=None",
+          "tick": 12000,
+          "admitted": 48,
+          "pending": 0,
+          "attacking": 8
+        }
+      ],
+      "snapshotIdentitySha256": "e35b4bad1bbb98c4695aa183eab7a65bd8ca84204f28faf8e1531de2223c9e1d",
+      "snapshot": "/workspace/navigation-comparison/frozen-b004/snapshot-e35b4bad1bbb98c4695aa183"
+    },
+    {
+      "run": "b1-forest-005-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "7ee4429575db0fe773e3164881b1323ad42b0ff04b5a87ce72bb31205d8d333b",
+      "candidateAssemblySha256": "1a3d511d08549d9300b35f39bede81295f7d6340a7301f72f014029732c32b4a",
+      "passed": 1,
+      "failed": 2,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "forest-full44-large",
+          "status": "Failed",
+          "error": "Deadline: alive=44, pending=0, moving=29, attack=13, failure=None",
+          "tick": 12000,
+          "admitted": 44,
+          "pending": 0,
+          "attacking": 13
+        },
+        {
+          "name": "forest-full45-medium",
+          "status": "Passed",
+          "error": null,
+          "tick": 5956,
+          "admitted": 45,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "forest-full44-two-late-small",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 3999,
+          "admitted": 44,
+          "pending": 2,
+          "attacking": 1
+        }
+      ],
+      "snapshotIdentitySha256": "c27ba979d4eeab177baf438f1c171498176aa025166fee14211b451e53ec1c30",
+      "snapshot": "/workspace/navigation-comparison/frozen-b005/snapshot-c27ba979d4eeab177baf438f"
+    },
+    {
+      "run": "b1-capacity-005-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "fe276b590fabe1cfd2d25a5e8b436c31122562f863d4b704bab36f3db2afe28a",
+      "candidateAssemblySha256": "1a3d511d08549d9300b35f39bede81295f7d6340a7301f72f014029732c32b4a",
+      "passed": 0,
+      "failed": 1,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "physical-and-endpoint-overflow-200",
+          "status": "Failed",
+          "error": "Deadline: alive=26, pending=174, moving=21, attack=2, failure=SpawnOccupied",
+          "tick": 6000,
+          "admitted": 26,
+          "pending": 174,
+          "attacking": 2
+        }
+      ]
+    },
+    {
+      "run": "b1-forest-006-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "f8aecb226411ca79a9227739ae25bdc2bfdadc66b67c5797254e9e40331f8ff4",
+      "candidateAssemblySha256": "4042aca8d0def14f5f291661a05ffe2c994acce475ad5dfc10f1b793d17f1abb",
+      "passed": 1,
+      "failed": 2,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "forest-full44-large",
+          "status": "Failed",
+          "error": "Deadline: alive=44, pending=0, moving=30, attack=8, failure=None",
+          "tick": 12000,
+          "admitted": 44,
+          "pending": 0,
+          "attacking": 8
+        },
+        {
+          "name": "forest-full45-medium",
+          "status": "Passed",
+          "error": null,
+          "tick": 3250,
+          "admitted": 45,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "forest-full44-two-late-small",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 3999,
+          "admitted": 44,
+          "pending": 2,
+          "attacking": 1
+        }
+      ],
+      "snapshotIdentitySha256": "29ea3770acbbff7515b7f60a352c3fa6d2ed1564e516194e89f6078f94a366e2",
+      "snapshot": "/workspace/navigation-comparison/frozen-b006/snapshot-29ea3770acbbff7515b7f60a"
+    },
+    {
+      "run": "b1-capacity-006-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "f29a8627912fbe3fb67b142840487ea65f393ea6ed657d103d7d3886b086551a",
+      "candidateAssemblySha256": "4042aca8d0def14f5f291661a05ffe2c994acce475ad5dfc10f1b793d17f1abb",
+      "passed": 0,
+      "failed": 1,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "physical-and-endpoint-overflow-200",
+          "status": "Failed",
+          "error": "Deadline: alive=32, pending=168, moving=31, attack=0, failure=SpawnOccupied",
+          "tick": 6000,
+          "admitted": 32,
+          "pending": 168,
+          "attacking": 0
+        }
+      ]
+    },
+    {
+      "run": "b1-forest-007-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "3a88b1bda5d143613d1137461176fa1f7d61b701fb29e1a422e2c21c3647764f",
+      "candidateAssemblySha256": "901321d8987f46f2e4df93569fe617b02eaa4833bb2e53726e37123a2708351a",
+      "passed": 0,
+      "failed": 3,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "forest-full44-large",
+          "status": "Failed",
+          "error": "Deadline: alive=44, pending=0, moving=32, attack=11, failure=None",
+          "tick": 12000,
+          "admitted": 44,
+          "pending": 0,
+          "attacking": 11
+        },
+        {
+          "name": "forest-full45-medium",
+          "status": "Failed",
+          "error": "Deadline: alive=45, pending=0, moving=1, attack=12, failure=None",
+          "tick": 12000,
+          "admitted": 45,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "forest-full44-two-late-small",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 3999,
+          "admitted": 44,
+          "pending": 2,
+          "attacking": 7
+        }
+      ],
+      "snapshotIdentitySha256": "1c40f43523d9b20ab6d709ebe889460223a846877578beef47ebeb648b624b18",
+      "snapshot": "/workspace/navigation-comparison/frozen-b007/snapshot-1c40f43523d9b20ab6d709eb"
+    },
+    {
+      "run": "b1-forest-008-dev",
+      "diagnosticOnly": true,
+      "summarySha256": "373e1311693c1b7a29d0ee939379718ed3c7fe0970d32d5b6c6f0afbfcfbfc34",
+      "candidateAssemblySha256": "4c205c7660150b596e67ea90626ed830dc1bfb1f208723a006cc2d7e37b19e4a",
+      "passed": 1,
+      "failed": 2,
+      "unsupported": 0,
+      "sourceFilesUnchanged": true,
+      "caseOutcomes": [
+        {
+          "name": "forest-full44-large",
+          "status": "Failed",
+          "error": "Deadline: alive=44, pending=0, moving=24, attack=14, failure=None",
+          "tick": 12000,
+          "admitted": 44,
+          "pending": 0,
+          "attacking": 14
+        },
+        {
+          "name": "forest-full45-medium",
+          "status": "Passed",
+          "error": null,
+          "tick": 3057,
+          "admitted": 45,
+          "pending": 0,
+          "attacking": 12
+        },
+        {
+          "name": "forest-full44-two-late-small",
+          "status": "Failed",
+          "error": "Initial crowd did not physically settle before late arrivals.",
+          "tick": 3999,
+          "admitted": 44,
+          "pending": 2,
+          "attacking": 5
+        }
+      ],
+      "snapshotIdentitySha256": "800d05829e78b08664ca3b53168ca41246ba270ec6dcaf75dd74f9400f6df3dd",
+      "snapshot": "/workspace/navigation-comparison/frozen-b008/snapshot-800d05829e78b08664ca3b53"
+    }
+  ]
+}

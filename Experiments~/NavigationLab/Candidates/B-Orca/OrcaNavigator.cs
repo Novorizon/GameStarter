@@ -527,9 +527,7 @@ namespace NavigationLab.Candidates.BOrca
                 }
 
                 requester.YieldRetryAt = microstep + 200;
-                foreach (var blocker in ordered.Where(actor => actor != requester && !actor.Yielding
-                    && (Arrived(actor) || actor.Request.Id > requester.Request.Id && microstep - actor.LastProgress >= 500
-                        && !ordered.Any(dependent => dependent.Yielding && dependent.YieldRequester == actor.Request.Id)))
+                foreach (var blocker in ordered.Where(actor => actor != requester && !actor.Yielding && Arrived(actor))
                     .OrderBy(actor => Point2.Distance(actor.Position, requester.Position)))
                 {
                     double distance = Point2.Distance(blocker.Position, requester.Position);
@@ -544,10 +542,6 @@ namespace NavigationLab.Candidates.BOrca
 
                     if (TryAngularYield(blocker, requester, ordered) || TryBeginYield(blocker, requester, ordered))
                     {
-                        if (!Arrived(blocker))
-                        {
-                            Add("MovingPeerYieldRequests");
-                        }
                         requester.LastProgress = microstep;
                         break;
                     }
