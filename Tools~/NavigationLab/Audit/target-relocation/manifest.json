@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "utc": "2026-11-11T03:00:42.052369+00:00",
+  "sourceFiles": {
+    "Program.cs": "febc0a8bd33f942d596e2339a44a89cd75ecfb1ee508906e6f7fe6f950074b20",
+    "Relocation.csproj": "9301f739595a5c6755565d6d1063559f4bea32cec69cb8e5408fcca24279a160"
+  },
+  "oracleSource": {
+    "Core": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c",
+    "Oracle": "06b02d324777fbaf1f6ac4ab840ef5108d3815830557288645c058247d3acc4b",
+    "Program.cs": "febc0a8bd33f942d596e2339a44a89cd75ecfb1ee508906e6f7fe6f950074b20"
+  },
+  "binarySha256": "e0969cd1f47da234bd46f913dec091578faf113ecc18f542ec92c0604a52c941",
+  "reportSha256": "2d89af2a42e719cf464b99def4c606a2c70ef8e138f30bb02d25ee556d1b0e07",
+  "executionLogSha256": "d872d0e7b49019d0c30575266472e8c2a46ba14cf97df252d2962a1bf7785623",
+  "scope": "Discrete target-relocation static safety and16-goal certificate only; not continuous target motion or a candidate execution."
+}

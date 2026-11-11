@@ -1,0 +1,3 @@
+PASS random-multigate-maze-11 alive32 attack16 wait16 edges=2030 ms=213000
+STATIC large-portal-grid-128 compatible=548 connected=548 demand=128
+STATIC large-portal-grid-256 compatible=548 connected=548 demand=256

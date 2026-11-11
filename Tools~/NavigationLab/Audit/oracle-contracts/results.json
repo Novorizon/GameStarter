@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "tests": [
+    {
+      "name": "rectangle-crossing-with-clear-endpoints",
+      "passed": true
+    },
+    {
+      "name": "rectangle-positive-tangent",
+      "passed": true
+    },
+    {
+      "name": "rectangle-submillimetre-penetration",
+      "passed": true
+    },
+    {
+      "name": "rectangle-diagonal-interior-crossing",
+      "passed": true
+    },
+    {
+      "name": "rectangle-rounded-corner-tangent",
+      "passed": true
+    },
+    {
+      "name": "large-radius-obstacle-two-cells-away",
+      "passed": true
+    },
+    {
+      "name": "base-circle-chord",
+      "passed": true
+    },
+    {
+      "name": "base-circle-tangent",
+      "passed": true
+    },
+    {
+      "name": "world-edge-tangent",
+      "passed": true
+    },
+    {
+      "name": "world-edge-penetration",
+      "passed": true
+    },
+    {
+      "name": "continuous-pair-endpoint-swap",
+      "passed": true
+    },
+    {
+      "name": "continuous-diagonal-pair-crossing",
+      "passed": true
+    },
+    {
+      "name": "same-velocity-preserves-clearance",
+      "passed": true
+    },
+    {
+      "name": "fast-agent-overtakes-slower-agent",
+      "passed": true
+    },
+    {
+      "name": "55mm-speed-allows-5point5mm-microstep",
+      "passed": true
+    },
+    {
+      "name": "55mm-speed-rejects-overspeed",
+      "passed": true
+    },
+    {
+      "name": "long-range-attacker-may-stand-outside-gather-distance",
+      "passed": true
+    },
+    {
+      "name": "rejected-birth-cannot-move-existing-unit",
+      "passed": true
+    },
+    {
+      "name": "rejected-birth-cannot-hide-existing-unit",
+      "passed": true
+    },
+    {
+      "name": "change-cannot-place-wall-through-live-body",
+      "passed": true
+    },
+    {
+      "name": "unknown-body-id-rejected",
+      "passed": true
+    }
+  ],
+  "failed": 0
+}
