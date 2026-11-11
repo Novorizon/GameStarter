@@ -50,7 +50,7 @@ namespace NavigationLab.DAoe4
                 return;
             }
             foreach (var requester in ordered.Where(actor => actor.ExchangePartner == 0 && actor.Request.AssignedGoalCell < 0
-                && actor.YieldCell < 0 && State(actor) == MotionState.Moving && actor.Route == null && step - actor.LastProgress >= 250)
+                && actor.YieldCell < 0 && State(actor) == MotionState.Moving && step - actor.LastProgress >= 250)
                 .OrderBy(actor => actor.LastProgress).ThenBy(actor => actor.Request.Id))
             {
                 var holders = ordered.Where(holder => holder.Request.Id != requester.Request.Id && holder.ExchangePartner == 0
@@ -71,10 +71,7 @@ namespace NavigationLab.DAoe4
                     {
                         continue;
                     }
-                    bool requesterAttack = geometry.CanAttack(World.Center(requester.Goal), requester.Request.Profile, requester.Request.TargetId);
-                    bool holderAttack = geometry.CanAttack(World.Center(holder.Goal), holder.Request.Profile, holder.Request.TargetId);
-                    if (requesterAttack != holderAttack
-                        || !FullBodySweep(holder, World.Center(requester.Goal), ordered, -1)
+                    if (!FullBodySweep(holder, World.Center(requester.Goal), ordered, -1)
                         || !FullBodySweep(requester, World.Center(holder.Goal), ordered, holder.Request.Id))
                     {
                         continue;
