@@ -52,6 +52,17 @@ namespace NavigationLab.DAoe4
         }
     }
 
+    public sealed class Aoe4DeepGoalFactory : INavigationFactory
+    {
+        public string Id => "D13-aoe4-with-deep-goals-progress-exchange";
+        public string Description => "D12 with project selection by static path depth; original legal Holding and compatibility unchanged.";
+        public NavigationFeatures Features => new Aoe4Factory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
+        {
+            return new AoeNavigator(world, profiles, false, true, true, true);
+        }
+    }
+
     internal sealed partial class AoeNavigator : INavigator
     {
         private sealed class Actor
@@ -93,6 +104,7 @@ namespace NavigationLab.DAoe4
         private readonly bool coordinated;
         private readonly bool slotExchanges;
         private readonly bool progressAware;
+        private readonly bool deepGoalOrder;
         private string progressWorldShape = string.Empty;
         private int step;
         private int goalRevision;
@@ -106,12 +118,14 @@ namespace NavigationLab.DAoe4
             IReadOnlyList<UnitProfile> profiles,
             bool coordinated,
             bool slotExchanges = false,
-            bool progressAware = false)
+            bool progressAware = false,
+            bool deepGoalOrder = false)
         {
             geometry = new GridGeometry(world);
             this.coordinated = coordinated;
             this.slotExchanges = slotExchanges;
             this.progressAware = progressAware;
+            this.deepGoalOrder = deepGoalOrder;
             if (progressAware)
             {
                 progressWorldShape = WorldShapeIdentity();
@@ -428,6 +442,7 @@ namespace NavigationLab.DAoe4
             CancelSlotExchanges(-1);
             planner.Invalidate();
             reachable.Clear();
+            goalDepths.Clear();
             holding.Clear();
             goalOwners.Clear();
             goalRevision++;
@@ -465,6 +480,7 @@ namespace NavigationLab.DAoe4
         {
             actors.Clear();
             goalOwners.Clear();
+            goalDepths.Clear();
             exchanges.Clear();
             exchangeCooldown.Clear();
             disposed = true;

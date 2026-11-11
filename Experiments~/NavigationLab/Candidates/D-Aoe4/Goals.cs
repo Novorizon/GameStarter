@@ -32,10 +32,11 @@ namespace NavigationLab.DAoe4
 
         private int PickGoal(UnitProfile profile, int target, int[] distances, Point2 from, bool attacksFirst)
         {
+            double[]? depths = deepGoalOrder ? GoalDepths(profile.RadiusMm, Array.IndexOf(distances, 0)) : null;
             return Holding(profile, target).Where(cell => distances[cell] >= 0 && !goalOwners.ContainsKey(cell) && GoalClear(cell, profile, -1))
                 .OrderByDescending(cell => attacksFirst && geometry.CanAttack(World.Center(cell), profile, target))
-                .ThenByDescending(cell => attacksFirst && PreferredAttack(cell, profile, target))
-                .ThenByDescending(cell => distances[cell])
+                .ThenByDescending(cell => !deepGoalOrder && attacksFirst && PreferredAttack(cell, profile, target))
+                .ThenByDescending(cell => depths == null ? distances[cell] : depths[cell])
                 .ThenBy(cell => Point2.Distance(from, World.Center(cell)))
                 .ThenBy(cell => cell).DefaultIfEmpty(-1).First();
         }
