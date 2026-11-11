@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "scope": "Read-only actual C17 yield-cycle replay, analytical fixed-neighbor barrier, and independent cooperative recovery witness, not a full-case pass",
+  "candidateSourceMatchesOriginalDevelopmentAndFinalFreeze": {
+    "candidate/Factory.cs": true,
+    "candidate/FlowTiles.cs": true,
+    "candidate/Geometry.cs": true,
+    "candidate/NavigationLab.CSupCom2.csproj": true
+  },
+  "frozenDllMatchesFinalManifest": {
+    "core": true,
+    "oracle": true,
+    "candidate": true
+  },
+  "snapshotIdentitySha256": "90eca89591770eff7e6dcf21c996f5ddbf1d6089d810703cc97d8de5ed33aa24",
+  "files": {
+    "FrozenDlls/NavigationLab.CSupCom2.dll": "8a20ba7ed8d94fd94a7d4e359e8ec9cf917599d09185064a2117104dbff1333d",
+    "FrozenDlls/NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "FrozenDlls/NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "Program.cs": "e83498f8d3835713e06e55358551ba61bc13d903ca0f43b4f5ce7d65709c46cb",
+    "README.zh-CN.md": "36689beeca75db39a88b3e5a8d87c971599968bfa7ed5e88a46987c0d23f165a",
+    "Replay.csproj": "3374670946bfbb98e25dadff5f3a3165b90d43a91918bf867bf5e44a175b9d8e",
+    "barrier-certificate.json": "0212d630848c00db1fa311e1f4a3d2e054897543af6adacefc8d9a9ba9b68396",
+    "barrier.py": "0da6cfe0faf0333452f16ac28f6cdcdad5e2431123a016305734d5e6b9c5278b",
+    "cooperative-replay.json": "1d53cd9b5b797650cdc3feaa63014e7942c763dbf87138d549fa947efdcddb35",
+    "final-C17-build-manifest.json": "024eb66ce7da0a1c20507e0d09e62b100b1e4cfc40aac54ec5e100b09f0d8705",
+    "frozen-source.zip": "72332815ee86eb4046ac3f41d271ea845ea701fa67c017ce8fffba03a278db45",
+    "inputs/capacity-death-refills-original-queue.json": "7d367cddbcd62512a49ff9d2f29ad3d66edcc027e926bf7a92fd847b0100228d",
+    "inspection-execution.log": "41d9d3cad9e97815378c414ab66e80229b41b0119f0108ea7d2b6436e0bd132f",
+    "inspection-result.json": "661cd84a28f0375d6fc5226586664ab378a65d1092587f2c8c40b601ff8234d8",
+    "original-development-summary.json": "b1c35ca824187428ffb02726b0206b313cbed27a6da9b9f2ba78884b408ef19d",
+    "original-report.json": "e13483f5ca1962d255fc073457a0004ef6cffb8af19ecc866bf05eb140054d15",
+    "replay-execution.log": "1d53cd9b5b797650cdc3feaa63014e7942c763dbf87138d549fa947efdcddb35"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "actor": 46,
+  "position": [
+    2981.8333029101896,
+    4617.651828268101
+  ],
+  "goal": [
+    3500,
+    6500
+  ],
+  "radiusMm": 490,
+  "otherBodiesFixed": true,
+  "expandedCircleBarrier": [
+    {
+      "center": [
+        2500.0,
+        5500.0
+      ],
+      "expandedRadius": 980,
+      "source": "actor45"
+    },
+    {
+      "center": [
+        4500,
+        4500
+      ],
+      "expandedRadius": 1490,
+      "source": "base"
+    },
+    {
+      "center": [
+        2500.0,
+        3500.0
+      ],
+      "expandedRadius": 980,
+      "source": "actor38"
+    },
+    {
+      "center": [
+        1984.3016377359143,
+        4620.697285903864
+      ],
+      "expandedRadius": 980,
+      "source": "actor48"
+    }
+  ],
+  "adjacentCircleOverlaps": [
+    {
+      "first": "actor45",
+      "second": "base",
+      "centerDistanceMm": 2236.06797749979,
+      "expandedRadiiSumMm": 2470,
+      "overlapDepthMm": 233.93202250021022
+    },
+    {
+      "first": "base",
+      "second": "actor38",
+      "centerDistanceMm": 2236.06797749979,
+      "expandedRadiiSumMm": 2470,
+      "overlapDepthMm": 233.93202250021022
+    },
+    {
+      "first": "actor38",
+      "second": "actor48",
+      "centerDistanceMm": 1233.6560328852397,
+      "expandedRadiiSumMm": 1960,
+      "overlapDepthMm": 726.3439671147603
+    },
+    {
+      "first": "actor48",
+      "second": "actor45",
+      "centerDistanceMm": 1019.3714062394977,
+      "expandedRadiiSumMm": 1960,
+      "overlapDepthMm": 940.6285937605023
+    }
+  ],
+  "startInsideCenterPolygon": true,
+  "goalOutsideCenterPolygon": true,
+  "conclusion": "The closed polygon boundary is contained in the union of expanded forbidden disks. Actor46 cannot reach its original Goal with all other bodies fixed; cooperative movement is necessary, independent of path graph resolution.",
+  "proofScope": "Analytical closed-barrier certificate from actual failed state; not a no-solution proof for cooperative motion."
+}

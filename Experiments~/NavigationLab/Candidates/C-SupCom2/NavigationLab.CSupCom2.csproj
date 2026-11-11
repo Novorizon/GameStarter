@@ -10,6 +10,7 @@
     <NavigationLabCoreRoot Condition="'$(NavigationLabCoreRoot)' == ''">../../Core</NavigationLabCoreRoot>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Evidence/**/*.cs" />
     <ProjectReference Include="$(NavigationLabCoreRoot)/NavigationLab.Core.csproj" />
   </ItemGroup>
 </Project>

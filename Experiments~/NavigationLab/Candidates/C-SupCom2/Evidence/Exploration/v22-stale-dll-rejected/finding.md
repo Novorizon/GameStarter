@@ -1,0 +1,1 @@
+无有效算法结果。把审计Program.cs放入Evidence后，SDK默认Compile glob误将其纳入netstandard候选，编译失败；原shell未set -e而继续启动旧C21 DLL。发现后立即终止，不接受该目录结果，不计通过或失败。已为csproj显式Compile Remove=Evidence/**/*.cs，后续所有编译-执行命令启用set -e，真实新C22b另目录重跑。正式C17冻结运行从未受影响。

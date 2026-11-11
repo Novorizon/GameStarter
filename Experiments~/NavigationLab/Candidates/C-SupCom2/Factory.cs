@@ -38,6 +38,8 @@ namespace NavigationLab.CSupCom2
             internal long YieldUntil;
             internal int Stuck;
             internal bool Processed;
+            internal bool VacancyTransfer;
+            internal bool PreferClearCorridor;
             internal double BestDistance = double.PositiveInfinity;
             internal double SiegeWindowBest = double.PositiveInfinity;
         }
@@ -133,6 +135,18 @@ namespace NavigationLab.CSupCom2
         public void Step()
         {
             microstep++;
+            foreach (var actor in actors.Values)
+            {
+                if ((actor.VacancyTransfer || actor.PreferClearCorridor) && State(actor) != MotionState.Moving)
+                {
+                    if (actor.VacancyTransfer)
+                    {
+                        Count("VacancyTransfersArrived");
+                    }
+                    actor.VacancyTransfer = false;
+                    actor.PreferClearCorridor = false;
+                }
+            }
             if (completedGroupSleeping)
             {
                 Count("CompletedGroupSleepSteps");
@@ -250,6 +264,8 @@ namespace NavigationLab.CSupCom2
             {
                 actor.Route = null;
                 actor.YieldGoal = -1;
+                actor.VacancyTransfer = false;
+                actor.PreferClearCorridor = false;
                 actor.SiegeWindowBest = double.PositiveInfinity;
                 actor.ProgressAnchor = actor.Position;
                 actor.Stuck = 0;
@@ -307,7 +323,7 @@ namespace NavigationLab.CSupCom2
 
         private bool Completed(Actor actor)
         {
-            return State(actor) != MotionState.Moving && CanHold(actor, actor.Goal)
+            return !actor.VacancyTransfer && State(actor) != MotionState.Moving && CanHold(actor, actor.Goal)
                 && Geometry.Clear(world, actor.Position, actor.Profile.RadiusMm);
         }
 
@@ -343,7 +359,7 @@ namespace NavigationLab.CSupCom2
                     continue;
                 }
                 Actor occupant = actors[owner];
-                if (occupant.AssignedGoal)
+                if (occupant.AssignedGoal || occupant.VacancyTransfer)
                 {
                     continue;
                 }
@@ -435,6 +451,11 @@ namespace NavigationLab.CSupCom2
             Point2 forward = actor.Position + preferred * distance;
             if (SafeMotion(actor, forward, ordered))
             {
+                if (actor.PreferClearCorridor && ClearBodyCorridor(actor, target, ordered))
+                {
+                    Count("ClearCorridorForwardSteps");
+                    return forward;
+                }
                 best = forward;
                 bestScore = 1 + .3 * Point2.Dot(preferred, direction);
             }
@@ -516,11 +537,17 @@ namespace NavigationLab.CSupCom2
                     .Where(cell => planner.Connected(origin, cell, blocker.Profile.RadiusMm))
                     .Where(cell => FreePosition(world.Center(cell), blocker.Profile.RadiusMm, blocker.Id))
                     .Where(cell => !ordered.Any(other => other.Id != blocker.Id && other.YieldGoal == cell))
+                    .Where(cell => cell != requester.Goal || CanExchangeVacancyGoals(requester, blocker, ordered))
                     .OrderByDescending(cell => Geometry.PointSegment(world.Center(cell), requester.Position, world.Center(requester.Goal)))
                     .ThenBy(cell => Point2.Distance(world.Center(cell), blocker.Position)).ThenBy(cell => cell).ToArray();
                 if (candidates.Length == 0)
                 {
                     continue;
+                }
+                if (candidates[0] == requester.Goal)
+                {
+                    CommitVacancyExchange(requester, blocker);
+                    return;
                 }
                 blocker.YieldGoal = candidates[0];
                 blocker.YieldRequester = requester.Id;
@@ -531,6 +558,54 @@ namespace NavigationLab.CSupCom2
                 Count("LocalPushRequests");
                 return;
             }
+            if (InSiegeArea(requester))
+            {
+                Actor? mover = ordered.Where(blocker => blocker.Id != requester.Id && CanExchangeVacancyGoals(requester, blocker, ordered))
+                    .OrderBy(blocker => GoalStepsFrom(requester, blocker.Goal)).ThenBy(blocker => blocker.Id).FirstOrDefault();
+                if (mover != null)
+                {
+                    CommitVacancyExchange(requester, mover);
+                }
+            }
+        }
+
+        private void CommitVacancyExchange(Actor requester, Actor mover)
+        {
+            int vacated = mover.Goal;
+            CommitGoals(new Dictionary<Actor, int> { [mover] = requester.Goal, [requester] = vacated });
+            mover.VacancyTransfer = true;
+            requester.PreferClearCorridor = true;
+            mover.PreferClearCorridor = true;
+            Count("PermanentVacancyGoalExchanges");
+        }
+
+        private bool CanExchangeVacancyGoals(Actor requester, Actor blocker, Actor[] ordered)
+        {
+            if (requester.AssignedGoal || blocker.AssignedGoal || requester.TargetId != blocker.TargetId
+                || !requester.Profile.Equals(blocker.Profile) || blocker.VacancyTransfer || State(blocker) == MotionState.Moving
+                || !CanHold(requester, blocker.Goal) || !CanHold(blocker, requester.Goal)
+                || GoalStepsFrom(requester, blocker.Goal) >= GoalStepsFrom(requester, requester.Goal)
+                || !planner.Connected(requester.Goal, blocker.Goal, requester.Profile.RadiusMm)
+                || ordered.Any(other => other.Id != requester.Id && other.Id != blocker.Id && other.YieldGoal == requester.Goal)
+                || !owners.TryGetValue(requester.Goal, out int requesterOwner) || requesterOwner != requester.Id
+                || !owners.TryGetValue(blocker.Goal, out int blockerOwner) || blockerOwner != blocker.Id)
+            {
+                return false;
+            }
+            return ClearBodyCorridor(blocker, world.Center(requester.Goal), ordered);
+        }
+
+        private bool ClearBodyCorridor(Actor actor, Point2 destination, Actor[] ordered)
+        {
+            return Geometry.Segment(world, actor.Position, destination, actor.Profile.RadiusMm)
+                && ordered.All(other => other.Id == actor.Id || Geometry.PointSegment(other.Position, actor.Position, destination)
+                    >= actor.Profile.RadiusMm + other.Profile.RadiusMm + 1e-6);
+        }
+
+        private int GoalStepsFrom(Actor actor, int goal)
+        {
+            int source = world.CellAt(actor.Position);
+            return Math.Abs(source % world.Width - goal % world.Width) + Math.Abs(source / world.Width - goal / world.Width);
         }
 
         private bool ReleaseYield(Actor blocker)
@@ -555,7 +630,7 @@ namespace NavigationLab.CSupCom2
 
         private void EnsureAttackService(Actor actor)
         {
-            if (actor.AssignedGoal || actor.Goal < 0 || Attack(actor, world.Center(actor.Goal)))
+            if (actor.AssignedGoal || actor.VacancyTransfer || actor.Goal < 0 || Attack(actor, world.Center(actor.Goal)))
             {
                 return;
             }
@@ -574,7 +649,7 @@ namespace NavigationLab.CSupCom2
                     continue;
                 }
                 Actor flexible = actors[owner];
-                if (flexible.AssignedGoal || flexible.TargetId != actor.TargetId)
+                if (flexible.AssignedGoal || flexible.VacancyTransfer || flexible.TargetId != actor.TargetId)
                 {
                     continue;
                 }
@@ -619,7 +694,7 @@ namespace NavigationLab.CSupCom2
                     updates[actor] = goal;
                     return true;
                 }
-                if (owner == actor.Id || actors[owner].AssignedGoal)
+                if (owner == actor.Id || actors[owner].AssignedGoal || actors[owner].VacancyTransfer)
                 {
                     continue;
                 }
@@ -651,6 +726,8 @@ namespace NavigationLab.CSupCom2
                 update.Key.Goal = update.Value;
                 update.Key.Route = null;
                 update.Key.YieldGoal = -1;
+                update.Key.VacancyTransfer = false;
+                update.Key.PreferClearCorridor = false;
                 update.Key.BestDistance = double.PositiveInfinity;
                 update.Key.Stuck = 0;
                 update.Key.ProgressAnchor = update.Key.Position;
@@ -663,7 +740,7 @@ namespace NavigationLab.CSupCom2
         {
             // This is the experiment's siege-slot layer, not a claim about the closed game's attack AI.
             // A min-cost matching changes only destinations; every body still moves through the flow/physics pipeline.
-            ordered = ordered.Where(InSiegeArea).ToArray();
+            ordered = ordered.Where(actor => !actor.VacancyTransfer && InSiegeArea(actor)).ToArray();
             if (ordered.Length == 0 || ordered.Length > 160)
             {
                 return;
