@@ -1,0 +1,1 @@
+Development revision with short-lookahead, exact narrow waypoints and static clipping. Forest44 completed its full 12000 tick deadline with only7 admitted,6 moving. Preserved as an execution failure; the shared harness was still under development, so this is not final frozen matrix evidence.

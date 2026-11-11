@@ -17,7 +17,7 @@ namespace NavigationLab.DAoe4
             }
             var neighbours = ordered.Where(other => other.Request.Id != actor.Request.Id)
                 .OrderBy(other => (other.Position - actor.Position).LengthSquared).Take(24).ToArray();
-            Point2 desired = direction * length;
+            Point2 desired = ClipStatic(actor, direction * length);
             double desiredScore = Score(actor, desired, direction, destination, neighbours, out bool risk);
             if (!risk && desiredScore > 0)
             {
@@ -31,7 +31,7 @@ namespace NavigationLab.DAoe4
                 double angle = i == 0 ? 0 : ((i + 1) / 2) * Math.PI / 12 * ((i & 1) == 0 ? -hand : hand);
                 double cosine = Math.Cos(angle);
                 double sine = Math.Sin(angle);
-                var delta = new Point2(direction.X * cosine - direction.Y * sine, direction.X * sine + direction.Y * cosine) * length;
+                var delta = ClipStatic(actor, new Point2(direction.X * cosine - direction.Y * sine, direction.X * sine + direction.Y * cosine) * length);
                 double score = Score(actor, delta, direction, destination, neighbours, out _);
                 if (score > bestScore + 1e-9)
                 {
@@ -57,10 +57,12 @@ namespace NavigationLab.DAoe4
                 risk = true;
                 return double.NegativeInfinity;
             }
-            double length = Math.Max(1e-9, delta.Length);
+            double length = Math.Max(1e-9, Math.Min(actor.Request.Profile.SpeedMmPerTick / 10.0, Point2.Distance(actor.Position, destination)));
             double score = Point2.Dot(delta, direction) / length;
             double remaining = Point2.Distance(actor.Position, destination);
-            Point2 forecast = Forecast(actor.Position, delta, destination, 40);
+            int horizon = (int)Math.Max(2, Math.Min(40, World.CellSizeMm * .5 / Math.Max(.1, actor.Request.Profile.SpeedMmPerTick / 10.0)));
+            Point2 forecast = Forecast(actor.Position, delta, destination, horizon);
+            double futurePenalty = 0;
             foreach (var other in neighbours)
             {
                 double radius = actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm;
@@ -70,15 +72,15 @@ namespace NavigationLab.DAoe4
                     risk = true;
                     return double.NegativeInfinity;
                 }
-                Point2 otherForecast = Forecast(other.Position, other.Velocity, Destination(other), 40);
+                Point2 otherForecast = Forecast(other.Position, other.Velocity, Destination(other), horizon);
                 double gap = Math.Sqrt(GridGeometry.SweptGapSquared(actor.Position, forecast, other.Position, otherForecast)) - radius;
-                double guard = remaining < World.CellSizeMm * 2 ? 0 : Math.Min(100, radius * .15);
+                double guard = 0;
                 double initialGap = Point2.Distance(actor.Position, other.Position) - radius;
                 double threshold = Math.Min(guard, Math.Max(0, initialGap));
                 if (gap < threshold - 1e-5)
                 {
                     risk = true;
-                    score -= 2 + (threshold - gap) / Math.Max(1, radius);
+                    futurePenalty = Math.Max(futurePenalty, .6 + (threshold - gap) / Math.Max(1, radius) * .8);
                 }
                 // Small deterministic lateral preference breaks perfectly mirrored head-on steering choices.
                 Point2 offset = other.Position - actor.Position;
@@ -88,8 +90,33 @@ namespace NavigationLab.DAoe4
                     score += .015 * Math.Sign(cross);
                 }
             }
-            score -= .025 * (delta - actor.Velocity).Length / Math.Max(1, delta.Length);
+            score -= futurePenalty;
+            score -= .025 * (delta - actor.Velocity).Length / Math.Max(1, actor.Request.Profile.SpeedMmPerTick / 10.0);
             return score;
+        }
+
+        private Point2 ClipStatic(Actor actor, Point2 movement)
+        {
+            if (geometry.CanSegment(actor.Position, actor.Position + movement, actor.Request.Profile.RadiusMm))
+            {
+                return movement;
+            }
+            double low = 0;
+            double high = 1;
+            for (int iteration = 0; iteration < 24; iteration++)
+            {
+                double middle = (low + high) * .5;
+                if (geometry.CanSegment(actor.Position, actor.Position + movement * middle, actor.Request.Profile.RadiusMm))
+                {
+                    low = middle;
+                }
+                else
+                {
+                    high = middle;
+                }
+            }
+            Add("StaticShortenedProposals");
+            return movement * low;
         }
 
         private static Point2 Forecast(Point2 position, Point2 movement, Point2 destination, int horizon)
@@ -133,7 +160,7 @@ namespace NavigationLab.DAoe4
                     EndYield(actor);
                 }
             }
-            foreach (var requester in ordered.Where(actor => State(actor) == MotionState.Moving && step - actor.LastProgress >= 80)
+            foreach (var requester in ordered.Where(actor => State(actor) == MotionState.Moving && step - actor.LastProgress >= 250)
                 .OrderByDescending(actor => step - actor.LastProgress).ThenBy(actor => actor.Request.Id))
             {
                 if (requester.YieldCell >= 0)
@@ -142,7 +169,7 @@ namespace NavigationLab.DAoe4
                 }
                 Point2 target = World.Center(requester.Goal);
                 var blockers = ordered.Where(other => other.Request.Id != requester.Request.Id && other.YieldCell < 0
-                    && State(other) != MotionState.Moving)
+                    && (State(other) != MotionState.Moving || step - other.LastProgress >= 250))
                     .Where(other => Point2.Distance(other.Position, requester.Position) < World.CellSizeMm * 3
                         || GridGeometry.PointSegmentSquared(other.Position, requester.Position, target)
                             < Math.Pow(other.Request.Profile.RadiusMm + requester.Request.Profile.RadiusMm + 50, 2))
@@ -170,6 +197,7 @@ namespace NavigationLab.DAoe4
                     blocker.YieldStarted = step;
                     blocker.YieldHoldStarted = 0;
                     blocker.Route = null;
+                    blocker.PreciseWaypoint = -1;
                     blocker.BestGoalDistance = double.MaxValue;
                     blocker.LastProgress = step;
                     requester.LastProgress = step;
@@ -184,6 +212,7 @@ namespace NavigationLab.DAoe4
             actor.YieldRequester = 0;
             actor.YieldHoldStarted = 0;
             actor.Route = null;
+            actor.PreciseWaypoint = -1;
             actor.BestGoalDistance = double.MaxValue;
             actor.LastProgress = step;
             Add("YieldReturns");

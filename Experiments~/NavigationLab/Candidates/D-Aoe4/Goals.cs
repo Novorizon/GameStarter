@@ -164,6 +164,7 @@ namespace NavigationLab.DAoe4
             goalRevision++;
             goalOwners[goal] = actor.Request.Id;
             actor.Route = null;
+            actor.PreciseWaypoint = -1;
             actor.BestGoalDistance = double.MaxValue;
             actor.LastProgress = step;
         }
