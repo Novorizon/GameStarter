@@ -335,7 +335,7 @@
   },
   "settled-batch-death-and-reinforcement": {
     "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/settled-batch-death-and-reinforcement.jsonl.gz",
-    "fullTraceNotIncluded": true,
+    "fullTraceNotIncluded": false,
     "compressedBytes": 537416,
     "originalFileSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
     "logicalPhysicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
@@ -347,11 +347,13 @@
       "trace-windows/settled-batch-death-and-reinforcement.first.jsonl.gz": "c2680876ba60062c33caf0e223aec610f8962cc319745a236c5120133b62bbad",
       "trace-windows/settled-batch-death-and-reinforcement.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
       "trace-windows/settled-batch-death-and-reinforcement.last-checkpoint.json": "ee667074090c1149284a82163eb3a8c88b4ae9fa426b78017ab286c7f3b3e826"
-    }
+    },
+    "includedFullTrace": "traces/settled-batch-death-and-reinforcement.jsonl.gz",
+    "includedFor": "Independent first-death waiting-set and final promotion derivation; no new simulation."
   },
   "old-waiters-refill-without-newcomers": {
     "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/old-waiters-refill-without-newcomers.jsonl.gz",
-    "fullTraceNotIncluded": true,
+    "fullTraceNotIncluded": false,
     "compressedBytes": 537416,
     "originalFileSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
     "logicalPhysicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
@@ -363,7 +365,9 @@
       "trace-windows/old-waiters-refill-without-newcomers.first.jsonl.gz": "c2680876ba60062c33caf0e223aec610f8962cc319745a236c5120133b62bbad",
       "trace-windows/old-waiters-refill-without-newcomers.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
       "trace-windows/old-waiters-refill-without-newcomers.last-checkpoint.json": "ee667074090c1149284a82163eb3a8c88b4ae9fa426b78017ab286c7f3b3e826"
-    }
+    },
+    "includedFullTrace": "traces/old-waiters-refill-without-newcomers.jsonl.gz",
+    "includedFor": "Independent first-death waiting-set and final promotion derivation; no new simulation."
   },
   "ranged84-before-short1-fairness": {
     "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/ranged84-before-short1-fairness.jsonl.gz",

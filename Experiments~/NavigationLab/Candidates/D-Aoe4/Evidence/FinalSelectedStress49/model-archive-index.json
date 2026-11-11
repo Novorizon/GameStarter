@@ -111,7 +111,7 @@
     "target-relocation-before-arrival.json.gz": "b09bd542e7106047361beb64170e469ca37011e70289845204b0c1a65a55c351",
     "three-hundred-units-original-12m.json.gz": "8a114a1d8ae836d52f6b8a96840670482e540c81258b04d92f0bada1e333192b",
     "three-hundred-units-parking-lanes.json.gz": "b71f6935b643f061137710c87a9f5426e78f7ecc73b7873a8c786cdb3e63a762",
-    "trace-storage.json": "f0e89154edc1d9c5b17b411f2d129fe5e129bebb34af7c4d53741507ca3aaa0f",
+    "trace-storage.json": "b5686a2378c08b3b5dc9485506ff6766f056bc65025d79f7346797ba60e5c00c",
     "trace-windows/capacity-death-refills-original-queue.first.jsonl.gz": "1f6bb524e2acfc49091eb252c83add46e67f5ee9a712f86255f4c966565519b4",
     "trace-windows/capacity-death-refills-original-queue.last-checkpoint.json": "1e19580a07e880522cb28b0eb6c1d58233730e497306d8f7de7b5587752fc982",
     "trace-windows/capacity-death-refills-original-queue.last.jsonl.gz": "a4f8018d8744afee8f914db70c1d04f52dbd20f2c3ee0566f6cd02209f64d44c",
@@ -181,6 +181,8 @@
     "trace-windows/u-obstacle.first.jsonl.gz": "4c02a19c29e0bb38d1bc7eb9421c35455fe5ae0dbe54a3aabaa7963a4e5444f6",
     "trace-windows/u-obstacle.last-checkpoint.json": "ce83f48e71529a419fe54fd6f030173883517792c4b85444395223c66e427328",
     "trace-windows/u-obstacle.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
-    "u-obstacle.json.gz": "4ecb88d9bfc61556246e4ea6117c7ba58a31e538b2e07c1e6b9f200b77395a45"
+    "u-obstacle.json.gz": "4ecb88d9bfc61556246e4ea6117c7ba58a31e538b2e07c1e6b9f200b77395a45",
+    "traces/old-waiters-refill-without-newcomers.jsonl.gz": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+    "traces/settled-batch-death-and-reinforcement.jsonl.gz": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3"
   }
 }

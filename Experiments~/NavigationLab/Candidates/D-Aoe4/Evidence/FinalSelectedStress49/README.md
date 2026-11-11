@@ -11,3 +11,5 @@ trace-storage.json明确列出原完整轨迹路径与SHA；版本化trace-windo
 本项目依据AoE4公开架构独立实现；有限测试不证明一般完备性，也不证明商业游戏内部实现，未进行性能排名。
 
 D256的两次仅线程栈诊断合计约1.030秒，原件及计时边界见RuntimeDiagnostics；wall/API数据不作性能排名。输入、逻辑时限和实际DLL均未修改。两个精确缓存版本另在各自辅助分支，仅四例，不计入本49成绩。
+
+另完整保留old-waiters与settled-batch两项死亡用例的原压缩trace，供独立重建死亡前候场集合与最终补位数；trace-storage与model-archive-index已列出实际存储及指纹，其他大轨迹仍明确为部分窗口或外部原件。
