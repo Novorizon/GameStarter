@@ -1,0 +1,76 @@
+{
+  "label": "before",
+  "scope": "Supplementary goal compatibility contract, not an added or modified common49 case. Original world/radius/speed/holding cells kept before/after.",
+  "scriptSha256": "c706ee234708a0ba3bcd51ac16c7ab3f4e7c44696a67133f9fa4c6a1803e0146",
+  "results": [
+    {
+      "Name": "two-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 168,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 2171
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": -300,
+        "Settled": 1,
+        "Steps": 10000,
+        "StableMicrosteps": 0,
+        "TraceSha256": "406e60f34852a5114825fe234ab5bb0d92590ea8191b5e067cd1d1bddde3d291",
+        "FinalState": "1:10600,5500:0:91|2:11500,4500:1:75",
+        "MinimumBodyGapMm": 0,
+        "PairSweeps": 10001
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "three-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 241,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 6736
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": -300,
+        "Settled": 2,
+        "Steps": 10000,
+        "StableMicrosteps": 0,
+        "TraceSha256": "ba1ddc0103ff93620a9cf407ba3712911644a5a6cccfdddb6a82e205a4f6b280",
+        "FinalState": "1:10600,5500:0:91|2:11500,4500:1:75|3:9500,3500:1:57",
+        "MinimumBodyGapMm": 0,
+        "PairSweeps": 30004
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "mixed-three",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 267,
+        "MinimumBodyGapMm": 83.81154862025676,
+        "PairSweeps": 6814
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": -300,
+        "Settled": 2,
+        "Steps": 10000,
+        "StableMicrosteps": 0,
+        "TraceSha256": "90b051d0ea6bbc0442ab00a13db2989f6ffdd7124bf732ced54b147a405f53cf",
+        "FinalState": "1:10600,5500:0:91|2:11500,4500:1:75|3:9500,3500:2:57",
+        "MinimumBodyGapMm": 0,
+        "PairSweeps": 30004
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    }
+  ]
+}

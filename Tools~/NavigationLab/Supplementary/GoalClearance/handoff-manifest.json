@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "scope": "Immutable generic supplementary3 fixture driver. Not a change to common49. The input export is asserted byte-identical to original-e-before files before each run.",
+  "arguments": [
+    "label",
+    "output-directory",
+    "candidate-assembly-path",
+    "full-factory-type"
+  ],
+  "sha256": {
+    "Program.cs": "3c6372c377b358b48b5497f60b36b7b092ad63971b56b9e675275d028cef9065",
+    "GoalClearance.csproj": "9cd59860e26e87a3eaee4a88c0a310a3f30b3d49f1e78f119be02441ccda7ac0",
+    "bin/Release/net8.0/GoalClearance.dll": "e5303f884f22316c084c0e95feba6e992f26e101e7173bbd9a0264dd92e8cd11",
+    "FrozenDlls/NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "FrozenDlls/NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "original-e-before/mixed-three.input.json": "58ef7bbfaed3639e0ddda4e3d5ebc489863d18f1a0717cce41dfec761d4a0300",
+    "original-e-before/three-large.input.json": "bc38b6e150a635f2a3e307e7ebbc16ba7c9e9720daf85d0557b7a470aef59cb1",
+    "original-e-before/two-large.input.json": "81483059a403afcdab5e765752f8344e2e34feb49ba0c7ed293926a736975b92"
+  }
+}
