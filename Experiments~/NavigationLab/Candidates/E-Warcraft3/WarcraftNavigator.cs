@@ -808,14 +808,23 @@ namespace NavigationLab.Candidates.EWarcraft3
                     continue;
                 }
 
-                int goal = SelectGoal(unit.Profile, unit.TargetId, search.Reachable(unit.Position, unit.Profile), unit.Position, true);
-                if (goal < 0)
+                int goal = -1;
+                List<Point2>? path = null;
+                goalOwners.Remove(unit.Goal);
+                try
                 {
-                    continue;
+                    goal = SelectGoal(unit.Profile, unit.TargetId, search.Reachable(unit.Position, unit.Profile), unit.Position, true);
+                    if (goal >= 0)
+                    {
+                        path = search.Find(unit.Position, goal, unit.Profile);
+                    }
+                }
+                finally
+                {
+                    goalOwners[unit.Goal] = unit.Id;
                 }
 
-                var path = search.Find(unit.Position, goal, unit.Profile);
-                if (path == null)
+                if (goal < 0 || path == null)
                 {
                     continue;
                 }
