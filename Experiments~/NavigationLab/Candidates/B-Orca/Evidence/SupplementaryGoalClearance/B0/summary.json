@@ -1,0 +1,92 @@
+{
+  "label": "B0-selected",
+  "scope": "Supplementary goal compatibility contract, not an added or modified common49 case. Original world/radius/speed/holding cells kept before/after.",
+  "scriptSha256": "3c6372c377b358b48b5497f60b36b7b092ad63971b56b9e675275d028cef9065",
+  "driverAssemblySha256": "e5303f884f22316c084c0e95feba6e992f26e101e7173bbd9a0264dd92e8cd11",
+  "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+  "factoryId": "B0-Orca",
+  "declaredFeatures": "DeathAndReinforcement, DynamicTerrain, MovingTarget, MultipleTargets, AssignedGoals, LargeBodies, FastPerTick",
+  "results": [
+    {
+      "Name": "two-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 168,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 2171
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 1528.4271247461902,
+        "Settled": 2,
+        "Steps": 2167,
+        "StableMicrosteps": 2000,
+        "Admitted": 2,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "12999459779dc872001d54c8c5aa2bd3729bb0ab5c88dbb59523660c79a31fc0",
+        "FinalState": "1:9500,3500:1:57|2:11500,5500:1:91",
+        "MinimumBodyGapMm": 39.865052982298266,
+        "PairSweeps": 2168,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "ebda53734e4af91adabc56e286dd345fe35d8a029cbb45ddff284704c5783fa1",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "three-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 241,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 6736
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 936.0679774997898,
+        "Settled": 3,
+        "Steps": 2190,
+        "StableMicrosteps": 2000,
+        "Admitted": 3,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "27709cb26f97fa399ded1d8085e58b0365d73d4f9f56cd30d42a4e61d3fbc379",
+        "FinalState": "1:9500,3500:1:57|2:9500,6500:1:105|3:11500,5500:1:91",
+        "MinimumBodyGapMm": 0.5955329972459822,
+        "PairSweeps": 6574,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "ebda53734e4af91adabc56e286dd345fe35d8a029cbb45ddff284704c5783fa1",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "mixed-three",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 267,
+        "MinimumBodyGapMm": 83.81154862025676,
+        "PairSweeps": 6814
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 170,
+        "Settled": 3,
+        "Steps": 2841,
+        "StableMicrosteps": 2000,
+        "Admitted": 3,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "d20ec1acb3c032371e07984eac6c59d4aac17cfd486caeecd6082fa4c4de18a1",
+        "FinalState": "1:9500,3500:1:57|2:11500,5500:1:91|3:11500,4500:1:75",
+        "MinimumBodyGapMm": 0.5056067635696309,
+        "PairSweeps": 8527,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "ebda53734e4af91adabc56e286dd345fe35d8a029cbb45ddff284704c5783fa1",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    }
+  ]
+}

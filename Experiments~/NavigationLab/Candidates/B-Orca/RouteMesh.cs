@@ -10,6 +10,7 @@ namespace NavigationLab.Candidates.BOrca
     /// </summary>
     internal sealed class RouteMesh
     {
+        internal const double StartJoinToleranceMm = SimulationProtocol.GeometryToleranceMm / 4;
         private readonly WorldDefinition world;
         private readonly int width;
         private readonly int height;
@@ -177,6 +178,9 @@ namespace NavigationLab.Candidates.BOrca
 
         private int ClosestJoin(Point2 point, Func<Point2, bool>? dynamicBlocked, Func<Point2, Point2, bool>? blockedSegment = null)
         {
+            // A float solver can leave a physical start a few micrometres across a mathematical tangent.
+            // Only that actual starting segment uses the execution epsilon; stand nodes and ordinary edges stay exact.
+            double joinTolerance = StartJoinToleranceMm;
             int centerX = (int)Math.Round((point.X - world.Origin.X) / step);
             int centerY = (int)Math.Round((point.Y - world.Origin.Y) / step);
             int result = -1;
@@ -188,7 +192,7 @@ namespace NavigationLab.Candidates.BOrca
                     int node = y * width + x;
                     var target = Center(node);
                     double candidate = Point2.Distance(point, target);
-                    if (!stand[node] || candidate >= distance || !Geometry.Clear(world, point, target, radius))
+                    if (!stand[node] || candidate >= distance || !Geometry.Clear(world, point, target, radius, true, joinTolerance))
                     {
                         continue;
                     }

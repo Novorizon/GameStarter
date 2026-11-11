@@ -1,0 +1,225 @@
+{
+  "scope": "Interrupted partial original case reports; not a completed 49-case corpus and not a final score. Interruption is a source-fix stage, not an algorithm deadline result.",
+  "cases": [
+    {
+      "name": "forest-wave-6",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "3b1d82b94ace1ee7e62cd060c7ebc873416c99b03f002615aba8a827b1b6c31d",
+      "semanticTraceSha256": "1722b153b3e6a8a05cb3c67bf734f48c8d88e12bee8e6d5a7a7e55571a3e03c4",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-wave-6.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-wave-6.json.gz",
+      "archivedOriginalCaseGzipSha256": "aca1b720cc01ae6fc53f489c85fdeed613e1a4a8b75ef3fc10ca9769bf9a1664"
+    },
+    {
+      "name": "forest-single-small",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "c850855e42f0f1fb9c9d406f93a7f063256c297a86eb1af0c9ac331af2e35d41",
+      "semanticTraceSha256": "32b06cbbe5db63b9eb706f92f72ac024576d35b49973809261830d00e3e7221e",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-single-small.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-single-small.json.gz",
+      "archivedOriginalCaseGzipSha256": "912b7311280d46de42609835eaa14c05ddf0cd35449ff83e63f9c0f9b1f3fc25"
+    },
+    {
+      "name": "forest-wave-5",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "a6f33b6a61f9c5973b38efa7a7d34e1049123dedc9134ba6cbc741c82f25813b",
+      "semanticTraceSha256": "006653e8c638c83a1bc7d7d31d2fbb1f99dba688be33667197805cacaa878ba8",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-wave-5.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-wave-5.json.gz",
+      "archivedOriginalCaseGzipSha256": "6f26f759e55b99e57f1ca7d9f92216b08f2e01c924abe2094b56a8623a1e9c22"
+    },
+    {
+      "name": "forest-wave-1",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "0535df654abca1ba437d145bbc733794583e476863bac68a3e3e9cc62123277c",
+      "semanticTraceSha256": "6da0e2d3d48e1eee76e66872659db1ce8243be97b946e42fa6b4e92c098e350c",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-wave-1.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-wave-1.json.gz",
+      "archivedOriginalCaseGzipSha256": "609a76f0de72875a04ec832acfdcc4cd27ffe256d3ce93815a85b8198d06d559"
+    },
+    {
+      "name": "u-obstacle",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "d93a4148af2d94601ba2070269f0158ce24483d63163b932206b6d0bb88d49e9",
+      "semanticTraceSha256": "92d273d41b9c2ee85dfeb294f4d322ae93b9e1111fc523b7fbefed932536dbb6",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/u-obstacle.jsonl.gz",
+      "archivedOriginalCaseGzip": "u-obstacle.json.gz",
+      "archivedOriginalCaseGzipSha256": "b15a4be7a2e98a13ad81f0cdb8d99c996752dab4ef81f1fe575f31ac8dd2b6f6"
+    },
+    {
+      "name": "three-hundred-units-original-12m",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "063ae0ae84d394fd63cd8b35f55fba2d0f0a9a4f77787a55eabe543baebe5cd0",
+      "semanticTraceSha256": "094ebaedb03b9c3486cd04b20b3374904e696921ac15ff8506d502edd1b9455c",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/three-hundred-units-original-12m.jsonl.gz",
+      "archivedOriginalCaseGzip": "three-hundred-units-original-12m.json.gz",
+      "archivedOriginalCaseGzipSha256": "df81a01d3ab55db1fa7755f132e83c10a83c5552245ac28e18dffc023c95b307"
+    },
+    {
+      "name": "three-hundred-units-parking-lanes",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "93a0749c8e2d1d04f6be0e84944eadd28db2fd207cba3fb6de27d428b42723d2",
+      "semanticTraceSha256": "0802ebc9600cc14ba692db4c1d247e76a1f83ff202f20f46ad4cecaacd53553c",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/three-hundred-units-parking-lanes.jsonl.gz",
+      "archivedOriginalCaseGzip": "three-hundred-units-parking-lanes.json.gz",
+      "archivedOriginalCaseGzipSha256": "70855f43c26a23a698f25679ad746d74ef232ac78c43e006d9726d40c7dbcf1a"
+    },
+    {
+      "name": "cross-junction-original-5m",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "8c90612bf794bad16db8ac67a31f4a85b7fab333c1ccf141996d540acc1f21d1",
+      "semanticTraceSha256": "1d07cf24d76e7d37cbeebd284a3429c53dcf43b3a680baf0b4720b8ac8fba704",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/cross-junction-original-5m.jsonl.gz",
+      "archivedOriginalCaseGzip": "cross-junction-original-5m.json.gz",
+      "archivedOriginalCaseGzipSha256": "96031bad99467a1c272bccb25bf638d0658b8e53b9fe9801ace4baaec2396203"
+    },
+    {
+      "name": "large-radius-turning-clearance",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "8c10089ff09a2720c9176b9419e7acfefa0014065e2e3099bc3711f559e84747",
+      "semanticTraceSha256": "5ddb48e017b4b247fa7f6197aea43b5f018dfd7d3f0d648676863d499c214252",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/large-radius-turning-clearance.jsonl.gz",
+      "archivedOriginalCaseGzip": "large-radius-turning-clearance.json.gz",
+      "archivedOriginalCaseGzipSha256": "f68b95f6afc53f587c8cd236b6f4212c8d279517402f2ed2c623e1d29d87564a"
+    },
+    {
+      "name": "cross-junction-parking-lanes",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "5c48a143f6810ef0de46c7b9eab5574f53f13d30d95c68b34c1ed962f4f3758f",
+      "semanticTraceSha256": "74a0fb088aea11248fb00f9fdedefaa4e63be7fae80e799940b73a98f1480a99",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/cross-junction-parking-lanes.jsonl.gz",
+      "archivedOriginalCaseGzip": "cross-junction-parking-lanes.json.gz",
+      "archivedOriginalCaseGzipSha256": "d173e55ca618beb57d1f3c663dc1614f680d8a0ce5449b2917596952eabac026"
+    },
+    {
+      "name": "cross-junction-original-4m",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "b543768956bd60eb3412f2a2f7eabe4be6e9f96158d016494299ce6749a4b973",
+      "semanticTraceSha256": "1a55e0fccc259bb84d8f52f2a1de355dcdd5bb513234049fb0c975d4a86a8d93",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/cross-junction-original-4m.jsonl.gz",
+      "archivedOriginalCaseGzip": "cross-junction-original-4m.json.gz",
+      "archivedOriginalCaseGzipSha256": "81a363701eb761dadd26c296bc7b817cd8839445e1af9ced6a8e28402b38edc6"
+    },
+    {
+      "name": "forest-single-medium",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "c8aa4535cb9b0c2c8b34c87b8e2a263c4cf8a44bdabc59eea856376ee0d546c8",
+      "semanticTraceSha256": "442e7c5ddd1f9792a53e17b28c9d3d68c9db59ef7c400fc7d97ece1bfd033a1c",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-single-medium.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-single-medium.json.gz",
+      "archivedOriginalCaseGzipSha256": "36c01b72b3a71547309c0722c6994e3d1591afb5a3dc45ad31cc7b6e5874f7d3"
+    },
+    {
+      "name": "shared-spawn-parking-lanes",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "a676e12ea0e1bea6cd23273947451cf94893a0e4074a14abf8c60bb315a6146a",
+      "semanticTraceSha256": "b654faf9b4c7549b42693db23d0be5706fba30320af68cf26a378bf495b2f296",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/shared-spawn-parking-lanes.jsonl.gz",
+      "archivedOriginalCaseGzip": "shared-spawn-parking-lanes.json.gz",
+      "archivedOriginalCaseGzipSha256": "a9581bd395437cd3d63cb89f2b89b4eb625fe4c71e429ff9d3ca64817bef550f"
+    },
+    {
+      "name": "forest-wave-3",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "0d4822b5bf4a5ed1cf9b44fe589a15ea57e4057c6161a304cdba1d6e0e5a096f",
+      "semanticTraceSha256": "4aca2a9c79b57d101f1efb0f94fdbd86e20eea35874bfe9d1f3de26559015ba8",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-wave-3.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-wave-3.json.gz",
+      "archivedOriginalCaseGzipSha256": "54ffee947a11dfbd18939669c9ee956e29c3892f43784ae04f0e47cc844e9c5b"
+    },
+    {
+      "name": "forest-single-large",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "2ecb63747614417bf900942cf12a63d332ab4e297ba9d41e913d06b251180c4d",
+      "semanticTraceSha256": "2d988f761911b4b05a371f0812a8fce6b72095eb20b5a9c01aa8028e5b174113",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-single-large.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-single-large.json.gz",
+      "archivedOriginalCaseGzipSha256": "855275d41a916082e40be5ee978d41a569e16cd7d470d396e5f1d0d19e298aac"
+    },
+    {
+      "name": "right-angle-corridor",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "37380187dc59c214ac8c0d401db62ffc508b8989c38b6eea45272178d93bd090",
+      "semanticTraceSha256": "60aec39354ae7f0fb98fa7f21f7cb5cb97f5f6a5e845936984c8b3cfeaf4ed14",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/right-angle-corridor.jsonl.gz",
+      "archivedOriginalCaseGzip": "right-angle-corridor.json.gz",
+      "archivedOriginalCaseGzipSha256": "851c7ae0830368416959aa815a6aa1fd9d903794e2566d63b72bf51cd04af748"
+    },
+    {
+      "name": "forest-wave-4",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "9854ef52428e5783b25e8a8f51c8156b6694c34fabf23f2446297b19c1160590",
+      "semanticTraceSha256": "5f509ea689b91d68db494424837fb302da2b256a7371984caef53a6b280d94a4",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-wave-4.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-wave-4.json.gz",
+      "archivedOriginalCaseGzipSha256": "50b58fda39c81dbf5b67040ae7a42f55810c5e63f229cb264561bf5c21942be0"
+    },
+    {
+      "name": "mixed-speed-approach",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "f82660186d6796f0bf989076d341b4b3bb2c31562b1edb03c4396f9620b85c58",
+      "semanticTraceSha256": "d4ea686cafcca4b065a0e89c886aa834e9a6def0d2e617bbb2723d535a927815",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/mixed-speed-approach.jsonl.gz",
+      "archivedOriginalCaseGzip": "mixed-speed-approach.json.gz",
+      "archivedOriginalCaseGzipSha256": "8d8a781254112bf529659f31691f22b5b39a31b0cfa651729571908f33f9acf8"
+    },
+    {
+      "name": "single-cell-throat",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "87f09513c67a466ea60ce1b5d2aeeff0a22fc0b2cf30f3c0854c7271bc3ad8fc",
+      "semanticTraceSha256": "7d7645e4dda1d2a1e40a507bb3b40c92d527b8c9a468073ce11aaf3d7bac2c40",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/single-cell-throat.jsonl.gz",
+      "archivedOriginalCaseGzip": "single-cell-throat.json.gz",
+      "archivedOriginalCaseGzipSha256": "02bf5570f0db7284dd0cc439b8112a127fe779e643d97e194ee4d4549ccc7b52"
+    },
+    {
+      "name": "shared-spawn-original-5m",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "f79995b9b51a2fefe2a260968b090313941afa9134ebbbe864c3c157a2415254",
+      "semanticTraceSha256": "eb2081dbf9c940a8b23b98a609a64afdf1cd9cac9997704b970036751f779914",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/shared-spawn-original-5m.jsonl.gz",
+      "archivedOriginalCaseGzip": "shared-spawn-original-5m.json.gz",
+      "archivedOriginalCaseGzipSha256": "f3b822b9f6bdaa60df12a6d87cdedf50c0bbab5a47fbbd734270aa3ece87ede7"
+    },
+    {
+      "name": "forest-wave-2",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "7bf5ef8ec88c255535693cfe694766df2ba0253abf8dec4cc1052caae61561eb",
+      "semanticTraceSha256": "0466549262f766f56f11a453709d3e2ac877522dfd626ca5df681661f2cbaa3c",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/forest-wave-2.jsonl.gz",
+      "archivedOriginalCaseGzip": "forest-wave-2.json.gz",
+      "archivedOriginalCaseGzipSha256": "2fac2bade0fd0a527a49d6467e3e524fbf5454e8dc75b733c5266797eb3eddfb"
+    },
+    {
+      "name": "open-arena",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "8b9c23d411d618d3b4550a4f5a3592e4125586996bafa5059b10260aac653923",
+      "semanticTraceSha256": "aa08f466f5c51033dcfd79ee6c53acb7450c22a909205e12cfeb4ada131f0fbb",
+      "originalTracePath": "/workspace/navigation-comparison/results/b1-v2-stress/traces/open-arena.jsonl.gz",
+      "archivedOriginalCaseGzip": "open-arena.json.gz",
+      "archivedOriginalCaseGzipSha256": "cdcb89946b1593dc96c938f7842557f53fea2ba724fb7d27dbaa6ccc142aba6f"
+    }
+  ]
+}

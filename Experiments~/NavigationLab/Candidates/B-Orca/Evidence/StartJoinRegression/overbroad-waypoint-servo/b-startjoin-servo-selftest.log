@@ -1,0 +1,69 @@
+{
+  "success": true,
+  "exceptionHostRestoration": true,
+  "tightZeroRangeArrival": true,
+  "settledTargetRelocation": true,
+  "offsetExactWidthCorridor": true,
+  "offsetCornerRebuild": true,
+  "polygonChecks": [
+    {
+      "range": 0,
+      "radii": [
+        250,
+        490,
+        700
+      ],
+      "goal": {
+        "x": 3020,
+        "y": 3360
+      },
+      "failures": 0,
+      "vertices": 513,
+      "criticalPlanes": 1,
+      "maximumExtraClearanceMicrometres": 19
+    },
+    {
+      "range": 10,
+      "radii": [
+        250,
+        490,
+        700
+      ],
+      "goal": {
+        "x": 3020,
+        "y": 3360
+      },
+      "failures": 0,
+      "vertices": 257,
+      "criticalPlanes": 1,
+      "maximumExtraClearanceMicrometres": 76
+    },
+    {
+      "range": 450,
+      "radii": [
+        250,
+        490,
+        700
+      ],
+      "goal": {
+        "x": 3020,
+        "y": 3360
+      },
+      "failures": 0,
+      "vertices": 129,
+      "criticalPlanes": 1,
+      "maximumExtraClearanceMicrometres": 302
+    }
+  ],
+  "isolated": {
+    "trajectorySha256": "f490d0a266a2f2d33112a02e119dc9dec1eab9411cc594a5c82415a5b909af82",
+    "pairSweeps": 2402,
+    "bodySweeps": 5407
+  },
+  "interleaved": {
+    "trajectorySha256": "f490d0a266a2f2d33112a02e119dc9dec1eab9411cc594a5c82415a5b909af82",
+    "pairSweeps": 2402,
+    "bodySweeps": 5407
+  },
+  "candidateDllSha256": "fe6f6b7ad150ac9f14d7021875aadaa923069f4241bbc6a6496412772f5090a7"
+}

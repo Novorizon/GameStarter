@@ -1,0 +1,21 @@
+{
+  "scope": "Original sealed independent audit files, including negative Forest result and non-passing old control. cs files are insidezip so candidate glob cannot compile evidence.",
+  "originalDirectory": "/workspace/navigation-comparison/audit/b-u-corner-connector",
+  "originalManifestSha256": "39902c38201b74aa28f9b60fcffb771074ad9b3fbbceb9fbe85e4b2392a76a1c",
+  "archiveSha256": "41be29827182746fadabbbd1cf8f9e003fff1f157bc17e675da7fae851cb8499",
+  "files": {
+    "query.json": "1d16aa0b9c11b98a5aa5ca175306e17144f10dd6ede1a1e316ae99f6b8153dd4",
+    "Program.cs": "a2ca297ce64e29fbbd2e8642c4b0210e4c8d97aeabad6e2962e818f8c1cef6cd",
+    "manifest.json": "39902c38201b74aa28f9b60fcffb771074ad9b3fbbceb9fbe85e4b2392a76a1c",
+    "query.log": "1d16aa0b9c11b98a5aa5ca175306e17144f10dd6ede1a1e316ae99f6b8153dd4",
+    "README.md": "16bdfbb0d6afc06f30c37bed9d742d45236fb5728b42daf5999e5e39669ebec0",
+    "Query.csproj": "8a1ea131b1b3176aa5bd7d6349e636ac3733cc3e9a516f149dd4b6a25b55c26c",
+    "Snapshot/OrcaNavigator.cs": "86f90c4cb4513b49eefca517c95fa5426f3c93e5bc773336286d929efc121f2e",
+    "Snapshot/NavigationLab.BOrca.dll": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7",
+    "Snapshot/Geometry.cs": "8965c16c1139f1964e2f330d456c06aae23d04b917d76145f25f448bc23276e2",
+    "Snapshot/NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "Snapshot/NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "Snapshot/RVO2-LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "Snapshot/RouteMesh.cs": "07a171e5c8f5730f5045b4e7a15323faab29caaeb6c09a116745e8f8c09403c8"
+  }
+}

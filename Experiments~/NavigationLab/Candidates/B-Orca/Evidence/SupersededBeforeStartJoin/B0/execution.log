@@ -1,0 +1,12 @@
+["/workspace/.singleton-removal-env/dotnet/dotnet", "/workspace/navigation-comparison/frozen-b-final/snapshot-674777fd671bf4dadad70f9c/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll", "--assembly", "/workspace/navigation-comparison/frozen-b-final/snapshot-674777fd671bf4dadad70f9c/Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll", "--factory", "NavigationLab.Candidates.BOrca.OrcaFactory", "--suite", "stress", "--output", "/workspace/navigation-comparison/results/b0-v2-stress", "--build-manifest", "/workspace/navigation-comparison/results/b0-v2-stress/build-manifest.json", "--require-build-manifest"]
+PASSED open-arena admitted=48 alive=48 pending=0 attack=16 tick=469 
+FAILED mixed-speed-approach admitted=64 alive=64 pending=0 attack=15 tick=12000 Deadline: alive=64, pending=0, moving=2, attack=15, failure=None
+FAILED large-radius-turning-clearance admitted=48 alive=48 pending=0 attack=12 tick=12000 Deadline: alive=48, pending=0, moving=3, attack=12, failure=None
+PASSED single-cell-throat admitted=48 alive=48 pending=0 attack=16 tick=867 
+PASSED u-obstacle admitted=56 alive=56 pending=0 attack=16 tick=536 
+PASSED right-angle-corridor admitted=32 alive=32 pending=0 attack=16 tick=1051 
+PASSED cross-junction-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=509 
+FAILED cross-junction-original-4m admitted=72 alive=72 pending=0 attack=12 tick=12000 Deadline: alive=72, pending=0, moving=4, attack=12, failure=None
+PASSED cross-junction-original-5m admitted=72 alive=72 pending=0 attack=16 tick=1633 
+FAILED shared-spawn-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=12000 Deadline: alive=72, pending=0, moving=1, attack=6, failure=None
+PASSED shared-spawn-original-5m admitted=72 alive=72 pending=0 attack=16 tick=682 

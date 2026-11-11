@@ -1,0 +1,22 @@
+{
+  "scope": "Original sealed independent audit files, including negative Forest result and non-passing old control. cs files are insidezip so candidate glob cannot compile evidence.",
+  "originalDirectory": "/workspace/navigation-comparison/audit/b-forest-start-join",
+  "originalManifestSha256": "2ce13a04fe2ecff5a43256169a5bd3ffe103f6ee83822f992d22642f3b95c2d2",
+  "archiveSha256": "b845baf3a004e5afda51be33dae2d744cd7131e3c3ad7341a51c1c724de702dd",
+  "files": {
+    "query.json": "64c575a0354eb8ef3484adeb823354a1addee2c9771506a8780c85275bede926",
+    "Program.cs": "ac563a87d89dc697039fb5d5c99daedbd02e11a0924c9e7252fe33667361dedd",
+    "manifest.json": "2ce13a04fe2ecff5a43256169a5bd3ffe103f6ee83822f992d22642f3b95c2d2",
+    "query.log": "64c575a0354eb8ef3484adeb823354a1addee2c9771506a8780c85275bede926",
+    "README.md": "9e1ef64efb2b7ec9b2eee0f53012bcee2c69adc5423e08c7a493cdc9f1fbfa8a",
+    "Query.csproj": "8a1ea131b1b3176aa5bd7d6349e636ac3733cc3e9a516f149dd4b6a25b55c26c",
+    "source-build-manifest.json": "626779c936349a1d27c0461c4c6252d44785bb65bfb1aa0f149480a36f158f03",
+    "Snapshot/OrcaNavigator.cs": "8eed10b4bd113840bfab0333584c3d6016d1ff3b164e4c88b37db37c1370ceeb",
+    "Snapshot/NavigationLab.BOrca.dll": "e75fd5c5a1603f92c89028d66fc1f9a177b55b9ae55ba83567b5d7725ff81b1b",
+    "Snapshot/Geometry.cs": "8965c16c1139f1964e2f330d456c06aae23d04b917d76145f25f448bc23276e2",
+    "Snapshot/NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "Snapshot/NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "Snapshot/RVO2-LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "Snapshot/RouteMesh.cs": "07a171e5c8f5730f5045b4e7a15323faab29caaeb6c09a116745e8f8c09403c8"
+  }
+}

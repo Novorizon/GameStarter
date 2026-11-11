@@ -1,0 +1,1 @@
+共享不可变补充3例，不扩共同49项、不改原输入或原半径/速度/Holding集合。B0/B1当前local ebda53734e4af91adabc56e286dd345fe35d8a029cbb45ddff284704c5783fa1均2大/3大/混合全部真实到位且fresh identical；独立见证Goal不传factory。实际间距和未来Goal间距为正，原input逐字SHA断言通过。后续正式冻结DLL若hash不同，另存同driver补跑，不把本local结果冒充新DLL。

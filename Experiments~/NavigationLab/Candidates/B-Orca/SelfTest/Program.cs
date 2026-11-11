@@ -24,6 +24,7 @@ var polygonChecks = VerifyPolygonGoalCompatibility();
 VerifyTightZeroRangeArrival();
 VerifySettledTargetRelocation();
 VerifyOffsetExactWidthCorridor();
+VerifyOffsetCornerRebuild();
 var isolated = Run(false);
 var interleaved = Run(true);
 if (isolated.Hash != interleaved.Hash)
@@ -37,6 +38,7 @@ Console.WriteLine(JsonSerializer.Serialize(new
     tightZeroRangeArrival = true,
     settledTargetRelocation = true,
     offsetExactWidthCorridor = true,
+    offsetCornerRebuild = true,
     polygonChecks,
     isolated = new { trajectorySha256 = isolated.Hash, pairSweeps = isolated.PairSweeps, bodySweeps = isolated.BodySweeps },
     interleaved = new { trajectorySha256 = interleaved.Hash, pairSweeps = interleaved.PairSweeps, bodySweeps = interleaved.BodySweeps },
@@ -248,11 +250,12 @@ static void VerifyTightZeroRangeArrival()
         using var nav = factory.Create(world, new[] { profile });
         var oracle = new ContinuousOracle(world);
         Birth(nav, oracle, new SpawnRequest(1, profile, 89, 1, goal));
+        Point2? anchor = null;
         int stable = 0;
         for (int step = 0; step < 5000 && stable < 2000; step++)
         {
             Advance(nav, oracle);
-            stable = nav.Snapshot().Single().State == MotionState.Attacking ? stable + 1 : 0;
+            ObserveStationaryAttack(nav.Snapshot().Single(), ref anchor, ref stable);
         }
         if (stable < 2000)
         {
@@ -283,11 +286,12 @@ static void VerifySettledTargetRelocation()
         Birth(nav, oracle, new SpawnRequest(1, profile, 121));
         for (int phase = 0; phase < 2; phase++)
         {
+            Point2? anchor = null;
             int stable = 0;
             for (int step = 0; step < 5000 && stable < 2000; step++)
             {
                 Advance(nav, oracle);
-                stable = nav.Snapshot().Single().State == MotionState.Attacking ? stable + 1 : 0;
+                ObserveStationaryAttack(nav.Snapshot().Single(), ref anchor, ref stable);
             }
             if (stable < 2000)
             {
@@ -342,11 +346,12 @@ static void VerifyOffsetExactWidthCorridor()
         using var nav = factory.Create(world, new[] { profile });
         var oracle = new ContinuousOracle(world);
         Birth(nav, oracle, new SpawnRequest(1, profile, spawn, 1, goal));
+        Point2? anchor = null;
         int stable = 0;
         for (int step = 0; step < 7000 && stable < 2000; step++)
         {
             Advance(nav, oracle);
-            stable = nav.Snapshot().Single().State == MotionState.Attacking ? stable + 1 : 0;
+            ObserveStationaryAttack(nav.Snapshot().Single(), ref anchor, ref stable);
         }
         if (stable < 2000)
         {
@@ -356,4 +361,95 @@ static void VerifyOffsetExactWidthCorridor()
                 + " staticProposalStops=" + (nav.Metrics.TryGetValue("UnsafeStaticOrSpeedProposalStops", out long stops) ? stops : 0));
         }
     }
+}
+
+static void VerifyOffsetCornerRebuild()
+{
+    var walk = new bool[24 * 14];
+    for (int x = 1; x <= 18; x++)
+    {
+        walk[4 * 24 + x] = true;
+        walk[10 * 24 + x] = true;
+    }
+    for (int y = 4; y <= 10; y++)
+    {
+        walk[y * 24 + 18] = true;
+    }
+    int spawn = 4 * 24 + 4;
+    int goal = 10 * 24 + 4;
+    var holding = new bool[walk.Length];
+    holding[goal] = true;
+    var world = new WorldDefinition(
+        24,
+        14,
+        500,
+        new Point2(0, -60),
+        walk,
+        holding,
+        new[] { spawn },
+        new[] { new TargetDefinition(1, new Point2(750, 5190), 500) },
+        4000);
+    var profile = new UnitProfile(250, 55, 1000);
+    if (ContinuousOracle.SegmentFits(world, world.Center(spawn), world.Center(goal), profile.RadiusMm))
+    {
+        throw new InvalidOperationException("Corner-rebuild regression requires a blocked direct goal segment.");
+    }
+    var proof = new[] { world.Center(spawn), new Point2(9250, 2190), new Point2(9250, 5190), world.Center(goal) };
+    for (int index = 1; index < proof.Length; index++)
+    {
+        if (!ContinuousOracle.SegmentFits(world, proof[index - 1], proof[index], profile.RadiusMm))
+        {
+            throw new InvalidOperationException("Exact-width corner fixture has no verified centre-line detour.");
+        }
+    }
+    foreach (var factory in new INavigationFactory[] { new OrcaFactory(), new OrcaYieldFactory() })
+    {
+        using var nav = factory.Create(world, new[] { profile });
+        var oracle = new ContinuousOracle(world);
+        Birth(nav, oracle, new SpawnRequest(1, profile, spawn, 1, goal));
+        Advance(nav, oracle);
+        var actualStart = nav.Snapshot().Single();
+        var change = new WorldChange { OpenCells = Array.Empty<int>() };
+        var before = nav.Snapshot();
+        if (!nav.ApplyWorldChange(change))
+        {
+            throw new InvalidOperationException("Expected path invalidation support.");
+        }
+        oracle.ApplyChange(change, before, nav.Snapshot());
+        if (nav.Snapshot().Single().Position != actualStart.Position)
+        {
+            throw new InvalidOperationException("A path rebuild moved the physical body.");
+        }
+        Point2? anchor = null;
+        int stable = 0;
+        for (int step = 0; step < 14000 && stable < 2000; step++)
+        {
+            Advance(nav, oracle);
+            ObserveStationaryAttack(nav.Snapshot().Single(), ref anchor, ref stable);
+        }
+        if (stable < 2000)
+        {
+            var current = nav.Snapshot().Single();
+            throw new InvalidOperationException("Offset corner rebuild did not physically arrive and hold: " + factory.Id
+                + " position=" + current.Position.X + "," + current.Position.Y);
+        }
+    }
+}
+
+static void ObserveStationaryAttack(UnitSnapshot current, ref Point2? anchor, ref int completeIntervals)
+{
+    if (current.State != MotionState.Attacking)
+    {
+        anchor = null;
+        completeIntervals = 0;
+        return;
+    }
+    if (!anchor.HasValue || Point2.Distance(current.Position, anchor.Value) > SimulationProtocol.GeometryToleranceMm)
+    {
+        // The anchor snapshot starts the observation: only the following 2000 full5ms intervals count.
+        anchor = current.Position;
+        completeIntervals = 0;
+        return;
+    }
+    completeIntervals++;
 }

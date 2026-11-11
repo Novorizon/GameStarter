@@ -14,6 +14,7 @@ namespace NavigationLab.Candidates.BOrca
             | NavigationFeatures.MovingTarget | NavigationFeatures.MultipleTargets | NavigationFeatures.AssignedGoals
             | NavigationFeatures.LargeBodies | NavigationFeatures.FastPerTick;
         private const double ExecutionToleranceMm = SimulationProtocol.GeometryToleranceMm / 4;
+        private const double WaypointServoDistanceMm = .25;
         private readonly SimulatorContext context = new SimulatorContext();
         private readonly Dictionary<int, Actor> actors = new Dictionary<int, Actor>();
         private readonly Dictionary<int, Actor> goalOwners = new Dictionary<int, Actor>();
@@ -54,6 +55,7 @@ namespace NavigationLab.Candidates.BOrca
             minimumAttackRange = profiles.Count == 0 ? 0 : profiles.Min(profile => profile.AttackRangeMm);
             Set("RegisteredProfiles", profiles.Count);
             Set("ExecutionNumericalToleranceMicrometres", (long)Math.Round(ExecutionToleranceMm * 1000));
+            Set("PlanningStartJoinToleranceMicrometres", (long)Math.Round(RouteMesh.StartJoinToleranceMm * 1000));
             Set("RouteResolutionHalfCells", 1);
             Set("UsesSipp", 0);
             Set("NegotiatedYieldEnabled", coordinatedYield ? 1 : 0);
@@ -150,15 +152,17 @@ namespace NavigationLab.Candidates.BOrca
 
             var before = ordered.Select(actor => actor.Position).ToArray();
             var next = new Point2[ordered.Length];
+            var destinations = new Point2[ordered.Length];
             context.Use(simulator =>
             {
                 long phaseStarted = Stopwatch.GetTimestamp();
-                foreach (var actor in ordered)
+                for (int index = 0; index < ordered.Length; index++)
                 {
+                    var actor = ordered[index];
                     UpdateRoute(actor, ordered);
                     Point2 destination = actor.Yielding ? actor.YieldTarget : GoalPoint(actor);
                     while (actor.Waypoint < actor.Path.Count
-                        && Point2.Distance(actor.Position, actor.Path[actor.Waypoint]) <= .25)
+                        && Point2.Distance(actor.Position, actor.Path[actor.Waypoint]) <= 1e-9)
                     {
                         actor.Waypoint++;
                     }
@@ -168,6 +172,7 @@ namespace NavigationLab.Candidates.BOrca
                         destination = actor.Path[actor.Waypoint];
                     }
 
+                    destinations[index] = destination;
                     var delta = destination - actor.Position;
                     double maximum = actor.Request.Profile.SpeedMmPerTick / 50.0;
                     double distancePerStep = Math.Min(maximum * SimulationProtocol.MicrostepMilliseconds, delta.Length);
@@ -185,6 +190,7 @@ namespace NavigationLab.Candidates.BOrca
                 }
 
                 phaseStarted = Stopwatch.GetTimestamp();
+                RefineNearWaypoint(ordered, before, destinations, next);
                 FilterUnsafeProposals(ordered, before, next);
                 Add("PhysicalFilterStopwatchTicks", Stopwatch.GetTimestamp() - phaseStarted);
                 for (int index = 0; index < ordered.Length; index++)
@@ -650,6 +656,43 @@ namespace NavigationLab.Candidates.BOrca
                 return true;
             }
             return false;
+        }
+
+        private void RefineNearWaypoint(Actor[] ordered, Point2[] before, Point2[] destinations, Point2[] next)
+        {
+            // A raw float position that did not advance may retain a tiny residual at a tight waypoint.
+            // This project offers an epsilon step only in that no-advance case, retaining every real raw move.
+            // Original speed/radius and the same static/pair/speed filter constrain the complete physical segment.
+            for (int index = 0; index < ordered.Length; index++)
+            {
+                var delta = destinations[index] - before[index];
+                double distance = delta.Length;
+                if (distance > WaypointServoDistanceMm)
+                {
+                    continue;
+                }
+                var roundTripBefore = Millimetres(Metres(before[index]));
+                if (next[index] != roundTripBefore || Point2.Distance(roundTripBefore, before[index]) > ExecutionToleranceMm)
+                {
+                    Add("NearWaypointRawMotionPreserved");
+                    continue;
+                }
+                double maximum = Math.Min(ordered[index].Request.Profile.SpeedMmPerTick / 10.0, ExecutionToleranceMm);
+                var proposed = distance <= maximum ? destinations[index] : before[index] + delta * (maximum / distance);
+                if (proposed != next[index])
+                {
+                    next[index] = proposed;
+                    Add("NearWaypointServoProposals");
+                    if (distance > 1e-9)
+                    {
+                        Add("NearWaypointServoMotionProposals");
+                    }
+                    else
+                    {
+                        Add("StationaryRoundTripCorrectionProposals");
+                    }
+                }
+            }
         }
 
         private void FilterUnsafeProposals(Actor[] ordered, Point2[] before, Point2[] next)

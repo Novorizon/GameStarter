@@ -1,0 +1,42 @@
+{
+  "scope": "Join-only fix reached first U corner but failed full arrival; not an ORCA theoretical result or a passing regression. Original source, actual DLLs and real failure log preserved.",
+  "sources": {
+    "ArgumentGuardCompatibility.cs": "6578f0ba74c272e7cf56835cc6ba20c4778d82a4315c4fbd201717e2bf359982",
+    "Geometry.cs": "8965c16c1139f1964e2f330d456c06aae23d04b917d76145f25f448bc23276e2",
+    "NavigationLab.BOrca.csproj": "702a10395a51d258835bb4efd6b558b997baea913d4432d4f62a6640b7475cc7",
+    "OrcaFactory.cs": "3efbc1443252d6f7e0e7e97e4f5bf91c882bc40845d213782e95d1f753b59850",
+    "OrcaNavigator.cs": "cfcc24913fd92266bae1323397a8638a99c73592165567431b9030958c8b0dc1",
+    "README.zh-CN.md": "97d689b3b2b37525095833ddc30b28d1bfa2ecb97aa5fbc51166f0938396df63",
+    "RouteMesh.cs": "d8138d146f44f017921306c4ff70a58bee4d845f1ba23acf14365cf7cd85e0e6",
+    "SelfTest/NavigationLab.BOrca.SelfTest.csproj": "57880872159a1740107981a9ea92014c4950777c3f4a70411ed4ab1d187b037d",
+    "SelfTest/Program.cs": "32a26aa266d3d39ad3b75261da5ab9b856848bdc54d4c0a5408b104856b65b0b",
+    "SimulatorContext.cs": "29310201464540596ff4c8256de6a9fbf596640dc837a31b19fca35de1fea987",
+    "ThirdParty/RVO2/Agent.cs": "6e95c5b82cd89bb7ad0b2a73d136dec27b935285ed2c89332a3aba20d254b140",
+    "ThirdParty/RVO2/KdTree.cs": "17b0f2af539b3cd9f086c821e4744f605edab8532c01f2ef8d32ae05329d1428",
+    "ThirdParty/RVO2/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "ThirdParty/RVO2/Line.cs": "3ab66ff3609631cbdd4d3f9e1b5cf02aa57691af6e195170e7d2278d3ad50187",
+    "ThirdParty/RVO2/Obstacle.cs": "c7853005c1bd95f69c824ea9b801cc2b9560b4b65b717e55d738d2efbd260302",
+    "ThirdParty/RVO2/RVOMath.cs": "a6c8976610867b58ef1f17bf2f6dc3089a235e4bc2eb6c57bd66e62acf2d2dfe",
+    "ThirdParty/RVO2/Simulator.cs": "d2ec317dfdb3b434213f7c3dfa17f01fda628f05b271d9a3ceb6099f4175bcf6",
+    "ThirdParty/RVO2/Vector2.cs": "a3785fcab6e8774e627b03dd4798b5e8c1bef9092556800e9525a260e9c48236",
+    "ThirdParty/upstream.json": "9023511bb70a223075fa69f1b7621e43fb785d2e9838a74d769908aab5395b12"
+  },
+  "runtimeRoles": {
+    "candidate": {
+      "sha256": "f9e9cc9561481e17dca9d47ff44896a26ec8fe8b32338532a5db3a567ac6759c",
+      "originalPath": "/workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll"
+    },
+    "core": {
+      "sha256": "c9385babc5fd6a81395c8cd1dd22d7bf65e7a34dc6104399cac821dbbd7f9902",
+      "originalPath": "/workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll"
+    },
+    "oracle": {
+      "sha256": "799b4de4143a798d6856dbd4ade7bcb6f9764de78ee6eed2cede2ef2a841c108",
+      "originalPath": "/workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Oracle/bin/Release/netstandard2.1/NavigationLab.Oracle.dll"
+    },
+    "selftest": {
+      "sha256": "b8f13290d86bc47d8cde7a36436fe7867e2c7079063f685ecc7601892ea19b6f",
+      "originalPath": "/workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/bin/Release/net8.0/NavigationLab.BOrca.SelfTest.dll"
+    }
+  }
+}

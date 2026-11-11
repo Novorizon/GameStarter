@@ -1,0 +1,23 @@
+["/workspace/.singleton-removal-env/dotnet/dotnet", "/workspace/navigation-comparison/frozen-b1-final/snapshot-90aa4b28e76ea49fcf1b1ad8/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll", "--assembly", "/workspace/navigation-comparison/frozen-b1-final/snapshot-90aa4b28e76ea49fcf1b1ad8/Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll", "--factory", "NavigationLab.Candidates.BOrca.OrcaYieldFactory", "--suite", "stress", "--output", "/workspace/navigation-comparison/results/b1-v2-stress", "--build-manifest", "/workspace/navigation-comparison/results/b1-v2-stress/build-manifest.json", "--require-build-manifest"]
+PASSED open-arena admitted=48 alive=48 pending=0 attack=16 tick=353 
+PASSED mixed-speed-approach admitted=64 alive=64 pending=0 attack=16 tick=849 
+PASSED large-radius-turning-clearance admitted=48 alive=48 pending=0 attack=12 tick=585 
+PASSED single-cell-throat admitted=48 alive=48 pending=0 attack=16 tick=716 
+PASSED u-obstacle admitted=56 alive=56 pending=0 attack=16 tick=378 
+PASSED right-angle-corridor admitted=32 alive=32 pending=0 attack=16 tick=425 
+PASSED cross-junction-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=860 
+PASSED cross-junction-original-4m admitted=72 alive=72 pending=0 attack=12 tick=693 
+PASSED cross-junction-original-5m admitted=72 alive=72 pending=0 attack=16 tick=514 
+PASSED shared-spawn-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=366 
+PASSED shared-spawn-original-5m admitted=72 alive=72 pending=0 attack=16 tick=773 
+PASSED three-hundred-units-parking-lanes admitted=300 alive=300 pending=0 attack=6 tick=915 
+PASSED three-hundred-units-original-12m admitted=300 alive=300 pending=0 attack=16 tick=1741 
+PASSED forest-single-small admitted=1 alive=1 pending=0 attack=1 tick=577 
+PASSED forest-single-medium admitted=1 alive=1 pending=0 attack=1 tick=792 
+PASSED forest-single-large admitted=1 alive=1 pending=0 attack=1 tick=1358 
+PASSED forest-wave-1 admitted=8 alive=8 pending=0 attack=8 tick=844 
+PASSED forest-wave-2 admitted=16 alive=16 pending=0 attack=13 tick=941 
+PASSED forest-wave-3 admitted=18 alive=18 pending=0 attack=14 tick=2060 
+PASSED forest-wave-4 admitted=25 alive=25 pending=0 attack=15 tick=1232 
+PASSED forest-wave-5 admitted=30 alive=30 pending=0 attack=15 tick=1443 
+PASSED forest-wave-6 admitted=29 alive=29 pending=0 attack=15 tick=1724 

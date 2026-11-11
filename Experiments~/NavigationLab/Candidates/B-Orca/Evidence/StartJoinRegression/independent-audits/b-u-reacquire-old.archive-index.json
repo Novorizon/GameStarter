@@ -1,0 +1,24 @@
+{
+  "scope": "Original sealed independent audit files, including negative Forest result and non-passing old control. cs files are insidezip so candidate glob cannot compile evidence.",
+  "originalDirectory": "/workspace/navigation-comparison/audit/b-u-reacquire-old",
+  "originalManifestSha256": "f4aa5d04d026668ae684eec4fe5b7593e206837a9469651930e1a5606e8316a5",
+  "archiveSha256": "ef6a621a718ea84f0f5ee4e11f1733f082dbba5dcd03a3dd5f86a420419094b3",
+  "files": {
+    "query.json": "db899018813317983a27efcdf0127581cc046c642abdd93b03c6c32f5270e1a3",
+    "original-path.jsonl.gz": "e1042bb5e30e7b68397b4731feb5fc8703e3011e2d2489da8ca3e19be007c41a",
+    "Program.cs": "f7c06434fa2649e5eafb039a07908fd53cde1cf900102cbd06b4eba93e0faa8a",
+    "manifest.json": "f4aa5d04d026668ae684eec4fe5b7593e206837a9469651930e1a5606e8316a5",
+    "empty-change.jsonl.gz": "c5a7d1de66c7d1cb93b3dc487690f0e258e2bddd7c64d4937cdcb4cacbb08bf3",
+    "query.log": "db899018813317983a27efcdf0127581cc046c642abdd93b03c6c32f5270e1a3",
+    "README.md": "6ae50bb2c0fba84665377cd1ea8c753a13fad5bc625ff3616c95336db9c313f7",
+    "Query.csproj": "8a1ea131b1b3176aa5bd7d6349e636ac3733cc3e9a516f149dd4b6a25b55c26c",
+    "source-build-manifest.json": "1768ee6ee71022235c82a1f38273d13249207ba135eacfe5d5ab1e35886ff2ce",
+    "Snapshot/OrcaNavigator.cs": "86f90c4cb4513b49eefca517c95fa5426f3c93e5bc773336286d929efc121f2e",
+    "Snapshot/NavigationLab.BOrca.dll": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7",
+    "Snapshot/Geometry.cs": "8965c16c1139f1964e2f330d456c06aae23d04b917d76145f25f448bc23276e2",
+    "Snapshot/NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "Snapshot/NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "Snapshot/RVO2-LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "Snapshot/RouteMesh.cs": "07a171e5c8f5730f5045b4e7a15323faab29caaeb6c09a116745e8f8c09403c8"
+  }
+}

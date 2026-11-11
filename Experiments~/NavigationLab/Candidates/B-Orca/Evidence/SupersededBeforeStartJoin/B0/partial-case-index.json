@@ -1,0 +1,115 @@
+{
+  "scope": "Interrupted partial original case reports; not a completed 49-case corpus and not a final score. Interruption is a source-fix stage, not an algorithm deadline result.",
+  "cases": [
+    {
+      "name": "u-obstacle",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "403bc238ff2987e4d2e5f22dd4fe85850bbb6e5025964b5d3655b1c64aa20f03",
+      "semanticTraceSha256": "7c9e5a963a687dc66422239776ccc55ac57cfb2717ed8a4c928c5cd237976648",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/u-obstacle.jsonl.gz",
+      "archivedOriginalCaseGzip": "u-obstacle.json.gz",
+      "archivedOriginalCaseGzipSha256": "23172167478c649dcb9ebf4a30a6e7f10c96e5c0615423aae61321666e961d8c"
+    },
+    {
+      "name": "cross-junction-original-5m",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "5ccb437ee0ceb699e5ef57c0c7315cbd351eda94e466bae6e63a657f4e0868e7",
+      "semanticTraceSha256": "c8b5962ee5f4c8866d7c45b49c46e159c8fc0ae460e7d05befd2810db21493b5",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/cross-junction-original-5m.jsonl.gz",
+      "archivedOriginalCaseGzip": "cross-junction-original-5m.json.gz",
+      "archivedOriginalCaseGzipSha256": "a2b539b760399252edf83edfcaa220d32bb7586059b76acc4cb7546dfd8b206e"
+    },
+    {
+      "name": "large-radius-turning-clearance",
+      "status": "Failed",
+      "replayVerified": false,
+      "originalCaseFileSha256": "e5eb518b8e258646a542623c51c7ecf539a553cb391810b782f4eaf0bde5d9ca",
+      "semanticTraceSha256": "93618f0cb7b215e1f5db5455f03019a00b9a4e7d2c9d5b2dd52832253d232481",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/large-radius-turning-clearance.jsonl.gz",
+      "archivedOriginalCaseGzip": "large-radius-turning-clearance.json.gz",
+      "archivedOriginalCaseGzipSha256": "8b69db564bb8378b084e0c99101b771b0b0a48baecf3c2930b88b9d773335890"
+    },
+    {
+      "name": "cross-junction-parking-lanes",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "3f8e4d22a262585893e9fd5f8b9c95f2d2352534a60fbf16fdcda3f82fa0a760",
+      "semanticTraceSha256": "33de60bf83a4a013517293af5136dec191dce9fa85f6ee3f617423118ad8849f",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/cross-junction-parking-lanes.jsonl.gz",
+      "archivedOriginalCaseGzip": "cross-junction-parking-lanes.json.gz",
+      "archivedOriginalCaseGzipSha256": "9d7c68469eb8876bde2f535fb2e848683da79d5187039cdac725af9b24c9f4e4"
+    },
+    {
+      "name": "cross-junction-original-4m",
+      "status": "Failed",
+      "replayVerified": false,
+      "originalCaseFileSha256": "589cb09933cbdbfd4fdce12500e6841ef044b33fb551724eaea388a8b707fddb",
+      "semanticTraceSha256": "3e99daeb52121741d8f02e360badcb123ac2c50ea03284897597fcf8eb01d81b",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/cross-junction-original-4m.jsonl.gz",
+      "archivedOriginalCaseGzip": "cross-junction-original-4m.json.gz",
+      "archivedOriginalCaseGzipSha256": "c4da2405aec912406ad7ccc1256e2530d73d114e05cea7b050f5c9dbe8b1713a"
+    },
+    {
+      "name": "shared-spawn-parking-lanes",
+      "status": "Failed",
+      "replayVerified": false,
+      "originalCaseFileSha256": "f69fbc94ab5441b087ec612f2e9d48758d35d78bd433759ad1a37f670a210e8d",
+      "semanticTraceSha256": "6d2b24b4199758d7e18555934195cef8d118750a94023813950d3e400d725c33",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/shared-spawn-parking-lanes.jsonl.gz",
+      "archivedOriginalCaseGzip": "shared-spawn-parking-lanes.json.gz",
+      "archivedOriginalCaseGzipSha256": "aceee94f8f2f902e2a6a151262ae4d06d01f9b57dc67995a241c2ace0769c67c"
+    },
+    {
+      "name": "right-angle-corridor",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "8256184b3d63609cfe4a09d1a7d86f70e0032cffeed365f6ca83e220772cd2cb",
+      "semanticTraceSha256": "93aa0afb0426e70c79391e7c8d010ed22427c6864755f1ccce951aea18a1c8f5",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/right-angle-corridor.jsonl.gz",
+      "archivedOriginalCaseGzip": "right-angle-corridor.json.gz",
+      "archivedOriginalCaseGzipSha256": "887fec1b81055231e45aab2bc45759050161f3852951e152a573434905891fa2"
+    },
+    {
+      "name": "mixed-speed-approach",
+      "status": "Failed",
+      "replayVerified": false,
+      "originalCaseFileSha256": "bc093d548df08bb88be8147919c6ee3531b9d5fe3e45eef885fec8e9769f87ca",
+      "semanticTraceSha256": "bebe92f10d3477678e4ade90b031042a35e11194a602532518f4d812c1dd77b9",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/mixed-speed-approach.jsonl.gz",
+      "archivedOriginalCaseGzip": "mixed-speed-approach.json.gz",
+      "archivedOriginalCaseGzipSha256": "132d0f7a107ef3386c2f997557540f4602bda117b4e083edc35b210e3d39ca58"
+    },
+    {
+      "name": "single-cell-throat",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "0b8782a606c904be300fa38d1f6252171b9d64250f5e800fbbf6668dccb34c71",
+      "semanticTraceSha256": "51c54233d1f1c459f3bd0ece827743b470c1808a14ac7b5c3e8d03f4559e577a",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/single-cell-throat.jsonl.gz",
+      "archivedOriginalCaseGzip": "single-cell-throat.json.gz",
+      "archivedOriginalCaseGzipSha256": "b87179d0b60863e00012a4311c945c97db1d064cae9173b8765e7e4ef47405ef"
+    },
+    {
+      "name": "shared-spawn-original-5m",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "6441b39275aaea2cef6d9d25c58fa4056df822b3fe6042213ae179f3148c3026",
+      "semanticTraceSha256": "e802928ba68016a0a1b97537cc7df51d77457fc6f0ac21d12bad55aff882c715",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/shared-spawn-original-5m.jsonl.gz",
+      "archivedOriginalCaseGzip": "shared-spawn-original-5m.json.gz",
+      "archivedOriginalCaseGzipSha256": "b8e300b4f2dd94d9e6230d16905a5f8fa317f304d01cd1506df8a2f30187756e"
+    },
+    {
+      "name": "open-arena",
+      "status": "Passed",
+      "replayVerified": true,
+      "originalCaseFileSha256": "6e8d09a06920730cdb332c8179146228fb917f8ef7772acc18ec98252ca56024",
+      "semanticTraceSha256": "d800694f8d1a4b74ae6774937d2503b5bbe79a2b2bb22ecdb859440e8ee105e7",
+      "originalTracePath": "/workspace/navigation-comparison/results/b0-v2-stress/traces/open-arena.jsonl.gz",
+      "archivedOriginalCaseGzip": "open-arena.json.gz",
+      "archivedOriginalCaseGzipSha256": "b8d7ef7a84d6ba00476899379618061082350740973f083c0ca3bc5085e4dbf3"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+  NavigationLab.Core -> /workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll
+  NavigationLab.BOrca -> /workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll
+  NavigationLab.Oracle -> /workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Oracle/bin/Release/netstandard2.1/NavigationLab.Oracle.dll
+  NavigationLab.BOrca.SelfTest -> /workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/bin/Release/net8.0/NavigationLab.BOrca.SelfTest.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.10

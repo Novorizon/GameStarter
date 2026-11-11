@@ -15,9 +15,9 @@ B 分支从冻结 A `8c0dd50` 分离。这里只增加独立候选和实验，�
 
 ## 实际物理执行
 
-ORCA 给出下一微步提议后，候选的连续非穿透执行器检查障碍、基地、速度和双方相对运动。发现不安全提议时，本微步保持相关身体的原位置并将速度置零；双方停止采用闭包迭代，避免前车停止后后车继续穿入。
+ORCA 给出下一微步提议后，候选仅在原始float位置未推进时，对原有路点0.25mm邻域作速度与0.025mm步长双重约束的epsilon点提案，再由连续非穿透执行器检查障碍、基地、速度和双方相对运动。发现不安全提议时，本微步保持相关身体的原位置并将速度置零；双方停止采用闭包迭代，避免前车停止后后车继续穿入。
 
-`UnsafeStaticOrSpeedProposalStops` 和 `UnsafePairProposalStops` 记录这些提议。最终运动仍由**不同实现的共享 Oracle**逐5ms验证，不能把提议过滤说成原ORCA求解器从未产生碰撞风险。执行器只会停止或减速，不寻找额外路径、不瞬移、不挤小身体；无法继续前进仍会作为到达超时失败保留。
+`UnsafeStaticOrSpeedProposalStops` 和 `UnsafePairProposalStops` 记录这些提议。最终运动仍由**不同实现的共享 Oracle**逐5ms验证，不能把提议过滤说成原ORCA求解器从未产生碰撞风险。所有提议保留原始身体和速度上限，并检查完整运动线段；执行器拒绝不安全提议，无法继续前进仍会作为到达超时失败保留。
 
 状态除目标距离外还检查实际射程/视线或实际候场半径；持有 Goal 不等于身体已经到位。基础实现首轮在候场外边界提前约1mm标记Waiting的问题已保留为开发失败并修正，不计为“ORCA不适用”的证明。
 
@@ -72,3 +72,11 @@ dotnet run --project Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Navig
 `Evidence/StrategyDevelopment` 保存003至008轮已完成的开发结果摘要、冻结构建清单与SHA；这些使用`--no-replay`的结果不作为最终正式矩阵。007增加停滞移动同伴让位，Forest45从006通过退为1个Moving超时，因此已撤回。008同时加入交叉移动目标交换，Forest45通过但44仍未完成；009隔离目标交换本身，不借用逐场景最佳策略。007/008的`MovingPeerYieldRequests`是在进入Yielding后取样，混入原已到位者，不能据此推断真实移动同伴请求数。
 
 ORCA的[官方说明](https://gamma-web.iacs.umd.edu/ORCA/)和本项目所用[RVO2-CS](https://github.com/snape/RVO2-CS)提供局部速度选择；这里的全局A*、终点分配、让位与目标交换属于本实验适配。到达死锁不能仅凭一个失败样本归结为官方ORCA缺陷，模型通过也不证明任意地图和单位数上的普适收敛。
+
+## 实际起点和拐角精度回归
+
+执行器允许0.025mm数值带，但旧全局图以零数值带拒绝真实浮点起点：相同点共享Oracle可通行，ClosestJoin却返回-1。当前只给“实际起点→已有严格合格节点”的连接同一0.025mm数值带；普通图节点、普通边和Goal资格仍保持原规则。`PlanningStartJoinToleranceMicrometres`公开该值。可见性简化仍可保守拒绝快捷线，完整严格节点路线保留。
+
+恰宽折返走廊的完整回归还发现旧0.25mm提前跳路点会配合ORCA浮点渐近积分，在拐角留下无法完成的微小分量。当前仅当原始ORCA输出位置等于本步起点的精确float roundtrip（位置未推进）且roundtrip误差不超原0.025mm数值带时，在该原邻域内提出沿既有路点的epsilon运动；单次步长同时限于原speed/10及0.025mm，经过同一static/pair/speed闭包检查，实际到点后再推进路点。原ORCA已整合出的任何真实位移均保留，包含到位者的真实让路；此条件并不证明solver零步必由量化造成，因此属于本项目有界epsilon控制提案，不是官方ORCA输出。`NearWaypointServoProposals`总计提议，`NearWaypointServoMotionProposals`计非零提议，`StationaryRoundTripCorrectionProposals`计无推进表示纠正，`NearWaypointRawMotionPreserved`计保留分支；提议数不等于已执行位移数。
+
+空world-change清掉路线后，新的B0/B1均真实走完被直线障碍阻隔的U路线并连续稳定200tick，逐5ms由原Oracle检查。join-only首拐角失败及源/DLL另存`Evidence/StartJoinRegression`；旧两轮未完成49项矩阵和旧Unity原件移到`Evidence/SupersededBeforeStartJoin`，不能混作新源结果。这些修复属于适配和执行精度，不据此声称ORCA理论改善。

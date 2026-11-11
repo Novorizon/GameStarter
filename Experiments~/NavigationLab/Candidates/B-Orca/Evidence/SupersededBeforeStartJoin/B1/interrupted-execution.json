@@ -1,0 +1,122 @@
+{
+  "utc": "2026-11-11T04:47:46.176231+00:00",
+  "stage": "interrupted-for-confirmed-planner-start-precision-fix",
+  "notACompletedCorpus": true,
+  "notAnAlgorithmDeadlineFailure": true,
+  "reason": "Fixed DLL accepts actual float start with execution tolerance .025mm and shared Oracle .1mm, but RouteMesh zero-tolerance ClosestJoin denies it. Root instructed minimal start-join fix and a new whole-version stress49+fresh run.",
+  "runnerPid": 90705,
+  "runnerCommand": "/workspace/.singleton-removal-env/dotnet/dotnet /workspace/navigation-comparison/frozen-b1-final/snapshot-90aa4b28e76ea49fcf1b1ad8/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll --assembly /workspace/navigation-comparison/frozen-b1-final/snapshot-90aa4b28e76ea49fcf1b1ad8/Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll --factory NavigationLab.Candidates.BOrca.OrcaYieldFactory --suite stress --output /workspace/navigation-comparison/results/b1-v2-stress --build-manifest /workspace/navigation-comparison/results/b1-v2-stress/build-manifest.json --require-build-manifest ",
+  "originalBuildManifestSha256": "626779c936349a1d27c0461c4c6252d44785bb65bfb1aa0f149480a36f158f03",
+  "completedOriginalCaseReports": {
+    "forest-wave-6": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "3b1d82b94ace1ee7e62cd060c7ebc873416c99b03f002615aba8a827b1b6c31d"
+    },
+    "forest-single-small": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "c850855e42f0f1fb9c9d406f93a7f063256c297a86eb1af0c9ac331af2e35d41"
+    },
+    "forest-wave-5": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "a6f33b6a61f9c5973b38efa7a7d34e1049123dedc9134ba6cbc741c82f25813b"
+    },
+    "forest-wave-1": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "0535df654abca1ba437d145bbc733794583e476863bac68a3e3e9cc62123277c"
+    },
+    "u-obstacle": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "d93a4148af2d94601ba2070269f0158ce24483d63163b932206b6d0bb88d49e9"
+    },
+    "three-hundred-units-original-12m": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "063ae0ae84d394fd63cd8b35f55fba2d0f0a9a4f77787a55eabe543baebe5cd0"
+    },
+    "three-hundred-units-parking-lanes": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "93a0749c8e2d1d04f6be0e84944eadd28db2fd207cba3fb6de27d428b42723d2"
+    },
+    "cross-junction-original-5m": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "8c90612bf794bad16db8ac67a31f4a85b7fab333c1ccf141996d540acc1f21d1"
+    },
+    "large-radius-turning-clearance": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "8c10089ff09a2720c9176b9419e7acfefa0014065e2e3099bc3711f559e84747"
+    },
+    "cross-junction-parking-lanes": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "5c48a143f6810ef0de46c7b9eab5574f53f13d30d95c68b34c1ed962f4f3758f"
+    },
+    "cross-junction-original-4m": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "b543768956bd60eb3412f2a2f7eabe4be6e9f96158d016494299ce6749a4b973"
+    },
+    "forest-single-medium": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "c8aa4535cb9b0c2c8b34c87b8e2a263c4cf8a44bdabc59eea856376ee0d546c8"
+    },
+    "shared-spawn-parking-lanes": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "a676e12ea0e1bea6cd23273947451cf94893a0e4074a14abf8c60bb315a6146a"
+    },
+    "forest-wave-3": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "0d4822b5bf4a5ed1cf9b44fe589a15ea57e4057c6161a304cdba1d6e0e5a096f"
+    },
+    "forest-single-large": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "2ecb63747614417bf900942cf12a63d332ab4e297ba9d41e913d06b251180c4d"
+    },
+    "right-angle-corridor": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "37380187dc59c214ac8c0d401db62ffc508b8989c38b6eea45272178d93bd090"
+    },
+    "forest-wave-4": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "9854ef52428e5783b25e8a8f51c8156b6694c34fabf23f2446297b19c1160590"
+    },
+    "mixed-speed-approach": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "f82660186d6796f0bf989076d341b4b3bb2c31562b1edb03c4396f9620b85c58"
+    },
+    "single-cell-throat": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "87f09513c67a466ea60ce1b5d2aeeff0a22fc0b2cf30f3c0854c7271bc3ad8fc"
+    },
+    "shared-spawn-original-5m": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "f79995b9b51a2fefe2a260968b090313941afa9134ebbbe864c3c157a2415254"
+    },
+    "forest-wave-2": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "7bf5ef8ec88c255535693cfe694766df2ba0253abf8dec4cc1052caae61561eb"
+    },
+    "open-arena": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "8b9c23d411d618d3b4550a4f5a3592e4125586996bafa5059b10260aac653923"
+    }
+  }
+}

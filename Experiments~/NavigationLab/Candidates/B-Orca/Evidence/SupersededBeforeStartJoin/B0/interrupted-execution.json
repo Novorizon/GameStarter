@@ -1,0 +1,67 @@
+{
+  "utc": "2026-11-11T04:47:46.125767+00:00",
+  "stage": "interrupted-for-confirmed-planner-start-precision-fix",
+  "notACompletedCorpus": true,
+  "notAnAlgorithmDeadlineFailure": true,
+  "reason": "Fixed DLL accepts actual float start with execution tolerance .025mm and shared Oracle .1mm, but RouteMesh zero-tolerance ClosestJoin denies it. Root instructed minimal start-join fix and a new whole-version stress49+fresh run.",
+  "runnerPid": 84459,
+  "runnerCommand": "/workspace/.singleton-removal-env/dotnet/dotnet /workspace/navigation-comparison/frozen-b-final/snapshot-674777fd671bf4dadad70f9c/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll --assembly /workspace/navigation-comparison/frozen-b-final/snapshot-674777fd671bf4dadad70f9c/Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll --factory NavigationLab.Candidates.BOrca.OrcaFactory --suite stress --output /workspace/navigation-comparison/results/b0-v2-stress --build-manifest /workspace/navigation-comparison/results/b0-v2-stress/build-manifest.json --require-build-manifest ",
+  "originalBuildManifestSha256": "1768ee6ee71022235c82a1f38273d13249207ba135eacfe5d5ab1e35886ff2ce",
+  "completedOriginalCaseReports": {
+    "u-obstacle": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "403bc238ff2987e4d2e5f22dd4fe85850bbb6e5025964b5d3655b1c64aa20f03"
+    },
+    "cross-junction-original-5m": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "5ccb437ee0ceb699e5ef57c0c7315cbd351eda94e466bae6e63a657f4e0868e7"
+    },
+    "large-radius-turning-clearance": {
+      "status": "Failed",
+      "replayVerified": false,
+      "fileSha256": "e5eb518b8e258646a542623c51c7ecf539a553cb391810b782f4eaf0bde5d9ca"
+    },
+    "cross-junction-parking-lanes": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "3f8e4d22a262585893e9fd5f8b9c95f2d2352534a60fbf16fdcda3f82fa0a760"
+    },
+    "cross-junction-original-4m": {
+      "status": "Failed",
+      "replayVerified": false,
+      "fileSha256": "589cb09933cbdbfd4fdce12500e6841ef044b33fb551724eaea388a8b707fddb"
+    },
+    "shared-spawn-parking-lanes": {
+      "status": "Failed",
+      "replayVerified": false,
+      "fileSha256": "f69fbc94ab5441b087ec612f2e9d48758d35d78bd433759ad1a37f670a210e8d"
+    },
+    "right-angle-corridor": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "8256184b3d63609cfe4a09d1a7d86f70e0032cffeed365f6ca83e220772cd2cb"
+    },
+    "mixed-speed-approach": {
+      "status": "Failed",
+      "replayVerified": false,
+      "fileSha256": "bc093d548df08bb88be8147919c6ee3531b9d5fe3e45eef885fec8e9769f87ca"
+    },
+    "single-cell-throat": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "0b8782a606c904be300fa38d1f6252171b9d64250f5e800fbbf6668dccb34c71"
+    },
+    "shared-spawn-original-5m": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "6441b39275aaea2cef6d9d25c58fa4056df822b3fe6042213ae179f3148c3026"
+    },
+    "open-arena": {
+      "status": "Passed",
+      "replayVerified": true,
+      "fileSha256": "6e8d09a06920730cdb332c8179146228fb917f8ef7772acc18ec98252ca56024"
+    }
+  }
+}

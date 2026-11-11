@@ -1,0 +1,1 @@
+原件是C17与旧B1混合6项：B1实际factory OrcaYieldFactory（e75fd5c5a1603f92c89028d66fc1f9a177b55b9ae55ba83567b5d7725ff81b1b）仅3项：Forest8通过tick851、Forest44到12000tick失败（28Moving/13Attack/3Wait）、移动中死亡补位通过tick347；C17另3项通过。原全局false/exit1及全部JSON保留，不能归给B1六项。原fresh/source不变/清理/shutdown均通过。这是修复start-join之前的旧源，不能替代新DLL验收。Null设备不代表渲染、IL2CPP或真机。
