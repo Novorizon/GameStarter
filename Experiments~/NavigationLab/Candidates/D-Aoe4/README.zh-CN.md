@@ -72,3 +72,7 @@ R10 将本项目四邻格心表示改为经过真实圆盘扫掠验证的八邻�
 `Aoe4DeepGoalFactory`保留D12的恢复与观察，只改变新请求的一般选点优先级：原Holding/CanHold候选池、Attack优先资格/射程、GoalClear及配额规则完全不变，去掉outer偏好，按相对此次请求入口的真实直/斜Dijkstra静态路径代价选择深点。不接收未来人数/顺序、certificate目标或见证路线；不因新出生暗中重排已准入者Goal，Assigned请求不变。
 
 非Assigned的前N实际预约子集可以与旧策略不同，选点始终来自原不变合法池；这属于项目slot预防策略，不是HPA本体或GDC披露商业公式的收益。整体版本按原人数、地图、体型、速度做相同四项及后续共同49验证，不按case切换版本。
+
+## 本轮正式候选选择
+
+统一选择`NavigationLab.DAoe4.Aoe4ProgressExchangeFactory`（D12）执行最终共同49。D0基础、D1额外让路、D11交换与D13深点策略保留为显式可选探索，不能在不同case中混选结果；D13的Forest改善及open回退均保留。阶段比较见`Evidence/D12D13KeyComparison`，最终49只认同源冻结清单、选定factory及实际完整输出；旧阶段开发PASS/FAIL不拼成最终矩阵。

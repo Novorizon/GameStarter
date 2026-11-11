@@ -1,0 +1,7 @@
+# D12/D13整体版本选择
+
+均按原四项完整执行且no-replay，不能当作最终49报告。D12 open/dynamic通过，Forest44与窄喉失败；D13虽Forest44提升到18攻击19候场，但仍7人未到位，同时open回退到5人未到位、窄喉未改善，因此统一选择D12做最终共同矩阵。不按case选更好的版本。
+
+D12的检测实际触发：Forest29次、窄喉45次，几何安全的交换仅Forest5/6一对完成；检测计数不是恢复结果。Legacy-motion mask观测只记录到1次，不能宣称旧策略所有失败都由摆动漏检造成。D13使用原候选池的深度选点是项目slot预防策略，不是HPA本体收益。Forest44满额预约集合逐点相同，全部真实到位仍未达到；open前48子集变化已明示。
+
+selected-before-integration记录D12源/DLL逐字指纹；整合后最终选定工厂仍为Aoe4ProgressExchangeFactory，新的冻结清单与实际DLL另行严格绑定，不能拿旧开发DLL替代。
