@@ -13,8 +13,8 @@
   },
   "mergeMain": false,
   "modifySdk": false,
-  "status": "five complete stress49 reports; D12 full stress49 running; no new default game backend",
-  "updatedUtc": "2026-11-11T08:59:47.453860+00:00",
+  "status": "six selected complete stress49 reports; independent experiment branches; default game backend unchanged",
+  "updatedUtc": "2026-11-11T14:27:00.752780+00:00",
   "evidenceScope": "Frozen manifest sourceFiles and actual DLLs are authoritative; origin commit may include unrelated dirty files. Evidence commit may follow implementation and does not change the bound DLL.",
   "selectedRuns": {
     "A": {
@@ -153,10 +153,17 @@
         "runner": "17942c8b66237aa3f574895993d500bc0641add9a3297f0f7afcbbe589669789"
       },
       "evidenceBranch": "experiment/navigation-d-aoe4",
-      "evidenceCommit": "51c4bd14ca27b44f7db9bda62405b048747b6584",
+      "evidenceCommit": "dbaa0eb95b3c77f565bac9d6cf25f17eb9cd756b",
       "evidencePath": "Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/FinalSelectedStress49",
-      "modelStatus": "running; source ZIP/native/supplementary only, no completed model archive",
-      "modelSummarySha256": null
+      "modelStatus": "completed; finite common stress49",
+      "modelSummarySha256": "a1bdc5212408003d7bb13c712b848faa24b335f82e2f44b14c173b886ec81248",
+      "counts": {
+        "passed": 26,
+        "failed": 23,
+        "unsupported": 0,
+        "invalidInputs": 0
+      },
+      "modelArchiveDeliveryStatus": "committed and remote HEAD verified"
     },
     "E": {
       "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",

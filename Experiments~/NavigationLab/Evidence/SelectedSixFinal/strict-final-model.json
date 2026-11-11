@@ -1,0 +1,86 @@
+{
+  "scope": "Strict selected six frozen .NET reports; finite corpus only. No new simulation, commercial-internals proof, Unity/device acceptance, or performance ranking.",
+  "reports": {
+    "A": {
+      "summary": "/workspace/navigation-comparison/results/a-v2-final-stress/summary.json",
+      "summarySha256": "cb58d6840a2196b91cfcc3f9bae8de945958f2c9c981e76a0c286e6a845a9889",
+      "factoryType": "NavigationLab.Candidates.ASipp.SippFactory",
+      "candidateAssemblySha256": "2a7c9467f14826252c4af4ab369bb5abf056fa7ce816b8d403aaf732e22e1c7a",
+      "counts": {
+        "passed": 41,
+        "failed": 0,
+        "unsupported": 8,
+        "invalidInputs": 0
+      }
+    },
+    "B0": {
+      "summary": "/workspace/navigation-comparison/results/b0-v2-final-stress/summary.json",
+      "summarySha256": "1b0462c69c48bd3508fe0e6bf426fbaf6f8c7795e6d979fcff0ca6bdc653c460",
+      "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+      "candidateAssemblySha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+      "counts": {
+        "passed": 28,
+        "failed": 21,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    },
+    "B1": {
+      "summary": "/workspace/navigation-comparison/results/b1-v2-final-stress/summary.json",
+      "summarySha256": "362909c45de54cb3888392e1f5b48c06e4e02fffc71aaa12f43354e74b70c96f",
+      "factoryType": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+      "candidateAssemblySha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+      "counts": {
+        "passed": 45,
+        "failed": 4,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    },
+    "C33": {
+      "summary": "/workspace/navigation-comparison/results/c-final2-v2-stress49/summary.json",
+      "summarySha256": "c36c045fe4d6d62c863a34e66a1288e6a8ac7479e916bc78cde76acfb0cd4649",
+      "factoryType": "NavigationLab.CSupCom2.Factory",
+      "candidateAssemblySha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372",
+      "counts": {
+        "passed": 46,
+        "failed": 3,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    },
+    "D12": {
+      "summary": "/workspace/navigation-comparison/results/d-final-stress/summary.json",
+      "summarySha256": "a1bdc5212408003d7bb13c712b848faa24b335f82e2f44b14c173b886ec81248",
+      "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+      "candidateAssemblySha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "counts": {
+        "passed": 26,
+        "failed": 23,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    },
+    "E": {
+      "summary": "/workspace/navigation-comparison/results/e-final-goal-safe-stress49/summary.json",
+      "summarySha256": "351a856caf5cf31c9f0d422c94a7e5aaac8a58cfc469187a6de9a5b67cb20b49",
+      "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "candidateAssemblySha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+      "counts": {
+        "passed": 37,
+        "failed": 12,
+        "unsupported": 0,
+        "invalidInputs": 0
+      }
+    }
+  },
+  "dNativeSubset": {
+    "passed": 2,
+    "failed": 1,
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "reportSha256": "f4208b727a85eafa28bcd4daf207f9d593eee2b06ab4fce76b62cd1a6e402c9b"
+  },
+  "comparisonSha256": "773c882122e59fefb89b38c4b0e68faec36c4a1a04557a3575c787b4eca97425",
+  "dArchiveIndexSha256": "277e95eef0975347c48186552d1f5a93cba47313f341b2577524b6df52f1d5cd",
+  "dEvidenceCommit": "dbaa0eb95b3c77f565bac9d6cf25f17eb9cd756b"
+}
