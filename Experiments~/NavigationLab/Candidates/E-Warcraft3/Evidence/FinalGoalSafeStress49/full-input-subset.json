@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "scope": "Same frozen final-source Runner exports full41 as a byte-identical subset of its stress49. This export executes no candidate.",
+  "fullCases": 41,
+  "stressCases": 49,
+  "sameInputSubset": true,
+  "sourceIdentitySha256": "81195cda39fb04aa75ee3fb492663257551fa70a99e34b74addc9693f386f6c9",
+  "cases": [
+    {
+      "name": "capacity-death-refills-original-queue",
+      "exportedInputFileSha256": "7d367cddbcd62512a49ff9d2f29ad3d66edcc027e926bf7a92fd847b0100228d"
+    },
+    {
+      "name": "cross-junction-original-4m",
+      "exportedInputFileSha256": "d2dfd12a5cb032ac85d4fec101bb2dc453bdd82870c1d897eaf3ca7c60c1a20b"
+    },
+    {
+      "name": "cross-junction-original-5m",
+      "exportedInputFileSha256": "86a3da4193a7675271e2dfe59273076bd65ae2685cd8baeeeb5a8ef0ee933d9a"
+    },
+    {
+      "name": "cross-junction-parking-lanes",
+      "exportedInputFileSha256": "40f425a892e1d97991b5ca2091a94081cce716db67e3dd922e73c86e9c11c554"
+    },
+    {
+      "name": "dynamic-route-block-and-open",
+      "exportedInputFileSha256": "8845386ec442c20ab2076de899eb6c64b027be6717b4b964b83f8f98dafdda02"
+    },
+    {
+      "name": "fast-per-tick-approach",
+      "exportedInputFileSha256": "a69f3652281eb171548be3cb9a032b9cf1e14e164878661a8a070bc599cc3376"
+    },
+    {
+      "name": "forest-full44-large",
+      "exportedInputFileSha256": "545fd7c95d54ad8bcb91f3d6819aa253c845042cf6e11847d126daec4a6d611b"
+    },
+    {
+      "name": "forest-full44-two-late-small",
+      "exportedInputFileSha256": "5cb64fd8c3d1d05454ed93aaa54e0a7e504dbae55a8f54956d1a1f1593fe54c8"
+    },
+    {
+      "name": "forest-full45-medium",
+      "exportedInputFileSha256": "3f4c85f5b1008ab6f107af46889af1375fdba147ec26f0e1ae28977047249057"
+    },
+    {
+      "name": "forest-single-large",
+      "exportedInputFileSha256": "56a3914cf85aea35ef6ad29daa86b3ac9045d5fe51ec871389e938cdb56f78f8"
+    },
+    {
+      "name": "forest-single-medium",
+      "exportedInputFileSha256": "787596f737665d1bb252fd10dae58abc443e336a04b409d6ed52316087c626c7"
+    },
+    {
+      "name": "forest-single-small",
+      "exportedInputFileSha256": "35872b9847d19a6de3b40864c0e418c13ef0f59d18784c42c1cb04cdb99277ce"
+    },
+    {
+      "name": "forest-wave-1",
+      "exportedInputFileSha256": "23018b770fbf1384bb851b3bf81765f0df82c9ffa0b9a212ccb8f9fbf036fcfd"
+    },
+    {
+      "name": "forest-wave-2",
+      "exportedInputFileSha256": "bf1dc50a102ff5d94206cfa2554c0e70a18c8c42e838fcda016ca7c6afad8732"
+    },
+    {
+      "name": "forest-wave-3",
+      "exportedInputFileSha256": "1cfeb4a729e78c98c3ab1cc888a12c332b3196c58c33d2f593f33a65832bb391"
+    },
+    {
+      "name": "forest-wave-4",
+      "exportedInputFileSha256": "37d0e87447ec1843d369d1eb8a4f9c59007b456995b02f3e5b65f9f67bfcd91d"
+    },
+    {
+      "name": "forest-wave-5",
+      "exportedInputFileSha256": "6610876bf1eee7e97181d2641e083774866e42b731a1d99f4cc46d9e0d8332d8"
+    },
+    {
+      "name": "forest-wave-6",
+      "exportedInputFileSha256": "6e6a3b0c2ebc105ceca17c48d17567f6c8c63e435eaacc0164ed6669aee6b1ea"
+    },
+    {
+      "name": "large-body-sparse-group",
+      "exportedInputFileSha256": "7a0788c3f7640041516af4abf8c40d84e454ffca887c8590f625c6244a5ff36e"
+    },
+    {
+      "name": "large-body-wide-approach",
+      "exportedInputFileSha256": "2f618d21e4d3824a3bfd039d445200d0bc609203a051e3c7c5f0b02aa3e0d673"
+    },
+    {
+      "name": "large-radius-turning-clearance",
+      "exportedInputFileSha256": "955c9b6d22e852a4c99ae0755a97b3e8500aa572be54707916c0d9853e7b8d75"
+    },
+    {
+      "name": "large-small-sparse-group",
+      "exportedInputFileSha256": "91d1bf53f78485f23251477dc719099f9e92d51d4330d82d1475f4e4267681f0"
+    },
+    {
+      "name": "mixed-speed-approach",
+      "exportedInputFileSha256": "5ac9f5015bf6b370d2361525d83d49d5afc3e229ce5e5e6773f37a74b3d89936"
+    },
+    {
+      "name": "moving-noncenter-death-and-reinforcement",
+      "exportedInputFileSha256": "18122082aa936f89407b40882ac1871a349bbb182c2c5e01f517fac7b916e9cd"
+    },
+    {
+      "name": "old-waiters-refill-without-newcomers",
+      "exportedInputFileSha256": "673fa883561ebd63fe6158ced9682a6756f9467665bfd37a787c735917c44825"
+    },
+    {
+      "name": "open-arena",
+      "exportedInputFileSha256": "33eec4794d8240a7ce29c9d27b44f42883ec265c9117641f7ebaa6da16e027d9"
+    },
+    {
+      "name": "opposing-flow-wide-arena",
+      "exportedInputFileSha256": "c7491312b0b5b66883ac299435c4f6c6050c965997743fb18749a055858991bb"
+    },
+    {
+      "name": "physical-and-endpoint-overflow-200",
+      "exportedInputFileSha256": "8404a7d64a8a34429525308cbeebdbcffbb1637d8f4731351962e74f760ccd8a"
+    },
+    {
+      "name": "random-multigate-maze-11",
+      "exportedInputFileSha256": "71503ffe91bb6d852b1dfde65236a4c60b41f8ae765229fa912e36a11d89688b"
+    },
+    {
+      "name": "random-multigate-maze-97",
+      "exportedInputFileSha256": "cfa893760d1703971bed6a8b4f7b878bb13402f1e9b164582911929234bf8a6f"
+    },
+    {
+      "name": "ranged84-before-short1-fairness",
+      "exportedInputFileSha256": "4ca6153dd5b50eef7a899b13d92b582a74b8d04d1d1b1b0e78ae7cddd6ba7cea"
+    },
+    {
+      "name": "right-angle-corridor",
+      "exportedInputFileSha256": "e475f40bf9cb7a320e05b2e5bff85d68a95f5e4f2dbd586826e660a5640c1917"
+    },
+    {
+      "name": "settled-batch-death-and-reinforcement",
+      "exportedInputFileSha256": "20ef11d6af9f2ad4176783bb194dc4f441be4dfb9117815a534c1da98b6d9423"
+    },
+    {
+      "name": "shared-spawn-original-5m",
+      "exportedInputFileSha256": "b3f0bce6a93220715c4ef78d5f90db0d44cb3ae2f86220f52794d7471bab3456"
+    },
+    {
+      "name": "shared-spawn-parking-lanes",
+      "exportedInputFileSha256": "1ca4506d225ce90dbfcdef7b09e8e3f47b4074f00405786494203edd2801c988"
+    },
+    {
+      "name": "short16-before-ranged84-fairness",
+      "exportedInputFileSha256": "fda7dcd61d5fdaa5dd7fe27d12a208e52e491c3925215f96d4ee514be22b186c"
+    },
+    {
+      "name": "single-cell-throat",
+      "exportedInputFileSha256": "3b9e5021929e2d2c8dd05c4839efa5a6e3aef28800ff0da6c3281f74f27f2517"
+    },
+    {
+      "name": "static-unreachable-retains-pending",
+      "exportedInputFileSha256": "c0a56ee9dc1906d9c9e7854155cf73acd45d47855a31954bcd812ba40aa05983"
+    },
+    {
+      "name": "target-relocation-after-settlement",
+      "exportedInputFileSha256": "1369ec437e43ac1f727f29641a7645a14e479fd863913ead9ded4887292b4e5e"
+    },
+    {
+      "name": "target-relocation-before-arrival",
+      "exportedInputFileSha256": "78fb0455d1ca749008433cff0916404de69cd38a32d6429353e240679a9bde76"
+    },
+    {
+      "name": "u-obstacle",
+      "exportedInputFileSha256": "6c4d767e7ca3798130d890bd8a66a2af198096a13f48aa0462c7d03ce5b10688"
+    }
+  ]
+}

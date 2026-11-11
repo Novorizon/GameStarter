@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "scope": "Archive file integrity only; actual algorithm status is recorded in original summary/validation and source-bound provenance.",
+  "sha256": {
+    "WarcraftRefinedFactory-forest-full44-large.png": "30472e7039d3211dd887233ddb64a3cdafc229a9bdd19124b8232a2855532fa7",
+    "target-relocation-after-settlement.unity-input.json": "73d5c2a73f43ec579f21e6348a20edfd15a046bf33d15f0a514de876d4b88a61",
+    "native-provenance.json": "dd90e637030ed35505de292ced40db510003d24dc16cf2d66dff5a01042f8710",
+    "native-manifest.json": "67b8eeadc43e2171a377089bb759e8adcc018b8467b738149060771d0b031aa9",
+    "model-build-manifest-0.json": "d209576e9e89da6455d447c25ac4beee15ca2bccb0524b87fe1a66eab04b774c",
+    "validation.json": "0d2fa066a1e0e87e7bef57a609334e374cbae288c9056c3e5acc63761e44c071",
+    "WarcraftRefinedFactory-target-relocation-after-settlement.png": "019d6180526a9a882fb51545a12a293a0ef53cf9f6cbfe8e904ee93dfcc6e52d",
+    "forest-full44-large.unity-input.json": "c379c0fd6bce0c2bad4bd13208581545b5596a104035a71abe8cb3e524e9e33a",
+    "WarcraftRefinedFactory-large-body-sparse-group.png": "f78a3d06a846d9ee4191024b84979dc8ca16eedbb29b7a33dd767def81c6ed6a",
+    "large-body-sparse-group.unity-input.json": "3d5a88fcf2bd3e5e2ff12a15e703faadf9d72f93d4fa64260ff8bfe48ff01c51",
+    "scope.json": "6451dc4b748bb8b6ba48fcb69fa44cc37b2bbea2b69297a3775f9ee170a54dbd"
+  }
+}

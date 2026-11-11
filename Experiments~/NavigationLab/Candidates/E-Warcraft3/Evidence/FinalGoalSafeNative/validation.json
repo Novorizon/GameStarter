@@ -1,0 +1,406 @@
+{
+    "success": true,
+    "shutdownVerified": true,
+    "runId": "fa354d5606df422ca78be8bfdb326374",
+    "unity": "2022.3.62f1",
+    "graphics": "OpenGLCore",
+    "device": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "manifestSha256": "67b8eeadc43e2171a377089bb759e8adcc018b8467b738149060771d0b031aa9",
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "stopwatchFrequency": 10000000,
+    "cases": [
+        {
+            "name": "WarcraftRefinedFactory-large-body-sparse-group",
+            "factoryId": "E4-Warcraft3-Inspired-RefinedConnections",
+            "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+            "inputSha256": "3d5a88fcf2bd3e5e2ff12a15e703faadf9d72f93d4fa64260ff8bfe48ff01c51",
+            "modelInputSha256": "e623283113cd55e439c80f3c739e936d76f9d99ad7f1f807d1adc51928eb5f93",
+            "candidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "199.99999999999523",
+            "screenshot": "WarcraftRefinedFactory-large-body-sparse-group.png",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": true,
+            "renderingError": "",
+            "originalRequests": 8,
+            "admitted": 8,
+            "rejected": 14,
+            "deaths": 0,
+            "live": 8,
+            "pending": 0,
+            "attacking": 8,
+            "waiting": 0,
+            "finalTick": 268,
+            "holdTicks": 200,
+            "checkedMicrosteps": 2680,
+            "pairSweeps": 71148,
+            "bodySweeps": 20748,
+            "maximumStepStopwatchTicks": 62581,
+            "stepStopwatchTicks": 508042,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "FriendlyYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "GroupedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RequesterBackoffEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RefinedConnectionsEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 22
+                },
+                {
+                    "name": "ReachabilityCells",
+                    "value": 6128
+                },
+                {
+                    "name": "GlobalAStarSearches",
+                    "value": 8
+                },
+                {
+                    "name": "DirectConnectors",
+                    "value": 8
+                },
+                {
+                    "name": "Spawned",
+                    "value": 8
+                },
+                {
+                    "name": "SimulationSubsteps",
+                    "value": 2680
+                },
+                {
+                    "name": "BodyMoveSubsteps",
+                    "value": 4230
+                },
+                {
+                    "name": "Rejected_SpawnOccupied",
+                    "value": 14
+                }
+            ]
+        },
+        {
+            "name": "WarcraftRefinedFactory-forest-full44-large",
+            "factoryId": "E4-Warcraft3-Inspired-RefinedConnections",
+            "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+            "inputSha256": "c379c0fd6bce0c2bad4bd13208581545b5596a104035a71abe8cb3e524e9e33a",
+            "modelInputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+            "candidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "0",
+            "screenshot": "WarcraftRefinedFactory-forest-full44-large.png",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": true,
+            "renderingError": "",
+            "originalRequests": 44,
+            "admitted": 44,
+            "rejected": 398,
+            "deaths": 0,
+            "live": 44,
+            "pending": 0,
+            "attacking": 18,
+            "waiting": 26,
+            "finalTick": 1618,
+            "holdTicks": 200,
+            "checkedMicrosteps": 16180,
+            "pairSweeps": 12823146,
+            "bodySweeps": 635994,
+            "maximumStepStopwatchTicks": 269516,
+            "stepStopwatchTicks": 24081176,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "FriendlyYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "GroupedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RequesterBackoffEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RefinedConnectionsEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 442
+                },
+                {
+                    "name": "ReachabilityCells",
+                    "value": 14168
+                },
+                {
+                    "name": "GlobalAStarSearches",
+                    "value": 91
+                },
+                {
+                    "name": "AStarExpandedCells",
+                    "value": 12875
+                },
+                {
+                    "name": "Spawned",
+                    "value": 44
+                },
+                {
+                    "name": "SimulationSubsteps",
+                    "value": 16180
+                },
+                {
+                    "name": "BodyMoveSubsteps",
+                    "value": 394629
+                },
+                {
+                    "name": "Rejected_SpawnOccupied",
+                    "value": 398
+                },
+                {
+                    "name": "SpatialCollisionStops",
+                    "value": 29721
+                },
+                {
+                    "name": "WaitingSubsteps",
+                    "value": 29721
+                },
+                {
+                    "name": "LocalSearches",
+                    "value": 72
+                },
+                {
+                    "name": "NoSpatialPath",
+                    "value": 161
+                },
+                {
+                    "name": "RefinedSearches",
+                    "value": 65
+                },
+                {
+                    "name": "RefinedExpandedNodes",
+                    "value": 7294
+                },
+                {
+                    "name": "RefinedCoarseConnections",
+                    "value": 752
+                },
+                {
+                    "name": "RefinedCoarseSearches",
+                    "value": 62
+                },
+                {
+                    "name": "RefinedNoCoarseRoute",
+                    "value": 62
+                },
+                {
+                    "name": "FriendlyYieldRequests",
+                    "value": 3
+                },
+                {
+                    "name": "DirectConnectors",
+                    "value": 4
+                },
+                {
+                    "name": "FriendlyYieldAccepted",
+                    "value": 2
+                },
+                {
+                    "name": "FriendlyYieldCompleted",
+                    "value": 2
+                },
+                {
+                    "name": "LocalRejoins",
+                    "value": 14
+                },
+                {
+                    "name": "RefinedNoConnection",
+                    "value": 3
+                },
+                {
+                    "name": "RefinedBlockedDestinations",
+                    "value": 34
+                },
+                {
+                    "name": "DynamicGlobalRepaths",
+                    "value": 2
+                },
+                {
+                    "name": "FriendlyYieldNoSidePocket",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "WarcraftRefinedFactory-target-relocation-after-settlement",
+            "factoryId": "E4-Warcraft3-Inspired-RefinedConnections",
+            "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+            "inputSha256": "73d5c2a73f43ec579f21e6348a20edfd15a046bf33d15f0a514de876d4b88a61",
+            "modelInputSha256": "3862b8b6e1baa87a3368e3c9aa7cdce2975db7eba155e02fad7950b4be3b6508",
+            "candidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "0",
+            "screenshot": "WarcraftRefinedFactory-target-relocation-after-settlement.png",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": true,
+            "renderingError": "",
+            "originalRequests": 24,
+            "admitted": 24,
+            "rejected": 23,
+            "deaths": 0,
+            "live": 24,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 8,
+            "finalTick": 1313,
+            "holdTicks": 200,
+            "checkedMicrosteps": 13130,
+            "pairSweeps": 3544024,
+            "bodySweeps": 310476,
+            "maximumStepStopwatchTicks": 935948,
+            "stepStopwatchTicks": 14277242,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "FriendlyYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "GroupedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RequesterBackoffEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RefinedConnectionsEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 47
+                },
+                {
+                    "name": "ReachabilityCells",
+                    "value": 42528
+                },
+                {
+                    "name": "GlobalAStarSearches",
+                    "value": 58
+                },
+                {
+                    "name": "AStarExpandedCells",
+                    "value": 5839
+                },
+                {
+                    "name": "Spawned",
+                    "value": 24
+                },
+                {
+                    "name": "SimulationSubsteps",
+                    "value": 13130
+                },
+                {
+                    "name": "BodyMoveSubsteps",
+                    "value": 34078
+                },
+                {
+                    "name": "Rejected_SpawnOccupied",
+                    "value": 23
+                },
+                {
+                    "name": "DirectConnectors",
+                    "value": 32
+                },
+                {
+                    "name": "SpatialCollisionStops",
+                    "value": 6044
+                },
+                {
+                    "name": "WaitingSubsteps",
+                    "value": 6044
+                },
+                {
+                    "name": "LocalSearches",
+                    "value": 45
+                },
+                {
+                    "name": "NoSpatialPath",
+                    "value": 42
+                },
+                {
+                    "name": "RefinedSearches",
+                    "value": 26
+                },
+                {
+                    "name": "RefinedExpandedNodes",
+                    "value": 33038
+                },
+                {
+                    "name": "RefinedDirectGoals",
+                    "value": 11
+                },
+                {
+                    "name": "RefinedCoarseSearches",
+                    "value": 24
+                },
+                {
+                    "name": "RefinedRoutes",
+                    "value": 13
+                },
+                {
+                    "name": "LocalRejoins",
+                    "value": 29
+                },
+                {
+                    "name": "RefinedCoarseConnections",
+                    "value": 1944
+                },
+                {
+                    "name": "RefinedNoCoarseRoute",
+                    "value": 11
+                },
+                {
+                    "name": "DynamicGlobalRepaths",
+                    "value": 8
+                },
+                {
+                    "name": "WorldChanges",
+                    "value": 1
+                },
+                {
+                    "name": "GoalReassignments",
+                    "value": 24
+                },
+                {
+                    "name": "RefinedQuarterRejoinsSkipped",
+                    "value": 19
+                },
+                {
+                    "name": "RefinedBlockedDestinations",
+                    "value": 5
+                },
+                {
+                    "name": "RefinedNoConnection",
+                    "value": 2
+                }
+            ]
+        }
+    ]
+}

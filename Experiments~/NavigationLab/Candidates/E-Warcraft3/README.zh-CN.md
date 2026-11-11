@@ -136,7 +136,7 @@ python3 Tools~/NavigationLab/freeze-run.py \
   --suite stress
 ```
 
-本分支包含所选修复实现和已完成关键证据；完整stress49正在单独执行。当前不能用关键5例、旧7项smoke或旧12项partial拼成最终源的49项。完成后再归档统一摘要、失败、输入、压缩轨迹、实际4DLL与编译来源，并从同一批输入派生full41。
+本分支包含所选修复实现和已完成关键证据；最终F0完整stress49已独立执行完成。当前不能用关键5例、旧7项smoke或旧12项partial拼成最终源的49项。完成后再归档统一摘要、失败、输入、压缩轨迹、实际4DLL与编译来源，并从同一批输入派生full41。
 
 
 ## 目标圆盘相容性与最终源
@@ -151,6 +151,26 @@ python3 Tools~/NavigationLab/freeze-run.py \
 
 `GoalCompatibility`保存通用driver、原输入/可行见证、7f与ad4与最终源的实际补充报告、源绑定关键回归和打包源码。最终源open/U/直角/Forest44/晚到46/Forest8的Input、完整Trace、Commands、FinalState和Status逐项等于7f对应例；成功case均完成正式重放，晚到46仍是真失败，不伪称通过。
 
-7f阶段已自然跑完49，严格验证后为37通过/12失败/0未支持/0非法输入；同一批输入派生full41为30通过/11失败。`StageE4V2BeforeGoalFix`保留其完整报告、输入、压缩轨迹、实际4DLL与全部冻结源；`StageE4V2NativeGraphics`的图形3P也只属于7f旧源，不能用于最终f0源。当前最终f0将以独立新目录执行完整49，不能拿7f分数冒称最终结果。
+7f阶段已自然跑完49，严格验证后为37通过/12失败/0未支持/0非法输入；同一批输入派生full41为30通过/11失败。`StageE4V2BeforeGoalFix`保留其完整报告、输入、压缩轨迹、实际4DLL与全部冻结源；`StageE4V2NativeGraphics`的图形3P也只属于7f旧源，不能用于最终f0源。最终F0已在独立新目录实际完成49；下面单列其结果，7f阶段分数没有冒称新源。
 
 历史E1b的精确源码/DLL以历史支与冻结归档为准；当前`WarcraftFactory`仅作为关闭精细连接的结构对照，共享后续Goal相容性修复，不冒称旧DLL逐字重现。生产Bootstrap/FightSession仍为A，没有切换业务默认后端。
+
+
+## 最终验收结果（F0）
+
+最终源`3136ae8` / DLL `f0e3f31d…99d29d`的共同stress49为 **37通过、12失败、0未支持、0非法输入**。37个成功case全部完整新实例重放一致，暂停/异world实例隔离、编译来源、源与4DLL前后稳定均通过。Wrapper真实返回1，与12个失败相符；`formalEvidenceReady=true`只表示证据完整，`success=false`仍然保留。
+
+同一已执行输入的full41子集为 **30通过、11失败**，没有另跑重复矩阵。与7f完整阶段逐49项核对InputSHA、完整TraceSHA、CommandsSHA、FinalState、Status，差异清单为空；这来自两轮真实执行后的核对，不是事前假设等价。Goal修复的收益在独立补充契约中证明，没有通过改变共同49来提高分数。
+
+| 失败组 | 实际结果 |
+| --- | --- |
+| 大半径转角 / 单格喉道 | 48人中分别10 / 39人仍Moving |
+| 300密集 | 300全部生成，仍2人Moving |
+| Forest波3/4/5/6 | 分别2/5/10/7人仍Moving |
+| Forest45 / 晚到46 | 分别3 / 2人仍Moving；晚到46先44稳定前提已成立 |
+| 容量200 / 容量死亡补兵 | 都仅18实际、182仍保留外部队列，尚未达到可行39；补兵案死亡事件因初始未稳而未触发 |
+| 84远程先到、1短程晚到 | 85人全部静止，84攻击、1候场；攻击配额仍失败，不能只看Moving=0算通过 |
+
+这些失败没有出现独立Oracle的穿越/隐藏单位/速度违规，但确实没有满足相应进展或攻击任务。未把它们归为Linux问题、物理不可能或已证明的原Warcraft算法极限，也没有改小体型、扩大地图、减少人数或缩短deadline。剩余控制策略不具有全图完备保证，生产业务默认仍保留A。
+
+`Evidence/FinalGoalSafeStress49`包含严格校验后的摘要、逐例完整gzip报告、实际49输入、压缩逐步轨迹、失败索引、同输入full41派生、与7f差异清单、真实四DLL与冻结源包及编译项。`FinalGoalSafeNative`则为相同F0的真实Unity 2022.3.62f1 Editor Play/Mono图形复验：稀疏r650八人8攻击(t268)、Forest44 18攻击26候场(t1618)、到位后目标移动24人16攻击8候场(t1313)，均200稳定区间、漂移0、3/3画面验证通过，源/暂存DLL/新鲜报告/清理/关闭均核验。使用OpenGLCore/llvmpipe软件渲染，不表示硬件GPU、IL2CPP或手机性能验收；稀疏八人也不替代dense补充三例与自身Goal契约。

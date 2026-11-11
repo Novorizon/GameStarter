@@ -1,0 +1,405 @@
+{
+  "schemaVersion": 1,
+  "scope": "Completed49 compared by original InputSHA, full logical TraceSHA, CommandsSHA, complete FinalState and Status. This is a comparison of two separately executed complete sources, not reused simulation or extra coverage. Supplemental dense-goal and own-goal lifecycle changes are reported outside49.",
+  "beforeCandidateSha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+  "afterCandidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+  "beforeSummarySha256": "f0bf563bd29b01ffb0bde2062e4762c4a70b94779f662c5cc0b83a07dc251108",
+  "afterSummarySha256": "351a856caf5cf31c9f0d422c94a7e5aaac8a58cfc469187a6de9a5b67cb20b49",
+  "comparedCases": 49,
+  "changedCaseCount": 0,
+  "changes": [],
+  "cases": [
+    {
+      "name": "open-arena",
+      "inputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "mixed-speed-approach",
+      "inputSha256": "3937d8bdf4f45614880d5a0c705c8e7cf7080af273e7e07f411d7f98d819c48f",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "large-radius-turning-clearance",
+      "inputSha256": "2f9c25573366986ec2c1af51ee28851b74623fd26b7ead7110cef86d45d52707",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "single-cell-throat",
+      "inputSha256": "d566c5ddbd26c3cdbced54c1174a2000fece1929bdeace48d6f925be17d728f7",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "u-obstacle",
+      "inputSha256": "ea159d7dde87e0e66bd57b5e216cbab2bf5d50e9a54d4ac0c9b45f0892542739",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "right-angle-corridor",
+      "inputSha256": "4b35e5c79d7835fd229fc0370f5f8499b88eae77bb03cc5e8c8d0212eb83f5a6",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "cross-junction-parking-lanes",
+      "inputSha256": "8e661c7feb50d581ce240c30b760fab74ad893ced8709a68747b9fbe21840c55",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "cross-junction-original-4m",
+      "inputSha256": "262a139ba9abbf6341f28944de08439f4efbf469f3dc8e3d09fcbef2d900a54e",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "cross-junction-original-5m",
+      "inputSha256": "5b4853e0d303e2e3048cfb6ce3c9f6a5d7e36d1f4b1c19c1aef45fafa099d0cd",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "shared-spawn-parking-lanes",
+      "inputSha256": "ccc04e690e248dc8da9e5aae2548a0da7493dc6ec5994de8e788f1d86b92e6ae",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "shared-spawn-original-5m",
+      "inputSha256": "b0d6e96f3086874e003561f30e03bd7d6c6b156567fcb4a03763e9fc51e038fc",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "three-hundred-units-parking-lanes",
+      "inputSha256": "c5bf0c18c1fccf8f084f2964276af42cee33c488f31b6543a4b06cb9f2402602",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "three-hundred-units-original-12m",
+      "inputSha256": "75e1baf916e3fd424b75593990328967c0d72e92bc344fe02b602ed110d650a1",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "forest-single-small",
+      "inputSha256": "99630388af44d2baf1285b6432dc1611c29cbc279d0d903ca6a8252745d7338d",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "forest-single-medium",
+      "inputSha256": "831dfbf72956562149727195f98de0b92d49bf662901338833cb4f8eecd33d98",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "forest-single-large",
+      "inputSha256": "5f0f1e8352e84f5f48c50e2c4a5b28d298b0e2c40e051c8808d9bf3eb2a5507b",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "forest-wave-1",
+      "inputSha256": "4287743cac00ef7287179738aa7592923ef817416e284b88fac1a6e78fe08686",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "forest-wave-2",
+      "inputSha256": "c9d713ac5d522aba2c0ace769037e060f8c1122326cc74a751cfaafe987eedaf",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "forest-wave-3",
+      "inputSha256": "1bbe6d055a0ae2e51ea48d86fc92526580964a8ee156e619863d3f10233ee579",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "forest-wave-4",
+      "inputSha256": "127ed4cc587cdd350fd4bcba71627b9b9acb2db26948e0481f20dc791f8688fb",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "forest-wave-5",
+      "inputSha256": "173c4edd034df556eaec8de9f8ad29ae2457b439431dbd1f851bede9b3b93ad5",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "forest-wave-6",
+      "inputSha256": "fb317fe40a35d6ce7eaa9c05a1e8ee9aaf02760d60135a4266aef9a0f5bd1f71",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "forest-full44-large",
+      "inputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "forest-full45-medium",
+      "inputSha256": "626a99fe6972d938944ab816c6ef959b93dae272ffa8538397a0a518958fd217",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "forest-full44-two-late-small",
+      "inputSha256": "7b714560c65db529a2ac45e976bf451c8dd538b20aa049ec3ceacd5f4dc4e320",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "static-unreachable-retains-pending",
+      "inputSha256": "634e6ea791aee28f2886938936238c6763d1f436e558dd2d9bd3f81bd5032e5c",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "physical-and-endpoint-overflow-200",
+      "inputSha256": "cb0ee72e9d5ee8b038409699d86388464b4e1fd71bc2df40e9b6dab4dd9c813e",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "capacity-death-refills-original-queue",
+      "inputSha256": "41ae21c659fb02b2c44f3657f4860c827132d3679e3103ae37db09650fdddb06",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "moving-noncenter-death-and-reinforcement",
+      "inputSha256": "3a0bcdc6382a04c801ce4b0e1fd4fb5cc70a0da60ab4d111049539f74a4d325f",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "settled-batch-death-and-reinforcement",
+      "inputSha256": "1e23c3960a90e204f86fc1444d1ca7bf6736297731bfd899c15a0d7d22bbcf08",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "old-waiters-refill-without-newcomers",
+      "inputSha256": "f925a5fd4c1dc206ccf2c86471265dfebe3a5c2f4d32e831475ae407a445f6e7",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "ranged84-before-short1-fairness",
+      "inputSha256": "f439d7b7287c728a1852f1ec892ce6a672b135689741ef156ecb81071a0da249",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Failed",
+      "afterStatus": "Failed"
+    },
+    {
+      "name": "short16-before-ranged84-fairness",
+      "inputSha256": "07af0ab8e78ad1131c7651833c85b889ac0b82eeb6a8dd1891dc488d981d9f62",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "dynamic-route-block-and-open",
+      "inputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "target-relocation-before-arrival",
+      "inputSha256": "51af3a54243b8dc42b968230d48549a2d4e09a946f059f2d77e32c458f9e1cc9",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "target-relocation-after-settlement",
+      "inputSha256": "3862b8b6e1baa87a3368e3c9aa7cdce2975db7eba155e02fad7950b4be3b6508",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "opposing-flow-wide-arena",
+      "inputSha256": "4c999ae61678cdc13b29edc81a9c66528f940ef07bd5a1dbb073c6dc90916993",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "large-body-wide-approach",
+      "inputSha256": "c824f36380270908402353b7ebfdb55daaa2e26b646226cd9194b0d32b552553",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "large-body-sparse-group",
+      "inputSha256": "e623283113cd55e439c80f3c739e936d76f9d99ad7f1f807d1adc51928eb5f93",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "large-small-sparse-group",
+      "inputSha256": "0a9c1e2f5c13fd073d8dae1ab36f9603b3808adbe8f024af0e8f6068387c8a3e",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "fast-per-tick-approach",
+      "inputSha256": "96bda50edf6ee1243530e218ce17685bb5bd65969d6261e4f3ac85b9bf593c81",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "random-multigate-maze-11",
+      "inputSha256": "5f33fea1dc20224af28bdaa488ecb1aa985810f9d8579d332f7d8aa9bc70baa0",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "random-multigate-maze-97",
+      "inputSha256": "2f582ebc736e93c23eb449dd6f31dff84334e04075b90943f719a3214efd8c8b",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "random-multigate-maze-713",
+      "inputSha256": "e5b042587ca9fedfc791e7b20fe59e7a46807e94d197e39056b439a838306515",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "random-multigate-maze-20261111",
+      "inputSha256": "b5d2372a077a372cceab09ff4a9584a2db7e05499f6c1e2f478b74d5a92083e7",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "random-multigate-maze-1701",
+      "inputSha256": "1e4f58628debf1793a3df4fca5992163938c317ab3f203a23c45aa67a958db62",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "random-multigate-maze-991",
+      "inputSha256": "ca73aa241c90ce608abd9572caa5cb4ce6c71fe29ed7e57e7a9f3a7f13041a03",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "large-portal-grid-128",
+      "inputSha256": "4d7e8ca754373afb1593e586ffff79396f0fbbe4e45952b0468644a19f995b24",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    },
+    {
+      "name": "large-portal-grid-256",
+      "inputSha256": "7e872621e00d6badc2acb623d39ced318aa6252b0cf9a688651420cc4472fa4f",
+      "fieldsEqual": true,
+      "changedFields": [],
+      "beforeStatus": "Passed",
+      "afterStatus": "Passed"
+    }
+  ]
+}

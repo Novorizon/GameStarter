@@ -1,0 +1,50 @@
+["dotnet", "/workspace/navigation-comparison/e-final-goal-safe-snapshots/snapshot-81195cda39fb04aa75ee3fb4/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll", "--assembly", "/workspace/navigation-comparison/e-final-goal-safe-snapshots/snapshot-81195cda39fb04aa75ee3fb4/Experiments~/NavigationLab/Candidates/E-Warcraft3/bin/Release/netstandard2.1/NavigationLab.EWarcraft3.dll", "--factory", "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory", "--suite", "stress", "--output", "/workspace/navigation-comparison/results/e-final-goal-safe-stress49", "--build-manifest", "/workspace/navigation-comparison/results/e-final-goal-safe-stress49/build-manifest.json", "--require-build-manifest"]
+PASSED open-arena admitted=48 alive=48 pending=0 attack=16 tick=308 
+PASSED mixed-speed-approach admitted=64 alive=64 pending=0 attack=16 tick=442 
+FAILED large-radius-turning-clearance admitted=48 alive=48 pending=0 attack=9 tick=12000 Deadline: alive=48, pending=0, moving=10, attack=9, failure=None
+FAILED single-cell-throat admitted=48 alive=48 pending=0 attack=9 tick=12000 Deadline: alive=48, pending=0, moving=39, attack=9, failure=None
+PASSED u-obstacle admitted=56 alive=56 pending=0 attack=16 tick=351 
+PASSED right-angle-corridor admitted=32 alive=32 pending=0 attack=16 tick=323 
+PASSED cross-junction-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=338 
+PASSED cross-junction-original-4m admitted=72 alive=72 pending=0 attack=12 tick=396 
+PASSED cross-junction-original-5m admitted=72 alive=72 pending=0 attack=16 tick=391 
+PASSED shared-spawn-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=296 
+PASSED shared-spawn-original-5m admitted=72 alive=72 pending=0 attack=16 tick=312 
+PASSED three-hundred-units-parking-lanes admitted=300 alive=300 pending=0 attack=6 tick=824 
+FAILED three-hundred-units-original-12m admitted=300 alive=300 pending=0 attack=16 tick=12000 Deadline: alive=300, pending=0, moving=2, attack=16, failure=None
+PASSED forest-single-small admitted=1 alive=1 pending=0 attack=1 tick=521 
+PASSED forest-single-medium admitted=1 alive=1 pending=0 attack=1 tick=724 
+PASSED forest-single-large admitted=1 alive=1 pending=0 attack=1 tick=1148 
+PASSED forest-wave-1 admitted=8 alive=8 pending=0 attack=8 tick=812 
+PASSED forest-wave-2 admitted=16 alive=16 pending=0 attack=13 tick=963 
+FAILED forest-wave-3 admitted=18 alive=18 pending=0 attack=14 tick=7000 Deadline: alive=18, pending=0, moving=2, attack=14, failure=None
+FAILED forest-wave-4 admitted=25 alive=25 pending=0 attack=15 tick=7000 Deadline: alive=25, pending=0, moving=5, attack=15, failure=None
+FAILED forest-wave-5 admitted=30 alive=30 pending=0 attack=11 tick=7000 Deadline: alive=30, pending=0, moving=10, attack=11, failure=None
+FAILED forest-wave-6 admitted=29 alive=29 pending=0 attack=14 tick=7000 Deadline: alive=29, pending=0, moving=7, attack=14, failure=None
+PASSED forest-full44-large admitted=44 alive=44 pending=0 attack=18 tick=1618 
+FAILED forest-full45-medium admitted=45 alive=45 pending=0 attack=12 tick=12000 Deadline: alive=45, pending=0, moving=3, attack=12, failure=None
+FAILED forest-full44-two-late-small admitted=46 alive=46 pending=0 attack=18 tick=12000 Deadline: alive=46, pending=0, moving=2, attack=18, failure=None
+PASSED static-unreachable-retains-pending admitted=0 alive=0 pending=12 attack=0 tick=200 
+FAILED physical-and-endpoint-overflow-200 admitted=18 alive=18 pending=182 attack=10 tick=6000 Deadline: alive=18, pending=182, moving=3, attack=10, failure=SpawnOccupied
+FAILED capacity-death-refills-original-queue admitted=18 alive=18 pending=182 attack=11 tick=8000 Deadline: alive=18, pending=182, moving=2, attack=11, failure=SpawnOccupied
+PASSED moving-noncenter-death-and-reinforcement admitted=25 alive=24 pending=0 attack=16 tick=362 
+PASSED settled-batch-death-and-reinforcement admitted=54 alive=48 pending=0 attack=16 tick=359 
+PASSED old-waiters-refill-without-newcomers admitted=48 alive=42 pending=0 attack=16 tick=359 
+FAILED ranged84-before-short1-fairness admitted=85 alive=85 pending=0 attack=84 tick=12000 Deadline: alive=85, pending=0, moving=0, attack=84, failure=None
+PASSED short16-before-ranged84-fairness admitted=101 alive=100 pending=0 attack=84 tick=2382 
+PASSED dynamic-route-block-and-open admitted=24 alive=24 pending=0 attack=16 tick=800 
+PASSED target-relocation-before-arrival admitted=24 alive=24 pending=0 attack=16 tick=374 
+PASSED target-relocation-after-settlement admitted=24 alive=24 pending=0 attack=16 tick=1313 
+PASSED opposing-flow-wide-arena admitted=8 alive=8 pending=0 attack=2 tick=285 
+PASSED large-body-wide-approach admitted=1 alive=1 pending=0 attack=1 tick=257 
+PASSED large-body-sparse-group admitted=8 alive=8 pending=0 attack=8 tick=268 
+PASSED large-small-sparse-group admitted=11 alive=11 pending=0 attack=11 tick=276 
+PASSED fast-per-tick-approach admitted=4 alive=4 pending=0 attack=4 tick=217 
+PASSED random-multigate-maze-11 admitted=32 alive=32 pending=0 attack=16 tick=428 
+PASSED random-multigate-maze-97 admitted=32 alive=32 pending=0 attack=16 tick=400 
+PASSED random-multigate-maze-713 admitted=32 alive=32 pending=0 attack=16 tick=347 
+PASSED random-multigate-maze-20261111 admitted=32 alive=32 pending=0 attack=16 tick=428 
+PASSED random-multigate-maze-1701 admitted=32 alive=32 pending=0 attack=16 tick=442 
+PASSED random-multigate-maze-991 admitted=32 alive=32 pending=0 attack=16 tick=432 
+PASSED large-portal-grid-128 admitted=128 alive=128 pending=0 attack=128 tick=427 
+PASSED large-portal-grid-256 admitted=256 alive=256 pending=0 attack=256 tick=484 

@@ -1,0 +1,35 @@
+{
+  "output": "/workspace/navigation-comparison/native/e-final-f0-selected",
+  "runId": "fa354d5606df422ca78be8bfdb326374",
+  "expectedCoreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "expectedOracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "graphicsRequired": true,
+  "wallDeadlineSeconds": 3600,
+  "stepsPerEditorUpdate": 250,
+  "runs": [
+    {
+      "name": "WarcraftRefinedFactory-large-body-sparse-group",
+      "input": "/workspace/navigation-comparison/native/e-final-f0-selected/large-body-sparse-group.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "expectedCandidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d"
+    },
+    {
+      "name": "WarcraftRefinedFactory-forest-full44-large",
+      "input": "/workspace/navigation-comparison/native/e-final-f0-selected/forest-full44-large.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "expectedCandidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d"
+    },
+    {
+      "name": "WarcraftRefinedFactory-target-relocation-after-settlement",
+      "input": "/workspace/navigation-comparison/native/e-final-f0-selected/target-relocation-after-settlement.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "expectedCandidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d"
+    }
+  ]
+}
