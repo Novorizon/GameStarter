@@ -1,6 +1,6 @@
 # A–E 导航方案对照
 
-本轮任务是保存现有实现，在独立分支实现并比较其他导航方案。有限测试只能检验明确的场景与假设，不能证明任意地图、人数或动态条件下均有解。
+本轮已保存现有实现，并在独立分支实现、完成六份共同49项对照，结果见[实现与对照结论](Findings.zh-CN.md)及[完整逐例证据](../../../Experiments~/NavigationLab/Evidence/SelectedSixFinal/README.md)。有限测试只能检验明确的场景与假设，不能证明任意地图、人数或动态条件下均有解。
 
 [整体问题和方案职责](ProblemsAndChoices.zh-CN.md)列出寻路、避障、围攻、拥堵恢复和生命周期的子问题。[工具与复现](../../../Tools~/NavigationLab/README.zh-CN.md)给出冻结、运行、比较及Unity子集的命令。
 
@@ -60,7 +60,7 @@ A 将每格移动时间量化为整数逻辑tick，B–E可采用连续速度；
 
 模型运行与真实 Unity/Mono 运行分别记录。模型通过不能自动成为 Unity、IL2CPP、HybridCLR 主包、PC 或移动设备的验收结果。耗时和分配只描述测试设备与相应输入。
 
-公共框架和候选实现位于 `Experiments~/NavigationLab`。[当前实际进度](Progress.zh-CN.md)区分完整报告与未结束长测；[工具与复现](../../../Tools~/NavigationLab/README.zh-CN.md)提供冻结运行命令。本文件的方案说明本身不是实验通过报告。
+公共框架和候选实现位于 `Experiments~/NavigationLab`。[最终进度与验收范围](Progress.zh-CN.md)记录完整报告与验收范围；[工具与复现](../../../Tools~/NavigationLab/README.zh-CN.md)提供冻结运行命令。本文件的方案说明本身不是实验通过报告。
 
 ## 独立可行性与检查器证据
 

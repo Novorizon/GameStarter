@@ -81,6 +81,7 @@
     "reportSha256": "f4208b727a85eafa28bcd4daf207f9d593eee2b06ab4fce76b62cd1a6e402c9b"
   },
   "comparisonSha256": "773c882122e59fefb89b38c4b0e68faec36c4a1a04557a3575c787b4eca97425",
-  "dArchiveIndexSha256": "277e95eef0975347c48186552d1f5a93cba47313f341b2577524b6df52f1d5cd",
-  "dEvidenceCommit": "dbaa0eb95b3c77f565bac9d6cf25f17eb9cd756b"
+  "dArchiveIndexSha256": "8accef8b73bdde9b02d36805859f693d01ad46bcd9b22c5bb6e95953e3ad6f9d",
+  "dEvidenceCommit": "f8dc39835bc5dd8c3668d76462c748c6d4101335",
+  "additionalDTraceScope": "Two original full death-case traces retained for independently derived old-waiting counts. Source model results unchanged."
 }

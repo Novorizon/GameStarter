@@ -1,0 +1,1410 @@
+{
+  "scope": "原报告条件的诊断派生分类，可多标签；不判断根因，不增加覆盖，不代替严格验收。缺字段不猜。",
+  "completeStress49Source": true,
+  "driverSha256": "4dbbb96b3736be9189f5fec728d57fddd628b9bd599c0bb69444df103c32841d",
+  "sourceSummary": "/workspace/navigation-comparison/results/d-final-stress/summary.json",
+  "sourceSummarySha256": "a1bdc5212408003d7bb13c712b848faa24b335f82e2f44b14c173b886ec81248",
+  "caseCount": 49,
+  "failures": [
+    {
+      "labels": [
+        "最终仍有移动单位"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=48, pending=0, moving=1, attack=12, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 48,
+        "Alive": 48,
+        "Pending": 0,
+        "Attacking": 12,
+        "Waiting": 35,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 1,
+          "Attacking": 12,
+          "Waiting": 35,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 12
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 48,
+          "expectedAttackers": 12,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "large-radius-turning-clearance",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/large-radius-turning-clearance.json.gz",
+      "sourceReportSha256": "934f59af0fe7ee34806dd8b3e2305e5d2d13ac2cef51851aaa7e9354f6088039",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/large-radius-turning-clearance.json",
+      "sourceInputSha256": "955c9b6d22e852a4c99ae0755a97b3e8500aa572be54707916c0d9853e7b8d75"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=48, pending=0, moving=45, attack=3, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 48,
+        "Alive": 48,
+        "Pending": 0,
+        "Attacking": 3,
+        "Waiting": 0,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 45,
+          "Attacking": 3,
+          "Waiting": 0,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 3
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 48,
+          "expectedAttackers": 16,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "single-cell-throat",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/single-cell-throat.json.gz",
+      "sourceReportSha256": "fad4ddf50c10286fa3e9407df851bfae5d063fe0f9f455fcba6c841b0d6e6866",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/single-cell-throat.json",
+      "sourceInputSha256": "3b9e5021929e2d2c8dd05c4839efa5a6e3aef28800ff0da6c3281f74f27f2517"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=56, pending=0, moving=2, attack=14, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 56,
+        "Alive": 56,
+        "Pending": 0,
+        "Attacking": 14,
+        "Waiting": 40,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 2,
+          "Attacking": 14,
+          "Waiting": 40,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 14
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 56,
+          "expectedAttackers": 16,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "u-obstacle",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/u-obstacle.json.gz",
+      "sourceReportSha256": "4ecb88d9bfc61556246e4ea6117c7ba58a31e538b2e07c1e6b9f200b77395a45",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/u-obstacle.json",
+      "sourceInputSha256": "6c4d767e7ca3798130d890bd8a66a2af198096a13f48aa0462c7d03ce5b10688"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=72, pending=0, moving=5, attack=6, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 72,
+        "Alive": 72,
+        "Pending": 0,
+        "Attacking": 6,
+        "Waiting": 61,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 5,
+          "Attacking": 6,
+          "Waiting": 61,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 6
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 72,
+          "expectedAttackers": 6,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "cross-junction-parking-lanes",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/cross-junction-parking-lanes.json.gz",
+      "sourceReportSha256": "f45ea0148132d468eaa8fc29676d8c83c4a79a5a296679f0d2380ddd402cd6ba",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/cross-junction-parking-lanes.json",
+      "sourceInputSha256": "40f425a892e1d97991b5ca2091a94081cce716db67e3dd922e73c86e9c11c554"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=72, pending=0, moving=2, attack=12, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 72,
+        "Alive": 72,
+        "Pending": 0,
+        "Attacking": 12,
+        "Waiting": 58,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 2,
+          "Attacking": 12,
+          "Waiting": 58,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 12
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 72,
+          "expectedAttackers": 12,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "cross-junction-original-4m",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/cross-junction-original-4m.json.gz",
+      "sourceReportSha256": "2361aad72afdcac41d279135f85a876bacc4996a6876d905e1d753a52e280207",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/cross-junction-original-4m.json",
+      "sourceInputSha256": "d2dfd12a5cb032ac85d4fec101bb2dc453bdd82870c1d897eaf3ca7c60c1a20b"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=72, pending=0, moving=1, attack=16, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 72,
+        "Alive": 72,
+        "Pending": 0,
+        "Attacking": 16,
+        "Waiting": 55,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 1,
+          "Attacking": 16,
+          "Waiting": 55,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 16
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 72,
+          "expectedAttackers": 16,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "shared-spawn-original-5m",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/shared-spawn-original-5m.json.gz",
+      "sourceReportSha256": "181418256cd058f72a76f0189e9db33a7c288b550befc91843a2b3ae11761300",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/shared-spawn-original-5m.json",
+      "sourceInputSha256": "b3f0bce6a93220715c4ef78d5f90db0d44cb3ae2f86220f52794d7471bab3456"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=300, pending=0, moving=1, attack=6, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 300,
+        "Alive": 300,
+        "Pending": 0,
+        "Attacking": 6,
+        "Waiting": 293,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 1,
+          "Attacking": 6,
+          "Waiting": 293,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 6
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 300,
+          "expectedAttackers": 6,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "three-hundred-units-parking-lanes",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/three-hundred-units-parking-lanes.json.gz",
+      "sourceReportSha256": "b71f6935b643f061137710c87a9f5426e78f7ecc73b7873a8c786cdb3e63a762",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/three-hundred-units-parking-lanes.json",
+      "sourceInputSha256": "3ee580f3a0e60afe16b171e52c695c8d3935ef74be86689c8cd706268f791adf"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=300, pending=0, moving=71, attack=15, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 300,
+        "Alive": 300,
+        "Pending": 0,
+        "Attacking": 15,
+        "Waiting": 214,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 71,
+          "Attacking": 15,
+          "Waiting": 214,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 15
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 300,
+          "expectedAttackers": 16,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "three-hundred-units-original-12m",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/three-hundred-units-original-12m.json.gz",
+      "sourceReportSha256": "8a114a1d8ae836d52f6b8a96840670482e540c81258b04d92f0bada1e333192b",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/three-hundred-units-original-12m.json",
+      "sourceInputSha256": "3275eb78a88a4bd0cd2c135f12adfa45c23702456960443815d50a90c7327295"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=18, pending=0, moving=4, attack=11, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 18,
+        "Alive": 18,
+        "Pending": 0,
+        "Attacking": 11,
+        "Waiting": 3,
+        "Deaths": 0,
+        "FinalTick": 7000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 4,
+          "Attacking": 11,
+          "Waiting": 3,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "450": 11
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 18,
+          "expectedAttackers": 14,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "forest-wave-3",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/forest-wave-3.json.gz",
+      "sourceReportSha256": "3402a194b30a16bf0b532c03a0de00a0050bef41df4d3efca56c07f5fe64d35e",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/forest-wave-3.json",
+      "sourceInputSha256": "1cfeb4a729e78c98c3ab1cc888a12c332b3196c58c33d2f593f33a65832bb391"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=25, pending=0, moving=5, attack=13, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 25,
+        "Alive": 25,
+        "Pending": 0,
+        "Attacking": 13,
+        "Waiting": 7,
+        "Deaths": 0,
+        "FinalTick": 7000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 5,
+          "Attacking": 13,
+          "Waiting": 7,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "450": 13
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 25,
+          "expectedAttackers": 15,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "forest-wave-4",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/forest-wave-4.json.gz",
+      "sourceReportSha256": "32a10d83ef543197806cea3fb3fa09e2d29afcf2aed7795c662894a748aa751f",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/forest-wave-4.json",
+      "sourceInputSha256": "37d0e87447ec1843d369d1eb8a4f9c59007b456995b02f3e5b65f9f67bfcd91d"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=30, pending=0, moving=9, attack=12, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 30,
+        "Alive": 30,
+        "Pending": 0,
+        "Attacking": 12,
+        "Waiting": 9,
+        "Deaths": 0,
+        "FinalTick": 7000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 9,
+          "Attacking": 12,
+          "Waiting": 9,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "450": 12
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 30,
+          "expectedAttackers": 15,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "forest-wave-5",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/forest-wave-5.json.gz",
+      "sourceReportSha256": "b2cd56f09043e99d611dbd4b6c534ab7b5c94721aa22a1111feadc2479e3e37a",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/forest-wave-5.json",
+      "sourceInputSha256": "6610876bf1eee7e97181d2641e083774866e42b731a1d99f4cc46d9e0d8332d8"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=29, pending=0, moving=3, attack=13, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 29,
+        "Alive": 29,
+        "Pending": 0,
+        "Attacking": 13,
+        "Waiting": 13,
+        "Deaths": 0,
+        "FinalTick": 7000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 3,
+          "Attacking": 13,
+          "Waiting": 13,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "450": 12,
+          "550": 1
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 29,
+          "expectedAttackers": 15,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "forest-wave-6",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/forest-wave-6.json.gz",
+      "sourceReportSha256": "e68a7b6acdeabafa34d2a0fa50ea04e802840e99d4bbc858004d31373164f810",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/forest-wave-6.json",
+      "sourceInputSha256": "6e6a3b0c2ebc105ceca17c48d17567f6c8c63e435eaacc0164ed6669aee6b1ea"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=44, pending=0, moving=27, attack=17, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 44,
+        "Alive": 44,
+        "Pending": 0,
+        "Attacking": 17,
+        "Waiting": 0,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 27,
+          "Attacking": 17,
+          "Waiting": 0,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "550": 17
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 44,
+          "expectedAttackers": 18,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "forest-full44-large",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/forest-full44-large.json.gz",
+      "sourceReportSha256": "cf9a858b882d6970e073f056b9f6a302946f9303d4195f92399e33550fd37aae",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/forest-full44-large.json",
+      "sourceInputSha256": "545fd7c95d54ad8bcb91f3d6819aa253c845042cf6e11847d126daec4a6d611b"
+    },
+    {
+      "labels": [
+        "初始批次前提失败",
+        "最终仍有移动单位",
+        "后续请求尚未到计划出生时间（非准入阻塞证据）"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Initial crowd did not physically settle before late arrivals.",
+        "InitialBatchVerified": false,
+        "Admitted": 44,
+        "Alive": 44,
+        "Pending": 2,
+        "Attacking": 17,
+        "Waiting": 0,
+        "Deaths": 0,
+        "FinalTick": 3999,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 27,
+          "Attacking": 17,
+          "Waiting": 0,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "550": 17
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 46,
+          "expectedAttackers": 20,
+          "initialSettledCheckTick": 3999,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        },
+        "originalRequestsScheduledAfterFinalTick": 2,
+        "pendingOtherThanFutureOriginalRequests": 0
+      },
+      "name": "forest-full44-two-late-small",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/forest-full44-two-late-small.json.gz",
+      "sourceReportSha256": "0edbdf66a6a7487dfce1e098f387eaa6ff80c5c783e45871d1d12f196119514d",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/forest-full44-two-late-small.json",
+      "sourceInputSha256": "5cb64fd8c3d1d05454ed93aaa54e0a7e504dbae55a8f54956d1a1f1593fe54c8"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "容量场景未达到要求的活体数"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=31, pending=169, moving=2, attack=12, failure=StaticGoalUnreachable",
+        "InitialBatchVerified": false,
+        "Admitted": 31,
+        "Alive": 31,
+        "Pending": 169,
+        "Attacking": 12,
+        "Waiting": 17,
+        "Deaths": 0,
+        "FinalTick": 6000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 2,
+          "Attacking": 12,
+          "Waiting": 17,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 12
+        },
+        "inputConditions": {
+          "expectation": "EndpointPolicyOverflow",
+          "expectedLive": 39,
+          "expectedAttackers": 12,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        },
+        "pendingIsAllowedByOverflowPolicy": true
+      },
+      "name": "physical-and-endpoint-overflow-200",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/physical-and-endpoint-overflow-200.json.gz",
+      "sourceReportSha256": "81e88f6dc1e0bc3ed85d7e1863c42ff5d97ecb83203e7f188891c08b49180112",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/physical-and-endpoint-overflow-200.json",
+      "sourceInputSha256": "8404a7d64a8a34429525308cbeebdbcffbb1637d8f4731351962e74f760ccd8a"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "容量场景未达到要求的活体数",
+        "到位条件后的死亡阶段未触发"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=31, pending=169, moving=2, attack=12, failure=StaticGoalUnreachable",
+        "InitialBatchVerified": false,
+        "Admitted": 31,
+        "Alive": 31,
+        "Pending": 169,
+        "Attacking": 12,
+        "Waiting": 17,
+        "Deaths": 0,
+        "FinalTick": 8000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 2,
+          "Attacking": 12,
+          "Waiting": 17,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 12
+        },
+        "inputConditions": {
+          "expectation": "EndpointPolicyOverflow",
+          "expectedLive": 39,
+          "expectedAttackers": 12,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        },
+        "pendingIsAllowedByOverflowPolicy": true,
+        "plannedDeathCount": 13
+      },
+      "name": "capacity-death-refills-original-queue",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/capacity-death-refills-original-queue.json.gz",
+      "sourceReportSha256": "fbc31d502de1a49be2c46bd02696262ad146fe6aadfe979fed0158c95014f266",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/capacity-death-refills-original-queue.json",
+      "sourceInputSha256": "7d367cddbcd62512a49ff9d2f29ad3d66edcc027e926bf7a92fd847b0100228d"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "全量到位场景仍有已到计划时间的外部待入队请求",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=42, pending=6, moving=6, attack=10, failure=StaticGoalUnreachable",
+        "InitialBatchVerified": false,
+        "Admitted": 48,
+        "Alive": 42,
+        "Pending": 6,
+        "Attacking": 10,
+        "Waiting": 26,
+        "Deaths": 6,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "oldWaitingDerivation": {
+          "status": "verified",
+          "scope": "First actual death boundary and final ID/state; not pass-only report defaults.",
+          "tracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/settled-batch-death-and-reinforcement.jsonl.gz",
+          "traceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+          "expectedTraceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+          "reportedLogicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
+          "deathBoundary": {
+            "firstDeathCommandMicrostep": 780,
+            "lastTraceStepBeforeDeath": 780,
+            "firstPostDeathTraceStep": 781,
+            "victimIds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "removedIdsAtFirstPostDeathTraceStep": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "bodiesBeforeDeath": 48
+          },
+          "derivedOldWaitingBeforeDeaths": 32,
+          "derivedOldWaitingIds": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ],
+          "derivedPromotedOldWaitingFinal": 0,
+          "derivedOldWaitingFinalStateCounts": {
+            "Attacking": 0,
+            "Moving": 6,
+            "Waiting": 26,
+            "Absent": 0
+          },
+          "finalTraceIdStateMatchesReport": true
+        },
+        "derivedOldWaitingBeforeDeaths": 32,
+        "derivedPromotedOldWaitingFinal": 0,
+        "derivedOldWaitingFinalStateCounts": {
+          "Attacking": 0,
+          "Moving": 6,
+          "Waiting": 26,
+          "Absent": 0
+        },
+        "actualDeathCommandCount": 6,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 6,
+          "Attacking": 10,
+          "Waiting": 26,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 10
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 48,
+          "expectedAttackers": 16,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        },
+        "originalRequestsScheduledAfterFinalTick": 0,
+        "pendingOtherThanFutureOriginalRequests": 6,
+        "plannedDeathCount": 6
+      },
+      "name": "settled-batch-death-and-reinforcement",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/settled-batch-death-and-reinforcement.json.gz",
+      "sourceReportSha256": "55996a17355f32e83c6caed9d5b6cac2357d7cc75cb4ea52fd8a73ef00c1d54f",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/settled-batch-death-and-reinforcement.json",
+      "sourceInputSha256": "20ef11d6af9f2ad4176783bb194dc4f441be4dfb9117815a534c1da98b6d9423"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求",
+        "旧候场单位补位数不足"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=42, pending=0, moving=6, attack=10, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 48,
+        "Alive": 42,
+        "Pending": 0,
+        "Attacking": 10,
+        "Waiting": 26,
+        "Deaths": 6,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "oldWaitingDerivation": {
+          "status": "verified",
+          "scope": "First actual death boundary and final ID/state; not pass-only report defaults.",
+          "tracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/old-waiters-refill-without-newcomers.jsonl.gz",
+          "traceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+          "expectedTraceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+          "reportedLogicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
+          "deathBoundary": {
+            "firstDeathCommandMicrostep": 780,
+            "lastTraceStepBeforeDeath": 780,
+            "firstPostDeathTraceStep": 781,
+            "victimIds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "removedIdsAtFirstPostDeathTraceStep": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "bodiesBeforeDeath": 48
+          },
+          "derivedOldWaitingBeforeDeaths": 32,
+          "derivedOldWaitingIds": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ],
+          "derivedPromotedOldWaitingFinal": 0,
+          "derivedOldWaitingFinalStateCounts": {
+            "Attacking": 0,
+            "Moving": 6,
+            "Waiting": 26,
+            "Absent": 0
+          },
+          "finalTraceIdStateMatchesReport": true
+        },
+        "derivedOldWaitingBeforeDeaths": 32,
+        "derivedPromotedOldWaitingFinal": 0,
+        "derivedOldWaitingFinalStateCounts": {
+          "Attacking": 0,
+          "Moving": 6,
+          "Waiting": 26,
+          "Absent": 0
+        },
+        "actualDeathCommandCount": 6,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 6,
+          "Attacking": 10,
+          "Waiting": 26,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 10
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 42,
+          "expectedAttackers": 16,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 6,
+          "holdTicks": 200
+        },
+        "plannedDeathCount": 6
+      },
+      "name": "old-waiters-refill-without-newcomers",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/old-waiters-refill-without-newcomers.json.gz",
+      "sourceReportSha256": "469c2a0c208c1a7f7a0abb705dd6e1548f7b8699b94f03157f4cfceb05f80b73",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/old-waiters-refill-without-newcomers.json",
+      "sourceInputSha256": "673fa883561ebd63fe6158ced9682a6756f9467665bfd37a787c735917c44825"
+    },
+    {
+      "labels": [
+        "初始批次前提失败",
+        "最终仍有移动单位",
+        "后续请求尚未到计划出生时间（非准入阻塞证据）",
+        "到位条件后的死亡阶段未触发"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Initial crowd did not physically settle before late arrivals.",
+        "InitialBatchVerified": false,
+        "Admitted": 84,
+        "Alive": 84,
+        "Pending": 1,
+        "Attacking": 79,
+        "Waiting": 0,
+        "Deaths": 0,
+        "FinalTick": 1999,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 5,
+          "Attacking": 79,
+          "Waiting": 0,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "4000": 79
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 85,
+          "expectedAttackers": 84,
+          "initialSettledCheckTick": 1999,
+          "minimumAttackersByRange": {
+            "1000": 1
+          },
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        },
+        "originalRequestsScheduledAfterFinalTick": 1,
+        "pendingOtherThanFutureOriginalRequests": 0,
+        "plannedDeathCount": 1
+      },
+      "name": "ranged84-before-short1-fairness",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/ranged84-before-short1-fairness.json.gz",
+      "sourceReportSha256": "b72412bf43d4fae466629d8b70dbc5100cbf1ebabe6830f8476bf71355920656",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/ranged84-before-short1-fairness.json",
+      "sourceInputSha256": "4ca6153dd5b50eef7a899b13d92b582a74b8d04d1d1b1b0e78ae7cddd6ba7cea"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "全量到位场景仍有已到计划时间的外部待入队请求",
+        "攻击人数未达到输入要求",
+        "到位条件后的死亡阶段未触发"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=67, pending=33, moving=11, attack=56, failure=SpawnOccupied",
+        "InitialBatchVerified": true,
+        "Admitted": 67,
+        "Alive": 67,
+        "Pending": 33,
+        "Attacking": 56,
+        "Waiting": 0,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 11,
+          "Attacking": 56,
+          "Waiting": 0,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 16,
+          "4000": 40
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 100,
+          "expectedAttackers": 84,
+          "initialSettledCheckTick": 1999,
+          "minimumAttackersByRange": {
+            "1000": 16
+          },
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        },
+        "originalRequestsScheduledAfterFinalTick": 0,
+        "pendingOtherThanFutureOriginalRequests": 33,
+        "plannedDeathCount": 1
+      },
+      "name": "short16-before-ranged84-fairness",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/short16-before-ranged84-fairness.json.gz",
+      "sourceReportSha256": "30dab1860e0aa596c38f317ebe940dc4af53ea17b7a26ff83dda011ec77a7938",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/short16-before-ranged84-fairness.json",
+      "sourceInputSha256": "fda7dcd61d5fdaa5dd7fe27d12a208e52e491c3925215f96d4ee514be22b186c"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=24, pending=0, moving=2, attack=14, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 24,
+        "Alive": 24,
+        "Pending": 0,
+        "Attacking": 14,
+        "Waiting": 8,
+        "Deaths": 0,
+        "FinalTick": 12000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [
+          {
+            "microstep": 10000,
+            "kind": "world-change",
+            "index": 0,
+            "accepted": true
+          }
+        ],
+        "derivedFinalStateCounts": {
+          "Moving": 2,
+          "Attacking": 14,
+          "Waiting": 8,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "1000": 14
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 24,
+          "expectedAttackers": 16,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        },
+        "untriggeredWorldEventIndices": []
+      },
+      "name": "target-relocation-after-settlement",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/target-relocation-after-settlement.json.gz",
+      "sourceReportSha256": "a5fa61ae7be8c0ea46e529c4d1bb21bd4f1221e5adec0ce8b82ab178874f25c9",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/target-relocation-after-settlement.json",
+      "sourceInputSha256": "1369ec437e43ac1f727f29641a7645a14e479fd863913ead9ded4887292b4e5e"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=128, pending=0, moving=1, attack=127, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 128,
+        "Alive": 128,
+        "Pending": 0,
+        "Attacking": 127,
+        "Waiting": 0,
+        "Deaths": 0,
+        "FinalTick": 15000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 1,
+          "Attacking": 127,
+          "Waiting": 0,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "12000": 127
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 128,
+          "expectedAttackers": 128,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "large-portal-grid-128",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/large-portal-grid-128.json.gz",
+      "sourceReportSha256": "67270dfa7e0eb4689bef6bbf01e2d7c78c5357fcab751a74631d90d21fdf8022",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/large-portal-grid-128.json",
+      "sourceInputSha256": "81979aa3ce677e855981619b91ba17d135b4e867676cc4f002b6b47b0e018fe6"
+    },
+    {
+      "labels": [
+        "最终仍有移动单位",
+        "攻击人数未达到输入要求"
+      ],
+      "facts": {
+        "Status": "Failed",
+        "Error": "Deadline: alive=256, pending=0, moving=23, attack=233, failure=None",
+        "InitialBatchVerified": false,
+        "Admitted": 256,
+        "Alive": 256,
+        "Pending": 0,
+        "Attacking": 233,
+        "Waiting": 0,
+        "Deaths": 0,
+        "FinalTick": 15000,
+        "HoldTicks": 0,
+        "HoldMaximumDriftMm": 0,
+        "ReplayVerified": false,
+        "MetricsReadError": null,
+        "reportedPassOnlyFields": {
+          "OldWaitingBeforeDeaths": 0,
+          "PromotedOldWaiting": 0
+        },
+        "reportedPassOnlyFieldsNote": "Runner only assigns these in its PASS branch; failed-report defaults are not used as measurements.",
+        "actualDeathCommandCount": 0,
+        "actualWorldChangeCommands": [],
+        "derivedFinalStateCounts": {
+          "Moving": 23,
+          "Attacking": 233,
+          "Waiting": 0,
+          "Other": 0
+        },
+        "derivedAttackersByRange": {
+          "12000": 233
+        },
+        "inputConditions": {
+          "expectation": "FullArrival",
+          "expectedLive": 256,
+          "expectedAttackers": 256,
+          "initialSettledCheckTick": null,
+          "minimumAttackersByRange": {},
+          "minimumOldWaitingPromotions": 0,
+          "holdTicks": 200
+        }
+      },
+      "name": "large-portal-grid-256",
+      "sourceReport": "/workspace/navigation-comparison/results/d-final-stress/large-portal-grid-256.json.gz",
+      "sourceReportSha256": "ed0dae09fca0b23764a938930bb8a4f254cfae0233a860309845db66e345ae3e",
+      "sourceInput": "/workspace/navigation-comparison/results/d-final-stress/inputs/large-portal-grid-256.json",
+      "sourceInputSha256": "63976e6ad5edfc9f4dbd39578755cd694e1c6ade30f6f001a2ebde8c23e91b67"
+    }
+  ],
+  "failureLabelCounts": {
+    "最终仍有移动单位": 23,
+    "攻击人数未达到输入要求": 14,
+    "初始批次前提失败": 2,
+    "后续请求尚未到计划出生时间（非准入阻塞证据）": 2,
+    "容量场景未达到要求的活体数": 2,
+    "到位条件后的死亡阶段未触发": 3,
+    "全量到位场景仍有已到计划时间的外部待入队请求": 2,
+    "旧候场单位补位数不足": 1
+  }
+}

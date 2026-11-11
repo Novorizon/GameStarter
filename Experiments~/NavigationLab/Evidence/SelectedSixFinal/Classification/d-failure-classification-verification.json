@@ -1,0 +1,168 @@
+{
+  "scope": "Actual immutable trace boundary derivations plus classifier-only negative guards; no simulation, original report edits or new coverage.",
+  "utc": "2026-11-11T14:34:44.175874+00:00",
+  "driverSha256": "4dbbb96b3736be9189f5fec728d57fddd628b9bd599c0bb69444df103c32841d",
+  "classificationSha256": "e62289b73a75bbf2051eaec7a59101e112d81c00a6a3340d417ab679fdfcc786",
+  "sourceSummarySha256": "a1bdc5212408003d7bb13c712b848faa24b335f82e2f44b14c173b886ec81248",
+  "fullCaseCount": 49,
+  "failureCount": 23,
+  "verifiedActualDerivations": [
+    {
+      "name": "old-waiters-refill-without-newcomers",
+      "derivation": {
+        "status": "verified",
+        "scope": "First actual death boundary and final ID/state; not pass-only report defaults.",
+        "tracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/old-waiters-refill-without-newcomers.jsonl.gz",
+        "traceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+        "expectedTraceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+        "reportedLogicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
+        "deathBoundary": {
+          "firstDeathCommandMicrostep": 780,
+          "lastTraceStepBeforeDeath": 780,
+          "firstPostDeathTraceStep": 781,
+          "victimIds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "removedIdsAtFirstPostDeathTraceStep": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "bodiesBeforeDeath": 48
+        },
+        "derivedOldWaitingBeforeDeaths": 32,
+        "derivedOldWaitingIds": [
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48
+        ],
+        "derivedPromotedOldWaitingFinal": 0,
+        "derivedOldWaitingFinalStateCounts": {
+          "Attacking": 0,
+          "Moving": 6,
+          "Waiting": 26,
+          "Absent": 0
+        },
+        "finalTraceIdStateMatchesReport": true
+      }
+    },
+    {
+      "name": "settled-batch-death-and-reinforcement",
+      "derivation": {
+        "status": "verified",
+        "scope": "First actual death boundary and final ID/state; not pass-only report defaults.",
+        "tracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/settled-batch-death-and-reinforcement.jsonl.gz",
+        "traceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+        "expectedTraceCompressedSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+        "reportedLogicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
+        "deathBoundary": {
+          "firstDeathCommandMicrostep": 780,
+          "lastTraceStepBeforeDeath": 780,
+          "firstPostDeathTraceStep": 781,
+          "victimIds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "removedIdsAtFirstPostDeathTraceStep": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "bodiesBeforeDeath": 48
+        },
+        "derivedOldWaitingBeforeDeaths": 32,
+        "derivedOldWaitingIds": [
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48
+        ],
+        "derivedPromotedOldWaitingFinal": 0,
+        "derivedOldWaitingFinalStateCounts": {
+          "Attacking": 0,
+          "Moving": 6,
+          "Waiting": 26,
+          "Absent": 0
+        },
+        "finalTraceIdStateMatchesReport": true
+      }
+    }
+  ],
+  "guards": {
+    "missingTraceEvidenceProducesUnknownNotZero": true,
+    "mismatchedTraceShaProducesUnknownNotZero": true,
+    "reportedPassOnlyZeroDoesNotOverrideSuppliedVerifiedCount": true
+  }
+}

@@ -14,7 +14,7 @@
   "mergeMain": false,
   "modifySdk": false,
   "status": "six selected complete stress49 reports; independent experiment branches; default game backend unchanged",
-  "updatedUtc": "2026-11-11T14:27:00.752780+00:00",
+  "updatedUtc": "2026-11-11T14:38:40.722854+00:00",
   "evidenceScope": "Frozen manifest sourceFiles and actual DLLs are authoritative; origin commit may include unrelated dirty files. Evidence commit may follow implementation and does not change the bound DLL.",
   "selectedRuns": {
     "A": {
@@ -153,7 +153,7 @@
         "runner": "17942c8b66237aa3f574895993d500bc0641add9a3297f0f7afcbbe589669789"
       },
       "evidenceBranch": "experiment/navigation-d-aoe4",
-      "evidenceCommit": "dbaa0eb95b3c77f565bac9d6cf25f17eb9cd756b",
+      "evidenceCommit": "f8dc39835bc5dd8c3668d76462c748c6d4101335",
       "evidencePath": "Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/FinalSelectedStress49",
       "modelStatus": "completed; finite common stress49",
       "modelSummarySha256": "a1bdc5212408003d7bb13c712b848faa24b335f82e2f44b14c173b886ec81248",
@@ -199,5 +199,43 @@
     "experiment/navigation-d-aoe4-d11",
     "experiment/navigation-d-aoe4-progress",
     "experiment/navigation-d-aoe4-deep-goals"
-  ]
+  ],
+  "auxiliaryExperiments": {
+    "DCanEdgeCache": {
+      "branch": "experiment/navigation-d-aoe4-cache",
+      "sourceCommit": "02b340935bd832edb519c366ceefb034c560373a",
+      "candidateAssemblySha256": "16030a4aff5df5773bd5431870f1d51e3e599774ca001aa8c0ef51bf617ed05e",
+      "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+      "evidenceCommit": "000f0bf4305b31fc64599b01c01df11aea44fb31",
+      "evidencePath": "Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/CacheTrialFour",
+      "caseCount": 4,
+      "counts": {
+        "passed": 2,
+        "failed": 2,
+        "unsupported": 0
+      },
+      "physicalEvidenceMatchesOriginalDForAllFour": true,
+      "partOfSelectedStress49": false,
+      "fullStress49Executed": false,
+      "selectedForBusiness": false
+    },
+    "DRouteResultCache": {
+      "branch": "experiment/navigation-d-aoe4-routecache",
+      "sourceCommit": "faa969b2beda8ce49fa2d3488eb8159a91d27895",
+      "candidateAssemblySha256": "bc6e75e003cbb4ab7aecb0953f6957d53ed61480b98a47b9b339e458fdc1e2a3",
+      "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+      "evidenceCommit": "36d6e6a756d4b3b1bcf562923eaf048f8d0a3c96",
+      "evidencePath": "Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/RouteCacheTrial",
+      "caseCount": 4,
+      "counts": {
+        "passed": 2,
+        "failed": 2,
+        "unsupported": 0
+      },
+      "physicalEvidenceMatchesOriginalDForAllFour": true,
+      "partOfSelectedStress49": false,
+      "fullStress49Executed": false,
+      "selectedForBusiness": false
+    }
+  }
 }
