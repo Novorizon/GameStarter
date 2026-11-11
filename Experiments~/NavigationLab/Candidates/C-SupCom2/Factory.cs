@@ -230,7 +230,10 @@ namespace NavigationLab.CSupCom2
                 }
                 if (ordered.Any(actor => actor.Stuck > 200 && actor.YieldGoal < 0 && InSiegeArea(actor)))
                 {
-                    RedistributeSiegeGoals(ordered);
+                    if (!RedistributeStalledGoals(ordered))
+                    {
+                        RedistributeSiegeGoals(ordered);
+                    }
                 }
             }
         }
@@ -578,7 +581,14 @@ namespace NavigationLab.CSupCom2
 
         private void RequestYield(Actor requester, Actor[] ordered)
         {
+            if (State(requester) != MotionState.Moving)
+            {
+                Count("CompletedYieldRequestsSuppressed");
+                return;
+            }
             Point2 routeDirection = (world.Center(requester.YieldGoal >= 0 ? requester.YieldGoal : requester.Goal) - requester.Position).Normalized;
+            Actor? indirectBlocker = null;
+            int indirectGoal = -1;
             foreach (var blocker in ordered.OrderBy(actor => Point2.Distance(actor.Position, requester.Position)))
             {
                 if (blocker.Id == requester.Id || blocker.YieldGoal >= 0)
@@ -601,7 +611,6 @@ namespace NavigationLab.CSupCom2
                     .Where(cell => Point2.Distance(world.Center(cell), blocker.Position) <= world.CellSizeMm * 4)
                     .Where(cell => planner.Connected(origin, cell, blocker.Profile.RadiusMm))
                     .Where(cell => FreePosition(world.Center(cell), blocker.Profile.RadiusMm, blocker.Id))
-                    .Where(cell => ClearBodyCorridor(blocker, world.Center(cell), ordered))
                     .Where(cell => !ordered.Any(other => other.Id != blocker.Id && other.YieldGoal == cell))
                     .Where(cell => cell != requester.Goal || CanExchangeVacancyGoals(requester, blocker, ordered))
                     .OrderByDescending(cell => Geometry.PointSegment(world.Center(cell), requester.Position, world.Center(requester.Goal)))
@@ -610,19 +619,23 @@ namespace NavigationLab.CSupCom2
                 {
                     continue;
                 }
+                int[] direct = candidates.Where(cell => ClearBodyCorridor(blocker, world.Center(cell), ordered)).ToArray();
+                if (direct.Length == 0)
+                {
+                    if (indirectBlocker == null)
+                    {
+                        indirectBlocker = blocker;
+                        indirectGoal = candidates[0];
+                    }
+                    continue;
+                }
+                candidates = direct;
                 if (candidates[0] == requester.Goal)
                 {
                     CommitVacancyExchange(requester, blocker);
                     return;
                 }
-                blocker.YieldGoal = candidates[0];
-                blocker.PreferClearCorridor = true;
-                blocker.YieldRequester = requester.Id;
-                blocker.YieldUntil = microstep + 1600;
-                blocker.Route = null;
-                blocker.BestDistance = double.PositiveInfinity;
-                requester.Stuck = 0;
-                Count("LocalPushRequests");
+                BeginYield(requester, blocker, candidates[0], false);
                 return;
             }
             if (InSiegeArea(requester))
@@ -632,8 +645,26 @@ namespace NavigationLab.CSupCom2
                 if (mover != null)
                 {
                     CommitVacancyExchange(requester, mover);
+                    return;
                 }
             }
+            if (indirectBlocker != null)
+            {
+                BeginYield(requester, indirectBlocker, indirectGoal, true);
+            }
+        }
+
+        private void BeginYield(Actor requester, Actor blocker, int goal, bool indirect)
+        {
+            blocker.YieldGoal = goal;
+            blocker.PreferClearCorridor = true;
+            blocker.YieldRequester = requester.Id;
+            blocker.YieldUntil = microstep + 1600;
+            blocker.Route = null;
+            blocker.BestDistance = double.PositiveInfinity;
+            requester.Stuck = 0;
+            Count("LocalPushRequests");
+            Count(indirect ? "IndirectYieldFallbacks" : "DirectYieldRequests");
         }
 
         private void CommitVacancyExchange(Actor requester, Actor mover)
@@ -897,6 +928,105 @@ namespace NavigationLab.CSupCom2
                 }
             }
             Count("SiegeMatchingRuns");
+        }
+
+        private bool RedistributeStalledGoals(Actor[] ordered)
+        {
+            var eligible = ordered.Where(actor => actor.Stuck > 400 && actor.YieldGoal < 0 && actor.Goal >= 0
+                && !actor.AssignedGoal && !actor.VacancyTransfer && State(actor) == MotionState.Moving && InSiegeArea(actor)).ToArray();
+            if (eligible.Length < 2 || eligible.Length > 160)
+            {
+                return false;
+            }
+            var visited = new HashSet<int>();
+            foreach (var seed in eligible)
+            {
+                if (!visited.Add(seed.Id))
+                {
+                    continue;
+                }
+                var members = new List<Actor> { seed };
+                for (int index = 0; index < members.Count; index++)
+                {
+                    Actor current = members[index];
+                    foreach (var other in eligible)
+                    {
+                        if (!visited.Contains(other.Id) && other.TargetId == seed.TargetId && other.Profile.Equals(seed.Profile)
+                            && Point2.Distance(current.Position, other.Position) <= current.Profile.RadiusMm + other.Profile.RadiusMm + world.CellSizeMm)
+                        {
+                            visited.Add(other.Id);
+                            members.Add(other);
+                        }
+                    }
+                }
+                if (members.Count < 2)
+                {
+                    continue;
+                }
+                var goals = members.Select(actor => actor.Goal).ToArray();
+                var costs = new double[members.Count, goals.Length];
+                const double impossible = 1e16;
+                double oldCost = 0;
+                for (int row = 0; row < members.Count; row++)
+                {
+                    Actor actor = members[row];
+                    int origin = planner.CanStand(world.CellAt(actor.Position), actor.Profile.RadiusMm) ? world.CellAt(actor.Position) : actor.Goal;
+                    var bodies = ordered.Where(other => other.Id != actor.Id && State(other) != MotionState.Moving)
+                        .Select(other => new CrowdBody(other.Position, other.Profile.RadiusMm)).ToArray();
+                    double[] traffic = planner.TrafficCosts(actor.Position, actor.Profile.RadiusMm, bodies);
+                    for (int column = 0; column < goals.Length; column++)
+                    {
+                        int goal = goals[column];
+                        if (!CanHold(actor, goal) || !planner.Connected(origin, goal, actor.Profile.RadiusMm) || double.IsInfinity(traffic[goal]))
+                        {
+                            costs[row, column] = impossible;
+                            continue;
+                        }
+                        Point2 destination = world.Center(goal);
+                        double cost = traffic[goal] + Point2.Distance(actor.Position, destination) * .1;
+                        // This is a momentary executable-step cost, not a future collision reservation.
+                        // A wall-detour goal is left to the ordinary static path cost rather than penalized for lacking direct LOS.
+                        if (Geometry.Segment(world, actor.Position, destination, actor.Profile.RadiusMm) && !CanAdvanceToward(actor, destination, ordered))
+                        {
+                            cost += world.CellSizeMm * 2;
+                        }
+                        costs[row, column] = cost;
+                    }
+                    oldCost += costs[row, row];
+                }
+                int[]? matching = MinimumCostMatching(costs, impossible);
+                if (matching == null)
+                {
+                    continue;
+                }
+                double newCost = Enumerable.Range(0, members.Count).Sum(row => costs[row, matching[row]]);
+                if (newCost >= oldCost - 1e-7)
+                {
+                    continue;
+                }
+                var updates = new Dictionary<Actor, int>();
+                for (int row = 0; row < members.Count; row++)
+                {
+                    if (members[row].Goal != goals[matching[row]])
+                    {
+                        updates[members[row]] = goals[matching[row]];
+                    }
+                }
+                if (updates.Count > 0 && CommitGoals(updates))
+                {
+                    Count("StalledClusterReassignments", updates.Count);
+                    Count("StalledClusterRecoveries");
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool CanAdvanceToward(Actor actor, Point2 destination, Actor[] ordered)
+        {
+            Point2 offset = destination - actor.Position;
+            double distance = Math.Min(offset.Length, actor.Profile.SpeedMmPerTick / (double)SimulationProtocol.Substeps);
+            return ClearBodyCorridor(actor, actor.Position + offset.Normalized * distance, ordered);
         }
 
         private bool InSiegeArea(Actor actor)

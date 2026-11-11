@@ -1,0 +1,1 @@
+固定C27 DLL/全46输入profile，431 API+39990微步精确匹配原late初始44失败末态；无activeYield/transfer，route直达正确，真实匹配确有触发。三移动者的静态交通目标评价无法选择较贵但可执行的同profile三循环。包内独立Oracle路径见证及仅用原CommitGoals三循环后原controller自行完成的反事实均不算原3999前提或未来2已生。解压保留相邻c27-late、c27-late-witness及外层manifest。
