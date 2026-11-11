@@ -1,0 +1,13 @@
+{
+  "scope": "D11 first conservative counterfactual prefix only; preserved exact original R10 poses and Goal set; one physical exchange5/6 completed, remaining27Moving. Not a complete original-case PASS and not a full49 matrix.",
+  "candidateDllSha256": "7d620fae0e5352190f6d1f588fd7b5d0127ece2e7454a005c64ebdbbe90016cf",
+  "sourceCsSha256": {
+    "AoeNavigator.cs": "9add0a08d760e39b83dd2685fdb3a106d11cd5b98e1ee40a90ec5bc823cfc117",
+    "SlotExchanges.cs": "02f84b9eedb2551e127e9a7748812ef40d22a51cb32de2f6b604868c59ae8257",
+    "Steering.cs": "36929a624823e24c2297a2c41c3e51585812029e3f9e3492b6966fd2e42a0bf7",
+    "HierarchicalFlow.cs": "b2b072108b006de936822ac0b485a0a28ef7a828ddbf75945f7b2979dd516067",
+    "GridGeometry.cs": "22a83be11f2b650e88e882f06c264dc25c6477e6dfcb4d50de32762f30242043",
+    "Goals.cs": "963e307990ee3c953e1b35c4df3646cde101365cc378f3f30e109529d8d423e4",
+    "MinHeap.cs": "185716b58261e5d73a6683f9e5ec73487259153f8e1787b5891701573d1ea8b7"
+  }
+}

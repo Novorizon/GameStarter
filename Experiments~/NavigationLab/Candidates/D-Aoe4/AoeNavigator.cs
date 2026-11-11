@@ -30,6 +30,17 @@ namespace NavigationLab.DAoe4
         }
     }
 
+    public sealed class Aoe4SlotExchangeFactory : INavigationFactory
+    {
+        public string Id => "D11-aoe4-with-project-slot-exchange";
+        public string Description => "D HPA LOS/FMM architecture plus explicit project-level physical slot exchange; not an AoE IV proprietary mechanism.";
+        public NavigationFeatures Features => new Aoe4Factory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
+        {
+            return new AoeNavigator(world, profiles, false, true);
+        }
+    }
+
     internal sealed partial class AoeNavigator : INavigator
     {
         private sealed class Actor
@@ -51,6 +62,7 @@ namespace NavigationLab.DAoe4
             internal int LastPromotionRevision = -1;
             internal int PreciseWaypoint = -1;
             internal int WaypointSourceCell = -1;
+            internal int ExchangePartner;
             internal int ObservationStep;
             internal Point2 ObservationPosition;
         }
@@ -67,6 +79,7 @@ namespace NavigationLab.DAoe4
         private readonly int largestRadius;
         private string bodySignature = "";
         private readonly bool coordinated;
+        private readonly bool slotExchanges;
         private int step;
         private int goalRevision;
         private bool disposed;
@@ -74,10 +87,11 @@ namespace NavigationLab.DAoe4
         public string LastSpawnFailure { get; private set; } = "None";
         private WorldDefinition World => geometry.World;
 
-        internal AoeNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool coordinated)
+        internal AoeNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool coordinated, bool slotExchanges = false)
         {
             geometry = new GridGeometry(world);
             this.coordinated = coordinated;
+            this.slotExchanges = slotExchanges;
             largestRadius = profiles.Count == 0 ? 1 : profiles.Max(profile => profile.RadiusMm);
             planningGeometry = geometry;
             planner = new HierarchicalFlow(planningGeometry, metrics, largestRadius);
@@ -155,6 +169,10 @@ namespace NavigationLab.DAoe4
             step++;
             Add("Microsteps");
             var ordered = actors.Values.OrderBy(actor => actor.Request.Id).ToArray();
+            if (slotExchanges)
+            {
+                UpdateSlotExchanges(ordered);
+            }
             if (step % SimulationProtocol.Substeps == 0)
             {
                 TrackAttackPeaks(ordered);
@@ -177,6 +195,12 @@ namespace NavigationLab.DAoe4
             {
                 int i = (order + rotation) % ordered.Length;
                 var actor = ordered[i];
+                if (slotExchanges && HoldSlotRequester(actor))
+                {
+                    actor.Planned = true;
+                    Add("SlotExchangeRequesterHoldSteps");
+                    continue;
+                }
                 Point2 destination = Destination(actor);
                 double error = Point2.Distance(actor.Position, destination);
                 if (error < actor.BestGoalDistance - .5)
@@ -339,6 +363,7 @@ namespace NavigationLab.DAoe4
             {
                 return false;
             }
+            CancelSlotExchanges(id);
             actors.Remove(id);
             if (goalOwners.TryGetValue(actor.Goal, out int owner) && owner == id)
             {
@@ -368,6 +393,7 @@ namespace NavigationLab.DAoe4
                 return false;
             }
             geometry.Apply(change);
+            CancelSlotExchanges(-1);
             planner.Invalidate();
             reachable.Clear();
             holding.Clear();
@@ -407,6 +433,8 @@ namespace NavigationLab.DAoe4
         {
             actors.Clear();
             goalOwners.Clear();
+            exchanges.Clear();
+            exchangeCooldown.Clear();
             disposed = true;
         }
 

@@ -52,3 +52,9 @@ r6 将精确不动身体圆盘加入私有HPA/FMM规划几何，并按身体集�
 正式验证只使用共同冻结的NavigationLab v2输入与Oracle；开发途中中止的诊断不计PASS/FAIL。最终完整矩阵、fresh replay、所用源码与DLL哈希由本分支证据报告给出。
 
 R10 将本项目四邻格心表示改为经过真实圆盘扫掠验证的八邻连接，解决圆形不动物体之间明明有对角通道却被四邻图判断开的情况。HPA块内Dijkstra与跨块边都使用实际直线长度，启发式同用欧氏距离；LOS/FMM保留上风积分，并补合法对角松弛和局部下降。这是本项目的合理实现选择，公开资料没有指定本候选这些离散参数。
+
+## D11：独立的项目围攻位置交换增强
+
+`Aoe4Factory` 保持基础D0；`Aoe4CoordinatedFactory`是此前额外让路探索；新增`Aoe4SlotExchangeFactory`显式启用本项目位置交换。它不是GDC披露的原版商业调度公式。
+
+同完整Profile/Target、非AssignedGoal的单位长期无进展时，只有到位holder能对所有真实身体/基地/地形安全直达requester原Goal，且requester能在holder离开后接其旧Goal，才原子交换两个原合法位置。holder实际到位后requester才继续走；交换命令、holder到位、双方完成分别计数。身体、原Goal集合和人数不变，未到位仍是Moving。独立增强必须整版测试，不能按场景混选D0与D11。

@@ -51,7 +51,8 @@ namespace NavigationLab.DAoe4
         {
             foreach (var other in actors.Values.OrderBy(actor => actor.Request.Id))
             {
-                if (other.Request.AssignedGoalCell >= 0 || other.Request.TargetId != request.TargetId || incomingReachable[other.Goal] < 0
+                if (other.ExchangePartner != 0 || other.Request.AssignedGoalCell >= 0 || other.Request.TargetId != request.TargetId
+                    || incomingReachable[other.Goal] < 0
                     || !geometry.CanHold(other.Goal, request.Profile, request.TargetId))
                 {
                     continue;
@@ -92,7 +93,7 @@ namespace NavigationLab.DAoe4
         {
             foreach (var actor in ordered.OrderBy(actor => actor.Request.Profile.AttackRangeMm).ThenByDescending(actor => actor.Request.Profile.RadiusMm))
             {
-                if (actor.Request.AssignedGoalCell >= 0 || actor.LastPromotionRevision == goalRevision || actor.YieldCell >= 0
+                if (actor.ExchangePartner != 0 || actor.Request.AssignedGoalCell >= 0 || actor.LastPromotionRevision == goalRevision || actor.YieldCell >= 0
                     || geometry.CanAttack(World.Center(actor.Goal), actor.Request.Profile, actor.Request.TargetId))
                 {
                     continue;
@@ -121,7 +122,7 @@ namespace NavigationLab.DAoe4
                 var constrained = new HashSet<int>(Holding(actor.Request.Profile, actor.Request.TargetId)
                     .Where(cell => geometry.CanAttack(World.Center(cell), actor.Request.Profile, actor.Request.TargetId)));
                 foreach (var donor in ordered.Where(other => other.Request.TargetId == actor.Request.TargetId
-                    && other.Request.Id != actor.Request.Id && other.Request.AssignedGoalCell < 0
+                    && other.ExchangePartner == 0 && other.Request.Id != actor.Request.Id && other.Request.AssignedGoalCell < 0
                     && constrained.Contains(other.Goal) && other.YieldCell < 0).OrderBy(other => other.Request.Id))
                 {
                     var flexible = new HashSet<int>(Holding(donor.Request.Profile, donor.Request.TargetId)
