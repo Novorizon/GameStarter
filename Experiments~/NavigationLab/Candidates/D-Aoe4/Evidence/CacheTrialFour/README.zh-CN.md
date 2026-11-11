@@ -15,7 +15,7 @@
 
 128人大图API耗时下降约2.038倍，但完整wall time仅540.659→330.038秒，其他场景存在回退，不能宣传统一提速。累计分配是整个调用过程总量，非同时驻留内存。测量受并发云端负载影响，仅作实现诊断，不是游戏原版、设备FPS或公平性能排名。
 
-cases/保留四份完整原摘要、完整案例报告、输入、**完整压缩轨迹**、构建/执行指纹、实际Compile清单和日志；本目录没有用窗口代替完整轨迹。source-and-four-dlls.zip按冻结manifest逐条包含实际源码/编译项和四角色DLL，source-package-index.json绑定每个成员。original-9e-reference仅保存对照个例及原构建身份。comparison.json包含反向变化、Root未选结论及编排进程清理记录。
+cases/保留四份完整原摘要、完整案例报告、输入、**完整压缩轨迹**、构建/执行指纹、实际Compile清单和日志（execution.log.gz保留原始字节及行尾空白，见execution-log-index.json）；本目录没有用窗口代替完整轨迹。source-and-four-dlls.zip按冻结manifest逐条包含实际源码/编译项和四角色DLL，source-package-index.json绑定每个成员。original-9e-reference仅保存对照个例及原构建身份。comparison.json包含反向变化、Root未选结论及编排进程清理记录。
 
 执行下面命令可验证归档字节、源包成员、DLL身份、输入及四项物理对照：
 

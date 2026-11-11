@@ -1,0 +1,22 @@
+{
+  "cases/forest-full44-large/execution.log.gz": {
+    "uncompressedSha256": "f049113a0a0f2e1524bf785129b7c23c3c49d3f9a31060a23cd735bd53a42dc7",
+    "originalBytes": 878,
+    "scope": "Original bytes, including terminal whitespace, preserved without normalization."
+  },
+  "cases/dynamic-route-block-and-open/execution.log.gz": {
+    "uncompressedSha256": "a0b2c847f7f2ea38e407fa33c6b3965a026a5cadf4822d6a2e12a4c8e3846f74",
+    "originalBytes": 847,
+    "scope": "Original bytes, including terminal whitespace, preserved without normalization."
+  },
+  "cases/large-portal-grid-128/execution.log.gz": {
+    "uncompressedSha256": "d3058236792f31d0cd6d1d15005a0d9bd7532f05dea6922014bfbe99c9575c91",
+    "originalBytes": 890,
+    "scope": "Original bytes, including terminal whitespace, preserved without normalization."
+  },
+  "cases/open-arena/execution.log.gz": {
+    "uncompressedSha256": "b15560a89dbf856e4e1abe59026ec2cd9c882728cee34abd44775eae60778502",
+    "originalBytes": 775,
+    "scope": "Original bytes, including terminal whitespace, preserved without normalization."
+  }
+}

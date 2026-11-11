@@ -40,6 +40,9 @@ def compact(raw):
 
 for relative, expected in read(root / 'sha256.json').items():
     assert digest((root / relative).read_bytes()) == expected, relative
+for relative, record in read(root / 'execution-log-index.json').items():
+    raw = gzip.decompress((root / relative).read_bytes())
+    assert digest(raw) == record['uncompressedSha256'] and len(raw) == record['originalBytes']
 package = read(root / 'source-package-index.json')
 assert digest((root / 'source-and-four-dlls.zip').read_bytes()) == package['zipSha256']
 with zipfile.ZipFile(root / 'source-and-four-dlls.zip') as source:
