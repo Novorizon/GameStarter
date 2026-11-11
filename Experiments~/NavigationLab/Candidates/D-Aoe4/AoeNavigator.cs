@@ -8,7 +8,8 @@ namespace NavigationLab.DAoe4
     public sealed class Aoe4Factory : INavigationFactory
     {
         public string Id => "D-aoe4-published-architecture";
-        public string Description => "HPA portal route, overlapping LOS/FMM segments, restricted-size extension and sampled steering; original C# implementation.";
+        public string Description => "HPA portal route, overlapping LOS/FMM segments, restricted-size extension and sampled steering; "
+            + "original C# implementation.";
         public NavigationFeatures Features => NavigationFeatures.DeathAndReinforcement | NavigationFeatures.DynamicTerrain | NavigationFeatures.MovingTarget
             | NavigationFeatures.MultipleTargets | NavigationFeatures.AssignedGoals | NavigationFeatures.LargeBodies | NavigationFeatures.FastPerTick;
         public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
@@ -20,7 +21,8 @@ namespace NavigationLab.DAoe4
     public sealed class Aoe4CoordinatedFactory : INavigationFactory
     {
         public string Id => "D-aoe4-with-project-yield";
-        public string Description => "D architecture plus separately identified project-level physical local yielding; not claimed as AoE IV proprietary coordination.";
+        public string Description => "D architecture plus separately identified project-level physical local yielding; "
+            + "not claimed as AoE IV proprietary coordination.";
         public NavigationFeatures Features => new Aoe4Factory().Features;
         public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
         {
@@ -111,7 +113,8 @@ namespace NavigationLab.DAoe4
             int goal = request.AssignedGoalCell;
             if (goal >= 0)
             {
-                if (goal >= World.CellCount || !geometry.CanHold(goal, request.Profile, request.TargetId) || distances[goal] < 0 || goalOwners.ContainsKey(goal) || !GoalClear(goal, request.Profile, request.Id))
+                if (goal >= World.CellCount || !geometry.CanHold(goal, request.Profile, request.TargetId) || distances[goal] < 0
+                    || goalOwners.ContainsKey(goal) || !GoalClear(goal, request.Profile, request.Id))
                 {
                     LastSpawnFailure = "AssignedGoalUnavailable";
                     return false;
@@ -203,7 +206,8 @@ namespace NavigationLab.DAoe4
                 {
                     anchor = Enumerable.Range(0, World.CellCount).Where(candidate => planningGeometry.Clearance(actor.Request.Profile.RadiusMm)[candidate]
                         && planningGeometry.CanSegment(actor.Position, World.Center(candidate), actor.Request.Profile.RadiusMm))
-                        .OrderBy(candidate => Point2.Distance(actor.Position, World.Center(candidate))).ThenBy(candidate => candidate).DefaultIfEmpty(-1).First();
+                        .OrderBy(candidate => Point2.Distance(actor.Position, World.Center(candidate)))
+                        .ThenBy(candidate => candidate).DefaultIfEmpty(-1).First();
                     if (anchor >= 0)
                     {
                         actor.PreciseWaypoint = anchor;
@@ -226,6 +230,13 @@ namespace NavigationLab.DAoe4
                     direction = actor.Route == null ? default : planner.Direction(actor.Position, actor.Route, out field);
                     Add("FlowCoverageRepaths");
                 }
+                bool directGoalRecovery = !reconnecting && direction.LengthSquared < 1e-12
+                    && planningGeometry.CanSegment(actor.Position, destination, actor.Request.Profile.RadiusMm);
+                if (directGoalRecovery)
+                {
+                    direction = (destination - actor.Position).Normalized;
+                    Add("ZeroFlowGoalLosRecoverySteps");
+                }
                 if (reconnecting)
                 {
                     actor.PreciseWaypoint = anchor;
@@ -233,8 +244,8 @@ namespace NavigationLab.DAoe4
                 }
                 Point2 steeringDestination = destination;
                 int cell = World.CellAt(actor.Position);
-                bool directFlowExit = !reconnecting && field != null
-                    && planningGeometry.CanSegment(actor.Position, World.Center(field.Exit), actor.Request.Profile.RadiusMm);
+                bool directFlowExit = directGoalRecovery || (!reconnecting && field != null
+                    && planningGeometry.CanSegment(actor.Position, World.Center(field.Exit), actor.Request.Profile.RadiusMm));
                 if (directFlowExit && actor.PreciseWaypoint >= 0)
                 {
                     actor.PreciseWaypoint = -1;

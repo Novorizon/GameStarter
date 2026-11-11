@@ -88,7 +88,15 @@ namespace NavigationLab.DAoe4
             var startDistance = TileDistances(start, radius);
             if (startTile == goalTile && startDistance[goal] >= 0)
             {
-                return new Route { Goal = goal, Radius = radius, Revision = geometry.Revision, Tiles = new[] { startTile }, Components = new[] { Component(start, radius) }, Exits = new[] { goal } };
+                return new Route
+                {
+                    Goal = goal,
+                    Radius = radius,
+                    Revision = geometry.Revision,
+                    Tiles = new[] { startTile },
+                    Components = new[] { Component(start, radius) },
+                    Exits = new[] { goal }
+                };
             }
             var graph = Graph(radius);
             if (!graph.TileNodes.TryGetValue(startTile, out var starts) || !graph.TileNodes.ContainsKey(goalTile))
@@ -161,7 +169,15 @@ namespace NavigationLab.DAoe4
                 }
             }
             exits.Add(goal);
-            return new Route { Goal = goal, Radius = radius, Revision = geometry.Revision, Tiles = tiles.ToArray(), Components = routeComponents.ToArray(), Exits = exits.ToArray() };
+            return new Route
+            {
+                Goal = goal,
+                Radius = radius,
+                Revision = geometry.Revision,
+                Tiles = tiles.ToArray(),
+                Components = routeComponents.ToArray(),
+                Exits = exits.ToArray()
+            };
         }
 
         internal Point2 Direction(Point2 position, Route route, out Flow? usedFlow)
