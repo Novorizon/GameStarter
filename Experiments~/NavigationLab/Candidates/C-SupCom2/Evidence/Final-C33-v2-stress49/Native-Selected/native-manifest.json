@@ -1,0 +1,35 @@
+{
+  "output": "/workspace/navigation-comparison/native/c-selected-1f53",
+  "runId": "7cad9211af8f41fcaaf80520ad130972",
+  "expectedCoreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "expectedOracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "graphicsRequired": false,
+  "wallDeadlineSeconds": 7200,
+  "stepsPerEditorUpdate": 250,
+  "runs": [
+    {
+      "name": "Factory-forest-full44-large",
+      "input": "/workspace/navigation-comparison/native/c-selected-1f53/forest-full44-large.unity-input.json",
+      "assemblyName": "NavigationLab.CSupCom2",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.CSupCom2.dll",
+      "factory": "NavigationLab.CSupCom2.Factory",
+      "expectedCandidateSha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372"
+    },
+    {
+      "name": "Factory-forest-full44-two-late-small",
+      "input": "/workspace/navigation-comparison/native/c-selected-1f53/forest-full44-two-late-small.unity-input.json",
+      "assemblyName": "NavigationLab.CSupCom2",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.CSupCom2.dll",
+      "factory": "NavigationLab.CSupCom2.Factory",
+      "expectedCandidateSha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372"
+    },
+    {
+      "name": "Factory-capacity-death-refills-original-queue",
+      "input": "/workspace/navigation-comparison/native/c-selected-1f53/capacity-death-refills-original-queue.unity-input.json",
+      "assemblyName": "NavigationLab.CSupCom2",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.CSupCom2.dll",
+      "factory": "NavigationLab.CSupCom2.Factory",
+      "expectedCandidateSha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372"
+    }
+  ]
+}
