@@ -1,0 +1,6 @@
+{
+  "scope": "Lossless storage of the original IL log including trailing spaces. No original byte was trimmed.",
+  "file": "findroute-il.log.gz",
+  "uncompressedSha256": "8cbf4dc5d45599db260c96102ea7a122631796a9e438b3ec7eb097d061a07509",
+  "compressedSha256": "b90c1d88ba2ed9347d0144f7d9a805f4449442a4412dcc5bd9d953dee4e8e019"
+}

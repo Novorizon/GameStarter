@@ -10,4 +10,4 @@
 
 源码审查已确认净空、门户图、分量及流场存在缓存。可能的后续原型包括几何实例内有向CanEdge精确布尔memo，以及TileDistances的有界精确缓存或tile局部表示；它们尚未被本次诊断证明有效，也没有被选入本轮9e61成绩。不能混用新原型结果填补原49。原128例记录了129次静止圆重建、130次门户图构建和约212.86GB候选累计分配，但这些事实本身不能证明D256的唯一瓶颈。
 
-原始快照、命令和计时分别位于metadata*.json、createdump*.log、threads*.crashreport.json；findroute-il.log保留IL定位，diagnosis.json保留诊断边界与128例来源SHA。摘要只采用方法名、时间、命令及数据证据，没有复制寄存器地址、环境变量或凭据。
+原始快照、命令和计时分别位于metadata*.json、createdump*.log、threads*.crashreport.json；findroute-il.log.gz无损保留IL定位原字节（含原始行尾空格），raw-log-storage.json记录解压后指纹，diagnosis.json保留诊断边界与128例来源SHA。摘要只采用方法名、时间、命令及数据证据，没有复制寄存器地址、环境变量或凭据。

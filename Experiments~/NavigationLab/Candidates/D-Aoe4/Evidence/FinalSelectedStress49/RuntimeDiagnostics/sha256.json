@@ -1,11 +1,12 @@
 {
-  "README.zh-CN.md": "5c1785c80727f382b5ba33f942e0d64392e1c4de98cc62bf82d7053b7a49fbd6",
+  "README.zh-CN.md": "90d1fc649e95c3e988470b527bd04d28295cd4f92d901374f8e0fb631a2b3c44",
   "createdump-second.log": "d89bacd1df1eb1e7e107ba8c110b92511611c0bf88c4a752cbd187658fcdb71c",
   "createdump.log": "dd7091358bc4be4dd08af99e7a2d9e26fcb76576e8905f0b93edec2fd084a0aa",
   "diagnosis.json": "39c873ae83b85b3d03fd1fb97c888385e045e72aa1629a9501fa6cd2f6fd9a79",
-  "findroute-il.log": "8cbf4dc5d45599db260c96102ea7a122631796a9e438b3ec7eb097d061a07509",
   "metadata-second.json": "bc6c75b612d4300eb376a4976025d5fe95c9ed2715d93e604b46ed1f2005d278",
   "metadata.json": "f5dfd60e305707906a0f601d4b3383c096de817ce79b3e150ff17137b2d71350",
   "threads-second.crashreport.json": "4c2fb26566149952f1bfca36a39e1ca963fab627c9ae2fdd8add8d603222e003",
-  "threads.crashreport.json": "1d17fa9602f4b34681bc409a8a0ad61f93f5d3c92dcfd3a3d7cbcb8d0447860f"
+  "threads.crashreport.json": "1d17fa9602f4b34681bc409a8a0ad61f93f5d3c92dcfd3a3d7cbcb8d0447860f",
+  "findroute-il.log.gz": "b90c1d88ba2ed9347d0144f7d9a805f4449442a4412dcc5bd9d953dee4e8e019",
+  "raw-log-storage.json": "bdf9f8acf31b2fc3fdb833980b5d3272d4f408e28cd0f5d1b6e535e1e363a33f"
 }
