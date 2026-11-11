@@ -25,7 +25,7 @@ python3 Tools~/NavigationLab/freeze-run.py \
 | B0 | `Experiments~/NavigationLab/Candidates/B-Orca/NavigationLab.BOrca.csproj` | `NavigationLab.Candidates.BOrca.OrcaFactory` |
 | B1 | 同B0 | `NavigationLab.Candidates.BOrca.OrcaYieldFactory` |
 | C | `Experiments~/NavigationLab/Candidates/C-SupCom2/NavigationLab.CSupCom2.csproj` | `NavigationLab.CSupCom2.Factory` |
-| D | `Experiments~/NavigationLab/Candidates/D-Aoe4/NavigationLab.DAoe4.csproj` | `NavigationLab.DAoe4.Aoe4Factory` |
+| D（统一D12） | `Experiments~/NavigationLab/Candidates/D-Aoe4/NavigationLab.DAoe4.csproj` | `NavigationLab.DAoe4.Aoe4ProgressExchangeFactory` |
 | E | `Experiments~/NavigationLab/Candidates/E-Warcraft3/NavigationLab.EWarcraft3.csproj` | `NavigationLab.Candidates.EWarcraft3.WarcraftFactory` |
 
 退出码0表示该次所选场景全部通过；1表示真实失败；2表示包含事先声明的不支持能力；3表示构建或工具错误。应继续核对summary的分类和来源标志，不能只按非零退出码称为算法失败。`--no-replay`仅供开发诊断，不是正式验收；`--build-only`只构建，不产生通过结论。
@@ -65,3 +65,5 @@ python3 Tools~/NavigationLab/native-run.py \
 可多次指定 `--build-manifest` 和 `--scenario`。`--graphics`另要求真实渲染截图通过颜色检查；不带该选项的运行只证明Play/Mono与几何行为。验证结束清理自己的临时文件，非预期工程改动会报告工具错误并保留证据。不要让多个Unity进程同时打开同一工程。
 
 Unity子集通过不表示完整49项已在Unity执行，更不表示IL2CPP、HybridCLR主包、Windows或手机已验证。模型与Unity各自保留真实的通过、失败和未执行范围。
+
+D的基础D0、D11物理交换与D13深点策略保留为显式探索factory；本轮最终D矩阵只选`Aoe4ProgressExchangeFactory`，不得用默认基础factory或按case切换来复用结论。各阶段源码、输入、实际未到位和归档见候选README。
