@@ -1,0 +1,92 @@
+{
+  "label": "D12-selected",
+  "scope": "Supplementary goal compatibility contract, not an added or modified common49 case. Original world/radius/speed/holding cells kept before/after.",
+  "scriptSha256": "3c6372c377b358b48b5497f60b36b7b092ad63971b56b9e675275d028cef9065",
+  "driverAssemblySha256": "e5303f884f22316c084c0e95feba6e992f26e101e7173bbd9a0264dd92e8cd11",
+  "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+  "factoryId": "D12-aoe4-with-route-progress-and-slot-exchange",
+  "declaredFeatures": "DeathAndReinforcement, DynamicTerrain, MovingTarget, MultipleTargets, AssignedGoals, LargeBodies, FastPerTick",
+  "results": [
+    {
+      "Name": "two-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 168,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 2171
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 1528.4271247461902,
+        "Settled": 2,
+        "Steps": 2091,
+        "StableMicrosteps": 2000,
+        "Admitted": 2,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "77e2c50da362d1bf4135d9cf88a98c99b075c212beda615e4a2c9c81ca0ecd07",
+        "FinalState": "1:9500,3500:1:57|2:11500,5500:1:91",
+        "MinimumBodyGapMm": 700,
+        "PairSweeps": 2092,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "three-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 241,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 6736
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 936.0679774997898,
+        "Settled": 3,
+        "Steps": 2123,
+        "StableMicrosteps": 2000,
+        "Admitted": 3,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "ca8d4b3c77865f8f6af263368a64ab03ec11cb5dcf869cc0f8bd19299e8f5919",
+        "FinalState": "1:9500,3500:1:57|2:9500,6500:1:105|3:11500,5500:1:91",
+        "MinimumBodyGapMm": 7.782774969532284,
+        "PairSweeps": 6373,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "mixed-three",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 267,
+        "MinimumBodyGapMm": 83.81154862025676,
+        "PairSweeps": 6814
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 170,
+        "Settled": 3,
+        "Steps": 2113,
+        "StableMicrosteps": 2000,
+        "Admitted": 3,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "66f376478c97001e04907b985a83adeb55a982f029cd8cd8b19fd97b5bffae10",
+        "FinalState": "1:9500,3500:1:57|2:11500,5500:1:91|3:11500,4500:1:75",
+        "MinimumBodyGapMm": 4.65560992039525,
+        "PairSweeps": 6343,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    }
+  ]
+}

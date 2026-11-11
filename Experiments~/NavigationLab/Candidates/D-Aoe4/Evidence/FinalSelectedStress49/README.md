@@ -1,0 +1,5 @@
+# D12选定源码与构建包
+
+实际Factory为NavigationLab.DAoe4.Aoe4ProgressExchangeFactory，DLL为9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c。source-and-binaries.zip逐条核对原build-manifest源文件和四角色DLL，并逐ZIP成员再次校验。
+
+完整49仍在原results/d-final-stress运行；没有以源包或选择性Mono结果冒称完整模型已通过。完成后同目录补原完整报告、输入、重放/执行指纹和明确trace库存。迁机应从源重建Runner，其根路径元数据不能直接假设可移植。
