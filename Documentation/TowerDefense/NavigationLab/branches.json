@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "8c0dd50ad3717ba295c1a52ac96c491e07697ae1",
+  "baselineDomainAggregateSha256": "074502ae2c712a92094d4b851c451afba25ac300c063f78e28b605b767a72c2f",
+  "forestMapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+  "branches": {
+    "A": "experiment/navigation-a-sipp",
+    "B": "experiment/navigation-b-orca",
+    "C": "experiment/navigation-c-supcom2",
+    "D": "experiment/navigation-d-aoe4",
+    "E": "experiment/navigation-e-warcraft3",
+    "comparison": "experiment/navigation-comparison"
+  },
+  "mergeMain": false,
+  "modifySdk": false,
+  "status": "implementing; no new algorithm acceptance claimed"
+}
