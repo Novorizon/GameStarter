@@ -1,0 +1,13 @@
+medium45 tick=0 born=1/45 moving=1 attack=0 elapsedMs=88
+medium45 tick=1000 born=45/45 moving=10 attack=12 elapsedMs=1967
+medium45 tick=2000 born=45/45 moving=5 attack=12 elapsedMs=3102
+medium45 tick=3000 born=45/45 moving=5 attack=12 elapsedMs=4320
+medium45 tick=4000 born=45/45 moving=5 attack=12 elapsedMs=5760
+medium45 tick=5000 born=45/45 moving=5 attack=12 elapsedMs=7353
+medium45 tick=6000 born=45/45 moving=5 attack=12 elapsedMs=8623
+medium45 tick=7000 born=45/45 moving=4 attack=12 elapsedMs=9887
+medium45 tick=8000 born=45/45 moving=4 attack=12 elapsedMs=11863
+medium45 tick=9000 born=45/45 moving=4 attack=12 elapsedMs=13061
+medium45 tick=10000 born=45/45 moving=5 attack=12 elapsedMs=14357
+medium45 tick=11000 born=45/45 moving=5 attack=12 elapsedMs=15557
+FINAL medium45 pass=False born=45/45 tick=12000 attack=12 wait=28 failure=Arrival/200-tick stability timeout

@@ -1,0 +1,6 @@
+late46 tick=0 born=1/46 moving=1 attack=0 elapsedMs=138
+late46 tick=1000 born=44/46 moving=41 attack=3 elapsedMs=1845
+late46 tick=2000 born=44/46 moving=4 attack=18 elapsedMs=3436
+late46 tick=3000 born=44/46 moving=4 attack=18 elapsedMs=5496
+FINAL late46 pass=False born=44/46 tick=3999 attack=18 wait=22 failure=System.InvalidOperationException: Initial pre-registered Big44 did not settle before Small release; late-admission precondition failed.
+   at Program.<Main>$(String[] args) in /workspace/navigation-comparison/e-warcraft3/Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Program.cs:line 64

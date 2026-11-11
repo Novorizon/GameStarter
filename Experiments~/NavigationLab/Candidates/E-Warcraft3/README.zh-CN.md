@@ -55,3 +55,15 @@ dotnet run --project Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Nav
 ```
 
 `--baseline`关闭显式友军让路，`--grouped`选择被拒绝的E2。报告中的factory ID区分实际变体；同一`name`不代表不同输入，不能拿重跑数量当新覆盖。
+
+## 默认版本与被拒绝的退让扩展
+
+默认 `NavigationLab.Candidates.EWarcraft3.WarcraftFactory` 使用较稳的空间重寻路与非分组友军让路（E1b）。它按空间净空而非其它单位的射程决定专用格优先级；预注册Small不再改变Big的整体填充顺序。当前存在的普适性失败不会被版本名称或参数改变掩盖。
+
+- `WarcraftBaselineFactory`：E0，仅空间A*、动态局部重搜和连续碰撞停步，不主动让路。
+- `WarcraftGroupedYieldFactory`：被拒绝的E2，冻结无关交通的让路组/返场实验。
+- `WarcraftRequesterBackoffFactory`：被拒绝的E3，空间专用位置的请求者先退让、等待门单位移动后再进入。它仍未使晚到46完成。
+
+E3早期无条件backoff破坏了初始44人稳定；限定到空间专用Goal后，初始44人确实稳定，但最后2名Small仍未到位。`Evidence/RequesterBackoff`与`Evidence/ConstrainedBackoff`保存失败。两目录均有`candidate-source.zip`及`source-snapshot.json`，归档的运行时源码逐字SHA与原报告一致，可以在独立worktree复现，不用当前默认源冒充旧变体。
+
+所有临停、backoff、Goal排序和碰撞优先级都是本实验自行选择的控制策略，尚无证据证明暴雪原版使用相同策略。此处测试的仅是统一模型中的2D地面圆盘、固定速度上限、格心驻留/攻击目标；未涵盖原版单位转向、加速度、海空移动、阵营阻挡规则、技能位移或战争迷雾。

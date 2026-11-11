@@ -1,0 +1,3 @@
+big44 tick=0 born=1/44 moving=1 attack=0 elapsedMs=81
+big44 tick=1000 born=44/44 moving=41 attack=3 elapsedMs=1485
+FINAL big44 pass=True born=44/44 tick=1616 attack=18 wait=26 failure=

@@ -30,6 +30,14 @@ namespace NavigationLab.Candidates.EWarcraft3
         public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, true, true);
     }
 
+    public sealed class WarcraftRequesterBackoffFactory : INavigationFactory
+    {
+        public string Id => "E3-Warcraft3-Inspired-RequesterBackoff";
+        public string Description => "Rejected constrained-request retreat extension, retained for explicit comparison.";
+        public NavigationFeatures Features => new WarcraftFactory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, true, false, true);
+    }
+
     internal sealed class MobileUnit
     {
         internal SpawnRequest Request;
@@ -43,6 +51,9 @@ namespace NavigationLab.Candidates.EWarcraft3
         internal int YieldRequester;
         internal long YieldStarted;
         internal double RequesterStartGoalDistance;
+        internal int RetreatCell = -1;
+        internal long RetreatStarted;
+        internal int ResumeAfterGate;
         internal int Id => Request.Id;
         internal UnitProfile Profile => Request.Profile;
         internal int TargetId => Request.TargetId;
@@ -69,6 +80,7 @@ namespace NavigationLab.Candidates.EWarcraft3
         private readonly UnitProfile[] profiles;
         private readonly bool friendlyYield;
         private readonly bool groupedYield;
+        private readonly bool requesterBackoff;
         private readonly List<int> yieldGroup = new List<int>();
         private readonly List<MobileUnit> units = new List<MobileUnit>();
         private readonly Dictionary<int, int> goalOwners = new Dictionary<int, int>();
@@ -85,16 +97,18 @@ namespace NavigationLab.Candidates.EWarcraft3
         public IReadOnlyDictionary<string, long> Metrics => metrics;
         public string LastSpawnFailure { get; private set; } = "None";
 
-        internal WarcraftNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool friendlyYield, bool groupedYield)
+        internal WarcraftNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool friendlyYield, bool groupedYield, bool requesterBackoff = false)
         {
             this.world = world.Clone();
             this.profiles = profiles.Distinct().ToArray();
             this.friendlyYield = friendlyYield;
             this.groupedYield = groupedYield;
+            this.requesterBackoff = requesterBackoff;
             geometry = new PathingGeometry(this.world);
             search = new GlobalSearch(this.world, geometry, Count);
             Count("FriendlyYieldEnabled", friendlyYield ? 1 : 0);
             Count("GroupedYieldEnabled", groupedYield ? 1 : 0);
+            Count("RequesterBackoffEnabled", requesterBackoff ? 1 : 0);
         }
 
         public bool TrySpawn(SpawnRequest request)
@@ -105,7 +119,7 @@ namespace NavigationLab.Candidates.EWarcraft3
                 return Reject(disposed ? "Disposed" : "DuplicateId");
             }
 
-            if (groupedYield && activeRequester != 0)
+            if ((groupedYield && activeRequester != 0) || HasConstrainedTraffic())
             {
                 return Reject("TrafficNegotiationActive");
             }
@@ -188,6 +202,7 @@ namespace NavigationLab.Candidates.EWarcraft3
 
             foreach (var unit in units)
             {
+                UpdateRetreat(unit);
                 if (!groupedYield)
                 {
                     UpdateYield(unit);
@@ -223,7 +238,7 @@ namespace NavigationLab.Candidates.EWarcraft3
                     Count("BodyMoveSubsteps", 1);
                 }
                 else if (State(unit) == MotionState.Moving
-                    && Point2.Distance(unit.Position, world.Center(unit.YieldCell >= 0 ? unit.YieldCell : unit.Goal)) > .001)
+                    && (unit.RetreatCell >= 0 || Point2.Distance(unit.Position, world.Center(unit.YieldCell >= 0 ? unit.YieldCell : unit.Goal)) > .001))
                 {
                     unit.BlockedSteps++;
                     Count("WaitingSubsteps", 1);
@@ -302,6 +317,8 @@ namespace NavigationLab.Candidates.EWarcraft3
                 }
 
                 unit.YieldCell = -1;
+                unit.RetreatCell = -1;
+                unit.ResumeAfterGate = 0;
                 SetPath(unit, search.Find(unit.Position, unit.Goal, unit.Profile));
                 unit.LastReplan = step;
             }
@@ -375,12 +392,12 @@ namespace NavigationLab.Candidates.EWarcraft3
         private bool CanClaim(int cell, UnitProfile profile, int targetId, double[] reachable)
         {
             return cell >= 0 && cell < world.CellCount && !goalOwners.ContainsKey(cell) && Eligible(profile, targetId).Holds[cell]
-                && !double.IsPositiveInfinity(reachable[cell]) && !units.Any(unit => unit.YieldCell == cell);
+                && !double.IsPositiveInfinity(reachable[cell]) && !units.Any(unit => unit.YieldCell == cell || unit.RetreatCell == cell);
         }
 
         private MotionState State(MobileUnit unit)
         {
-            if (unit.YieldCell >= 0 || Point2.Distance(unit.Position, world.Center(unit.Goal)) > .001)
+            if (unit.YieldCell >= 0 || unit.RetreatCell >= 0 || Point2.Distance(unit.Position, world.Center(unit.Goal)) > .001)
             {
                 return MotionState.Moving;
             }
@@ -390,7 +407,7 @@ namespace NavigationLab.Candidates.EWarcraft3
 
         private Point2 PreferredPosition(MobileUnit unit)
         {
-            int destination = unit.YieldCell >= 0 ? unit.YieldCell : unit.Goal;
+            int destination = unit.RetreatCell >= 0 ? unit.RetreatCell : unit.YieldCell >= 0 ? unit.YieldCell : unit.Goal;
             if (Point2.Distance(unit.Position, world.Center(destination)) <= .001)
             {
                 return unit.Position;
@@ -466,7 +483,16 @@ namespace NavigationLab.Candidates.EWarcraft3
         private void RepairPath(MobileUnit unit)
         {
             unit.LastReplan = step;
-            int destination = unit.YieldCell >= 0 ? unit.YieldCell : unit.Goal;
+            if (unit.RetreatCell >= 0 && Point2.Distance(unit.Position, world.Center(unit.RetreatCell)) <= .001)
+            {
+                if (unit.ResumeAfterGate == 0)
+                {
+                    SetPath(unit, search.Find(unit.Position, unit.Goal, unit.Profile));
+                    TryRequestYield(unit);
+                }
+                return;
+            }
+            int destination = unit.RetreatCell >= 0 ? unit.RetreatCell : unit.YieldCell >= 0 ? unit.YieldCell : unit.Goal;
             Func<Point2, Point2, bool> clear = (from, to) => DynamicClear(unit, from, to);
             int finalRejoin = Math.Min(unit.Path.Count - 1, unit.Waypoint + 8);
             for (int rejoin = finalRejoin; rejoin >= unit.Waypoint; rejoin--)
@@ -490,7 +516,7 @@ namespace NavigationLab.Candidates.EWarcraft3
                 return;
             }
 
-            if (friendlyYield && unit.BlockedSteps >= 160 && unit.YieldCell < 0)
+            if (friendlyYield && unit.BlockedSteps >= 160 && unit.YieldCell < 0 && unit.RetreatCell < 0)
             {
                 TryRequestYield(unit);
             }
@@ -559,6 +585,10 @@ namespace NavigationLab.Candidates.EWarcraft3
                 blocker.YieldRequester = requester.Id;
                 blocker.YieldStarted = step;
                 blocker.RequesterStartGoalDistance = Point2.Distance(requester.Position, world.Center(requester.Goal));
+                if (requester.RetreatCell >= 0)
+                {
+                    requester.ResumeAfterGate = blocker.Id;
+                }
                 SetPath(blocker, path);
                 blocker.BlockedSteps = 0;
                 Count("FriendlyYieldAccepted", 1);
@@ -581,6 +611,10 @@ namespace NavigationLab.Candidates.EWarcraft3
             }
 
             Count("FriendlyYieldNoSidePocket", 1);
+            if (NeedsConstrainedBackoff(requester) && requester.RetreatCell < 0)
+            {
+                TryRequesterRetreat(requester);
+            }
         }
 
         private bool BlocksRequesterRoute(MobileUnit requester, MobileUnit blocker, int cell)
@@ -614,7 +648,7 @@ namespace NavigationLab.Candidates.EWarcraft3
                 && Point2.Distance(requester.Position, world.Center(requester.Goal)) < unit.RequesterStartGoalDistance - world.CellSizeMm * .75);
             bool arrived = requester != null && State(requester) != MotionState.Moving;
             bool timedOut = step - unit.YieldStarted >= 6000;
-            if (!passed && !arrived && !timedOut)
+            if ((!passed || (requester != null && NeedsConstrainedBackoff(requester))) && !arrived && !timedOut)
             {
                 return;
             }
@@ -625,6 +659,93 @@ namespace NavigationLab.Candidates.EWarcraft3
             SetPath(unit, search.Find(unit.Position, unit.Goal, unit.Profile));
             unit.LastReplan = step;
             Count(timedOut ? "FriendlyYieldTimeouts" : "FriendlyYieldCompleted", 1);
+        }
+
+        private void TryRequesterRetreat(MobileUnit unit)
+        {
+            var target = world.Target(unit.TargetId);
+            double fromTarget = Point2.Distance(unit.Position, target.Center);
+            int origin = world.CellAt(unit.Position);
+            var candidates = Enumerable.Range(0, world.CellCount).Where(cell => !goalOwners.ContainsKey(cell)
+                && !world.SpawnCells.Contains(cell) && geometry.CanStand(cell, unit.Profile.RadiusMm)
+                && !units.Any(other => other.YieldCell == cell || other.RetreatCell == cell)
+                && Math.Abs(cell % world.Width - origin % world.Width) <= 4 && Math.Abs(cell / world.Width - origin / world.Width) <= 4
+                && Point2.Distance(world.Center(cell), target.Center) >= fromTarget + world.CellSizeMm
+                && Point2.Distance(world.Center(cell), unit.Position) >= world.CellSizeMm * 1.5)
+                .OrderBy(cell => Point2.Distance(world.Center(cell), unit.Position)).ThenBy(cell => cell).Take(32);
+            foreach (int cell in candidates)
+            {
+                var path = search.Find(unit.Position, cell, unit.Profile, (from, to) => DynamicClear(unit, from, to));
+                if (path == null)
+                {
+                    continue;
+                }
+
+                unit.RetreatCell = cell;
+                unit.RetreatStarted = step;
+                unit.ResumeAfterGate = 0;
+                unit.BlockedSteps = 0;
+                goalRevision++;
+                SetPath(unit, path);
+                Count("RequesterRetreatsStarted", 1);
+                return;
+            }
+
+            Count("RequesterRetreatsBlocked", 1);
+        }
+
+        private bool NeedsConstrainedBackoff(MobileUnit unit)
+        {
+            return requesterBackoff && profiles.Any(profile => !Eligible(profile, unit.TargetId).Holds[unit.Goal]);
+        }
+
+        private bool HasConstrainedTraffic()
+        {
+            if (!requesterBackoff)
+            {
+                return false;
+            }
+            foreach (var unit in units)
+            {
+                if (unit.RetreatCell >= 0)
+                {
+                    return true;
+                }
+                if (unit.YieldCell >= 0)
+                {
+                    var requester = units.FirstOrDefault(other => other.Id == unit.YieldRequester);
+                    if (requester != null && NeedsConstrainedBackoff(requester))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void UpdateRetreat(MobileUnit unit)
+        {
+            if (unit.RetreatCell < 0)
+            {
+                return;
+            }
+
+            var gate = units.FirstOrDefault(other => other.Id == unit.ResumeAfterGate);
+            bool gateReady = unit.ResumeAfterGate != 0 && (gate == null || gate.YieldCell < 0
+                || Point2.Distance(gate.Position, world.Center(gate.YieldCell)) <= .001);
+            bool timedOut = step - unit.RetreatStarted >= 4000;
+            if (!gateReady && !timedOut)
+            {
+                return;
+            }
+
+            unit.RetreatCell = -1;
+            unit.ResumeAfterGate = 0;
+            unit.BlockedSteps = 0;
+            goalRevision++;
+            SetPath(unit, search.Find(unit.Position, unit.Goal, unit.Profile));
+            unit.LastReplan = step;
+            Count(timedOut ? "RequesterRetreatTimeouts" : "RequesterRetreatsCompleted", 1);
         }
 
         private void PromoteWaiting()

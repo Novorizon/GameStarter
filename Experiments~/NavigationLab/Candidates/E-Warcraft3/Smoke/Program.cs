@@ -10,6 +10,7 @@ string name = args[1];
 string output = args[2];
 bool baseline = args.Contains("--baseline");
 bool grouped = args.Contains("--grouped");
+bool backoff = args.Contains("--backoff");
 Directory.CreateDirectory(output);
 var watch = Stopwatch.StartNew();
 var world = ParseForest(Path.Combine(repository, "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes"));
@@ -21,7 +22,8 @@ int count = name == "late46" ? 46 : int.Parse(new string(name.Where(char.IsDigit
 var inputs = Enumerable.Range(1, count).Select(id => new SpawnRequest(id, name == "late46" && id > 44 ? small : profile, world.SpawnCells[0])).ToArray();
 var original = Sources(repository);
 var oracle = new ContinuousOracle(world);
-INavigationFactory factory = baseline ? new WarcraftBaselineFactory() : grouped ? new WarcraftGroupedYieldFactory() : new WarcraftFactory();
+INavigationFactory factory = baseline ? new WarcraftBaselineFactory() : grouped ? new WarcraftGroupedYieldFactory()
+    : backoff ? new WarcraftRequesterBackoffFactory() : new WarcraftFactory();
 using var navigator = factory.Create(world, name == "late46" ? new[] { small, big } : new[] { profile });
 int next = 0;
 int firstSettled = -1;
@@ -132,7 +134,7 @@ var result = new
     minimumBodyGapMm = double.IsFinite(oracle.MinimumBodyGapMm) ? oracle.MinimumBodyGapMm : (double?)null,
     bodies = bodies.Select(body => new { body.Id, x = body.Position.X, y = body.Position.Y, body.State, body.GoalCell, body.TargetId })
 };
-File.WriteAllText(Path.Combine(output, name + (baseline ? "-baseline" : grouped ? "-grouped" : "-yield") + ".json"), JsonSerializer.Serialize(result, new JsonSerializerOptions
+File.WriteAllText(Path.Combine(output, name + (baseline ? "-baseline" : grouped ? "-grouped" : backoff ? "-backoff" : "-yield") + ".json"), JsonSerializer.Serialize(result, new JsonSerializerOptions
 {
     WriteIndented = true
 }));

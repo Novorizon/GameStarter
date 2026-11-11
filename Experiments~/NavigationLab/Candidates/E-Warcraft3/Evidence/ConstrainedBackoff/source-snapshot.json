@@ -1,0 +1,6 @@
+{
+  "scope": "Reproducible source for rejected early debug variant; WarcraftNavigator raw bytes exactly match sourceHashes in original report.",
+  "zipSha256": "1390850812cfea2980f3f726916959a05927d4fb74d84633f1cf901180300a3f",
+  "navigatorSha256": "92C2693702E01D81B0B84DC6D9A9DE2B1C713B1116532D5112887B4DC54179C6",
+  "allCsMatchesReport": true
+}
