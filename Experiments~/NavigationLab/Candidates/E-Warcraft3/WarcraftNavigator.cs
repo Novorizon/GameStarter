@@ -412,7 +412,26 @@ namespace NavigationLab.Candidates.EWarcraft3
         private bool CanClaim(int cell, UnitProfile profile, int targetId, double[] reachable)
         {
             return cell >= 0 && cell < world.CellCount && !goalOwners.ContainsKey(cell) && Eligible(profile, targetId).Holds[cell]
-                && !double.IsPositiveInfinity(reachable[cell]) && !units.Any(unit => unit.YieldCell == cell || unit.RetreatCell == cell);
+                && !double.IsPositiveInfinity(reachable[cell])
+                && !units.Any(unit => unit.YieldCell == cell || unit.RetreatCell == cell || ConflictsWithHeldGoal(cell, profile, unit));
+        }
+
+        private bool ConflictsWithHeldGoal(int cell, UnitProfile profile, MobileUnit other)
+        {
+            double requiredDistance = (double)profile.RadiusMm + other.Profile.RadiusMm;
+            if (requiredDistance <= world.CellSizeMm)
+            {
+                return false;
+            }
+
+            // Released goals are no longer owned, including a waiter's old goal during promotion.
+            if (!goalOwners.TryGetValue(other.Goal, out int owner) || owner != other.Id)
+            {
+                return false;
+            }
+
+            double minimum = requiredDistance - .001;
+            return (world.Center(cell) - world.Center(other.Goal)).LengthSquared < minimum * minimum;
         }
 
         private MotionState State(MobileUnit unit)
