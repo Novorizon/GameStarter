@@ -1,0 +1,47 @@
+{
+  "scope": "Early real-Forest debugging only; not the shared cross-algorithm matrix or Unity acceptance.",
+  "success": true,
+  "factory": "E-Warcraft3-Inspired-FriendlyYield",
+  "name": "big1",
+  "tick": 1146,
+  "firstSettled": 947,
+  "hold": 200,
+  "requested": 1,
+  "spawned": 1,
+  "pending": 0,
+  "attacking": 1,
+  "waiting": 0,
+  "moving": 0,
+  "failure": null,
+  "elapsedMilliseconds": 211,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/GlobalSearch.cs": "664208EE855A123ED8E9DA65AD05271658560E69D7E5E1BE558663533B35B2A2",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/PathingGeometry.cs": "DC9E0A157FC7AD66A923AC4AAF9B974A88E461B9FFF785FF7364C923B27ECAA9",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Program.cs": "4A78F548CB703D1E85F098622202293B1E4E45887850968B41A1DA999187170D",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/WarcraftNavigator.cs": "81360B619C0E13B496200839C1113D02B6F3D966E75747D811362A94B2663D83"
+  },
+  "metrics": {
+    "FriendlyYieldEnabled": 1,
+    "SpawnAttempts": 1,
+    "ReachabilityCells": 322,
+    "GlobalAStarSearches": 1,
+    "AStarExpandedCells": 270,
+    "Spawned": 1,
+    "SimulationSubsteps": 11470,
+    "BodyMoveSubsteps": 9480
+  },
+  "PairSweeps": 0,
+  "BodySweeps": 11471,
+  "minimumBodyGapMm": null,
+  "bodies": [
+    {
+      "Id": 1,
+      "x": 9250,
+      "y": -4310,
+      "State": 1,
+      "GoalCell": 304,
+      "TargetId": 1
+    }
+  ]
+}

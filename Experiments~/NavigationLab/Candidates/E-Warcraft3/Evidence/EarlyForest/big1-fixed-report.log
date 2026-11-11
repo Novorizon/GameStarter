@@ -1,0 +1,3 @@
+big1 tick=0 born=1/1 moving=1 attack=0 elapsedMs=66
+big1 tick=1000 born=1/1 moving=0 attack=1 elapsedMs=188
+FINAL big1 pass=True born=1/1 tick=1146 attack=1 wait=0 failure=

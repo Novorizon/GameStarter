@@ -1,0 +1,180 @@
+{
+  "scope": "Early real-Forest debugging only; not the shared cross-algorithm matrix or Unity acceptance.",
+  "success": true,
+  "factory": "E-Warcraft3-Inspired-FriendlyYield",
+  "name": "medium8",
+  "tick": 745,
+  "firstSettled": 546,
+  "hold": 200,
+  "requested": 8,
+  "spawned": 8,
+  "pending": 0,
+  "attacking": 8,
+  "waiting": 0,
+  "moving": 0,
+  "failure": null,
+  "elapsedMilliseconds": 508,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/GlobalSearch.cs": "664208EE855A123ED8E9DA65AD05271658560E69D7E5E1BE558663533B35B2A2",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/PathingGeometry.cs": "DC9E0A157FC7AD66A923AC4AAF9B974A88E461B9FFF785FF7364C923B27ECAA9",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Program.cs": "64E4167E8C7B83DADC9DA8BD96F515E9049B501A9873C162216B3013D071BE15",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/WarcraftNavigator.cs": "DC5AE17C006B27FCED6AB2D5E1234E1A2E29EB9A9A698DAB13BA401E968AC968"
+  },
+  "debugUnits": [
+    {
+      "id": 1,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 100,
+      "pathCount": 100,
+      "remainder": []
+    },
+    {
+      "id": 2,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 100,
+      "pathCount": 100,
+      "remainder": []
+    },
+    {
+      "id": 3,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 4,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 98,
+      "pathCount": 98,
+      "remainder": []
+    },
+    {
+      "id": 5,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 6,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 7,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 96,
+      "pathCount": 96,
+      "remainder": []
+    },
+    {
+      "id": 8,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 98,
+      "pathCount": 98,
+      "remainder": []
+    }
+  ],
+  "metrics": {
+    "FriendlyYieldEnabled": 1,
+    "SpawnAttempts": 31,
+    "ReachabilityCells": 2600,
+    "GlobalAStarSearches": 8,
+    "AStarExpandedCells": 2096,
+    "Spawned": 8,
+    "SimulationSubsteps": 7460,
+    "BodyMoveSubsteps": 40962,
+    "Rejected_SpawnOccupied": 23,
+    "SpatialCollisionStops": 406,
+    "WaitingSubsteps": 406
+  },
+  "PairSweeps": 202984,
+  "BodySweeps": 58526,
+  "minimumBodyGapMm": 0,
+  "bodies": [
+    {
+      "Id": 1,
+      "x": 9250,
+      "y": -3810,
+      "State": 1,
+      "GoalCell": 348,
+      "TargetId": 1
+    },
+    {
+      "Id": 2,
+      "x": 9250,
+      "y": -3310,
+      "State": 1,
+      "GoalCell": 392,
+      "TargetId": 1
+    },
+    {
+      "Id": 3,
+      "x": 8750,
+      "y": -4310,
+      "State": 1,
+      "GoalCell": 303,
+      "TargetId": 1
+    },
+    {
+      "Id": 4,
+      "x": 8250,
+      "y": -4810,
+      "State": 1,
+      "GoalCell": 258,
+      "TargetId": 1
+    },
+    {
+      "Id": 5,
+      "x": 8750,
+      "y": -2810,
+      "State": 1,
+      "GoalCell": 435,
+      "TargetId": 1
+    },
+    {
+      "Id": 6,
+      "x": 8750,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 479,
+      "TargetId": 1
+    },
+    {
+      "Id": 7,
+      "x": 7250,
+      "y": -4810,
+      "State": 1,
+      "GoalCell": 256,
+      "TargetId": 1
+    },
+    {
+      "Id": 8,
+      "x": 8250,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 478,
+      "TargetId": 1
+    }
+  ]
+}

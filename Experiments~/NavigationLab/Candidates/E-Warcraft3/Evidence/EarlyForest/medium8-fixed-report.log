@@ -1,0 +1,13 @@
+medium8 tick=0 born=1/8 moving=1 attack=0 elapsedMs=79
+medium8 tick=1000 born=8/8 moving=6 attack=2 elapsedMs=885
+medium8 tick=2000 born=8/8 moving=6 attack=2 elapsedMs=1136
+medium8 tick=3000 born=8/8 moving=6 attack=2 elapsedMs=1370
+medium8 tick=4000 born=8/8 moving=6 attack=2 elapsedMs=1615
+medium8 tick=5000 born=8/8 moving=6 attack=2 elapsedMs=1861
+medium8 tick=6000 born=8/8 moving=6 attack=2 elapsedMs=2122
+medium8 tick=7000 born=8/8 moving=6 attack=2 elapsedMs=2362
+medium8 tick=8000 born=8/8 moving=6 attack=2 elapsedMs=2611
+medium8 tick=9000 born=8/8 moving=6 attack=2 elapsedMs=2864
+medium8 tick=10000 born=8/8 moving=6 attack=2 elapsedMs=3117
+medium8 tick=11000 born=8/8 moving=6 attack=2 elapsedMs=3352
+FINAL medium8 pass=False born=8/8 tick=12000 attack=2 wait=0 failure=Arrival/200-tick stability timeout

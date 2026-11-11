@@ -1,0 +1,148 @@
+{
+  "scope": "Early real-Forest debugging only; not the shared cross-algorithm matrix or Unity acceptance.",
+  "success": false,
+  "factory": "E-Warcraft3-Inspired-FriendlyYield",
+  "name": "big12",
+  "tick": 12000,
+  "firstSettled": -1,
+  "hold": 0,
+  "requested": 12,
+  "spawned": 12,
+  "pending": 0,
+  "attacking": 1,
+  "waiting": 0,
+  "moving": 11,
+  "failure": "Arrival/200-tick stability timeout",
+  "elapsedMilliseconds": 5232,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/GlobalSearch.cs": "664208EE855A123ED8E9DA65AD05271658560E69D7E5E1BE558663533B35B2A2",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/PathingGeometry.cs": "DC9E0A157FC7AD66A923AC4AAF9B974A88E461B9FFF785FF7364C923B27ECAA9",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Program.cs": "4A78F548CB703D1E85F098622202293B1E4E45887850968B41A1DA999187170D",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/WarcraftNavigator.cs": "81360B619C0E13B496200839C1113D02B6F3D966E75747D811362A94B2663D83"
+  },
+  "metrics": {
+    "FriendlyYieldEnabled": 1,
+    "SpawnAttempts": 111,
+    "ReachabilityCells": 3864,
+    "GlobalAStarSearches": 8679,
+    "AStarExpandedCells": 1507602,
+    "Spawned": 12,
+    "SimulationSubsteps": 120000,
+    "BodyMoveSubsteps": 74459,
+    "Rejected_SpawnOccupied": 99,
+    "SpatialCollisionStops": 1011428,
+    "WaitingSubsteps": 1011428,
+    "LocalSearches": 58320,
+    "LocalRejoins": 5483,
+    "NoSpatialPath": 61267,
+    "DynamicGlobalRepaths": 7,
+    "DirectConnectors": 2740,
+    "FriendlyYieldRequests": 200,
+    "FriendlyYieldAccepted": 118,
+    "FriendlyYieldNoSidePocket": 82,
+    "FriendlyYieldCompleted": 4,
+    "FriendlyYieldTimeouts": 108
+  },
+  "PairSweeps": 7869686,
+  "BodySweeps": 1433478,
+  "minimumBodyGapMm": 0,
+  "bodies": [
+    {
+      "Id": 1,
+      "x": 9750,
+      "y": -4310,
+      "State": 0,
+      "GoalCell": 304,
+      "TargetId": 1
+    },
+    {
+      "Id": 2,
+      "x": 9250,
+      "y": -3810,
+      "State": 1,
+      "GoalCell": 348,
+      "TargetId": 1
+    },
+    {
+      "Id": 3,
+      "x": 8750,
+      "y": -4810,
+      "State": 0,
+      "GoalCell": 259,
+      "TargetId": 1
+    },
+    {
+      "Id": 4,
+      "x": -7250,
+      "y": -2810,
+      "State": 0,
+      "GoalCell": 392,
+      "TargetId": 1
+    },
+    {
+      "Id": 5,
+      "x": 8250,
+      "y": -4810,
+      "State": 0,
+      "GoalCell": 303,
+      "TargetId": 1
+    },
+    {
+      "Id": 6,
+      "x": 4761,
+      "y": 3190,
+      "State": 0,
+      "GoalCell": 436,
+      "TargetId": 1
+    },
+    {
+      "Id": 7,
+      "x": -7260.5,
+      "y": -3310,
+      "State": 0,
+      "GoalCell": 258,
+      "TargetId": 1
+    },
+    {
+      "Id": 8,
+      "x": 5255.436733856077,
+      "y": 3265.6681797200204,
+      "State": 0,
+      "GoalCell": 213,
+      "TargetId": 1
+    },
+    {
+      "Id": 9,
+      "x": 5250,
+      "y": 3766.5,
+      "State": 0,
+      "GoalCell": 435,
+      "TargetId": 1
+    },
+    {
+      "Id": 10,
+      "x": 4750,
+      "y": 4190,
+      "State": 0,
+      "GoalCell": 479,
+      "TargetId": 1
+    },
+    {
+      "Id": 11,
+      "x": 4250,
+      "y": 4190,
+      "State": 0,
+      "GoalCell": 212,
+      "TargetId": 1
+    },
+    {
+      "Id": 12,
+      "x": 4250,
+      "y": 3190,
+      "State": 0,
+      "GoalCell": 478,
+      "TargetId": 1
+    }
+  ]
+}

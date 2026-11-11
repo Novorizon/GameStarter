@@ -339,7 +339,7 @@ namespace NavigationLab.Candidates.EWarcraft3
 
         private MotionState State(MobileUnit unit)
         {
-            if (unit.YieldCell >= 0 || Point2.Distance(unit.Position, world.Center(unit.Goal)) > SimulationProtocol.GoalToleranceMm)
+            if (unit.YieldCell >= 0 || Point2.Distance(unit.Position, world.Center(unit.Goal)) > .001)
             {
                 return MotionState.Moving;
             }
@@ -404,7 +404,12 @@ namespace NavigationLab.Candidates.EWarcraft3
                             continue;
                         }
 
+                        bool firstAlone = firstMoves && PathingGeometry.MovingPairSquared(starts[first], next[first], starts[second], starts[second])
+                            >= distance * distance;
+                        bool secondAlone = secondMoves && PathingGeometry.MovingPairSquared(starts[first], starts[first], starts[second], next[second])
+                            >= distance * distance;
                         int stopped = !firstMoves ? second : !secondMoves ? first
+                            : firstAlone && !secondAlone ? second : secondAlone && !firstAlone ? first
                             : (units[first].BlockedSteps > units[second].BlockedSteps ? second
                                 : units[first].BlockedSteps < units[second].BlockedSteps ? first
                                 : ((first + step) % Math.Max(1, units.Count) < (second + step) % Math.Max(1, units.Count) ? second : first));

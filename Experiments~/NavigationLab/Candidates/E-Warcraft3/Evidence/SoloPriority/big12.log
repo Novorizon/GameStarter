@@ -1,0 +1,3 @@
+big12 tick=0 born=1/12 moving=1 attack=0 elapsedMs=62
+big12 tick=1000 born=12/12 moving=9 attack=3 elapsedMs=753
+FINAL big12 pass=True born=12/12 tick=1263 attack=12 wait=0 failure=

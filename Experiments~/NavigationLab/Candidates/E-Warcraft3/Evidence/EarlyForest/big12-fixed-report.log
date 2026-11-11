@@ -1,0 +1,13 @@
+big12 tick=0 born=1/12 moving=1 attack=0 elapsedMs=72
+big12 tick=1000 born=12/12 moving=11 attack=1 elapsedMs=1349
+big12 tick=2000 born=12/12 moving=11 attack=1 elapsedMs=1688
+big12 tick=3000 born=12/12 moving=11 attack=1 elapsedMs=2038
+big12 tick=4000 born=12/12 moving=11 attack=1 elapsedMs=2473
+big12 tick=5000 born=12/12 moving=11 attack=1 elapsedMs=2826
+big12 tick=6000 born=12/12 moving=11 attack=1 elapsedMs=3175
+big12 tick=7000 born=12/12 moving=11 attack=1 elapsedMs=3509
+big12 tick=8000 born=12/12 moving=11 attack=1 elapsedMs=3844
+big12 tick=9000 born=12/12 moving=11 attack=1 elapsedMs=4170
+big12 tick=10000 born=12/12 moving=11 attack=1 elapsedMs=4597
+big12 tick=11000 born=12/12 moving=10 attack=2 elapsedMs=4906
+FINAL big12 pass=False born=12/12 tick=12000 attack=1 wait=0 failure=Arrival/200-tick stability timeout

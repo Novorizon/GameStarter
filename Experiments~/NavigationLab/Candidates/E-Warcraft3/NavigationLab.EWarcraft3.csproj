@@ -11,5 +11,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="$(NavigationLabCoreRoot)/NavigationLab.Core.csproj" />
+    <Compile Remove="Smoke/**/*.cs" />
   </ItemGroup>
 </Project>

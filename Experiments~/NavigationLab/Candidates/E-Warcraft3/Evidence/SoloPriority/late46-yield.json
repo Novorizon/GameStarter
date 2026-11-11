@@ -1,0 +1,1102 @@
+{
+  "scope": "Early real-Forest debugging only; not the shared cross-algorithm matrix or Unity acceptance.",
+  "success": false,
+  "factory": "E-Warcraft3-Inspired-FriendlyYield",
+  "name": "late46",
+  "tick": 12000,
+  "firstSettled": -1,
+  "hold": 0,
+  "requested": 46,
+  "spawned": 46,
+  "pending": 0,
+  "attacking": 13,
+  "waiting": 11,
+  "moving": 22,
+  "failure": "Arrival/200-tick stability timeout",
+  "elapsedMilliseconds": 29522,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/GlobalSearch.cs": "664208EE855A123ED8E9DA65AD05271658560E69D7E5E1BE558663533B35B2A2",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/PathingGeometry.cs": "DC9E0A157FC7AD66A923AC4AAF9B974A88E461B9FFF785FF7364C923B27ECAA9",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Program.cs": "64E4167E8C7B83DADC9DA8BD96F515E9049B501A9873C162216B3013D071BE15",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/WarcraftNavigator.cs": "DC5AE17C006B27FCED6AB2D5E1234E1A2E29EB9A9A698DAB13BA401E968AC968"
+  },
+  "debugUnits": [
+    {
+      "id": 1,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 100,
+      "pathCount": 100,
+      "remainder": []
+    },
+    {
+      "id": 2,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 3,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 1,
+      "pathCount": 1,
+      "remainder": []
+    },
+    {
+      "id": 4,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 97,
+      "pathCount": 97,
+      "remainder": []
+    },
+    {
+      "id": 5,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 96,
+      "pathCount": 96,
+      "remainder": []
+    },
+    {
+      "id": 6,
+      "blocked": 103798,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 6250,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 1,
+      "pathCount": 1,
+      "remainder": []
+    },
+    {
+      "id": 8,
+      "blocked": 96913,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 9,
+      "remainder": [
+        {
+          "X": 5250,
+          "Y": -5810
+        },
+        {
+          "X": 5750,
+          "Y": -5310
+        },
+        {
+          "X": 6250,
+          "Y": -5310
+        },
+        {
+          "X": 6750,
+          "Y": -5310
+        },
+        {
+          "X": 7250,
+          "Y": -5310
+        },
+        {
+          "X": 7750,
+          "Y": -5310
+        },
+        {
+          "X": 8250,
+          "Y": -4810
+        },
+        {
+          "X": 8750,
+          "Y": -4310
+        },
+        {
+          "X": 9250,
+          "Y": -3810
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 10,
+      "pathCount": 10,
+      "remainder": []
+    },
+    {
+      "id": 10,
+      "blocked": 109559,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 95,
+      "pathCount": 99,
+      "remainder": [
+        {
+          "X": 7250,
+          "Y": -5310
+        },
+        {
+          "X": 7750,
+          "Y": -5310
+        },
+        {
+          "X": 8250,
+          "Y": -4810
+        },
+        {
+          "X": 8750,
+          "Y": -4310
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "blocked": 96914,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 8250,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 13,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 14,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 8,
+      "pathCount": 8,
+      "remainder": []
+    },
+    {
+      "id": 15,
+      "blocked": 103122,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 6750,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 94,
+      "pathCount": 94,
+      "remainder": []
+    },
+    {
+      "id": 17,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 95,
+      "pathCount": 95,
+      "remainder": []
+    },
+    {
+      "id": 18,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 94,
+      "pathCount": 94,
+      "remainder": []
+    },
+    {
+      "id": 19,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 12,
+      "pathCount": 12,
+      "remainder": []
+    },
+    {
+      "id": 20,
+      "blocked": 100901,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 6,
+      "remainder": [
+        {
+          "X": 5750,
+          "Y": -3810
+        },
+        {
+          "X": 6250,
+          "Y": -4310
+        },
+        {
+          "X": 6750,
+          "Y": -4810
+        },
+        {
+          "X": 7250,
+          "Y": -5310
+        },
+        {
+          "X": 7750,
+          "Y": -5310
+        },
+        {
+          "X": 8250,
+          "Y": -5310
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 3,
+      "pathCount": 3,
+      "remainder": []
+    },
+    {
+      "id": 22,
+      "blocked": 108289,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 3,
+      "remainder": [
+        {
+          "X": 6750,
+          "Y": -5310
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "blocked": 108281,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 94,
+      "remainder": [
+        {
+          "X": 6250,
+          "Y": -5310
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "blocked": 108281,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 92,
+      "pathCount": 93,
+      "remainder": [
+        {
+          "X": 5750,
+          "Y": -5310
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "blocked": 108275,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 91,
+      "pathCount": 93,
+      "remainder": [
+        {
+          "X": 5250,
+          "Y": -4810
+        },
+        {
+          "X": 5750,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "blocked": 108237,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 91,
+      "pathCount": 93,
+      "remainder": [
+        {
+          "X": 5250,
+          "Y": -4810
+        },
+        {
+          "X": 5250,
+          "Y": -5310
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "blocked": 88418,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 5750,
+          "Y": -4310
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "blocked": 108077,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 90,
+      "pathCount": 92,
+      "remainder": [
+        {
+          "X": 4750,
+          "Y": -4310
+        },
+        {
+          "X": 5250,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "blocked": 88418,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 5250,
+          "Y": -4310
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "blocked": 88757,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 4,
+      "remainder": [
+        {
+          "X": 3750,
+          "Y": -4310
+        },
+        {
+          "X": 4250,
+          "Y": -4310
+        },
+        {
+          "X": 4750,
+          "Y": -4310
+        },
+        {
+          "X": 4750,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 93,
+      "remainder": []
+    },
+    {
+      "id": 32,
+      "blocked": 88900,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 4750,
+          "Y": -4310
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 34,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 92,
+      "pathCount": 92,
+      "remainder": []
+    },
+    {
+      "id": 35,
+      "blocked": 76631,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 4250,
+          "Y": -4310
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 37,
+      "blocked": 82655,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 3,
+      "remainder": [
+        {
+          "X": 3250,
+          "Y": -3810
+        },
+        {
+          "X": 3250,
+          "Y": -4310
+        },
+        {
+          "X": 3750,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 91,
+      "pathCount": 91,
+      "remainder": []
+    },
+    {
+      "id": 39,
+      "blocked": 88826,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 3,
+      "remainder": [
+        {
+          "X": 3750,
+          "Y": -4310
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 41,
+      "blocked": 87207,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 1,
+      "remainder": [
+        {
+          "X": 4250,
+          "Y": -2810
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 43,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 1,
+      "pathCount": 1,
+      "remainder": []
+    },
+    {
+      "id": 44,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 3,
+      "pathCount": 3,
+      "remainder": []
+    },
+    {
+      "id": 45,
+      "blocked": 76651,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 0,
+      "pathCount": 9,
+      "remainder": [
+        {
+          "X": 3750,
+          "Y": -2810
+        },
+        {
+          "X": 4250,
+          "Y": -3310
+        },
+        {
+          "X": 4750,
+          "Y": -3310
+        },
+        {
+          "X": 5250,
+          "Y": -3810
+        },
+        {
+          "X": 5750,
+          "Y": -3810
+        },
+        {
+          "X": 6250,
+          "Y": -4310
+        },
+        {
+          "X": 6750,
+          "Y": -4810
+        },
+        {
+          "X": 7250,
+          "Y": -4810
+        },
+        {
+          "X": 7750,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "blocked": 76633,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 88,
+      "pathCount": 96,
+      "remainder": [
+        {
+          "X": 3750,
+          "Y": -3310
+        },
+        {
+          "X": 4250,
+          "Y": -3310
+        },
+        {
+          "X": 4750,
+          "Y": -3810
+        },
+        {
+          "X": 5250,
+          "Y": -3810
+        },
+        {
+          "X": 5750,
+          "Y": -4310
+        },
+        {
+          "X": 6250,
+          "Y": -4310
+        },
+        {
+          "X": 6750,
+          "Y": -4810
+        },
+        {
+          "X": 7250,
+          "Y": -4810
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "FriendlyYieldEnabled": 1,
+    "SpawnAttempts": 446,
+    "ReachabilityCells": 3658572,
+    "GlobalAStarSearches": 822567,
+    "AStarExpandedCells": 1516198,
+    "Spawned": 46,
+    "SimulationSubsteps": 120000,
+    "BodyMoveSubsteps": 401024,
+    "Rejected_SpawnOccupied": 400,
+    "SpatialCollisionStops": 2261490,
+    "WaitingSubsteps": 2261490,
+    "LocalSearches": 75644,
+    "NoSpatialPath": 898072,
+    "LocalRejoins": 18,
+    "FriendlyYieldRequests": 27089,
+    "FriendlyYieldAccepted": 37,
+    "DirectConnectors": 50,
+    "FriendlyYieldCompleted": 13,
+    "FriendlyYieldNoSidePocket": 27052,
+    "DynamicGlobalRepaths": 1,
+    "FriendlyYieldTimeouts": 24
+  },
+  "PairSweeps": 117900525,
+  "BodySweeps": 5346191,
+  "minimumBodyGapMm": -6.366462912410498E-12,
+  "bodies": [
+    {
+      "Id": 1,
+      "x": 9250,
+      "y": -4310,
+      "State": 1,
+      "GoalCell": 304,
+      "TargetId": 1
+    },
+    {
+      "Id": 2,
+      "x": 8750,
+      "y": -4810,
+      "State": 1,
+      "GoalCell": 259,
+      "TargetId": 1
+    },
+    {
+      "Id": 3,
+      "x": 9250,
+      "y": -2810,
+      "State": 1,
+      "GoalCell": 436,
+      "TargetId": 1
+    },
+    {
+      "Id": 4,
+      "x": 7750,
+      "y": -5310,
+      "State": 1,
+      "GoalCell": 213,
+      "TargetId": 1
+    },
+    {
+      "Id": 5,
+      "x": 7250,
+      "y": -5310,
+      "State": 1,
+      "GoalCell": 212,
+      "TargetId": 1
+    },
+    {
+      "Id": 6,
+      "x": 6250,
+      "y": -5771.5,
+      "State": 0,
+      "GoalCell": 254,
+      "TargetId": 1
+    },
+    {
+      "Id": 7,
+      "x": 6250,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 474,
+      "TargetId": 1
+    },
+    {
+      "Id": 8,
+      "x": 5206.5,
+      "y": -5810,
+      "State": 0,
+      "GoalCell": 348,
+      "TargetId": 1
+    },
+    {
+      "Id": 9,
+      "x": 9250,
+      "y": -3310,
+      "State": 1,
+      "GoalCell": 392,
+      "TargetId": 1
+    },
+    {
+      "Id": 10,
+      "x": 6893.896229971453,
+      "y": -4953.896229971453,
+      "State": 0,
+      "GoalCell": 303,
+      "TargetId": 1
+    },
+    {
+      "Id": 11,
+      "x": 5688.29168369935,
+      "y": -5663.902772100242,
+      "State": 0,
+      "GoalCell": 258,
+      "TargetId": 1
+    },
+    {
+      "Id": 12,
+      "x": 8750,
+      "y": -2810,
+      "State": 1,
+      "GoalCell": 435,
+      "TargetId": 1
+    },
+    {
+      "Id": 13,
+      "x": 8750,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 479,
+      "TargetId": 1
+    },
+    {
+      "Id": 14,
+      "x": 8250,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 478,
+      "TargetId": 1
+    },
+    {
+      "Id": 15,
+      "x": 5893.896229971453,
+      "y": -3953.896229971465,
+      "State": 0,
+      "GoalCell": 255,
+      "TargetId": 1
+    },
+    {
+      "Id": 16,
+      "x": 6250,
+      "y": -4310,
+      "State": 1,
+      "GoalCell": 298,
+      "TargetId": 1
+    },
+    {
+      "Id": 17,
+      "x": 6750,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 475,
+      "TargetId": 1
+    },
+    {
+      "Id": 18,
+      "x": 6250,
+      "y": -2810,
+      "State": 1,
+      "GoalCell": 430,
+      "TargetId": 1
+    },
+    {
+      "Id": 19,
+      "x": 8750,
+      "y": -5310,
+      "State": 2,
+      "GoalCell": 215,
+      "TargetId": 1
+    },
+    {
+      "Id": 20,
+      "x": 5537.792459942906,
+      "y": -3597.7924599429125,
+      "State": 0,
+      "GoalCell": 214,
+      "TargetId": 1
+    },
+    {
+      "Id": 21,
+      "x": 9250,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 480,
+      "TargetId": 1
+    },
+    {
+      "Id": 22,
+      "x": 6541.5,
+      "y": -5310,
+      "State": 0,
+      "GoalCell": 211,
+      "TargetId": 1
+    },
+    {
+      "Id": 23,
+      "x": 6041.5,
+      "y": -5310,
+      "State": 0,
+      "GoalCell": 210,
+      "TargetId": 1
+    },
+    {
+      "Id": 24,
+      "x": 5572.794245611638,
+      "y": -5132.794245611638,
+      "State": 0,
+      "GoalCell": 209,
+      "TargetId": 1
+    },
+    {
+      "Id": 25,
+      "x": 5216.690475583091,
+      "y": -4776.690475583091,
+      "State": 0,
+      "GoalCell": 253,
+      "TargetId": 1
+    },
+    {
+      "Id": 26,
+      "x": 4862.783531599247,
+      "y": -4422.783531599247,
+      "State": 0,
+      "GoalCell": 208,
+      "TargetId": 1
+    },
+    {
+      "Id": 27,
+      "x": 5040.241623479479,
+      "y": -3955.1208117397396,
+      "State": 0,
+      "GoalCell": 297,
+      "TargetId": 1
+    },
+    {
+      "Id": 28,
+      "x": 4371,
+      "y": -4310,
+      "State": 0,
+      "GoalCell": 252,
+      "TargetId": 1
+    },
+    {
+      "Id": 29,
+      "x": 4619.463293169947,
+      "y": -3679.463293169959,
+      "State": 0,
+      "GoalCell": 296,
+      "TargetId": 1
+    },
+    {
+      "Id": 30,
+      "x": 3250,
+      "y": -4513,
+      "State": 0,
+      "GoalCell": 251,
+      "TargetId": 1
+    },
+    {
+      "Id": 31,
+      "x": 5750,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 429,
+      "TargetId": 1
+    },
+    {
+      "Id": 32,
+      "x": 4025.48357482798,
+      "y": -3947.74178741399,
+      "State": 0,
+      "GoalCell": 295,
+      "TargetId": 1
+    },
+    {
+      "Id": 33,
+      "x": 5750,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 473,
+      "TargetId": 1
+    },
+    {
+      "Id": 34,
+      "x": 5250,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 428,
+      "TargetId": 1
+    },
+    {
+      "Id": 35,
+      "x": 3836.088617133744,
+      "y": -3482.1772342674876,
+      "State": 0,
+      "GoalCell": 294,
+      "TargetId": 1
+    },
+    {
+      "Id": 36,
+      "x": 5250,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 472,
+      "TargetId": 1
+    },
+    {
+      "Id": 37,
+      "x": 3151.5,
+      "y": -3810,
+      "State": 0,
+      "GoalCell": 249,
+      "TargetId": 1
+    },
+    {
+      "Id": 38,
+      "x": 4750,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 427,
+      "TargetId": 1
+    },
+    {
+      "Id": 39,
+      "x": 3553.3488091290446,
+      "y": -4113.348809129043,
+      "State": 0,
+      "GoalCell": 293,
+      "TargetId": 1
+    },
+    {
+      "Id": 40,
+      "x": 4750,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 471,
+      "TargetId": 1
+    },
+    {
+      "Id": 41,
+      "x": 4750,
+      "y": -1810,
+      "State": 0,
+      "GoalCell": 426,
+      "TargetId": 1
+    },
+    {
+      "Id": 42,
+      "x": 4250,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 470,
+      "TargetId": 1
+    },
+    {
+      "Id": 43,
+      "x": 3750,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 425,
+      "TargetId": 1
+    },
+    {
+      "Id": 44,
+      "x": 3750,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 469,
+      "TargetId": 1
+    },
+    {
+      "Id": 45,
+      "x": 3316,
+      "y": -2810,
+      "State": 0,
+      "GoalCell": 257,
+      "TargetId": 1
+    },
+    {
+      "Id": 46,
+      "x": 3431.5,
+      "y": -3310,
+      "State": 0,
+      "GoalCell": 256,
+      "TargetId": 1
+    }
+  ]
+}
