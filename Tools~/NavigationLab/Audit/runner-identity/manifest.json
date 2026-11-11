@@ -1,0 +1,17 @@
+{
+  "scope": "Read-only actual Runner compile-input identity proof and isolated validator unit fixtures; no multi-candidate completion claim",
+  "files": {
+    "/workspace/navigation-comparison/audit/runner-identity/README.md": "1786e46b0191ee42c9b1af0d96bf5fb1fb79b51b42696d1a6c703bad74905b17",
+    "/workspace/navigation-comparison/audit/runner-identity/tool-source.py": "648af1663fed083701a1963dea3bcaeca3b3379809015692fe6b37f194ea7b87",
+    "/workspace/navigation-comparison/audit/runner-identity/checks.py": "8ec6b467f19852b2ce1c1a9f977ba7e5847b084cd2e3fa5ac627fca148bad292",
+    "/workspace/navigation-comparison/audit/runner-identity/checks.json": "60596ef3585be1f87585309ed6d15182f2996919b82239a61374cf92ec57cb81",
+    "/workspace/navigation-comparison/audit/runner-identity/execution.log": "60596ef3585be1f87585309ed6d15182f2996919b82239a61374cf92ec57cb81",
+    "/workspace/navigation-comparison/audit/runner-identity/actual-models.json": "b31fa0f5e189eac6b3f0a4b621a29043bd58cde885de79804e79529956c99450",
+    "/workspace/navigation-comparison/results/a-v2-final-stress/build-manifest.json": "9e942b0d13ad81d0153ae349c6bf4b1f7c64898688e83a5b359074cc43392a49",
+    "/workspace/navigation-comparison/results/b0-v2-stress/build-manifest.json": "1768ee6ee71022235c82a1f38273d13249207ba135eacfe5d5ab1e35886ff2ce",
+    "/workspace/navigation-comparison/results/b1-v2-stress/build-manifest.json": "626779c936349a1d27c0461c4c6252d44785bb65bfb1aa0f149480a36f158f03",
+    "/workspace/navigation-comparison/results/c-final-v2-stress49/build-manifest.json": "024eb66ce7da0a1c20507e0d09e62b100b1e4cfc40aac54ec5e100b09f0d8705",
+    "/workspace/navigation-comparison/results/d-r9-build/build-manifest.json": "fca80909587450d9741aa4a1629891bdcf4b6ca4de53b360f0b351342be3b721",
+    "/workspace/navigation-comparison/results/e-v2-stress/build-manifest.json": "36f6a582c8ee874e57e15ad721d21a8bea8b019a6d13c5c45cfe1b464afc0441"
+  }
+}
