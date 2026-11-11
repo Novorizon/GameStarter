@@ -6,7 +6,7 @@ using System.Linq;
 namespace Game.HotUpdate.TowerDefense.Domain
 {
     /// <summary>Single-player fixed-tick rules. No Unity objects, services, wall clock or global random.</summary>
-    public sealed class FightSession
+    public sealed partial class FightSession
     {
         public const int TickMilliseconds = 50;
         public const int TowerFoundationRadiusMillimetres = 420;
@@ -30,13 +30,26 @@ namespace Game.HotUpdate.TowerDefense.Domain
             internal int BatchIndex;
             internal int Health;
             internal Position2 Position;
+            internal Position2 PreviousPosition;
             internal long NextBaseAttackTick;
+            internal int RouteDistance;
+            internal int Radius;
+            internal int ApproachLimit;
+            internal Position2[] Maneuver;
+            internal int ManeuverIndex;
+            internal Position2 ManeuverSegmentStart;
+            internal int ManeuverSegmentDistance;
+            internal int ManeuverWaitTicks;
+            internal bool AttackDestination;
+            internal bool InAssaultArea;
+            internal bool HasStagingPosition;
+            internal bool AtAttackPosition;
         }
 
         private readonly Dictionary<int, TowerDefinition> towerDefinitions;
         private readonly Dictionary<int, EnemyDefinition> enemyDefinitions;
         private readonly Dictionary<int, BuildSlotDefinition> slots;
-        private readonly Dictionary<int, RouteDefinition> routes;
+        private readonly Dictionary<int, RouteTrack> routes;
         private readonly List<Tower> towers = new List<Tower>();
         private readonly List<Enemy> enemies = new List<Enemy>();
         private readonly List<TowerSnapshot> towerSnapshots = new List<TowerSnapshot>();
@@ -135,7 +148,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
             towerDefinitions = configuration.Towers.ToDictionary(value => value.Id);
             enemyDefinitions = configuration.Enemies.ToDictionary(value => value.Id);
             slots = configuration.BuildSlots.ToDictionary(value => value.Id);
-            routes = configuration.Routes.ToDictionary(value => value.Id);
+            routes = configuration.Routes.ToDictionary(value => value.Id, value => new RouteTrack(value));
+            InitializeNavigation();
             Gold = configuration.InitialGold;
             BaseLevel = configuration.Objective.HasBase ? 1 : 0;
             BaseMaxHp = BaseHp = configuration.Objective.HasBase ? configuration.BaseHealth : 0;
@@ -165,7 +179,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
             }
 
-            return true;
+            return IsTowerFoundationClear(slot.Position);
         }
 
         public bool BuildTower(int slotId, int towerTypeId)
@@ -180,6 +194,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             Gold -= paid;
             usedOpeningDiscount |= definition.Id == Configuration.OpeningDiscountTowerId;
             towers.Add(new Tower { Id = nextTowerId++, Slot = slots[slotId], Definition = definition, PaidBuildCost = paid });
+            NavigationObstaclesChanged();
             RefreshSnapshots();
             return true;
         }
@@ -255,6 +270,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
 
             Gold = SaturatingAdd(Gold, SellValue(towers[index]));
             towers.RemoveAt(index);
+            NavigationObstaclesChanged();
             RefreshSnapshots();
             return true;
         }
@@ -340,15 +356,17 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     Gold = SaturatingAdd(Gold, target.Definition.GoldReward);
                     Kills++;
                     enemies.Remove(target);
+                    NavigationEnemyRemoved(target);
                     RewardResolvedEnemy(target);
                 }
             }
 
+            AdvanceEnemies();
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 var enemy = enemies[i];
                 if (RelayHeld && enemy.Route.Id == Configuration.RelayRouteId
-                    && enemy.Position.Equals(enemy.Route.Points[Configuration.RelayPointIndex]))
+                    && enemy.RouteDistance >= routes[enemy.Route.Id].DistanceAtPoint(Configuration.RelayPointIndex))
                 {
                     RelayHeld = false;
                 }
@@ -362,6 +380,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 {
                     Phase = BattlePhase.Defeat;
                     enemies.Clear();
+                    maneuvers.Clear();
                     return;
                 }
             }
@@ -425,9 +444,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 var group = groups[i];
                 int age = waveTick - group.StartTick;
                 int due = age < 0 ? 0 : Math.Min(group.Count, 1 + age / group.IntervalTicks);
-                if (emitted[i] < due)
+                if (emitted[i] < due && TrySpawnEnemy(group, batchIndex))
                 {
-                    SpawnEnemy(group, batchIndex);
                     emitted[i]++;
                 }
 
@@ -441,19 +459,30 @@ namespace Game.HotUpdate.TowerDefense.Domain
             }
         }
 
-        private void SpawnEnemy(SpawnGroup group, int batchIndex)
+        private bool TrySpawnEnemy(SpawnGroup group, int batchIndex)
         {
             var definition = enemyDefinitions[group.EnemyId];
-            var route = routes[group.RouteId];
+            var track = routes[group.RouteId];
+            var spawn = track.Route.Points[0];
+            int radius = EnemyNavigationRadiusMillimetres(definition.Id);
+            if (UsesTraffic && !CanOccupySpawn(spawn, radius))
+            {
+                return false;
+            }
+
             enemies.Add(new Enemy
             {
                 Id = nextEnemyId++,
                 Definition = definition,
-                Route = route,
+                Route = track.Route,
                 BatchIndex = batchIndex,
                 Health = definition.Health,
-                Position = route.Points[0]
+                Position = spawn,
+                PreviousPosition = spawn,
+                Radius = radius,
+                ApproachLimit = ApproachLimit(track, radius)
             });
+            return true;
         }
 
         private static long DistanceSquared(Position2 first, Position2 second)
@@ -474,13 +503,14 @@ namespace Game.HotUpdate.TowerDefense.Domain
         private void RecordLeak(Enemy enemy, int index)
         {
             enemies.RemoveAt(index);
+            NavigationEnemyRemoved(enemy);
             Leaks++;
             RewardResolvedEnemy(enemy);
         }
 
-        private static bool AtObjective(Enemy enemy)
+        private bool AtObjective(Enemy enemy)
         {
-            return enemy.Position.Equals(enemy.Route.Points[^1]);
+            return navigation != null ? enemy.AtAttackPosition : enemy.Position.Equals(enemy.Route.Points[^1]);
         }
 
         private bool ResolveArrival(Enemy enemy, int index)
@@ -521,7 +551,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             long range = Range(tower.Definition, tower.Level);
             foreach (var enemy in enemies)
             {
-                long distanceToGoal = DistanceSquared(enemy.Position, enemy.Route.Points[^1]);
+                long distanceToGoal = DistanceToObjective(enemy);
                 if (DistanceSquared(enemy.Position, tower.Slot.Position) <= range * range && distanceToGoal < remaining)
                 {
                     best = enemy;
@@ -669,9 +699,11 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     enemy.Definition.Id,
                     enemy.Route.Id,
                     enemy.Position,
+                    enemy.PreviousPosition,
                     enemy.Health,
                     enemy.Definition.Health,
                     Configuration.Objective.Type == BattleObjectiveType.DefendBase && AtObjective(enemy),
+                    enemy.HasStagingPosition,
                     enemy.NextBaseAttackTick));
             }
         }

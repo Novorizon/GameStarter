@@ -42,6 +42,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private bool trackingPlacementTouch;
         private int ghostDefinitionId;
         private Mesh shadowMesh;
+        private long interpolationHoldTick = -1;
 
         private void CreateWorld(Sprite map, ClientArt art)
         {
@@ -409,6 +410,14 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         {
             liveEnemies.Clear();
             var objectivePosition = World(configuration.Routes[0].Points[^1], .05f);
+            const float tickSeconds = FightSession.TickMilliseconds / 1000f;
+            bool interpolating = session.Phase == BattlePhase.Fighting && !session.IsPaused;
+            if (!interpolating)
+            {
+                interpolationHoldTick = session.Tick;
+            }
+
+            float interpolation = interpolating && session.Tick != interpolationHoldTick ? Mathf.Clamp01(accumulator / tickSeconds) : 1f;
             foreach (var state in session.Enemies)
             {
                 liveEnemies.Add(state.Id);
@@ -420,7 +429,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 }
 
                 var next = World(state.Position, .05f);
-                var direction = state.AttackingBase ? objectivePosition - next : next - view.Root.transform.localPosition;
+                var previous = World(state.PreviousPosition, .05f);
+                var direction = state.AttackingBase ? objectivePosition - next : next - previous;
                 if (direction.sqrMagnitude > .0001f)
                 {
                     var rotation = Quaternion.LookRotation(direction);
@@ -441,10 +451,10 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                         rotation *= Quaternion.Euler(pitch, 0, 0);
                     }
 
-                    view.Root.transform.rotation = rotation;
+                    view.Root.transform.rotation = Quaternion.RotateTowards(view.Root.transform.rotation, rotation, elapsed * 720f);
                 }
 
-                view.Root.transform.localPosition = next;
+                view.Root.transform.localPosition = Vector3.Lerp(previous, next, interpolation);
                 float health = state.MaxHealth == 0 ? 0 : Mathf.Clamp01((float)state.Health / state.MaxHealth);
                 view.Health.transform.parent.rotation = worldCamera.transform.rotation;
                 view.Health.SetPosition(1, new Vector3(-.32f + health * .64f, 0, 0));

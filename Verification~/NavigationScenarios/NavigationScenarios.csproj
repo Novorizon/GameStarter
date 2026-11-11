@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/*.cs" Link="Domain/%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Data/TowerDefenseTables.cs;../../Assets/HotUpdate/TowerDefense/Data/TowerDefenseMapObjectives.cs" />
+    <Compile Include="../../Assets/HotUpdate/Generated/Data/*.cs" />
+    <Compile Include="../../Packages/com.code-philosophy.luban@*/Runtime/*.cs" />
+  </ItemGroup>
+</Project>

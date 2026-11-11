@@ -17,17 +17,20 @@ namespace Game.HotUpdate.TowerDefense.Data
             private readonly BattleObjective objective;
             private readonly TowerPlacementArea towerPlacement;
             private readonly Position2[] routePoints;
+            private readonly AssaultNavigationMap assaultNavigation;
 
-            internal Settings(BattleObjective objective, TowerPlacementArea towerPlacement, Position2[] routePoints)
+            internal Settings(BattleObjective objective, TowerPlacementArea towerPlacement, Position2[] routePoints, AssaultNavigationMap assaultNavigation)
             {
                 this.objective = objective;
                 this.towerPlacement = towerPlacement;
                 this.routePoints = routePoints;
+                this.assaultNavigation = assaultNavigation;
             }
 
             internal void ApplyTo(FightConfiguration configuration)
             {
                 configuration.Objective = objective;
+                configuration.AssaultNavigation = assaultNavigation;
                 if (routePoints != null)
                 {
                     if (configuration.Routes.Length != 1)
@@ -83,6 +86,20 @@ namespace Game.HotUpdate.TowerDefense.Data
         }
 
         [Serializable]
+        private sealed class AssaultNavigationRule
+        {
+            public MapPoint min = null;
+            public MapPoint max = null;
+            public MapPoint areaMin = null;
+            public MapPoint areaMax = null;
+            public MapPoint baseMin = null;
+            public MapPoint baseMax = null;
+            public int approachInset = 0;
+            public MapPoint[] walkableBoundary = null;
+            public BlockedAreaRule[] blockedAreas = null;
+        }
+
+        [Serializable]
         private sealed class MapRules
         {
             public string objectiveType = "";
@@ -94,6 +111,7 @@ namespace Game.HotUpdate.TowerDefense.Data
             public AssaultRule assault = null;
             public MapPoint[] routePoints = null;
             public TowerPlacementRule towerPlacement = null;
+            public AssaultNavigationRule assaultNavigation = null;
         }
 
         internal static async Task<Dictionary<int, Settings>> LoadAsync(IEnumerable<cfg.TdStage> stages, CancellationToken token)
@@ -116,7 +134,7 @@ namespace Game.HotUpdate.TowerDefense.Data
             return settings;
         }
 
-        private static Settings Parse(string json)
+        internal static Settings Parse(string json)
         {
             var rules = JsonUtility.FromJson<MapRules>(json);
             if (rules == null || !Enum.TryParse(rules.objectiveType, out BattleObjectiveType type)
@@ -139,8 +157,42 @@ namespace Game.HotUpdate.TowerDefense.Data
                 assault,
                 baseAttackWindupTicks: rules.baseAttackWindupTicks);
             var route = rules.routePoints is { Length: > 0 } ? ParsePoints(rules.routePoints, 2) : null;
-            return new Settings(objective, ParseTowerPlacement(rules.towerPlacement), route);
+            var navigation = ParseAssaultNavigation(rules.assaultNavigation);
+            if (navigation != null && type != BattleObjectiveType.DefendBase)
+            {
+                throw new ArgumentException("Assault navigation requires a base defense objective.");
+            }
+
+            return new Settings(objective, ParseTowerPlacement(rules.towerPlacement), route, navigation);
         }
+
+        private static AssaultNavigationMap ParseAssaultNavigation(AssaultNavigationRule rule)
+        {
+            // JsonUtility can instantiate an omitted inline object with default field values.
+            if (rule == null || (IsDefaultPoint(rule.min) && IsDefaultPoint(rule.max) && IsDefaultPoint(rule.areaMin)
+                && IsDefaultPoint(rule.areaMax) && IsDefaultPoint(rule.baseMin) && IsDefaultPoint(rule.baseMax)
+                && rule.approachInset == 0
+                && (rule.walkableBoundary == null || rule.walkableBoundary.Length == 0)
+                && (rule.blockedAreas == null || rule.blockedAreas.Length == 0)))
+            {
+                return null;
+            }
+
+            var blocked = rule.blockedAreas?.Select(area => ParsePoints(area?.points, 3)).ToArray();
+            var boundary = rule.walkableBoundary is { Length: > 0 } ? ParsePoints(rule.walkableBoundary, 3) : null;
+            return new AssaultNavigationMap(
+                ParsePoint(rule.min),
+                ParsePoint(rule.max),
+                ParsePoint(rule.areaMin),
+                ParsePoint(rule.areaMax),
+                ParsePoint(rule.baseMin),
+                ParsePoint(rule.baseMax),
+                blocked,
+                boundary,
+                rule.approachInset == 0 ? AssaultNavigationMap.DefaultApproachInset : rule.approachInset);
+        }
+
+        private static bool IsDefaultPoint(MapPoint point) => point == null || point.x == 0 && point.y == 0;
 
         private static TowerPlacementArea ParseTowerPlacement(TowerPlacementRule rule)
         {

@@ -119,6 +119,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int StageId { get; set; }
         public string StageName { get; set; } = "林间哨站";
         public BattleObjective Objective { get; set; } = BattleObjective.Legacy;
+        public AssaultNavigationMap AssaultNavigation { get; set; }
         public int InitialGold { get; set; }
         public int BaseHealth { get; set; }
         public int OpeningDiscountTowerId { get; set; }
@@ -274,21 +275,34 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int DefinitionId { get; }
         public int RouteId { get; }
         public Position2 Position { get; }
+        internal Position2 PreviousPosition { get; }
         public int Health { get; }
         public int MaxHealth { get; }
         public bool AttackingBase { get; }
+        internal bool IsStaged { get; }
         public long NextBaseAttackTick { get; }
 
         internal EnemySnapshot(
-            int id, int definitionId, int routeId, Position2 position, int health, int maxHealth, bool attackingBase, long nextBaseAttackTick)
+            int id,
+            int definitionId,
+            int routeId,
+            Position2 position,
+            Position2 previousPosition,
+            int health,
+            int maxHealth,
+            bool attackingBase,
+            bool isStaged,
+            long nextBaseAttackTick)
         {
             Id = id;
             DefinitionId = definitionId;
             RouteId = routeId;
             Position = position;
+            PreviousPosition = previousPosition;
             Health = health;
             MaxHealth = maxHealth;
             AttackingBase = attackingBase;
+            IsStaged = isStaged;
             NextBaseAttackTick = nextBaseAttackTick;
         }
     }

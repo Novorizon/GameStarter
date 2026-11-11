@@ -496,6 +496,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         {
             if (session.ChooseCard(index))
             {
+                interpolationHoldTick = session.Tick;
                 SetNotice("强化已生效。");
                 RefreshInterface();
             }
@@ -532,6 +533,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             accumulator = 0;
             if (initialized && !disposed)
             {
+                interpolationHoldTick = session.Tick;
                 bool paused = pauseState.IsPaused || systemMenu.activeSelf || mapDetails.activeSelf;
                 skipSimulationFrame |= session.IsPaused != paused;
                 session.SetPaused(paused);

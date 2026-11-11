@@ -6,5 +6,22 @@
   "baseUpgrades": [
     { "goldCost": 60, "durabilityIncrease": 6 },
     { "goldCost": 100, "durabilityIncrease": 8 }
-  ]
+  ],
+  "assaultNavigation": {
+    "min": { "x": -10500, "y": -6600 },
+    "max": { "x": 10500, "y": 6600 },
+    "areaMin": { "x": 4200, "y": -6480 },
+    "areaMax": { "x": 10500, "y": -1450 },
+    "baseMin": { "x": 7900, "y": -4750 },
+    "baseMax": { "x": 9600, "y": -2950 },
+    "blockedAreas": [
+      { "points": [
+        { "x": 9580, "y": -2060 },
+        { "x": 10080, "y": -2070 },
+        { "x": 10230, "y": -1890 },
+        { "x": 10020, "y": -1580 },
+        { "x": 9720, "y": -1660 }
+      ] }
+    ]
+  }
 }
