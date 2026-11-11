@@ -6,6 +6,7 @@ using System.Runtime.Loader;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using NavigationLab.Core;
 using NavigationLab.Oracle;
 
@@ -31,6 +32,7 @@ internal static class Program
         Directory.CreateDirectory(Path.Combine(output, "inputs"));
         foreach (var item in cases)
         {
+            ValidateInputCertificate(item);
             WriteJson(Path.Combine(output, "inputs", item.Name + ".json"), Export(item));
         }
         if (arguments.Contains("--list") || arguments.Contains("--export-only"))
@@ -83,7 +85,13 @@ internal static class Program
                 }
             }
             results.Add(result);
-            WriteJson(Path.Combine(output, item.Name + ".json"), result);
+            string individual = Path.Combine(output, item.Name + ".json");
+            WriteJson(individual, result);
+            using (var compressed = new GZipStream(File.Create(individual + ".gz"), CompressionLevel.Optimal))
+            {
+                using var raw = File.OpenRead(individual);
+                raw.CopyTo(compressed);
+            }
             Console.WriteLine(result.Status.ToUpperInvariant() + " " + item.Name + " admitted=" + result.Admitted + " alive=" + result.Alive
                 + " pending=" + result.Pending + " attack=" + result.Attacking + " tick=" + result.FinalTick + " " + result.Error);
         }
@@ -91,6 +99,7 @@ internal static class Program
         bool sourcesUnchanged = JsonSerializer.Serialize(sourceBefore) == JsonSerializer.Serialize(sourceAfter);
         int failed = results.Count(item => item.Status == "Failed");
         int unsupported = results.Count(item => item.Status == "Unsupported");
+        int invalidInputs = results.Count(item => item.Status == "InvalidInput");
         WriteJson(Path.Combine(output, "summary.json"), new
         {
             schemaVersion = 1,
@@ -105,8 +114,8 @@ internal static class Program
             protocol = new { microstepMilliseconds = 5, logicalTickMilliseconds = 50, stableLogicalTicks = 200, geometryToleranceMm = 0.1 },
             scope = "Independent .NET8 host executing netstandard2.1 candidate DLLs; not a claim of original proprietary game source, Unity integration or device FPS.",
             suite,
-            success = failed == 0 && unsupported == 0 && isolation && sourcesUnchanged,
-            supportedCasesPassed = failed == 0 && isolation && sourcesUnchanged,
+            success = failed == 0 && unsupported == 0 && invalidInputs == 0 && isolation && sourcesUnchanged,
+            supportedCasesPassed = failed == 0 && invalidInputs == 0 && isolation && sourcesUnchanged,
             allSuiteCasesSupported = unsupported == 0,
             finiteCorpusOnly = true,
             replayRequested = replay,
@@ -116,7 +125,8 @@ internal static class Program
             passed = results.Count(item => item.Status == "Passed"),
             failed,
             unsupported,
-            cases = results,
+            invalidInputs,
+            cases = results.Select(result => CompactResult(result, output)).ToArray(),
             isolationAndPauseVerified = isolation,
             isolationError,
             sourceFilesUnchanged = sourcesUnchanged,
@@ -127,7 +137,7 @@ internal static class Program
             uniquePhysicalInputCountIgnoringIds = results.Select(item => item.PhysicalInputSha256).Distinct().Count(),
             timingScope = "Candidate Create/TrySpawn/Step/Remove/Apply/Dispose/Snapshot wall time and allocation are measured separately; input clone/Freeze copy/oracle/JSON excluded. Snapshot includes extra validation reads. Concurrent host timings are diagnostic, not device FPS."
         });
-        return failed > 0 || !isolation || !sourcesUnchanged ? 1 : unsupported > 0 ? 2 : 0;
+        return failed > 0 || invalidInputs > 0 || !isolation || !sourcesUnchanged ? 1 : unsupported > 0 ? 2 : 0;
     }
 
     private static CaseResult Execute(INavigationFactory factory, LabCase spec, string output, bool capture)
@@ -167,6 +177,8 @@ internal static class Program
         var triggeredWorld = new HashSet<int>();
         var triggeredDeaths = new HashSet<int>();
         int nextId = pending.Max(item => item.Request.Id) + 1;
+        int issuedRequests = spec.Requests.Count;
+        var oldWaitingIds = new HashSet<int>();
         int stable = 0;
         var holdAnchor = new Dictionary<int, Point2>();
         double holdMaximumDrift = 0;
@@ -197,19 +209,23 @@ internal static class Program
                     for (int index = 0; index < spec.TerrainEvents.Count; index++)
                     {
                         var planned = spec.TerrainEvents[index];
-                        if (tick == planned.Tick && triggeredWorld.Add(index))
+                        if (tick >= planned.Tick && !triggeredWorld.Contains(index)
+                            && (!planned.AfterSettlement || Complete(spec, pending, current, oracle, false, issuedRequests - result.Deaths)))
                         {
+                            triggeredWorld.Add(index);
                             var before = Freeze(nav);
+                            oracle.ValidateWorldChangeInput(planned.Change.DeepClone(), before);
                             bool accepted = nav.ApplyWorldChange(planned.Change.DeepClone());
                             var after = Freeze(nav);
+                            current = after;
+                            RecordCommand(new { microstep, kind = "world-change", index, accepted });
                             Require(accepted, "Advertised dynamic capability rejected the actual event.");
                             oracle.ApplyChange(planned.Change.DeepClone(), before, after);
                             current = after;
-                            RecordCommand(new { microstep, kind = "world-change", index });
                             stable = 0;
                         }
                     }
-                    bool settledNow = Complete(spec, pending, current, oracle, false);
+                    bool settledNow = Complete(spec, pending, current, oracle, false, issuedRequests - result.Deaths);
                     for (int index = 0; index < spec.DeathEvents.Count; index++)
                     {
                         var planned = spec.DeathEvents[index];
@@ -218,6 +234,7 @@ internal static class Program
                             continue;
                         }
                         var selected = current.Where(unit => planned.Range < 0 || oracle.Live[unit.Id].Profile.AttackRangeMm == planned.Range)
+                            .Where(unit => !planned.AttackersOnly || unit.State == MotionState.Attacking)
                             .Where(unit => !planned.RequireMoving || unit.State == MotionState.Moving
                                 && Point2.Distance(unit.Position, oracle.World.Center(oracle.World.CellAt(unit.Position))) > 0.1)
                             .OrderBy(unit => unit.Id).Take(planned.Count).ToArray();
@@ -230,6 +247,7 @@ internal static class Program
                             continue;
                         }
                         triggeredDeaths.Add(index);
+                        oldWaitingIds.UnionWith(current.Where(unit => unit.State == MotionState.Waiting).Select(unit => unit.Id));
                         foreach (var victim in selected)
                         {
                             var original = oracle.Live[victim.Id];
@@ -241,8 +259,14 @@ internal static class Program
                             RecordCommand(new { microstep, kind = "death", victim.Id, x = victim.Position.X, y = victim.Position.Y });
                             if (planned.Replace)
                             {
-                                var replacement = new SpawnRequest(nextId++, original.Profile, original.SpawnCell, original.TargetId, original.AssignedGoalCell);
+                                var replacement = new SpawnRequest(
+                                    nextId++,
+                                    original.Profile,
+                                    original.SpawnCell,
+                                    original.TargetId,
+                                    original.AssignedGoalCell);
                                 pending.Add(new ScheduledRequest(tick, replacement));
+                                issuedRequests++;
                             }
                         }
                         stable = 0;
@@ -257,6 +281,9 @@ internal static class Program
                         var before = Freeze(nav);
                         bool accepted = nav.TrySpawn(order.Request);
                         current = Freeze(nav);
+                        RecordCommand(new { microstep, kind = accepted ? "spawn" : "spawn-rejected", order.Request.Id,
+                            radius = order.Request.Profile.RadiusMm, speed = order.Request.Profile.SpeedMmPerTick,
+                            range = order.Request.Profile.AttackRangeMm, spawn = order.Request.SpawnCell, failure = accepted ? null : nav.LastSpawnFailure });
                         if (accepted)
                         {
                             oracle.RegisterBirth(order.Request, before, current);
@@ -270,19 +297,19 @@ internal static class Program
                             result.Failures.TryGetValue(nav.LastSpawnFailure, out int count);
                             result.Failures[nav.LastSpawnFailure] = count + 1;
                         }
-                        RecordCommand(new { microstep, kind = accepted ? "spawn" : "spawn-rejected", order.Request.Id,
-                            radius = order.Request.Profile.RadiusMm, speed = order.Request.Profile.SpeedMmPerTick,
-                            range = order.Request.Profile.AttackRangeMm, spawn = order.Request.SpawnCell, failure = accepted ? null : nav.LastSpawnFailure });
                     }
                     if (!initialChecked && tick == initialCheckTick)
                     {
                         int due = spec.Requests.Count(order => order.ReadyTick <= tick);
-                        Require(current.Length == due && current.All(unit => unit.State != MotionState.Moving), "Initial crowd did not physically settle before late arrivals.");
+                        Require(
+                            current.Length == due && current.All(unit => unit.State != MotionState.Moving),
+                            "Initial crowd did not physically settle before late arrivals.");
                         initialChecked = true;
                         result.InitialBatchVerified = true;
                     }
+                    int promotedOld = current.Count(unit => oldWaitingIds.Contains(unit.Id) && unit.State == MotionState.Attacking);
                     bool complete = Complete(spec, pending, current, oracle, true) && triggeredDeaths.Count == spec.DeathEvents.Count
-                        && triggeredWorld.Count == spec.TerrainEvents.Count && initialChecked;
+                        && triggeredWorld.Count == spec.TerrainEvents.Count && initialChecked && promotedOld >= spec.MinimumOldWaitingPromotions;
                     if (complete)
                     {
                         if (stable == 0)
@@ -308,6 +335,8 @@ internal static class Program
                         result.Waiting = current.Count(unit => unit.State == MotionState.Waiting);
                         result.FinalState = Canonical(current);
                         result.Metrics = nav.Metrics.ToDictionary(pair => pair.Key, pair => pair.Value);
+                        result.OldWaitingBeforeDeaths = oldWaitingIds.Count;
+                        result.PromotedOldWaiting = promotedOld;
                         result.ByRange = current.GroupBy(unit => oracle.Live[unit.Id].Profile.AttackRangeMm).ToDictionary(
                             group => group.Key, group => new[] { group.Count(), group.Count(unit => unit.State == MotionState.Attacking) });
                         break;
@@ -319,7 +348,8 @@ internal static class Program
                 oracle.ValidateTransition(previous, current, SimulationProtocol.MicrostepMilliseconds);
                 if (stable > 0)
                 {
-                    bool uninterrupted = current.Length == holdAnchor.Count && current.All(unit => unit.State != MotionState.Moving && holdAnchor.ContainsKey(unit.Id));
+                    bool uninterrupted = current.Length == holdAnchor.Count
+                        && current.All(unit => unit.State != MotionState.Moving && holdAnchor.ContainsKey(unit.Id));
                     double drift = uninterrupted && current.Length > 0 ? current.Max(unit => Point2.Distance(unit.Position, holdAnchor[unit.Id])) : 0;
                     if (!uninterrupted || drift > SimulationProtocol.GeometryToleranceMm)
                     {
@@ -359,12 +389,12 @@ internal static class Program
         }
         catch (Exception error)
         {
-            result.Status = "Failed";
+            result.Status = error.Message.StartsWith("INVALID TEST INPUT:", StringComparison.Ordinal) ? "InvalidInput" : "Failed";
             result.Error = error.Message;
             result.FinalTick = microstep / SimulationProtocol.Substeps;
             result.FailureSnapshot = current.Select(unit => new object[]
             {
-                unit.Id, unit.Position.X, unit.Position.Y, (int)unit.State, unit.GoalCell, unit.TargetId
+                unit.Id, SafeNumber(unit.Position.X), SafeNumber(unit.Position.Y), (int)unit.State, unit.GoalCell, unit.TargetId
             }).ToArray();
             trace.WriteLine(JsonSerializer.Serialize(new { step = microstep + 1, failure = result.Error, unsafeSnapshot = result.FailureSnapshot }));
         }
@@ -384,9 +414,16 @@ internal static class Program
         return result;
     }
 
-    private static bool Complete(LabCase spec, List<ScheduledRequest> pending, UnitSnapshot[] snapshot, ContinuousOracle oracle, bool final)
+    private static bool Complete(
+        LabCase spec,
+        List<ScheduledRequest> pending,
+        UnitSnapshot[] snapshot,
+        ContinuousOracle oracle,
+        bool final,
+        int? expectedAliveBeforeLifecycle = null)
     {
-        int expected = spec.ExpectedLive;
+        int expected = !final && spec.Expectation == CaseExpectation.FullArrival && expectedAliveBeforeLifecycle.HasValue
+            ? expectedAliveBeforeLifecycle.Value : spec.ExpectedLive;
         if (snapshot.Length != expected || snapshot.Any(unit => unit.State == MotionState.Moving))
         {
             return false;
@@ -485,13 +522,36 @@ internal static class Program
             first.Step();
         }
         string paused = Canonical(Freeze(first));
-        using var second = factory.Create(world.Clone(), new[] { profile });
-        Require(second.TrySpawn(new SpawnRequest(999, profile, world.SpawnCells[0])), "Second isolated spawn failed.");
+        var alternateMask = (bool[])walkable.Clone();
+        for (int y = 0; y < 25; y++)
+        {
+            if (y < 11 || y > 13)
+            {
+                alternateMask[15 + y * 35] = false;
+            }
+        }
+        var alternate = new WorldDefinition(35, 25, 1000, default, alternateMask, alternateMask, new[] { 2 + 18 * 35 },
+            new[] { new TargetDefinition(1, new Point2(28500, 6500), 1000) }, 7000);
+        var alternateProfile = new UnitProfile(300, 500, 2000);
+        using var second = factory.Create(alternate, new[] { alternateProfile });
+        Require(second.TrySpawn(new SpawnRequest(999, alternateProfile, alternate.SpawnCells[0])), "Second isolated spawn failed.");
         for (int tick = 0; tick < 75; tick++)
         {
             second.Step();
         }
         Require(Canonical(Freeze(first)) == paused, "Other instance advanced or reset paused instance.");
+        Require(second.Remove(999), "Second-instance removal failed.");
+        Require(second.TrySpawn(new SpawnRequest(1001, alternateProfile, alternate.SpawnCells[0])), "Second-instance reentry failed.");
+        if (factory.Features.HasFlag(NavigationFeatures.DynamicTerrain))
+        {
+            Require(second.ApplyWorldChange(new WorldChange { BlockCells = new[] { 10 + 4 * 35 } }), "Second-instance dynamic event failed.");
+        }
+        if (factory.Features.HasFlag(NavigationFeatures.MovingTarget))
+        {
+            Require(second.ApplyWorldChange(new WorldChange { ReplaceTarget = new TargetDefinition(1, new Point2(30500, 8500), 1000) }),
+                "Second-instance target event failed.");
+        }
+        Require(Canonical(Freeze(first)) == paused, "Other-instance removal/rebirth/cache invalidation changed paused world.");
         for (int tick = 35; tick < 100; tick++)
         {
             first.Step();
@@ -504,9 +564,158 @@ internal static class Program
         return true;
     }
 
+    private static void ValidateInputCertificate(LabCase spec)
+    {
+        Require(spec.Requests.Select(order => order.Request.Id).Distinct().Count() == spec.Requests.Count, "Input has duplicate original IDs.");
+        foreach (var order in spec.Requests)
+        {
+            Require(ContinuousOracle.CircleFits(spec.World, spec.World.Center(order.Request.SpawnCell), order.Request.Profile.RadiusMm),
+                "Invalid original spawn geometry in " + spec.Name);
+        }
+        if (spec.Name == "cross-junction-original-4m")
+        {
+            var profile = spec.Requests[0].Request.Profile;
+            var target = spec.World.Target(1);
+            int endpoints = Enumerable.Range(0, spec.World.CellCount).Count(cell => spec.World.HoldingAllowed(cell)
+                && ContinuousOracle.CircleFits(spec.World, spec.World.Center(cell), profile.RadiusMm)
+                && (ContinuousOracle.CanAttack(spec.World, spec.World.Center(cell), profile, target)
+                    || Point2.Distance(spec.World.Center(cell), target.Center) <= target.RadiusMm + spec.World.GatheringDistanceMm));
+            Require(endpoints == 72, "Original72 endpoint set changed.");
+        }
+        if (spec.PhysicalAreaUpperBound > 0)
+        {
+            Require(spec.World.Width == 9 && spec.World.Height == 9 && spec.World.CellSizeMm == 1000, "Unexpected physical-capacity fixture.");
+            var profile = spec.Requests[0].Request.Profile;
+            Require(profile.RadiusMm == 490, "Area proof requires fixed490mm bodies.");
+            long upper = (49L * 1000000 * 100 - 314L * 1000 * 1000) / (314L * 490 * 490);
+            Require(upper == spec.PhysicalAreaUpperBound && upper == 60, "Physical area bound changed.");
+            int endpoints = Enumerable.Range(0, spec.World.CellCount).Count(cell => spec.World.HoldingAllowed(cell)
+                && ContinuousOracle.CircleFits(spec.World, spec.World.Center(cell), profile.RadiusMm));
+            Require(endpoints == 39 && spec.ExpectedLive == endpoints, "Discrete endpoint bound changed.");
+            for (int y = 0; y < 9; y++)
+            {
+                for (int x = 0; x < 9; x++)
+                {
+                    Require(spec.World.IsWalkable(y * 9 + x) == (x > 0 && x < 8 && y > 0 && y < 8), "Area proof rectangle changed.");
+                }
+            }
+        }
+        if (spec.Family == "large-body-group")
+        {
+            var options = spec.Requests.ToDictionary(order => order.Request.Id, order => Enumerable.Range(0, spec.World.CellCount)
+                .Where(cell => spec.World.HoldingAllowed(cell) && ContinuousOracle.CircleFits(spec.World, spec.World.Center(cell), order.Request.Profile.RadiusMm)
+                    && ContinuousOracle.CanAttack(spec.World, spec.World.Center(cell), order.Request.Profile, spec.World.Target(order.Request.TargetId))).ToArray());
+            var goals = new Dictionary<int, int>();
+            bool Match(int id, HashSet<int> seen)
+            {
+                foreach (int cell in options[id])
+                {
+                    if (seen.Add(cell) && (!goals.TryGetValue(cell, out int owner) || Match(owner, seen)))
+                    {
+                        goals[cell] = id;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            foreach (var request in spec.Requests)
+            {
+                Require(Match(request.Request.Id, new HashSet<int>()), "Sparse large-body attack assignment certificate failed.");
+            }
+            var requested = spec.Requests.ToDictionary(order => order.Request.Id, order => order.Request);
+            foreach (var first in goals)
+            {
+                foreach (var second in goals.Where(pair => pair.Key != first.Key))
+                {
+                    Require(Point2.Distance(spec.World.Center(first.Key), spec.World.Center(second.Key))
+                        >= requested[first.Value].Profile.RadiusMm + requested[second.Value].Profile.RadiusMm,
+                        "Sparse endpoint physical packing certificate failed.");
+                }
+                var request = requested[first.Value];
+                var visited = new HashSet<int> { request.SpawnCell };
+                var queue = new Queue<int>(visited);
+                while (queue.Count > 0)
+                {
+                    int cell = queue.Dequeue();
+                    foreach (int next in spec.World.Neighbours(cell))
+                    {
+                        var from = spec.World.Center(cell);
+                        var to = spec.World.Center(next);
+                        if (!visited.Contains(next) && ContinuousOracle.SegmentFits(spec.World, from, to, request.Profile.RadiusMm)
+                            && goals.Where(pair => pair.Value != request.Id).All(pair => ContinuousOracle.DistanceToSegment(spec.World.Center(pair.Key), from, to)
+                                + 0.1 >= request.Profile.RadiusMm + requested[pair.Value].Profile.RadiusMm))
+                        {
+                            visited.Add(next);
+                            queue.Enqueue(next);
+                        }
+                    }
+                }
+                Require(visited.Contains(first.Key), "Sparse large-body permanent access certificate failed.");
+            }
+        }
+        foreach (var planned in spec.TerrainEvents.Where(item => item.Change.ReplaceTarget.HasValue))
+        {
+            var replacement = planned.Change.ReplaceTarget!.Value;
+            var updated = spec.World.WithChange(planned.Change);
+            var profile = spec.Requests[0].Request.Profile;
+            int slots = Enumerable.Range(0, updated.CellCount).Count(cell => updated.HoldingAllowed(cell)
+                && ContinuousOracle.CircleFits(updated, updated.Center(cell), profile.RadiusMm)
+                && ContinuousOracle.CanAttack(updated, updated.Center(cell), profile, replacement));
+            Require(slots == 16, "Relocated target16-slot certificate changed.");
+            if (planned.AfterSettlement)
+            {
+                var original = spec.World.Target(replacement.Id);
+                double oldRadius = original.RadiusMm + Math.Max(spec.World.GatheringDistanceMm, profile.RadiusMm + profile.AttackRangeMm);
+                Require(Point2.Distance(original.Center, replacement.Center) - oldRadius - SimulationProtocol.GoalToleranceMm
+                    > replacement.RadiusMm + profile.RadiusMm, "Relocation could cover an old settled body.");
+            }
+        }
+        if (spec.Expectation == CaseExpectation.StaticUnreachable)
+        {
+            var profile = spec.Requests[0].Request.Profile;
+            var seen = new HashSet<int> { spec.Requests[0].Request.SpawnCell };
+            var queue = new Queue<int>(seen);
+            while (queue.Count > 0)
+            {
+                int cell = queue.Dequeue();
+                Require(
+                    !ContinuousOracle.CanAttack(spec.World, spec.World.Center(cell), profile, spec.World.Target(1)),
+                    "Unreachable certificate has a reachable attack position.");
+                foreach (int next in spec.World.Neighbours(cell))
+                {
+                    if (!seen.Contains(next) && ContinuousOracle.SegmentFits(spec.World, spec.World.Center(cell), spec.World.Center(next), profile.RadiusMm))
+                    {
+                        seen.Add(next);
+                        queue.Enqueue(next);
+                    }
+                }
+            }
+        }
+    }
+
     private static NavigationFeatures Required(LabCase spec)
     {
         var features = spec.Features;
+        if (spec.World.Targets.Count > 1)
+        {
+            features |= NavigationFeatures.MultipleTargets;
+        }
+        if (spec.Requests.Any(order => order.Request.AssignedGoalCell >= 0))
+        {
+            features |= NavigationFeatures.AssignedGoals;
+        }
+        if (spec.DeathEvents.Count > 0)
+        {
+            features |= NavigationFeatures.DeathAndReinforcement;
+        }
+        if (spec.TerrainEvents.Any(planned => planned.Change.BlockCells.Length > 0 || planned.Change.OpenCells.Length > 0))
+        {
+            features |= NavigationFeatures.DynamicTerrain;
+        }
+        if (spec.TerrainEvents.Any(planned => planned.Change.ReplaceTarget.HasValue))
+        {
+            features |= NavigationFeatures.MovingTarget;
+        }
         if (spec.Requests.Any(order => order.Request.Profile.RadiusMm > spec.World.CellSizeMm / 2))
         {
             features |= NavigationFeatures.LargeBodies;
@@ -537,7 +746,7 @@ internal static class Program
             radiusMm = order.Request.Profile.RadiusMm, speedMmPerTick = order.Request.Profile.SpeedMmPerTick,
             attackRangeMm = order.Request.Profile.AttackRangeMm, spawnCell = order.Request.SpawnCell,
             targetId = order.Request.TargetId, assignedGoalCell = order.Request.AssignedGoalCell }),
-        worldEvents = item.TerrainEvents.Select(planned => new { planned.Tick, planned.Change.BlockCells, planned.Change.OpenCells,
+        worldEvents = item.TerrainEvents.Select(planned => new { planned.Tick, planned.AfterSettlement, planned.Change.BlockCells, planned.Change.OpenCells,
             replaceTarget = planned.Change.ReplaceTarget.HasValue ? new
             {
                 id = planned.Change.ReplaceTarget.Value.Id,
@@ -553,15 +762,28 @@ internal static class Program
         deadlineTicks = item.DeadlineTicks,
         holdTicks = item.HoldTicks,
         initialSettledCheckTick = item.RequireInitialSettledAtTick,
+        minimumOldWaitingPromotions = item.MinimumOldWaitingPromotions,
         requiredFeatures = Required(item).ToString(),
         microstepMilliseconds = 5,
         logicalTickMilliseconds = 50
     };
+    private static JsonObject CompactResult(CaseResult result, string output)
+    {
+        var value = JsonSerializer.SerializeToNode(result)!.AsObject();
+        value.Remove(nameof(CaseResult.Commands));
+        value["FullReport"] = result.Name + ".json.gz";
+        value["FullReportSha256"] = FileSha(Path.Combine(output, result.Name + ".json.gz"));
+        string trace = Path.Combine(output, result.Trace);
+        value["TraceFileSha256"] = File.Exists(trace) ? FileSha(trace) : null;
+        return value;
+    }
+    private static object SafeNumber(double value) => double.IsFinite(value) ? value : value.ToString("R", CultureInfo.InvariantCulture);
     private static UnitSnapshot[] Freeze(INavigator navigator) => navigator.Snapshot().ToArray();
     private static bool Same(UnitSnapshot first, UnitSnapshot second) => first.Id == second.Id && first.Position == second.Position
         && first.GoalCell == second.GoalCell && first.State == second.State && first.TargetId == second.TargetId;
-    private static string Canonical(UnitSnapshot[] snapshot) => string.Join("|", snapshot.OrderBy(unit => unit.Id).Select(unit =>
-        unit.Id + ":" + unit.Position.X.ToString("R") + "," + unit.Position.Y.ToString("R") + ":" + (int)unit.State + ":" + unit.GoalCell + ":" + unit.TargetId));
+    private static string Canonical(UnitSnapshot[] snapshot) => string.Join("|", snapshot.OrderBy(unit => unit.Id).Select(UnitCanonical));
+    private static string UnitCanonical(UnitSnapshot unit) => unit.Id + ":" + unit.Position.X.ToString("R") + "," + unit.Position.Y.ToString("R")
+        + ":" + (int)unit.State + ":" + unit.GoalCell + ":" + unit.TargetId;
     private static object Sources(string root, string candidateAssembly, string factory)
     {
         string candidate = Path.GetDirectoryName(candidateAssembly)!;
@@ -574,7 +796,8 @@ internal static class Program
                 && (Path.GetExtension(path) is ".cs" or ".csproj" || path.EndsWith("authored-forest.json", StringComparison.Ordinal)))
             .ToDictionary(path => "harness/" + Path.GetRelativePath(Path.Combine(root, "Experiments~/NavigationLab"), path), FileSha);
         foreach (string path in Directory.GetFiles(candidate, "*", SearchOption.AllDirectories).Where(path =>
-            !path.Split(Path.DirectorySeparatorChar).Any(part => part is "bin" or "obj") && (Path.GetExtension(path) is ".cs" or ".csproj" || Path.GetFileName(path) == "LICENSE")))
+            !path.Split(Path.DirectorySeparatorChar).Any(part => part is "bin" or "obj")
+            && (Path.GetExtension(path) is ".cs" or ".csproj" || Path.GetFileName(path) == "LICENSE")))
         {
             lab["candidate/" + Path.GetRelativePath(candidate, path)] = FileSha(path);
         }
@@ -654,6 +877,8 @@ internal sealed class CaseResult
     public int Attacking { get; set; }
     public int Waiting { get; set; }
     public int Deaths { get; set; }
+    public int OldWaitingBeforeDeaths { get; set; }
+    public int PromotedOldWaiting { get; set; }
     public int RejectedAttempts { get; set; }
     public int FinalTick { get; set; }
     public int HoldTicks { get; set; }
