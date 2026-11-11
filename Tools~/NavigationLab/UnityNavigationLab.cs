@@ -291,7 +291,7 @@ namespace NavigationLab.UnityValidation
                     return;
                 }
             }
-            Require(tick <= input.deadlineTicks, "Arrival deadline: live=" + snapshot.Length + " pending=" + pending.Count
+            Require(microstep <= input.deadlineTicks * SimulationProtocol.Substeps, "Arrival deadline: live=" + snapshot.Length + " pending=" + pending.Count
                 + " moving=" + snapshot.Count(unit => unit.State == MotionState.Moving) + " failure=" + navigator.LastSpawnFailure);
             var previous = navigator.Snapshot().ToArray();
             long started = Stopwatch.GetTimestamp();
