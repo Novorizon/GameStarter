@@ -20,8 +20,16 @@ foreach (var size in new[] { (width: 9, height: 9), (width: 17, height: 13) })
     walkable[width * 3 + 4] = false;
     walkable[width * 5 + 5] = false;
     var holding = Enumerable.Repeat(true, width * height).ToArray();
-    var world = new WorldDefinition(width, height, 1000, new Point2(-137, 211), walkable, holding, new[] { width + 1 },
-        new[] { new TargetDefinition(1, new Point2(width * 650, height * 550), 350) }, 10000);
+    var world = new WorldDefinition(
+        width,
+        height,
+        1000,
+        new Point2(-137, 211),
+        walkable,
+        holding,
+        new[] { width + 1 },
+        new[] { new TargetDefinition(1, new Point2(width * 650, height * 550), 350) },
+        10000);
     var bodies = new[]
     {
         new Cached.PlanningBody(1, world.Center(width * 4 + 4), 250),
@@ -76,7 +84,8 @@ var output = new
     {
         ["Program.cs"] = Hash(Path.Combine(AppContext.BaseDirectory, "../../../Program.cs")),
         ["OriginalGridGeometry.cs"] = Hash(Path.Combine(AppContext.BaseDirectory, "../../../OriginalGridGeometry.cs")),
-        ["CandidateGridGeometry.cs"] = Hash(Path.Combine(AppContext.BaseDirectory,
+        ["CandidateGridGeometry.cs"] = Hash(Path.Combine(
+            AppContext.BaseDirectory,
             "../../../../../Experiments~/NavigationLab/Candidates/D-Aoe4/GridGeometry.cs"))
     }
 };
