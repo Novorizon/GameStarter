@@ -85,14 +85,20 @@ namespace NavigationLab.Candidates.EWarcraft3
         }
     }
 
-    internal sealed class GlobalSearch
+    internal sealed partial class GlobalSearch
     {
         private readonly WorldDefinition world;
         private readonly PathingGeometry geometry;
         private readonly Action<string, long> count;
+        private readonly bool refinedConnections;
 
-        internal GlobalSearch(WorldDefinition world, PathingGeometry geometry, Action<string, long> count)
+        internal GlobalSearch(WorldDefinition world, PathingGeometry geometry, Action<string, long> count) : this(world, geometry, count, false)
         {
+        }
+
+        internal GlobalSearch(WorldDefinition world, PathingGeometry geometry, Action<string, long> count, bool refinedConnections)
+        {
+            this.refinedConnections = refinedConnections;
             this.world = world;
             this.geometry = geometry;
             this.count = count;
@@ -128,6 +134,39 @@ namespace NavigationLab.Candidates.EWarcraft3
         internal List<Point2>? Find(Point2 from, int goal, UnitProfile profile, Func<Point2, Point2, bool>? dynamicClear = null, int localRadius = 0)
         {
             count(localRadius > 0 ? "LocalSearches" : "GlobalAStarSearches", 1);
+            var path = FindCoarse(from, goal, profile, dynamicClear, localRadius, null);
+            if (path != null || !refinedConnections || dynamicClear == null || !geometry.CanStand(goal, profile.RadiusMm))
+            {
+                return path;
+            }
+
+            if (!dynamicClear(world.Center(goal), world.Center(goal)))
+            {
+                count("RefinedBlockedDestinations", 1);
+                return null;
+            }
+
+            var starts = RefinedConnections(from, goal, profile, dynamicClear, localRadius);
+            if (starts.Count == 0)
+            {
+                count("RefinedNoConnection", 1);
+                return null;
+            }
+
+            count("RefinedCoarseSearches", 1);
+            path = FindCoarse(from, goal, profile, dynamicClear, localRadius, starts);
+            count(path == null ? "RefinedNoCoarseRoute" : "RefinedRoutes", 1);
+            return path;
+        }
+
+        private List<Point2>? FindCoarse(
+            Point2 from,
+            int goal,
+            UnitProfile profile,
+            Func<Point2, Point2, bool>? dynamicClear,
+            int localRadius,
+            List<RefinedConnection>? refinedStarts)
+        {
             if (!geometry.CanStand(goal, profile.RadiusMm))
             {
                 return null;
@@ -149,16 +188,29 @@ namespace NavigationLab.Candidates.EWarcraft3
             }
 
             var queue = new SearchQueue();
-            foreach (int cell in Connections(from, profile.RadiusMm))
+            var prefixes = new Dictionary<int, List<Point2>>();
+            if (refinedStarts == null)
             {
-                Point2 center = world.Center(cell);
-                if (dynamicClear != null && !dynamicClear(from, center))
+                foreach (int cell in Connections(from, profile.RadiusMm))
                 {
-                    continue;
-                }
+                    Point2 center = world.Center(cell);
+                    if (dynamicClear != null && !dynamicClear(from, center))
+                    {
+                        continue;
+                    }
 
-                costs[cell] = Point2.Distance(from, center);
-                queue.Add(cell, costs[cell], costs[cell] + Point2.Distance(center, destination));
+                    costs[cell] = Point2.Distance(from, center);
+                    queue.Add(cell, costs[cell], costs[cell] + Point2.Distance(center, destination));
+                }
+            }
+            else
+            {
+                foreach (var start in refinedStarts)
+                {
+                    costs[start.Cell] = start.Cost;
+                    prefixes[start.Cell] = start.Path;
+                    queue.Add(start.Cell, start.Cost, start.Cost + Point2.Distance(world.Center(start.Cell), destination));
+                }
             }
 
             int iterations = 0;
@@ -183,6 +235,17 @@ namespace NavigationLab.Candidates.EWarcraft3
                     }
 
                     result.Reverse();
+                    int root = world.CellAt(result[0]);
+                    if (prefixes.TryGetValue(root, out var prefix))
+                    {
+                        var joined = new List<Point2>(prefix);
+                        if (joined.Count > 0)
+                        {
+                            joined.RemoveAt(joined.Count - 1);
+                        }
+                        joined.AddRange(result);
+                        result = joined;
+                    }
                     if (result.Count > 0 && Point2.Distance(result[0], from) < .001)
                     {
                         result.RemoveAt(0);
