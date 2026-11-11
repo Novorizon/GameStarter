@@ -1,0 +1,33 @@
+using NavigationLab.Core;
+using NavigationLab.DAoe4;
+var lines=File.ReadAllLines("/workspace/navigation-comparison/d-aoe4/Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes").Where(l=>l.Length>0&&!l.StartsWith(';')).ToArray();
+int[] Ints(string s)=>s.Split(' ',StringSplitOptions.RemoveEmptyEntries).Skip(1).Select(int.Parse).ToArray();
+var size=Ints(lines[1]);int width=size[0],height=size[1],cell=Ints(lines[2])[0];var origin=Ints(lines[3]);var target=Ints(lines[4]);
+var walk=new bool[width*height];var hold=new bool[width*height];var spawns=new List<int>();
+for(int y=0;y<height;y++){for(int x=0;x<width;x++){int c=y*width+x;char symbol=lines[6+height-1-y][x];walk[c]=".+aBS".Contains(symbol);hold[c]=symbol=='a';if(symbol=='S'){spawns.Add(c);}}}
+var world=new WorldDefinition(width,height,cell,new Point2(origin[0],origin[1]),walk,hold,spawns.ToArray(),new[]{new TargetDefinition(1,new Point2(target[0],target[1]),target[2])});
+var big=new UnitProfile(250,55,550);var small=new UnitProfile(180,165,450);
+using var nav=(args.Contains("--yield")?(INavigationFactory)new Aoe4CoordinatedFactory():new Aoe4Factory()).Create(world,new[]{small,big});
+int next=1;int count=int.Parse(args.FirstOrDefault(a=>a.StartsWith("--count="))?.Split('=')[1]??"44");
+for(int tick=0;tick<500;tick++)
+{
+ if(next<=count&&nav.TrySpawn(new SpawnRequest(next,big,spawns[0]))){next++;}
+ for(int s=0;s<10;s++){nav.Step();}
+ var units=nav.Snapshot();
+ if(tick%200==0){Console.WriteLine($"{tick} born {next-1} settled {units.Count(u=>u.State!=MotionState.Moving)} last={nav.LastSpawnFailure}");}
+ if(next==count+1&&units.All(u=>u.State!=MotionState.Moving)){Console.WriteLine($"DONE tick{tick}");break;}
+ if(tick==499){foreach(var u in units){Console.WriteLine($"id{u.Id} pos{u.Position.X},{u.Position.Y} goal{u.GoalCell} state{u.State}");}}
+}
+foreach(var p in nav.Metrics){Console.WriteLine(p.Key+" "+p.Value);}
+
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Public;
+object Get(object o,string n)=>o.GetType().GetField(n,flags)!.GetValue(o)!;
+var planner=Get(nav,"planner");
+foreach(System.Collections.DictionaryEntry entry in (System.Collections.IDictionary)Get(nav,"actors"))
+{
+ var actor=entry.Value!;var pos=(Point2)Get(actor,"Position");var route=Get(actor,"Route");
+ var a=new object[]{pos,route,null!};var dir=(Point2)planner.GetType().GetMethod("Direction",flags)!.Invoke(planner,a)!;var field=a[2];
+ Console.WriteLine($"DEBUG id{entry.Key} direction {dir.X},{dir.Y} cell{world.CellAt(pos)} exit{Get(field,"Exit")}");
+ Console.WriteLine("ROUTE tiles "+string.Join(",",(int[])Get(route,"Tiles"))+" exits "+string.Join(",",(int[])Get(route,"Exits")));
+ var values=(double[])Get(field,"Distance");foreach(int c in world.Neighbours(world.CellAt(pos))){Console.WriteLine($"cell{c} center{world.Center(c).X},{world.Center(c).Y} t{values[c]}");}
+}

@@ -1,0 +1,22 @@
+{
+  "status": "failed-development-smoke",
+  "oracleUsed": false,
+  "notFinalBenchmarkEvidence": true,
+  "requested": 12,
+  "spawned": 2,
+  "arrived": 0,
+  "diagnosticLogicalTicks": 500,
+  "radiusMm": 250,
+  "speedMmPer50ms": 55,
+  "sourceFiles": {
+    "AoeNavigator.cs": "b158ec3935bcb9adc6e5c04719b6022bd17abf69f10e72dec297c1fe96bb16ab",
+    "Goals.cs": "fcaf8f0ded7a56bceb373acc77eb8383ed3100929fa44dcd1dd22b0c9d87a8f6",
+    "GridGeometry.cs": "d0fd6ea5967d36f2f28070acaa760595ff3fd595303e9a3ee3cec00b20b724b1",
+    "HierarchicalFlow.cs": "ba1aea85868439caa478e39770156725a23063ae7f5ea31337e802e38250e10e",
+    "MinHeap.cs": "185716b58261e5d73a6683f9e5ec73487259153f8e1787b5891701573d1ea8b7",
+    "Steering.cs": "bf302486faf739935d80d40f3c4b70f4ce79574a56eb36e5f5696d94c106a4a0"
+  },
+  "binarySha256": "bfd0e902d4f0886f53b8b0ffd69791bedc4459778c285daca27782e3fa7f565b",
+  "mapSha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+  "cause": "Predictive steering penalized safe close t=0 even when diverging. Separately, repeated HPA tiles used last occurrence rather than physical route progression."
+}

@@ -1,0 +1,59 @@
+0 born 1 settled 0 last=None
+200 born 2 settled 0 last=SpawnOccupied
+400 born 2 settled 0 last=SpawnOccupied
+600 born 2 settled 0 last=SpawnOccupied
+800 born 2 settled 0 last=SpawnOccupied
+1000 born 2 settled 0 last=SpawnOccupied
+1200 born 2 settled 0 last=SpawnOccupied
+1400 born 2 settled 0 last=SpawnOccupied
+1600 born 2 settled 0 last=SpawnOccupied
+1800 born 2 settled 0 last=SpawnOccupied
+2000 born 2 settled 0 last=SpawnOccupied
+2200 born 2 settled 0 last=SpawnOccupied
+2400 born 2 settled 0 last=SpawnOccupied
+2600 born 2 settled 0 last=SpawnOccupied
+2800 born 2 settled 0 last=SpawnOccupied
+3000 born 2 settled 0 last=SpawnOccupied
+3200 born 2 settled 0 last=SpawnOccupied
+3400 born 2 settled 0 last=SpawnOccupied
+3600 born 2 settled 0 last=SpawnOccupied
+3800 born 2 settled 0 last=SpawnOccupied
+4000 born 2 settled 0 last=SpawnOccupied
+4200 born 2 settled 0 last=SpawnOccupied
+4400 born 2 settled 0 last=SpawnOccupied
+4600 born 2 settled 0 last=SpawnOccupied
+4800 born 2 settled 0 last=SpawnOccupied
+5000 born 2 settled 0 last=SpawnOccupied
+5200 born 2 settled 0 last=SpawnOccupied
+5400 born 2 settled 0 last=SpawnOccupied
+5600 born 2 settled 0 last=SpawnOccupied
+5800 born 2 settled 0 last=SpawnOccupied
+6000 born 2 settled 0 last=SpawnOccupied
+6200 born 2 settled 0 last=SpawnOccupied
+6400 born 2 settled 0 last=SpawnOccupied
+6600 born 2 settled 0 last=SpawnOccupied
+6800 born 2 settled 0 last=SpawnOccupied
+7000 born 2 settled 0 last=SpawnOccupied
+7200 born 2 settled 0 last=SpawnOccupied
+7400 born 2 settled 0 last=SpawnOccupied
+7600 born 2 settled 0 last=SpawnOccupied
+7800 born 2 settled 0 last=SpawnOccupied
+id1 pos-9200,4690 goal348 stateMoving
+id2 pos-9750,4690 goal392 stateMoving
+IndependentBattleInstances 1
+SpawnAttempts 8000
+StaticReachabilityBuilds 1
+HpaSearches 2
+PortalGraphBuilds 1
+PortalGraphNodes 133
+PortalNodesExpanded 242
+Spawned 2
+GoalAssignments 2
+Microsteps 80000
+SegmentFlowBuilds 1
+LosIntegrationSeeds 51
+FmmAcceptedCells 67
+SteeringSamples 4154900
+StaticRejectedProposals 1757800
+SteeringWaits 159800
+FlowCacheHits 1

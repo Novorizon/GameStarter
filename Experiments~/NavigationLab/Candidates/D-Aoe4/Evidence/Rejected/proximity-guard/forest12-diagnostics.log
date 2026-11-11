@@ -1,0 +1,34 @@
+0 born 1 settled 0 last=None
+200 born 2 settled 0 last=SpawnOccupied
+400 born 2 settled 0 last=SpawnOccupied
+id1 pos-9200,4690 goal348 stateMoving
+id2 pos-9750,4690 goal392 stateMoving
+IndependentBattleInstances 1
+SpawnAttempts 500
+StaticReachabilityBuilds 1
+HpaSearches 2
+PortalGraphBuilds 1
+PortalGraphNodes 133
+PortalNodesExpanded 242
+Spawned 2
+GoalAssignments 2
+Microsteps 5000
+SegmentFlowBuilds 1
+LosIntegrationSeeds 51
+FmmAcceptedCells 67
+SteeringSamples 254900
+StaticRejectedProposals 107800
+SteeringWaits 9800
+FlowCacheHits 1
+DEBUG id1 direction 1,0 cell1059 exit983
+ROUTE tiles 18,12,13,14,15,16,10,9,8,7,6,7,8,9,10,4,5 exits 1060,975,983,947,955,736,692,640,632,624,359,367,375,383,384,303,348
+cell1058 center-9750,4690 t6798.434417474466
+cell1060 center-8750,4690 t5798.434417474466
+cell1015 center-9250,4190 tInfinity
+cell1103 center-9250,5190 t6593.791630738052
+DEBUG id2 direction 1,0 cell1058 exit983
+ROUTE tiles 18,12,13,14,15,16,10,9,8,7,6,7,8,9,10,11 exits 1060,975,983,947,955,736,692,640,632,624,359,367,375,383,435,392
+cell1057 center-10250,4690 t7298.434417474466
+cell1059 center-9250,4690 t6298.434417474466
+cell1014 center-9750,4190 tInfinity
+cell1102 center-9750,5190 t7034.53632776484
