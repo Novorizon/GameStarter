@@ -60,7 +60,7 @@ A 将每格移动时间量化为整数逻辑tick，B–E可采用连续速度；
 
 模型运行与真实 Unity/Mono 运行分别记录。模型通过不能自动成为 Unity、IL2CPP、HybridCLR 主包、PC 或移动设备的验收结果。耗时和分配只描述测试设备与相应输入。
 
-公共框架和候选实现位于 `Experiments~/NavigationLab`。实验结果及最终复现命令将在源码冻结后补充；本文件本身不是实验通过报告。
+公共框架和候选实现位于 `Experiments~/NavigationLab`。[当前实际进度](Progress.zh-CN.md)区分完整报告与未结束长测；[工具与复现](../../../Tools~/NavigationLab/README.zh-CN.md)提供冻结运行命令。本文件的方案说明本身不是实验通过报告。
 
 ## 独立可行性与检查器证据
 

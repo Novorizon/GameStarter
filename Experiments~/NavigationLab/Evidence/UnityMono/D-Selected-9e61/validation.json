@@ -1,0 +1,574 @@
+{
+    "success": false,
+    "shutdownVerified": true,
+    "runId": "22482f7344294b01960f1b87f9972201",
+    "unity": "2022.3.62f1",
+    "graphics": "Null",
+    "device": "Null Device",
+    "manifestSha256": "2c491c724d6b9361e5b4cc207790f1cbaafdcb703f63b3889f70457c87125de1",
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "stopwatchFrequency": 10000000,
+    "cases": [
+        {
+            "name": "Aoe4ProgressExchangeFactory-open-arena",
+            "factoryId": "D12-aoe4-with-route-progress-and-slot-exchange",
+            "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+            "inputSha256": "de3259372cf13dff4908eb2e2f66157dcd7b2f5bcb0d34d3186bcd95b89aca23",
+            "modelInputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b",
+            "candidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "0.47853201936766254",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 48,
+            "admitted": 48,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 48,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 32,
+            "finalTick": 252,
+            "holdTicks": 200,
+            "checkedMicrosteps": 2520,
+            "pairSweeps": 2745784,
+            "bodySweeps": 118536,
+            "maximumStepStopwatchTicks": 7125802,
+            "stepStopwatchTicks": 125176326,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "IndependentBattleInstances",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 48
+                },
+                {
+                    "name": "StaticReachabilityBuilds",
+                    "value": 149
+                },
+                {
+                    "name": "HpaSearches",
+                    "value": 1012
+                },
+                {
+                    "name": "PortalGraphBuilds",
+                    "value": 30
+                },
+                {
+                    "name": "PortalGraphNodes",
+                    "value": 8877
+                },
+                {
+                    "name": "PortalNodesExpanded",
+                    "value": 9104
+                },
+                {
+                    "name": "TileConnectedComponents",
+                    "value": 624
+                },
+                {
+                    "name": "Spawned",
+                    "value": 48
+                },
+                {
+                    "name": "GoalAssignments",
+                    "value": 48
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 2520
+                },
+                {
+                    "name": "LocalPrioritySweeps",
+                    "value": 2520
+                },
+                {
+                    "name": "SegmentFlowBuilds",
+                    "value": 1087
+                },
+                {
+                    "name": "LosIntegrationSeeds",
+                    "value": 257090
+                },
+                {
+                    "name": "FmmAcceptedCells",
+                    "value": 369424
+                },
+                {
+                    "name": "DiagonalFlowRelaxations",
+                    "value": 633945
+                },
+                {
+                    "name": "LosSteeringUses",
+                    "value": 10108
+                },
+                {
+                    "name": "RouteProgressObservations",
+                    "value": 12712
+                },
+                {
+                    "name": "RouteProgressIntentChanges",
+                    "value": 48
+                },
+                {
+                    "name": "RouteProgressRouteBaselines",
+                    "value": 1011
+                },
+                {
+                    "name": "SteeringSamples",
+                    "value": 22461
+                },
+                {
+                    "name": "RouteProgressHistoricalBestImprovements",
+                    "value": 11585
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 43
+                },
+                {
+                    "name": "RouteRefreshes",
+                    "value": 963
+                },
+                {
+                    "name": "NarrowPreciseWaypointSteps",
+                    "value": 756
+                },
+                {
+                    "name": "PhysicalGridReconnectSteps",
+                    "value": 131
+                },
+                {
+                    "name": "ZeroFlowGoalLosRecoverySteps",
+                    "value": 76
+                },
+                {
+                    "name": "LosSupersedesGridCorrection",
+                    "value": 90
+                },
+                {
+                    "name": "ImmobileCircleRebuilds",
+                    "value": 39
+                },
+                {
+                    "name": "ImmobileCirclesIntegrated",
+                    "value": 930
+                },
+                {
+                    "name": "FlowCoverageRepaths",
+                    "value": 1
+                },
+                {
+                    "name": "RouteProgressUnprojectableSamples",
+                    "value": 24
+                },
+                {
+                    "name": "SteeringWaits",
+                    "value": 2
+                },
+                {
+                    "name": "RouteProgressQualifiedWindows",
+                    "value": 1
+                },
+                {
+                    "name": "RouteProgressFixedWindows",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "Aoe4ProgressExchangeFactory-forest-full44-large",
+            "factoryId": "D12-aoe4-with-route-progress-and-slot-exchange",
+            "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+            "inputSha256": "c379c0fd6bce0c2bad4bd13208581545b5596a104035a71abe8cb3e524e9e33a",
+            "modelInputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+            "candidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+            "detail": "System.InvalidOperationException: Arrival deadline: live=44 pending=0 moving=27 failure=None\n  at NavigationLab.UnityValidation.UnityNavigationLab.Advance () [0x007cd] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:317 \n  at NavigationLab.UnityValidation.UnityNavigationLab.Poll () [0x001d7] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:128 ",
+            "minimumGapMm": "0",
+            "screenshot": "",
+            "success": false,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 44,
+            "admitted": 44,
+            "rejected": 396,
+            "deaths": 0,
+            "live": 44,
+            "pending": 0,
+            "attacking": 17,
+            "waiting": 0,
+            "finalTick": 12000,
+            "holdTicks": 0,
+            "checkedMicrosteps": 120001,
+            "pairSweeps": 110951288,
+            "bodySweeps": 5200510,
+            "maximumStepStopwatchTicks": 156169773,
+            "stepStopwatchTicks": 16262051462,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "IndependentBattleInstances",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 440
+                },
+                {
+                    "name": "StaticReachabilityBuilds",
+                    "value": 95
+                },
+                {
+                    "name": "HpaSearches",
+                    "value": 122910
+                },
+                {
+                    "name": "PortalGraphBuilds",
+                    "value": 20
+                },
+                {
+                    "name": "PortalGraphNodes",
+                    "value": 2528
+                },
+                {
+                    "name": "PortalNodesExpanded",
+                    "value": 15299676
+                },
+                {
+                    "name": "TileConnectedComponents",
+                    "value": 499
+                },
+                {
+                    "name": "Spawned",
+                    "value": 44
+                },
+                {
+                    "name": "GoalAssignments",
+                    "value": 44
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 120001
+                },
+                {
+                    "name": "LocalPrioritySweeps",
+                    "value": 120001
+                },
+                {
+                    "name": "SegmentFlowBuilds",
+                    "value": 548
+                },
+                {
+                    "name": "LosIntegrationSeeds",
+                    "value": 21489
+                },
+                {
+                    "name": "FmmAcceptedCells",
+                    "value": 60999
+                },
+                {
+                    "name": "DiagonalFlowRelaxations",
+                    "value": 63101
+                },
+                {
+                    "name": "NarrowPreciseWaypointSteps",
+                    "value": 3135898
+                },
+                {
+                    "name": "RouteProgressObservations",
+                    "value": 3315453
+                },
+                {
+                    "name": "RouteProgressIntentChanges",
+                    "value": 46
+                },
+                {
+                    "name": "RouteProgressRouteBaselines",
+                    "value": 694
+                },
+                {
+                    "name": "SteeringSamples",
+                    "value": 75701624
+                },
+                {
+                    "name": "RouteProgressHistoricalBestImprovements",
+                    "value": 113916
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 692
+                },
+                {
+                    "name": "StaticShortenedProposals",
+                    "value": 21357135
+                },
+                {
+                    "name": "RouteProgressQualifiedWindows",
+                    "value": 907
+                },
+                {
+                    "name": "RouteProgressFixedWindows",
+                    "value": 8271
+                },
+                {
+                    "name": "SteeringWaits",
+                    "value": 2626706
+                },
+                {
+                    "name": "LosSteeringUses",
+                    "value": 58970
+                },
+                {
+                    "name": "LosSupersedesGridCorrection",
+                    "value": 1531
+                },
+                {
+                    "name": "RouteProgressPotentialOnlyWindowsRejected",
+                    "value": 6
+                },
+                {
+                    "name": "RouteRefreshes",
+                    "value": 111755
+                },
+                {
+                    "name": "PhysicalGridReconnectSteps",
+                    "value": 2156
+                },
+                {
+                    "name": "ZeroFlowGoalLosRecoverySteps",
+                    "value": 1409
+                },
+                {
+                    "name": "RouteProgressUnprojectableSamples",
+                    "value": 111332
+                },
+                {
+                    "name": "ImmobileCircleRebuilds",
+                    "value": 19
+                },
+                {
+                    "name": "ImmobileCirclesIntegrated",
+                    "value": 182
+                },
+                {
+                    "name": "FlowCoverageRepaths",
+                    "value": 11111
+                },
+                {
+                    "name": "RouteProgressStallDetections",
+                    "value": 29
+                },
+                {
+                    "name": "SlotExchangeFutureHolderRejected",
+                    "value": 1285994
+                },
+                {
+                    "name": "SlotExchangesStarted",
+                    "value": 1
+                },
+                {
+                    "name": "SlotExchangeRequesterHoldSteps",
+                    "value": 92
+                },
+                {
+                    "name": "SlotExchangeHolderArrivals",
+                    "value": 1
+                },
+                {
+                    "name": "SlotExchangeRequesterReleases",
+                    "value": 1
+                },
+                {
+                    "name": "RouteProgressLegacyMotionMaskDetected",
+                    "value": 1
+                },
+                {
+                    "name": "SlotExchangesCompleted",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "Aoe4ProgressExchangeFactory-dynamic-route-block-and-open",
+            "factoryId": "D12-aoe4-with-route-progress-and-slot-exchange",
+            "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+            "inputSha256": "6b8bdf17daf495250308ce32490524de86292319c466bbebe59e2ba02ec61339",
+            "modelInputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+            "candidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "0.58722758564920241",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 24,
+            "admitted": 24,
+            "rejected": 23,
+            "deaths": 0,
+            "live": 24,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 8,
+            "finalTick": 800,
+            "holdTicks": 200,
+            "checkedMicrosteps": 8000,
+            "pairSweeps": 2128145,
+            "bodySweeps": 187358,
+            "maximumStepStopwatchTicks": 3460245,
+            "stepStopwatchTicks": 56487216,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "IndependentBattleInstances",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 47
+                },
+                {
+                    "name": "StaticReachabilityBuilds",
+                    "value": 71
+                },
+                {
+                    "name": "HpaSearches",
+                    "value": 309
+                },
+                {
+                    "name": "PortalGraphBuilds",
+                    "value": 22
+                },
+                {
+                    "name": "PortalGraphNodes",
+                    "value": 6999
+                },
+                {
+                    "name": "PortalNodesExpanded",
+                    "value": 5802
+                },
+                {
+                    "name": "TileConnectedComponents",
+                    "value": 501
+                },
+                {
+                    "name": "Spawned",
+                    "value": 24
+                },
+                {
+                    "name": "GoalAssignments",
+                    "value": 24
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 8000
+                },
+                {
+                    "name": "LocalPrioritySweeps",
+                    "value": 8000
+                },
+                {
+                    "name": "SegmentFlowBuilds",
+                    "value": 380
+                },
+                {
+                    "name": "LosIntegrationSeeds",
+                    "value": 89569
+                },
+                {
+                    "name": "FmmAcceptedCells",
+                    "value": 130301
+                },
+                {
+                    "name": "DiagonalFlowRelaxations",
+                    "value": 221951
+                },
+                {
+                    "name": "LosSteeringUses",
+                    "value": 11165
+                },
+                {
+                    "name": "RouteProgressObservations",
+                    "value": 24198
+                },
+                {
+                    "name": "RouteProgressIntentChanges",
+                    "value": 26
+                },
+                {
+                    "name": "RouteProgressRouteBaselines",
+                    "value": 309
+                },
+                {
+                    "name": "SteeringSamples",
+                    "value": 29323
+                },
+                {
+                    "name": "RouteProgressHistoricalBestImprovements",
+                    "value": 23568
+                },
+                {
+                    "name": "WorldInvalidations",
+                    "value": 2
+                },
+                {
+                    "name": "ImmobileCircleRebuilds",
+                    "value": 26
+                },
+                {
+                    "name": "ImmobileCirclesIntegrated",
+                    "value": 324
+                },
+                {
+                    "name": "AcceptedWorldChanges",
+                    "value": 2
+                },
+                {
+                    "name": "RouteRefreshes",
+                    "value": 285
+                },
+                {
+                    "name": "NarrowPreciseWaypointSteps",
+                    "value": 10989
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 34
+                },
+                {
+                    "name": "RouteProgressQualifiedWindows",
+                    "value": 48
+                },
+                {
+                    "name": "RouteProgressFixedWindows",
+                    "value": 48
+                },
+                {
+                    "name": "LosSupersedesGridCorrection",
+                    "value": 75
+                },
+                {
+                    "name": "StaticShortenedProposals",
+                    "value": 181
+                },
+                {
+                    "name": "PhysicalGridReconnectSteps",
+                    "value": 51
+                },
+                {
+                    "name": "ZeroFlowGoalLosRecoverySteps",
+                    "value": 51
+                }
+            ]
+        }
+    ]
+}

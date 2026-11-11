@@ -1,0 +1,44 @@
+{
+  "scope": "Independent archive extraction and clean build/export only; no navigation simulations. Runner DLL root metadata is path-dependent and not asserted byte-identical.",
+  "runs": [
+    {
+      "label": "B1",
+      "sourceRun": "b1-v2-final-stress",
+      "freshBuildRoot": "/workspace/navigation-comparison/audit/package-rebuild-b1",
+      "candidateCoreOracleBitIdentical": true,
+      "assemblySha256": {
+        "candidate": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+      },
+      "exportedInputsByteIdentical": true,
+      "inputCount": 49
+    },
+    {
+      "label": "C33",
+      "sourceRun": "c-final2-v2-stress49",
+      "freshBuildRoot": "/workspace/navigation-comparison/audit/package-rebuild-c",
+      "candidateCoreOracleBitIdentical": true,
+      "assemblySha256": {
+        "candidate": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+      },
+      "exportedInputsByteIdentical": true,
+      "inputCount": 49
+    },
+    {
+      "label": "E",
+      "sourceRun": "e-final-goal-safe-stress49",
+      "freshBuildRoot": "/workspace/navigation-comparison/audit/package-rebuild-e",
+      "candidateCoreOracleBitIdentical": true,
+      "assemblySha256": {
+        "candidate": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+        "core": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+        "oracle": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+      },
+      "exportedInputsByteIdentical": true,
+      "inputCount": 49
+    }
+  ]
+}

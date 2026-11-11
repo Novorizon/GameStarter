@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored /workspace/navigation-comparison/audit/package-rebuild-c/Experiments~/NavigationLab/Core/NavigationLab.Core.csproj (in 160 ms).
+  Restored /workspace/navigation-comparison/audit/package-rebuild-c/Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj (in 305 ms).
+  Restored /workspace/navigation-comparison/audit/package-rebuild-c/Experiments~/NavigationLab/Oracle/NavigationLab.Oracle.csproj (in 2 ms).
+  NavigationLab.Core -> /workspace/navigation-comparison/audit/package-rebuild-c/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll
+  NavigationLab.Oracle -> /workspace/navigation-comparison/audit/package-rebuild-c/Experiments~/NavigationLab/Oracle/bin/Release/netstandard2.1/NavigationLab.Oracle.dll
+  NavigationLab.Runner -> /workspace/navigation-comparison/audit/package-rebuild-c/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:01:22.76

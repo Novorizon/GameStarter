@@ -1,0 +1,518 @@
+{
+    "success": false,
+    "shutdownVerified": true,
+    "runId": "7cad9211af8f41fcaaf80520ad130972",
+    "unity": "2022.3.62f1",
+    "graphics": "Null",
+    "device": "Null Device",
+    "manifestSha256": "0ea9a8662e129e98716064aaa0ad21ac375c1eab0188eaabea5c5735804db230",
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "stopwatchFrequency": 10000000,
+    "cases": [
+        {
+            "name": "Factory-forest-full44-large",
+            "factoryId": "C-SupCom2-FlowTiles",
+            "factoryType": "NavigationLab.CSupCom2.Factory",
+            "inputSha256": "c379c0fd6bce0c2bad4bd13208581545b5596a104035a71abe8cb3e524e9e33a",
+            "modelInputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+            "candidateSha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372",
+            "detail": "System.InvalidOperationException: Arrival deadline: live=44 pending=0 moving=2 failure=None\n  at NavigationLab.UnityValidation.UnityNavigationLab.Advance () [0x007cd] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:317 \n  at NavigationLab.UnityValidation.UnityNavigationLab.Poll () [0x001d7] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:128 ",
+            "minimumGapMm": "-8.2923270383616909E-07",
+            "screenshot": "",
+            "success": false,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 44,
+            "admitted": 44,
+            "rejected": 387,
+            "deaths": 0,
+            "live": 44,
+            "pending": 0,
+            "attacking": 17,
+            "waiting": 25,
+            "finalTick": 12000,
+            "holdTicks": 0,
+            "checkedMicrosteps": 120001,
+            "pairSweeps": 111030128,
+            "bodySweeps": 5203462,
+            "maximumStepStopwatchTicks": 1228078,
+            "stepStopwatchTicks": 688284940,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "CompletedGroupWakeCalls",
+                    "value": 431
+                },
+                {
+                    "name": "RadiusGraphs",
+                    "value": 1
+                },
+                {
+                    "name": "PortalNodesBuilt",
+                    "value": 40
+                },
+                {
+                    "name": "BusinessGoalReassignments",
+                    "value": 44
+                },
+                {
+                    "name": "Spawned",
+                    "value": 44
+                },
+                {
+                    "name": "PortalAStarRequests",
+                    "value": 548
+                },
+                {
+                    "name": "PortalAStarExpanded",
+                    "value": 1668
+                },
+                {
+                    "name": "IntegrationExpanded",
+                    "value": 1423
+                },
+                {
+                    "name": "FlowDirectionsBuilt",
+                    "value": 47
+                },
+                {
+                    "name": "FlowTilesBuilt",
+                    "value": 47
+                },
+                {
+                    "name": "CachedFlowDirections",
+                    "value": 422342
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 481133
+                },
+                {
+                    "name": "SpawnBlocked",
+                    "value": 387
+                },
+                {
+                    "name": "RejectedBodyMotions",
+                    "value": 8774010
+                },
+                {
+                    "name": "CollisionStops",
+                    "value": 815437
+                },
+                {
+                    "name": "TerminalPortalCompletions",
+                    "value": 57
+                },
+                {
+                    "name": "GoalLosQueries",
+                    "value": 855002
+                },
+                {
+                    "name": "DisplacedSourceReconnects",
+                    "value": 7861
+                },
+                {
+                    "name": "MergingAStarHits",
+                    "value": 493
+                },
+                {
+                    "name": "SiegeTrafficDiagnosisExpanded",
+                    "value": 3356528
+                },
+                {
+                    "name": "SiegeTrafficDiagnosisRuns",
+                    "value": 10424
+                },
+                {
+                    "name": "SiegeMatchingReassignments",
+                    "value": 358
+                },
+                {
+                    "name": "SiegeMatchingRuns",
+                    "value": 234
+                },
+                {
+                    "name": "DisplacedSourceRepaths",
+                    "value": 194
+                },
+                {
+                    "name": "LocalPushRequests",
+                    "value": 41
+                },
+                {
+                    "name": "DirectYieldRequests",
+                    "value": 34
+                },
+                {
+                    "name": "PermanentVacancyGoalExchanges",
+                    "value": 1
+                },
+                {
+                    "name": "ClearCorridorForwardSteps",
+                    "value": 3335
+                },
+                {
+                    "name": "VacancyTransfersArrived",
+                    "value": 1
+                },
+                {
+                    "name": "IndirectYieldFallbacks",
+                    "value": 7
+                },
+                {
+                    "name": "YieldReturns",
+                    "value": 26
+                },
+                {
+                    "name": "StalledClusterReassignments",
+                    "value": 214
+                },
+                {
+                    "name": "StalledClusterRecoveries",
+                    "value": 107
+                }
+            ]
+        },
+        {
+            "name": "Factory-forest-full44-two-late-small",
+            "factoryId": "C-SupCom2-FlowTiles",
+            "factoryType": "NavigationLab.CSupCom2.Factory",
+            "inputSha256": "c8dc808a65f008b63f269d801ac42089541e06b87b3f0a4cf9122f384650be9d",
+            "modelInputSha256": "7b714560c65db529a2ac45e976bf451c8dd538b20aa049ec3ceacd5f4dc4e320",
+            "candidateSha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "-9.5539462563465349E-08",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": true,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 46,
+            "admitted": 46,
+            "rejected": 389,
+            "deaths": 0,
+            "live": 46,
+            "pending": 0,
+            "attacking": 20,
+            "waiting": 26,
+            "finalTick": 5486,
+            "holdTicks": 200,
+            "checkedMicrosteps": 54860,
+            "pairSweeps": 50733917,
+            "bodySweeps": 2367219,
+            "maximumStepStopwatchTicks": 693381,
+            "stepStopwatchTicks": 262870623,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "CompletedGroupWakeCalls",
+                    "value": 435
+                },
+                {
+                    "name": "RadiusGraphs",
+                    "value": 2
+                },
+                {
+                    "name": "PortalNodesBuilt",
+                    "value": 80
+                },
+                {
+                    "name": "BusinessGoalReassignments",
+                    "value": 46
+                },
+                {
+                    "name": "Spawned",
+                    "value": 46
+                },
+                {
+                    "name": "PortalAStarRequests",
+                    "value": 505
+                },
+                {
+                    "name": "PortalAStarExpanded",
+                    "value": 1706
+                },
+                {
+                    "name": "IntegrationExpanded",
+                    "value": 1669
+                },
+                {
+                    "name": "FlowDirectionsBuilt",
+                    "value": 58
+                },
+                {
+                    "name": "FlowTilesBuilt",
+                    "value": 58
+                },
+                {
+                    "name": "CachedFlowDirections",
+                    "value": 374522
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 380053
+                },
+                {
+                    "name": "SpawnBlocked",
+                    "value": 389
+                },
+                {
+                    "name": "RejectedBodyMotions",
+                    "value": 1293511
+                },
+                {
+                    "name": "CollisionStops",
+                    "value": 86246
+                },
+                {
+                    "name": "TerminalPortalCompletions",
+                    "value": 359
+                },
+                {
+                    "name": "GoalLosQueries",
+                    "value": 99312
+                },
+                {
+                    "name": "DisplacedSourceReconnects",
+                    "value": 9921
+                },
+                {
+                    "name": "MergingAStarHits",
+                    "value": 439
+                },
+                {
+                    "name": "SiegeTrafficDiagnosisExpanded",
+                    "value": 1212956
+                },
+                {
+                    "name": "SiegeTrafficDiagnosisRuns",
+                    "value": 3766
+                },
+                {
+                    "name": "SiegeMatchingReassignments",
+                    "value": 191
+                },
+                {
+                    "name": "SiegeMatchingRuns",
+                    "value": 85
+                },
+                {
+                    "name": "LocalPushRequests",
+                    "value": 134
+                },
+                {
+                    "name": "DirectYieldRequests",
+                    "value": 106
+                },
+                {
+                    "name": "ClearCorridorForwardSteps",
+                    "value": 12427
+                },
+                {
+                    "name": "YieldReturns",
+                    "value": 84
+                },
+                {
+                    "name": "IndirectYieldFallbacks",
+                    "value": 28
+                },
+                {
+                    "name": "StalledClusterReassignments",
+                    "value": 6
+                },
+                {
+                    "name": "StalledClusterRecoveries",
+                    "value": 3
+                },
+                {
+                    "name": "PermanentVacancyGoalExchanges",
+                    "value": 4
+                },
+                {
+                    "name": "VacancyTransfersArrived",
+                    "value": 4
+                },
+                {
+                    "name": "CompletedGroupSleepEntries",
+                    "value": 2
+                },
+                {
+                    "name": "CompletedGroupSleepSteps",
+                    "value": 18784
+                }
+            ]
+        },
+        {
+            "name": "Factory-capacity-death-refills-original-queue",
+            "factoryId": "C-SupCom2-FlowTiles",
+            "factoryType": "NavigationLab.CSupCom2.Factory",
+            "inputSha256": "915de6988c6e96cc22b046f3b586f4294181f70d1ca5e9b39decabe241b8ac1d",
+            "modelInputSha256": "41ae21c659fb02b2c44f3657f4860c827132d3679e3103ae37db09650fdddb06",
+            "candidateSha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "7.9270695323430118E-05",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 200,
+            "admitted": 52,
+            "rejected": 5810,
+            "deaths": 13,
+            "live": 39,
+            "pending": 148,
+            "attacking": 12,
+            "waiting": 27,
+            "finalTick": 5861,
+            "holdTicks": 200,
+            "checkedMicrosteps": 58610,
+            "pairSweeps": 38820629,
+            "bodySweeps": 2353357,
+            "maximumStepStopwatchTicks": 1105953,
+            "stepStopwatchTicks": 120815797,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "CompletedGroupWakeCalls",
+                    "value": 5875
+                },
+                {
+                    "name": "RadiusGraphs",
+                    "value": 1
+                },
+                {
+                    "name": "PortalNodesBuilt",
+                    "value": 0
+                },
+                {
+                    "name": "BusinessGoalReassignments",
+                    "value": 52
+                },
+                {
+                    "name": "Spawned",
+                    "value": 52
+                },
+                {
+                    "name": "IntegrationExpanded",
+                    "value": 640
+                },
+                {
+                    "name": "FlowDirectionsBuilt",
+                    "value": 16
+                },
+                {
+                    "name": "FlowTilesBuilt",
+                    "value": 16
+                },
+                {
+                    "name": "CachedFlowDirections",
+                    "value": 12613
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 18800
+                },
+                {
+                    "name": "GoalLosQueries",
+                    "value": 115972
+                },
+                {
+                    "name": "DisplacedSourceReconnects",
+                    "value": 33620
+                },
+                {
+                    "name": "RejectedBodyMotions",
+                    "value": 1428184
+                },
+                {
+                    "name": "CollisionStops",
+                    "value": 157447
+                },
+                {
+                    "name": "SpawnBlocked",
+                    "value": 5570
+                },
+                {
+                    "name": "SiegeTrafficDiagnosisExpanded",
+                    "value": 260960
+                },
+                {
+                    "name": "SiegeTrafficDiagnosisRuns",
+                    "value": 6524
+                },
+                {
+                    "name": "SiegeMatchingReassignments",
+                    "value": 144
+                },
+                {
+                    "name": "SiegeMatchingRuns",
+                    "value": 191
+                },
+                {
+                    "name": "LocalPushRequests",
+                    "value": 99
+                },
+                {
+                    "name": "DirectYieldRequests",
+                    "value": 33
+                },
+                {
+                    "name": "IndirectYieldFallbacks",
+                    "value": 66
+                },
+                {
+                    "name": "ClearCorridorForwardSteps",
+                    "value": 1006
+                },
+                {
+                    "name": "YieldReturns",
+                    "value": 55
+                },
+                {
+                    "name": "PermanentVacancyGoalExchanges",
+                    "value": 41
+                },
+                {
+                    "name": "VacancyTransfersArrived",
+                    "value": 41
+                },
+                {
+                    "name": "CompletedGroupSleepEntries",
+                    "value": 210
+                },
+                {
+                    "name": "CompletedGroupSleepSteps",
+                    "value": 1848
+                },
+                {
+                    "name": "CompletedYieldRequestsSuppressed",
+                    "value": 1
+                },
+                {
+                    "name": "StalledClusterReassignments",
+                    "value": 6
+                },
+                {
+                    "name": "StalledClusterRecoveries",
+                    "value": 3
+                },
+                {
+                    "name": "GoalRejected",
+                    "value": 240
+                },
+                {
+                    "name": "Removed",
+                    "value": 13
+                },
+                {
+                    "name": "WaitingPromotions",
+                    "value": 9
+                }
+            ]
+        }
+    ]
+}
