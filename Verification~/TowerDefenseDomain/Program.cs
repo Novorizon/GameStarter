@@ -80,11 +80,11 @@ internal static class Program
             True(!game.StartNextWave());
             Equal(62, game.Gold);
         });
-        Check("an enemy at the objective damages the base once and defeat stops scheduled spawns", () =>
+        Check("leaks damage the base once and defeat prevents later spawns/rewards", () =>
         {
             var config = Tiny();
             config.BaseHealth = 1;
-            config.Routes[0].Points = new[] { new Position2(0, 0), new Position2(1000, 0), new Position2(0, 0) };
+            config.Enemies[0].SpeedPerTick = 1000;
             config.Waves[0].Groups[0].Count = 2;
             var game = new FightSession(config);
             game.StartNextWave();
@@ -97,10 +97,28 @@ internal static class Program
             Equal(1, game.Leaks);
             Equal(0, game.Enemies.Count);
         });
+        Check("integer movement traverses multiple authored segments and leaks without gold", () =>
+        {
+            var config = Tiny();
+            config.Routes[0].Points = new[] { new Position2(0, 0), new Position2(1000, 0), new Position2(1000, 1000) };
+            config.Enemies[0].SpeedPerTick = 600;
+            var game = new FightSession(config);
+            game.StartNextWave();
+            game.Step(2);
+            Equal(1000, game.Enemies[0].Position.X);
+            Equal(200, game.Enemies[0].Position.Y);
+            Equal(100, game.Gold);
+            game.Step(2);
+            Equal(9, game.BaseHp);
+            Equal(1, game.Leaks);
+            Equal(0, game.Kills);
+            Equal(107, game.Gold);
+        });
         Check("attack cooldown is measured in ticks and does not tick while paused", () =>
         {
             var config = Tiny();
             config.Enemies[0].Health = 100;
+            config.Enemies[0].SpeedPerTick = 1;
             config.Towers[0].Damage = 7;
             config.Towers[0].AttackIntervalTicks = 3;
             var game = new FightSession(config);
@@ -161,6 +179,32 @@ internal static class Program
             config.Cards = config.Cards.Take(2).ToArray();
             Throws<ArgumentException>(() => new FightSession(config));
         });
+        Check("demo configuration is winnable with a simple build policy", () =>
+        {
+            var game = new FightSession(DemoConfiguration.Create(), 99);
+            int guard = 0;
+            while (game.Phase != BattlePhase.Victory && game.Phase != BattlePhase.Defeat && guard++ < 10000)
+            {
+                if (game.Phase == BattlePhase.Planning)
+                {
+                    foreach (var slot in game.Configuration.BuildSlots)
+                    {
+                        game.BuildTower(slot.Id, 1);
+                    }
+
+                    game.StartNextWave();
+                }
+                else if (game.Phase == BattlePhase.ChoosingCard)
+                {
+                    game.ChooseCard(0);
+                }
+
+                game.Step(10);
+            }
+
+            True(guard < 10000 && game.Tick > 0);
+            Equal(BattlePhase.Victory, game.Phase);
+        });
         Console.WriteLine("PASS " + passed + " pure C# tower-defense scenarios; no Unity or server execution.");
     }
 
@@ -168,6 +212,7 @@ internal static class Program
     {
         var config = Tiny(3);
         config.Enemies[0].Health = 5;
+        config.Enemies[0].SpeedPerTick = 1;
         config.Towers[0].Damage = 1;
         foreach (var wave in config.Waves)
         {

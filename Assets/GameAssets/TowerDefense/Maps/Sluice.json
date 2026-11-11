@@ -3,6 +3,31 @@
   "assault": { "reinforcementGapTicks": 100, "firstDraftPoints": 6, "repeatDraftPoints": 12 },
   "targetName": "水闸绞盘",
   "baseAttackIntervalTicks": 30,
+  "baseAttack": {
+    "approachInset": 2200,
+    "paths": [
+      {
+        "side": 1, "firstAttackPoint": 0, "maxBodyRadius": 460,
+        "points": [
+          { "x": 7100, "y": -2700 },
+          { "x": 7860, "y": -2260 },
+          { "x": 8810, "y": -2260 },
+          { "x": 9810, "y": -2410 },
+          { "x": 10025, "y": -3330 }
+        ]
+      },
+      {
+        "side": -1, "firstAttackPoint": 0, "maxBodyRadius": 460,
+        "points": [
+          { "x": 7110, "y": -5020 },
+          { "x": 7890, "y": -5320 },
+          { "x": 8840, "y": -5320 },
+          { "x": 9800, "y": -5210 },
+          { "x": 10025, "y": -4350 }
+        ]
+      }
+    ]
+  },
   "baseUpgrades": [
     { "goldCost": 60, "durabilityIncrease": 6 },
     { "goldCost": 100, "durabilityIncrease": 8 }

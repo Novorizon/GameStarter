@@ -424,8 +424,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 if (direction.sqrMagnitude > .0001f)
                 {
                     var rotation = Quaternion.LookRotation(direction);
-                    int windupTicks = configuration.Objective.BaseAttackWindupTicks;
-                    if (state.AttackingBase && windupTicks > 0)
+                    var engagement = configuration.Objective.BaseAttack?.Engagement;
+                    if (state.AttackingBase && engagement != null)
                     {
                         long untilHit = state.NextBaseAttackTick - session.Tick;
                         float pitch = 0f;
@@ -433,9 +433,9 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                         {
                             pitch = 16f;
                         }
-                        else if (untilHit > 0 && untilHit <= windupTicks)
+                        else if (untilHit > 0 && untilHit <= engagement.WindupTicks)
                         {
-                            pitch = -12f * (windupTicks - untilHit + 1) / windupTicks;
+                            pitch = -12f * (engagement.WindupTicks - untilHit + 1) / engagement.WindupTicks;
                         }
 
                         rotation *= Quaternion.Euler(pitch, 0, 0);

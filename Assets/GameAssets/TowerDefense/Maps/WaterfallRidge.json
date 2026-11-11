@@ -3,6 +3,27 @@
   "assault": { "reinforcementGapTicks": 100, "firstDraftPoints": 6, "repeatDraftPoints": 12 },
   "targetName": "高台营地",
   "baseAttackIntervalTicks": 30,
+  "baseAttack": {
+    "approachInset": 1810,
+    "paths": [
+      {
+        "side": 1, "firstAttackPoint": 0, "maxBodyRadius": 460,
+        "points": [
+          { "x": 1540, "y": 2890 },
+          { "x": 940, "y": 2360 },
+          { "x": 0, "y": 2260 },
+          { "x": -980, "y": 2430 },
+          { "x": -1370, "y": 3320 }
+        ]
+      },
+      {
+        "side": -1, "firstAttackPoint": 0, "maxBodyRadius": 460,
+        "points": [
+          { "x": 1630, "y": 4240 }
+        ]
+      }
+    ]
+  },
   "baseUpgrades": [
     { "goldCost": 60, "durabilityIncrease": 6 },
     { "goldCost": 100, "durabilityIncrease": 8 }

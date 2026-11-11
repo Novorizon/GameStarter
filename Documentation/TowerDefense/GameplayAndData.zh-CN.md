@@ -2,7 +2,7 @@
 
 ## 最小战斗循环
 
-出征前的准备页汇总关卡目标、失败条件、敌人和胜负补给。确认后才申请战场美术资源。一局开始后固定关卡配置和随机种子，重试复用该种子。开场有 10 秒备战时间，玩家可以建塔、等待倒计时结束或立即开战。随后刷怪组按时间出兵，并通过 `RouteId` 读取关卡的出生位置。塔在领域中选目标并结算命中。每击杀一名敌人获得 1 点击杀积分，积分达标时暂停模拟并选一张强化卡，选完继续当前战斗。
+出征前的准备页汇总关卡目标、失败条件、敌人和胜负补给。确认后才申请战场美术资源。一局开始后固定关卡配置和随机种子，重试复用该种子。开场有 10 秒备战时间，玩家可以建塔、等待倒计时结束或立即开战。随后敌军按时间连续出兵。敌人按配置路线移动，塔在领域中选目标并结算命中。每击杀一名敌人获得 1 点击杀积分，积分达标时暂停模拟并选一张强化卡，选完继续当前战斗。
 
 每张地图的目标配置位于 [地图规则目录](../../Assets/GameAssets/TowerDefense/Maps)。JSON 文件与 `TdStage.mapAsset` 的文件名对应，`objectiveType` 对应 `BattleObjectiveType`，`targetName` 用于准备页和战场目标标牌。
 
@@ -10,10 +10,8 @@
 
 | 目标类型 | 参数 | 判定 |
 | --- | --- | --- |
-| `DefendBase` | `baseAttackWindupTicks`、`baseAttackIntervalTicks` | 敌人当前位置与目标坐标一致时进入基地攻击结算。全歼敌军且基地仍有耐久时获胜，基地耐久归零时失败。 |
-| `InterceptEscapes` | `escapesToDefeat` | 各路线共用同一传送门坐标。敌人当前位置与传送门坐标一致时离场并计为逃脱，全局计数达到阈值即失败。最后一名敌人离场时，逃脱数低于阈值则获胜。例如峡谷双潭填 7，最多允许 6 名逃脱。 |
-
-敌人满足基地攻击条件后，按 `baseAttackWindupTicks` 完成首次攻击前摇，随后每 `baseAttackIntervalTicks` 攻击一次。前摇为零时首次攻击即时结算。每 tick 为 50 毫秒。
+| `DefendBase` | `baseAttackIntervalTicks`，每 tick 为 50 毫秒 | 敌人停在距基地路线末点 1.2 米的入口，首次到达时攻击，随后按设定间隔攻击。全歼敌军且基地仍有耐久时获胜，基地耐久归零时失败。 |
+| `InterceptEscapes` | `escapesToDefeat` | 各路线共用同一传送门末点。到达传送门的敌人离场并计为逃脱，全局计数达到阈值即失败。最后一名敌人离场时，逃脱数低于阈值则获胜。例如峡谷双潭填 7，最多允许 6 名逃脱。 |
 
 守基地关卡的 `baseUpgrades` 从 Lv.1 升 Lv.2 起逐级配置 `goldCost` 和 `durabilityIncrease`。备战和战斗中可点击基地或标牌，用局内金币加固。加固同时提高上限和当前耐久，保留此前受损的点数。修理和回复强化以当局最新上限结算，重开时恢复初始等级和耐久。
 
@@ -35,9 +33,7 @@ stateDiagram-v2
 
 ## 当前领域配置与后续拆表
 
-战斗 schema 对应 8 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表。客户端 schema 定义主题、旅程任务、玩家等级、营地等级和营地任务。加上 Example 共 14 张表。正式关卡读取 Luban 表与对应地图 JSON。 [战斗 schema](../../Config/Luban/Defines/towerdefense.xml) [客户端 schema](../../Config/Luban/Defines/client.xml) [营地配置与存档](../Game/IslandCamp.zh-CN.md)
-
-单路线关卡可在地图 JSON 中用 `routePoints` 保存与底图对齐的关卡坐标。多路线关卡按 Luban 的 `stageId`、`routeId` 和 `sequence` 组合。首末坐标分别对应出生位置和关卡目标。地图 JSON 的 `towerPlacement` 保存建造范围、道路半宽和禁建区域，用于生成塔位。 [关卡配置读取](../../Assets/HotUpdate/TowerDefense/Data/TowerDefenseMapObjectives.cs)
+战斗 schema 是 [towerdefense.xml](../../Config/Luban/Defines/towerdefense.xml)，对应 8 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表；[client.xml](../../Config/Luban/Defines/client.xml) 定义主题、旅程任务、玩家等级以及营地等级/任务 5 张表。加上 Example 共 14 张表。当前关卡为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡；静态 `DemoConfiguration` 仍是测试用的 5 波版本。营地配置与存档规则见[海岛说明](../Game/IslandCamp.zh-CN.md)。
 
 | 已有表 / bean | 主键和关系 | 关键字段 |
 | --- | --- | --- |

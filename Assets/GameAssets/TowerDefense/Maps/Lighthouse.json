@@ -3,6 +3,30 @@
   "assault": { "reinforcementGapTicks": 100, "firstDraftPoints": 6, "repeatDraftPoints": 12 },
   "targetName": "白崖灯塔",
   "baseAttackIntervalTicks": 30,
+  "baseAttack": {
+    "approachInset": 1820,
+    "paths": [
+      {
+        "side": 1, "firstAttackPoint": 0, "maxBodyRadius": 460,
+        "points": [
+          { "x": 7180, "y": -180 },
+          { "x": 7790, "y": 200 },
+          { "x": 8750, "y": 200 },
+          { "x": 9690, "y": -70 },
+          { "x": 9860, "y": -1010 }
+        ]
+      },
+      {
+        "side": -1, "firstAttackPoint": 1, "maxBodyRadius": 800,
+        "points": [
+          { "x": 7140, "y": -2610 },
+          { "x": 7790, "y": -3060 },
+          { "x": 8660, "y": -3330 },
+          { "x": 9530, "y": -3180 }
+        ]
+      }
+    ]
+  },
   "baseUpgrades": [
     { "goldCost": 60, "durabilityIncrease": 6 },
     { "goldCost": 100, "durabilityIncrease": 8 }

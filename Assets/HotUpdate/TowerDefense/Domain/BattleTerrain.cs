@@ -2,38 +2,44 @@ using System;
 
 namespace Game.HotUpdate.TowerDefense.Domain
 {
-    /// <summary>Static ground constraints used when generating tower slots.</summary>
-    internal sealed class TowerPlacementArea
+    /// <summary>Ground-plane navigation shared by road movement, local assaults and construction.</summary>
+    public sealed class BattleTerrain
     {
+        private readonly Position2[] road;
         private readonly BlockedArea[] blockedAreas;
         private readonly int roadHalfWidth;
-        internal Position2 Min { get; }
-        internal Position2 Max { get; }
-
-        internal TowerPlacementArea(Position2 min, Position2 max, int roadHalfWidth, Position2[][] blockedAreas)
+        public Position2 Min { get; }
+        public Position2 Max { get; }
+        public BattleTerrain(Position2 min, Position2 max, Position2[] road, int roadHalfWidth, Position2[][] blockedAreas)
         {
             if (max.X <= min.X || max.Y <= min.Y || (long)max.X - min.X > 32000 || (long)max.Y - min.Y > 32000
-                || roadHalfWidth <= 0 || roadHalfWidth > 2000 || blockedAreas == null)
+                || road == null || road.Length < 2 || roadHalfWidth <= 0 || roadHalfWidth > 2000 || blockedAreas == null)
             {
-                throw new ArgumentException("Invalid tower placement bounds, road width or obstacles.");
+                throw new ArgumentException("Invalid battle terrain bounds, road or obstacles.");
             }
 
             Min = min;
             Max = max;
+            this.road = (Position2[])road.Clone();
             this.roadHalfWidth = roadHalfWidth;
             this.blockedAreas = Array.ConvertAll(blockedAreas, points => new BlockedArea(points));
         }
 
-        internal bool CanBuild(Position2 position, int radius, RouteDefinition[] routes)
+        public bool CanBuild(Position2 position, int radius)
         {
-            if (!FitsBounds(position, radius) || IsNearRoad(position, roadHalfWidth + radius, routes))
+            return !IsNearRoad(position, roadHalfWidth + radius) && CanMove(position, position, radius);
+        }
+
+        public bool CanMove(Position2 from, Position2 to, int radius)
+        {
+            if (!FitsBounds(from, radius) || !FitsBounds(to, radius))
             {
                 return false;
             }
 
             foreach (var area in blockedAreas)
             {
-                if (area.Blocks(position, radius))
+                if (area.Blocks(from, to, radius))
                 {
                     return false;
                 }
@@ -47,18 +53,14 @@ namespace Game.HotUpdate.TowerDefense.Domain
             return point.X >= Min.X + radius && point.X <= Max.X - radius && point.Y >= Min.Y + radius && point.Y <= Max.Y - radius;
         }
 
-        private static bool IsNearRoad(Position2 point, int distance, RouteDefinition[] routes)
+        private bool IsNearRoad(Position2 point, int distance)
         {
             long distanceSquared = (long)distance * distance;
-            foreach (var route in routes)
+            for (int i = 1; i < road.Length; i++)
             {
-                var points = route.Points;
-                for (int i = 1; i < points.Length; i++)
+                if (PointToSegmentSquared(point, road[i - 1], road[i]) <= distanceSquared)
                 {
-                    if (PointToSegmentSquared(point, points[i - 1], points[i]) <= distanceSquared)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -121,9 +123,13 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
             }
 
-            internal bool Blocks(Position2 position, int radius)
+            internal bool Blocks(Position2 from, Position2 to, int radius)
             {
-                if (position.X + radius < left || position.X - radius > right || position.Y + radius < bottom || position.Y - radius > top)
+                int minX = Math.Min(from.X, to.X);
+                int maxX = Math.Max(from.X, to.X);
+                int minY = Math.Min(from.Y, to.Y);
+                int maxY = Math.Max(from.Y, to.Y);
+                if (maxX + radius < left || minX - radius > right || maxY + radius < bottom || minY - radius > top)
                 {
                     return false;
                 }
@@ -133,14 +139,13 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 var a = vertices[^1];
                 foreach (var b in vertices)
                 {
-                    double edgeDistance = PointToSegmentSquared(position, a, b);
-                    if (edgeDistance == 0 || edgeDistance < clearance)
+                    if (SegmentsTouch(from, to, a, b) || PointToSegmentSquared(a, from, to) < clearance
+                        || PointToSegmentSquared(from, a, b) < clearance || PointToSegmentSquared(to, a, b) < clearance)
                     {
                         return true;
                     }
 
-                    if ((a.Y > position.Y) != (b.Y > position.Y)
-                        && position.X < a.X + (position.Y - a.Y) * (double)(b.X - a.X) / (b.Y - a.Y))
+                    if ((a.Y > from.Y) != (b.Y > from.Y) && from.X < a.X + (from.Y - a.Y) * (double)(b.X - a.X) / (b.Y - a.Y))
                     {
                         inside = !inside;
                     }
@@ -149,6 +154,19 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
 
                 return inside;
+            }
+
+            internal static bool SegmentsTouch(Position2 a, Position2 b, Position2 c, Position2 d)
+            {
+                return Math.Max(a.X, b.X) >= Math.Min(c.X, d.X) && Math.Max(c.X, d.X) >= Math.Min(a.X, b.X)
+                    && Math.Max(a.Y, b.Y) >= Math.Min(c.Y, d.Y) && Math.Max(c.Y, d.Y) >= Math.Min(a.Y, b.Y)
+                    && Math.Sign(Orientation(a, b, c)) * Math.Sign(Orientation(a, b, d)) <= 0
+                    && Math.Sign(Orientation(c, d, a)) * Math.Sign(Orientation(c, d, b)) <= 0;
+            }
+
+            private static long Orientation(Position2 a, Position2 b, Position2 c)
+            {
+                return ((long)b.X - a.X) * ((long)c.Y - a.Y) - ((long)b.Y - a.Y) * ((long)c.X - a.X);
             }
         }
     }

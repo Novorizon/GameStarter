@@ -6,10 +6,13 @@ using System.Linq;
 namespace Game.HotUpdate.TowerDefense.Domain
 {
     /// <summary>Single-player fixed-tick rules. No Unity objects, services, wall clock or global random.</summary>
-    public sealed class FightSession
+    public sealed partial class FightSession
     {
         public const int TickMilliseconds = 50;
         public const int TowerFoundationRadiusMillimetres = 420;
+        private const int RoadLaneOffsetMillimetres = 360;
+        private const int EnemyMoveStepMillimetres = 180;
+
         private sealed class Tower
         {
             internal int Id;
@@ -26,24 +29,79 @@ namespace Game.HotUpdate.TowerDefense.Domain
         {
             internal int Id;
             internal EnemyDefinition Definition;
-            internal RouteDefinition Route;
+            internal Route Route;
             internal int BatchIndex;
             internal int Health;
+            internal int Distance;
+            internal int Lane;
             internal Position2 Position;
+            internal BaseAttackOrder BaseAttack;
+            internal AssaultMotion AssaultOrder;
             internal long NextBaseAttackTick;
+            internal int RoadSegmentIndex;
+            internal int RoadSegmentStart;
+        }
+
+        private sealed class Route
+        {
+            internal RouteDefinition Definition;
+            internal int[] SegmentLengths;
+            internal int Length;
+            internal int RelayDistance;
+            internal int EndInset;
+            internal int LargestBodyRadius;
+            internal Position2[] LaneOffsets;
+
+            internal Position2 Position(int distance, int lane = 0)
+            {
+                for (int i = 0; i < SegmentLengths.Length; i++)
+                {
+                    int length = SegmentLengths[i];
+                    if (distance <= length)
+                    {
+                        var first = Definition.Points[i];
+                        var second = Definition.Points[i + 1];
+                        int x = Interpolate(first.X, second.X, distance, length);
+                        int y = Interpolate(first.Y, second.Y, distance, length);
+                        if (lane != 0)
+                        {
+                            var firstOffset = LaneOffsets[i];
+                            var secondOffset = LaneOffsets[i + 1];
+                            int laneLength = i == SegmentLengths.Length - 1 ? length - EndInset : length;
+                            x += lane * Interpolate(firstOffset.X, secondOffset.X, distance, laneLength);
+                            y += lane * Interpolate(firstOffset.Y, secondOffset.Y, distance, laneLength);
+                        }
+
+                        return new Position2(x, y);
+                    }
+
+                    distance -= length;
+                }
+
+                return Definition.Points[Definition.Points.Length - 1];
+            }
+
+            private static int Interpolate(int start, int end, int distance, int length)
+            {
+                return start + (int)((long)(end - start) * distance / length);
+            }
         }
 
         private readonly Dictionary<int, TowerDefinition> towerDefinitions;
         private readonly Dictionary<int, EnemyDefinition> enemyDefinitions;
         private readonly Dictionary<int, BuildSlotDefinition> slots;
-        private readonly Dictionary<int, RouteDefinition> routes;
+        private readonly Dictionary<int, Route> routes;
         private readonly List<Tower> towers = new List<Tower>();
         private readonly List<Enemy> enemies = new List<Enemy>();
+        private readonly List<Enemy> movementOrder = new List<Enemy>();
         private readonly List<TowerSnapshot> towerSnapshots = new List<TowerSnapshot>();
         private readonly List<EnemySnapshot> enemySnapshots = new List<EnemySnapshot>();
         private readonly List<CardDefinition> offers = new List<CardDefinition>();
         private readonly Dictionary<int, int> cardStacks = new Dictionary<int, int>();
         private readonly AssaultRules assault;
+        private readonly bool useRoadTraffic;
+        private readonly bool useAuthoredNavigation;
+        private readonly int largestAssaultBodyRadius;
         private readonly int[] remainingByBatch;
         private int[] emitted = Array.Empty<int>();
         private int waveTick;
@@ -123,6 +181,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
         {
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Validate(configuration);
+            useRoadTraffic = configuration.Objective.Type == BattleObjectiveType.DefendBase || configuration.Terrain != null;
+            useAuthoredNavigation = configuration.Terrain != null || configuration.Objective.BaseAttack?.LocalArea != null;
             assault = configuration.Objective.Assault ?? defaultAssault;
             if (assault != null)
             {
@@ -135,11 +195,37 @@ namespace Game.HotUpdate.TowerDefense.Domain
             towerDefinitions = configuration.Towers.ToDictionary(value => value.Id);
             enemyDefinitions = configuration.Enemies.ToDictionary(value => value.Id);
             slots = configuration.BuildSlots.ToDictionary(value => value.Id);
-            routes = configuration.Routes.ToDictionary(value => value.Id);
+            int attackInset = configuration.Objective.BaseAttack?.ApproachInset ?? 0;
+            routes = configuration.Routes.ToDictionary(value => value.Id, value => CreateRoute(value, configuration.Objective.HasBase, attackInset));
+            if (useRoadTraffic)
+            {
+                foreach (var route in routes.Values)
+                {
+                    route.LaneOffsets = CreateLaneOffsets(route.Definition.Points);
+                }
+            }
+
+            if (useAuthoredNavigation)
+            {
+                foreach (var group in configuration.Waves.SelectMany(wave => wave.Groups))
+                {
+                    var route = routes[group.RouteId];
+                    route.LargestBodyRadius = Math.Max(route.LargestBodyRadius, enemyDefinitions[group.EnemyId].BodyRadius);
+                }
+
+                largestAssaultBodyRadius = routes.Values.Max(route => route.LargestBodyRadius);
+            }
+
+            ReserveBaseAttackCorridors();
             Gold = configuration.InitialGold;
             BaseLevel = configuration.Objective.HasBase ? 1 : 0;
             BaseMaxHp = BaseHp = configuration.Objective.HasBase ? configuration.BaseHealth : 0;
             RelayHeld = configuration.RelayRouteId != 0;
+            if (RelayHeld)
+            {
+                var relayRoute = routes[configuration.RelayRouteId];
+                relayRoute.RelayDistance = relayRoute.SegmentLengths.Take(configuration.RelayPointIndex).Sum();
+            }
             Towers = towerSnapshots.AsReadOnly();
             Enemies = enemySnapshots.AsReadOnly();
             CurrentCardOffers = offers.AsReadOnly();
@@ -165,7 +251,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
             }
 
-            return true;
+            return !useAuthoredNavigation || CanBuildAmongTerrainTraffic(slot.Position);
         }
 
         public bool BuildTower(int slotId, int towerTypeId)
@@ -344,16 +430,26 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
             }
 
+            if (useRoadTraffic)
+            {
+                AdvanceTraffic();
+            }
+
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 var enemy = enemies[i];
-                if (RelayHeld && enemy.Route.Id == Configuration.RelayRouteId
-                    && enemy.Position.Equals(enemy.Route.Points[Configuration.RelayPointIndex]))
+                if (!useRoadTraffic)
+                {
+                    enemy.Distance = Math.Min(enemy.Distance + enemy.Definition.SpeedPerTick, enemy.Route.Length);
+                    enemy.Position = enemy.Route.Position(enemy.Distance);
+                }
+
+                if (RelayHeld && enemy.Route.RelayDistance > 0 && enemy.Distance >= enemy.Route.RelayDistance)
                 {
                     RelayHeld = false;
                 }
 
-                if (!AtObjective(enemy))
+                if (!ReachedObjective(enemy))
                 {
                     continue;
                 }
@@ -425,9 +521,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 var group = groups[i];
                 int age = waveTick - group.StartTick;
                 int due = age < 0 ? 0 : Math.Min(group.Count, 1 + age / group.IntervalTicks);
-                if (emitted[i] < due)
+                if (emitted[i] < due && TrySpawnEnemy(group, batchIndex))
                 {
-                    SpawnEnemy(group, batchIndex);
                     emitted[i]++;
                 }
 
@@ -441,19 +536,226 @@ namespace Game.HotUpdate.TowerDefense.Domain
             }
         }
 
-        private void SpawnEnemy(SpawnGroup group, int batchIndex)
+        private bool TrySpawnEnemy(SpawnGroup group, int batchIndex)
         {
             var definition = enemyDefinitions[group.EnemyId];
             var route = routes[group.RouteId];
+            int lane = 0;
+            var position = route.Definition.Points[0];
+            if (useAuthoredNavigation)
+            {
+                if (!CanSpawnOnTerrain(position, definition.BodyRadius))
+                {
+                    return false;
+                }
+            }
+            else if (useRoadTraffic)
+            {
+                if (definition.BodyRadius <= RoadLaneOffsetMillimetres)
+                {
+                    lane = (nextEnemyId & 1) == 0 ? -1 : 1;
+                    position = route.Position(0, lane);
+                }
+
+                if (!HasRoadSpace(position, definition.BodyRadius))
+                {
+                    if (lane == 0)
+                    {
+                        return false;
+                    }
+
+                    lane = -lane;
+                    position = route.Position(0, lane);
+                    if (!HasRoadSpace(position, definition.BodyRadius))
+                    {
+                        return false;
+                    }
+                }
+            }
+
             enemies.Add(new Enemy
             {
                 Id = nextEnemyId++,
                 Definition = definition,
                 Route = route,
+                Position = position,
+                Lane = lane,
                 BatchIndex = batchIndex,
-                Health = definition.Health,
-                Position = route.Points[0]
+                Health = definition.Health
             });
+            return true;
+        }
+
+        private void AdvanceTraffic()
+        {
+            FillBaseAttackGaps();
+            var baseAttackLayout = Configuration.Objective.BaseAttack;
+            movementOrder.AddRange(enemies);
+            movementOrder.Sort(CompareRoadPriority);
+            if (baseAttackLayout?.LocalArea != null)
+            {
+                ScheduleAssaultPositions(baseAttackLayout);
+            }
+
+            ScheduleRoadConflicts();
+            foreach (var enemy in movementOrder)
+            {
+                AdvanceTrafficEnemy(enemy, baseAttackLayout);
+            }
+
+            movementOrder.Clear();
+        }
+
+        private void AdvanceTrafficEnemy(Enemy enemy, BaseAttackLayout baseAttackLayout)
+        {
+            if (enemy.AssaultOrder is AssaultMotion motion)
+            {
+                AdvanceAssaultMotion(enemy, motion, baseAttackLayout);
+                return;
+            }
+
+            var attack = enemy.BaseAttack;
+            if (attack != null)
+            {
+                attack.Distance = AdvancePath(enemy, attack.Path, attack.Distance, attack.Stop, 0);
+                return;
+            }
+
+            if (useAuthoredNavigation)
+            {
+                AdvanceCorridorRoad(enemy);
+            }
+            else
+            {
+                enemy.Distance = AdvancePath(enemy, enemy.Route, enemy.Distance, enemy.Route.Length, enemy.Lane);
+            }
+
+            if (enemy.Distance == enemy.Route.Length && baseAttackLayout?.LocalArea == null)
+            {
+                AssignBaseAttack(enemy);
+            }
+        }
+
+        private int AdvancePath(Enemy enemy, Route route, int progress, int stop, int lane)
+        {
+            int target = Math.Min(progress + enemy.Definition.SpeedPerTick, stop);
+            while (progress < target)
+            {
+                int distance = Math.Min(target, progress + EnemyMoveStepMillimetres);
+                var position = route.Position(distance, lane);
+                if (!CanAdvancePathTo(enemy, position))
+                {
+                    // Close up to the available gap instead of dropping the whole movement step.
+                    int blocked = distance;
+                    while (blocked - progress > 1)
+                    {
+                        int middle = progress + (blocked - progress) / 2;
+                        var probe = route.Position(middle, lane);
+                        if (CanAdvancePathTo(enemy, probe))
+                        {
+                            progress = middle;
+                            enemy.Position = probe;
+                        }
+                        else
+                        {
+                            blocked = middle;
+                        }
+                    }
+
+                    break;
+                }
+
+                progress = distance;
+                enemy.Position = position;
+            }
+
+            return progress;
+        }
+
+        private bool CanAdvancePathTo(Enemy enemy, Position2 position)
+        {
+            int radius = enemy.Definition.BodyRadius;
+            return useAuthoredNavigation
+                ? IsClearBattleGround(enemy.Position, position, radius) && IsClearOfEnemyBodies(enemy.Position, position, enemy, radius)
+                : HasRoadSpace(position, radius, enemy);
+        }
+
+        private static int CompareRoadPriority(Enemy first, Enemy second)
+        {
+            int order = (first.Route.Length - first.Distance).CompareTo(second.Route.Length - second.Distance);
+            return order != 0 ? order : first.Id.CompareTo(second.Id);
+        }
+
+        private bool HasRoadSpace(Position2 position, int radius, Enemy mover = null)
+        {
+            if (mover?.BaseAttack is { Layout: null } && !IsClearOfTowers(mover.Position, position, radius))
+            {
+                return false;
+            }
+
+            var layout = Configuration.Objective.BaseAttack;
+            bool enteringBaseApproach = mover != null && mover.BaseAttack == null && layout?.Engagement != null
+                && (layout.LocalArea == null || mover.Route.Length - mover.Distance <= 2500);
+            foreach (var other in enemies)
+            {
+                if (other == mover)
+                {
+                    continue;
+                }
+
+                int clearance = radius + other.Definition.BodyRadius;
+                long required = (long)clearance * clearance;
+                long gap = DistanceSquared(position, other.Position);
+                if (gap < required)
+                {
+                    return false;
+                }
+
+                // Let an enemy already committed to crossing the road clear its approach.
+                if (enteringBaseApproach && other.BaseAttack != null && BlocksReservedAttackPath(position, other, required))
+                {
+                    return false;
+                }
+
+                if (mover == null || mover.BaseAttack != null || mover.Route == other.Route || other.Distance == other.Route.Length
+                    || gap >= 9 * required || CompareRoadPriority(other, mover) >= 0)
+                {
+                    continue;
+                }
+
+                // Yield before entering the lead enemy's path at a junction.
+                int lookAhead = Math.Min(other.Route.Length, other.Distance + 2 * clearance);
+                var ahead = other.Route.Position(lookAhead, other.Lane);
+                double reservedGap = SegmentDistanceSquared(position, other.Position, ahead);
+                if (reservedGap < required && reservedGap <= SegmentDistanceSquared(mover.Position, other.Position, ahead))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static double SegmentDistanceSquared(Position2 point, Position2 start, Position2 end)
+        {
+            long x = (long)end.X - start.X;
+            long y = (long)end.Y - start.Y;
+            long dx = (long)point.X - start.X;
+            long dy = (long)point.Y - start.Y;
+            long projection = dx * x + dy * y;
+            if (projection <= 0)
+            {
+                return DistanceSquared(point, start);
+            }
+
+            long lengthSquared = x * x + y * y;
+            if (projection >= lengthSquared)
+            {
+                return DistanceSquared(point, end);
+            }
+
+            long cross = dx * y - dy * x;
+            return (double)cross * cross / lengthSquared;
         }
 
         private static long DistanceSquared(Position2 first, Position2 second)
@@ -478,11 +780,6 @@ namespace Game.HotUpdate.TowerDefense.Domain
             RewardResolvedEnemy(enemy);
         }
 
-        private static bool AtObjective(Enemy enemy)
-        {
-            return enemy.Position.Equals(enemy.Route.Points[^1]);
-        }
-
         private bool ResolveArrival(Enemy enemy, int index)
         {
             var objective = Configuration.Objective;
@@ -492,9 +789,9 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     RecordLeak(enemy, index);
                     return Leaks >= objective.EscapesToDefeat;
                 case BattleObjectiveType.DefendBase:
-                    if (enemy.NextBaseAttackTick == 0 && objective.BaseAttackWindupTicks > 0)
+                    if (enemy.NextBaseAttackTick == 0 && objective.BaseAttack?.Engagement is BaseAttackEngagement engagement)
                     {
-                        enemy.NextBaseAttackTick = Tick + objective.BaseAttackWindupTicks;
+                        enemy.NextBaseAttackTick = Tick + engagement.WindupTicks;
                         return false;
                     }
 
@@ -517,11 +814,11 @@ namespace Game.HotUpdate.TowerDefense.Domain
         private Enemy Target(Tower tower)
         {
             Enemy best = null;
-            long remaining = long.MaxValue;
+            int remaining = int.MaxValue;
             long range = Range(tower.Definition, tower.Level);
             foreach (var enemy in enemies)
             {
-                long distanceToGoal = DistanceSquared(enemy.Position, enemy.Route.Points[^1]);
+                int distanceToGoal = enemy.Route.Length - enemy.Distance;
                 if (DistanceSquared(enemy.Position, tower.Slot.Position) <= range * range && distanceToGoal < remaining)
                 {
                     best = enemy;
@@ -667,13 +964,82 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 enemySnapshots.Add(new EnemySnapshot(
                     enemy.Id,
                     enemy.Definition.Id,
-                    enemy.Route.Id,
+                    enemy.Route.Definition.Id,
                     enemy.Position,
                     enemy.Health,
                     enemy.Definition.Health,
-                    Configuration.Objective.Type == BattleObjectiveType.DefendBase && AtObjective(enemy),
+                    enemy.Distance,
+                    useRoadTraffic && ReachedObjective(enemy),
                     enemy.NextBaseAttackTick));
             }
+        }
+
+        private static Route CreateRoute(RouteDefinition definition, bool hasBase, int attackInset = 0)
+        {
+            var route = new Route { Definition = definition, SegmentLengths = new int[definition.Points.Length - 1] };
+            for (int i = 0; i < route.SegmentLengths.Length; i++)
+            {
+                long dx = definition.Points[i + 1].X - definition.Points[i].X;
+                long dy = definition.Points[i + 1].Y - definition.Points[i].Y;
+                long square = dx * dx + dy * dy;
+                int length = (int)Math.Sqrt(square);
+                while ((long)(length + 1) * (length + 1) <= square)
+                {
+                    length++;
+                }
+
+                while ((long)length * length > square)
+                {
+                    length--;
+                }
+
+                Require(length > 0, "Route segments must have positive length.");
+                route.SegmentLengths[i] = length;
+                route.Length = checked(route.Length + length);
+                Require(route.Length <= 10000000, "Route length exceeds supported range.");
+            }
+
+            if (hasBase)
+            {
+                int finalSegmentLength = route.SegmentLengths[route.SegmentLengths.Length - 1];
+                Require(definition.BaseEntranceInset >= 0 && definition.BaseEntranceInset < finalSegmentLength, "Invalid base entrance inset.");
+                route.EndInset = attackInset > 0 ? attackInset : definition.BaseEntranceInset;
+                Require(route.EndInset < route.Length, "The base attack approach must start after the route entrance.");
+                route.Length -= route.EndInset;
+            }
+
+            return route;
+        }
+
+        private static Position2[] CreateLaneOffsets(Position2[] points)
+        {
+            var offsets = new Position2[points.Length];
+            var incoming = LaneNormal(points[0], points[1]);
+            for (int i = 0; i < points.Length; i++)
+            {
+                var outgoing = i > 0 && i + 1 < points.Length ? LaneNormal(points[i], points[i + 1]) : incoming;
+                // Use the corner shared by both offset segments so the lanes stay separated through a bend.
+                double alignment = 1 + incoming.X * outgoing.X + incoming.Y * outgoing.Y;
+                if (alignment < .5)
+                {
+                    incoming = outgoing;
+                    alignment = 2;
+                }
+
+                double scale = RoadLaneOffsetMillimetres / alignment;
+                offsets[i] = new Position2(
+                    (int)Math.Round((incoming.X + outgoing.X) * scale),
+                    (int)Math.Round((incoming.Y + outgoing.Y) * scale));
+                incoming = outgoing;
+            }
+
+            return offsets;
+        }
+
+        private static (double X, double Y) LaneNormal(Position2 start, Position2 end)
+        {
+            double length = Math.Sqrt(DistanceSquared(start, end));
+            return ((start.Y - end.Y) / length, (end.X - start.X) / length);
         }
 
         private static void Validate(FightConfiguration value)
@@ -709,6 +1075,36 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 Require(relay?.Points != null && value.RelayPointIndex > 0 && value.RelayPointIndex < relay.Points.Length - 1, "Invalid relay checkpoint.");
             }
 
+            var baseAttack = value.Objective.BaseAttack;
+            if (baseAttack != null)
+            {
+                if (baseAttack.Engagement != null)
+                {
+                    ValidatePoint(baseAttack.Engagement.Min);
+                    ValidatePoint(baseAttack.Engagement.Max);
+                }
+
+                if (baseAttack.LocalArea is BaseApproachArea area)
+                {
+                    ValidatePoint(area.Min);
+                    ValidatePoint(area.Max);
+                    foreach (var obstacle in area.Obstacles)
+                    {
+                        ValidatePoint(obstacle.Center);
+                    }
+                }
+
+                foreach (var path in baseAttack.Paths)
+                {
+                    Require(baseAttack.Engagement == null || path.FirstAttackPoint == path.Points.Count - 1,
+                        "A local attack path must end at its only attack position.");
+                    foreach (var point in path.Points)
+                    {
+                        ValidatePoint(point);
+                    }
+                }
+            }
+
             foreach (var route in value.Routes)
             {
                 Require(route.Points != null && route.Points.Length >= 2 && route.Points.Length <= 1000, "Invalid route point count.");
@@ -717,10 +1113,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     ValidatePoint(point);
                 }
 
-                for (int index = 1; index < route.Points.Length; index++)
-                {
-                    Require(!route.Points[index - 1].Equals(route.Points[index]), "Adjacent map points must be distinct.");
-                }
+                CreateRoute(route, value.Objective.HasBase, baseAttack?.ApproachInset ?? 0);
             }
 
             if (value.Objective.Type == BattleObjectiveType.InterceptEscapes)
@@ -755,6 +1148,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             foreach (var enemy in value.Enemies)
             {
                 Require(enemy.Health > 0 && enemy.SpeedPerTick > 0 && enemy.SpeedPerTick <= 1000000, "Invalid enemy health/speed.");
+                Require(enemy.BodyRadius > 0 && enemy.BodyRadius <= 2000, "Invalid enemy body radius.");
                 Require(enemy.GoldReward >= 0 && enemy.BaseDamage > 0, "Invalid enemy rewards/base damage.");
             }
 
@@ -768,6 +1162,9 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 {
                     var enemy = value.Enemies.FirstOrDefault(definition => definition.Id == group.EnemyId);
                     Require(enemy != null && value.Routes.Any(route => route.Id == group.RouteId), "Spawn references missing enemy/route.");
+                    Require(baseAttack == null || baseAttack.LocalArea != null || baseAttack.Paths.Any(path => enemy.BodyRadius <= path.MaxBodyRadius
+                        && (baseAttack.Engagement == null || baseAttack.Engagement.CanAttackFrom(path.Points[path.FirstAttackPoint], enemy.BodyRadius))),
+                        "No base attack path fits the enemy.");
                     Require(
                         group.Count > 0 && group.Count <= 10000 && group.StartTick >= 0 && group.IntervalTicks > 0
                             && (long)group.StartTick + (long)group.Count * group.IntervalTicks <= 10000000,

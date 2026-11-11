@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/BattleTerrain.cs" Link="Geometry/BattleTerrain.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/Configuration.cs" Link="Geometry/Configuration.cs" />
+  </ItemGroup>
+</Project>

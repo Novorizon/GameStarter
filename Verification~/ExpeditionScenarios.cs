@@ -130,7 +130,7 @@ internal static partial class Program
             Equal(40, new JourneyProgress(ReadTowerDefenseTables(), store).Camp.Wood);
             Equal(1, store.Saves);
         });
-        Check("combat at the configured spawn point settles across varied expedition seeds", () =>
+        Check("authored stage remains winnable across varied expedition seeds", () =>
         {
             foreach (uint seed in new uint[] { 0, 1, 33, 4729, 12345, 987654, 2147483648, uint.MaxValue })
             {

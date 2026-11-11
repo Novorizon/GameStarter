@@ -1,4 +1,5 @@
 <linker>
   <assembly fullname="Game.Startup" preserve="all" />
   <assembly fullname="Google.Protobuf" preserve="all" />
+  <assembly fullname="Game.ThirdParty.Rvo2" preserve="all" />
 </linker>

@@ -57,6 +57,132 @@ namespace Game.HotUpdate.TowerDefense.Domain
         }
     }
 
+    public sealed class BaseAttackPath
+    {
+        public int Side { get; }
+        public int FirstAttackPoint { get; }
+        public int MaxBodyRadius { get; }
+        public IReadOnlyList<Position2> Points { get; }
+
+        public BaseAttackPath(int side, int firstAttackPoint, int maxBodyRadius, Position2[] points)
+        {
+            if (side < -1 || side > 1 || points == null || points.Length == 0 || points.Length > 16
+                || firstAttackPoint < 0 || firstAttackPoint >= points.Length || maxBodyRadius <= 0 || maxBodyRadius > 2000)
+            {
+                throw new ArgumentException("Invalid base attack path.");
+            }
+
+            for (int i = 1; i < points.Length; i++)
+            {
+                if (points[i].Equals(points[i - 1]))
+                {
+                    throw new ArgumentException("Consecutive base attack points must be distinct.");
+                }
+            }
+
+            Side = side;
+            FirstAttackPoint = firstAttackPoint;
+            MaxBodyRadius = maxBodyRadius;
+            Points = Array.AsReadOnly((Position2[])points.Clone());
+        }
+    }
+
+    public sealed class BaseAttackLayout
+    {
+        public int ApproachInset { get; }
+        public IReadOnlyList<BaseAttackPath> Paths { get; }
+        public BaseAttackEngagement Engagement { get; }
+        public BaseApproachArea LocalArea { get; }
+
+        public BaseAttackLayout(int approachInset, BaseAttackPath[] paths, BaseAttackEngagement engagement = null, BaseApproachArea localArea = null)
+        {
+            paths ??= Array.Empty<BaseAttackPath>();
+            if (approachInset <= 0 || (localArea == null && paths.Length == 0) || paths.Length > 8 || paths.Any(path => path == null))
+            {
+                throw new ArgumentException("Invalid base attack layout.");
+            }
+
+            if (localArea != null && engagement == null)
+            {
+                throw new ArgumentException("A local approach requires a base engagement boundary.");
+            }
+
+            ApproachInset = approachInset;
+            Paths = Array.AsReadOnly((BaseAttackPath[])paths.Clone());
+            Engagement = engagement;
+            LocalArea = localArea;
+        }
+    }
+
+    public readonly struct BaseApproachObstacle
+    {
+        public Position2 Center { get; }
+        public int Radius { get; }
+
+        public BaseApproachObstacle(Position2 center, int radius)
+        {
+            Center = center;
+            Radius = radius;
+        }
+    }
+
+    public sealed class BaseApproachArea
+    {
+        public Position2 Min { get; }
+        public Position2 Max { get; }
+        public IReadOnlyList<BaseApproachObstacle> Obstacles { get; }
+
+        public BaseApproachArea(Position2 min, Position2 max, BaseApproachObstacle[] obstacles)
+        {
+            long width = (long)max.X - min.X;
+            long height = (long)max.Y - min.Y;
+            if (width <= 0 || height <= 0 || width > 12000 || height > 12000
+                || obstacles == null || obstacles.Length > 32 || obstacles.Any(value => value.Radius <= 0 || value.Radius > 3000))
+            {
+                throw new ArgumentException("Invalid local base approach area.");
+            }
+
+            Min = min;
+            Max = max;
+            Obstacles = Array.AsReadOnly((BaseApproachObstacle[])obstacles.Clone());
+        }
+    }
+
+    public sealed class BaseAttackEngagement
+    {
+        public Position2 Min { get; }
+        public Position2 Max { get; }
+        public int Reach { get; }
+        public int WindupTicks { get; }
+
+        public BaseAttackEngagement(Position2 min, Position2 max, int reach, int windupTicks)
+        {
+            if (min.X >= max.X || min.Y >= max.Y || reach <= 0 || reach > 2000 || windupTicks <= 0)
+            {
+                throw new ArgumentException("Invalid base engagement bounds, reach or windup.");
+            }
+
+            Min = min;
+            Max = max;
+            Reach = reach;
+            WindupTicks = windupTicks;
+        }
+
+        internal bool CanAttackFrom(Position2 position, int bodyRadius)
+        {
+            long distance = DistanceToFootprintSquared(position);
+            long limit = bodyRadius + Reach;
+            return distance >= (long)bodyRadius * bodyRadius && distance <= limit * limit;
+        }
+
+        internal long DistanceToFootprintSquared(Position2 position)
+        {
+            long x = Math.Max(0L, Math.Max((long)Min.X - position.X, (long)position.X - Max.X));
+            long y = Math.Max(0L, Math.Max((long)Min.Y - position.Y, (long)position.Y - Max.Y));
+            return x * x + y * y;
+        }
+    }
+
     public sealed class BattleObjective
     {
         internal static readonly BattleObjective Legacy = new BattleObjective(BattleObjectiveType.LegacyBaseLeak, "防守终点");
@@ -67,7 +193,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int EscapesToDefeat { get; }
         public IReadOnlyList<BaseUpgrade> BaseUpgrades { get; }
         public AssaultRules Assault { get; }
-        public int BaseAttackWindupTicks { get; }
+        public BaseAttackLayout BaseAttack { get; }
         public bool HasBase => Type != BattleObjectiveType.InterceptEscapes;
 
         public BattleObjective(
@@ -77,7 +203,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             int escapesToDefeat = 0,
             BaseUpgrade[] baseUpgrades = null,
             AssaultRules assault = null,
-            int baseAttackWindupTicks = 0)
+            BaseAttackLayout baseAttack = null)
         {
             bool valid = type switch
             {
@@ -91,10 +217,14 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 throw new ArgumentException("Invalid battle objective: " + type);
             }
 
-            if (baseAttackWindupTicks < 0
-                || (type == BattleObjectiveType.DefendBase ? baseAttackWindupTicks >= baseAttackIntervalTicks : baseAttackWindupTicks != 0))
+            if (baseAttack != null && type != BattleObjectiveType.DefendBase)
             {
-                throw new ArgumentException("Invalid base attack windup.");
+                throw new ArgumentException("Only a defended base can have attack paths.", nameof(baseAttack));
+            }
+
+            if (baseAttack?.Engagement is BaseAttackEngagement engagement && engagement.WindupTicks >= baseAttackIntervalTicks)
+            {
+                throw new ArgumentException("Attack windup must be shorter than the attack interval.", nameof(baseAttack));
             }
 
             var upgrades = baseUpgrades ?? Array.Empty<BaseUpgrade>();
@@ -110,7 +240,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             EscapesToDefeat = escapesToDefeat;
             BaseUpgrades = Array.AsReadOnly((BaseUpgrade[])upgrades.Clone());
             Assault = assault;
-            BaseAttackWindupTicks = baseAttackWindupTicks;
+            BaseAttack = baseAttack;
         }
     }
 
@@ -129,6 +259,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public bool HidePlannedRoutes { get; set; }
         // Zero is used by scenarios with individually authored pads.
         public int BuildGridStep { get; set; }
+        public BattleTerrain Terrain { get; set; }
         public RouteDefinition[] Routes { get; set; } = Array.Empty<RouteDefinition>();
         public BuildSlotDefinition[] BuildSlots { get; set; } = Array.Empty<BuildSlotDefinition>();
         public TowerDefinition[] Towers { get; set; } = Array.Empty<TowerDefinition>();
@@ -142,6 +273,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int Id { get; set; }
         public string EntranceName { get; set; } = "敌人入口";
         public Position2[] Points { get; set; } = Array.Empty<Position2>();
+        // The last point anchors the base. Enemies reach its entrance this many millimetres earlier.
+        public int BaseEntranceInset { get; set; }
     }
 
     public sealed class BuildSlotDefinition
@@ -166,9 +299,12 @@ namespace Game.HotUpdate.TowerDefense.Domain
 
     public sealed class EnemyDefinition
     {
+        public const int DefaultBodyRadius = 340;
+
         public int Id { get; set; }
         public string Name { get; set; } = "";
         public int Health { get; set; }
+        public int BodyRadius { get; set; } = DefaultBodyRadius;
         public int SpeedPerTick { get; set; }
         public int GoldReward { get; set; }
         public int BaseDamage { get; set; }
@@ -276,11 +412,12 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public Position2 Position { get; }
         public int Health { get; }
         public int MaxHealth { get; }
+        public int Distance { get; }
         public bool AttackingBase { get; }
         public long NextBaseAttackTick { get; }
 
         internal EnemySnapshot(
-            int id, int definitionId, int routeId, Position2 position, int health, int maxHealth, bool attackingBase, long nextBaseAttackTick)
+            int id, int definitionId, int routeId, Position2 position, int health, int maxHealth, int distance, bool attackingBase, long nextBaseAttackTick)
         {
             Id = id;
             DefinitionId = definitionId;
@@ -288,6 +425,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             Position = position;
             Health = health;
             MaxHealth = maxHealth;
+            Distance = distance;
             AttackingBase = attackingBase;
             NextBaseAttackTick = nextBaseAttackTick;
         }

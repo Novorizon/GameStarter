@@ -72,7 +72,7 @@ Unity 场景中的 GameEntry
 
 当前加载 14 张表：8 张战斗配置、主题/旅程任务/等级 3 张、营地等级/营地任务 2 张和原 Example。营地有四个建设阶段，任务与塔防提供本地材料；头像打开玩家成长/旅程档案，出征准备展示关卡、波次和补给，确认后加载战场；关卡有 6 波、7 个固定建造位置、3 塔型、4 怪物型和 7 张强化卡。先选塔卡，才显示可建区域；部署后点击已有塔查看实际射程和升级。卡牌显示表中的品级与图标，抽取仍使用原单池权重。局内预告下一波敌人和奖励，手动/后台/失焦/返回确认暂停相互独立；新出征使用新种子，重开保留原种子。
 
-地图是 imagegen 生成的低多边形台地式 2D 预渲染图，包含砂岩道路、池塘和木桥。出生位置、关卡目标和建造数据随 Luban 表与地图 JSON 发布。固定 55° 正交相机呈现 3D 石塔、蓝顶基地和怪物，UI 使用松绿、铜金九宫格面板和 3×3 图标图集。所有文字使用 TMP。图片与动态 SDF 字体通过 YooAsset 租约加载，按 maps/ui/fonts 分类。字体许可随包保留在 `Assets/StreamingAssets/ThirdPartyLicenses/Noto-CJK.txt`。3D 使用简单几何体占位，正式模型由用户通过 Meshy 提供。移动真机和最终性能尚未验收。
+地图是 imagegen 生成的低多边形台地式 2D 预渲染图，包含砂岩道路、池塘、木桥和七个固定建造位置；18 个路线点和建造点随 Luban 表一起发布。固定 55° 正交相机呈现 3D 石塔、蓝顶基地和怪物，UI 使用松绿/铜金九宫格面板和 3×3 图标图集；所有文字使用 TMP。图片与动态 SDF 字体通过 YooAsset 租约加载，按 maps/ui/fonts 分类；字体许可随包保留在 `Assets/StreamingAssets/ThirdPartyLicenses/Noto-CJK.txt`。3D 当前仅保留简单几何体占位，正式模型由用户通过 Meshy 提供；移动真机和最终性能尚未验收。
 
 当前玩法、输入链路、布局截图和真实 Unity 验收范围见[交付记录](Documentation/TowerDefense/Delivery.zh-CN.md)。原生表现由 `Game.Editor.TowerDefenseValidation.Run` 验证；带 `--novorizon-phone-layout` 可检查 19.5:9 编辑器横屏布局。当前没有真实登录或发奖后端，Editor 图形验收不代表手机真机、IL2CPP 或声音已通过。
 
