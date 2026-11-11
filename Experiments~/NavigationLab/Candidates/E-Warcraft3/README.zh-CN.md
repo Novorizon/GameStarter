@@ -67,3 +67,9 @@ dotnet run --project Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Nav
 E3早期无条件backoff破坏了初始44人稳定；限定到空间专用Goal后，初始44人确实稳定，但最后2名Small仍未到位。`Evidence/RequesterBackoff`与`Evidence/ConstrainedBackoff`保存失败。两目录均有`candidate-source.zip`及`source-snapshot.json`，归档的运行时源码逐字SHA与原报告一致，可以在独立worktree复现，不用当前默认源冒充旧变体。
 
 所有临停、backoff、Goal排序和碰撞优先级都是本实验自行选择的控制策略，尚无证据证明暴雪原版使用相同策略。此处测试的仅是统一模型中的2D地面圆盘、固定速度上限、格心驻留/攻击目标；未涵盖原版单位转向、加速度、海空移动、阵营阻挡规则、技能位移或战争迷雾。
+
+## 绑定来源的公共7项smoke
+
+共享harness `c882538`、默认运行时源`8a0a3cd`已通过freeze-run构建绑定、独立oracle与全新实例重放。结果为 **6 Passed / 1 Failed / 0 Unsupported**：open48、Forest8、非格心途中死亡补兵、动态堵路/重开、大体型r700、快速2200mm/tick通过，6项通过均重放一致；原72场景全部实际生成，但最终11人Moving、仅9攻击，deadline12000，明确失败。
+
+这7项只是正式绑定的smoke，不是完整普适性结论。暂停/实例隔离、源与DLL无漂移均通过；`formalEvidenceReady=true`表示来源完整，并不表示`success=true`（本轮success为false）。`Evidence/BoundSmoke7`保留summary、编译项、buildmanifest、实际输入、日志与压缩逐步轨迹；其中冻结DLL SHA为`ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543`，不能与未PathMap的live构建DLL指纹混用。后续同一公共full/stress仍须单独验证并记录真实失败。

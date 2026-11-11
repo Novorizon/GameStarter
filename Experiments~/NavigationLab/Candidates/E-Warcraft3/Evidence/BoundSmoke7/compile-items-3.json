@@ -1,0 +1,95 @@
+{
+  "Properties": {
+    "TargetFramework": "netstandard2.1",
+    "LangVersion": "9"
+  },
+  "Items": {
+    "Compile": [
+      {
+        "Identity": "GlobalSearch.cs",
+        "FullPath": "/workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/GlobalSearch.cs",
+        "RootDir": "/",
+        "Filename": "GlobalSearch",
+        "Extension": ".cs",
+        "RelativeDir": "",
+        "Directory": "workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.DefaultItems.props",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.Sdk.DefaultItems",
+        "DefiningProjectExtension": ".props"
+      },
+      {
+        "Identity": "PathingGeometry.cs",
+        "FullPath": "/workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/PathingGeometry.cs",
+        "RootDir": "/",
+        "Filename": "PathingGeometry",
+        "Extension": ".cs",
+        "RelativeDir": "",
+        "Directory": "workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.DefaultItems.props",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.Sdk.DefaultItems",
+        "DefiningProjectExtension": ".props"
+      },
+      {
+        "Identity": "WarcraftNavigator.cs",
+        "FullPath": "/workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/WarcraftNavigator.cs",
+        "RootDir": "/",
+        "Filename": "WarcraftNavigator",
+        "Extension": ".cs",
+        "RelativeDir": "",
+        "Directory": "workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.DefaultItems.props",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.Sdk.DefaultItems",
+        "DefiningProjectExtension": ".props"
+      },
+      {
+        "Identity": "obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs",
+        "FullPath": "/workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs",
+        "RootDir": "/",
+        "Filename": ".NETStandard,Version=v2.1.AssemblyAttributes",
+        "Extension": ".cs",
+        "RelativeDir": "obj/Release/netstandard2.1/",
+        "Directory": "workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/obj/Release/netstandard2.1/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Microsoft.Common.CurrentVersion.targets",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/",
+        "DefiningProjectName": "Microsoft.Common.CurrentVersion",
+        "DefiningProjectExtension": ".targets"
+      },
+      {
+        "Identity": "obj/Release/netstandard2.1/NavigationLab.EWarcraft3.AssemblyInfo.cs",
+        "FullPath": "/workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/obj/Release/netstandard2.1/NavigationLab.EWarcraft3.AssemblyInfo.cs",
+        "RootDir": "/",
+        "Filename": "NavigationLab.EWarcraft3.AssemblyInfo",
+        "Extension": ".cs",
+        "RelativeDir": "obj/Release/netstandard2.1/",
+        "Directory": "workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/obj/Release/netstandard2.1/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.GenerateAssemblyInfo.targets",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.GenerateAssemblyInfo",
+        "DefiningProjectExtension": ".targets"
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+["dotnet", "/workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll", "--assembly", "/workspace/navigation-comparison/e-snapshots/snapshot-6f08544e3ef3f40eb87c3d33/Experiments~/NavigationLab/Candidates/E-Warcraft3/bin/Release/netstandard2.1/NavigationLab.EWarcraft3.dll", "--factory", "NavigationLab.Candidates.EWarcraft3.WarcraftFactory", "--suite", "smoke", "--output", "/workspace/navigation-comparison/results/e-bound-smoke", "--build-manifest", "/workspace/navigation-comparison/results/e-bound-smoke/build-manifest.json", "--require-build-manifest"]
+PASSED open-arena admitted=48 alive=48 pending=0 attack=16 tick=374 
+FAILED cross-junction-original-4m admitted=72 alive=72 pending=0 attack=9 tick=12000 Deadline: alive=72, pending=0, moving=11, attack=9, failure=None
+PASSED forest-wave-1 admitted=8 alive=8 pending=0 attack=8 tick=812 
+PASSED moving-noncenter-death-and-reinforcement admitted=25 alive=24 pending=0 attack=16 tick=362 
+PASSED dynamic-route-block-and-open admitted=24 alive=24 pending=0 attack=16 tick=800 
+PASSED large-body-wide-approach admitted=1 alive=1 pending=0 attack=1 tick=257 
+PASSED fast-per-tick-approach admitted=4 alive=4 pending=0 attack=4 tick=217 

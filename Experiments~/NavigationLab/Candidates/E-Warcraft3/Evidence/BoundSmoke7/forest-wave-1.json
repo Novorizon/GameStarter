@@ -1,0 +1,171 @@
+{
+  "Name": "forest-wave-1",
+  "Family": "authored-forest",
+  "Status": "Passed",
+  "Error": null,
+  "InputSha256": "b8c6d977d922d0871e6f8d5e6380d21bc3b8e20cb9686970b6cbd36435c55192",
+  "PhysicalInputSha256": "19405959d3f96a3afe2b957c5fedef9a2f758c2f4347c7828a8dec6bb2cc8035",
+  "GeometrySha256": "04305267c593f7d1797a4417119b61e22ddb1de4439a6de8e16933f14f948c38",
+  "Expectation": "FullArrival",
+  "FeasibilityBasis": "Original fixed input previously constructively witnessed; no route/goal assignment passed to candidate.",
+  "Trace": "traces/forest-wave-1.jsonl.gz",
+  "TraceSha256": "dc7251893f15b678cdf0cd36afa1da68f5175acfec32bd12bd1a33d5f6977a65",
+  "CommandsSha256": "29678eaddfc5edc62267b1b7e181ef9b5039f75ef35e41aca313667785d09057",
+  "FinalState": "1:9250,-3810:1:348:1|2:9250,-3310:1:392:1|3:8750,-4310:1:303:1|4:8250,-4810:1:258:1|5:8750,-2810:1:435:1|6:8750,-2310:1:479:1|7:7250,-4810:1:256:1|8:8250,-2310:1:478:1",
+  "OriginalRequests": 8,
+  "Admitted": 8,
+  "Alive": 8,
+  "Pending": 0,
+  "Attacking": 8,
+  "Waiting": 0,
+  "Deaths": 0,
+  "RejectedAttempts": 0,
+  "FinalTick": 812,
+  "HoldTicks": 200,
+  "HoldMaximumDriftMm": 0,
+  "KnownEndpointPopulation": 8,
+  "PhysicalAreaUpperBound": 0,
+  "InitialBatchVerified": false,
+  "ReplayVerified": true,
+  "CheckedMicrosteps": 8120,
+  "PairSweeps": 206444,
+  "BodySweeps": 60796,
+  "MinimumBodyGapMm": 100,
+  "ApiStopwatchTicks": {
+    "Create": 78841,
+    "Snapshot": 15291299,
+    "TrySpawn": 5341364,
+    "Step": 25756609,
+    "Dispose": 8264
+  },
+  "ApiMaximumStopwatchTicks": {
+    "Create": 78841,
+    "Snapshot": 795175,
+    "TrySpawn": 1420707,
+    "Step": 3213409,
+    "Dispose": 8264
+  },
+  "ApiAllocatedBytes": {
+    "Create": 4416,
+    "Snapshot": 17806448,
+    "TrySpawn": 1723416,
+    "Step": 12823440,
+    "Dispose": 0
+  },
+  "ApiCalls": {
+    "Create": 1,
+    "Snapshot": 16257,
+    "TrySpawn": 8,
+    "Step": 8120,
+    "Dispose": 1
+  },
+  "TotalCandidateApiStopwatchTicks": 46476377,
+  "TotalCandidateApiAllocatedBytes": 32357720,
+  "StepStopwatchTicks": 25756609,
+  "MaximumStepStopwatchTicks": 3213409,
+  "StepAllocatedBytes": 12823440,
+  "StopwatchFrequency": 1000000000,
+  "ElapsedMilliseconds": 404,
+  "Failures": {},
+  "Metrics": {
+    "FriendlyYieldEnabled": 1,
+    "GroupedYieldEnabled": 0,
+    "RequesterBackoffEnabled": 0,
+    "SpawnAttempts": 8,
+    "ReachabilityCells": 2600,
+    "GlobalAStarSearches": 8,
+    "AStarExpandedCells": 2096,
+    "Spawned": 8,
+    "SimulationSubsteps": 8120,
+    "BodyMoveSubsteps": 40962
+  },
+  "ByRange": {
+    "450": [
+      8,
+      8
+    ]
+  },
+  "Commands": [
+    {
+      "microstep": 0,
+      "kind": "spawn",
+      "Id": 1,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    },
+    {
+      "microstep": 150,
+      "kind": "spawn",
+      "Id": 2,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    },
+    {
+      "microstep": 300,
+      "kind": "spawn",
+      "Id": 3,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    },
+    {
+      "microstep": 450,
+      "kind": "spawn",
+      "Id": 4,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    },
+    {
+      "microstep": 600,
+      "kind": "spawn",
+      "Id": 5,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    },
+    {
+      "microstep": 750,
+      "kind": "spawn",
+      "Id": 6,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    },
+    {
+      "microstep": 900,
+      "kind": "spawn",
+      "Id": 7,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    },
+    {
+      "microstep": 1050,
+      "kind": "spawn",
+      "Id": 8,
+      "radius": 200,
+      "speed": 100,
+      "range": 450,
+      "spawn": 1058,
+      "failure": null
+    }
+  ],
+  "FailureSnapshot": null
+}

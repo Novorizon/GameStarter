@@ -134,10 +134,12 @@ var result = new
     minimumBodyGapMm = double.IsFinite(oracle.MinimumBodyGapMm) ? oracle.MinimumBodyGapMm : (double?)null,
     bodies = bodies.Select(body => new { body.Id, x = body.Position.X, y = body.Position.Y, body.State, body.GoalCell, body.TargetId })
 };
-File.WriteAllText(Path.Combine(output, name + (baseline ? "-baseline" : grouped ? "-grouped" : backoff ? "-backoff" : "-yield") + ".json"), JsonSerializer.Serialize(result, new JsonSerializerOptions
-{
-    WriteIndented = true
-}));
+File.WriteAllText(
+    Path.Combine(output, name + (baseline ? "-baseline" : grouped ? "-grouped" : backoff ? "-backoff" : "-yield") + ".json"),
+    JsonSerializer.Serialize(result, new JsonSerializerOptions
+    {
+        WriteIndented = true
+    }));
 Console.WriteLine($"FINAL {name} pass={result.success} born={next}/{count} tick={tick} attack={result.attacking} wait={result.waiting} failure={failure}");
 return result.success ? 0 : 1;
 

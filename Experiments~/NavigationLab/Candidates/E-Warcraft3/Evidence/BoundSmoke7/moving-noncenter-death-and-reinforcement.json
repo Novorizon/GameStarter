@@ -1,0 +1,605 @@
+{
+  "Name": "moving-noncenter-death-and-reinforcement",
+  "Family": "lifecycle",
+  "Status": "Passed",
+  "Error": null,
+  "InputSha256": "a2ad3f1d09419fa970cd8169af73f111ca09e5c9e15f6440d12a6ee83069ccea",
+  "PhysicalInputSha256": "2761a92ab6dd970fc39924ea020e7ba8df21e58dac6bdde215a77011cfaf798d",
+  "GeometrySha256": "8c028632bd6c61b903380dd7e2f783bb36566539c84a97dbace13c2693424b77",
+  "Expectation": "FullArrival",
+  "FeasibilityBasis": "Original fixed input previously constructively witnessed; no route/goal assignment passed to candidate.",
+  "Trace": "traces/moving-noncenter-death-and-reinforcement.jsonl.gz",
+  "TraceSha256": "80bfba3fa404dfa5770a49cd96e82ae5bd165662d275db6c6adf15770d760ef6",
+  "CommandsSha256": "14e7b62540b925775d8a992b0666a244d4b02040a34bb70a89765a27bcc2f0ac",
+  "FinalState": "2:29500,15500:1:554:1|3:29500,14500:1:519:1|4:28500,12500:1:448:1|5:28500,16500:1:588:1|6:29500,13500:1:484:1|7:28500,13500:1:483:1|8:28500,15500:1:553:1|9:27500,12500:1:447:1|10:27500,16500:1:587:1|11:26500,12500:1:446:1|12:26500,16500:1:586:1|13:26500,13500:1:481:1|14:26500,15500:1:551:1|15:25500,13500:1:480:1|16:25500,15500:1:550:1|17:25500,14500:1:515:1|18:33500,9500:2:348:1|19:33500,19500:2:698:1|20:33500,10500:2:383:1|21:33500,18500:2:663:1|22:33500,11500:2:418:1|23:33500,17500:2:628:1|24:33500,12500:2:453:1|25:33500,16500:2:593:1",
+  "OriginalRequests": 24,
+  "Admitted": 25,
+  "Alive": 24,
+  "Pending": 0,
+  "Attacking": 16,
+  "Waiting": 8,
+  "Deaths": 1,
+  "RejectedAttempts": 24,
+  "FinalTick": 362,
+  "HoldTicks": 200,
+  "HoldMaximumDriftMm": 0,
+  "KnownEndpointPopulation": 24,
+  "PhysicalAreaUpperBound": 0,
+  "InitialBatchVerified": false,
+  "ReplayVerified": true,
+  "CheckedMicrosteps": 3620,
+  "PairSweeps": 909630,
+  "BodySweeps": 81285,
+  "MinimumBodyGapMm": 0.30035978400673,
+  "ApiStopwatchTicks": {
+    "Create": 18212,
+    "Snapshot": 28638472,
+    "TrySpawn": 47232809,
+    "Step": 100192563,
+    "Remove": 2879386,
+    "Dispose": 8330
+  },
+  "ApiMaximumStopwatchTicks": {
+    "Create": 18212,
+    "Snapshot": 852379,
+    "TrySpawn": 21332546,
+    "Step": 27089866,
+    "Remove": 2879386,
+    "Dispose": 8330
+  },
+  "ApiAllocatedBytes": {
+    "Create": 3808,
+    "Snapshot": 37097376,
+    "TrySpawn": 10678344,
+    "Step": 25466224,
+    "Remove": 216,
+    "Dispose": 0
+  },
+  "ApiCalls": {
+    "Create": 1,
+    "Snapshot": 7341,
+    "TrySpawn": 49,
+    "Step": 3620,
+    "Remove": 1,
+    "Dispose": 1
+  },
+  "TotalCandidateApiStopwatchTicks": 178969772,
+  "TotalCandidateApiAllocatedBytes": 73245968,
+  "StepStopwatchTicks": 100192563,
+  "MaximumStepStopwatchTicks": 27089866,
+  "StepAllocatedBytes": 25466224,
+  "StopwatchFrequency": 1000000000,
+  "ElapsedMilliseconds": 573,
+  "Failures": {
+    "SpawnOccupied": 24
+  },
+  "Metrics": {
+    "FriendlyYieldEnabled": 1,
+    "GroupedYieldEnabled": 0,
+    "RequesterBackoffEnabled": 0,
+    "SpawnAttempts": 49,
+    "ReachabilityCells": 22150,
+    "GlobalAStarSearches": 42,
+    "AStarExpandedCells": 2397,
+    "Spawned": 25,
+    "SimulationSubsteps": 3620,
+    "BodyMoveSubsteps": 21082,
+    "Rejected_SpawnOccupied": 24,
+    "DirectConnectors": 25,
+    "RemovedByCaller": 1,
+    "SpatialCollisionStops": 1022,
+    "WaitingSubsteps": 1022,
+    "LocalSearches": 17,
+    "NoSpatialPath": 24,
+    "FriendlyYieldRequests": 3,
+    "FriendlyYieldAccepted": 3,
+    "FriendlyYieldCompleted": 3,
+    "DynamicGlobalRepaths": 4
+  },
+  "ByRange": {
+    "1000": [
+      24,
+      16
+    ]
+  },
+  "Commands": [
+    {
+      "microstep": 0,
+      "kind": "spawn",
+      "Id": 1,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 10,
+      "kind": "spawn-rejected",
+      "Id": 2,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 20,
+      "kind": "spawn",
+      "Id": 2,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 30,
+      "kind": "spawn-rejected",
+      "Id": 3,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 40,
+      "kind": "spawn",
+      "Id": 3,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 50,
+      "kind": "spawn-rejected",
+      "Id": 4,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 60,
+      "kind": "spawn",
+      "Id": 4,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 70,
+      "kind": "spawn-rejected",
+      "Id": 5,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 80,
+      "kind": "spawn",
+      "Id": 5,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 90,
+      "kind": "spawn-rejected",
+      "Id": 6,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 100,
+      "kind": "death",
+      "Id": 1,
+      "x": 4733.100000000001,
+      "y": 14500
+    },
+    {
+      "microstep": 100,
+      "kind": "spawn",
+      "Id": 6,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 110,
+      "kind": "spawn-rejected",
+      "Id": 7,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 120,
+      "kind": "spawn",
+      "Id": 7,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 130,
+      "kind": "spawn-rejected",
+      "Id": 8,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 140,
+      "kind": "spawn",
+      "Id": 8,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 150,
+      "kind": "spawn-rejected",
+      "Id": 9,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 160,
+      "kind": "spawn",
+      "Id": 9,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 170,
+      "kind": "spawn-rejected",
+      "Id": 10,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 180,
+      "kind": "spawn",
+      "Id": 10,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 190,
+      "kind": "spawn-rejected",
+      "Id": 11,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 200,
+      "kind": "spawn",
+      "Id": 11,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 210,
+      "kind": "spawn-rejected",
+      "Id": 12,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 220,
+      "kind": "spawn",
+      "Id": 12,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 230,
+      "kind": "spawn-rejected",
+      "Id": 13,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 240,
+      "kind": "spawn",
+      "Id": 13,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 250,
+      "kind": "spawn-rejected",
+      "Id": 14,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 260,
+      "kind": "spawn",
+      "Id": 14,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 270,
+      "kind": "spawn-rejected",
+      "Id": 15,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 280,
+      "kind": "spawn",
+      "Id": 15,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 290,
+      "kind": "spawn-rejected",
+      "Id": 16,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 300,
+      "kind": "spawn",
+      "Id": 16,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 310,
+      "kind": "spawn-rejected",
+      "Id": 17,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 320,
+      "kind": "spawn",
+      "Id": 17,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 330,
+      "kind": "spawn-rejected",
+      "Id": 18,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 340,
+      "kind": "spawn",
+      "Id": 18,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 350,
+      "kind": "spawn-rejected",
+      "Id": 19,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 360,
+      "kind": "spawn",
+      "Id": 19,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 370,
+      "kind": "spawn-rejected",
+      "Id": 20,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 380,
+      "kind": "spawn",
+      "Id": 20,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 390,
+      "kind": "spawn-rejected",
+      "Id": 21,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 400,
+      "kind": "spawn",
+      "Id": 21,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 410,
+      "kind": "spawn-rejected",
+      "Id": 22,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 420,
+      "kind": "spawn",
+      "Id": 22,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 430,
+      "kind": "spawn-rejected",
+      "Id": 23,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 440,
+      "kind": "spawn",
+      "Id": 23,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 450,
+      "kind": "spawn-rejected",
+      "Id": 24,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 460,
+      "kind": "spawn",
+      "Id": 24,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    },
+    {
+      "microstep": 470,
+      "kind": "spawn-rejected",
+      "Id": 25,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": "SpawnOccupied"
+    },
+    {
+      "microstep": 480,
+      "kind": "spawn",
+      "Id": 25,
+      "radius": 250,
+      "speed": 333,
+      "range": 1000,
+      "spawn": 491,
+      "failure": null
+    }
+  ],
+  "FailureSnapshot": null
+}

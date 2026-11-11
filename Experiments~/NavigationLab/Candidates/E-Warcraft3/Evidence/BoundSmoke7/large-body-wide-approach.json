@@ -1,0 +1,101 @@
+{
+  "Name": "large-body-wide-approach",
+  "Family": "large-body",
+  "Status": "Passed",
+  "Error": null,
+  "InputSha256": "a8c0bfc3553bd787437674cb4383e431feb028d68017fa2fc87068e788561fcf",
+  "PhysicalInputSha256": "fa8ae9fe360af3e887a180d2e442e611c4f01604caa998161786de8e6ae2301f",
+  "GeometrySha256": "f6f43675b8d3acec5b71b3593a4b92f4d0c869e378406ac5a89e2971d0ff6268",
+  "Expectation": "FullArrival",
+  "FeasibilityBasis": "One 700mm disc in a wide open room, no packing interaction; reachable valid target centres are independently checked.",
+  "Trace": "traces/large-body-wide-approach.jsonl.gz",
+  "TraceSha256": "c8c05abcecbb99f158b0efd42eeef00685d3cd674f46915b81b17df8eb121125",
+  "CommandsSha256": "8516dd45cae084d18e09a72e0054b78a84549a9943e6f0feef84339a0ff40955",
+  "FinalState": "1:30500,12500:1:450:1",
+  "OriginalRequests": 1,
+  "Admitted": 1,
+  "Alive": 1,
+  "Pending": 0,
+  "Attacking": 1,
+  "Waiting": 0,
+  "Deaths": 0,
+  "RejectedAttempts": 0,
+  "FinalTick": 257,
+  "HoldTicks": 200,
+  "HoldMaximumDriftMm": 0,
+  "KnownEndpointPopulation": 1,
+  "PhysicalAreaUpperBound": 0,
+  "InitialBatchVerified": false,
+  "ReplayVerified": true,
+  "CheckedMicrosteps": 2570,
+  "PairSweeps": 0,
+  "BodySweeps": 2571,
+  "MinimumBodyGapMm": null,
+  "ApiStopwatchTicks": {
+    "Create": 12809,
+    "Snapshot": 3028028,
+    "TrySpawn": 1488759,
+    "Step": 8334649,
+    "Dispose": 9346
+  },
+  "ApiMaximumStopwatchTicks": {
+    "Create": 12809,
+    "Snapshot": 510324,
+    "TrySpawn": 1488759,
+    "Step": 4762107,
+    "Dispose": 9346
+  },
+  "ApiAllocatedBytes": {
+    "Create": 3808,
+    "Snapshot": 2189264,
+    "TrySpawn": 682600,
+    "Step": 1120544,
+    "Dispose": 0
+  },
+  "ApiCalls": {
+    "Create": 1,
+    "Snapshot": 5143,
+    "TrySpawn": 1,
+    "Step": 2570,
+    "Dispose": 1
+  },
+  "TotalCandidateApiStopwatchTicks": 12873591,
+  "TotalCandidateApiAllocatedBytes": 3996216,
+  "StepStopwatchTicks": 8334649,
+  "MaximumStepStopwatchTicks": 4762107,
+  "StepAllocatedBytes": 1120544,
+  "StopwatchFrequency": 1000000000,
+  "ElapsedMilliseconds": 41,
+  "Failures": {},
+  "Metrics": {
+    "FriendlyYieldEnabled": 1,
+    "GroupedYieldEnabled": 0,
+    "RequesterBackoffEnabled": 0,
+    "SpawnAttempts": 1,
+    "ReachabilityCells": 766,
+    "GlobalAStarSearches": 1,
+    "DirectConnectors": 1,
+    "Spawned": 1,
+    "SimulationSubsteps": 2570,
+    "BodyMoveSubsteps": 562
+  },
+  "ByRange": {
+    "2000": [
+      1,
+      1
+    ]
+  },
+  "Commands": [
+    {
+      "microstep": 0,
+      "kind": "spawn",
+      "Id": 1,
+      "radius": 700,
+      "speed": 500,
+      "range": 2000,
+      "spawn": 492,
+      "failure": null
+    }
+  ],
+  "FailureSnapshot": null
+}
