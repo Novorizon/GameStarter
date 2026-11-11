@@ -26,9 +26,12 @@ python3 Tools~/NavigationLab/freeze-run.py \
 | B1 | 同B0 | `NavigationLab.Candidates.BOrca.OrcaYieldFactory` |
 | C | `Experiments~/NavigationLab/Candidates/C-SupCom2/NavigationLab.CSupCom2.csproj` | `NavigationLab.CSupCom2.Factory` |
 | D | `Experiments~/NavigationLab/Candidates/D-Aoe4/NavigationLab.DAoe4.csproj` | `NavigationLab.DAoe4.Aoe4Factory` |
-| E | `Experiments~/NavigationLab/Candidates/E-Warcraft3/NavigationLab.EWarcraft3.csproj` | `NavigationLab.Candidates.EWarcraft3.WarcraftFactory` |
+| E 基础/历史 | `Experiments~/NavigationLab/Candidates/E-Warcraft3/NavigationLab.EWarcraft3.csproj` | `NavigationLab.Candidates.EWarcraft3.WarcraftFactory` |
+| E 精细连接 | 同E | `NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory` |
 
 退出码0表示该次所选场景全部通过；1表示真实失败；2表示包含事先声明的不支持能力；3表示构建或工具错误。应继续核对summary的分类和来源标志，不能只按非零退出码称为算法失败。`--no-replay`仅供开发诊断，不是正式验收；`--build-only`只构建，不产生通过结论。
+
+工厂名与源码指纹一起确定实际版本。同一工厂在后续修复中会生成新DLL，必须独立冻结与验证；不能用旧源码的完整报告拼成新源码成绩。D的终点交换、进展判定等增强位于各自实验分支，使用该分支明确声明的factory，最终对照须记录实际类型。
 
 `full`的41项逐字包含于`stress`的49项。正式stress完成后可按InputHash提取full子集；不要把重复运行算成新地图覆盖。长测会包含每5ms全身体的连续几何检查和压缩轨迹，完整wall time不等于候选Step时间或游戏帧率。
 
@@ -65,3 +68,9 @@ python3 Tools~/NavigationLab/native-run.py \
 可多次指定 `--build-manifest` 和 `--scenario`。`--graphics`另要求真实渲染截图通过颜色检查；不带该选项的运行只证明Play/Mono与几何行为。验证结束清理自己的临时文件，非预期工程改动会报告工具错误并保留证据。不要让多个Unity进程同时打开同一工程。
 
 Unity子集通过不表示完整49项已在Unity执行，更不表示IL2CPP、HybridCLR主包、Windows或手机已验证。模型与Unity各自保留真实的通过、失败和未执行范围。
+
+## 大体型终点相容性补充
+
+[独立补充驱动](Supplementary/GoalClearance/REPRODUCE.zh-CN.md)固定了2个r650、3个r650及650/650/180混合三例。Holding包含相邻冲突点与足够合法替代点；原输入逐字SHA、独立连续可行见证、实际Core/Oracle和驱动二进制均保留。候选只能看到原世界和请求，不获取见证的目标分配。
+
+三例检查同时持有的未来Goal几何间距以及实际到位、队列、运动与重放，结果单列，不加进49项得分。A已声明大于半格身体不支持，单列该边界。补充驱动本身也不证明任意多体型终点分配完备。

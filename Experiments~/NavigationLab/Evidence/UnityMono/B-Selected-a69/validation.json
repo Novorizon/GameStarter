@@ -1,0 +1,973 @@
+{
+    "success": false,
+    "shutdownVerified": true,
+    "runId": "abc60f9aa4b24618b51614f97e224bdd",
+    "unity": "2022.3.62f1",
+    "graphics": "Null",
+    "device": "Null Device",
+    "manifestSha256": "ad31c8fd7000c6514c2ffda918f1a928f5ad656436fcfa2eb096f197828a0e49",
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "stopwatchFrequency": 10000000,
+    "cases": [
+        {
+            "name": "OrcaFactory-forest-single-large",
+            "factoryId": "B0-Orca",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+            "inputSha256": "bf9365ba5db8e52a836222ef44d6afd55dde897d15c4121a5ab825ca8481df07",
+            "modelInputSha256": "5f0f1e8352e84f5f48c50e2c4a5b28d298b0e2c40e051c8808d9bf3eb2a5507b",
+            "candidateSha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "not-observed",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 1,
+            "admitted": 1,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 1,
+            "pending": 0,
+            "attacking": 1,
+            "waiting": 0,
+            "finalTick": 1408,
+            "holdTicks": 200,
+            "checkedMicrosteps": 14080,
+            "pairSweeps": 0,
+            "bodySweeps": 14081,
+            "maximumStepStopwatchTicks": 293503,
+            "stepStopwatchTicks": 10605632,
+            "holdMaximumDriftMm": 0.033435821533203128,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "PlanningStartJoinToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 332
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 128
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 44
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 1
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 14081
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 1
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 1025
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 33453
+                },
+                {
+                    "name": "Spawned",
+                    "value": 1
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 14080
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 59
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 2287545
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 4588267
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 113220
+                },
+                {
+                    "name": "NearWaypointServoProposals",
+                    "value": 2021
+                },
+                {
+                    "name": "NearWaypointServoMotionProposals",
+                    "value": 43
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 68
+                },
+                {
+                    "name": "NearWaypointRawMotionPreserved",
+                    "value": 307
+                },
+                {
+                    "name": "StationaryRoundTripCorrectionProposals",
+                    "value": 1978
+                }
+            ]
+        },
+        {
+            "name": "OrcaFactory-forest-full44-large",
+            "factoryId": "B0-Orca",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+            "inputSha256": "c379c0fd6bce0c2bad4bd13208581545b5596a104035a71abe8cb3e524e9e33a",
+            "modelInputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+            "candidateSha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+            "detail": "System.InvalidOperationException: Arrival deadline: live=44 pending=0 moving=27 failure=None\n  at NavigationLab.UnityValidation.UnityNavigationLab.Advance () [0x007cd] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:317 \n  at NavigationLab.UnityValidation.UnityNavigationLab.Poll () [0x001d7] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:128 ",
+            "minimumGapMm": "-0.024998123986904375",
+            "screenshot": "",
+            "success": false,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 44,
+            "admitted": 44,
+            "rejected": 387,
+            "deaths": 0,
+            "live": 44,
+            "pending": 0,
+            "attacking": 9,
+            "waiting": 8,
+            "finalTick": 12000,
+            "holdTicks": 0,
+            "checkedMicrosteps": 120001,
+            "pairSweeps": 111030128,
+            "bodySweeps": 5203462,
+            "maximumStepStopwatchTicks": 5621670,
+            "stepStopwatchTicks": 4149555002,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "PlanningStartJoinToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 332
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 128
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 44
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 1
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 120002
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 431
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 1025
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 2985419
+                },
+                {
+                    "name": "Spawned",
+                    "value": 44
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 120001
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 19457
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 445348823
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 3399910757
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 118079493
+                },
+                {
+                    "name": "RejectedSpawns",
+                    "value": 387
+                },
+                {
+                    "name": "NearWaypointServoProposals",
+                    "value": 671353
+                },
+                {
+                    "name": "NearWaypointServoMotionProposals",
+                    "value": 8835
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 4802
+                },
+                {
+                    "name": "NearWaypointRawMotionPreserved",
+                    "value": 201123
+                },
+                {
+                    "name": "UnsafePairProposalStops",
+                    "value": 1438
+                },
+                {
+                    "name": "StationaryRoundTripCorrectionProposals",
+                    "value": 662518
+                },
+                {
+                    "name": "UnsafeStaticOrSpeedProposalStops",
+                    "value": 454
+                }
+            ]
+        },
+        {
+            "name": "OrcaFactory-dynamic-route-block-and-open",
+            "factoryId": "B0-Orca",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+            "inputSha256": "6b8bdf17daf495250308ce32490524de86292319c466bbebe59e2ba02ec61339",
+            "modelInputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+            "candidateSha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "-0.024910767609924278",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 24,
+            "admitted": 24,
+            "rejected": 23,
+            "deaths": 0,
+            "live": 24,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 8,
+            "finalTick": 800,
+            "holdTicks": 200,
+            "checkedMicrosteps": 8000,
+            "pairSweeps": 2128145,
+            "bodySweeps": 187358,
+            "maximumStepStopwatchTicks": 975900,
+            "stepStopwatchTicks": 136121004,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "PlanningStartJoinToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 302
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 384
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 2630
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 3
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 8003
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 47
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 2
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 6695
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 72591
+                },
+                {
+                    "name": "Spawned",
+                    "value": 24
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 8000
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 222
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 5579223
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 114285864
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 1967896
+                },
+                {
+                    "name": "RejectedSpawns",
+                    "value": 23
+                },
+                {
+                    "name": "WorldChanges",
+                    "value": 2
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 194
+                },
+                {
+                    "name": "UnsafePairProposalStops",
+                    "value": 103
+                },
+                {
+                    "name": "NearWaypointRawMotionPreserved",
+                    "value": 263
+                },
+                {
+                    "name": "NearWaypointServoProposals",
+                    "value": 3
+                },
+                {
+                    "name": "NearWaypointServoMotionProposals",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "name": "OrcaYieldFactory-forest-single-large",
+            "factoryId": "B1-OrcaYield",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+            "inputSha256": "bf9365ba5db8e52a836222ef44d6afd55dde897d15c4121a5ab825ca8481df07",
+            "modelInputSha256": "5f0f1e8352e84f5f48c50e2c4a5b28d298b0e2c40e051c8808d9bf3eb2a5507b",
+            "candidateSha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "not-observed",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 1,
+            "admitted": 1,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 1,
+            "pending": 0,
+            "attacking": 1,
+            "waiting": 0,
+            "finalTick": 1408,
+            "holdTicks": 200,
+            "checkedMicrosteps": 14080,
+            "pairSweeps": 0,
+            "bodySweeps": 14081,
+            "maximumStepStopwatchTicks": 388807,
+            "stepStopwatchTicks": 20546199,
+            "holdMaximumDriftMm": 0.033435821533203128,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "PlanningStartJoinToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 332
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 128
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 44
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 1
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 14081
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 1
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 1025
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 33453
+                },
+                {
+                    "name": "Spawned",
+                    "value": 1
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 14080
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 59
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 4358643
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 8643445
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 284278
+                },
+                {
+                    "name": "NearWaypointServoProposals",
+                    "value": 2021
+                },
+                {
+                    "name": "NearWaypointServoMotionProposals",
+                    "value": 43
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 68
+                },
+                {
+                    "name": "NearWaypointRawMotionPreserved",
+                    "value": 307
+                },
+                {
+                    "name": "StationaryRoundTripCorrectionProposals",
+                    "value": 1978
+                }
+            ]
+        },
+        {
+            "name": "OrcaYieldFactory-forest-full44-large",
+            "factoryId": "B1-OrcaYield",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+            "inputSha256": "c379c0fd6bce0c2bad4bd13208581545b5596a104035a71abe8cb3e524e9e33a",
+            "modelInputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+            "candidateSha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+            "detail": "System.InvalidOperationException: Arrival deadline: live=44 pending=0 moving=33 failure=None\n  at NavigationLab.UnityValidation.UnityNavigationLab.Advance () [0x007cd] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:317 \n  at NavigationLab.UnityValidation.UnityNavigationLab.Poll () [0x001d7] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:128 ",
+            "minimumGapMm": "-0.024999981999826559",
+            "screenshot": "",
+            "success": false,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 44,
+            "admitted": 44,
+            "rejected": 387,
+            "deaths": 0,
+            "live": 44,
+            "pending": 0,
+            "attacking": 6,
+            "waiting": 5,
+            "finalTick": 12000,
+            "holdTicks": 0,
+            "checkedMicrosteps": 120001,
+            "pairSweeps": 111030128,
+            "bodySweeps": 5203462,
+            "maximumStepStopwatchTicks": 11092080,
+            "stepStopwatchTicks": 5812741860,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "PlanningStartJoinToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 332
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 128
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 44
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 1
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 120002
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 431
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 1025
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 2361862
+                },
+                {
+                    "name": "Spawned",
+                    "value": 44
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 120001
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 18867
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 526171085
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 4784590549
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 175038655
+                },
+                {
+                    "name": "RejectedSpawns",
+                    "value": 387
+                },
+                {
+                    "name": "NearWaypointServoProposals",
+                    "value": 414639
+                },
+                {
+                    "name": "NearWaypointServoMotionProposals",
+                    "value": 7612
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 3217
+                },
+                {
+                    "name": "CrossedMovingGoalExchanges",
+                    "value": 348
+                },
+                {
+                    "name": "UnsafePairProposalStops",
+                    "value": 3737
+                },
+                {
+                    "name": "NearWaypointRawMotionPreserved",
+                    "value": 230063
+                },
+                {
+                    "name": "StationaryRoundTripCorrectionProposals",
+                    "value": 407027
+                },
+                {
+                    "name": "YieldPathTrials",
+                    "value": 553
+                },
+                {
+                    "name": "YieldRequests",
+                    "value": 644
+                },
+                {
+                    "name": "AngularYieldRequests",
+                    "value": 290
+                },
+                {
+                    "name": "YieldCompletions",
+                    "value": 628
+                },
+                {
+                    "name": "BorrowedFutureGoalBuffers",
+                    "value": 18
+                },
+                {
+                    "name": "YieldTimeouts",
+                    "value": 10
+                },
+                {
+                    "name": "UnsafeStaticOrSpeedProposalStops",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "name": "OrcaYieldFactory-dynamic-route-block-and-open",
+            "factoryId": "B1-OrcaYield",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+            "inputSha256": "6b8bdf17daf495250308ce32490524de86292319c466bbebe59e2ba02ec61339",
+            "modelInputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+            "candidateSha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "-0.024972303820504749",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 24,
+            "admitted": 24,
+            "rejected": 23,
+            "deaths": 0,
+            "live": 24,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 8,
+            "finalTick": 800,
+            "holdTicks": 200,
+            "checkedMicrosteps": 8000,
+            "pairSweeps": 2128145,
+            "bodySweeps": 187358,
+            "maximumStepStopwatchTicks": 1241616,
+            "stepStopwatchTicks": 121581119,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "PlanningStartJoinToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 302
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 384
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 2630
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 3
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 8003
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 47
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 2
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 6695
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 88890
+                },
+                {
+                    "name": "Spawned",
+                    "value": 24
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 8000
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 281
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 7627195
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 97456457
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 1963796
+                },
+                {
+                    "name": "RejectedSpawns",
+                    "value": 23
+                },
+                {
+                    "name": "WorldChanges",
+                    "value": 2
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 259
+                },
+                {
+                    "name": "UnsafePairProposalStops",
+                    "value": 192
+                },
+                {
+                    "name": "CrossedMovingGoalExchanges",
+                    "value": 35
+                },
+                {
+                    "name": "NearWaypointRawMotionPreserved",
+                    "value": 362
+                },
+                {
+                    "name": "NearWaypointServoProposals",
+                    "value": 335
+                },
+                {
+                    "name": "NearWaypointServoMotionProposals",
+                    "value": 22
+                },
+                {
+                    "name": "YieldRequests",
+                    "value": 1
+                },
+                {
+                    "name": "AngularYieldRequests",
+                    "value": 1
+                },
+                {
+                    "name": "StationaryRoundTripCorrectionProposals",
+                    "value": 313
+                },
+                {
+                    "name": "YieldCompletions",
+                    "value": 1
+                }
+            ]
+        }
+    ]
+}
