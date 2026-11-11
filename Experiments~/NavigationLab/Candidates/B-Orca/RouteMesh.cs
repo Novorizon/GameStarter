@@ -79,7 +79,8 @@ namespace NavigationLab.Candidates.BOrca
             Point2 goal,
             Func<Point2, bool>? dynamicBlocked,
             out int expanded,
-            Func<Point2, Point2, bool>? blockedSegment = null)
+            Func<Point2, Point2, bool>? blockedSegment = null,
+            int expansionLimit = int.MaxValue)
         {
             expanded = 0;
             if (Geometry.Clear(world, start, goal, radius) && SegmentAvoids(start, goal, dynamicBlocked)
@@ -116,6 +117,10 @@ namespace NavigationLab.Candidates.BOrca
                 }
 
                 expanded++;
+                if (expanded > expansionLimit)
+                {
+                    return null;
+                }
                 if (current == goalNode)
                 {
                     var result = new List<Point2>();

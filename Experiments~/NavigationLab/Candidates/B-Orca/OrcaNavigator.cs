@@ -41,6 +41,8 @@ namespace NavigationLab.Candidates.BOrca
             internal Point2 YieldTarget;
             internal int YieldRequester;
             internal long YieldStarted;
+            internal long YieldRetryAt;
+            internal int YieldTrialRound;
         }
 
         internal OrcaNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool coordinatedYield)
@@ -209,6 +211,7 @@ namespace NavigationLab.Candidates.BOrca
                 }
 
                 actor.RepathAt = 0;
+                actor.YieldRetryAt = 0;
             }
 
             RebuildSimulator();
@@ -229,6 +232,7 @@ namespace NavigationLab.Candidates.BOrca
                 actor.Path.Clear();
                 actor.Waypoint = 0;
                 actor.RepathAt = 0;
+                actor.YieldRetryAt = 0;
                 if (!AvailableGoal(actor.Goal, actor.Request.Profile, actor.Request.TargetId))
                 {
                     actor.Goal = SelectGoal(actor.Request, actor.Position);
@@ -453,34 +457,67 @@ namespace NavigationLab.Candidates.BOrca
 
             foreach (var requester in ordered)
             {
-                if (requester.Yielding || Arrived(requester) || microstep - requester.LastProgress < 1000
+                if (requester.Yielding || Arrived(requester) || microstep < requester.YieldRetryAt || microstep - requester.LastProgress < 1000
                     || ordered.Count(actor => actor.Yielding && actor.YieldRequester == requester.Request.Id) >= 4)
                 {
                     continue;
                 }
 
+                requester.YieldRetryAt = microstep + 200;
                 foreach (var blocker in ordered.Where(actor => actor != requester && !actor.Yielding && Arrived(actor))
                     .OrderBy(actor => Point2.Distance(actor.Position, requester.Position)))
                 {
                     double distance = Point2.Distance(blocker.Position, requester.Position);
-                    if (distance > world.CellSizeMm * 3
-                        || Geometry.PointSegmentSquared(blocker.Position, requester.Position,
-                            requester.Waypoint < requester.Path.Count ? requester.Path[requester.Waypoint] : GoalPoint(requester))
-                            > Square(requester.Request.Profile.RadiusMm + blocker.Request.Profile.RadiusMm + world.CellSizeMm * .5))
+                    var routePoint = requester.Waypoint < requester.Path.Count ? requester.Path[requester.Waypoint] : GoalPoint(requester);
+                    double routeDistance = Geometry.PointSegmentSquared(blocker.Position, requester.Position, routePoint);
+                    double goalDistance = Geometry.PointSegmentSquared(blocker.Position, requester.Position, GoalPoint(requester));
+                    if (distance > world.CellSizeMm * 3 || Math.Min(routeDistance, goalDistance)
+                        > Square(requester.Request.Profile.RadiusMm + blocker.Request.Profile.RadiusMm + world.CellSizeMm * .5))
                     {
                         continue;
                     }
 
-                    if (TryBeginYield(blocker, requester, ordered))
+                    if (TryAngularYield(blocker, requester, ordered) || TryBeginYield(blocker, requester, ordered))
                     {
                         requester.LastProgress = microstep;
-                        if (ordered.Count(actor => actor.Yielding && actor.YieldRequester == requester.Request.Id) >= 4)
-                        {
-                            break;
-                        }
+                        break;
                     }
                 }
             }
+        }
+
+        private bool TryAngularYield(Actor blocker, Actor requester, Actor[] ordered)
+        {
+            var outward = (blocker.Position - world.Target(blocker.Request.TargetId).Center).Normalized;
+            if (outward.LengthSquared < .1)
+            {
+                outward = (blocker.Position - requester.Position).Normalized;
+            }
+            double length = Math.Max(world.CellSizeMm, (requester.Request.Profile.RadiusMm + blocker.Request.Profile.RadiusMm) * 1.5);
+            foreach (double angle in new[] { 0.0, Math.PI / 4, -Math.PI / 4, Math.PI / 2, -Math.PI / 2, Math.PI })
+            {
+                var direction = new Point2(outward.X * Math.Cos(angle) - outward.Y * Math.Sin(angle),
+                    outward.X * Math.Sin(angle) + outward.Y * Math.Cos(angle));
+                var destination = blocker.Position + direction * length;
+                if (!Geometry.Clear(world, blocker.Position, destination, blocker.Request.Profile.RadiusMm)
+                    || ordered.Any(other => other != blocker
+                        && (Point2.Distance(destination, other.Position) < blocker.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm + 5
+                            || other.Yielding && Point2.Distance(destination, other.YieldTarget)
+                                < blocker.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm + 5)))
+                {
+                    continue;
+                }
+                blocker.Yielding = true;
+                blocker.YieldTarget = destination;
+                blocker.YieldRequester = requester.Request.Id;
+                blocker.YieldStarted = microstep;
+                blocker.Path = new List<Point2> { destination };
+                blocker.Waypoint = 0;
+                Add("YieldRequests");
+                Add("AngularYieldRequests");
+                return true;
+            }
+            return false;
         }
 
         private bool TryBeginYield(Actor blocker, Actor requester, Actor[] ordered)
@@ -517,12 +554,20 @@ namespace NavigationLab.Candidates.BOrca
             Func<Point2, Point2, bool> blockedSegment = (first, second) => protectedBodies.Any(other =>
                 Geometry.PointSegmentSquared(other.Position, first, second)
                     < Square(blocker.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - .005));
-            foreach (int cell in candidates.OrderBy(cell => goalOwners.ContainsKey(cell) ? 2 : world.HoldingAllowed(cell) ? 1 : 0)
-                .ThenBy(cell => Point2.Distance(world.Center(cell), blocker.Position)).ThenBy(cell => cell))
+            var sorted = candidates.OrderBy(cell => goalOwners.ContainsKey(cell) ? 2 : world.HoldingAllowed(cell) ? 1 : 0)
+                .ThenBy(cell => Point2.Distance(world.Center(cell), blocker.Position)).ThenBy(cell => cell).ToArray();
+            int offset = sorted.Length == 0 ? 0 : blocker.YieldTrialRound * 12 % sorted.Length;
+            blocker.YieldTrialRound++;
+            for (int trial = 0; trial < Math.Min(12, sorted.Length); trial++)
             {
+                int cell = sorted[(offset + trial) % sorted.Length];
                 var point = world.Center(cell);
-                var path = Mesh(blocker.Request.Profile).Find(blocker.Position, point, blocked, out int expanded, blockedSegment);
+                var path = Mesh(blocker.Request.Profile).Find(blocker.Position, point, blocked, out int expanded, blockedSegment, 2048);
                 Add("GlobalExpandedNodes", expanded);
+                if (expanded > 2048)
+                {
+                    Add("YieldSearchBudgetExhaustions");
+                }
                 Add("YieldPathTrials");
                 if (path == null)
                 {
