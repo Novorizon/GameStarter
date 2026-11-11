@@ -22,6 +22,7 @@ namespace NavigationLab.DAoe4
     {
         private readonly PlanningBody[] bodies;
         private readonly Dictionary<int, bool[]> clearance = new Dictionary<int, bool[]>();
+        private readonly Dictionary<int, byte[]> edgeClearance = new Dictionary<int, byte[]>();
         internal WorldDefinition World { get; private set; }
         internal int Revision { get; private set; }
 
@@ -36,6 +37,7 @@ namespace NavigationLab.DAoe4
             World = World.WithChange(change);
             Revision++;
             clearance.Clear();
+            edgeClearance.Clear();
         }
 
         internal System.Collections.Generic.IEnumerable<int> Neighbours(int cell)
@@ -134,8 +136,35 @@ namespace NavigationLab.DAoe4
         internal bool CanEdge(int from, int to, int radius)
         {
             var cells = Clearance(radius);
-            return from >= 0 && to >= 0 && from < cells.Length && to < cells.Length && cells[from] && cells[to]
-                && CanSegment(World.Center(from), World.Center(to), radius);
+            if (from < 0 || to < 0 || from >= cells.Length || to >= cells.Length)
+            {
+                return false;
+            }
+            int dx = to % World.Width - from % World.Width;
+            int dy = to / World.Width - from / World.Width;
+            if (dx < -1 || dx > 1 || dy < -1 || dy > 1 || (dx == 0 && dy == 0) || cells.Length > int.MaxValue / 8)
+            {
+                return cells[from] && cells[to] && CanSegment(World.Center(from), World.Center(to), radius);
+            }
+            if (!edgeClearance.TryGetValue(radius, out var edges))
+            {
+                edges = new byte[cells.Length * 8];
+                edgeClearance.Add(radius, edges);
+            }
+            int direction = (dy + 1) * 3 + dx + 1;
+            if (direction > 4)
+            {
+                direction--;
+            }
+            int index = from * 8 + direction;
+            byte cached = edges[index];
+            if (cached != 0)
+            {
+                return cached == 2;
+            }
+            bool result = cells[from] && cells[to] && CanSegment(World.Center(from), World.Center(to), radius);
+            edges[index] = result ? (byte)2 : (byte)1;
+            return result;
         }
 
         internal bool CanAttack(Point2 point, UnitProfile profile, int targetId)
