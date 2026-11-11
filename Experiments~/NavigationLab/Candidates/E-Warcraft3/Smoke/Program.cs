@@ -26,6 +26,7 @@ using var navigator = factory.Create(world, name == "late46" ? new[] { small, bi
 int next = 0;
 int firstSettled = -1;
 int hold = 0;
+bool initialBigSettled = false;
 int tick = 0;
 string? failure = null;
 try
@@ -55,6 +56,14 @@ try
         }
 
         var current = navigator.Snapshot().ToArray();
+        if (name == "late46" && tick == 3999)
+        {
+            initialBigSettled = next == 44 && current.Length == 44 && current.All(unit => unit.State != MotionState.Moving);
+            if (!initialBigSettled)
+            {
+                throw new InvalidOperationException("Initial pre-registered Big44 did not settle before Small release; late-admission precondition failed.");
+            }
+        }
         if (next == inputs.Length && current.All(unit => unit.State != MotionState.Moving))
         {
             if (firstSettled < 0)
@@ -104,6 +113,7 @@ var result = new
     name,
     tick,
     firstSettled,
+    initialBigSettled,
     hold,
     requested = count,
     spawned = next,

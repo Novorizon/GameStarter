@@ -358,8 +358,7 @@ namespace NavigationLab.Candidates.EWarcraft3
                     continue;
                 }
 
-                int compatibility = profiles.Count(other => mask.Attacks[cell]
-                    ? Eligible(other, targetId).Attacks[cell] : Eligible(other, targetId).Holds[cell]);
+                int compatibility = profiles.Count(other => Eligible(other, targetId).Holds[cell]);
                 double score = (mask.Attacks[cell] ? 0 : 100000000) + compatibility * 1000000
                     - Point2.Distance(world.Center(cell), from) * 10
                     - (mask.Attacks[cell] ? Point2.Distance(world.Center(cell), target.Center) : 0);

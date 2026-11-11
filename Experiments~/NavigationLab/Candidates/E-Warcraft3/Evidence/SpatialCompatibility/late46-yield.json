@@ -1,0 +1,871 @@
+{
+  "scope": "Early real-Forest debugging only; not the shared cross-algorithm matrix or Unity acceptance.",
+  "success": false,
+  "factory": "E-Warcraft3-Inspired-SpatialYield",
+  "name": "late46",
+  "tick": 12000,
+  "firstSettled": -1,
+  "initialBigSettled": true,
+  "hold": 0,
+  "requested": 46,
+  "spawned": 46,
+  "pending": 0,
+  "attacking": 18,
+  "waiting": 26,
+  "moving": 2,
+  "failure": "Arrival/200-tick stability timeout",
+  "elapsedMilliseconds": 24718,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/GlobalSearch.cs": "664208EE855A123ED8E9DA65AD05271658560E69D7E5E1BE558663533B35B2A2",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/PathingGeometry.cs": "DC9E0A157FC7AD66A923AC4AAF9B974A88E461B9FFF785FF7364C923B27ECAA9",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Program.cs": "56A5D0119B77A2B943D7B3F744C6619322F5F811186F8307DEA8833F6B389274",
+    "Experiments~/NavigationLab/Candidates/E-Warcraft3/WarcraftNavigator.cs": "93A3AF349342F58BA27B5FBE43031256C8E02BD635FAC2BD8C8222C59296E707"
+  },
+  "debugUnits": [
+    {
+      "id": 1,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 1,
+      "pathCount": 1,
+      "remainder": []
+    },
+    {
+      "id": 2,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 100,
+      "pathCount": 100,
+      "remainder": []
+    },
+    {
+      "id": 3,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 1,
+      "pathCount": 1,
+      "remainder": []
+    },
+    {
+      "id": 4,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 100,
+      "pathCount": 100,
+      "remainder": []
+    },
+    {
+      "id": 5,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 6,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 100,
+      "pathCount": 100,
+      "remainder": []
+    },
+    {
+      "id": 7,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 98,
+      "pathCount": 98,
+      "remainder": []
+    },
+    {
+      "id": 8,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 97,
+      "pathCount": 97,
+      "remainder": []
+    },
+    {
+      "id": 9,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 10,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 99,
+      "pathCount": 99,
+      "remainder": []
+    },
+    {
+      "id": 11,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 96,
+      "pathCount": 96,
+      "remainder": []
+    },
+    {
+      "id": 12,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 98,
+      "pathCount": 98,
+      "remainder": []
+    },
+    {
+      "id": 13,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 95,
+      "pathCount": 95,
+      "remainder": []
+    },
+    {
+      "id": 14,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 94,
+      "pathCount": 94,
+      "remainder": []
+    },
+    {
+      "id": 15,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 94,
+      "pathCount": 94,
+      "remainder": []
+    },
+    {
+      "id": 16,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 95,
+      "pathCount": 95,
+      "remainder": []
+    },
+    {
+      "id": 17,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 94,
+      "pathCount": 94,
+      "remainder": []
+    },
+    {
+      "id": 18,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 19,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 12,
+      "pathCount": 12,
+      "remainder": []
+    },
+    {
+      "id": 20,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 21,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 3,
+      "pathCount": 3,
+      "remainder": []
+    },
+    {
+      "id": 22,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 4,
+      "pathCount": 4,
+      "remainder": []
+    },
+    {
+      "id": 23,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 94,
+      "pathCount": 94,
+      "remainder": []
+    },
+    {
+      "id": 24,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 93,
+      "remainder": []
+    },
+    {
+      "id": 25,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 93,
+      "remainder": []
+    },
+    {
+      "id": 26,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 93,
+      "remainder": []
+    },
+    {
+      "id": 27,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 93,
+      "remainder": []
+    },
+    {
+      "id": 28,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 92,
+      "pathCount": 92,
+      "remainder": []
+    },
+    {
+      "id": 29,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 92,
+      "pathCount": 92,
+      "remainder": []
+    },
+    {
+      "id": 30,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 92,
+      "pathCount": 92,
+      "remainder": []
+    },
+    {
+      "id": 31,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 93,
+      "remainder": []
+    },
+    {
+      "id": 32,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 91,
+      "pathCount": 91,
+      "remainder": []
+    },
+    {
+      "id": 33,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 34,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 92,
+      "pathCount": 92,
+      "remainder": []
+    },
+    {
+      "id": 35,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 90,
+      "pathCount": 90,
+      "remainder": []
+    },
+    {
+      "id": 36,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 37,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 90,
+      "pathCount": 90,
+      "remainder": []
+    },
+    {
+      "id": 38,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 91,
+      "pathCount": 91,
+      "remainder": []
+    },
+    {
+      "id": 39,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 89,
+      "pathCount": 89,
+      "remainder": []
+    },
+    {
+      "id": 40,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 41,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 90,
+      "pathCount": 90,
+      "remainder": []
+    },
+    {
+      "id": 42,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 2,
+      "pathCount": 2,
+      "remainder": []
+    },
+    {
+      "id": 43,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 89,
+      "pathCount": 89,
+      "remainder": []
+    },
+    {
+      "id": 44,
+      "blocked": 0,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 3,
+      "pathCount": 3,
+      "remainder": []
+    },
+    {
+      "id": 45,
+      "blocked": 77051,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 93,
+      "pathCount": 97,
+      "remainder": [
+        {
+          "X": 6250,
+          "Y": -4310
+        },
+        {
+          "X": 6750,
+          "Y": -4810
+        },
+        {
+          "X": 7250,
+          "Y": -4810
+        },
+        {
+          "X": 7750,
+          "Y": -4810
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "blocked": 77050,
+      "yieldCell": -1,
+      "yieldRequester": 0,
+      "waypoint": 92,
+      "pathCount": 96,
+      "remainder": [
+        {
+          "X": 5750,
+          "Y": -4310
+        },
+        {
+          "X": 6250,
+          "Y": -4310
+        },
+        {
+          "X": 6750,
+          "Y": -4810
+        },
+        {
+          "X": 7250,
+          "Y": -4810
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "FriendlyYieldEnabled": 1,
+    "GroupedYieldEnabled": 0,
+    "SpawnAttempts": 446,
+    "ReachabilityCells": 14820,
+    "GlobalAStarSearches": 63587,
+    "AStarExpandedCells": 738605,
+    "Spawned": 46,
+    "SimulationSubsteps": 120000,
+    "BodyMoveSubsteps": 400496,
+    "Rejected_SpawnOccupied": 400,
+    "SpatialCollisionStops": 183824,
+    "WaitingSubsteps": 183824,
+    "LocalSearches": 7776,
+    "NoSpatialPath": 71297,
+    "FriendlyYieldRequests": 1927,
+    "DirectConnectors": 4,
+    "FriendlyYieldAccepted": 2,
+    "FriendlyYieldCompleted": 2,
+    "LocalRejoins": 14,
+    "DynamicGlobalRepaths": 2,
+    "FriendlyYieldNoSidePocket": 1925
+  },
+  "PairSweeps": 117900525,
+  "BodySweeps": 5346191,
+  "minimumBodyGapMm": 0,
+  "bodies": [
+    {
+      "Id": 1,
+      "x": 9250,
+      "y": -4310,
+      "State": 1,
+      "GoalCell": 304,
+      "TargetId": 1
+    },
+    {
+      "Id": 2,
+      "x": 9250,
+      "y": -3810,
+      "State": 1,
+      "GoalCell": 348,
+      "TargetId": 1
+    },
+    {
+      "Id": 3,
+      "x": 8750,
+      "y": -4810,
+      "State": 1,
+      "GoalCell": 259,
+      "TargetId": 1
+    },
+    {
+      "Id": 4,
+      "x": 9250,
+      "y": -3310,
+      "State": 1,
+      "GoalCell": 392,
+      "TargetId": 1
+    },
+    {
+      "Id": 5,
+      "x": 8750,
+      "y": -4310,
+      "State": 1,
+      "GoalCell": 303,
+      "TargetId": 1
+    },
+    {
+      "Id": 6,
+      "x": 9250,
+      "y": -2810,
+      "State": 1,
+      "GoalCell": 436,
+      "TargetId": 1
+    },
+    {
+      "Id": 7,
+      "x": 8250,
+      "y": -4810,
+      "State": 1,
+      "GoalCell": 258,
+      "TargetId": 1
+    },
+    {
+      "Id": 8,
+      "x": 7750,
+      "y": -5310,
+      "State": 1,
+      "GoalCell": 213,
+      "TargetId": 1
+    },
+    {
+      "Id": 9,
+      "x": 8750,
+      "y": -2810,
+      "State": 1,
+      "GoalCell": 435,
+      "TargetId": 1
+    },
+    {
+      "Id": 10,
+      "x": 8750,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 479,
+      "TargetId": 1
+    },
+    {
+      "Id": 11,
+      "x": 7250,
+      "y": -5310,
+      "State": 1,
+      "GoalCell": 212,
+      "TargetId": 1
+    },
+    {
+      "Id": 12,
+      "x": 8250,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 478,
+      "TargetId": 1
+    },
+    {
+      "Id": 13,
+      "x": 6750,
+      "y": -4810,
+      "State": 1,
+      "GoalCell": 255,
+      "TargetId": 1
+    },
+    {
+      "Id": 14,
+      "x": 6250,
+      "y": -4810,
+      "State": 1,
+      "GoalCell": 254,
+      "TargetId": 1
+    },
+    {
+      "Id": 15,
+      "x": 6250,
+      "y": -4310,
+      "State": 1,
+      "GoalCell": 298,
+      "TargetId": 1
+    },
+    {
+      "Id": 16,
+      "x": 6750,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 475,
+      "TargetId": 1
+    },
+    {
+      "Id": 17,
+      "x": 6250,
+      "y": -2810,
+      "State": 1,
+      "GoalCell": 430,
+      "TargetId": 1
+    },
+    {
+      "Id": 18,
+      "x": 6250,
+      "y": -2310,
+      "State": 1,
+      "GoalCell": 474,
+      "TargetId": 1
+    },
+    {
+      "Id": 19,
+      "x": 8750,
+      "y": -5310,
+      "State": 2,
+      "GoalCell": 215,
+      "TargetId": 1
+    },
+    {
+      "Id": 20,
+      "x": 8250,
+      "y": -5310,
+      "State": 2,
+      "GoalCell": 214,
+      "TargetId": 1
+    },
+    {
+      "Id": 21,
+      "x": 9250,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 480,
+      "TargetId": 1
+    },
+    {
+      "Id": 22,
+      "x": 6750,
+      "y": -5310,
+      "State": 2,
+      "GoalCell": 211,
+      "TargetId": 1
+    },
+    {
+      "Id": 23,
+      "x": 6250,
+      "y": -5310,
+      "State": 2,
+      "GoalCell": 210,
+      "TargetId": 1
+    },
+    {
+      "Id": 24,
+      "x": 5750,
+      "y": -5310,
+      "State": 2,
+      "GoalCell": 209,
+      "TargetId": 1
+    },
+    {
+      "Id": 25,
+      "x": 5750,
+      "y": -4810,
+      "State": 2,
+      "GoalCell": 253,
+      "TargetId": 1
+    },
+    {
+      "Id": 26,
+      "x": 5250,
+      "y": -5310,
+      "State": 2,
+      "GoalCell": 208,
+      "TargetId": 1
+    },
+    {
+      "Id": 27,
+      "x": 5750,
+      "y": -4310,
+      "State": 2,
+      "GoalCell": 297,
+      "TargetId": 1
+    },
+    {
+      "Id": 28,
+      "x": 5250,
+      "y": -4810,
+      "State": 2,
+      "GoalCell": 252,
+      "TargetId": 1
+    },
+    {
+      "Id": 29,
+      "x": 5250,
+      "y": -4310,
+      "State": 2,
+      "GoalCell": 296,
+      "TargetId": 1
+    },
+    {
+      "Id": 30,
+      "x": 4750,
+      "y": -4810,
+      "State": 2,
+      "GoalCell": 251,
+      "TargetId": 1
+    },
+    {
+      "Id": 31,
+      "x": 5750,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 429,
+      "TargetId": 1
+    },
+    {
+      "Id": 32,
+      "x": 4750,
+      "y": -4310,
+      "State": 2,
+      "GoalCell": 295,
+      "TargetId": 1
+    },
+    {
+      "Id": 33,
+      "x": 5750,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 473,
+      "TargetId": 1
+    },
+    {
+      "Id": 34,
+      "x": 5250,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 428,
+      "TargetId": 1
+    },
+    {
+      "Id": 35,
+      "x": 4250,
+      "y": -4310,
+      "State": 2,
+      "GoalCell": 294,
+      "TargetId": 1
+    },
+    {
+      "Id": 36,
+      "x": 5250,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 472,
+      "TargetId": 1
+    },
+    {
+      "Id": 37,
+      "x": 3750,
+      "y": -4810,
+      "State": 2,
+      "GoalCell": 249,
+      "TargetId": 1
+    },
+    {
+      "Id": 38,
+      "x": 4750,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 427,
+      "TargetId": 1
+    },
+    {
+      "Id": 39,
+      "x": 3750,
+      "y": -4310,
+      "State": 2,
+      "GoalCell": 293,
+      "TargetId": 1
+    },
+    {
+      "Id": 40,
+      "x": 4750,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 471,
+      "TargetId": 1
+    },
+    {
+      "Id": 41,
+      "x": 4250,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 426,
+      "TargetId": 1
+    },
+    {
+      "Id": 42,
+      "x": 4250,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 470,
+      "TargetId": 1
+    },
+    {
+      "Id": 43,
+      "x": 3750,
+      "y": -2810,
+      "State": 2,
+      "GoalCell": 425,
+      "TargetId": 1
+    },
+    {
+      "Id": 44,
+      "x": 3750,
+      "y": -2310,
+      "State": 2,
+      "GoalCell": 469,
+      "TargetId": 1
+    },
+    {
+      "Id": 45,
+      "x": 5820.003571337469,
+      "y": -3880.003571337469,
+      "State": 0,
+      "GoalCell": 257,
+      "TargetId": 1
+    },
+    {
+      "Id": 46,
+      "x": 5320.003571337469,
+      "y": -3880.003571337469,
+      "State": 0,
+      "GoalCell": 256,
+      "TargetId": 1
+    }
+  ]
+}
