@@ -230,7 +230,7 @@ namespace NavigationLab.DAoe4
                     direction = actor.Route == null ? default : planner.Direction(actor.Position, actor.Route, out field);
                     Add("FlowCoverageRepaths");
                 }
-                bool directGoalRecovery = !reconnecting && direction.LengthSquared < 1e-12
+                bool directGoalRecovery = direction.LengthSquared < 1e-12
                     && planningGeometry.CanSegment(actor.Position, destination, actor.Request.Profile.RadiusMm);
                 if (directGoalRecovery)
                 {
