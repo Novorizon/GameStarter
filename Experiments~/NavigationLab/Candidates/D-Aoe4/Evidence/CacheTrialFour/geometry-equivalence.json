@@ -1,0 +1,38 @@
+{
+  "success": true,
+  "scope": "Directed integer-cell edge memoization equivalence against preserved pre-cache source. No navigation simulation or universal proof.",
+  "comparisons": 412146,
+  "passes": 14,
+  "radii": [
+    0,
+    180,
+    250,
+    490,
+    650,
+    1000
+  ],
+  "checks": [
+    {
+      "width": 9,
+      "height": 9,
+      "cachedEntries": 3264,
+      "independentEntries": 3264
+    },
+    {
+      "width": 17,
+      "height": 13,
+      "cachedEntries": 9552,
+      "independentEntries": 9552
+    }
+  ],
+  "sourceSha256": {
+    "Program.cs": "2c6d70e2fb06e4fc402b0ef4e043a4a7c84b9f9d8b6e88505ec63615b315d3dc",
+    "OriginalGridGeometry.cs": "1b314e11ed49c2fd3e023c87f2ea5f07d6bf881d83f6624a953ad15a3f57def6",
+    "CandidateGridGeometry.cs": "5e6de346c33af33c2c747e6e873b73fa8c856e3df3054351b619a8e3306db7ca"
+  },
+  "originalFrozenGeometrySha256": "22a83be11f2b650e88e882f06c264dc25c6477e6dfcb4d50de32762f30242043",
+  "referenceTransformation": "Only namespace NavigationLab.DAoe4 -> NavigationLab.DAoe4Original; original file otherwise byte-identical.",
+  "testAssemblySha256": "35127714373f3b1530f2495560c0a010539411cb96b621e50cb86e33736ea901",
+  "coreAssemblySha256": "88c86d92377219e083213bac1fd65cb6a0556a1977831f439a6e22e26e57e854",
+  "coreSourceSha256": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c"
+}

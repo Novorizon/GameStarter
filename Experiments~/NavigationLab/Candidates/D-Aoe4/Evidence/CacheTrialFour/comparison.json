@@ -1,0 +1,116 @@
+{
+  "stage": "four-cases-verified-not-selected",
+  "utc": "2026-11-11T11:03:12.214018+00:00",
+  "comparisons": [
+    {
+      "name": "open-arena",
+      "physicalIdentitiesEqual": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "freshReplayVerified": true,
+      "status": "Passed",
+      "candidateSha256": "16030a4aff5df5773bd5431870f1d51e3e599774ca001aa8c0ef51bf617ed05e",
+      "originalCandidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "snapshot": "/workspace/navigation-comparison/d-cache-snapshots/snapshot-e97c0c7f7b258e44c4bfc5f7",
+      "snapshotIdentitySha256": "e97c0c7f7b258e44c4bfc5f72a27a686a07a5dd79b70cf8d875695fd0d4f23a3",
+      "sourceCommit": "02b340935bd832edb519c366ceefb034c560373a",
+      "newElapsedMilliseconds": 3569,
+      "oldElapsedMilliseconds": 5930,
+      "newCandidateApiSeconds": 2.988396221,
+      "oldCandidateApiSeconds": 4.634695422,
+      "newCandidateAllocatedBytes": 843946424,
+      "oldCandidateAllocatedBytes": 1895132320
+    },
+    {
+      "name": "dynamic-route-block-and-open",
+      "physicalIdentitiesEqual": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "freshReplayVerified": true,
+      "status": "Passed",
+      "candidateSha256": "16030a4aff5df5773bd5431870f1d51e3e599774ca001aa8c0ef51bf617ed05e",
+      "originalCandidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "snapshot": "/workspace/navigation-comparison/d-cache-snapshots/snapshot-e97c0c7f7b258e44c4bfc5f7",
+      "snapshotIdentitySha256": "e97c0c7f7b258e44c4bfc5f72a27a686a07a5dd79b70cf8d875695fd0d4f23a3",
+      "sourceCommit": "02b340935bd832edb519c366ceefb034c560373a",
+      "newElapsedMilliseconds": 3600,
+      "oldElapsedMilliseconds": 1845,
+      "newCandidateApiSeconds": 2.755946632,
+      "oldCandidateApiSeconds": 1.310516137,
+      "newCandidateAllocatedBytes": 655801432,
+      "oldCandidateAllocatedBytes": 1198369928
+    },
+    {
+      "name": "forest-full44-large",
+      "physicalIdentitiesEqual": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "freshReplayVerified": false,
+      "status": "Failed",
+      "candidateSha256": "16030a4aff5df5773bd5431870f1d51e3e599774ca001aa8c0ef51bf617ed05e",
+      "originalCandidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "snapshot": "/workspace/navigation-comparison/d-cache-snapshots/snapshot-e97c0c7f7b258e44c4bfc5f7",
+      "snapshotIdentitySha256": "e97c0c7f7b258e44c4bfc5f72a27a686a07a5dd79b70cf8d875695fd0d4f23a3",
+      "sourceCommit": "02b340935bd832edb519c366ceefb034c560373a",
+      "newElapsedMilliseconds": 289896,
+      "oldElapsedMilliseconds": 227268,
+      "newCandidateApiSeconds": 261.475559227,
+      "oldCandidateApiSeconds": 207.115051033,
+      "newCandidateAllocatedBytes": 135166946280,
+      "oldCandidateAllocatedBytes": 138463400568
+    },
+    {
+      "name": "large-portal-grid-128",
+      "physicalIdentitiesEqual": {
+        "InputSha256": true,
+        "PhysicalInputSha256": true,
+        "GeometrySha256": true,
+        "Status": true,
+        "TraceSha256": true,
+        "CommandsSha256": true,
+        "FinalState": true
+      },
+      "freshReplayVerified": false,
+      "status": "Failed",
+      "candidateSha256": "16030a4aff5df5773bd5431870f1d51e3e599774ca001aa8c0ef51bf617ed05e",
+      "originalCandidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
+      "snapshot": "/workspace/navigation-comparison/d-cache-snapshots/snapshot-e97c0c7f7b258e44c4bfc5f7",
+      "snapshotIdentitySha256": "e97c0c7f7b258e44c4bfc5f72a27a686a07a5dd79b70cf8d875695fd0d4f23a3",
+      "sourceCommit": "02b340935bd832edb519c366ceefb034c560373a",
+      "newElapsedMilliseconds": 330038,
+      "oldElapsedMilliseconds": 540659,
+      "newCandidateApiSeconds": 205.358696184,
+      "oldCandidateApiSeconds": 418.610893161,
+      "newCandidateAllocatedBytes": 158182039808,
+      "oldCandidateAllocatedBytes": 212860447760
+    }
+  ],
+  "rootUpdatedFullGate": "Do not run full49 automatically unless large128 API time improves at least 2x and all four physical identities agree.",
+  "large128ApiReductionFactor": 2.038437626161823,
+  "full49Started": false,
+  "strictSingleReportLoadVerifiedForAllFour": true,
+  "rootDecision": "CanEdge-only large128 API gain is not sufficient against wall time and smaller-case regressions; no full49 or final-D selection.",
+  "orchestrationCleanup": {
+    "pid": 131899,
+    "action": "SIGTERM then SIGCONT to deliver pending termination after scenario children finished",
+    "original9eProcessUnaffected": true
+  }
+}
