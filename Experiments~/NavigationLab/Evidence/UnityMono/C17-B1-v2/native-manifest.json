@@ -1,0 +1,59 @@
+{
+  "output": "/workspace/navigation-comparison/native/c-b1-v2-subset",
+  "runId": "dd6a4836bfcb4d72aa7d6bdee6ae7650",
+  "expectedCoreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "expectedOracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "graphicsRequired": false,
+  "wallDeadlineSeconds": 3600,
+  "stepsPerEditorUpdate": 250,
+  "runs": [
+    {
+      "name": "Factory-forest-wave-1",
+      "input": "/workspace/navigation-comparison/native/c-b1-v2-subset/forest-wave-1.unity-input.json",
+      "assemblyName": "NavigationLab.CSupCom2",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.CSupCom2.dll",
+      "factory": "NavigationLab.CSupCom2.Factory",
+      "expectedCandidateSha256": "8a20ba7ed8d94fd94a7d4e359e8ec9cf917599d09185064a2117104dbff1333d"
+    },
+    {
+      "name": "Factory-forest-full44-large",
+      "input": "/workspace/navigation-comparison/native/c-b1-v2-subset/forest-full44-large.unity-input.json",
+      "assemblyName": "NavigationLab.CSupCom2",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.CSupCom2.dll",
+      "factory": "NavigationLab.CSupCom2.Factory",
+      "expectedCandidateSha256": "8a20ba7ed8d94fd94a7d4e359e8ec9cf917599d09185064a2117104dbff1333d"
+    },
+    {
+      "name": "Factory-moving-noncenter-death-and-reinforcement",
+      "input": "/workspace/navigation-comparison/native/c-b1-v2-subset/moving-noncenter-death-and-reinforcement.unity-input.json",
+      "assemblyName": "NavigationLab.CSupCom2",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.CSupCom2.dll",
+      "factory": "NavigationLab.CSupCom2.Factory",
+      "expectedCandidateSha256": "8a20ba7ed8d94fd94a7d4e359e8ec9cf917599d09185064a2117104dbff1333d"
+    },
+    {
+      "name": "OrcaYieldFactory-forest-wave-1",
+      "input": "/workspace/navigation-comparison/native/c-b1-v2-subset/forest-wave-1.unity-input.json",
+      "assemblyName": "NavigationLab.BOrca",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.BOrca.dll",
+      "factory": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+      "expectedCandidateSha256": "e75fd5c5a1603f92c89028d66fc1f9a177b55b9ae55ba83567b5d7725ff81b1b"
+    },
+    {
+      "name": "OrcaYieldFactory-forest-full44-large",
+      "input": "/workspace/navigation-comparison/native/c-b1-v2-subset/forest-full44-large.unity-input.json",
+      "assemblyName": "NavigationLab.BOrca",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.BOrca.dll",
+      "factory": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+      "expectedCandidateSha256": "e75fd5c5a1603f92c89028d66fc1f9a177b55b9ae55ba83567b5d7725ff81b1b"
+    },
+    {
+      "name": "OrcaYieldFactory-moving-noncenter-death-and-reinforcement",
+      "input": "/workspace/navigation-comparison/native/c-b1-v2-subset/moving-noncenter-death-and-reinforcement.unity-input.json",
+      "assemblyName": "NavigationLab.BOrca",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.BOrca.dll",
+      "factory": "NavigationLab.Candidates.BOrca.OrcaYieldFactory",
+      "expectedCandidateSha256": "e75fd5c5a1603f92c89028d66fc1f9a177b55b9ae55ba83567b5d7725ff81b1b"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "exitCode": 1,
+  "originalModelInputFileSha256": {
+    "forest-wave-1": "23018b770fbf1384bb851b3bf81765f0df82c9ffa0b9a212ccb8f9fbf036fcfd",
+    "forest-full44-large": "545fd7c95d54ad8bcb91f3d6819aa253c845042cf6e11847d126daec4a6d611b",
+    "moving-noncenter-death-and-reinforcement": "18122082aa936f89407b40882ac1871a349bbb182c2c5e01f517fac7b916e9cd"
+  },
+  "stagedPluginHashes": {
+    "NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "NavigationLab.CSupCom2.dll": "8a20ba7ed8d94fd94a7d4e359e8ec9cf917599d09185064a2117104dbff1333d",
+    "NavigationLab.BOrca.dll": "e75fd5c5a1603f92c89028d66fc1f9a177b55b9ae55ba83567b5d7725ff81b1b"
+  },
+  "stagedAndFrozenBinariesUnchanged": true,
+  "freshManifestBoundReport": true,
+  "runId": "dd6a4836bfcb4d72aa7d6bdee6ae7650",
+  "nativeManifestSha256": "0e78076c9bee1b955584f6e5ce23e345b891efc3e4623dc6ec21cb10e01df547",
+  "driverSourceSha256": "f84b8cc404f2e808a280aa9e0376c1b1f2376351a85ba3c84d1e14bd3d6fac13",
+  "buildManifests": {
+    "/workspace/navigation-comparison/results/c-final-v2-stress49/build-manifest.json": "024eb66ce7da0a1c20507e0d09e62b100b1e4cfc40aac54ec5e100b09f0d8705",
+    "/workspace/navigation-comparison/results/b1-v2-stress/build-manifest.json": "626779c936349a1d27c0461c4c6252d44785bb65bfb1aa0f149480a36f158f03"
+  },
+  "scope": "Unity Editor Play/Mono plugin experiment; no replacement of the default business backend.",
+  "assetCleanupVerified": true
+}
