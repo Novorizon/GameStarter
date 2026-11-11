@@ -1,0 +1,52 @@
+{
+  "scope": "Single-agent observer diagnostic using unchanged original forest-single-large complete input/profile/request/population; independent5ms Oracle and actual generated route; not a replacement for the strict full49 Runner report.",
+  "originalInputSha256": "56a3914cf85aea35ef6ad29daa86b3ac9045d5fe51ec871389e938cdb56f78f8",
+  "originalPopulation": 1,
+  "diagnosticPopulation": 1,
+  "microsteps": 11257,
+  "stableMicrosteps": 2000,
+  "awayProgressSamples": 2357,
+  "stalls": 0,
+  "physicalBodySweeps": 11258,
+  "metrics": {
+    "IndependentBattleInstances": 1,
+    "SpawnAttempts": 1,
+    "StaticReachabilityBuilds": 1,
+    "HpaSearches": 1,
+    "PortalGraphBuilds": 1,
+    "PortalGraphNodes": 133,
+    "PortalNodesExpanded": 115,
+    "TileConnectedComponents": 23,
+    "Spawned": 1,
+    "GoalAssignments": 1,
+    "Microsteps": 11257,
+    "LocalPrioritySweeps": 11257,
+    "SegmentFlowBuilds": 16,
+    "LosIntegrationSeeds": 653,
+    "FmmAcceptedCells": 1690,
+    "DiagonalFlowRelaxations": 1837,
+    "NarrowPreciseWaypointSteps": 6769,
+    "RouteProgressObservations": 9259,
+    "RouteProgressIntentChanges": 1,
+    "RouteProgressRouteBaselines": 1,
+    "SteeringSamples": 9259,
+    "RouteProgressHistoricalBestImprovements": 3029,
+    "RouteProgressQualifiedWindows": 23,
+    "RouteProgressFixedWindows": 23,
+    "LosSteeringUses": 1836,
+    "LosSupersedesGridCorrection": 86,
+    "PhysicalGridReconnectSteps": 83,
+    "ZeroFlowGoalLosRecoverySteps": 83,
+    "ImmobileCircleRebuilds": 1,
+    "ImmobileCirclesIntegrated": 1
+  },
+  "final": [
+    {
+      "Id": 1,
+      "GoalCell": 436,
+      "x": 9250,
+      "y": -2810,
+      "state": "Attacking"
+    }
+  ]
+}

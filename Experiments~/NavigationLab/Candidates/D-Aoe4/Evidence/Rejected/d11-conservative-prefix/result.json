@@ -1,0 +1,678 @@
+{
+  "scope": "Diagnostic counterfactual from exact R10 verified prefix poses/IDs/profiles/goals; fresh D11 planning caches; full original world/radii/speeds, all continuation5ms oracle; not a from-spawn R10 complete-case result",
+  "ticks": 500,
+  "holdTicks": 0,
+  "oraclePairSweeps": 4730946,
+  "oracleBodySweeps": 220044,
+  "minimumGap": 0,
+  "initial": [
+    {
+      "Id": 1,
+      "x": 9250,
+      "y": -2810,
+      "state": "Attacking",
+      "GoalCell": 436
+    },
+    {
+      "Id": 2,
+      "x": 9250,
+      "y": -3310,
+      "state": "Attacking",
+      "GoalCell": 392
+    },
+    {
+      "Id": 3,
+      "x": 9250,
+      "y": -3810,
+      "state": "Attacking",
+      "GoalCell": 348
+    },
+    {
+      "Id": 4,
+      "x": 9250,
+      "y": -4310,
+      "state": "Attacking",
+      "GoalCell": 304
+    },
+    {
+      "Id": 5,
+      "x": 8750,
+      "y": -2310,
+      "state": "Attacking",
+      "GoalCell": 479
+    },
+    {
+      "Id": 6,
+      "x": 7890.445333657058,
+      "y": -2057.208810031952,
+      "state": "Moving",
+      "GoalCell": 435
+    },
+    {
+      "Id": 7,
+      "x": 8750,
+      "y": -4810,
+      "state": "Attacking",
+      "GoalCell": 259
+    },
+    {
+      "Id": 8,
+      "x": 7324.7027054666405,
+      "y": -2075.235526554292,
+      "state": "Moving",
+      "GoalCell": 478
+    },
+    {
+      "Id": 9,
+      "x": 7444.840932770357,
+      "y": -4896.4893098742605,
+      "state": "Moving",
+      "GoalCell": 258
+    },
+    {
+      "Id": 10,
+      "x": 6936.257879778536,
+      "y": -4896.396554900942,
+      "state": "Moving",
+      "GoalCell": 213
+    },
+    {
+      "Id": 11,
+      "x": 6326.789310643139,
+      "y": -4981.949986176025,
+      "state": "Moving",
+      "GoalCell": 212
+    },
+    {
+      "Id": 12,
+      "x": 5968.039326797192,
+      "y": -2495.399261613046,
+      "state": "Moving",
+      "GoalCell": 475
+    },
+    {
+      "Id": 13,
+      "x": 5299.143664068617,
+      "y": -4419.275834085024,
+      "state": "Moving",
+      "GoalCell": 255
+    },
+    {
+      "Id": 14,
+      "x": 4745.920981491325,
+      "y": -2715.04409099249,
+      "state": "Moving",
+      "GoalCell": 474
+    },
+    {
+      "Id": 15,
+      "x": 4143.580235536644,
+      "y": -3106.00870232129,
+      "state": "Moving",
+      "GoalCell": 430
+    },
+    {
+      "Id": 16,
+      "x": 3556.880159487879,
+      "y": -3892.559951809121,
+      "state": "Moving",
+      "GoalCell": 298
+    },
+    {
+      "Id": 17,
+      "x": 2897.018906860359,
+      "y": -3803.455159305684,
+      "state": "Moving",
+      "GoalCell": 254
+    },
+    {
+      "Id": 18,
+      "x": 2087.587655416982,
+      "y": -3808.7228116950205,
+      "state": "Moving",
+      "GoalCell": 303
+    },
+    {
+      "Id": 19,
+      "x": 1788.9922334102828,
+      "y": -3310.0000000067134,
+      "state": "Moving",
+      "GoalCell": 480
+    },
+    {
+      "Id": 20,
+      "x": -834.2519781328302,
+      "y": -3762.628920060826,
+      "state": "Moving",
+      "GoalCell": 215
+    },
+    {
+      "Id": 21,
+      "x": 1149.043702619193,
+      "y": -3809.990103468182,
+      "state": "Moving",
+      "GoalCell": 214
+    },
+    {
+      "Id": 22,
+      "x": 495.343516036242,
+      "y": -3799.9187309674207,
+      "state": "Moving",
+      "GoalCell": 211
+    },
+    {
+      "Id": 23,
+      "x": -116.49825874654577,
+      "y": -3794.7261169084495,
+      "state": "Moving",
+      "GoalCell": 210
+    },
+    {
+      "Id": 24,
+      "x": -1385.9702627545214,
+      "y": -3310.004574313279,
+      "state": "Moving",
+      "GoalCell": 473
+    },
+    {
+      "Id": 25,
+      "x": -1984.950820399628,
+      "y": -3324.549916682102,
+      "state": "Moving",
+      "GoalCell": 429
+    },
+    {
+      "Id": 26,
+      "x": -2599.0216044905283,
+      "y": -3648.5652887085635,
+      "state": "Moving",
+      "GoalCell": 297
+    },
+    {
+      "Id": 27,
+      "x": -3203.9551536413383,
+      "y": -3808.7169321928213,
+      "state": "Moving",
+      "GoalCell": 208
+    },
+    {
+      "Id": 28,
+      "x": -3835.6341063395516,
+      "y": -3802.2754342028998,
+      "state": "Moving",
+      "GoalCell": 253
+    },
+    {
+      "Id": 29,
+      "x": -4442.463464225776,
+      "y": -3779.344815987551,
+      "state": "Moving",
+      "GoalCell": 209
+    },
+    {
+      "Id": 30,
+      "x": -7262.3434939812,
+      "y": -1945.4750394729012,
+      "state": "Moving",
+      "GoalCell": 472
+    },
+    {
+      "Id": 31,
+      "x": -4926.920670708915,
+      "y": -3310.4787950310965,
+      "state": "Moving",
+      "GoalCell": 428
+    },
+    {
+      "Id": 32,
+      "x": -5604.295211003688,
+      "y": -3783.8979981606444,
+      "state": "Moving",
+      "GoalCell": 251
+    },
+    {
+      "Id": 33,
+      "x": -6167.601748725272,
+      "y": -3723.1360388704206,
+      "state": "Moving",
+      "GoalCell": 296
+    },
+    {
+      "Id": 34,
+      "x": -6694.022513039525,
+      "y": -3514.604860501497,
+      "state": "Moving",
+      "GoalCell": 252
+    },
+    {
+      "Id": 35,
+      "x": -7183.691282723173,
+      "y": -3233.1226830448013,
+      "state": "Moving",
+      "GoalCell": 471
+    },
+    {
+      "Id": 36,
+      "x": -7252.284392079642,
+      "y": -2705.547203991841,
+      "state": "Moving",
+      "GoalCell": 427
+    },
+    {
+      "Id": 37,
+      "x": -7250.580606227632,
+      "y": -1308.5132160349879,
+      "state": "Moving",
+      "GoalCell": 295
+    },
+    {
+      "Id": 38,
+      "x": -7257.119781412398,
+      "y": -806.8192838517558,
+      "state": "Moving",
+      "GoalCell": 470
+    },
+    {
+      "Id": 39,
+      "x": -7168.617479768884,
+      "y": -313.27086354965064,
+      "state": "Moving",
+      "GoalCell": 426
+    },
+    {
+      "Id": 40,
+      "x": -4535.006302575684,
+      "y": -309.7054416359688,
+      "state": "Moving",
+      "GoalCell": 249
+    },
+    {
+      "Id": 41,
+      "x": -6607.189609640259,
+      "y": -309.8654118503576,
+      "state": "Moving",
+      "GoalCell": 294
+    },
+    {
+      "Id": 42,
+      "x": -5255.10908991948,
+      "y": -309.94589156773026,
+      "state": "Moving",
+      "GoalCell": 469
+    },
+    {
+      "Id": 43,
+      "x": -5975.155562331681,
+      "y": -308.7024972994286,
+      "state": "Moving",
+      "GoalCell": 425
+    },
+    {
+      "Id": 44,
+      "x": -3892.618659487691,
+      "y": -309.93755614497206,
+      "state": "Moving",
+      "GoalCell": 293
+    }
+  ],
+  "final": [
+    {
+      "Id": 1,
+      "x": 9250,
+      "y": -2810,
+      "state": "Attacking",
+      "GoalCell": 436
+    },
+    {
+      "Id": 2,
+      "x": 9250,
+      "y": -3310,
+      "state": "Attacking",
+      "GoalCell": 392
+    },
+    {
+      "Id": 3,
+      "x": 9250,
+      "y": -3810,
+      "state": "Attacking",
+      "GoalCell": 348
+    },
+    {
+      "Id": 4,
+      "x": 9250,
+      "y": -4310,
+      "state": "Attacking",
+      "GoalCell": 304
+    },
+    {
+      "Id": 5,
+      "x": 8750,
+      "y": -2810,
+      "state": "Attacking",
+      "GoalCell": 435
+    },
+    {
+      "Id": 6,
+      "x": 8750,
+      "y": -2310,
+      "state": "Attacking",
+      "GoalCell": 479
+    },
+    {
+      "Id": 7,
+      "x": 8750,
+      "y": -4810,
+      "state": "Attacking",
+      "GoalCell": 259
+    },
+    {
+      "Id": 8,
+      "x": 8250,
+      "y": -2310,
+      "state": "Attacking",
+      "GoalCell": 478
+    },
+    {
+      "Id": 9,
+      "x": 8250,
+      "y": -4810,
+      "state": "Attacking",
+      "GoalCell": 258
+    },
+    {
+      "Id": 10,
+      "x": 7750,
+      "y": -5310,
+      "state": "Attacking",
+      "GoalCell": 213
+    },
+    {
+      "Id": 11,
+      "x": 7250,
+      "y": -5310,
+      "state": "Attacking",
+      "GoalCell": 212
+    },
+    {
+      "Id": 12,
+      "x": 6750,
+      "y": -2310,
+      "state": "Attacking",
+      "GoalCell": 475
+    },
+    {
+      "Id": 13,
+      "x": 6750,
+      "y": -4810,
+      "state": "Attacking",
+      "GoalCell": 255
+    },
+    {
+      "Id": 14,
+      "x": 6250,
+      "y": -2310,
+      "state": "Attacking",
+      "GoalCell": 474
+    },
+    {
+      "Id": 15,
+      "x": 6250,
+      "y": -2810,
+      "state": "Attacking",
+      "GoalCell": 430
+    },
+    {
+      "Id": 16,
+      "x": 6250,
+      "y": -4310,
+      "state": "Attacking",
+      "GoalCell": 298
+    },
+    {
+      "Id": 17,
+      "x": 6250,
+      "y": -4810,
+      "state": "Attacking",
+      "GoalCell": 254
+    },
+    {
+      "Id": 18,
+      "x": 2087.587655416982,
+      "y": -3808.7228116950205,
+      "state": "Moving",
+      "GoalCell": 303
+    },
+    {
+      "Id": 19,
+      "x": 2047.4922334102828,
+      "y": -3310.000000003381,
+      "state": "Moving",
+      "GoalCell": 480
+    },
+    {
+      "Id": 20,
+      "x": 674.3466565743275,
+      "y": -3730.6807764210503,
+      "state": "Moving",
+      "GoalCell": 215
+    },
+    {
+      "Id": 21,
+      "x": 1594.3036712255043,
+      "y": -3521.985815371084,
+      "state": "Moving",
+      "GoalCell": 214
+    },
+    {
+      "Id": 22,
+      "x": 1181.5880772955845,
+      "y": -3809.9999999425186,
+      "state": "Moving",
+      "GoalCell": 211
+    },
+    {
+      "Id": 23,
+      "x": 993.2572657467703,
+      "y": -3344.5961643119645,
+      "state": "Moving",
+      "GoalCell": 210
+    },
+    {
+      "Id": 24,
+      "x": 403.7582927581628,
+      "y": -3310.0000000263562,
+      "state": "Moving",
+      "GoalCell": 473
+    },
+    {
+      "Id": 25,
+      "x": -97.33303406344906,
+      "y": -3310.000000072504,
+      "state": "Moving",
+      "GoalCell": 429
+    },
+    {
+      "Id": 26,
+      "x": -101.09679223721528,
+      "y": -3809.9999999976903,
+      "state": "Moving",
+      "GoalCell": 297
+    },
+    {
+      "Id": 27,
+      "x": -596.300170872663,
+      "y": -3732.644510954729,
+      "state": "Moving",
+      "GoalCell": 208
+    },
+    {
+      "Id": 28,
+      "x": -1093.0824499182447,
+      "y": -3809.9999999922666,
+      "state": "Moving",
+      "GoalCell": 253
+    },
+    {
+      "Id": 29,
+      "x": -1594.6515685768493,
+      "y": -3809.9999999935862,
+      "state": "Moving",
+      "GoalCell": 209
+    },
+    {
+      "Id": 30,
+      "x": -4087.35023420822,
+      "y": -3310.0000000240543,
+      "state": "Moving",
+      "GoalCell": 472
+    },
+    {
+      "Id": 31,
+      "x": -1596.191354455679,
+      "y": -3310.0000000099753,
+      "state": "Moving",
+      "GoalCell": 428
+    },
+    {
+      "Id": 32,
+      "x": -2092.035041131489,
+      "y": -3739.0264269454,
+      "state": "Moving",
+      "GoalCell": 251
+    },
+    {
+      "Id": 33,
+      "x": -2588.4286621001693,
+      "y": -3809.9999999476827,
+      "state": "Moving",
+      "GoalCell": 296
+    },
+    {
+      "Id": 34,
+      "x": -3090.1966468294954,
+      "y": -3809.9999998427334,
+      "state": "Moving",
+      "GoalCell": 252
+    },
+    {
+      "Id": 35,
+      "x": -3095.1672994689998,
+      "y": -3310.000000012181,
+      "state": "Moving",
+      "GoalCell": 471
+    },
+    {
+      "Id": 36,
+      "x": -3590.403981944537,
+      "y": -3386.440302297238,
+      "state": "Moving",
+      "GoalCell": 427
+    },
+    {
+      "Id": 37,
+      "x": -4092.5225741703334,
+      "y": -3809.9999999788906,
+      "state": "Moving",
+      "GoalCell": 295
+    },
+    {
+      "Id": 38,
+      "x": -4584.527216449838,
+      "y": -3370.222689798138,
+      "state": "Moving",
+      "GoalCell": 470
+    },
+    {
+      "Id": 39,
+      "x": -5084.670347020119,
+      "y": -3310.0000001347066,
+      "state": "Moving",
+      "GoalCell": 426
+    },
+    {
+      "Id": 40,
+      "x": -6088.122874998447,
+      "y": -3809.9999999265397,
+      "state": "Moving",
+      "GoalCell": 249
+    },
+    {
+      "Id": 41,
+      "x": -5087.596304594391,
+      "y": -3809.999999983557,
+      "state": "Moving",
+      "GoalCell": 294
+    },
+    {
+      "Id": 42,
+      "x": -6084.012476094509,
+      "y": -3310.000000297004,
+      "state": "Moving",
+      "GoalCell": 469
+    },
+    {
+      "Id": 43,
+      "x": -5582.95552926259,
+      "y": -3353.8966782527787,
+      "state": "Moving",
+      "GoalCell": 425
+    },
+    {
+      "Id": 44,
+      "x": -6584.097584269469,
+      "y": -3732.6810678988163,
+      "state": "Moving",
+      "GoalCell": 293
+    }
+  ],
+  "goalChanges": [
+    {
+      "microstep": 10010,
+      "changes": [
+        {
+          "Id": 5,
+          "oldGoal": 479,
+          "newGoal": 435
+        },
+        {
+          "Id": 6,
+          "oldGoal": 435,
+          "newGoal": 479
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "IndependentBattleInstances": 1,
+    "Microsteps": 5000,
+    "ImmobileCircleRebuilds": 14,
+    "ImmobileCirclesIntegrated": 149,
+    "LocalPrioritySweeps": 5000,
+    "HpaSearches": 5965,
+    "PortalGraphBuilds": 14,
+    "PortalGraphNodes": 1762,
+    "PortalNodesExpanded": 700731,
+    "TileConnectedComponents": 346,
+    "RouteRefreshes": 5465,
+    "SegmentFlowBuilds": 339,
+    "LosIntegrationSeeds": 13899,
+    "FmmAcceptedCells": 36501,
+    "DiagonalFlowRelaxations": 37911,
+    "NarrowPreciseWaypointSteps": 129400,
+    "SteeringSamples": 3026250,
+    "FlowCacheHits": 137,
+    "StaticShortenedProposals": 822532,
+    "PhysicalGridReconnectSteps": 417,
+    "ZeroFlowGoalLosRecoverySteps": 357,
+    "LosSupersedesGridCorrection": 377,
+    "LosSteeringUses": 3518,
+    "SlotExchangesStarted": 1,
+    "StaticReachabilityBuilds": 50,
+    "SlotExchangeRequesterHoldSteps": 92,
+    "FlowCoverageRepaths": 500,
+    "SteeringWaits": 108257,
+    "SlotExchangeHolderArrivals": 1,
+    "SlotExchangesCompleted": 1
+  },
+  "candidateAssemblySha256": "7d620fae0e5352190f6d1f588fd7b5d0127ece2e7454a005c64ebdbbe90016cf"
+}

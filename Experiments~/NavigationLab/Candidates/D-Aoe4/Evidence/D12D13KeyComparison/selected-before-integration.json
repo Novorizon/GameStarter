@@ -1,0 +1,123 @@
+{
+  "scope": "D12 selected globally for final49 after4 key development cases; no per-case selection. D13 remains explicit optional negative/positive exploration. Full49 is not yet claimed.",
+  "factoryType": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+  "factoryId": "D12-aoe4-with-route-progress-and-slot-exchange",
+  "sourceCommit": "390725e08f8bc901a1d0db9fcfdee0f31e6f39b0",
+  "candidateDllSha256": "d2021aa936d589b969d71ebf19714069947b686efe12b597fe1811c0f2c1b366",
+  "csSha256": {
+    "AoeNavigator.cs": "8a4c48876d08bad5866b5613db39889816ec35ab69b3e5cebd90fd8ac26efb43",
+    "SlotExchanges.cs": "957d985b051e7aa3c31acedb43cf6b1a9248666953ec54630ff275c034bb33e6",
+    "Steering.cs": "36929a624823e24c2297a2c41c3e51585812029e3f9e3492b6966fd2e42a0bf7",
+    "HierarchicalFlow.cs": "c24a4690b1bf6defac28a65ea39e70fce81e7c7d640b83e2986d3171cc789991",
+    "GridGeometry.cs": "22a83be11f2b650e88e882f06c264dc25c6477e6dfcb4d50de32762f30242043",
+    "Goals.cs": "963e307990ee3c953e1b35c4df3646cde101365cc378f3f30e109529d8d423e4",
+    "MinHeap.cs": "185716b58261e5d73a6683f9e5ec73487259153f8e1787b5891701573d1ea8b7",
+    "RouteProgress.cs": "dd52d7571345883cff4f618ea7252cd3433e40bd9674240fc057717477555b45"
+  },
+  "cases": [
+    {
+      "variant": "d12",
+      "case": "open-arena",
+      "status": "Passed",
+      "error": null,
+      "admitted": 48,
+      "alive": 48,
+      "attack": 16,
+      "waiting": 32,
+      "tick": 252,
+      "inputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b",
+      "replayVerified": false
+    },
+    {
+      "variant": "d12",
+      "case": "dynamic-route-block-and-open",
+      "status": "Passed",
+      "error": null,
+      "admitted": 24,
+      "alive": 24,
+      "attack": 16,
+      "waiting": 8,
+      "tick": 800,
+      "inputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+      "replayVerified": false
+    },
+    {
+      "variant": "d12",
+      "case": "forest-full44-large",
+      "status": "Failed",
+      "error": "Deadline: alive=44, pending=0, moving=27, attack=17, failure=None",
+      "admitted": 44,
+      "alive": 44,
+      "attack": 17,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+      "replayVerified": false
+    },
+    {
+      "variant": "d12",
+      "case": "single-cell-throat",
+      "status": "Failed",
+      "error": "Deadline: alive=48, pending=0, moving=45, attack=3, failure=None",
+      "admitted": 48,
+      "alive": 48,
+      "attack": 3,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "d566c5ddbd26c3cdbced54c1174a2000fece1929bdeace48d6f925be17d728f7",
+      "replayVerified": false
+    },
+    {
+      "variant": "d13",
+      "case": "open-arena",
+      "status": "Failed",
+      "error": "Deadline: alive=48, pending=0, moving=5, attack=15, failure=None",
+      "admitted": 48,
+      "alive": 48,
+      "attack": 15,
+      "waiting": 28,
+      "tick": 12000,
+      "inputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b",
+      "replayVerified": false
+    },
+    {
+      "variant": "d13",
+      "case": "dynamic-route-block-and-open",
+      "status": "Passed",
+      "error": null,
+      "admitted": 24,
+      "alive": 24,
+      "attack": 16,
+      "waiting": 8,
+      "tick": 800,
+      "inputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+      "replayVerified": false
+    },
+    {
+      "variant": "d13",
+      "case": "forest-full44-large",
+      "status": "Failed",
+      "error": "Deadline: alive=44, pending=0, moving=7, attack=18, failure=None",
+      "admitted": 44,
+      "alive": 44,
+      "attack": 18,
+      "waiting": 19,
+      "tick": 12000,
+      "inputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+      "replayVerified": false
+    },
+    {
+      "variant": "d13",
+      "case": "single-cell-throat",
+      "status": "Failed",
+      "error": "Deadline: alive=48, pending=0, moving=45, attack=3, failure=None",
+      "admitted": 48,
+      "alive": 48,
+      "attack": 3,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "d566c5ddbd26c3cdbced54c1174a2000fece1929bdeace48d6f925be17d728f7",
+      "replayVerified": false
+    }
+  ]
+}

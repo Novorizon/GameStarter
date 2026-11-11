@@ -52,3 +52,27 @@ r6 将精确不动身体圆盘加入私有HPA/FMM规划几何，并按身体集�
 正式验证只使用共同冻结的NavigationLab v2输入与Oracle；开发途中中止的诊断不计PASS/FAIL。最终完整矩阵、fresh replay、所用源码与DLL哈希由本分支证据报告给出。
 
 R10 将本项目四邻格心表示改为经过真实圆盘扫掠验证的八邻连接，解决圆形不动物体之间明明有对角通道却被四邻图判断开的情况。HPA块内Dijkstra与跨块边都使用实际直线长度，启发式同用欧氏距离；LOS/FMM保留上风积分，并补合法对角松弛和局部下降。这是本项目的合理实现选择，公开资料没有指定本候选这些离散参数。
+
+## D11：独立的项目围攻位置交换增强
+
+`Aoe4Factory` 保持基础D0；`Aoe4CoordinatedFactory`是此前额外让路探索；新增`Aoe4SlotExchangeFactory`显式启用本项目位置交换。它不是GDC披露的原版商业调度公式。
+
+同完整Profile/Target、非AssignedGoal的单位长期无进展时，只有到位holder能对所有真实身体/基地/地形安全直达requester原Goal，且requester能在holder离开后接其旧Goal，才原子交换两个原合法位置。holder实际到位后requester才继续走；交换命令、holder到位、双方完成分别计数。身体、原Goal集合和人数不变，未到位仍是Moving。独立增强必须整版测试，不能按场景混选D0与D11。
+
+## D12：独立的路线进展观察增强
+
+`Aoe4ProgressExchangeFactory`在D11已验证的future/actual holder安全条件之上，独立启用进展观察。不是把摆动位移当作已经脱困，也不声称它自动解决所有拥堵。
+
+剩余量使用当前LOS/FMM代价加HPA后续段代价；重新接入包含真实join段。真实Goal/临时yield/世界形状变化区分意图；实际不动物体集合与路线拓扑区分历史，同一路重试或缓存重建不清历史，新路线基线本身不算前进。每个固定2秒窗口，只有历史最优剩余量改善且实际净位移成立才确认进展；无可投影路线时另要求连续静止窗口。历史达到上限后不将未知移动轨迹误判为已观测停滞。
+
+公开计数包括route baselines、same-intent retries、historical-best improvements、qualified windows、motion-only/potential-only rejected windows和stall detections；恢复是否成功仍以原5ms物理Oracle及全部真实到位/驻留为准。组件正负例不加入共同49计分，正式矩阵仍使用原人数/地形/半径/速度/Goal规则。
+
+## D13：独立的静态路径深度选点策略
+
+`Aoe4DeepGoalFactory`保留D12的恢复与观察，只改变新请求的一般选点优先级：原Holding/CanHold候选池、Attack优先资格/射程、GoalClear及配额规则完全不变，去掉outer偏好，按相对此次请求入口的真实直/斜Dijkstra静态路径代价选择深点。不接收未来人数/顺序、certificate目标或见证路线；不因新出生暗中重排已准入者Goal，Assigned请求不变。
+
+非Assigned的前N实际预约子集可以与旧策略不同，选点始终来自原不变合法池；这属于项目slot预防策略，不是HPA本体或GDC披露商业公式的收益。整体版本按原人数、地图、体型、速度做相同四项及后续共同49验证，不按case切换版本。
+
+## 本轮正式候选选择
+
+统一选择`NavigationLab.DAoe4.Aoe4ProgressExchangeFactory`（D12）执行最终共同49。D0基础、D1额外让路、D11交换与D13深点策略保留为显式可选探索，不能在不同case中混选结果；D13的Forest改善及open回退均保留。阶段比较见`Evidence/D12D13KeyComparison`，最终49只认同源冻结清单、选定factory及实际完整输出；旧阶段开发PASS/FAIL不拼成最终矩阵。

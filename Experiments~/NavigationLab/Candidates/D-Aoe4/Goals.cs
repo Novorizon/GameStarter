@@ -32,10 +32,11 @@ namespace NavigationLab.DAoe4
 
         private int PickGoal(UnitProfile profile, int target, int[] distances, Point2 from, bool attacksFirst)
         {
+            double[]? depths = deepGoalOrder ? GoalDepths(profile.RadiusMm, Array.IndexOf(distances, 0)) : null;
             return Holding(profile, target).Where(cell => distances[cell] >= 0 && !goalOwners.ContainsKey(cell) && GoalClear(cell, profile, -1))
                 .OrderByDescending(cell => attacksFirst && geometry.CanAttack(World.Center(cell), profile, target))
-                .ThenByDescending(cell => attacksFirst && PreferredAttack(cell, profile, target))
-                .ThenByDescending(cell => distances[cell])
+                .ThenByDescending(cell => !deepGoalOrder && attacksFirst && PreferredAttack(cell, profile, target))
+                .ThenByDescending(cell => depths == null ? distances[cell] : depths[cell])
                 .ThenBy(cell => Point2.Distance(from, World.Center(cell)))
                 .ThenBy(cell => cell).DefaultIfEmpty(-1).First();
         }
@@ -51,7 +52,8 @@ namespace NavigationLab.DAoe4
         {
             foreach (var other in actors.Values.OrderBy(actor => actor.Request.Id))
             {
-                if (other.Request.AssignedGoalCell >= 0 || other.Request.TargetId != request.TargetId || incomingReachable[other.Goal] < 0
+                if (other.ExchangePartner != 0 || other.Request.AssignedGoalCell >= 0 || other.Request.TargetId != request.TargetId
+                    || incomingReachable[other.Goal] < 0
                     || !geometry.CanHold(other.Goal, request.Profile, request.TargetId))
                 {
                     continue;
@@ -92,7 +94,7 @@ namespace NavigationLab.DAoe4
         {
             foreach (var actor in ordered.OrderBy(actor => actor.Request.Profile.AttackRangeMm).ThenByDescending(actor => actor.Request.Profile.RadiusMm))
             {
-                if (actor.Request.AssignedGoalCell >= 0 || actor.LastPromotionRevision == goalRevision || actor.YieldCell >= 0
+                if (actor.ExchangePartner != 0 || actor.Request.AssignedGoalCell >= 0 || actor.LastPromotionRevision == goalRevision || actor.YieldCell >= 0
                     || geometry.CanAttack(World.Center(actor.Goal), actor.Request.Profile, actor.Request.TargetId))
                 {
                     continue;
@@ -121,7 +123,7 @@ namespace NavigationLab.DAoe4
                 var constrained = new HashSet<int>(Holding(actor.Request.Profile, actor.Request.TargetId)
                     .Where(cell => geometry.CanAttack(World.Center(cell), actor.Request.Profile, actor.Request.TargetId)));
                 foreach (var donor in ordered.Where(other => other.Request.TargetId == actor.Request.TargetId
-                    && other.Request.Id != actor.Request.Id && other.Request.AssignedGoalCell < 0
+                    && other.ExchangePartner == 0 && other.Request.Id != actor.Request.Id && other.Request.AssignedGoalCell < 0
                     && constrained.Contains(other.Goal) && other.YieldCell < 0).OrderBy(other => other.Request.Id))
                 {
                     var flexible = new HashSet<int>(Holding(donor.Request.Profile, donor.Request.TargetId)

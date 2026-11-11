@@ -30,6 +30,39 @@ namespace NavigationLab.DAoe4
         }
     }
 
+    public sealed class Aoe4SlotExchangeFactory : INavigationFactory
+    {
+        public string Id => "D11-aoe4-with-project-slot-exchange";
+        public string Description => "D HPA LOS/FMM architecture plus explicit project-level physical slot exchange; not an AoE IV proprietary mechanism.";
+        public NavigationFeatures Features => new Aoe4Factory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
+        {
+            return new AoeNavigator(world, profiles, false, true);
+        }
+    }
+
+    public sealed class Aoe4ProgressExchangeFactory : INavigationFactory
+    {
+        public string Id => "D12-aoe4-with-route-progress-and-slot-exchange";
+        public string Description => "D architecture with separately identified route-progress observations and physical project slot exchange.";
+        public NavigationFeatures Features => new Aoe4Factory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
+        {
+            return new AoeNavigator(world, profiles, false, true, true);
+        }
+    }
+
+    public sealed class Aoe4DeepGoalFactory : INavigationFactory
+    {
+        public string Id => "D13-aoe4-with-deep-goals-progress-exchange";
+        public string Description => "D12 with project selection by static path depth; original legal Holding and compatibility unchanged.";
+        public NavigationFeatures Features => new Aoe4Factory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
+        {
+            return new AoeNavigator(world, profiles, false, true, true, true);
+        }
+    }
+
     internal sealed partial class AoeNavigator : INavigator
     {
         private sealed class Actor
@@ -51,6 +84,8 @@ namespace NavigationLab.DAoe4
             internal int LastPromotionRevision = -1;
             internal int PreciseWaypoint = -1;
             internal int WaypointSourceCell = -1;
+            internal int ExchangePartner;
+            internal RouteProgress? Progress;
             internal int ObservationStep;
             internal Point2 ObservationPosition;
         }
@@ -67,6 +102,10 @@ namespace NavigationLab.DAoe4
         private readonly int largestRadius;
         private string bodySignature = "";
         private readonly bool coordinated;
+        private readonly bool slotExchanges;
+        private readonly bool progressAware;
+        private readonly bool deepGoalOrder;
+        private string progressWorldShape = string.Empty;
         private int step;
         private int goalRevision;
         private bool disposed;
@@ -74,10 +113,23 @@ namespace NavigationLab.DAoe4
         public string LastSpawnFailure { get; private set; } = "None";
         private WorldDefinition World => geometry.World;
 
-        internal AoeNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool coordinated)
+        internal AoeNavigator(
+            WorldDefinition world,
+            IReadOnlyList<UnitProfile> profiles,
+            bool coordinated,
+            bool slotExchanges = false,
+            bool progressAware = false,
+            bool deepGoalOrder = false)
         {
             geometry = new GridGeometry(world);
             this.coordinated = coordinated;
+            this.slotExchanges = slotExchanges;
+            this.progressAware = progressAware;
+            this.deepGoalOrder = deepGoalOrder;
+            if (progressAware)
+            {
+                progressWorldShape = WorldShapeIdentity();
+            }
             largestRadius = profiles.Count == 0 ? 1 : profiles.Max(profile => profile.RadiusMm);
             planningGeometry = geometry;
             planner = new HierarchicalFlow(planningGeometry, metrics, largestRadius);
@@ -155,6 +207,10 @@ namespace NavigationLab.DAoe4
             step++;
             Add("Microsteps");
             var ordered = actors.Values.OrderBy(actor => actor.Request.Id).ToArray();
+            if (slotExchanges)
+            {
+                UpdateSlotExchanges(ordered);
+            }
             if (step % SimulationProtocol.Substeps == 0)
             {
                 TrackAttackPeaks(ordered);
@@ -177,6 +233,12 @@ namespace NavigationLab.DAoe4
             {
                 int i = (order + rotation) % ordered.Length;
                 var actor = ordered[i];
+                if (slotExchanges && HoldSlotRequester(actor))
+                {
+                    actor.Planned = true;
+                    Add("SlotExchangeRequesterHoldSteps");
+                    continue;
+                }
                 Point2 destination = Destination(actor);
                 double error = Point2.Distance(actor.Position, destination);
                 if (error < actor.BestGoalDistance - .5)
@@ -296,6 +358,10 @@ namespace NavigationLab.DAoe4
                     direction = (steeringDestination - actor.Position).Normalized;
                     Add("NarrowPreciseWaypointSteps");
                 }
+                if (progressAware)
+                {
+                    ObserveRouteProgress(actor, field, anchor, directGoalRecovery);
+                }
                 desired[i] = SampleVelocity(actor, direction, steeringDestination, ordered);
                 actor.Proposal = desired[i];
                 actor.Planned = true;
@@ -339,6 +405,7 @@ namespace NavigationLab.DAoe4
             {
                 return false;
             }
+            CancelSlotExchanges(id);
             actors.Remove(id);
             if (goalOwners.TryGetValue(actor.Goal, out int owner) && owner == id)
             {
@@ -368,8 +435,14 @@ namespace NavigationLab.DAoe4
                 return false;
             }
             geometry.Apply(change);
+            if (progressAware)
+            {
+                progressWorldShape = WorldShapeIdentity();
+            }
+            CancelSlotExchanges(-1);
             planner.Invalidate();
             reachable.Clear();
+            goalDepths.Clear();
             holding.Clear();
             goalOwners.Clear();
             goalRevision++;
@@ -407,6 +480,9 @@ namespace NavigationLab.DAoe4
         {
             actors.Clear();
             goalOwners.Clear();
+            goalDepths.Clear();
+            exchanges.Clear();
+            exchangeCooldown.Clear();
             disposed = true;
         }
 
