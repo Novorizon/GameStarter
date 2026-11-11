@@ -1,0 +1,131 @@
+{
+  "success": true,
+  "scope": "Static geometry and discrete target-relocation safety certificate; not a candidate execution, continuous moving-solid test, or joint reconfiguration proof.",
+  "oldTarget": {
+    "x": 27500,
+    "y": 14500,
+    "radiusMm": 1000
+  },
+  "newTarget": {
+    "x": 16500,
+    "y": 14500,
+    "radiusMm": 1000
+  },
+  "world": {
+    "width": 35,
+    "height": 29,
+    "cellMm": 1000,
+    "openInterior": {
+      "left": 1000,
+      "right": 34000,
+      "bottom": 1000,
+      "top": 28000
+    }
+  },
+  "originalLiveCount": 24,
+  "profile": {
+    "radiusMm": 250,
+    "speedMmPer50ms": 333,
+    "rangeMm": 1000
+  },
+  "oldLegalCentreDistanceBoundMm": 8005,
+  "relocationDistanceMm": 11000,
+  "guaranteedNewBaseToOldBodyGapMm": 1745,
+  "guaranteedNewGoalDiscToOldBodyGapMm": 245,
+  "newAttackCentres": [
+    {
+      "cell": 435,
+      "x": 15500,
+      "y": 12500
+    },
+    {
+      "cell": 436,
+      "x": 16500,
+      "y": 12500
+    },
+    {
+      "cell": 437,
+      "x": 17500,
+      "y": 12500
+    },
+    {
+      "cell": 469,
+      "x": 14500,
+      "y": 13500
+    },
+    {
+      "cell": 470,
+      "x": 15500,
+      "y": 13500
+    },
+    {
+      "cell": 472,
+      "x": 17500,
+      "y": 13500
+    },
+    {
+      "cell": 473,
+      "x": 18500,
+      "y": 13500
+    },
+    {
+      "cell": 504,
+      "x": 14500,
+      "y": 14500
+    },
+    {
+      "cell": 508,
+      "x": 18500,
+      "y": 14500
+    },
+    {
+      "cell": 539,
+      "x": 14500,
+      "y": 15500
+    },
+    {
+      "cell": 540,
+      "x": 15500,
+      "y": 15500
+    },
+    {
+      "cell": 542,
+      "x": 17500,
+      "y": 15500
+    },
+    {
+      "cell": 543,
+      "x": 18500,
+      "y": 15500
+    },
+    {
+      "cell": 575,
+      "x": 15500,
+      "y": 16500
+    },
+    {
+      "cell": 576,
+      "x": 16500,
+      "y": 16500
+    },
+    {
+      "cell": 577,
+      "x": 17500,
+      "y": 16500
+    }
+  ],
+  "newAttackCentreCount": 16,
+  "allNewGoalsReachableFromOriginalEntry": true,
+  "minimumPairwiseGoalBodyGapMm": 500,
+  "exampleOriginalAttacker": {
+    "x": 25500,
+    "y": 14500
+  },
+  "targetContinuousSweepWouldHitExampleAttacker": true,
+  "continuousTargetMotionWasNotValidated": true,
+  "sourceAndOracleHashes": {
+    "Core": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c",
+    "Oracle": "06b02d324777fbaf1f6ac4ab840ef5108d3815830557288645c058247d3acc4b",
+    "Program.cs": "febc0a8bd33f942d596e2339a44a89cd75ecfb1ee508906e6f7fe6f950074b20"
+  }
+}

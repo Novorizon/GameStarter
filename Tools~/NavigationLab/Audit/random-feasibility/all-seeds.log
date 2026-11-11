@@ -1,0 +1,8 @@
+PASS random-multigate-maze-11 alive32 attack16 wait16 edges=2030 ms=213000
+PASS random-multigate-maze-97 alive32 attack16 wait16 edges=1678 ms=177800
+PASS random-multigate-maze-713 alive32 attack16 wait16 edges=1830 ms=193000
+PASS random-multigate-maze-20261111 alive32 attack16 wait16 edges=3142 ms=324200
+PASS random-multigate-maze-1701 alive32 attack16 wait16 edges=2026 ms=212600
+PASS random-multigate-maze-991 alive32 attack16 wait16 edges=1580 ms=168000
+STATIC large-portal-grid-128 compatible=548 connected=548 demand=128
+STATIC large-portal-grid-256 compatible=548 connected=548 demand=256
