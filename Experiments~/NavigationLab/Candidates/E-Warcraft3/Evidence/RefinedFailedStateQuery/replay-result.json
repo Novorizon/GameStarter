@@ -1,0 +1,97 @@
+{
+  "success": true,
+  "scope": "Refined algorithm-produced path from E1b\u0027s actual failed state; all 55 other bodies remain fixed. Not a replay of the original birth history or a full live navigator execution.",
+  "refinedCandidateDynamicFindReturnedPath": true,
+  "frozenCandidateStaticFindReturnedPath": true,
+  "staticConnectors": [
+    511,
+    512,
+    513,
+    548,
+    549,
+    550,
+    586,
+    587
+  ],
+  "dynamicConnectorCount": 0,
+  "inputFileSha256": "6c4d767e7ca3798130d890bd8a66a2af198096a13f48aa0462c7d03ce5b10688",
+  "originalCaseReportSha256": "23774a06c682647573c78aa3f30fa28368e1c7387aadd222ed08cb1b07f4a535",
+  "originalCaseCanonicalInputSha256": "ea159d7dde87e0e66bd57b5e216cbab2bf5d50e9a54d4ac0c9b45f0892542739",
+  "candidateAssemblySha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+  "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "originalBodyRadiusMm": 250,
+  "originalSpeedMmPer50ms": 1000,
+  "preservedGoal": 588,
+  "otherBodyCount": 55,
+  "movementMicrosteps": 40,
+  "movementMilliseconds": 200,
+  "movedDistanceMm": 3361.473233655446,
+  "holdLogicalTicks": 200,
+  "holdDriftMm": 0,
+  "totalValidatedBodySweeps": 114352,
+  "totalValidatedPairSweeps": 3144680,
+  "minimumBodyGapMm": 0,
+  "maximumObservedStepMm": 100.00000000000274,
+  "finalAttack": 16,
+  "finalWait": 40,
+  "scriptSha256": "ad22cd9485dda20797727755d7721b118aeea44d07ae17e995e432908cef4ba1",
+  "algorithmPath": [
+    {
+      "x": 31045.44858419952,
+      "y": 14272.72429209976
+    },
+    {
+      "x": 31000,
+      "y": 14250
+    },
+    {
+      "x": 31000,
+      "y": 14500
+    },
+    {
+      "x": 31000,
+      "y": 14750
+    },
+    {
+      "x": 31250,
+      "y": 15000
+    },
+    {
+      "x": 31500,
+      "y": 15000
+    },
+    {
+      "x": 31750,
+      "y": 15000
+    },
+    {
+      "x": 32000,
+      "y": 15000
+    },
+    {
+      "x": 32250,
+      "y": 15000
+    },
+    {
+      "x": 32500,
+      "y": 15000
+    },
+    {
+      "x": 32750,
+      "y": 15000
+    },
+    {
+      "x": 33000,
+      "y": 15000
+    },
+    {
+      "x": 33250,
+      "y": 15250
+    },
+    {
+      "x": 33500,
+      "y": 15500
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "scope": "Closed case reports from an in-progress three-case regression group, not a complete group or matrix. The third late46 case is still running and is not copied.",
+  "formalGroupEvidenceReady": false,
+  "originalOutput": "/workspace/navigation-comparison/results/e-refined-v2-forest",
+  "completedCases": [
+    {
+      "Name": "forest-full44-large",
+      "Status": "Passed",
+      "Error": null,
+      "Admitted": 44,
+      "Alive": 44,
+      "Pending": 0,
+      "Attacking": 18,
+      "Waiting": 26,
+      "FinalTick": 1618,
+      "HoldTicks": 200,
+      "ReplayVerified": true
+    },
+    {
+      "Name": "forest-full45-medium",
+      "Status": "Failed",
+      "Error": "Deadline: alive=45, pending=0, moving=3, attack=12, failure=None",
+      "Admitted": 45,
+      "Alive": 45,
+      "Pending": 0,
+      "Attacking": 12,
+      "Waiting": 30,
+      "FinalTick": 12000,
+      "HoldTicks": 0,
+      "ReplayVerified": false
+    }
+  ]
+}

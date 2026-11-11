@@ -14,6 +14,17 @@ namespace NavigationLab.Candidates.EWarcraft3
         public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, true, false);
     }
 
+    public sealed class WarcraftRefinedFactory : INavigationFactory
+    {
+        public string Id => "E4-Warcraft3-Inspired-RefinedConnections";
+        public string Description => "Spatial controller with bounded quarter-cell reconnection; original body geometry, terrain, goals and speed.";
+        public NavigationFeatures Features => new WarcraftFactory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
+        {
+            return new WarcraftNavigator(world, profiles, true, false, false, true);
+        }
+    }
+
     public sealed class WarcraftBaselineFactory : INavigationFactory
     {
         public string Id => "E0-Warcraft3-Inspired-LocalRepath";
@@ -81,6 +92,7 @@ namespace NavigationLab.Candidates.EWarcraft3
         private readonly bool friendlyYield;
         private readonly bool groupedYield;
         private readonly bool requesterBackoff;
+        private readonly bool refinedConnections;
         private readonly List<int> yieldGroup = new List<int>();
         private readonly List<MobileUnit> units = new List<MobileUnit>();
         private readonly Dictionary<int, int> goalOwners = new Dictionary<int, int>();
@@ -102,18 +114,21 @@ namespace NavigationLab.Candidates.EWarcraft3
             IReadOnlyList<UnitProfile> profiles,
             bool friendlyYield,
             bool groupedYield,
-            bool requesterBackoff = false)
+            bool requesterBackoff = false,
+            bool refinedConnections = false)
         {
             this.world = world.Clone();
             this.profiles = profiles.Distinct().ToArray();
             this.friendlyYield = friendlyYield;
             this.groupedYield = groupedYield;
             this.requesterBackoff = requesterBackoff;
+            this.refinedConnections = refinedConnections;
             geometry = new PathingGeometry(this.world);
-            search = new GlobalSearch(this.world, geometry, Count);
+            search = new GlobalSearch(this.world, geometry, Count, refinedConnections);
             Count("FriendlyYieldEnabled", friendlyYield ? 1 : 0);
             Count("GroupedYieldEnabled", groupedYield ? 1 : 0);
             Count("RequesterBackoffEnabled", requesterBackoff ? 1 : 0);
+            Count("RefinedConnectionsEnabled", refinedConnections ? 1 : 0);
         }
 
         public bool TrySpawn(SpawnRequest request)
@@ -291,7 +306,7 @@ namespace NavigationLab.Candidates.EWarcraft3
 
             world = world.WithChange(change);
             geometry = new PathingGeometry(world);
-            search = new GlobalSearch(world, geometry, Count);
+            search = new GlobalSearch(world, geometry, Count, refinedConnections);
             eligibility.Clear();
             admissionRejections.Clear();
             goalRevision++;
@@ -503,6 +518,12 @@ namespace NavigationLab.Candidates.EWarcraft3
             for (int rejoin = finalRejoin; rejoin >= unit.Waypoint; rejoin--)
             {
                 int cell = world.CellAt(unit.Path[rejoin]);
+                if (cell < 0 || Point2.Distance(unit.Path[rejoin], world.Center(cell)) > .001)
+                {
+                    Count("RefinedQuarterRejoinsSkipped", 1);
+                    continue;
+                }
+
                 var local = search.Find(unit.Position, cell, unit.Profile, clear, 6);
                 if (local != null)
                 {

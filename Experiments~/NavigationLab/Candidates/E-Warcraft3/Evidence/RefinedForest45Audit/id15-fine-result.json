@@ -1,0 +1,31 @@
+{
+  "id": 15,
+  "start": [
+    9150.0,
+    -4310.0
+  ],
+  "goalCell": 259,
+  "goal": [
+    8750.0,
+    -4810.0
+  ],
+  "radiusMm": 200,
+  "originalProfile": {
+    "readyTick": 0,
+    "id": 15,
+    "radiusMm": 200,
+    "speedMmPerTick": 100,
+    "attackRangeMm": 450,
+    "spawnCell": 1058,
+    "targetId": 1,
+    "assignedGoalCell": -1
+  },
+  "otherBodiesFixed": 44,
+  "destinationBlockers": [],
+  "searchSpacingMm": 25,
+  "searchBudget": 30000,
+  "expanded": 7,
+  "budgetExhausted": false,
+  "witnessFound": false,
+  "path": []
+}

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent original-E1b failed-state counterexample preserved before the refined implementation. E1b did not execute the witness path.",
+  "originalAuditRoot": "/workspace/navigation-comparison/audit/e-final-stagnation",
+  "auditArchiveSha256": "56188430aef5ed5affbdeea958b8790f145a0d26df84f1954f5c0011a1736c7a",
+  "noRuntimeSourcesChangedInOriginalBranch": true
+}

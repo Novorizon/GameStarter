@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "scope": "Refined algorithm-produced path from E1b's actual failed state; all 55 other bodies remain fixed. Not a replay of the original birth history or a full live navigator execution.",
+  "candidateAssemblySha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+  "querySourceZipSha256": "0ab16e6391774ec26ddfcfe49806b0d1fb33dad88ec95f29dcb8aebdf6469564",
+  "sourceProgramSha256": "ad22cd9485dda20797727755d7721b118aeea44d07ae17e995e432908cef4ba1",
+  "originalCounterexample": "../CoarseConnectionCounterexample",
+  "candidateBuildManifest": "../RefinedRegressions/V2-U/build-manifest.json",
+  "independentReviewSha256": "aa3a1629860945c2a6c8d5cb61e3e566f4b1755070b11b5b3cd345912a633436"
+}

@@ -1,0 +1,13 @@
+["dotnet", "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll", "--assembly", "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Candidates/E-Warcraft3/bin/Release/netstandard2.1/NavigationLab.EWarcraft3.dll", "--factory", "NavigationLab.Candidates.EWarcraft3.WarcraftFactory", "--suite", "stress", "--output", "/workspace/navigation-comparison/results/e-v2-stress", "--build-manifest", "/workspace/navigation-comparison/results/e-v2-stress/build-manifest.json", "--require-build-manifest"]
+PASSED open-arena admitted=48 alive=48 pending=0 attack=16 tick=374 
+FAILED mixed-speed-approach admitted=64 alive=64 pending=0 attack=12 tick=12000 Deadline: alive=64, pending=0, moving=9, attack=12, failure=None
+FAILED large-radius-turning-clearance admitted=48 alive=48 pending=0 attack=10 tick=12000 Deadline: alive=48, pending=0, moving=7, attack=10, failure=None
+PASSED single-cell-throat admitted=48 alive=48 pending=0 attack=16 tick=494 
+FAILED u-obstacle admitted=56 alive=56 pending=0 attack=16 tick=12000 Deadline: alive=56, pending=0, moving=1, attack=16, failure=None
+FAILED right-angle-corridor admitted=32 alive=32 pending=0 attack=14 tick=12000 Deadline: alive=32, pending=0, moving=8, attack=14, failure=None
+PASSED cross-junction-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=360 
+FAILED cross-junction-original-4m admitted=72 alive=72 pending=0 attack=9 tick=12000 Deadline: alive=72, pending=0, moving=11, attack=9, failure=None
+FAILED cross-junction-original-5m admitted=72 alive=72 pending=0 attack=14 tick=12000 Deadline: alive=72, pending=0, moving=14, attack=14, failure=None
+PASSED shared-spawn-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=296 
+FAILED shared-spawn-original-5m admitted=72 alive=72 pending=0 attack=16 tick=12000 Deadline: alive=72, pending=0, moving=8, attack=16, failure=None
+PASSED three-hundred-units-parking-lanes admitted=300 alive=300 pending=0 attack=6 tick=852 

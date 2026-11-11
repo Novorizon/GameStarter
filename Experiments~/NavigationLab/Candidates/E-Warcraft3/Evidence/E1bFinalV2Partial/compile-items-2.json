@@ -1,0 +1,113 @@
+{
+  "Properties": {
+    "TargetFramework": "net8.0",
+    "LangVersion": "12"
+  },
+  "Items": {
+    "Compile": [
+      {
+        "Identity": "LabCases.cs",
+        "FullPath": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/LabCases.cs",
+        "RootDir": "/",
+        "Filename": "LabCases",
+        "Extension": ".cs",
+        "RelativeDir": "",
+        "Directory": "workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.DefaultItems.props",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.Sdk.DefaultItems",
+        "DefiningProjectExtension": ".props"
+      },
+      {
+        "Identity": "Program.cs",
+        "FullPath": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/Program.cs",
+        "RootDir": "/",
+        "Filename": "Program",
+        "Extension": ".cs",
+        "RelativeDir": "",
+        "Directory": "workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.DefaultItems.props",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.Sdk.DefaultItems",
+        "DefiningProjectExtension": ".props"
+      },
+      {
+        "Identity": "../../../Verification~/TowerDefenseNavigation/Scenarios.cs",
+        "Link": "FrozenInputs/Scenarios.cs",
+        "FullPath": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Verification~/TowerDefenseNavigation/Scenarios.cs",
+        "RootDir": "/",
+        "Filename": "Scenarios",
+        "Extension": ".cs",
+        "RelativeDir": "../../../Verification~/TowerDefenseNavigation/",
+        "Directory": "workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Verification~/TowerDefenseNavigation/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj",
+        "DefiningProjectDirectory": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/",
+        "DefiningProjectName": "NavigationLab.Runner",
+        "DefiningProjectExtension": ".csproj"
+      },
+      {
+        "Identity": "obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs",
+        "FullPath": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs",
+        "RootDir": "/",
+        "Filename": "NavigationLab.Runner.GlobalUsings.g",
+        "Extension": ".cs",
+        "RelativeDir": "obj/Release/net8.0/",
+        "Directory": "workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/obj/Release/net8.0/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.GenerateGlobalUsings.targets",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.GenerateGlobalUsings",
+        "DefiningProjectExtension": ".targets"
+      },
+      {
+        "Identity": "obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
+        "FullPath": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
+        "RootDir": "/",
+        "Filename": ".NETCoreApp,Version=v8.0.AssemblyAttributes",
+        "Extension": ".cs",
+        "RelativeDir": "obj/Release/net8.0/",
+        "Directory": "workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/obj/Release/net8.0/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Microsoft.Common.CurrentVersion.targets",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/",
+        "DefiningProjectName": "Microsoft.Common.CurrentVersion",
+        "DefiningProjectExtension": ".targets"
+      },
+      {
+        "Identity": "obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs",
+        "FullPath": "/workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs",
+        "RootDir": "/",
+        "Filename": "NavigationLab.Runner.AssemblyInfo",
+        "Extension": ".cs",
+        "RelativeDir": "obj/Release/net8.0/",
+        "Directory": "workspace/navigation-comparison/e-v2-snapshots/snapshot-99a0a7bb02ee8c476d77d76b/Experiments~/NavigationLab/Runner/obj/Release/net8.0/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.GenerateAssemblyInfo.targets",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.GenerateAssemblyInfo",
+        "DefiningProjectExtension": ".targets"
+      }
+    ]
+  }
+}

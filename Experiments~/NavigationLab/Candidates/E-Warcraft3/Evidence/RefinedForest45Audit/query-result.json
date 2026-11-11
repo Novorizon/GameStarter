@@ -1,0 +1,137 @@
+{
+  "scope": "Independent original-body fixed-neighbor geometry queries from E4 Forest45 failed state; not candidate execution or a full-case pass.",
+  "inputFileSha256": "3f4c85f5b1008ab6f107af46889af1375fdba147ec26f0e1ae28977047249057",
+  "reportSha256": "0478e801cdba9e7b46df5e38c7f5bb2895131cf3373cda153fc67f6bfbfe011f",
+  "canonicalInputSha256": "626a99fe6972d938944ab816c6ef959b93dae272ffa8538397a0a518958fd217",
+  "queries": [
+    {
+      "id": 15,
+      "start": [
+        9150.0,
+        -4310.0
+      ],
+      "goalCell": 259,
+      "goal": [
+        8750.0,
+        -4810.0
+      ],
+      "radiusMm": 200,
+      "originalProfile": {
+        "readyTick": 0,
+        "id": 15,
+        "radiusMm": 200,
+        "speedMmPerTick": 100,
+        "attackRangeMm": 450,
+        "spawnCell": 1058,
+        "targetId": 1,
+        "assignedGoalCell": -1
+      },
+      "otherBodiesFixed": 44,
+      "destinationBlockers": [],
+      "suppliedPathLegal": false,
+      "legChecks": [
+        {
+          "from": [
+            9150.0,
+            -4310.0
+          ],
+          "to": [
+            9150,
+            -4810
+          ],
+          "legal": false
+        },
+        {
+          "from": [
+            9150,
+            -4810
+          ],
+          "to": [
+            8750.0,
+            -4810.0
+          ],
+          "legal": false
+        }
+      ],
+      "witnessFound": false,
+      "path": [
+        [
+          9150.0,
+          -4310.0
+        ],
+        [
+          9150,
+          -4810
+        ],
+        [
+          8750.0,
+          -4810.0
+        ]
+      ]
+    },
+    {
+      "id": 14,
+      "start": [
+        9550.0,
+        -4310.0
+      ],
+      "goalCell": 304,
+      "goal": [
+        9250.0,
+        -4310.0
+      ],
+      "radiusMm": 200,
+      "originalProfile": {
+        "readyTick": 0,
+        "id": 14,
+        "radiusMm": 200,
+        "speedMmPerTick": 100,
+        "attackRangeMm": 450,
+        "spawnCell": 1058,
+        "targetId": 1,
+        "assignedGoalCell": -1
+      },
+      "otherBodiesFixed": 44,
+      "destinationBlockers": [
+        {
+          "id": 15,
+          "gapMm": -300.0
+        }
+      ],
+      "searchSkipped": "Actual final destination occupied under the fixed-neighbor condition.",
+      "witnessFound": false,
+      "path": []
+    },
+    {
+      "id": 19,
+      "start": [
+        9750.0,
+        -3960.0
+      ],
+      "goalCell": 213,
+      "goal": [
+        7750.0,
+        -5310.0
+      ],
+      "radiusMm": 200,
+      "originalProfile": {
+        "readyTick": 0,
+        "id": 19,
+        "radiusMm": 200,
+        "speedMmPerTick": 100,
+        "attackRangeMm": 450,
+        "spawnCell": 1058,
+        "targetId": 1,
+        "assignedGoalCell": -1
+      },
+      "otherBodiesFixed": 44,
+      "destinationBlockers": [],
+      "searchSpacingMm": 25,
+      "searchBudget": 30000,
+      "expanded": 6209,
+      "budgetExhausted": false,
+      "witnessFound": false,
+      "path": []
+    }
+  ]
+}
