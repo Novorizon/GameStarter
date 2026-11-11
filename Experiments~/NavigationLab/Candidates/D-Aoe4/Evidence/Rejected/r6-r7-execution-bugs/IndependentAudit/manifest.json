@@ -1,0 +1,12 @@
+{
+  "d-r6-planner-query.tar.gz": {
+    "sha256": "5b7ab0a0e979c02b5aa91b38a1818594963aa57d92ac1313dbefa95ddea68ed1",
+    "sourceManifestSha256": "9805ab609d92b2ff57e65d21a46c4ff7b4acfe1cc38b5c099ac9997ebf75075f",
+    "scope": "Read-only copy of independently sealed diagnostic. Original absolute paths identify provenance; archive is not a replacement complete final matrix."
+  },
+  "d-r6-los-gap.tar.gz": {
+    "sha256": "9b18468162ca54899c8be6cd14a92d3924321d42bdc61dbeb0fb0e134ef9d9ff",
+    "sourceManifestSha256": "5022b24b9d5a174f3ad3c5a1a81a024d60284e81fae3a2030884cc9cb6e1c8a9",
+    "scope": "Read-only copy of independently sealed diagnostic. Original absolute paths identify provenance; archive is not a replacement complete final matrix."
+  }
+}
