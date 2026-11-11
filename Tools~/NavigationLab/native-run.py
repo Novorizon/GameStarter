@@ -32,7 +32,7 @@ def convert_input(path):
     result['minimumAttackers'] = [{'range': int(key), 'count': value} for key, value in original['minimumAttackersByRange'].items()]
     result.pop('minimumAttackersByRange')
     result['worldEvents'] = [{'tick': item['Tick'], 'blockCells': item['BlockCells'], 'openCells': item['OpenCells'],
-                              'replaceTarget': item['replaceTarget']} for item in original['worldEvents']]
+                              'replaceTarget': item['replaceTarget'], 'afterSettlement': item.get('afterSettlement', item.get('AfterSettlement', False))} for item in original['worldEvents']]
     result['deaths'] = [{'tick': item['Tick'], 'count': item['Count'], 'afterSettlement': item['AfterSettlement'],
                         'replace': item['Replace'], 'requireMoving': item['RequireMoving'], 'range': item['Range']}
                        for item in original['deaths']]
@@ -56,7 +56,7 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     if not (project / 'ProjectSettings/ProjectVersion.txt').exists():
         parser.error('--project is not a Unity project')
-    unity_processes = subprocess.check_output(['ps', '-eo', 'args'], text=True).splitlines()
+    unity_processes = subprocess.check_output(['ps', '-eo', 'args'], text=True).splitlines() if os.name != 'nt' else []
     if any('Editor/Unity -' in line and '-projectPath ' + str(project) in line and not line.lstrip().startswith(('bash ', '/bin/bash '))
            for line in unity_processes):
         raise RuntimeError('A Unity editor already owns this project; wait for it to exit.')

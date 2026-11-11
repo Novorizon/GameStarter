@@ -185,7 +185,7 @@ namespace NavigationLab.UnityValidation
                 for (int index = 0; index < input.worldEvents.Length; index++)
                 {
                     var planned = input.worldEvents[index];
-                    if (tick == planned.tick && worldEvents.Add(index))
+                    if (tick >= planned.tick && (!planned.afterSettlement || IsComplete(snapshot)) && worldEvents.Add(index))
                     {
                         var before = navigator.Snapshot().ToArray();
                         var change = planned.Change();
@@ -621,6 +621,7 @@ namespace NavigationLab.UnityValidation
         {
             public int tick;
             public int[] blockCells, openCells;
+            public bool afterSettlement;
             public Target replaceTarget;
             public WorldChange Change() => new WorldChange
             {
