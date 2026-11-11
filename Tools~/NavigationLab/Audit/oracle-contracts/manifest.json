@@ -1,0 +1,18 @@
+{
+  "Core.cs": {
+    "snapshotSha256": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c",
+    "liveSha256": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c",
+    "stillSame": true
+  },
+  "Oracle.cs": {
+    "snapshotSha256": "7d6d2a4b74201e32675155b2b24901977ca2fec55ad2a50e8e695160d925a1b9",
+    "liveSha256": "7d6d2a4b74201e32675155b2b24901977ca2fec55ad2a50e8e695160d925a1b9",
+    "stillSame": true
+  },
+  "scope": "Independent analytic positive/negative oracle contracts; not a candidate algorithm matrix, performance benchmark, Unity or IL2CPP proof.",
+  "harnessSha256": "b6b4b33a78d97b0bcf4012a2fca0a6e6b3640ffb00bc4d29b270fec1ca6b4a2d",
+  "projectSha256": "800ee02e3e2272994212a21b1d51bd5c21c71eb544d08407a5084576dbdcc6a1",
+  "resultSha256": "b496189448abcab882f328ae6c655afb2058c8dae50c0c5c491c2dd2a0fe8a9a",
+  "binarySha256": "296ef30cc17eec28e9ffcb5cc4d824083c5482408a012bb19bb6b45e7f800eec",
+  "utc": "2026-11-11T03:00:42.051396+00:00"
+}
