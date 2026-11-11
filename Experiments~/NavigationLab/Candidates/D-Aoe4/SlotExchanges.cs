@@ -57,7 +57,7 @@ namespace NavigationLab.DAoe4
                 return;
             }
             foreach (var requester in ordered.Where(actor => actor.ExchangePartner == 0 && actor.Request.AssignedGoalCell < 0
-                && actor.YieldCell < 0 && State(actor) == MotionState.Moving && step - actor.LastProgress >= 250)
+                && actor.YieldCell < 0 && State(actor) == MotionState.Moving && SlotRequesterStalled(actor))
                 .OrderBy(actor => actor.LastProgress).ThenBy(actor => actor.Request.Id))
             {
                 var holders = ordered.Where(holder => holder.Request.Id != requester.Request.Id && holder.ExchangePartner == 0

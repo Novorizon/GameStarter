@@ -41,6 +41,17 @@ namespace NavigationLab.DAoe4
         }
     }
 
+    public sealed class Aoe4ProgressExchangeFactory : INavigationFactory
+    {
+        public string Id => "D12-aoe4-with-route-progress-and-slot-exchange";
+        public string Description => "D architecture with separately identified route-progress observations and physical project slot exchange.";
+        public NavigationFeatures Features => new Aoe4Factory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles)
+        {
+            return new AoeNavigator(world, profiles, false, true, true);
+        }
+    }
+
     internal sealed partial class AoeNavigator : INavigator
     {
         private sealed class Actor
@@ -63,6 +74,7 @@ namespace NavigationLab.DAoe4
             internal int PreciseWaypoint = -1;
             internal int WaypointSourceCell = -1;
             internal int ExchangePartner;
+            internal RouteProgress? Progress;
             internal int ObservationStep;
             internal Point2 ObservationPosition;
         }
@@ -80,6 +92,8 @@ namespace NavigationLab.DAoe4
         private string bodySignature = "";
         private readonly bool coordinated;
         private readonly bool slotExchanges;
+        private readonly bool progressAware;
+        private string progressWorldShape = string.Empty;
         private int step;
         private int goalRevision;
         private bool disposed;
@@ -87,11 +101,21 @@ namespace NavigationLab.DAoe4
         public string LastSpawnFailure { get; private set; } = "None";
         private WorldDefinition World => geometry.World;
 
-        internal AoeNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool coordinated, bool slotExchanges = false)
+        internal AoeNavigator(
+            WorldDefinition world,
+            IReadOnlyList<UnitProfile> profiles,
+            bool coordinated,
+            bool slotExchanges = false,
+            bool progressAware = false)
         {
             geometry = new GridGeometry(world);
             this.coordinated = coordinated;
             this.slotExchanges = slotExchanges;
+            this.progressAware = progressAware;
+            if (progressAware)
+            {
+                progressWorldShape = WorldShapeIdentity();
+            }
             largestRadius = profiles.Count == 0 ? 1 : profiles.Max(profile => profile.RadiusMm);
             planningGeometry = geometry;
             planner = new HierarchicalFlow(planningGeometry, metrics, largestRadius);
@@ -320,6 +344,10 @@ namespace NavigationLab.DAoe4
                     direction = (steeringDestination - actor.Position).Normalized;
                     Add("NarrowPreciseWaypointSteps");
                 }
+                if (progressAware)
+                {
+                    ObserveRouteProgress(actor, field, anchor, directGoalRecovery);
+                }
                 desired[i] = SampleVelocity(actor, direction, steeringDestination, ordered);
                 actor.Proposal = desired[i];
                 actor.Planned = true;
@@ -393,6 +421,10 @@ namespace NavigationLab.DAoe4
                 return false;
             }
             geometry.Apply(change);
+            if (progressAware)
+            {
+                progressWorldShape = WorldShapeIdentity();
+            }
             CancelSlotExchanges(-1);
             planner.Invalidate();
             reachable.Clear();

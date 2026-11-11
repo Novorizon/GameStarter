@@ -10,6 +10,10 @@ namespace NavigationLab.DAoe4
         internal sealed class Route
         {
             internal int Goal;
+            internal int StartCell;
+            internal double TotalCost;
+            internal double[] RemainingAfterExits = Array.Empty<double>();
+            internal string ProgressKey = string.Empty;
             internal int Radius;
             internal int Revision;
             internal int[] Tiles = Array.Empty<int>();
@@ -91,6 +95,10 @@ namespace NavigationLab.DAoe4
                 return new Route
                 {
                     Goal = goal,
+                    StartCell = start,
+                    TotalCost = startDistance[goal],
+                    RemainingAfterExits = new[] { 0.0 },
+                    ProgressKey = goal + ":" + radius + ":" + startTile,
                     Radius = radius,
                     Revision = geometry.Revision,
                     Tiles = new[] { startTile },
@@ -151,16 +159,22 @@ namespace NavigationLab.DAoe4
                 return null;
             }
             var reversed = new List<int>();
+            var prefixCosts = new List<double>();
             for (int node = end; node >= 0; node = parent[node])
             {
                 reversed.Add(graph.Cells[node]);
+                prefixCosts.Add(cost[node]);
             }
             reversed.Reverse();
+            prefixCosts.Reverse();
             reversed.Insert(0, start);
+            prefixCosts.Insert(0, 0);
             reversed.Add(goal);
+            prefixCosts.Add(best);
             var tiles = new List<int> { startTile };
             var routeComponents = new List<int> { Component(start, radius) };
             var exits = new List<int>();
+            var remaining = new List<double>();
             for (int i = 1; i < reversed.Count; i++)
             {
                 int tile = Tile(reversed[i]);
@@ -168,14 +182,20 @@ namespace NavigationLab.DAoe4
                 if (component != routeComponents[routeComponents.Count - 1])
                 {
                     exits.Add(reversed[i - 1]);
+                    remaining.Add(best - prefixCosts[i - 1]);
                     tiles.Add(tile);
                     routeComponents.Add(component);
                 }
             }
             exits.Add(goal);
+            remaining.Add(0);
             return new Route
             {
                 Goal = goal,
+                StartCell = start,
+                TotalCost = best,
+                RemainingAfterExits = remaining.ToArray(),
+                ProgressKey = goal + ":" + radius + "|" + string.Join(",", tiles) + "|" + string.Join(",", exits),
                 Radius = radius,
                 Revision = geometry.Revision,
                 Tiles = tiles.ToArray(),
