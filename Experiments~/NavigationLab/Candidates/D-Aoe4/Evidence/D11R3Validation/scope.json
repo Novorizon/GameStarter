@@ -1,0 +1,95 @@
+{
+  "scope": "All4 key cases completed for each R2 and R3, no-replay development only; not a complete49 score. R3 independently fixes future-holder validation, not credited with progress-detection gains.",
+  "r3Commit": "225831fa506831ef588711bb7c09bed68a05b306",
+  "r3DllSha256": "552672fd11ae36debe9e2014932e2091222b7f6bdb7c9d183a1fba9463a53493",
+  "results": [
+    {
+      "version": "d11r2",
+      "case": "open-arena",
+      "status": "Passed",
+      "error": null,
+      "alive": 48,
+      "attacking": 16,
+      "waiting": 32,
+      "tick": 252,
+      "inputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b"
+    },
+    {
+      "version": "d11r2",
+      "case": "dynamic-route-block-and-open",
+      "status": "Passed",
+      "error": null,
+      "alive": 24,
+      "attacking": 16,
+      "waiting": 8,
+      "tick": 800,
+      "inputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a"
+    },
+    {
+      "version": "d11r2",
+      "case": "forest-full44-large",
+      "status": "Failed",
+      "error": "Deadline: alive=44, pending=0, moving=27, attack=17, failure=None",
+      "alive": 44,
+      "attacking": 17,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e"
+    },
+    {
+      "version": "d11r2",
+      "case": "single-cell-throat",
+      "status": "Failed",
+      "error": "Deadline: alive=48, pending=0, moving=45, attack=3, failure=None",
+      "alive": 48,
+      "attacking": 3,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "d566c5ddbd26c3cdbced54c1174a2000fece1929bdeace48d6f925be17d728f7"
+    },
+    {
+      "version": "d11r3",
+      "case": "open-arena",
+      "status": "Passed",
+      "error": null,
+      "alive": 48,
+      "attacking": 16,
+      "waiting": 32,
+      "tick": 252,
+      "inputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b"
+    },
+    {
+      "version": "d11r3",
+      "case": "dynamic-route-block-and-open",
+      "status": "Passed",
+      "error": null,
+      "alive": 24,
+      "attacking": 16,
+      "waiting": 8,
+      "tick": 800,
+      "inputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a"
+    },
+    {
+      "version": "d11r3",
+      "case": "forest-full44-large",
+      "status": "Failed",
+      "error": "Deadline: alive=44, pending=0, moving=27, attack=17, failure=None",
+      "alive": 44,
+      "attacking": 17,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e"
+    },
+    {
+      "version": "d11r3",
+      "case": "single-cell-throat",
+      "status": "Failed",
+      "error": "Deadline: alive=48, pending=0, moving=45, attack=3, failure=None",
+      "alive": 48,
+      "attacking": 3,
+      "waiting": 0,
+      "tick": 12000,
+      "inputSha256": "d566c5ddbd26c3cdbced54c1174a2000fece1929bdeace48d6f925be17d728f7"
+    }
+  ]
+}
