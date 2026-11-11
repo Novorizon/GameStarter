@@ -153,7 +153,7 @@
         "runner": "17942c8b66237aa3f574895993d500bc0641add9a3297f0f7afcbbe589669789"
       },
       "evidenceBranch": "experiment/navigation-d-aoe4",
-      "evidenceCommit": "8eefcee52298c8b80f07c6cc23f561e75e794507",
+      "evidenceCommit": "51c4bd14ca27b44f7db9bda62405b048747b6584",
       "evidencePath": "Experiments~/NavigationLab/Candidates/D-Aoe4/Evidence/FinalSelectedStress49",
       "modelStatus": "running; source ZIP/native/supplementary only, no completed model archive",
       "modelSummarySha256": null
