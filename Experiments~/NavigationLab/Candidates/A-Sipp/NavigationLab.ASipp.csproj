@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <Nullable>annotations</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Core/NavigationLab.Core.csproj" />
+    <Compile Include="../../../../Assets/HotUpdate/TowerDefense/Domain/**/*.cs" Link="FrozenDomain/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

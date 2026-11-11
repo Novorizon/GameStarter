@@ -1,0 +1,207 @@
+{
+  "sourceHashes": {
+    "Config/Luban/Data/tdenemy.xlsx": "8da6af18bd1d8a59e4e61e1471e026273b6ada430a64124da7228f19c7024618",
+    "Config/Luban/Data/tdspawn.xlsx": "5722ea3e594c7f2f8cf75d8d25f5a7e7f964f8113972f3bb14c8210a1257bcaa",
+    "Config/Luban/Data/tdwave.xlsx": "7d747d3475096094eeb824eaf22c004408dec43ef4f2ae58c737fba42f6ef549"
+  },
+  "enemies": [
+    {
+      "id": 1,
+      "name": "苔团",
+      "health": 55,
+      "speedPerTick": 100,
+      "goldReward": 8,
+      "baseDamage": 1,
+      "radius": 200,
+      "attackRange": 450,
+      "attackIntervalTicks": 20
+    },
+    {
+      "id": 2,
+      "name": "疾风团",
+      "health": 42,
+      "speedPerTick": 165,
+      "goldReward": 10,
+      "baseDamage": 1,
+      "radius": 180,
+      "attackRange": 450,
+      "attackIntervalTicks": 15
+    },
+    {
+      "id": 3,
+      "name": "石甲团",
+      "health": 160,
+      "speedPerTick": 65,
+      "goldReward": 16,
+      "baseDamage": 2,
+      "radius": 240,
+      "attackRange": 450,
+      "attackIntervalTicks": 28
+    },
+    {
+      "id": 4,
+      "name": "蘑菇领主",
+      "health": 900,
+      "speedPerTick": 55,
+      "goldReward": 90,
+      "baseDamage": 8,
+      "radius": 250,
+      "attackRange": 550,
+      "attackIntervalTicks": 35
+    }
+  ],
+  "spawns": [
+    {
+      "id": 1,
+      "waveId": 1,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 8,
+      "startTick": 0,
+      "intervalTicks": 15
+    },
+    {
+      "id": 2,
+      "waveId": 2,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 12,
+      "startTick": 0,
+      "intervalTicks": 12
+    },
+    {
+      "id": 3,
+      "waveId": 2,
+      "enemyId": 2,
+      "routeId": 1,
+      "count": 4,
+      "startTick": 60,
+      "intervalTicks": 20
+    },
+    {
+      "id": 4,
+      "waveId": 3,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 6,
+      "startTick": 0,
+      "intervalTicks": 22
+    },
+    {
+      "id": 5,
+      "waveId": 3,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 12,
+      "startTick": 15,
+      "intervalTicks": 10
+    },
+    {
+      "id": 6,
+      "waveId": 4,
+      "enemyId": 2,
+      "routeId": 1,
+      "count": 20,
+      "startTick": 0,
+      "intervalTicks": 9
+    },
+    {
+      "id": 7,
+      "waveId": 4,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 5,
+      "startTick": 80,
+      "intervalTicks": 20
+    },
+    {
+      "id": 8,
+      "waveId": 5,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 12,
+      "startTick": 0,
+      "intervalTicks": 18
+    },
+    {
+      "id": 9,
+      "waveId": 5,
+      "enemyId": 2,
+      "routeId": 1,
+      "count": 18,
+      "startTick": 30,
+      "intervalTicks": 8
+    },
+    {
+      "id": 10,
+      "waveId": 6,
+      "enemyId": 4,
+      "routeId": 1,
+      "count": 1,
+      "startTick": 0,
+      "intervalTicks": 1
+    },
+    {
+      "id": 11,
+      "waveId": 6,
+      "enemyId": 1,
+      "routeId": 1,
+      "count": 20,
+      "startTick": 50,
+      "intervalTicks": 8
+    },
+    {
+      "id": 12,
+      "waveId": 6,
+      "enemyId": 3,
+      "routeId": 1,
+      "count": 8,
+      "startTick": 70,
+      "intervalTicks": 16
+    }
+  ],
+  "waves": [
+    {
+      "id": 1,
+      "stageId": 1,
+      "sequence": 1,
+      "rewardGold": 25,
+      "giveCard": true
+    },
+    {
+      "id": 2,
+      "stageId": 1,
+      "sequence": 2,
+      "rewardGold": 30,
+      "giveCard": true
+    },
+    {
+      "id": 3,
+      "stageId": 1,
+      "sequence": 3,
+      "rewardGold": 35,
+      "giveCard": true
+    },
+    {
+      "id": 4,
+      "stageId": 1,
+      "sequence": 4,
+      "rewardGold": 40,
+      "giveCard": true
+    },
+    {
+      "id": 5,
+      "stageId": 1,
+      "sequence": 5,
+      "rewardGold": 45,
+      "giveCard": true
+    },
+    {
+      "id": 6,
+      "stageId": 1,
+      "sequence": 6,
+      "rewardGold": 50,
+      "giveCard": false
+    }
+  ]
+}
