@@ -1,0 +1,27 @@
+{
+  "Name": "two-large",
+  "independentSerialWitness": {
+    "Success": true,
+    "Steps": 168,
+    "MinimumBodyGapMm": 687.7674693472384,
+    "PairSweeps": 2171
+  },
+  "candidate": {
+    "ClaimedGoalMinimumGapMm": -300,
+    "Settled": 1,
+    "Steps": 10000,
+    "StableMicrosteps": 0,
+    "Admitted": 2,
+    "Pending": 0,
+    "LastSpawnRejection": "None",
+    "TraceSha256": "8cff840e35c053cf501f10ea9b99b5abd71476319bdcd516cd2cdb943b2da752",
+    "FinalState": "1:11500,5500:1:91|2:11521.72884726104,4195.3049974041805:0:75",
+    "MinimumBodyGapMm": 0,
+    "PairSweeps": 10001,
+    "Error": null
+  },
+  "freshReplayIdentical": true,
+  "candidateAssemblySha256": "f008e95a8d457eb0251a0b25b82c5cd414cc0babc7816334f7f8dece5496dd67",
+  "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+}

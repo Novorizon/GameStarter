@@ -1,0 +1,1 @@
+独立只读审计证明C17 Wave4 terminal portal使用错误，并保留原500mm四邻合法路径、同冻结Core/Oracle真实移动+200hold及逐命令重放末态一致证据。解压proof-bundle.zip后保留相邻三个目录与外层manifest，即可按包内说明复核。手工见证不计共同49测试通过。

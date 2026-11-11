@@ -58,6 +58,7 @@ namespace NavigationLab.CSupCom2
         };
         private long microstep;
         private bool completedGroupSleeping;
+        private int maximumClaimRadius;
         public IReadOnlyDictionary<string, long> Metrics => metrics;
         public string LastSpawnFailure { get; private set; } = "None";
 
@@ -97,7 +98,7 @@ namespace NavigationLab.CSupCom2
                 TargetId = request.TargetId
             };
             var changes = new Dictionary<Actor, int>();
-            if (!Assign(actor, new HashSet<int>(), changes, 0))
+            if (!Assign(actor, new HashSet<int>(), changes, 0) || !CompatibleClaims(changes))
             {
                 LastSpawnFailure = "NoCompatibleReachableGoal";
                 Count("GoalRejected");
@@ -125,6 +126,7 @@ namespace NavigationLab.CSupCom2
                 owners[change.Value] = change.Key.Id;
             }
             actors.Add(actor.Id, actor);
+            maximumClaimRadius = Math.Max(maximumClaimRadius, actor.Profile.RadiusMm);
             EnsureAttackService(actor);
             LastSpawnFailure = "None";
             Count("Spawned");
@@ -241,6 +243,10 @@ namespace NavigationLab.CSupCom2
                 return false;
             }
             actors.Remove(id);
+            if (actor.Profile.RadiusMm == maximumClaimRadius)
+            {
+                maximumClaimRadius = actors.Values.Select(other => other.Profile.RadiusMm).DefaultIfEmpty(0).Max();
+            }
             owners.Remove(actor.Goal);
             Count("Removed");
             PromoteWaiting();
@@ -281,7 +287,7 @@ namespace NavigationLab.CSupCom2
             foreach (var actor in actors.Values.Where(actor => actor.Goal < 0).OrderBy(actor => actor.Id))
             {
                 var changes = new Dictionary<Actor, int>();
-                if (!Assign(actor, new HashSet<int>(), changes, 0))
+                if (!Assign(actor, new HashSet<int>(), changes, 0) || !CompatibleClaims(changes))
                 {
                     Count("InvalidatedGoalsWithoutReplacement");
                     continue;
@@ -345,7 +351,7 @@ namespace NavigationLab.CSupCom2
                 {
                     continue;
                 }
-                if (!owners.ContainsKey(goal))
+                if (!owners.ContainsKey(goal) && FitsClaim(actor, goal, changes))
                 {
                     seen.Add(goal);
                     changes[actor] = goal;
@@ -363,13 +369,72 @@ namespace NavigationLab.CSupCom2
                 {
                     continue;
                 }
-                if (Assign(occupant, seen, changes, depth + 1))
+                bool cellClaimsSuffice = maximumClaimRadius <= world.CellSizeMm * .5 && actor.Profile.RadiusMm <= world.CellSizeMm * .5
+                    && changes.Keys.All(other => other.Profile.RadiusMm <= world.CellSizeMm * .5);
+                if (cellClaimsSuffice && Assign(occupant, seen, changes, depth + 1))
                 {
                     changes[actor] = goal;
                     return true;
                 }
+                if (!cellClaimsSuffice)
+                {
+                    var branchChanges = new Dictionary<Actor, int>(changes);
+                    var branchSeen = new HashSet<int>(seen);
+                    if (Assign(occupant, branchSeen, branchChanges, depth + 1) && FitsClaim(actor, goal, branchChanges))
+                    {
+                        changes.Clear();
+                        foreach (var update in branchChanges)
+                        {
+                            changes[update.Key] = update.Value;
+                        }
+                        changes[actor] = goal;
+                        seen.UnionWith(branchSeen);
+                        return true;
+                    }
+                }
             }
             return false;
+        }
+
+        private bool FitsClaim(Actor actor, int goal, IReadOnlyDictionary<Actor, int> updates)
+        {
+            int largest = maximumClaimRadius;
+            foreach (var other in updates.Keys)
+            {
+                largest = Math.Max(largest, other.Profile.RadiusMm);
+            }
+            if ((double)actor.Profile.RadiusMm + largest <= world.CellSizeMm)
+            {
+                return true;
+            }
+            var all = actors.Values.Concat(updates.Keys.Where(other => !actors.ContainsKey(other.Id)));
+            foreach (var other in all)
+            {
+                int otherGoal = updates.TryGetValue(other, out int replacement) ? replacement : other.Goal;
+                if (other == actor || otherGoal < 0)
+                {
+                    continue;
+                }
+                if (Point2.Distance(world.Center(goal), world.Center(otherGoal)) < (double)actor.Profile.RadiusMm + other.Profile.RadiusMm - 1e-6)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool CompatibleClaims(IReadOnlyDictionary<Actor, int> updates)
+        {
+            var claimed = new HashSet<int>();
+            foreach (var actor in actors.Values.Concat(updates.Keys.Where(other => !actors.ContainsKey(other.Id))))
+            {
+                int goal = updates.TryGetValue(actor, out int replacement) ? replacement : actor.Goal;
+                if (goal >= 0 && (!claimed.Add(goal) || !FitsClaim(actor, goal, updates)))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private int Rarity(Actor actor, int cell)
@@ -536,6 +601,7 @@ namespace NavigationLab.CSupCom2
                     .Where(cell => Point2.Distance(world.Center(cell), blocker.Position) <= world.CellSizeMm * 4)
                     .Where(cell => planner.Connected(origin, cell, blocker.Profile.RadiusMm))
                     .Where(cell => FreePosition(world.Center(cell), blocker.Profile.RadiusMm, blocker.Id))
+                    .Where(cell => ClearBodyCorridor(blocker, world.Center(cell), ordered))
                     .Where(cell => !ordered.Any(other => other.Id != blocker.Id && other.YieldGoal == cell))
                     .Where(cell => cell != requester.Goal || CanExchangeVacancyGoals(requester, blocker, ordered))
                     .OrderByDescending(cell => Geometry.PointSegment(world.Center(cell), requester.Position, world.Center(requester.Goal)))
@@ -550,6 +616,7 @@ namespace NavigationLab.CSupCom2
                     return;
                 }
                 blocker.YieldGoal = candidates[0];
+                blocker.PreferClearCorridor = true;
                 blocker.YieldRequester = requester.Id;
                 blocker.YieldUntil = microstep + 1600;
                 blocker.Route = null;
@@ -572,7 +639,10 @@ namespace NavigationLab.CSupCom2
         private void CommitVacancyExchange(Actor requester, Actor mover)
         {
             int vacated = mover.Goal;
-            CommitGoals(new Dictionary<Actor, int> { [mover] = requester.Goal, [requester] = vacated });
+            if (!CommitGoals(new Dictionary<Actor, int> { [mover] = requester.Goal, [requester] = vacated }))
+            {
+                return;
+            }
             mover.VacancyTransfer = true;
             requester.PreferClearCorridor = true;
             mover.PreferClearCorridor = true;
@@ -599,7 +669,7 @@ namespace NavigationLab.CSupCom2
         {
             return Geometry.Segment(world, actor.Position, destination, actor.Profile.RadiusMm)
                 && ordered.All(other => other.Id == actor.Id || Geometry.PointSegment(other.Position, actor.Position, destination)
-                    >= actor.Profile.RadiusMm + other.Profile.RadiusMm + 1e-6);
+                    >= actor.Profile.RadiusMm + other.Profile.RadiusMm - 1e-6);
         }
 
         private int GoalStepsFrom(Actor actor, int goal)
@@ -635,12 +705,12 @@ namespace NavigationLab.CSupCom2
                 return;
             }
             var updates = new Dictionary<Actor, int>();
-            if (AugmentAttack(actor, new HashSet<int>(), updates))
+            if (AugmentAttack(actor, new HashSet<int>(), updates) && CommitGoals(updates))
             {
-                CommitGoals(updates);
                 Count("WaitingPromotions");
                 return;
             }
+            updates.Clear();
             int[] requested = AttackCells(actor).ToArray();
             foreach (int goal in requested)
             {
@@ -675,9 +745,12 @@ namespace NavigationLab.CSupCom2
                 }
                 updates[flexible] = alternative;
                 updates[actor] = goal;
-                CommitGoals(updates);
-                Count("AttackServiceExchanges");
-                return;
+                if (CommitGoals(updates))
+                {
+                    Count("AttackServiceExchanges");
+                    return;
+                }
+                updates.Clear();
             }
         }
 
@@ -712,8 +785,13 @@ namespace NavigationLab.CSupCom2
             return Enumerable.Range(0, world.CellCount).Where(cell => CanHold(actor, cell) && Attack(actor, world.Center(cell)));
         }
 
-        private void CommitGoals(Dictionary<Actor, int> updates)
+        private bool CommitGoals(Dictionary<Actor, int> updates)
         {
+            if (!CompatibleClaims(updates))
+            {
+                Count("RejectedOverlappingGoalChanges");
+                return false;
+            }
             foreach (var actor in updates.Keys)
             {
                 if (owners.TryGetValue(actor.Goal, out int owner) && owner == actor.Id)
@@ -734,6 +812,7 @@ namespace NavigationLab.CSupCom2
                 update.Key.SiegeWindowBest = double.PositiveInfinity;
                 owners[update.Value] = update.Key.Id;
             }
+            return true;
         }
 
         private void RedistributeSiegeGoals(Actor[] ordered)
@@ -812,8 +891,10 @@ namespace NavigationLab.CSupCom2
             }
             if (updates.Count > 0)
             {
-                CommitGoals(updates);
-                Count("SiegeMatchingReassignments", updates.Count);
+                if (CommitGoals(updates))
+                {
+                    Count("SiegeMatchingReassignments", updates.Count);
+                }
             }
             Count("SiegeMatchingRuns");
         }

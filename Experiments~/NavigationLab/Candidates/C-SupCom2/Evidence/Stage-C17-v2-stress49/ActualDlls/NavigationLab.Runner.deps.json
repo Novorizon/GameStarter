@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "NavigationLab.Runner/1.0.0": {
+        "dependencies": {
+          "NavigationLab.Core": "1.0.0",
+          "NavigationLab.Oracle": "1.0.0"
+        },
+        "runtime": {
+          "NavigationLab.Runner.dll": {}
+        }
+      },
+      "NavigationLab.Core/1.0.0": {
+        "runtime": {
+          "NavigationLab.Core.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "NavigationLab.Oracle/1.0.0": {
+        "dependencies": {
+          "NavigationLab.Core": "1.0.0"
+        },
+        "runtime": {
+          "NavigationLab.Oracle.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "NavigationLab.Runner/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NavigationLab.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NavigationLab.Oracle/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

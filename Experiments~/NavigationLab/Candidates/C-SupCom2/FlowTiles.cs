@@ -490,6 +490,12 @@ namespace NavigationLab.CSupCom2
                 return null;
             }
             int sector = Sector(cell);
+            if (route.Phase < route.Nodes.Length && sector == Sector(goal) && !double.IsInfinity(GridDistances(graph, sector, goal)[cell]))
+            {
+                // The final portal is an arrival anchor, not an instruction to leave a reachable goal sector.
+                route.Phase = route.Nodes.Length;
+                Count("TerminalPortalCompletions");
+            }
             while (route.Phase < route.Nodes.Length)
             {
                 Portal node = graph.Portals[route.Nodes[route.Phase]];

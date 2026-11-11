@@ -1,0 +1,27 @@
+{
+  "Name": "mixed-three",
+  "independentSerialWitness": {
+    "Success": true,
+    "Steps": 267,
+    "MinimumBodyGapMm": 83.81154862025676,
+    "PairSweeps": 6814
+  },
+  "candidate": {
+    "ClaimedGoalMinimumGapMm": 170,
+    "Settled": 3,
+    "Steps": 2144,
+    "StableMicrosteps": 2000,
+    "Admitted": 3,
+    "Pending": 0,
+    "LastSpawnRejection": "None",
+    "TraceSha256": "8e61b915015c37bb5bdc127765cc25e75cda6ec68d8621d7fc5a0e918f3a0f2f",
+    "FinalState": "1:9500,3500:1:57|2:11500,4500:1:75|3:11500,5500:1:91",
+    "MinimumBodyGapMm": 0.1369304775398632,
+    "PairSweeps": 6436,
+    "Error": null
+  },
+  "freshReplayIdentical": true,
+  "candidateAssemblySha256": "f008e95a8d457eb0251a0b25b82c5cd414cc0babc7816334f7f8dece5496dd67",
+  "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+}
