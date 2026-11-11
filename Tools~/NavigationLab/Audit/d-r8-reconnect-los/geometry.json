@@ -1,0 +1,334 @@
+{
+  "scope": "Read-only R8 actor3 reconnection guard diagnostic; original endpoint, original goal and all other bodies fixed, no candidate pass claimed.",
+  "actorId": 3,
+  "from": [
+    23064.914441871962,
+    14328.163596121945
+  ],
+  "toUnchangedGoal": [
+    24500.0,
+    13500.0
+  ],
+  "minimumBodyGapMm": 5.880102346668139,
+  "minimumBaseGapMm": 1.3817475519317668e-07,
+  "continuousChecks": [
+    {
+      "kind": "body",
+      "id": 1,
+      "gapMm": 1290.4021386258635
+    },
+    {
+      "kind": "body",
+      "id": 2,
+      "gapMm": 1732.0776131194489
+    },
+    {
+      "kind": "body",
+      "id": 4,
+      "gapMm": 2598.2032064811615
+    },
+    {
+      "kind": "body",
+      "id": 5,
+      "gapMm": 5.880102346668139
+    },
+    {
+      "kind": "body",
+      "id": 6,
+      "gapMm": 480.7521743060586
+    },
+    {
+      "kind": "body",
+      "id": 7,
+      "gapMm": 1521.0996744137829
+    },
+    {
+      "kind": "body",
+      "id": 8,
+      "gapMm": 502.4885378781862
+    },
+    {
+      "kind": "body",
+      "id": 9,
+      "gapMm": 1074.320475658364
+    },
+    {
+      "kind": "body",
+      "id": 10,
+      "gapMm": 2721.750223031199
+    },
+    {
+      "kind": "body",
+      "id": 11,
+      "gapMm": 2176.9069045428896
+    },
+    {
+      "kind": "body",
+      "id": 12,
+      "gapMm": 1804.62044129362
+    },
+    {
+      "kind": "body",
+      "id": 13,
+      "gapMm": 2098.3767800851315
+    },
+    {
+      "kind": "body",
+      "id": 14,
+      "gapMm": 366.125593361711
+    },
+    {
+      "kind": "body",
+      "id": 15,
+      "gapMm": 2160.8142397877064
+    },
+    {
+      "kind": "body",
+      "id": 16,
+      "gapMm": 1998.8751738415617
+    },
+    {
+      "kind": "body",
+      "id": 17,
+      "gapMm": 4885.164807134504
+    },
+    {
+      "kind": "body",
+      "id": 18,
+      "gapMm": 3105.5512754639894
+    },
+    {
+      "kind": "body",
+      "id": 19,
+      "gapMm": 6563.382857235916
+    },
+    {
+      "kind": "body",
+      "id": 20,
+      "gapMm": 3972.1359549995796
+    },
+    {
+      "kind": "body",
+      "id": 21,
+      "gapMm": 3105.5512754639894
+    },
+    {
+      "kind": "body",
+      "id": 22,
+      "gapMm": 6196.232839358349
+    },
+    {
+      "kind": "body",
+      "id": 23,
+      "gapMm": 3105.5512754639894
+    },
+    {
+      "kind": "body",
+      "id": 24,
+      "gapMm": 3623.1056256176607
+    },
+    {
+      "kind": "body",
+      "id": 25,
+      "gapMm": 5903.1242374328485
+    },
+    {
+      "kind": "body",
+      "id": 26,
+      "gapMm": 3623.1056256176607
+    },
+    {
+      "kind": "body",
+      "id": 27,
+      "gapMm": 2662.2776601683795
+    },
+    {
+      "kind": "body",
+      "id": 28,
+      "gapMm": 6134.847871024484
+    },
+    {
+      "kind": "body",
+      "id": 29,
+      "gapMm": 4500.0
+    },
+    {
+      "kind": "body",
+      "id": 30,
+      "gapMm": 2328.42712474619
+    },
+    {
+      "kind": "body",
+      "id": 31,
+      "gapMm": 5696.406412962319
+    },
+    {
+      "kind": "body",
+      "id": 32,
+      "gapMm": 2328.42712474619
+    },
+    {
+      "kind": "body",
+      "id": 33,
+      "gapMm": 2662.2776601683795
+    },
+    {
+      "kind": "body",
+      "id": 34,
+      "gapMm": 5330.951894845301
+    },
+    {
+      "kind": "body",
+      "id": 35,
+      "gapMm": 2662.2776601683795
+    },
+    {
+      "kind": "body",
+      "id": 36,
+      "gapMm": 3500.0
+    },
+    {
+      "kind": "body",
+      "id": 37,
+      "gapMm": 5156.85424949238
+    },
+    {
+      "kind": "body",
+      "id": 38,
+      "gapMm": 3742.640687119285
+    },
+    {
+      "kind": "body",
+      "id": 39,
+      "gapMm": 3623.1056256176607
+    },
+    {
+      "kind": "body",
+      "id": 40,
+      "gapMm": 6685.021701211632
+    },
+    {
+      "kind": "body",
+      "id": 41,
+      "gapMm": 2500.0
+    },
+    {
+      "kind": "body",
+      "id": 42,
+      "gapMm": 1736.0679774997898
+    },
+    {
+      "kind": "body",
+      "id": 43,
+      "gapMm": 5836.48444765566
+    },
+    {
+      "kind": "body",
+      "id": 44,
+      "gapMm": 5216.426634172963
+    },
+    {
+      "kind": "body",
+      "id": 45,
+      "gapMm": 1736.0679774997898
+    },
+    {
+      "kind": "body",
+      "id": 46,
+      "gapMm": 4830.28081960061
+    },
+    {
+      "kind": "body",
+      "id": 47,
+      "gapMm": 1736.0679774997898
+    },
+    {
+      "kind": "body",
+      "id": 48,
+      "gapMm": 2500.0
+    },
+    {
+      "kind": "base",
+      "id": 1,
+      "gapMm": 1.3817475519317668e-07
+    },
+    {
+      "kind": "world-boundary",
+      "gapMm": 6250.0
+    }
+  ],
+  "closedCellsDisjointFromSweptDiscAabb": true,
+  "microstepsOf5MsAtOriginalSpeedLimit": 17,
+  "actor1EscapeWitness": {
+    "scope": "All other 47 bodies fixed; unchanged goal551. Only an existence/steering-limit witness, not a candidate pass or claim that the R9 correction needs another strategy.",
+    "segments": [
+      {
+        "from": [
+          21611.323059532708,
+          15373.444377149282
+        ],
+        "to": [
+          21900,
+          15373.444377149282
+        ],
+        "minimum": {
+          "kind": "body",
+          "id": 12,
+          "gapMm": 14.299398638989487
+        },
+        "microstepsOf5Ms": 3
+      },
+      {
+        "from": [
+          21900,
+          15373.444377149282
+        ],
+        "to": [
+          22000,
+          16400
+        ],
+        "minimum": {
+          "kind": "body",
+          "id": 11,
+          "gapMm": 9.901951359278485
+        },
+        "microstepsOf5Ms": 11
+      },
+      {
+        "from": [
+          22000,
+          16400
+        ],
+        "to": [
+          22500,
+          16600
+        ],
+        "minimum": {
+          "kind": "body",
+          "id": 11,
+          "gapMm": 9.901951359278485
+        },
+        "microstepsOf5Ms": 6
+      },
+      {
+        "from": [
+          22500,
+          16600
+        ],
+        "to": [
+          24500,
+          17500
+        ],
+        "minimum": {
+          "kind": "base",
+          "id": 1,
+          "gapMm": 163.47833302141498
+        },
+        "microstepsOf5Ms": 22
+      }
+    ],
+    "minimumGapMm": 9.901951359278485,
+    "firstEastwardStepScoreUpperBound": -0.633578254245376,
+    "minimumAcceptedScore": -0.2
+  }
+}
