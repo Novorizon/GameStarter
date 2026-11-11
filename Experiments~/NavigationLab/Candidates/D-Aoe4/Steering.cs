@@ -73,10 +73,12 @@ namespace NavigationLab.DAoe4
                 Point2 otherForecast = Forecast(other.Position, other.Velocity, Destination(other), 40);
                 double gap = Math.Sqrt(GridGeometry.SweptGapSquared(actor.Position, forecast, other.Position, otherForecast)) - radius;
                 double guard = remaining < World.CellSizeMm * 2 ? 0 : Math.Min(100, radius * .15);
-                if (gap < guard)
+                double initialGap = Point2.Distance(actor.Position, other.Position) - radius;
+                double threshold = Math.Min(guard, Math.Max(0, initialGap));
+                if (gap < threshold - 1e-5)
                 {
                     risk = true;
-                    score -= 2 + (guard - gap) / Math.Max(1, radius);
+                    score -= 2 + (threshold - gap) / Math.Max(1, radius);
                 }
                 // Small deterministic lateral preference breaks perfectly mirrored head-on steering choices.
                 Point2 offset = other.Position - actor.Position;

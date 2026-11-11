@@ -174,6 +174,12 @@ namespace NavigationLab.DAoe4
                     Add("RouteRefreshes");
                 }
                 Point2 direction = actor.Route == null ? default : planner.Direction(actor.Position, actor.Route, out _);
+                if (direction.LengthSquared < 1e-12 && step % SimulationProtocol.Substeps == 0)
+                {
+                    actor.Route = planner.FindRoute(World.CellAt(actor.Position), goal, actor.Request.Profile.RadiusMm);
+                    direction = actor.Route == null ? default : planner.Direction(actor.Position, actor.Route, out _);
+                    Add("FlowCoverageRepaths");
+                }
                 desired[i] = SampleVelocity(actor, direction, destination, ordered);
             }
             var proposed = ordered.Select((actor, index) => actor.Position + desired[index]).ToArray();

@@ -15,6 +15,8 @@ namespace NavigationLab.DAoe4
             internal int[] Tiles = Array.Empty<int>();
             internal int[] Exits = Array.Empty<int>();
             internal int LastTile = -1;
+            internal int LastSegmentIndex = -1;
+            internal int CurrentIndex;
             internal Flow? LastFlow;
         }
 
@@ -165,12 +167,37 @@ namespace NavigationLab.DAoe4
                 return default;
             }
             int tile = Tile(cell);
-            int index = Array.LastIndexOf(route.Tiles, tile);
+            int index = route.CurrentIndex;
+            if (route.Tiles[index] != tile)
+            {
+                int next = -1;
+                for (int i = index + 1; i < route.Tiles.Length; i++)
+                {
+                    if (route.Tiles[i] == tile)
+                    {
+                        next = i;
+                        break;
+                    }
+                }
+                if (next < 0)
+                {
+                    for (int i = index - 1; i >= 0; i--)
+                    {
+                        if (route.Tiles[i] == tile)
+                        {
+                            next = i;
+                            break;
+                        }
+                    }
+                }
+                index = next;
+            }
             if (index < 0)
             {
                 return default;
             }
-            if (route.LastTile == tile && route.LastFlow != null)
+            route.CurrentIndex = index;
+            if (route.LastTile == tile && route.LastSegmentIndex == index && route.LastFlow != null)
             {
                 usedFlow = route.LastFlow;
                 return FieldDirection(position, route.Radius, cell, route.LastFlow);
@@ -224,6 +251,7 @@ namespace NavigationLab.DAoe4
             }
             usedFlow = field;
             route.LastTile = tile;
+            route.LastSegmentIndex = index;
             route.LastFlow = field;
             return FieldDirection(position, route.Radius, cell, field);
         }
