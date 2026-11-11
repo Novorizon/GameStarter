@@ -54,7 +54,7 @@ E2试图冻结无关交通，为单个请求者逐个让路，结果制造更多
 dotnet run --project Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/NavigationLab.EWarcraft3.Smoke.csproj -c Release -- /path/to/GameStarter big44 /tmp/E-Forest
 ```
 
-`--baseline`关闭显式友军让路，`--grouped`选择被拒绝的E2。报告中的factory ID区分实际变体；同一`name`不代表不同输入，不能拿重跑数量当新覆盖。
+`--baseline`关闭显式友军让路，`--grouped`选择被拒绝的E2，`--backoff`选择E3。报告中的factory ID区分实际变体；同一`name`不代表不同输入，不能拿重跑数量当新覆盖。
 
 ## 默认版本与被拒绝的退让扩展
 

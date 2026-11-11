@@ -97,7 +97,12 @@ namespace NavigationLab.Candidates.EWarcraft3
         public IReadOnlyDictionary<string, long> Metrics => metrics;
         public string LastSpawnFailure { get; private set; } = "None";
 
-        internal WarcraftNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool friendlyYield, bool groupedYield, bool requesterBackoff = false)
+        internal WarcraftNavigator(
+            WorldDefinition world,
+            IReadOnlyList<UnitProfile> profiles,
+            bool friendlyYield,
+            bool groupedYield,
+            bool requesterBackoff = false)
         {
             this.world = world.Clone();
             this.profiles = profiles.Distinct().ToArray();
