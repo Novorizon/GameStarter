@@ -1,0 +1,16 @@
+{
+  "scope": "Read-only R8 actor3 reconnection guard diagnostic; original endpoint, original goal and all other bodies fixed, no candidate pass claimed.",
+  "actorId": 3,
+  "from": [
+    23064.914441871962,
+    14328.163596121945
+  ],
+  "toUnchangedGoal": [
+    24500.0,
+    13500.0
+  ],
+  "minimumBodyGapMm": 5.880102346668139,
+  "minimumBaseGapMm": 1.3817475519317668e-07,
+  "closedCellsDisjointFromSweptDiscAabb": true,
+  "microstepsOf5MsAtOriginalSpeedLimit": 17
+}
