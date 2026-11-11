@@ -1,5 +1,9 @@
 # D：依据《帝国时代 IV》公开架构实现的导航候选
 
+本分支为独立的路线结果缓存辅助试验，基于选定D12搜索体；不是原9e61运行的替代证据。缓存仅复用同planner、同有向(start,goal,radius,Revision)的正常结果，容量4096。异常不缓存，Invalidate清空，新geometry使用新planner。
+
+正向结果每次返回全新Route及四份独立数组，运行状态恢复初值；首次miss也先复制独立模板，调用方不能污染缓存。缓存不改变搜索、选择、tie、速度、净空或时限。独立契约见Verification~/DRouteCache；同源原场景等价与时间/分配诊断见Evidence/RouteCacheTrial，未选入默认业务或原D49成绩。
+
 本候选是独立 C# 实验，基线为 GameStarter `8c0dd50`。它不包含或声称恢复微软/Relic 的商业源码。
 
 ## 核实到的一手来源

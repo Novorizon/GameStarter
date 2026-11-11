@@ -1,0 +1,9 @@
+# 路线结果缓存的独立契约
+
+只验证缓存返回值、对象隔离与失效规则，不替代共同49场景、真实Unity或设备性能验收。测试通过内部友元程序集访问候选，不向业务接口增加API。
+
+默认通过ProjectReference构建本工作树候选。也可传入FrozenCandidateAssembly与FrozenCoreAssembly两个MSBuild属性，对实际冻结DLL运行同一契约；结果JSON记录实际加载的两份DLL SHA。
+
+覆盖首次miss/后续hit对象及四数组隔离、Direction运行状态、标量修改、正常null、异常不缓存、4096上限、有向输入、半径、多实例、Invalidate、Apply与Invalidate配套、新静止圆geometry，以及独立Revision key的blocked-goal短路检查。Revision特例不表示一般Apply可省略原有planner.Invalidate。
+
+同geometry上的对照使用独立新planner；世界变化后对照也施加相同Apply以保持Revision相同。指标只描述请求与命中，不参与导航决策。

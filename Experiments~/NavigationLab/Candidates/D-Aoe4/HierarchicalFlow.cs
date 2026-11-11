@@ -51,6 +51,7 @@ namespace NavigationLab.DAoe4
         }
 
         private const int TileSize = 8;
+        private const int RouteCacheCapacity = 4096;
         private readonly GridGeometry geometry;
         private readonly IDictionary<string, long> metrics;
         private readonly int largestRadius;
@@ -58,6 +59,8 @@ namespace NavigationLab.DAoe4
         private readonly Dictionary<int, PortalGraph> graphs = new Dictionary<int, PortalGraph>();
         private readonly Dictionary<string, Flow> flows = new Dictionary<string, Flow>();
         private readonly Queue<string> flowOrder = new Queue<string>();
+        private readonly Dictionary<(int Start, int Goal, int Radius, int Revision), Route?> routes =
+            new Dictionary<(int Start, int Goal, int Radius, int Revision), Route?>();
         private long retainedCells;
         private WorldDefinition World => geometry.World;
         private int TileWidth => (World.Width + TileSize - 1) / TileSize;
@@ -71,6 +74,7 @@ namespace NavigationLab.DAoe4
 
         internal void Invalidate()
         {
+            routes.Clear();
             graphs.Clear();
             components.Clear();
             flows.Clear();
@@ -82,6 +86,45 @@ namespace NavigationLab.DAoe4
         internal Route? FindRoute(int start, int goal, int radius)
         {
             Add("HpaSearches");
+            var key = (start, goal, radius, geometry.Revision);
+            if (routes.TryGetValue(key, out var cached))
+            {
+                Add("RouteCacheHits");
+                return cached == null ? null : CopyRoute(cached);
+            }
+            var route = FindRouteUncached(start, goal, radius);
+            if (routes.Count < RouteCacheCapacity)
+            {
+                // Cache only a completed result. Exceptions leave no entry.
+                // The template is detached from every returned mutable Route.
+                routes.Add(key, route == null ? null : CopyRoute(route));
+            }
+            return route;
+        }
+
+        private static Route CopyRoute(Route route)
+        {
+            return new Route
+            {
+                Goal = route.Goal,
+                StartCell = route.StartCell,
+                TotalCost = route.TotalCost,
+                RemainingAfterExits = (double[])route.RemainingAfterExits.Clone(),
+                ProgressKey = route.ProgressKey,
+                Radius = route.Radius,
+                Revision = route.Revision,
+                Tiles = (int[])route.Tiles.Clone(),
+                Components = (int[])route.Components.Clone(),
+                Exits = (int[])route.Exits.Clone(),
+                CurrentIndex = 0,
+                LastTile = -1,
+                LastSegmentIndex = -1,
+                LastFlow = null
+            };
+        }
+
+        private Route? FindRouteUncached(int start, int goal, int radius)
+        {
             var stand = geometry.Clearance(radius);
             if (start < 0 || goal < 0 || !stand[start] || !stand[goal])
             {

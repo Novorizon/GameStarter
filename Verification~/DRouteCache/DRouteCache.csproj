@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>NavigationLab.DAoe4.RouteCacheVerification</AssemblyName>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Experiments~/NavigationLab/Candidates/D-Aoe4/NavigationLab.DAoe4.csproj" Condition="'$(FrozenCandidateAssembly)' == ''" />
+    <Reference Include="NavigationLab.DAoe4" Condition="'$(FrozenCandidateAssembly)' != ''">
+      <HintPath>$(FrozenCandidateAssembly)</HintPath>
+    </Reference>
+    <Reference Include="NavigationLab.Core" Condition="'$(FrozenCandidateAssembly)' != ''">
+      <HintPath>$(FrozenCoreAssembly)</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

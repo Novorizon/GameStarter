@@ -11,5 +11,8 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="$(NavigationLabCoreRoot)/NavigationLab.Core.csproj" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>NavigationLab.DAoe4.RouteCacheVerification</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>
