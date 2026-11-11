@@ -15,6 +15,7 @@ namespace NavigationLab.DAoe4
             internal int HolderOldGoal;
             internal int Started;
             internal bool HolderArrived;
+            internal bool RequesterReleased;
         }
 
         private readonly Dictionary<int, SlotExchange> exchanges = new Dictionary<int, SlotExchange>();
@@ -35,7 +36,13 @@ namespace NavigationLab.DAoe4
                     exchange.HolderArrived = true;
                     Add("SlotExchangeHolderArrivals");
                 }
-                if (exchange.HolderArrived && ExactRest(requester))
+                if (exchange.HolderArrived && !exchange.RequesterReleased
+                    && FullBodySweep(requester, World.Center(requester.Goal), ordered, -1))
+                {
+                    exchange.RequesterReleased = true;
+                    Add("SlotExchangeRequesterReleases");
+                }
+                if (exchange.RequesterReleased && ExactRest(holder) && ExactRest(requester))
                 {
                     EndSlotExchange(exchange, true);
                 }
@@ -71,6 +78,11 @@ namespace NavigationLab.DAoe4
                     {
                         continue;
                     }
+                    if (!FutureHolderAllowsRequester(requester, holder))
+                    {
+                        Add("SlotExchangeFutureHolderRejected");
+                        continue;
+                    }
                     if (!FullBodySweep(holder, World.Center(requester.Goal), ordered, -1)
                         || !FullBodySweep(requester, World.Center(holder.Goal), ordered, holder.Request.Id))
                     {
@@ -102,7 +114,14 @@ namespace NavigationLab.DAoe4
 
         private bool HoldSlotRequester(Actor actor)
         {
-            return exchanges.TryGetValue(actor.Request.Id, out var exchange) && !exchange.HolderArrived;
+            return exchanges.TryGetValue(actor.Request.Id, out var exchange) && !exchange.RequesterReleased;
+        }
+
+        private bool FutureHolderAllowsRequester(Actor requester, Actor holder)
+        {
+            double combined = requester.Request.Profile.RadiusMm + holder.Request.Profile.RadiusMm;
+            double distanceSquared = GridGeometry.PointSegmentSquared(World.Center(requester.Goal), requester.Position, World.Center(holder.Goal));
+            return distanceSquared >= combined * combined - 1e-5;
         }
 
         private bool FullBodySweep(Actor actor, Point2 destination, Actor[] ordered, int ignoredId)
