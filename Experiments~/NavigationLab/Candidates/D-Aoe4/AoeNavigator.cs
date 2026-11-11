@@ -60,7 +60,10 @@ namespace NavigationLab.DAoe4
         private readonly Dictionary<string, int> attackPeaks = new Dictionary<string, int>();
         private readonly Dictionary<string, long> metrics = new Dictionary<string, long>();
         private readonly GridGeometry geometry;
-        private readonly HierarchicalFlow planner;
+        private HierarchicalFlow planner;
+        private GridGeometry planningGeometry;
+        private readonly int largestRadius;
+        private string bodySignature = "";
         private readonly bool coordinated;
         private int step;
         private int goalRevision;
@@ -73,7 +76,9 @@ namespace NavigationLab.DAoe4
         {
             geometry = new GridGeometry(world);
             this.coordinated = coordinated;
-            planner = new HierarchicalFlow(geometry, metrics, profiles.Count == 0 ? 1 : profiles.Max(profile => profile.RadiusMm));
+            largestRadius = profiles.Count == 0 ? 1 : profiles.Max(profile => profile.RadiusMm);
+            planningGeometry = geometry;
+            planner = new HierarchicalFlow(planningGeometry, metrics, largestRadius);
             Add("IndependentBattleInstances");
         }
 
@@ -156,6 +161,7 @@ namespace NavigationLab.DAoe4
                     UpdateYields(ordered);
                 }
             }
+            RefreshPlanningBodies(ordered);
             var desired = new Point2[ordered.Length];
             foreach (var actor in ordered)
             {
@@ -193,10 +199,10 @@ namespace NavigationLab.DAoe4
                 int goal = actor.YieldCell >= 0 ? actor.YieldCell : actor.Goal;
                 int physicalCell = World.CellAt(actor.Position);
                 int anchor = physicalCell;
-                if (physicalCell < 0 || !geometry.Clearance(actor.Request.Profile.RadiusMm)[physicalCell])
+                if (physicalCell < 0 || !planningGeometry.Clearance(actor.Request.Profile.RadiusMm)[physicalCell])
                 {
-                    anchor = Enumerable.Range(0, World.CellCount).Where(candidate => geometry.Clearance(actor.Request.Profile.RadiusMm)[candidate]
-                        && geometry.CanSegment(actor.Position, World.Center(candidate), actor.Request.Profile.RadiusMm))
+                    anchor = Enumerable.Range(0, World.CellCount).Where(candidate => planningGeometry.Clearance(actor.Request.Profile.RadiusMm)[candidate]
+                        && planningGeometry.CanSegment(actor.Position, World.Center(candidate), actor.Request.Profile.RadiusMm))
                         .OrderBy(candidate => Point2.Distance(actor.Position, World.Center(candidate))).ThenBy(candidate => candidate).DefaultIfEmpty(-1).First();
                     if (anchor >= 0)
                     {
@@ -234,8 +240,8 @@ namespace NavigationLab.DAoe4
                 if (actor.PreciseWaypoint == cell && field != null)
                 {
                     int forward = World.Neighbours(cell).Where(next => field.Included[next]
-                        && field.Distance[next] < field.Distance[cell] - 1e-6 && geometry.CanEdge(cell, next, actor.Request.Profile.RadiusMm)
-                        && geometry.CanSegment(actor.Position, World.Center(next), actor.Request.Profile.RadiusMm))
+                        && field.Distance[next] < field.Distance[cell] - 1e-6 && planningGeometry.CanEdge(cell, next, actor.Request.Profile.RadiusMm)
+                        && planningGeometry.CanSegment(actor.Position, World.Center(next), actor.Request.Profile.RadiusMm))
                         .OrderBy(next => field.Distance[next]).ThenBy(next => next).DefaultIfEmpty(-1).First();
                     if (forward >= 0)
                     {
@@ -253,14 +259,14 @@ namespace NavigationLab.DAoe4
                     Point2 center = World.Center(cell);
                     int next = World.Neighbours(cell)
                         .Where(candidate => field.Included[candidate] && field.Distance[candidate] < field.Distance[cell] - 1e-6
-                            && geometry.CanEdge(cell, candidate, actor.Request.Profile.RadiusMm))
+                            && planningGeometry.CanEdge(cell, candidate, actor.Request.Profile.RadiusMm))
                         .OrderBy(candidate => field.Distance[candidate]).ThenBy(candidate => candidate).DefaultIfEmpty(-1).First();
-                    if (next >= 0 && geometry.CanSegment(actor.Position, World.Center(next), actor.Request.Profile.RadiusMm))
+                    if (next >= 0 && planningGeometry.CanSegment(actor.Position, World.Center(next), actor.Request.Profile.RadiusMm))
                     {
                         actor.PreciseWaypoint = next;
                     }
                     else if (Point2.Distance(actor.Position, center) > 1e-6
-                        && geometry.CanSegment(actor.Position, center, actor.Request.Profile.RadiusMm))
+                        && planningGeometry.CanSegment(actor.Position, center, actor.Request.Profile.RadiusMm))
                     {
                         actor.PreciseWaypoint = cell;
                     }
@@ -366,6 +372,8 @@ namespace NavigationLab.DAoe4
                     goalOwners[goal] = actor.Request.Id;
                 }
             }
+            bodySignature = "force-world-rebuild";
+            RefreshPlanningBodies(actors.Values.OrderBy(actor => actor.Request.Id).ToArray());
             Add("AcceptedWorldChanges");
             return true;
         }
@@ -384,11 +392,37 @@ namespace NavigationLab.DAoe4
             disposed = true;
         }
 
+        private void RefreshPlanningBodies(Actor[] ordered)
+        {
+            var bodies = ordered.Where(actor => actor.YieldCell < 0 && actor.Velocity.LengthSquared < 1e-8
+                && Point2.Distance(actor.Position, World.Center(actor.Goal)) <= 1e-6)
+                .Select(actor => new PlanningBody(actor.Request.Id, actor.Position, actor.Request.Profile.RadiusMm)).ToArray();
+            string signature = string.Join(";", bodies.Select(body => body.Id + ":"
+                + body.Position.X.ToString("R", System.Globalization.CultureInfo.InvariantCulture) + ":"
+                + body.Position.Y.ToString("R", System.Globalization.CultureInfo.InvariantCulture)));
+            if (signature == bodySignature)
+            {
+                return;
+            }
+            bodySignature = signature;
+            planningGeometry = bodies.Length == 0 ? geometry : new GridGeometry(World, bodies);
+            planner = new HierarchicalFlow(planningGeometry, metrics, largestRadius);
+            foreach (var actor in ordered)
+            {
+                actor.Route = null;
+                actor.RouteGoal = -1;
+                actor.PreciseWaypoint = -1;
+                actor.WaypointSourceCell = -1;
+            }
+            Add("ImmobileCircleRebuilds");
+            Add("ImmobileCirclesIntegrated", bodies.Length);
+        }
+
         private bool NearStaticCorner(int cell, int radius)
         {
             int x = cell % World.Width;
             int y = cell / World.Width;
-            var stand = geometry.Clearance(radius);
+            var stand = planningGeometry.Clearance(radius);
             for (int dy = -1; dy <= 1; dy++)
             {
                 for (int dx = -1; dx <= 1; dx++)

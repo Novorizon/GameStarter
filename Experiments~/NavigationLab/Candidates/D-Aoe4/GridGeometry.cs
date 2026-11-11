@@ -5,14 +5,29 @@ using NavigationLab.Core;
 
 namespace NavigationLab.DAoe4
 {
+    internal readonly struct PlanningBody
+    {
+        internal readonly int Id;
+        internal readonly Point2 Position;
+        internal readonly int Radius;
+        internal PlanningBody(int id, Point2 position, int radius)
+        {
+            Id = id;
+            Position = position;
+            Radius = radius;
+        }
+    }
+
     internal sealed class GridGeometry
     {
+        private readonly PlanningBody[] bodies;
         private readonly Dictionary<int, bool[]> clearance = new Dictionary<int, bool[]>();
         internal WorldDefinition World { get; private set; }
         internal int Revision { get; private set; }
 
-        internal GridGeometry(WorldDefinition world)
+        internal GridGeometry(WorldDefinition world, PlanningBody[]? bodies = null)
         {
+            this.bodies = bodies == null ? Array.Empty<PlanningBody>() : (PlanningBody[])bodies.Clone();
             World = world.Clone();
         }
 
@@ -46,6 +61,13 @@ namespace NavigationLab.DAoe4
                     return false;
                 }
             }
+            foreach (var body in bodies)
+            {
+                if (Point2.Distance(point, body.Position) < body.Radius + radius - 1e-7)
+                {
+                    return false;
+                }
+            }
             foreach (int cell in Nearby(point, point, radius))
             {
                 if (!World.IsWalkable(cell) && PointRectangleSquared(point, cell) < radius * radius - 1e-7)
@@ -66,6 +88,14 @@ namespace NavigationLab.DAoe4
             {
                 double reach = target.RadiusMm + radius;
                 if (target.Id != ignoreTarget && PointSegmentSquared(target.Center, from, to) < reach * reach - 1e-7)
+                {
+                    return false;
+                }
+            }
+            foreach (var body in bodies)
+            {
+                double reach = body.Radius + radius;
+                if (PointSegmentSquared(body.Position, from, to) < reach * reach - 1e-7)
                 {
                     return false;
                 }
