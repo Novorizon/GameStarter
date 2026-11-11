@@ -88,7 +88,7 @@ internal static partial class Program
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
         var ownerField = typeof(GameEntry).GetField("hotUpdate", flags);
         var owner = ownerField.GetValue(entry);
-        var task = (Task)typeof(GameEntry).GetField("startupTask", flags).GetValue(entry);
+        var task = entry.StartupTask;
         if (owner == null || task == null)
         {
             throw new InvalidOperationException("Entry has not started.");

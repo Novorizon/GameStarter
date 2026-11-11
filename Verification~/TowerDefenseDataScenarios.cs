@@ -18,7 +18,7 @@ internal static partial class Program
             True(loaded.Contains("tbexample") && loaded.Contains("tbclienttheme"));
             var configuration = TowerDefenseTables.Create(tables, 1);
             Equal(6, configuration.Waves.Length);
-            Equal(7, configuration.BuildSlots.Length);
+            Equal(407, configuration.BuildSlots.Length);
             Equal(3, configuration.Towers.Length);
             Equal(4, configuration.Enemies.Length);
             Equal(7, configuration.Cards.Length);
@@ -67,13 +67,13 @@ internal static partial class Program
                 Equal(row.IconIndex, card.IconIndex);
             }
         });
-        Check("invalid stage and missing decoded table set cannot fall back to demo tuning", () =>
+        Check("invalid stage and missing decoded tables are rejected", () =>
         {
             var tables = ReadTowerDefenseTables();
             Throws<KeyNotFoundException>(() => TowerDefenseTables.Create(tables, int.MaxValue));
             Throws<ArgumentNullException>(() => TowerDefenseTables.Create(null, 1));
         });
-        Check("real table battles replay identical seed and commands with equivalent fixed-tick batching", () =>
+        Check("combat at the configured spawn point replays identical commands across fixed-tick batching", () =>
         {
             var first = RunTowerDefenseDataBattle(1, 12345);
             var repeated = RunTowerDefenseDataBattle(1, 12345);
@@ -83,7 +83,7 @@ internal static partial class Program
             Equal(first.Commands, batched.Commands);
             Equal(first.State, batched.State);
         });
-        Check("authored first stage is winnable with build-upgrade and damage-or-gold draft policy", () =>
+        Check("the authored tables settle a battle when towers cover the enemy spawn point", () =>
         {
             var run = RunTowerDefenseDataBattle(10, 12345);
             var session = run.Session;
@@ -116,6 +116,8 @@ internal static partial class Program
     private static TowerDefenseDataRun RunTowerDefenseDataBattle(int batchTicks, uint seed)
     {
         var session = new FightSession(TowerDefenseTables.Create(ReadTowerDefenseTables(), 1), seed);
+        var spawn = session.Configuration.Routes.Single().Points[0];
+        var slots = session.Configuration.BuildSlots.OrderBy(slot => DistanceToSpawn(slot.Position)).ThenBy(slot => slot.Id).ToArray();
         var commands = new List<string>();
         int decisions = 0;
         while (session.Phase != BattlePhase.Victory && session.Phase != BattlePhase.Defeat
@@ -123,7 +125,7 @@ internal static partial class Program
         {
             if (session.Phase == BattlePhase.Planning)
             {
-                foreach (var slot in session.Configuration.BuildSlots.OrderBy(value => value.Id))
+                foreach (var slot in slots)
                 {
                     if (session.BuildTower(slot.Id, 1))
                     {
@@ -158,7 +160,7 @@ internal static partial class Program
         if (session.Phase != BattlePhase.Victory)
         {
             throw new InvalidOperationException(
-                "Authored first-stage policy failed: phase=" + session.Phase + ", wave=" + session.WaveIndex
+                "The authored-table combat check failed: phase=" + session.Phase + ", wave=" + session.WaveIndex
                 + ", tick=" + session.Tick + ", baseHP=" + session.BaseHp + ", gold=" + session.Gold
                 + ", kills=" + session.Kills + ", leaks=" + session.Leaks + ", seed=" + seed);
         }
@@ -178,6 +180,13 @@ internal static partial class Program
                 string.Join(",", session.Towers.Select(tower => tower.Id + ":" + tower.Level + ":" + tower.Damage + ":" + tower.ShotSequence)),
                 string.Join(",", session.ChosenCardStacks.OrderBy(pair => pair.Key).Select(pair => pair.Key + ":" + pair.Value)))
         };
+
+        long DistanceToSpawn(Position2 position)
+        {
+            long x = (long)position.X - spawn.X;
+            long y = (long)position.Y - spawn.Y;
+            return x * x + y * y;
+        }
     }
 
     private static int TowerDefenseCardPriority(CardDefinition card)

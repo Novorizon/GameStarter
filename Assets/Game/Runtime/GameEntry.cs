@@ -24,7 +24,6 @@ namespace Game
         private string initialInputMap = "Gameplay";
         private GameHotUpdate hotUpdate;
         private CancellationTokenSource cts;
-        private Task startupTask;
         private string startupError;
         private StartupScreen startupScreen;
 
@@ -34,17 +33,25 @@ namespace Game
 
         protected override void OnStart()
         {
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+            if (Screen.fullScreen)
+            {
+                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            }
+#endif
             cts = new CancellationTokenSource();
             startupError = null;
             State = StartupState.Starting;
             startupScreen = StartupScreen.Open(this);
-            startupTask = InitializeAsync();
-            ObserveNativeStartup();
+            var token = cts.Token;
+            var startup = InitializeAsync(token);
+            ObserveStartup(startup, token);
         }
 
-        private async Task InitializeAsync()
+        partial void ObserveStartup(Task startup, CancellationToken token);
+
+        private async Task InitializeAsync(CancellationToken token)
         {
-            var token = cts.Token;
             GameHotUpdate current = null;
             try
             {
@@ -87,7 +94,6 @@ namespace Game
             startupScreen = null;
             hotUpdate?.Dispose();
             hotUpdate = null;
-            startupTask = null;
             State = StartupState.NotStarted;
             try
             {

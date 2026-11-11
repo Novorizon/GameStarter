@@ -13,6 +13,7 @@ namespace Game.HotUpdate.Camp
         public int wood;
         public int stone;
         public bool arrivalSeen;
+        public bool outpostBriefed;
         public List<int> claimedTasks = new List<int>();
 
         internal LocalCampData Copy()
@@ -24,6 +25,7 @@ namespace Game.HotUpdate.Camp
                 wood = wood,
                 stone = stone,
                 arrivalSeen = arrivalSeen,
+                outpostBriefed = outpostBriefed,
                 claimedTasks = new List<int>(claimedTasks)
             };
         }
@@ -42,13 +44,14 @@ namespace Game.HotUpdate.Camp
         public int Wood => State.wood;
         public int Stone => State.stone;
         public bool ArrivalSeen => State.arrivalSeen;
+        public bool ExpeditionUnlocked => ArrivalSeen && State.outpostBriefed;
 
         internal CampProgress(cfg.Tables tables, JourneyProgress owner)
         {
             this.owner = owner;
             levels = tables.TbCampLevel.DataList.OrderBy(value => value.Id).ToArray();
             tasks = tables.TbCampTask.DataList.OrderBy(value => value.Id).ToArray();
-            if (levels.Length == 0 || levels.Where((value, index) => value.Id != index + 1).Any()
+            if (levels.Length < 2 || levels.Where((value, index) => value.Id != index + 1).Any()
                 || levels.Any(value => value.WoodCost < 0 || value.StoneCost < 0 || value.RequiredVictories < 0
                     || value.StartingWood < 0 || value.StartingStone < 0 || value.VictoryWood < 0 || value.VictoryStone < 0
                     || value.DefeatWood < 0 || value.DefeatStone < 0)
@@ -60,12 +63,27 @@ namespace Game.HotUpdate.Camp
 
         internal LocalCampData CreateInitial()
         {
-            return new LocalCampData { format = 1, wood = levels[0].StartingWood, stone = levels[0].StartingStone };
+            return new LocalCampData { format = 2, wood = levels[0].StartingWood, stone = levels[0].StartingStone };
+        }
+
+        internal LocalCampData Restore(LocalCampData value, int victories)
+        {
+            Validate(value);
+            var restored = value.Copy();
+            if (restored.format == 1)
+            {
+                restored.format = 2;
+                restored.outpostBriefed = restored.arrivalSeen && restored.level >= 2;
+            }
+
+            ApplyVictoryMilestones(restored, victories);
+            return restored;
         }
 
         internal void Validate(LocalCampData value)
         {
-            if (value == null || value.format != 1 || value.level < 1 || value.level > levels.Length || value.wood < 0 || value.stone < 0
+            if (value == null || (value.format != 1 && value.format != 2) || value.level < 1 || value.level > levels.Length
+                || value.wood < 0 || value.stone < 0 || (value.format == 2 && value.outpostBriefed && (!value.arrivalSeen || value.level < 2))
                 || value.claimedTasks == null || value.claimedTasks.Distinct().Count() != value.claimedTasks.Count
                 || value.claimedTasks.Any(id => !tasks.Any(task => task.Id == id)))
             {
@@ -73,42 +91,16 @@ namespace Game.HotUpdate.Camp
             }
         }
 
-        public string UpgradeBlockedReason
-        {
-            get
-            {
-                var next = NextLevel;
-                if (next == null)
-                {
-                    return "营地已建设完成";
-                }
-
-                if (!ArrivalSeen)
-                {
-                    return "先完成抵达海岛的故事";
-                }
-
-                if (owner.Victories < next.RequiredVictories)
-                {
-                    return "需要塔防胜利 " + next.RequiredVictories + " 次";
-                }
-
-                return Wood < next.WoodCost || Stone < next.StoneCost ? "材料不足，完成任务或前往塔防获取" : null;
-            }
-        }
-
+        // 首次整备是一次确认，后续营地设施随胜利结算落位。
         public bool Upgrade()
         {
-            if (UpgradeBlockedReason != null)
+            if (!ArrivalSeen || Level.Id != 1)
             {
                 return false;
             }
 
-            var next = NextLevel;
             var changed = State.Copy();
-            changed.level = next.Id;
-            changed.wood -= next.WoodCost;
-            changed.stone -= next.StoneCost;
+            changed.level = 2;
             owner.SaveCamp(changed);
             return true;
         }
@@ -122,6 +114,20 @@ namespace Game.HotUpdate.Camp
 
             var changed = State.Copy();
             changed.arrivalSeen = true;
+            ApplyVictoryMilestones(changed, owner.Victories);
+            owner.SaveCamp(changed);
+            return true;
+        }
+
+        public bool CompleteOutpostBriefing()
+        {
+            if (!ArrivalSeen || Level.Id < 2 || ExpeditionUnlocked)
+            {
+                return false;
+            }
+
+            var changed = State.Copy();
+            changed.outpostBriefed = true;
             owner.SaveCamp(changed);
             return true;
         }
@@ -165,7 +171,7 @@ namespace Game.HotUpdate.Camp
             return true;
         }
 
-        internal LocalCampData BattleLoot(bool victory, int campLevelId)
+        internal LocalCampData BattleLoot(bool victory, int campLevelId, int victories)
         {
             var level = campLevelId == 0 ? Level : levels.FirstOrDefault(value => value.Id == campLevelId);
             if (level == null)
@@ -176,7 +182,28 @@ namespace Game.HotUpdate.Camp
             var changed = State.Copy();
             changed.wood = checked(changed.wood + (victory ? level.VictoryWood : level.DefeatWood));
             changed.stone = checked(changed.stone + (victory ? level.VictoryStone : level.DefeatStone));
+            if (victory)
+            {
+                ApplyVictoryMilestones(changed, victories);
+            }
+
             return changed;
+        }
+
+        private void ApplyVictoryMilestones(LocalCampData camp, int victories)
+        {
+            if (!camp.arrivalSeen || victories == 0)
+            {
+                return;
+            }
+
+            // 旧档可能已经出征过。按战绩补齐设施，但保留已有等级和余额。
+            camp.level = Math.Max(2, camp.level);
+            camp.outpostBriefed = true;
+            while (camp.level < levels.Length && victories >= levels[camp.level].RequiredVictories)
+            {
+                camp.level++;
+            }
         }
     }
 }

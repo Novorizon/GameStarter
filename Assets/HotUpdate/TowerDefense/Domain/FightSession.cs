@@ -9,11 +9,13 @@ namespace Game.HotUpdate.TowerDefense.Domain
     public sealed class FightSession
     {
         public const int TickMilliseconds = 50;
+        public const int TowerFoundationRadiusMillimetres = 420;
         private sealed class Tower
         {
             internal int Id;
             internal TowerDefinition Definition;
             internal BuildSlotDefinition Slot;
+            internal int PaidBuildCost;
             internal int Level = 1;
             internal int Cooldown;
             internal int LastTargetId;
@@ -24,55 +26,36 @@ namespace Game.HotUpdate.TowerDefense.Domain
         {
             internal int Id;
             internal EnemyDefinition Definition;
-            internal Route Route;
+            internal RouteDefinition Route;
+            internal int BatchIndex;
             internal int Health;
-            internal int Distance;
-        }
-
-        private sealed class Route
-        {
-            internal RouteDefinition Definition;
-            internal int[] SegmentLengths;
-            internal int Length;
-
-            internal Position2 Position(int distance)
-            {
-                for (int i = 0; i < SegmentLengths.Length; i++)
-                {
-                    int length = SegmentLengths[i];
-                    if (distance <= length)
-                    {
-                        var first = Definition.Points[i];
-                        var second = Definition.Points[i + 1];
-                        return new Position2(
-                            first.X + (int)((long)(second.X - first.X) * distance / length),
-                            first.Y + (int)((long)(second.Y - first.Y) * distance / length));
-                    }
-
-                    distance -= length;
-                }
-
-                return Definition.Points[Definition.Points.Length - 1];
-            }
+            internal Position2 Position;
+            internal long NextBaseAttackTick;
         }
 
         private readonly Dictionary<int, TowerDefinition> towerDefinitions;
         private readonly Dictionary<int, EnemyDefinition> enemyDefinitions;
         private readonly Dictionary<int, BuildSlotDefinition> slots;
-        private readonly Dictionary<int, Route> routes;
+        private readonly Dictionary<int, RouteDefinition> routes;
         private readonly List<Tower> towers = new List<Tower>();
         private readonly List<Enemy> enemies = new List<Enemy>();
         private readonly List<TowerSnapshot> towerSnapshots = new List<TowerSnapshot>();
         private readonly List<EnemySnapshot> enemySnapshots = new List<EnemySnapshot>();
         private readonly List<CardDefinition> offers = new List<CardDefinition>();
         private readonly Dictionary<int, int> cardStacks = new Dictionary<int, int>();
+        private readonly AssaultRules assault;
+        private readonly int[] remainingByBatch;
         private int[] emitted = Array.Empty<int>();
         private int waveTick;
+        private bool batchSpawned;
+        private long nextBatchAt;
+        private int spentDraftPoints;
         private int nextTowerId = 1;
         private int nextEnemyId = 1;
         private int damageBonus;
         private int speedBonus;
         private int rangeBonus;
+        private bool usedOpeningDiscount;
         private uint random;
 
         /// <summary>Configuration is read-only for the duration of a run; feed a fresh DTO from table adapters.</summary>
@@ -82,45 +65,156 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public int WaveIndex { get; private set; }
         public int Gold { get; private set; }
         public int BaseHp { get; private set; }
+        public int BaseMaxHp { get; private set; }
+        public int BaseLevel { get; private set; }
         public long Tick { get; private set; }
         public bool IsPaused { get; private set; }
         public int Kills { get; private set; }
         public int Leaks { get; private set; }
+        public int DraftPoints => Kills - spentDraftPoints;
+        public int DraftPointsRequired { get; private set; }
+        public bool AllEnemiesSpawned => batchSpawned && WaveIndex == Configuration.Waves.Length;
+        public int ReinforcementTicksRemaining => assault != null && batchSpawned && !AllEnemiesSpawned
+            ? (int)Math.Max(0, nextBatchAt - Tick) : 0;
+        public bool RepairUsed { get; private set; }
+        public bool RelayHeld { get; private set; }
+        public bool CanRepair => Configuration.Objective.HasBase && Configuration.PlanningRepair > 0 && !RepairUsed
+            && !IsPaused && (Phase == BattlePhase.Planning || assault != null && Phase == BattlePhase.Fighting) && BaseHp < BaseMaxHp;
+        public BaseUpgrade? NextBaseUpgrade => BaseLevel > 0 && BaseLevel <= Configuration.Objective.BaseUpgrades.Count
+            ? Configuration.Objective.BaseUpgrades[BaseLevel - 1] : (BaseUpgrade?)null;
+        public bool CanUpgradeBase => CanBuild() && NextBaseUpgrade is BaseUpgrade upgrade && Gold >= upgrade.GoldCost;
+        public int TowersBuilt => nextTowerId - 1;
+        public int RemainingEnemiesInWave
+        {
+            get
+            {
+                if (Phase != BattlePhase.Fighting)
+                {
+                    return 0;
+                }
+
+                if (remainingByBatch != null)
+                {
+                    return remainingByBatch[WaveIndex - 1];
+                }
+
+                var groups = Configuration.Waves[WaveIndex - 1].Groups;
+                int remaining = enemies.Count;
+                for (int index = 0; index < groups.Length; index++)
+                {
+                    remaining += groups[index].Count - emitted[index];
+                }
+
+                return remaining;
+            }
+        }
+
         public IReadOnlyList<TowerSnapshot> Towers { get; }
         public IReadOnlyList<EnemySnapshot> Enemies { get; }
         public IReadOnlyList<CardDefinition> CurrentCardOffers { get; }
         public IReadOnlyDictionary<int, int> ChosenCardStacks { get; }
 
         public FightSession(FightConfiguration configuration, uint seed = 1)
+            : this(configuration, seed, null)
+        {
+        }
+
+        internal FightSession(FightConfiguration configuration, uint seed, AssaultRules defaultAssault)
         {
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             Validate(configuration);
+            assault = configuration.Objective.Assault ?? defaultAssault;
+            if (assault != null)
+            {
+                remainingByBatch = configuration.Waves.Select(batch => batch.Groups.Sum(group => group.Count)).ToArray();
+                DraftPointsRequired = assault.FirstDraftPoints;
+            }
+
             Seed = seed;
             random = seed == 0 ? 0x9e3779b9u : seed;
             towerDefinitions = configuration.Towers.ToDictionary(value => value.Id);
             enemyDefinitions = configuration.Enemies.ToDictionary(value => value.Id);
             slots = configuration.BuildSlots.ToDictionary(value => value.Id);
-            routes = configuration.Routes.ToDictionary(value => value.Id, CreateRoute);
+            routes = configuration.Routes.ToDictionary(value => value.Id);
             Gold = configuration.InitialGold;
-            BaseHp = configuration.BaseHealth;
+            BaseLevel = configuration.Objective.HasBase ? 1 : 0;
+            BaseMaxHp = BaseHp = configuration.Objective.HasBase ? configuration.BaseHealth : 0;
+            RelayHeld = configuration.RelayRouteId != 0;
             Towers = towerSnapshots.AsReadOnly();
             Enemies = enemySnapshots.AsReadOnly();
             CurrentCardOffers = offers.AsReadOnly();
             ChosenCardStacks = new ReadOnlyDictionary<int, int>(cardStacks);
         }
 
-        public bool BuildTower(int slotId, int towerTypeId)
+        public bool CanBuildTower(int slotId, int towerTypeId)
         {
-            if (!CanBuild() || !slots.TryGetValue(slotId, out var slot)
-                || !towerDefinitions.TryGetValue(towerTypeId, out var definition)
-                || Gold < definition.BuildCost || towers.Exists(value => value.Slot.Id == slotId))
+            if (!CanBuild() || !slots.TryGetValue(slotId, out var slot) || !towerDefinitions.TryGetValue(towerTypeId, out var definition)
+                || Gold < BuildCost(definition))
             {
                 return false;
             }
 
-            Gold -= definition.BuildCost;
-            towers.Add(new Tower { Id = nextTowerId++, Slot = slot, Definition = definition });
+            int clearance = Configuration.BuildGridStep > 0 ? 2 * TowerFoundationRadiusMillimetres : 0;
+            foreach (var tower in towers)
+            {
+                long dx = (long)tower.Slot.Position.X - slot.Position.X;
+                long dy = (long)tower.Slot.Position.Y - slot.Position.Y;
+                if (tower.Slot.Id == slotId || dx * dx + dy * dy < clearance * clearance)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool BuildTower(int slotId, int towerTypeId)
+        {
+            if (!CanBuildTower(slotId, towerTypeId))
+            {
+                return false;
+            }
+
+            var definition = towerDefinitions[towerTypeId];
+            int paid = BuildCost(definition);
+            Gold -= paid;
+            usedOpeningDiscount |= definition.Id == Configuration.OpeningDiscountTowerId;
+            towers.Add(new Tower { Id = nextTowerId++, Slot = slots[slotId], Definition = definition, PaidBuildCost = paid });
             RefreshSnapshots();
+            return true;
+        }
+
+        public int BuildCost(TowerDefinition definition)
+        {
+            return !usedOpeningDiscount && definition.Id == Configuration.OpeningDiscountTowerId
+                ? Math.Max(0, definition.BuildCost - Configuration.OpeningDiscountGold)
+                : definition.BuildCost;
+        }
+
+        public bool RepairBase()
+        {
+            if (!CanRepair)
+            {
+                return false;
+            }
+
+            BaseHp = Math.Min(BaseMaxHp, SaturatingAdd(BaseHp, Configuration.PlanningRepair));
+            RepairUsed = true;
+            return true;
+        }
+
+        public bool UpgradeBase()
+        {
+            if (!CanUpgradeBase)
+            {
+                return false;
+            }
+
+            var upgrade = NextBaseUpgrade.Value;
+            Gold -= upgrade.GoldCost;
+            BaseLevel++;
+            BaseMaxHp += upgrade.DurabilityIncrease;
+            BaseHp += upgrade.DurabilityIncrease;
             return true;
         }
 
@@ -144,6 +238,27 @@ namespace Game.HotUpdate.TowerDefense.Domain
             return true;
         }
 
+        internal (int Damage, int Range) PreviewTowerUpgrade(TowerSnapshot tower)
+        {
+            var definition = towerDefinitions[tower.DefinitionId];
+            int nextLevel = Math.Min(tower.Level + 1, definition.MaxLevel);
+            return (Damage(definition, nextLevel), Range(definition, nextLevel));
+        }
+
+        public bool SellTower(int instanceId)
+        {
+            int index = towers.FindIndex(tower => tower.Id == instanceId);
+            if (!CanBuild() || index < 0)
+            {
+                return false;
+            }
+
+            Gold = SaturatingAdd(Gold, SellValue(towers[index]));
+            towers.RemoveAt(index);
+            RefreshSnapshots();
+            return true;
+        }
+
         private bool CanBuild()
         {
             return !IsPaused && (Phase == BattlePhase.Planning || Phase == BattlePhase.Fighting);
@@ -156,10 +271,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 return false;
             }
 
-            var wave = Configuration.Waves[WaveIndex];
-            WaveIndex++;
-            emitted = new int[wave.Groups.Length];
-            waveTick = 0;
+            BeginBatch();
             foreach (var tower in towers)
             {
                 tower.Cooldown = 0;
@@ -199,27 +311,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
         private void StepOne()
         {
             Tick++;
-            var wave = Configuration.Waves[WaveIndex - 1];
-            bool allSpawned = true;
-            for (int i = 0; i < wave.Groups.Length; i++)
-            {
-                var group = wave.Groups[i];
-                if (emitted[i] < group.Count && waveTick >= group.StartTick
-                    && (waveTick - group.StartTick) % group.IntervalTicks == 0)
-                {
-                    var definition = enemyDefinitions[group.EnemyId];
-                    enemies.Add(new Enemy
-                    {
-                        Id = nextEnemyId++,
-                        Definition = definition,
-                        Route = routes[group.RouteId],
-                        Health = definition.Health
-                    });
-                    emitted[i]++;
-                }
-
-                allSpawned &= emitted[i] == group.Count;
-            }
+            SpawnScheduledEnemies();
 
             foreach (var tower in towers)
             {
@@ -239,31 +331,34 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     continue;
                 }
 
-                tower.Cooldown = Math.Max(1, (tower.Definition.AttackIntervalTicks * 100 + 99 + speedBonus) / (100 + speedBonus));
+                tower.Cooldown = AttackInterval(tower);
                 tower.LastTargetId = target.Id;
                 tower.ShotSequence++;
-                target.Health -= Damage(tower);
+                target.Health -= Damage(tower.Definition, tower.Level);
                 if (target.Health <= 0)
                 {
                     Gold = SaturatingAdd(Gold, target.Definition.GoldReward);
                     Kills++;
                     enemies.Remove(target);
+                    RewardResolvedEnemy(target);
                 }
             }
 
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 var enemy = enemies[i];
-                enemy.Distance += enemy.Definition.SpeedPerTick;
-                if (enemy.Distance < enemy.Route.Length)
+                if (RelayHeld && enemy.Route.Id == Configuration.RelayRouteId
+                    && enemy.Position.Equals(enemy.Route.Points[Configuration.RelayPointIndex]))
+                {
+                    RelayHeld = false;
+                }
+
+                if (!AtObjective(enemy))
                 {
                     continue;
                 }
 
-                BaseHp = Math.Max(0, BaseHp - enemy.Definition.BaseDamage);
-                Leaks++;
-                enemies.RemoveAt(i);
-                if (BaseHp == 0)
+                if (ResolveArrival(enemy, i))
                 {
                     Phase = BattlePhase.Defeat;
                     enemies.Clear();
@@ -271,9 +366,20 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
             }
 
-            waveTick++;
-            if (allSpawned && enemies.Count == 0)
+            if (assault != null)
             {
+                if (AllEnemiesSpawned && enemies.Count == 0)
+                {
+                    Phase = BattlePhase.Victory;
+                }
+                else
+                {
+                    TryOpenAssaultDraft();
+                }
+            }
+            else if (batchSpawned && enemies.Count == 0)
+            {
+                var wave = Configuration.Waves[WaveIndex - 1];
                 Gold = SaturatingAdd(Gold, wave.RewardGold);
                 if (WaveIndex == Configuration.Waves.Length)
                 {
@@ -291,44 +397,169 @@ namespace Game.HotUpdate.TowerDefense.Domain
             }
         }
 
+        private void BeginBatch()
+        {
+            var groups = Configuration.Waves[WaveIndex++].Groups;
+            emitted = new int[groups.Length];
+            waveTick = assault == null ? 0 : groups.Min(group => group.StartTick);
+            batchSpawned = false;
+        }
+
+        private void SpawnScheduledEnemies()
+        {
+            if (batchSpawned)
+            {
+                if (assault == null || AllEnemiesSpawned || Tick < nextBatchAt)
+                {
+                    return;
+                }
+
+                BeginBatch();
+            }
+
+            int batchIndex = WaveIndex - 1;
+            var groups = Configuration.Waves[batchIndex].Groups;
+            batchSpawned = true;
+            for (int i = 0; i < groups.Length; i++)
+            {
+                var group = groups[i];
+                int age = waveTick - group.StartTick;
+                int due = age < 0 ? 0 : Math.Min(group.Count, 1 + age / group.IntervalTicks);
+                if (emitted[i] < due)
+                {
+                    SpawnEnemy(group, batchIndex);
+                    emitted[i]++;
+                }
+
+                batchSpawned &= emitted[i] == group.Count;
+            }
+
+            waveTick++;
+            if (batchSpawned && assault != null)
+            {
+                nextBatchAt = Tick + assault.ReinforcementGapTicks;
+            }
+        }
+
+        private void SpawnEnemy(SpawnGroup group, int batchIndex)
+        {
+            var definition = enemyDefinitions[group.EnemyId];
+            var route = routes[group.RouteId];
+            enemies.Add(new Enemy
+            {
+                Id = nextEnemyId++,
+                Definition = definition,
+                Route = route,
+                BatchIndex = batchIndex,
+                Health = definition.Health,
+                Position = route.Points[0]
+            });
+        }
+
+        private static long DistanceSquared(Position2 first, Position2 second)
+        {
+            long x = (long)first.X - second.X;
+            long y = (long)first.Y - second.Y;
+            return x * x + y * y;
+        }
+
+        private void RewardResolvedEnemy(Enemy enemy)
+        {
+            if (remainingByBatch != null && --remainingByBatch[enemy.BatchIndex] == 0)
+            {
+                Gold = SaturatingAdd(Gold, Configuration.Waves[enemy.BatchIndex].RewardGold);
+            }
+        }
+
+        private void RecordLeak(Enemy enemy, int index)
+        {
+            enemies.RemoveAt(index);
+            Leaks++;
+            RewardResolvedEnemy(enemy);
+        }
+
+        private static bool AtObjective(Enemy enemy)
+        {
+            return enemy.Position.Equals(enemy.Route.Points[^1]);
+        }
+
+        private bool ResolveArrival(Enemy enemy, int index)
+        {
+            var objective = Configuration.Objective;
+            switch (objective.Type)
+            {
+                case BattleObjectiveType.InterceptEscapes:
+                    RecordLeak(enemy, index);
+                    return Leaks >= objective.EscapesToDefeat;
+                case BattleObjectiveType.DefendBase:
+                    if (enemy.NextBaseAttackTick == 0 && objective.BaseAttackWindupTicks > 0)
+                    {
+                        enemy.NextBaseAttackTick = Tick + objective.BaseAttackWindupTicks;
+                        return false;
+                    }
+
+                    if (Tick < enemy.NextBaseAttackTick)
+                    {
+                        return false;
+                    }
+
+                    enemy.NextBaseAttackTick = Tick + objective.BaseAttackIntervalTicks;
+                    break;
+                case BattleObjectiveType.LegacyBaseLeak:
+                    RecordLeak(enemy, index);
+                    break;
+            }
+
+            BaseHp = Math.Max(0, BaseHp - enemy.Definition.BaseDamage);
+            return BaseHp == 0;
+        }
+
         private Enemy Target(Tower tower)
         {
             Enemy best = null;
-            int remaining = int.MaxValue;
-            long range = Range(tower);
+            long remaining = long.MaxValue;
+            long range = Range(tower.Definition, tower.Level);
             foreach (var enemy in enemies)
             {
-                var point = enemy.Route.Position(enemy.Distance);
-                long dx = point.X - tower.Slot.Position.X;
-                long dy = point.Y - tower.Slot.Position.Y;
-                int distanceToBase = enemy.Route.Length - enemy.Distance;
-                if (dx * dx + dy * dy <= range * range && distanceToBase < remaining)
+                long distanceToGoal = DistanceSquared(enemy.Position, enemy.Route.Points[^1]);
+                if (DistanceSquared(enemy.Position, tower.Slot.Position) <= range * range && distanceToGoal < remaining)
                 {
                     best = enemy;
-                    remaining = distanceToBase;
+                    remaining = distanceToGoal;
                 }
             }
 
             return best;
         }
 
-        private int Damage(Tower tower)
+        private int Damage(TowerDefinition definition, int level)
         {
-            long value = tower.Definition.Damage + (tower.Level - 1) * tower.Definition.UpgradeDamage;
+            long value = definition.Damage + (level - 1) * definition.UpgradeDamage;
             return (int)Math.Min(int.MaxValue, value * (100 + damageBonus) / 100);
         }
 
-        private int Range(Tower tower)
+        private int AttackInterval(Tower tower)
         {
-            long value = tower.Definition.Range + (tower.Level - 1) * tower.Definition.UpgradeRange;
+            return Math.Max(1, (tower.Definition.AttackIntervalTicks * 100 + 99 + speedBonus) / (100 + speedBonus));
+        }
+
+        private static int SellValue(Tower tower)
+        {
+            long paid = tower.PaidBuildCost + (long)tower.Definition.UpgradeCost * tower.Level * (tower.Level - 1) / 2;
+            return (int)Math.Min(int.MaxValue, paid * 70 / 100);
+        }
+
+        private int Range(TowerDefinition definition, int level)
+        {
+            long value = definition.Range + (level - 1) * definition.UpgradeRange;
             return (int)Math.Min(int.MaxValue, value * (100 + rangeBonus) / 100);
         }
 
         private void DrawCards()
         {
             offers.Clear();
-            var pool = Configuration.Cards.Where(card => card.MaxStacks == 0
-                || !cardStacks.TryGetValue(card.Id, out int stacks) || stacks < card.MaxStacks).ToList();
+            var pool = Configuration.Cards.Where(card => IsApplicable(Configuration.Objective, card) && (card.MaxStacks == 0
+                || !cardStacks.TryGetValue(card.Id, out int stacks) || stacks < card.MaxStacks)).ToList();
             for (int i = 0; i < 3; i++)
             {
                 uint total = (uint)pool.Sum(card => card.Weight);
@@ -342,6 +573,19 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 offers.Add(pool[index]);
                 pool.RemoveAt(index);
             }
+        }
+
+        private void TryOpenAssaultDraft()
+        {
+            if (DraftPoints < DraftPointsRequired)
+            {
+                return;
+            }
+
+            spentDraftPoints += DraftPointsRequired;
+            DraftPointsRequired = assault.RepeatDraftPoints;
+            DrawCards();
+            Phase = BattlePhase.ChoosingCard;
         }
 
         public bool ChooseCard(int offerIndex)
@@ -369,12 +613,17 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     Gold = SaturatingAdd(Gold, card.Value);
                     break;
                 case CardEffect.HealBase:
-                    BaseHp = Math.Min(Configuration.BaseHealth, SaturatingAdd(BaseHp, card.Value));
+                    BaseHp = Math.Min(BaseMaxHp, SaturatingAdd(BaseHp, card.Value));
                     break;
             }
 
             offers.Clear();
-            Phase = BattlePhase.Planning;
+            Phase = assault == null ? BattlePhase.Planning : BattlePhase.Fighting;
+            if (assault != null)
+            {
+                TryOpenAssaultDraft();
+            }
+
             RefreshSnapshots();
             return true;
         }
@@ -403,8 +652,10 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     tower.Slot.Id,
                     tower.Slot.Position,
                     tower.Level,
-                    Range(tower),
-                    Damage(tower),
+                    Range(tower.Definition, tower.Level),
+                    Damage(tower.Definition, tower.Level),
+                    AttackInterval(tower),
+                    SellValue(tower),
                     tower.Cooldown,
                     tower.LastTargetId,
                     tower.ShotSequence));
@@ -416,45 +667,22 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 enemySnapshots.Add(new EnemySnapshot(
                     enemy.Id,
                     enemy.Definition.Id,
-                    enemy.Route.Definition.Id,
-                    enemy.Route.Position(enemy.Distance),
+                    enemy.Route.Id,
+                    enemy.Position,
                     enemy.Health,
                     enemy.Definition.Health,
-                    enemy.Distance));
+                    Configuration.Objective.Type == BattleObjectiveType.DefendBase && AtObjective(enemy),
+                    enemy.NextBaseAttackTick));
             }
-        }
-
-        private static Route CreateRoute(RouteDefinition definition)
-        {
-            var route = new Route { Definition = definition, SegmentLengths = new int[definition.Points.Length - 1] };
-            for (int i = 0; i < route.SegmentLengths.Length; i++)
-            {
-                long dx = definition.Points[i + 1].X - definition.Points[i].X;
-                long dy = definition.Points[i + 1].Y - definition.Points[i].Y;
-                long square = dx * dx + dy * dy;
-                int length = (int)Math.Sqrt(square);
-                while ((long)(length + 1) * (length + 1) <= square)
-                {
-                    length++;
-                }
-
-                while ((long)length * length > square)
-                {
-                    length--;
-                }
-
-                Require(length > 0, "Route segments must have positive length.");
-                route.SegmentLengths[i] = length;
-                route.Length = checked(route.Length + length);
-                Require(route.Length <= 10000000, "Route length exceeds supported range.");
-            }
-
-            return route;
         }
 
         private static void Validate(FightConfiguration value)
         {
-            Require(value.InitialGold >= 0 && value.BaseHealth > 0, "Invalid initial currency/base health.");
+            Require(value.Objective != null, "A battle objective is required.");
+            Require(value.InitialGold >= 0 && value.BaseHealth >= (value.Objective.HasBase ? 1 : 0), "Invalid initial currency/base health.");
+            long maxBaseHp = value.BaseHealth + value.Objective.BaseUpgrades.Sum(upgrade => (long)upgrade.DurabilityIncrease);
+            Require(maxBaseHp <= int.MaxValue, "Base durability exceeds the supported range.");
+            Require(value.BuildGridStep >= 0, "Build grid step cannot be negative.");
             Require(value.Routes != null && value.Routes.Length > 0, "At least one route is required.");
             Require(value.BuildSlots != null && value.Towers != null && value.Enemies != null && value.Cards != null, "Configuration arrays cannot be null.");
             Require(
@@ -473,6 +701,14 @@ namespace Game.HotUpdate.TowerDefense.Domain
             Unique(value.Enemies.Select(item => item.Id));
             Unique(value.Waves.Select(item => item.Id));
             Unique(value.Cards.Select(item => item.Id));
+            Require(value.OpeningDiscountGold >= 0 && value.PlanningRepair >= 0, "Invalid expedition supplies.");
+            Require(value.OpeningDiscountGold == 0 || value.Towers.Any(tower => tower.Id == value.OpeningDiscountTowerId), "Discount tower is missing.");
+            if (value.RelayRouteId != 0)
+            {
+                var relay = value.Routes.FirstOrDefault(route => route.Id == value.RelayRouteId);
+                Require(relay?.Points != null && value.RelayPointIndex > 0 && value.RelayPointIndex < relay.Points.Length - 1, "Invalid relay checkpoint.");
+            }
+
             foreach (var route in value.Routes)
             {
                 Require(route.Points != null && route.Points.Length >= 2 && route.Points.Length <= 1000, "Invalid route point count.");
@@ -481,12 +717,27 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     ValidatePoint(point);
                 }
 
-                CreateRoute(route);
+                for (int index = 1; index < route.Points.Length; index++)
+                {
+                    Require(!route.Points[index - 1].Equals(route.Points[index]), "Adjacent map points must be distinct.");
+                }
             }
 
+            if (value.Objective.Type == BattleObjectiveType.InterceptEscapes)
+            {
+                var exit = value.Routes[0].Points[^1];
+                Require(value.Routes.All(route => route.Points[^1].Equals(exit)), "Escape routes must end at the same portal.");
+            }
+
+            var gridPositions = value.BuildGridStep > 0 ? new HashSet<Position2>() : null;
             foreach (var slot in value.BuildSlots)
             {
                 ValidatePoint(slot.Position);
+                if (gridPositions != null)
+                {
+                    Require(slot.Position.X % value.BuildGridStep == 0 && slot.Position.Y % value.BuildGridStep == 0
+                        && gridPositions.Add(slot.Position), "Build grid cells must align to the grid and have unique positions.");
+                }
             }
 
             foreach (var tower in value.Towers)
@@ -515,9 +766,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
                     "Wave spawn rows/count exceed supported limits.");
                 foreach (var group in wave.Groups)
                 {
-                    Require(
-                        value.Enemies.Any(enemy => enemy.Id == group.EnemyId) && value.Routes.Any(route => route.Id == group.RouteId),
-                        "Spawn references missing enemy/route.");
+                    var enemy = value.Enemies.FirstOrDefault(definition => definition.Id == group.EnemyId);
+                    Require(enemy != null && value.Routes.Any(route => route.Id == group.RouteId), "Spawn references missing enemy/route.");
                     Require(
                         group.Count > 0 && group.Count <= 10000 && group.StartTick >= 0 && group.IntervalTicks > 0
                             && (long)group.StartTick + (long)group.Count * group.IntervalTicks <= 10000000,
@@ -525,7 +775,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 }
             }
 
-            Require(value.Cards.Count(card => card.MaxStacks == 0) >= 3, "Three repeatable cards are required for a full draft.");
+            Require(value.Cards.Count(card => card.MaxStacks == 0 && IsApplicable(value.Objective, card)) >= 3,
+                "Three applicable repeatable cards are required for a full draft.");
             foreach (var card in value.Cards)
             {
                 Require(Enum.IsDefined(typeof(CardEffect), card.Effect) && card.Value > 0 && card.Value <= 1000000, "Invalid card effect/value.");
@@ -534,6 +785,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
 
             Require(value.Cards.Sum(card => (long)card.Weight) <= int.MaxValue, "Card weight total exceeds supported range.");
         }
+
+        private static bool IsApplicable(BattleObjective objective, CardDefinition card) => objective.HasBase || card.Effect != CardEffect.HealBase;
 
         private static void ValidatePoint(Position2 point)
         {

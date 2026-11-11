@@ -22,13 +22,26 @@ namespace Game.Editor
                 package = AssetBundleCollectorSettingData.Setting.Packages.Single(value => value.PackageName == GameDataPaths.PackageName);
             }
 
-            bool changed = ResourceCollectorSetup.SetGroup(
+            bool changed = false;
+            foreach (string map in new[] { "Map", "Sluice", "Ridge", "Lighthouse", "PondTerrace", "CliffCrossing", "WaterfallRidge", "TwinApproach" })
+            {
+                changed |= ResourceCollectorSetup.SetGroup(
+                    package,
+                    "TowerDefenseMaps",
+                    "maps",
+                    "Assets/GameAssets/TowerDefense/Art/" + map + ".png",
+                    nameof(PackSeparately),
+                    nameof(TowerDefenseAddressRule));
+            }
+
+            changed |= ResourceCollectorSetup.SetGroup(
                 package,
-                "TowerDefenseMaps",
+                "TowerDefenseObjectives",
                 "maps",
-                "Assets/GameAssets/TowerDefense/Art/Map.png",
-                nameof(PackSeparately),
+                "Assets/GameAssets/TowerDefense/Maps",
+                nameof(PackDirectory),
                 nameof(TowerDefenseAddressRule));
+
             if (changed)
             {
                 AssetBundleCollectorSettingData.SaveFile();

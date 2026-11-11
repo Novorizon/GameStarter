@@ -75,22 +75,28 @@ namespace Game.HotUpdate
             }
         }
 
-        public void SetMasterVolume(float value)
+        public void SetMasterVolume(float value, bool saveImmediately = true)
         {
             EnsureUsable();
             Validate(value);
             restoreFailed = false;
             AudioManager.Instance.MasterVolume = value;
-            Save();
+            if (saveImmediately)
+            {
+                Save();
+            }
         }
 
-        public void SetGroupVolume(AudioGroup group, float value)
+        public void SetGroupVolume(AudioGroup group, float value, bool saveImmediately = true)
         {
             EnsureUsable();
             Validate(value);
             restoreFailed = false;
             AudioManager.Instance.SetGroupVolume(group, value);
-            Save();
+            if (saveImmediately)
+            {
+                Save();
+            }
         }
 
         public async Task RebindAsync(string action, int bindingIndex, CancellationToken token = default)

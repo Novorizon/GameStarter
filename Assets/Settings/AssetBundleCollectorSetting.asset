@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
   m_Name: AssetBundleCollectorSetting
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   ShowPackageView: 1
   ShowEditorAlias: 0
   UniqueBundleName: 0
@@ -37,7 +37,7 @@ MonoBehaviour:
         PackRuleName: PackDirectory
         FilterRuleName: GameDataFilterRule
         AssetTags: data
-        UserData:
+        UserData: 
     - GroupName: GameStarterCode
       GroupDesc: Hot DLLs and baseline AOT metadata
       AssetTags: code
@@ -50,9 +50,9 @@ MonoBehaviour:
         PackRuleName: PackSeparately
         FilterRuleName: GameCodeFilterRule
         AssetTags: code
-        UserData:
+        UserData: 
     - GroupName: TowerDefenseMaps
-      GroupDesc:
+      GroupDesc: 
       AssetTags: maps
       ActiveRuleName: EnableGroup
       Collectors:
@@ -62,10 +62,79 @@ MonoBehaviour:
         AddressRuleName: TowerDefenseAddressRule
         PackRuleName: PackSeparately
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/Sluice.png
+        CollectorGUID: 2280b39fdbea4aae82270238451ae4a2
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/Ridge.png
+        CollectorGUID: 4c29303fb8fb440799251a9dad1f2d6c
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/Lighthouse.png
+        CollectorGUID: 2a0b37b28b8f4b23bd76aa0cb18ee693
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/PondTerrace.png
+        CollectorGUID: 2f4691285ada496f9fb40449a0e9a8c5
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/CliffCrossing.png
+        CollectorGUID: b80765f45e794d369509e87ca36b59e6
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/WaterfallRidge.png
+        CollectorGUID: 85a8761c78a74d88bdceb58a39658bbc
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/TowerDefense/Art/TwinApproach.png
+        CollectorGUID: 7f1ca84285b1483184a132c4c3299d5f
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: TowerDefenseObjectives
+      GroupDesc: 
+      AssetTags: maps
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/TowerDefense/Maps
+        CollectorGUID: 0db12d36edf64ca3a946290ad9f0e099
+        CollectorType: 0
+        AddressRuleName: TowerDefenseAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: ClientUI
-      GroupDesc:
+      GroupDesc: 
       AssetTags: ui
       ActiveRuleName: EnableGroup
       Collectors:
@@ -75,42 +144,74 @@ MonoBehaviour:
         AddressRuleName: ClientAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
       - CollectPath: Assets/GameAssets/Common/UI/Panel.png
         CollectorGUID: 6fd828ae53c44f1087e6db1e0953e9f7
         CollectorType: 0
         AddressRuleName: ClientAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
       - CollectPath: Assets/GameAssets/Common/UI/Avatar.png
         CollectorGUID: 6ce694bfc5d54105a13b8e30b0c5ef5f
         CollectorType: 0
         AddressRuleName: ClientAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
       - CollectPath: Assets/GameAssets/Common/Startup/Background.bytes
         CollectorGUID: da35bece6db24f78b6a04f92dbb1e622
         CollectorType: 0
         AddressRuleName: ClientAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
       - CollectPath: Assets/GameAssets/Common/Startup/Layout.json
         CollectorGUID: 13b74e1bcede4c34bee0e7e2154a8111
         CollectorType: 0
         AddressRuleName: ClientAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/UI/BattleHud.png
+        CollectorGUID: b2364b09e19345229e86d58fc4614d0d
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/UI/AvatarShore.png
+        CollectorGUID: 266a7da746a047519999e606e33be017
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/UI/AvatarEmber.png
+        CollectorGUID: 6fcc61f23b26438b91c47c6bcf7e3892
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/UI/CampHud.png
+        CollectorGUID: 06a58dd1ffdd4ba58b7994e5ae507e8e
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: ClientFonts
-      GroupDesc:
+      GroupDesc: 
       AssetTags: fonts
       ActiveRuleName: EnableGroup
       Collectors:
@@ -120,10 +221,26 @@ MonoBehaviour:
         AddressRuleName: ClientAddressRule
         PackRuleName: PackSeparately
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/Fonts/BattleHudMedium.asset
+        CollectorGUID: 98c97b957a8698a4884854d11f8294f9
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/Fonts/BattleHudBold.asset
+        CollectorGUID: 6d7eeaf6e0767b74f82ec1bbeb679ba8
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: CampMaps
-      GroupDesc:
+      GroupDesc: 
       AssetTags: maps
       ActiveRuleName: EnableGroup
       Collectors:
@@ -133,10 +250,10 @@ MonoBehaviour:
         AddressRuleName: CampAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
     - GroupName: CampStory
-      GroupDesc:
+      GroupDesc: 
       AssetTags: story
       ActiveRuleName: EnableGroup
       Collectors:
@@ -146,10 +263,26 @@ MonoBehaviour:
         AddressRuleName: CampAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Camp/Story/Outpost.json
+        CollectorGUID: c25a6732ee694acda3857e7494a9cbda
+        CollectorType: 0
+        AddressRuleName: CampAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Camp/Story/TideCampaign.json
+        CollectorGUID: a33c47dd45f4bf0469e8bc9fa4b7ae14
+        CollectorType: 0
+        AddressRuleName: CampAddressRule
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: ClientRendering
-      GroupDesc:
+      GroupDesc: 
       AssetTags: rendering
       ActiveRuleName: EnableGroup
       Collectors:
@@ -159,13 +292,42 @@ MonoBehaviour:
         AddressRuleName: ClientAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
       - CollectPath: Assets/GameAssets/Common/Rendering/WorldSprite.mat
         CollectorGUID: 15de7b4d4541cd4c297cbbf5a1305abd
         CollectorType: 0
         AddressRuleName: ClientAddressRule
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
+    - GroupName: ExpeditionUI
+      GroupDesc: 
+      AssetTags: ui
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAssets/Common/UI/ExpeditionBackdrop.png
+        CollectorGUID: 0c932764f8ea43759668585cb9579942
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/UI/ExpeditionBanner.png
+        CollectorGUID: 8e0cada612134c068c0176026b4c81b5
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameAssets/Common/UI/ExpeditionGlyphs.png
+        CollectorGUID: cf5d625789be451a9e46cde2e6480607
+        CollectorType: 0
+        AddressRuleName: ClientAddressRule
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

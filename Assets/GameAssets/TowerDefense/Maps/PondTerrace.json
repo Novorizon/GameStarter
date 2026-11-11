@@ -1,0 +1,10 @@
+{
+  "objectiveType": "DefendBase",
+  "assault": { "reinforcementGapTicks": 100, "firstDraftPoints": 6, "repeatDraftPoints": 12 },
+  "targetName": "桥后营地",
+  "baseAttackIntervalTicks": 30,
+  "baseUpgrades": [
+    { "goldCost": 60, "durabilityIncrease": 6 },
+    { "goldCost": 100, "durabilityIncrease": 8 }
+  ]
+}
