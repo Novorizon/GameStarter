@@ -1,0 +1,48 @@
+[
+  {
+    "test": "all_six_actual_manifests_normalize_equally",
+    "passed": true,
+    "commonIdentity": "e17b632f65d9b62990907f10726b84af8d6fa3747c1aa6d20bc0dbd260195544",
+    "rawDllHashesAreDifferent": true,
+    "onlyDifferingCompileSource": "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs"
+  },
+  {
+    "test": "only_exact_repository_root_path_difference_accepted",
+    "passed": true
+  },
+  {
+    "test": "different_actual_compile_source_rejected",
+    "rejected": true,
+    "reason": "共同 Runner 实际 Compile/源/csproj/编译属性身份不同"
+  },
+  {
+    "test": "different_actual_compile_property_rejected",
+    "rejected": true,
+    "reason": "共同 Runner 实际 Compile/源/csproj/编译属性身份不同"
+  },
+  {
+    "test": "different_csproj_rejected",
+    "rejected": true,
+    "reason": "共同 Runner 实际 Compile/源/csproj/编译属性身份不同"
+  },
+  {
+    "test": "metadata_wrong_snapshot_rejected",
+    "rejected": true,
+    "reason": "Runner RepositoryRoot 不是该项目生成的精确根路径"
+  },
+  {
+    "test": "metadata_duplicate_root_rejected",
+    "rejected": true,
+    "reason": "Runner AssemblyInfo 必须含唯一且形状准确的 RepositoryRoot 属性"
+  },
+  {
+    "test": "other_assemblyinfo_change_rejected",
+    "rejected": true,
+    "reason": "共同 Runner 实际 Compile/源/csproj/编译属性身份不同"
+  },
+  {
+    "test": "missing_explicit_fresh_flag_rejected",
+    "rejected": true,
+    "reason": "bad: 冻结执行为陈旧/无回放报告"
+  }
+]

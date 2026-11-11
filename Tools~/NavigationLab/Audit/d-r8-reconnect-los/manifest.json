@@ -1,0 +1,18 @@
+{
+  "scope": "Read-only R8 reconnection-guard and local escape diagnostics, no candidate pass claimed",
+  "files": {
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/README.md": "2b3522d55201e30ffa3fc70c7f4377e2cdbc50c00f8a82d5f332fb08931fedbd",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/Program.cs": "d414b0693b13717869e5ec31901e962db91fd8f62e09e3798dd236b762ea636b",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/Query.csproj": "b3f0d30d296b574017937f7e746ba3e0b5d70514d3953fc9c6b9751e83de4628",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/planner.log": "bf5a0e3f92ce3f654cee03a28de49774039e8644611e1a54fbf89eb0a9dceb83",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/verify.py": "d850c588c66f64027fde64d6356d8178e6ded47030329a8eda318da9fe2551ad",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/geometry.json": "bd6831f616c1a2b5427d4ed787050fea8f6923a48ab04908b9060287fcccad44",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/verification.log": "59364391821ccecc9f8891874129fae4db0c68bda481d8f7bca034f3e16cf5a6",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/bin/Release/net8.0/NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "/workspace/navigation-comparison/audit/d-r8-reconnect-los/bin/Release/net8.0/NavigationLab.DAoe4.dll": "fcca5c1ddbef60a8139b47d2067c2bc7d4f7cc277d06c4ba99548bf6001eab4d",
+    "/workspace/navigation-comparison/results/d-v2-stress/open-arena.json": "59ac73b4cb26b0b607f6a163a667db91c8ca46dcfa8f5ecffbafaf996bc9155f",
+    "/workspace/navigation-comparison/results/d-v2-stress/inputs/open-arena.json": "33eec4794d8240a7ce29c9d27b44f42883ec265c9117641f7ebaa6da16e027d9",
+    "/workspace/navigation-comparison/results/d-v2-stress/traces/open-arena.jsonl.gz": "e1cdac0cda17f01cdcb654dbfeb34a8a2f0c2a2bd7d283bcd40395adbf97b7df",
+    "/workspace/navigation-comparison/results/d-v2-stress/build-manifest.json": "332b07110b685c12d25155d2e42712d601717e51b38cf19fbafe51fabd67b5e2"
+  }
+}
