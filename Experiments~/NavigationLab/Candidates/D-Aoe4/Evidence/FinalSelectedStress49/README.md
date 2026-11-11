@@ -9,3 +9,5 @@ trace-storage.json明确列出原完整轨迹路径与SHA；版本化trace-windo
 选定DLL的真实Linux Unity/Mono子集为2通过、1失败，原件见 ../FinalSelectedNative。不是49项全Unity验收，不代表图形、IL2CPP、Windows或手机验证。
 
 本项目依据AoE4公开架构独立实现；有限测试不证明一般完备性，也不证明商业游戏内部实现，未进行性能排名。
+
+D256的两次仅线程栈诊断合计约1.030秒，原件及计时边界见RuntimeDiagnostics；wall/API数据不作性能排名。输入、逻辑时限和实际DLL均未修改。两个精确缓存版本另在各自辅助分支，仅四例，不计入本49成绩。
