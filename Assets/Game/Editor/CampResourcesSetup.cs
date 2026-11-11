@@ -31,6 +31,20 @@ namespace Game.Editor
                 "Assets/GameAssets/Camp/Story/Arrival.json",
                 nameof(PackDirectory),
                 nameof(CampAddressRule));
+            changed |= ResourceCollectorSetup.SetGroup(
+                package,
+                "CampStory",
+                "story",
+                "Assets/GameAssets/Camp/Story/Outpost.json",
+                nameof(PackDirectory),
+                nameof(CampAddressRule));
+            changed |= ResourceCollectorSetup.SetGroup(
+                package,
+                "CampStory",
+                "story",
+                "Assets/GameAssets/Camp/Story/TideCampaign.json",
+                nameof(PackDirectory),
+                nameof(CampAddressRule));
             if (changed)
             {
                 AssetBundleCollectorSettingData.SaveFile();

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NuGetAudit>false</NuGetAudit>
+    <CrowdBackendSource Condition="'$(CrowdBackendSource)' == ''">../CrowdFlowPrototype</CrowdBackendSource>
+    <CrowdDirectionFieldSource Condition="'$(CrowdDirectionFieldSource)' == ''">$(CrowdBackendSource)/DirectionField.cs</CrowdDirectionFieldSource>
+    <CrowdSteeringSource Condition="'$(CrowdSteeringSource)' == ''">$(CrowdBackendSource)/CrowdSteering.cs</CrowdSteeringSource>
+    <CrowdBackendAdapter Condition="'$(CrowdBackendAdapter)' == ''">PrototypeBackend.cs</CrowdBackendAdapter>
+    <DefineConstants Condition="'$(CrowdPortalField)' == 'true'">$(DefineConstants);CROWD_PORTAL_DIRECTION_FIELD</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs;Scenarios.cs;$(CrowdBackendAdapter)" />
+    <Compile Include="$(CrowdDirectionFieldSource);$(CrowdSteeringSource);$(CrowdBackendSource)/Junction.cs" />
+    <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/BattleTerrain.cs;../../Assets/HotUpdate/TowerDefense/Domain/Configuration.cs" />
+  </ItemGroup>
+</Project>

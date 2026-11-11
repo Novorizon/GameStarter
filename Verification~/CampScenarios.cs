@@ -25,7 +25,7 @@ internal static partial class Program
             Equal(40, reloaded.Camp.Wood);
             Equal(2, reloaded.Victories);
         });
-        Check("camp progression uses task rewards and two battles to build the island home", () =>
+        Check("camp setup and two victories automatically build the island home", () =>
         {
             var store = new JourneyStore();
             var journey = new JourneyProgress(ReadTowerDefenseTables(), store);
@@ -33,24 +33,26 @@ internal static partial class Program
             True(!camp.Upgrade());
             True(!camp.Claim(1));
             True(camp.CompleteArrival());
-            True(camp.Claim(1));
+            True(journey.TrySaveIdentity("  海风  ", TravelerAppearance.Shore));
             True(camp.Upgrade());
             Equal(2, camp.Level.Id);
+            True(!camp.ExpeditionUnlocked && camp.CompleteOutpostBriefing() && camp.ExpeditionUnlocked);
+            True(camp.Claim(1));
             True(camp.Claim(2));
             True(!camp.Upgrade());
             journey.Record(new JourneyBattle { RunId = "island-first", Victory = true, Wave = 6, Kills = 126, Towers = 3, Cards = 5 });
-            True(camp.Claim(3));
-            True(camp.Upgrade());
             Equal(3, camp.Level.Id);
+            True(camp.Claim(3));
             True(camp.Claim(4));
             True(!camp.Upgrade());
             journey.Record(new JourneyBattle { RunId = "island-second", Victory = true, Wave = 6, Kills = 126, Towers = 3, Cards = 5 });
-            True(camp.Upgrade());
             Equal(4, camp.Level.Id);
             True(camp.NextLevel == null && !camp.Upgrade());
             var reloaded = new JourneyProgress(ReadTowerDefenseTables(), store);
             Equal(4, reloaded.Camp.Level.Id);
             Equal(camp.Wood, reloaded.Camp.Wood);
+            Equal("海风", reloaded.Nickname);
+            Equal(TravelerAppearance.Shore, reloaded.Appearance);
             True(reloaded.Camp.Claimed(4));
         });
         Check("camp task claims are gated and idempotent across reloads", () =>

@@ -25,6 +25,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
         public bool OffersCard { get; }
         public int EnemyCount { get; }
         public IReadOnlyList<EnemyBriefing> Enemies { get; }
+        public IReadOnlyList<int> RouteIds { get; }
 
         internal WaveBriefing(WaveDefinition wave, int number, int waveCount, IReadOnlyDictionary<int, EnemyDefinition> definitions)
         {
@@ -34,6 +35,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             var enemies = wave.Groups.GroupBy(group => group.EnemyId).OrderBy(group => group.Key)
                 .Select(group => new EnemyBriefing(group.Key, definitions[group.Key].Name, group.Sum(item => item.Count))).ToArray();
             Enemies = Array.AsReadOnly(enemies);
+            RouteIds = Array.AsReadOnly(wave.Groups.Select(group => group.RouteId).Distinct().OrderBy(id => id).ToArray());
             EnemyCount = enemies.Sum(enemy => enemy.Count);
         }
     }
@@ -42,6 +44,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
     public sealed class BattleBriefing
     {
         public IReadOnlyList<WaveBriefing> Waves { get; }
+        public IReadOnlyList<EnemyBriefing> Enemies { get; }
         public int EnemyCount { get; }
 
         public BattleBriefing(FightConfiguration configuration)
@@ -54,7 +57,9 @@ namespace Game.HotUpdate.TowerDefense.Domain
             var definitions = configuration.Enemies.ToDictionary(enemy => enemy.Id);
             var waves = configuration.Waves.Select((wave, index) => new WaveBriefing(wave, index + 1, configuration.Waves.Length, definitions)).ToArray();
             Waves = Array.AsReadOnly(waves);
-            EnemyCount = waves.Sum(wave => wave.EnemyCount);
+            Enemies = Array.AsReadOnly(waves.SelectMany(wave => wave.Enemies).GroupBy(enemy => enemy.Id).OrderBy(group => group.Key)
+                .Select(group => new EnemyBriefing(group.Key, definitions[group.Key].Name, group.Sum(enemy => enemy.Count))).ToArray());
+            EnemyCount = Enemies.Sum(enemy => enemy.Count);
         }
     }
 }

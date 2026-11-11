@@ -18,7 +18,7 @@ internal static partial class Program
             True(loaded.Contains("tbexample") && loaded.Contains("tbclienttheme"));
             var configuration = TowerDefenseTables.Create(tables, 1);
             Equal(6, configuration.Waves.Length);
-            Equal(7, configuration.BuildSlots.Length);
+            Equal(407, configuration.BuildSlots.Length);
             Equal(3, configuration.Towers.Length);
             Equal(4, configuration.Enemies.Length);
             Equal(7, configuration.Cards.Length);

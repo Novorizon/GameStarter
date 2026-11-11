@@ -10,5 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../Assets/HotUpdate/TowerDefense/Domain/*.cs" Link="Domain/%(Filename)%(Extension)" />
+    <Compile Include="../../NativeFixtures~/Editor/NativeValidation/DemoConfiguration.cs" Link="Fixtures/DemoConfiguration.cs" />
   </ItemGroup>
 </Project>

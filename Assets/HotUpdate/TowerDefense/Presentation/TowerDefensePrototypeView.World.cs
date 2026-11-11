@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Game.HotUpdate.Client;
 using Game.HotUpdate.TowerDefense.Domain;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 namespace Game.HotUpdate.TowerDefense.Presentation
 {
@@ -13,6 +15,14 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private const float CameraPitch = 55;
         private const float MapWidth = 22;
         private const float MapDepth = 15.12f;
+        private const float TowerFoundationRadius = FightSession.TowerFoundationRadiusMillimetres / 1000f;
+        private const float TowerModelFoundationRadius = .52f;
+        private const float TowerModelScale = TowerFoundationRadius / TowerModelFoundationRadius;
+        private const float TowerGroundOffset = .02f;
+        private static readonly float DefaultProjectedMapDepth = MapDepth * Mathf.Sin(CameraPitch * Mathf.Deg2Rad);
+        private float projectedMapDepth = DefaultProjectedMapDepth;
+        private float CellHalfWidth => configuration.BuildGridStep > 0 ? configuration.BuildGridStep / 2000f : .54f;
+        private float CellHalfDepth => configuration.BuildGridStep > 0 ? configuration.BuildGridStep / 2000f : .58f;
         private Material stone;
         private Material stoneLight;
         private Material wood;
@@ -20,11 +30,23 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private Material iron;
         private Material blue;
         private Material eye;
-        private Material shadowMaterial;
+        private Material vertexColorMaterial;
+        private Material litTemplate;
+        private Material spriteTemplate;
+        private Transform baseTarget;
+        private readonly Dictionary<Material, Material> previewMaterials = new Dictionary<Material, Material>();
+        private GameObject placementGhost;
+        private LineRenderer placementFootprint;
+        private bool? previewCanBuild;
+        private PointerEventData pointerQuery;
+        private bool trackingPlacementTouch;
+        private int ghostDefinitionId;
         private Mesh shadowMesh;
 
-        private void CreateWorld(Sprite map)
+        private void CreateWorld(Sprite map, ClientArt art)
         {
+            litTemplate = art?.WorldLit;
+            spriteTemplate = art?.WorldSprite;
             field = new GameObject("Battlefield").transform;
             field.SetParent(transform, false);
             previousCamera = Camera.main;
@@ -40,7 +62,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             worldCamera = cameraRoot.AddComponent<Camera>();
             worldCamera.orthographic = true;
             worldCamera.transform.rotation = Quaternion.Euler(CameraPitch, 0, 0);
-            worldCamera.transform.position = new Vector3(0, 0, -1.60f) - worldCamera.transform.forward * 35;
+            worldCamera.transform.position = -worldCamera.transform.forward * 35;
             worldCamera.orthographicSize = 7.65f;
             worldCamera.clearFlags = CameraClearFlags.SolidColor;
             worldCamera.backgroundColor = new Color(.16f, .19f, .17f);
@@ -53,6 +75,13 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             stone = MakeMaterial(new Color(.48f, .51f, .46f));
             stoneLight = MakeMaterial(new Color(.79f, .77f, .64f));
             wood = MakeMaterial(new Color(.39f, .24f, .12f));
+            var stoneTexture = PrototypeTextures.Stone();
+            var woodTexture = PrototypeTextures.Wood();
+            materialAssets.Add(stoneTexture);
+            materialAssets.Add(woodTexture);
+            stone.mainTexture = stoneTexture;
+            stoneLight.mainTexture = stoneTexture;
+            wood.mainTexture = woodTexture;
             brass = MakeMaterial(new Color(.83f, .59f, .23f));
             iron = MakeMaterial(new Color(.20f, .25f, .25f));
             blue = MakeMaterial(new Color(.16f, .43f, .63f));
@@ -67,33 +96,24 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             CreateShadowMesh();
             mapRenderer = new GameObject("DioramaMapArtwork").AddComponent<SpriteRenderer>();
             mapRenderer.transform.SetParent(field, false);
+            if (spriteTemplate != null)
+            {
+                mapRenderer.sharedMaterial = spriteTemplate;
+            }
+
             // The map already contains the camera projection. Keep it facing the camera, behind every 3D unit.
-            mapRenderer.transform.position = worldCamera.transform.forward * 18;
             mapRenderer.transform.rotation = worldCamera.transform.rotation;
             ApplyMap(map);
-            CreateCastle(configuration.Routes[0].Points[configuration.Routes[0].Points.Length - 1]);
-            foreach (var slot in configuration.BuildSlots)
+            CreateObjective(configuration.Routes[0]);
+            if (configuration.RelayRouteId != 0)
             {
-                var pad = new GameObject("Build pad " + slot.Id);
-                pad.transform.SetParent(field, false);
-                pad.transform.localPosition = World(slot.Position, .06f);
-                var collider = pad.AddComponent<BoxCollider>();
-                collider.size = new Vector3(1.30f, .20f, 1.45f);
-                pad.AddComponent<PrototypeWorldTarget>().SlotId = slot.Id;
-                var outline = pad.AddComponent<LineRenderer>();
-                outline.sharedMaterial = lineMaterial;
-                outline.useWorldSpace = false;
-                outline.loop = true;
-                outline.startWidth = .035f;
-                outline.endWidth = .035f;
-                outline.positionCount = 4;
-                outline.SetPositions(new[]
+                foreach (var route in configuration.Routes)
                 {
-                    new Vector3(-.57f, .02f, -.65f), new Vector3(-.57f, .02f, .65f),
-                    new Vector3(.57f, .02f, .65f), new Vector3(.57f, .02f, -.65f)
-                });
-                outline.enabled = false;
-                slots.Add(slot.Id, pad);
+                    if (route.Id == configuration.RelayRouteId)
+                    {
+                        CreateRelay(route);
+                    }
+                }
             }
 
             rangeRing = new GameObject("SelectedTowerRange").AddComponent<LineRenderer>();
@@ -106,6 +126,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             rangeRing.positionCount = 64;
             rangeRing.startWidth = .035f;
             rangeRing.endWidth = .035f;
+            rangeRing.startColor = rangeRing.endColor = new Color(.57f, .93f, 1f, .95f);
             rangeRing.enabled = false;
         }
 
@@ -113,19 +134,94 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         {
             mapRenderer.sprite = map;
             mapRenderer.enabled = map != null;
+            float depth = DefaultProjectedMapDepth;
             if (map != null)
             {
-                float projectedDepth = MapDepth * Mathf.Sin(CameraPitch * Mathf.Deg2Rad);
-                mapRenderer.transform.localScale = new Vector3(MapWidth / map.bounds.size.x, projectedDepth / map.bounds.size.y, 1);
+                // Level coordinates are authored against the complete image, including its transparent border.
+                var size = map.rect.size;
+                var pivot = map.pivot - size * .5f;
+                var camera = worldCamera.transform;
+                float unitsPerPixel = MapWidth / size.x;
+                float scale = unitsPerPixel * map.pixelsPerUnit;
+                depth = size.y * unitsPerPixel;
+                mapRenderer.transform.localScale = new Vector3(scale, scale, 1);
+                mapRenderer.transform.position = field.position + camera.forward * 18
+                    + camera.right * (pivot.x * unitsPerPixel) + camera.up * (pivot.y * unitsPerPixel);
+            }
+
+            if (!Mathf.Approximately(depth, projectedMapDepth))
+            {
+                projectedMapDepth = depth;
+                lastWidth = 0;
             }
         }
 
-        private void CreateCastle(Position2 position)
+        private void CreateObjective(RouteDefinition route)
         {
-            var root = new GameObject("Base - Forest Keep").transform;
+            var root = new GameObject("Defense Objective").transform;
             root.SetParent(field, false);
-            root.localPosition = World(position, 0);
+            var points = route.Points;
+            var center = World(points[points.Length - 1], 0);
+            root.localPosition = center;
+            root.localRotation = Quaternion.LookRotation(center - World(points[points.Length - 2], 0));
+            if (!configuration.Objective.HasBase)
+            {
+                CreatePortal(root);
+                return;
+            }
+
+            if (configuration.Objective.BaseUpgrades.Count != 0)
+            {
+                baseTarget = root;
+                float height = configuration.StageId switch
+                {
+                    2 => 1.82f,
+                    3 => 2.13f,
+                    4 => 3.12f,
+                    _ => 2.38f
+                };
+                var hitbox = root.gameObject.AddComponent<BoxCollider>();
+                hitbox.center = new Vector3(0, .5f * height, 0);
+                hitbox.size = new Vector3(1.72f, height, 1.48f);
+            }
+
             AddShadow(root, 1.15f);
+            if (configuration.StageId == 2)
+            {
+                Primitive("Sluice platform", PrimitiveType.Cube, root, new Vector3(0, .1f, 0), new Vector3(1.8f, .2f, 1.7f), stoneLight);
+                Primitive("Sluice door", PrimitiveType.Cube, root, new Vector3(0, .75f, .12f), new Vector3(1.33f, 1.32f, .30f), wood);
+                foreach (float x in new[] { -.78f, .78f })
+                {
+                    Primitive("Sluice pillar", PrimitiveType.Cube, root, new Vector3(x, .93f, .1f), new Vector3(.25f, 1.65f, .40f), stone);
+                }
+
+                Primitive("Winch beam", PrimitiveType.Cube, root, new Vector3(0, 1.70f, .1f), new Vector3(1.88f, .23f, .41f), wood);
+                var wheel = Primitive("Winch wheel", PrimitiveType.Cylinder, root, new Vector3(0, 1.45f, -.23f), new Vector3(.55f, .09f, .55f), brass);
+                wheel.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                return;
+            }
+
+            if (configuration.StageId == 3)
+            {
+                Primitive("Signal platform", PrimitiveType.Cube, root, new Vector3(0, .16f, 0), new Vector3(1.62f, .32f, 1.50f), stoneLight);
+                Primitive("Signal station", PrimitiveType.Cube, root, new Vector3(0, .79f, 0), new Vector3(1.05f, 1.09f, .93f), wood);
+                Primitive("Tower flag", PrimitiveType.Cube, root, new Vector3(.40f, 1.99f, 0), new Vector3(.66f, .27f, .045f), blue);
+                Prism("Alarm bell", root, new Vector3(0, 1.50f, 0), .34f, .40f, 8, brass, .18f);
+                Prism("Signal roof", root, new Vector3(0, 1.93f, 0), .67f, .38f, 4, blue).transform.localRotation = Quaternion.Euler(0, 45, 0);
+                return;
+            }
+
+            if (configuration.StageId == 4)
+            {
+                Prism("Lighthouse steps", root, new Vector3(0, .14f, 0), .90f, .27f, 8, stoneLight);
+                Prism("White stone tower", root, new Vector3(0, 1.16f, 0), .62f, 1.90f, 8, stoneLight, .48f);
+                Prism("Blue cornice", root, new Vector3(0, 2.11f, 0), .59f, .24f, 8, blue);
+                Prism("Beacon cage", root, new Vector3(0, 2.44f, 0), .39f, .51f, 8, brass);
+                Prism("Copper roof", root, new Vector3(0, 2.85f, 0), .55f, .39f, 8, blue, .10f);
+                Primitive("Tower door", PrimitiveType.Cube, root, new Vector3(0, .52f, -.57f), new Vector3(.36f, .59f, .08f), wood);
+                return;
+            }
+
             Primitive("Keep foundation", PrimitiveType.Cube, root, new Vector3(0, .10f, 0), new Vector3(1.7f, .20f, 1.4f), stoneLight);
             Primitive("Keep hall", PrimitiveType.Cube, root, new Vector3(0, .65f, 0), new Vector3(1.15f, 1.05f, .95f), stoneLight);
             var roof = Prism("Blue slate roof", root, new Vector3(0, 1.40f, 0), .92f, .65f, 4, blue, 0);
@@ -141,17 +237,62 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             Primitive("Keep banner", PrimitiveType.Cube, root, new Vector3(.24f, 2.17f, 0), new Vector3(.46f, .25f, .035f), blue);
         }
 
-        private TowerView CreateTower(int id, int definition, Position2 position)
+        private void CreatePortal(Transform root)
+        {
+            AddShadow(root, .92f);
+            Prism("Portal plinth", root, new Vector3(0, .10f, 0), .82f, .20f, 8, stoneLight);
+            var ring = new GameObject("Portal ring").AddComponent<LineRenderer>();
+            ring.transform.SetParent(root, false);
+            ring.sharedMaterial = MakeMaterial(new Color(.36f, .91f, 1f), true);
+            ring.useWorldSpace = false;
+            ring.loop = true;
+            ring.startWidth = ring.endWidth = .12f;
+            ring.positionCount = 40;
+            for (int index = 0; index < ring.positionCount; index++)
+            {
+                float angle = 2 * Mathf.PI * index / ring.positionCount;
+                ring.SetPosition(index, new Vector3(.66f * Mathf.Cos(angle), 1.05f + .86f * Mathf.Sin(angle), 0));
+            }
+        }
+
+        private Position2 RelayPosition(RouteDefinition route)
+        {
+            var point = route.Points[configuration.RelayPointIndex];
+            return new Position2(point.X, point.Y + 780);
+        }
+
+        private void CreateRelay(RouteDefinition route)
+        {
+            var root = new GameObject("Side Signal").transform;
+            root.SetParent(field, false);
+            root.localPosition = World(RelayPosition(route), 0);
+            AddShadow(root, .50f);
+            Prism("Side signal plinth", root, new Vector3(0, .16f, 0), .42f, .29f, 6, stoneLight);
+            Primitive("Side signal mast", PrimitiveType.Cube, root, new Vector3(0, .64f, 0), new Vector3(.18f, .83f, .18f), wood);
+            var light = MakeMaterial(new Color(1, .76f, .24f), true);
+            relayLamp = Prism("Signal lantern", root, new Vector3(0, 1.09f, 0), .24f, .31f, 6, light);
+        }
+
+        private TowerView CreateTower(int id, int definition, Position2 position, bool preview = false)
         {
             var root = new GameObject("Tower " + id + " - Stone Watchtower");
             root.transform.SetParent(field, false);
-            root.transform.localPosition = World(position, .02f);
-            AddShadow(root.transform, .72f);
-            Prism("Foundation", root.transform, new Vector3(0, .10f, 0), .52f, .18f, 8, stoneLight);
+            root.transform.localPosition = World(position, TowerGroundOffset);
+            root.transform.localScale = Vector3.one * TowerModelScale;
+            if (!preview)
+            {
+                AddShadow(root.transform, .72f);
+            }
+
+            Prism("Foundation", root.transform, new Vector3(0, .10f, 0), TowerModelFoundationRadius, .18f, 8, stoneLight);
             var body = Prism("Masonry", root.transform, new Vector3(0, .61f, 0), .39f, .90f, 8, stone, .34f);
-            var collider = body.AddComponent<BoxCollider>();
-            collider.size = new Vector3(.84f, 1.1f, .84f);
-            body.AddComponent<PrototypeWorldTarget>().TowerId = id;
+            if (!preview)
+            {
+                var collider = body.AddComponent<BoxCollider>();
+                collider.size = new Vector3(.84f, 1.1f, .84f);
+                body.AddComponent<PrototypeWorldTarget>().TowerId = id;
+            }
+
             Prism("Coping", root.transform, new Vector3(0, 1.10f, 0), .48f, .16f, 8, stoneLight);
             for (int course = 1; course <= 3; course++)
             {
@@ -200,6 +341,11 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 Destroy(part);
             }
 
+            if (preview)
+            {
+                return new TowerView { Root = root, Turret = turret };
+            }
+
             var beam = new GameObject("Shot").AddComponent<LineRenderer>();
             beam.transform.SetParent(root.transform, false);
             beam.sharedMaterial = lineMaterial;
@@ -215,11 +361,12 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             var root = new GameObject("Enemy " + id + " - Forest Raider");
             root.transform.SetParent(field, false);
             var material = enemyMaterials[(Math.Abs(definition) - 1) % enemyMaterials.Length];
-            float size = definition == 3 ? 1.25f : .90f;
+            bool colossus = definition == 5;
+            float size = colossus ? 2.15f : definition == 3 ? 1.25f : .90f;
             root.transform.localScale = Vector3.one * size;
             AddShadow(root.transform, .38f);
-            Prism("Body", root.transform, new Vector3(0, .29f, 0), .20f, .35f, 6, wood, .24f);
-            Prism("Head", root.transform, new Vector3(0, .65f, 0), .26f, .34f, 7, material, .16f);
+            Prism("Body", root.transform, new Vector3(0, .29f, 0), .20f, .35f, 6, colossus ? stone : wood, .24f);
+            Prism("Head", root.transform, new Vector3(0, .65f, 0), .26f, .34f, 7, colossus ? stoneLight : material, .16f);
             for (int side = -1; side <= 1; side += 2)
             {
                 var ear = Prism("Ear", root.transform, new Vector3(side * .26f, .67f, 0), .10f, .30f, 4, material, 0);
@@ -228,21 +375,40 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 Destroy(pupil.GetComponent<Collider>());
                 var boot = Primitive("Boot", PrimitiveType.Cube, root.transform, new Vector3(side * .12f, .07f, .04f), new Vector3(.14f, .14f, .22f), iron);
                 Destroy(boot.GetComponent<Collider>());
+                if (colossus)
+                {
+                    Prism("Tide shell", root.transform, new Vector3(side * .26f, .36f, -.11f), .22f, .35f, 6, blue, .18f);
+                }
             }
 
-            var bar = new GameObject("Health").AddComponent<LineRenderer>();
-            bar.transform.SetParent(root.transform, false);
-            bar.useWorldSpace = false;
-            bar.sharedMaterial = lineMaterial;
-            bar.startWidth = .045f;
-            bar.endWidth = .045f;
-            bar.positionCount = 2;
+            var health = new GameObject("Health").transform;
+            health.SetParent(root.transform, false);
+            health.localPosition = new Vector3(0, 1.05f, 0);
+            CreateHealthStroke(health, "Track", .085f, new Color(.08f, .10f, .13f), 0);
+            var bar = CreateHealthStroke(health, "Fill", .053f, new Color(1, .41f, .44f), 1);
             return new EnemyView { Root = root, Health = bar };
+        }
+
+        private LineRenderer CreateHealthStroke(Transform parent, string name, float width, Color color, int order)
+        {
+            var line = new GameObject(name).AddComponent<LineRenderer>();
+            line.transform.SetParent(parent, false);
+            line.useWorldSpace = false;
+            line.sharedMaterial = lineMaterial;
+            line.startWidth = line.endWidth = width;
+            line.startColor = line.endColor = color;
+            line.numCapVertices = 8;
+            line.sortingOrder = order;
+            line.positionCount = 2;
+            line.SetPosition(0, new Vector3(-.32f, 0, 0));
+            line.SetPosition(1, new Vector3(.32f, 0, 0));
+            return line;
         }
 
         private void SynchronizeWorld(float elapsed)
         {
             liveEnemies.Clear();
+            var objectivePosition = World(configuration.Routes[0].Points[^1], .05f);
             foreach (var state in session.Enemies)
             {
                 liveEnemies.Add(state.Id);
@@ -254,32 +420,41 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 }
 
                 var next = World(state.Position, .05f);
-                var movement = next - view.Root.transform.localPosition;
-                if (movement.sqrMagnitude > .0001f)
+                var direction = state.AttackingBase ? objectivePosition - next : next - view.Root.transform.localPosition;
+                if (direction.sqrMagnitude > .0001f)
                 {
-                    view.Root.transform.rotation = Quaternion.LookRotation(movement);
+                    var rotation = Quaternion.LookRotation(direction);
+                    var engagement = configuration.Objective.BaseAttack?.Engagement;
+                    if (state.AttackingBase && engagement != null)
+                    {
+                        long untilHit = state.NextBaseAttackTick - session.Tick;
+                        float pitch = 0f;
+                        if (untilHit == configuration.Objective.BaseAttackIntervalTicks)
+                        {
+                            pitch = 16f;
+                        }
+                        else if (untilHit > 0 && untilHit <= engagement.WindupTicks)
+                        {
+                            pitch = -12f * (engagement.WindupTicks - untilHit + 1) / engagement.WindupTicks;
+                        }
+
+                        rotation *= Quaternion.Euler(pitch, 0, 0);
+                    }
+
+                    view.Root.transform.rotation = rotation;
                 }
 
                 view.Root.transform.localPosition = next;
                 float health = state.MaxHealth == 0 ? 0 : Mathf.Clamp01((float)state.Health / state.MaxHealth);
-                view.Health.SetPosition(0, new Vector3(-.32f, 1.05f, 0));
-                view.Health.SetPosition(1, new Vector3(-.32f + health * .64f, 1.05f, 0));
+                view.Health.transform.parent.rotation = worldCamera.transform.rotation;
+                view.Health.SetPosition(1, new Vector3(-.32f + health * .64f, 0, 0));
             }
 
             rangeRing.enabled = false;
-            foreach (var pair in slots)
-            {
-                bool occupied = false;
-                foreach (var tower in session.Towers)
-                {
-                    occupied |= tower.SlotId == pair.Key;
-                }
-
-                pair.Value.GetComponent<LineRenderer>().enabled = buildMode && !occupied;
-            }
-
+            liveTowers.Clear();
             foreach (var state in session.Towers)
             {
+                liveTowers.Add(state.Id);
                 if (!towers.TryGetValue(state.Id, out var view))
                 {
                     view = CreateTower(state.Id, state.DefinitionId, state.Position);
@@ -298,7 +473,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                             view.Turret.rotation = Quaternion.LookRotation(direction);
                         }
 
-                        view.Beam.SetPosition(0, view.Root.transform.position + Vector3.up * 1.45f);
+                        view.Beam.SetPosition(0, view.Root.transform.TransformPoint(new Vector3(0, 1.45f, 0)));
                         view.Beam.SetPosition(1, target.Root.transform.position + Vector3.up * .40f);
                         view.BeamSeconds = .10f;
                     }
@@ -326,6 +501,22 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             {
                 enemies.Remove(id);
             }
+
+            removals.Clear();
+            foreach (var pair in towers)
+            {
+                if (!liveTowers.Contains(pair.Key))
+                {
+                    pair.Value.Root.SetActive(false);
+                    Destroy(pair.Value.Root);
+                    removals.Add(pair.Key);
+                }
+            }
+
+            foreach (int id in removals)
+            {
+                towers.Remove(id);
+            }
         }
 
         private void DrawRange(Position2 position, float radius)
@@ -345,15 +536,26 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private Material MakeMaterial(Color color, bool unlit = false)
         {
-            bool urp = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null;
-            var material = new Material(Shader.Find(unlit ? "Sprites/Default" : urp ? "Universal Render Pipeline/Lit" : "Standard"));
+            var template = unlit ? spriteTemplate : litTemplate;
+            Material material;
+            if (template != null)
+            {
+                material = new Material(template);
+            }
+            else
+            {
+                bool urp = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null;
+                string shader = unlit ? "Sprites/Default" : urp ? "Universal Render Pipeline/Lit" : "Standard";
+                material = new Material(Shader.Find(shader));
+            }
+
             material.color = color;
             if (!unlit)
             {
                 material.SetFloat(material.HasProperty("_Smoothness") ? "_Smoothness" : "_Glossiness", 0);
             }
 
-            materials.Add(material);
+            materialAssets.Add(material);
             return material;
         }
 
@@ -420,7 +622,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private void CreateShadowMesh()
         {
-            shadowMaterial = MakeMaterial(Color.white, true);
+            vertexColorMaterial = MakeMaterial(Color.white, true);
             var vertices = new List<Vector3> { Vector3.zero };
             var colors = new List<Color> { new Color(0, 0, 0, .26f) };
             var triangles = new List<int>();
@@ -451,76 +653,265 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             root.transform.localPosition = new Vector3(0, .018f, 0);
             root.transform.localScale = new Vector3(radius, 1, radius);
             root.GetComponent<MeshFilter>().sharedMesh = shadowMesh;
-            root.GetComponent<MeshRenderer>().sharedMaterial = shadowMaterial;
+            root.GetComponent<MeshRenderer>().sharedMaterial = vertexColorMaterial;
         }
+        private bool IsOverInterface(Vector2 position)
+        {
+            if (EventSystem.current == null)
+            {
+                return false;
+            }
+
+            pointerQuery ??= new PointerEventData(EventSystem.current);
+            pointerQuery.position = position;
+            uiHits.Clear();
+            EventSystem.current.RaycastAll(pointerQuery, uiHits);
+            return uiHits.Count != 0;
+        }
+
+        private bool CanPointAtField(Vector2 position)
+        {
+            return battlefieldPixels.Contains(position) && !IsOverInterface(position);
+        }
+
+        private bool ResolvePlacement(Vector2 pointer, out Vector3 position, out int slotId)
+        {
+            position = default;
+            slotId = 0;
+            var ray = worldCamera.ScreenPointToRay(pointer);
+            var ground = new Plane(field.up, field.position);
+            if (!ground.Raycast(ray, out float distance))
+            {
+                return false;
+            }
+
+            position = field.InverseTransformPoint(ray.GetPoint(distance));
+            position.y = TowerGroundOffset;
+            float halfWidth = CellHalfWidth;
+            float halfDepth = CellHalfDepth;
+            foreach (var cell in configuration.BuildSlots)
+            {
+                var center = World(cell.Position, position.y);
+                if (Mathf.Abs(position.x - center.x) <= halfWidth && Mathf.Abs(position.z - center.z) <= halfDepth)
+                {
+                    slotId = cell.Id;
+                    position = center;
+                    break;
+                }
+            }
+
+            return true;
+        }
+
+        private void UpdatePlacementPreview()
+        {
+            var touch = Touchscreen.current?.primaryTouch;
+            bool previewTouch = trackingPlacementTouch && touch?.press.isPressed == true;
+            var mouse = Mouse.current;
+            if (!buildMode || session.IsPaused || (!previewTouch && mouse == null))
+            {
+                placementGhost?.SetActive(false);
+                return;
+            }
+
+            var pointer = previewTouch ? touch.position.ReadValue() : mouse.position.ReadValue();
+            if (!CanPointAtField(pointer) || !ResolvePlacement(pointer, out var point, out int slotId))
+            {
+                placementGhost?.SetActive(false);
+                return;
+            }
+
+            if (placementGhost == null || ghostDefinitionId != selectedDefinition)
+            {
+                if (placementGhost != null)
+                {
+                    placementGhost.SetActive(false);
+                    Destroy(placementGhost);
+                }
+
+                placementGhost = CreateTower(0, selectedDefinition, default, preview: true).Root;
+                placementGhost.name = "Tower placement preview";
+                ghostDefinitionId = selectedDefinition;
+                foreach (var collider in placementGhost.GetComponentsInChildren<Collider>())
+                {
+                    collider.enabled = false;
+                }
+
+                foreach (var renderer in placementGhost.GetComponentsInChildren<MeshRenderer>())
+                {
+                    renderer.shadowCastingMode = ShadowCastingMode.Off;
+                    var materials = renderer.sharedMaterials;
+                    for (int index = 0; index < materials.Length; index++)
+                    {
+                        materials[index] = PreviewMaterial(materials[index]);
+                    }
+
+                    renderer.sharedMaterials = materials;
+                }
+
+                placementFootprint = CreatePlacementFootprint(placementGhost.transform);
+                previewCanBuild = null;
+            }
+
+            bool valid = slotId != 0 && session.CanBuildTower(slotId, selectedDefinition);
+            placementGhost.transform.localPosition = point;
+            if (previewCanBuild != valid)
+            {
+                foreach (var pair in previewMaterials)
+                {
+                    var sourceColor = pair.Key.color;
+                    var tint = valid ? sourceColor : Color.Lerp(sourceColor, new Color(1, .17f, .12f, sourceColor.a), .62f);
+                    tint.a *= .64f;
+                    pair.Value.color = tint;
+                }
+
+                placementFootprint.startColor = placementFootprint.endColor = valid ? new Color(.96f, .91f, .78f, .82f) : new Color(1, .38f, .31f);
+                previewCanBuild = valid;
+            }
+
+            placementGhost.SetActive(true);
+        }
+
+        private Material PreviewMaterial(Material source)
+        {
+            if (previewMaterials.TryGetValue(source, out var preview))
+            {
+                return preview;
+            }
+
+            preview = new Material(source);
+            if (preview.HasProperty("_Surface"))
+            {
+                // URP Lit reads _Surface for output alpha, so the preview can reuse the bundled lighting variant.
+                preview.SetFloat("_Surface", 1);
+                preview.SetInt("_SrcBlendAlpha", (int)BlendMode.One);
+                preview.SetInt("_DstBlendAlpha", (int)BlendMode.OneMinusSrcAlpha);
+                preview.SetShaderPassEnabled("DepthOnly", false);
+            }
+            else if (preview.HasProperty("_Mode"))
+            {
+                preview.SetFloat("_Mode", 2);
+                preview.EnableKeyword("_ALPHABLEND_ON");
+            }
+
+            preview.SetOverrideTag("RenderType", "Transparent");
+            preview.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
+            preview.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
+            preview.SetInt("_ZWrite", 0);
+            preview.renderQueue = (int)RenderQueue.Transparent;
+            previewMaterials.Add(source, preview);
+            materialAssets.Add(preview);
+            return preview;
+        }
+
+        private LineRenderer CreatePlacementFootprint(Transform ghost)
+        {
+            var ring = new GameObject("Placement footprint").AddComponent<LineRenderer>();
+            ring.transform.SetParent(ghost, false);
+            ring.transform.localPosition = Vector3.down * (TowerGroundOffset / TowerModelScale);
+            ring.transform.localScale = Vector3.one / TowerModelScale;
+            ring.sharedMaterial = vertexColorMaterial;
+            ring.useWorldSpace = false;
+            ring.loop = true;
+            ring.startWidth = ring.endWidth = .052f;
+            ring.positionCount = 48;
+            for (int index = 0; index < ring.positionCount; index++)
+            {
+                float angle = index * 2 * Mathf.PI / ring.positionCount;
+                ring.SetPosition(index, new Vector3(Mathf.Cos(angle) * TowerFoundationRadius, 0, Mathf.Sin(angle) * TowerFoundationRadius));
+            }
+
+            return ring;
+        }
+
         private void HandlePointer()
         {
-            Vector2 position;
-            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+            var mouse = Mouse.current;
+            bool rightPressed = mouse?.rightButton.wasPressedThisFrame == true;
+            if (rightPressed && (systemMenu.activeSelf || mapDetails.activeSelf || restartConfirm.activeSelf || exitConfirm.activeSelf))
             {
-                position = Touchscreen.current.primaryTouch.position.ReadValue();
+                HandleEscape();
+                return;
             }
-            else if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+
+            if (rightPressed && buildMode)
             {
-                position = Mouse.current.position.ReadValue();
+                CancelPlacement();
+                return;
+            }
+
+            var touch = Touchscreen.current?.primaryTouch;
+            bool touchPressed = touch?.press.wasPressedThisFrame == true;
+            if (!buildMode || session.IsPaused || touch == null)
+            {
+                trackingPlacementTouch = false;
+            }
+            else if (touchPressed)
+            {
+                trackingPlacementTouch = CanPointAtField(touch.startPosition.ReadValue());
+            }
+
+            bool placeTouch = trackingPlacementTouch && touch.press.wasReleasedThisFrame;
+            if (placeTouch)
+            {
+                trackingPlacementTouch = false;
+                if (touch.phase.ReadValue() != UnityEngine.InputSystem.TouchPhase.Ended)
+                {
+                    return;
+                }
+            }
+
+            Vector2 position;
+            bool quick = false;
+            bool mousePressed = mouse != null && (mouse.leftButton.wasPressedThisFrame || rightPressed);
+            if (placeTouch || (!buildMode && touchPressed))
+            {
+                position = touch.position.ReadValue();
+            }
+            else if (mousePressed && touch?.press.isPressed != true)
+            {
+                quick = rightPressed && !mouse.leftButton.wasPressedThisFrame;
+                position = mouse.position.ReadValue();
             }
             else
             {
                 return;
             }
 
-            if (EventSystem.current != null)
+            if (!CanPointAtField(position))
             {
-                uiHits.Clear();
-                EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = position }, uiHits);
-                if (uiHits.Count != 0)
-                {
-                    return;
-                }
+                return;
+            }
+
+            if (buildMode)
+            {
+                BuildAt(position);
+                return;
             }
 
             if (Physics.Raycast(worldCamera.ScreenPointToRay(position), out var hit, 100))
             {
-                var target = hit.collider.GetComponent<PrototypeWorldTarget>();
-                if (target == null)
+                if (hit.collider.TryGetComponent<PrototypeWorldTarget>(out var target) && target.TowerId != 0)
                 {
+                    selectedTower = target.TowerId;
+                    selectedBase = false;
+                    useQuickActions = quick;
+                    SetNotice("");
+                    RefreshInterface();
                     return;
                 }
 
-                if (target.TowerId != 0)
+                var picked = hit.collider.transform;
+                if (baseTarget != null && (picked == baseTarget || picked.IsChildOf(baseTarget)))
                 {
-                    selectedTower = target.TowerId;
-                    buildMode = false;
-                    SetNotice("已选择防御塔，圆圈显示实际攻击范围。可在下方升级。");
+                    SelectBase();
+                    return;
                 }
-                else
-                {
-                    bool occupied = false;
-                    foreach (var tower in session.Towers)
-                    {
-                        if (tower.SlotId == target.SlotId)
-                        {
-                            selectedTower = tower.Id;
-                            buildMode = false;
-                            occupied = true;
-                            break;
-                        }
-                    }
+            }
 
-                    if (!occupied)
-                    {
-                        if (buildMode)
-                        {
-                            BuildAt(target.SlotId);
-                        }
-                        else
-                        {
-                            SetNotice("先选择下方塔卡，再点击出现的绿色建造区域。");
-                        }
-                    }
-                }
-
-                RefreshInterface();
+            if (selectedTower != 0 || selectedBase)
+            {
+                CloseSelection();
             }
         }
     }

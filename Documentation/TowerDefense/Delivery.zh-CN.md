@@ -41,7 +41,7 @@
 
 [桌面](Validation/prototype.json)、[宽屏](Validation/phone-layout.json)、[脚本编译](Validation/player-compile.json)、[程序集](Validation/sample-assemblies.json)、[包安装](Validation/packages.json)、[资源包](Validation/resource-build.json)、[输入范围](Validation/inputs.json)。启动生命周期报告见 [EntryStartup](../Validation/EntryStartup/)。
 
-验收入口：`Game.Editor.TowerDefenseValidation.Run`，加 `--novorizon-phone-layout` 检查宽屏；`Game.Editor.GameEntryValidation.Run` 验证启动与退出。这些 Play 验收不加 `-quit`。
+在独立验收副本中使用 `Tools~/unity-validate.sh tower-defense` 或 PowerShell 的 `TowerDefense` 阶段。可通过 `--novorizon-phone-layout` 或 `-PhoneLayout` 切换手机横屏布局。连续启动与退出使用 `startup-cycles` 或 `StartupCycles` 阶段。
 
 ## 规划与范围
 

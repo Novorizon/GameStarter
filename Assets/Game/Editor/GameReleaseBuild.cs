@@ -17,6 +17,9 @@ namespace Game.Editor
         private const string KeyAsset = "Assets/Resources/GameUpdateKey.asset";
         private const string VersionFile = "Library/Novorizon/GameStarter/resource-version.txt";
         private const string DirectoryFile = "Library/Novorizon/GameStarter/resource-directory.txt";
+        private const string StartupProbeAsset = "Assets/Game/Runtime/GameEntry.NativeValidation.cs";
+        private const string SchemaProbeAsset = "Assets/HotUpdate/HotGame.NativeValidation.cs";
+        private static bool buildingNativeValidation;
         public static string LastResourceVersion => File.Exists(VersionFile) ? File.ReadAllText(VersionFile) : null;
 
         static GameReleaseBuild()
@@ -27,6 +30,7 @@ namespace Game.Editor
 
         public static UpdateSettings CreateBuildSettings()
         {
+            VerifyProbeIsolation();
             var settings = GameReleaseConfiguration.CreateSettings(AssetDatabase.LoadAssetAtPath<GameUpdateKey>(KeyAsset));
             if (!string.IsNullOrWhiteSpace(LastResourceVersion))
             {
@@ -41,6 +45,33 @@ namespace Game.Editor
             return settings;
         }
 
+        public static void VerifyProbeIsolation()
+        {
+            if (!buildingNativeValidation && (File.Exists(StartupProbeAsset) || File.Exists(SchemaProbeAsset)))
+            {
+                throw new InvalidOperationException("Native validation probe sources are staged. Remove the staged files before a regular build or export.");
+            }
+        }
+
+        public static void RunNativeValidationBuild(Action build)
+        {
+            if (!File.Exists(StartupProbeAsset) || !File.Exists(SchemaProbeAsset))
+            {
+                throw new InvalidOperationException("Stage native probes with the Player or SchemaPatch phase of Tools~/native-validate.ps1.");
+            }
+
+            bool previous = buildingNativeValidation;
+            buildingNativeValidation = true;
+            try
+            {
+                build();
+            }
+            finally
+            {
+                buildingNativeValidation = previous;
+            }
+        }
+
         public static string PrivateKeyPath
         {
             get
@@ -51,7 +82,7 @@ namespace Game.Editor
                         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                         "Novorizon",
                         "Signing",
-                        Application.identifier,
+                        GameReleaseConfiguration.AppId,
                         "development.private.xml")
                     : configured;
                 path = Path.GetFullPath(path);
@@ -121,10 +152,16 @@ namespace Game.Editor
         [MenuItem("Tools/Novorizon/GameStarter/4. Export Signed Update")]
         public static void ExportSignedUpdate()
         {
+            ExportSignedUpdateTo("Artifacts/Publish");
+        }
+
+        public static void ExportSignedUpdateTo(string outputRoot)
+        {
+            VerifyProbeIsolation();
             EnsureSigningKey();
             string unsigned = GameBuild.ExportUpdateToDirectory();
-            string output = PublishUnsigned(unsigned, File.ReadAllText(DirectoryFile));
-            Debug.Log("SIGNED_UPDATE_EXPORTED " + output + ". Upload assets/ first, then publish manifests/ to /srv/gameserver/updates/.");
+            string output = PublishUnsigned(unsigned, File.ReadAllText(DirectoryFile), outputRoot);
+            Debug.Log("SIGNED_UPDATE_EXPORTED " + output);
         }
 
         public static string PublishUnsigned(string unsigned, string resourcesDirectory, string outputRoot = "Artifacts/Publish")

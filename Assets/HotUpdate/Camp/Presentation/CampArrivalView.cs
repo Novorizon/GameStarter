@@ -10,24 +10,17 @@ using UnityEngine.UI;
 
 namespace Game.HotUpdate.Camp
 {
-    /// <summary>抵达剧情的营地呈现器；推进、取消和结果由 SDK StoryPlayer 负责。</summary>
+    /// <summary>营地对白呈现器；推进、取消和结果由 SDK StoryPlayer 负责。</summary>
     public sealed class CampArrivalView : MonoBehaviour, IStoryPresenter, IDisposable
     {
-        [Serializable]
-        private sealed class Script
-        {
-            public string id;
-            public string version;
-            public string title;
-            public string speaker;
-            public string[] lines;
-        }
-
         private StoryPlayer player;
         private StorySession session;
         private StorySequence sequence;
-        private Script content;
+        private CampStoryScript content;
+        private string finishLabel;
+        private string traveler;
         private TMP_Text body;
+        private TMP_Text speakerName;
         private TMP_Text counter;
         private Button next;
         private TaskCompletionSource<StoryStepOutcome> waiting;
@@ -36,27 +29,48 @@ namespace Game.HotUpdate.Camp
         private bool disposed;
         public bool Playing => player != null && player.IsPlaying;
 
-        public static CampArrivalView Create(Transform parent, ClientArt art)
+        public static CampArrivalView Create(Transform parent, ClientArt art, string script, string chapter, string finishLabel, string skipLabel)
         {
-            var ui = new CampUI(art);
-            var root = CampUI.Overlay("CampArrivalStory", parent);
-            var view = root.gameObject.AddComponent<CampArrivalView>();
-            view.content = JsonUtility.FromJson<Script>(art.ArrivalScript);
-            if (view.content?.lines == null || view.content.lines.Length == 0 || view.content.lines.Any(string.IsNullOrWhiteSpace))
+            return Create(parent, art, JsonUtility.FromJson<CampStoryScript>(script), chapter, finishLabel, skipLabel, "漂流者");
+        }
+
+        internal static CampArrivalView Create(
+            Transform parent,
+            ClientArt art,
+            CampStoryScript script,
+            string chapter,
+            string finishLabel,
+            string skipLabel,
+            string traveler)
+        {
+            if (script?.lines == null || script.lines.Length == 0 || script.lines.Any(string.IsNullOrWhiteSpace)
+                || (script.speakers?.Length > 0 && script.speakers.Length != script.lines.Length))
             {
-                throw new InvalidOperationException("The island arrival story has no valid dialogue.");
+                throw new InvalidOperationException("The camp story has no valid dialogue.");
             }
+
+            var ui = new CampUI(art);
+            var root = CampUI.Overlay("Camp" + chapter + "Story", parent, .52f);
+            var view = root.gameObject.AddComponent<CampArrivalView>();
+            view.content = script;
+            view.finishLabel = finishLabel;
+            view.traveler = traveler;
 
             var nodes = view.content.lines.Select((line, i) => new StoryNode("shore-" + i, StoryNodeKind.Say, textKey: line)).ToList();
             nodes.Add(new StoryNode("camp-ready", StoryNodeKind.End));
-            view.sequence = new StorySequence(view.content.id, view.content.version, nodes);
-            var panel = ui.Panel("ArrivalDialogue", root, .16f, .18f, .84f, .68f);
-            ui.Text("Chapter", panel, .055f, .79f, .84f, .92f, 30, view.content.title, CampUI.Gold);
-            ui.Text("Speaker", panel, .055f, .66f, .90f, .78f, 25, view.content.speaker, CampUI.Muted);
-            view.body = ui.Text("Dialogue", panel, .055f, .28f, .94f, .65f, 28, "", CampUI.Cream);
-            view.counter = ui.Text("Step", panel, .055f, .09f, .35f, .23f, 21, "", CampUI.Muted);
-            view.next = ui.ActionButton("ArrivalContinue", panel, .64f, .07f, .94f, .24f, "继续", () => view.session?.Advance());
-            ui.ActionButton("ArrivalSkip", root, .83f, .87f, .96f, .95f, "跳过序章", () => view.session?.Skip());
+            view.sequence = new StorySequence(view.content.id, string.IsNullOrEmpty(view.content.version) ? "1" : view.content.version, nodes);
+            var panel = ui.Panel("ArrivalDialogue", root, .016f, .034f, .626f, .322f);
+            ui.Glyph(CampPiece.Journal, panel, .046f, .768f, .086f, .942f, CampUI.Gold);
+            ui.Text("Chapter", panel, .096f, .774f, .747f, .938f, 31, view.content.title, CampUI.Cream, bold: true);
+            var speaker = ui.Panel("SpeakerChip", panel, .762f, .797f, .954f, .933f, CampPiece.Badge);
+            view.speakerName = ui.Text("Speaker", speaker, .08f, .12f, .92f, .88f, 21, view.content.speaker, CampUI.Mint);
+            view.speakerName.alignment = TextAlignmentOptions.Center;
+            CampUI.Divider(panel, .049f, .75f, .952f, .755f);
+            view.body = ui.Text("Dialogue", panel, .052f, .33f, .947f, .731f, 28, "", CampUI.Cream);
+            view.body.richText = false;
+            view.counter = ui.Text("Step", panel, .052f, .096f, .24f, .252f, 22, "", CampUI.Muted, bold: true);
+            view.next = ui.ActionButton(chapter + "Continue", panel, .669f, .069f, .954f, .277f, "继续", () => view.session?.Advance(), CampPiece.Primary);
+            ui.ActionButton(chapter + "Skip", root, .854f, .887f, .984f, .984f, skipLabel, () => view.session?.Skip());
             view.player = new StoryPlayer(view);
             root.gameObject.SetActive(false);
             return view;
@@ -72,6 +86,7 @@ namespace Game.HotUpdate.Camp
         public Task OpenAsync(StorySequence value, Guid sessionId, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
+            transform.SetAsLastSibling();
             gameObject.SetActive(true);
             return Task.CompletedTask;
         }
@@ -81,13 +96,14 @@ namespace Game.HotUpdate.Camp
             token.ThrowIfCancellationRequested();
             if (node.Kind != StoryNodeKind.Say)
             {
-                throw new InvalidOperationException("The arrival presenter only supports dialogue nodes.");
+                throw new InvalidOperationException("The camp presenter only supports dialogue nodes.");
             }
 
             step = context;
-            body.text = node.TextKey;
+            body.text = node.TextKey.Replace("{traveler}", traveler);
+            speakerName.text = content.speakers?.Length > 0 ? content.speakers[index] : content.speaker;
             counter.text = (++index) + " / " + content.lines.Length;
-            next.GetComponentInChildren<TMP_Text>().text = index == content.lines.Length ? "从这里开始" : "继续";
+            next.GetComponentInChildren<TMP_Text>().text = index == content.lines.Length ? finishLabel : "继续";
             var completion = new TaskCompletionSource<StoryStepOutcome>(TaskCreationOptions.RunContinuationsAsynchronously);
             waiting = completion;
             next.onClick.RemoveAllListeners();

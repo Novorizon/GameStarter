@@ -1,0 +1,6 @@
+{
+  "objectiveType": "InterceptEscapes",
+  "assault": { "reinforcementGapTicks": 100, "firstDraftPoints": 6, "repeatDraftPoints": 12 },
+  "targetName": "下游传送门",
+  "escapesToDefeat": 9
+}

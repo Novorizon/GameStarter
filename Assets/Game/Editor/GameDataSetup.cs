@@ -242,6 +242,7 @@ namespace Game.Editor
 
         public static void BuildResources(bool copyToBuiltin)
         {
+            GameReleaseBuild.VerifyProbeIsolation();
             if (EditorApplication.isCompiling || EditorApplication.isUpdating || EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 throw new InvalidOperationException("Wait for compilation and leave Play Mode before building resources.");
@@ -352,6 +353,7 @@ namespace Game.Editor
 
         public void OnPreprocessBuild(UnityEditor.Build.Reporting.BuildReport report)
         {
+            GameReleaseBuild.VerifyProbeIsolation();
             GameDataSetup.ValidatePlayerResources(report.summary.platform);
         }
     }

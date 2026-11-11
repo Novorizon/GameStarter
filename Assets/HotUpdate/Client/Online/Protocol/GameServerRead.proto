@@ -1,0 +1,27 @@
+syntax = "proto3";
+package gameserver;
+option csharp_namespace = "Game.HotUpdate.Client.Protocol";
+
+// Read-only wire subset of GameServer protos/game.proto at 97538a12b7907fb8c7f2a6f723936ade9928d74d.
+enum ServerMessageId {
+  SERVER_MESSAGE_ID_NONE = 0;
+  SERVER_MESSAGE_ID_LOGIN = 1000;
+  SERVER_MESSAGE_ID_PROGRESS_READ = 2000000001;
+}
+
+message LoginRequest {
+  string device_id = 1;
+  string access_token = 100;
+}
+
+message LoginResponse {
+  string device_id = 1;
+  int64 player_id = 100;
+}
+
+message ProgressReadRequest {}
+
+message ProgressResponse {
+  int32 progress = 1;
+  int64 version = 2;
+}

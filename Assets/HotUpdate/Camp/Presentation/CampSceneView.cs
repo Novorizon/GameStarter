@@ -1,20 +1,46 @@
 using System;
 using System.Collections.Generic;
+using Game.HotUpdate.Client;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Game.HotUpdate.Camp
 {
-    /// <summary>固定海岛场景表现；建设状态来自营地域，网格和材质只由场景拥有。</summary>
-    public sealed class CampSceneView : MonoBehaviour, IDisposable
+    internal enum CampCameraMove
     {
+        Near,
+        Far,
+        Reset
+    }
+
+    /// <summary>海岛营地表现，拥有平面底图、建筑、材质和营地镜头。</summary>
+    public sealed partial class CampSceneView : MonoBehaviour, IDisposable
+    {
+        private const float CameraTransitionSeconds = .32f;
+        private const float OverviewHalfHeight = 6.6f;
+        private const float OverviewPitch = 55;
+        private const float CameraDistance = 32;
+        private static readonly Vector2 ClearingFocus = new Vector2(.46f, .52f);
+        private static readonly Vector2 CourtyardAnchor = new Vector2(.293f, .567f);
+        private static readonly Vector2 ShelterAnchor = new Vector2(.278f, .509f);
+        private static readonly Vector2 CampfireAnchor = new Vector2(.285f, .615f);
+        private static readonly Vector2 SupplyAnchor = new Vector2(.161f, .664f);
+        private static readonly Vector2 WorkbenchAnchor = new Vector2(.396f, .515f);
+        private static readonly Vector2 FarmAnchor = new Vector2(.646f, .582f);
+        private static readonly Vector2 WaterAnchor = new Vector2(.613f, .675f);
+        private float cameraZoom = 1;
+        private float targetZoom = 1;
+        private float startZoom;
+        private float cameraElapsed = CameraTransitionSeconds;
+        private float overviewSize;
         private readonly List<UnityEngine.Object> owned = new List<UnityEngine.Object>();
         private readonly List<RaycastResult> uiHits = new List<RaycastResult>();
         private Camera sceneCamera;
         private Transform settlement;
-        private SpriteRenderer island;
+        private Transform waterPoint;
         private GameObject buildings;
+        private Material worldSprite;
         private Material timber;
         private Material sand;
         private Material canvas;
@@ -31,54 +57,61 @@ namespace Game.HotUpdate.Camp
         private Color previousAmbient;
         private UnityEngine.Rendering.AmbientMode previousAmbientMode;
         public Action Selected;
+        public Action WaterSelected;
         public int DisplayedLevel => level;
 
-        public static CampSceneView Create(Transform parent, Sprite map)
+        public static CampSceneView Create(Transform parent, ClientArt art)
         {
             var root = new GameObject("IslandCampScene");
             root.transform.SetParent(parent, false);
             var view = root.AddComponent<CampSceneView>();
-            view.Initialize(map);
+            view.Initialize(art);
             return view;
         }
 
-        private void Initialize(Sprite map)
+        private void Initialize(ClientArt art)
         {
             var cameraRoot = new GameObject("CampCamera");
             cameraRoot.transform.SetParent(transform, false);
             cameraRoot.tag = "MainCamera";
             sceneCamera = cameraRoot.AddComponent<Camera>();
             sceneCamera.orthographic = true;
-            sceneCamera.transform.rotation = Quaternion.Euler(55, 0, 0);
-            sceneCamera.transform.position = -sceneCamera.transform.forward * 32;
+            sceneCamera.transform.localRotation = Quaternion.Euler(OverviewPitch, 0, 0);
+            sceneCamera.transform.localPosition = sceneCamera.transform.localRotation * (Vector3.back * CameraDistance);
             sceneCamera.clearFlags = CameraClearFlags.SolidColor;
-            sceneCamera.backgroundColor = new Color(.04f, .54f, .67f);
+            sceneCamera.backgroundColor = new Color(.21f, .19f, .18f);
             sceneCamera.depth = -10;
             var sun = new GameObject("CampSun").AddComponent<Light>();
             sun.transform.SetParent(transform, false);
             sun.type = LightType.Directional;
             sun.intensity = 1.1f;
             sun.transform.rotation = Quaternion.Euler(55, -35, 0);
-            island = new GameObject("IslandArtwork").AddComponent<SpriteRenderer>();
-            island.transform.SetParent(transform, false);
-            island.transform.position = sceneCamera.transform.forward * 18;
-            island.transform.rotation = sceneCamera.transform.rotation;
-            island.sprite = map;
-            island.transform.localScale = new Vector3(25 / map.bounds.size.x, 14.07f / map.bounds.size.y, 1);
+            worldSprite = art.WorldSprite;
+            CreateBackdrop(art.CampMap);
             settlement = new GameObject("CampSettlement").transform;
             settlement.SetParent(transform, false);
-            settlement.localPosition = new Vector3(-1.25f, 0, .1f);
+            settlement.localPosition = ArtworkGroundPoint(ClearingFocus);
             settlement.localRotation = Quaternion.Euler(0, -15, 0);
             var target = settlement.gameObject.AddComponent<BoxCollider>();
-            target.center = new Vector3(0, .6f, 0);
-            target.size = new Vector3(6.6f, 1.5f, 4.6f);
-            timber = Material(new Color(.43f, .25f, .11f));
-            sand = Material(new Color(.86f, .72f, .45f));
-            canvas = Material(new Color(.91f, .78f, .50f));
-            dark = Material(new Color(.16f, .20f, .16f));
-            teal = Material(new Color(.11f, .42f, .49f));
-            stone = Material(new Color(.65f, .66f, .57f));
-            flame = Material(new Color(1, .53f, .10f));
+            target.center = CampPosition(CourtyardAnchor) + Vector3.up * .6f;
+            target.size = new Vector3(5.6f, 1.5f, 3.7f);
+            timber = Material(art.WorldLit, new Color(.43f, .25f, .11f));
+            sand = Material(art.WorldLit, new Color(.86f, .72f, .45f));
+            canvas = Material(art.WorldLit, new Color(.91f, .78f, .50f));
+            dark = Material(art.WorldLit, new Color(.16f, .20f, .16f));
+            teal = Material(art.WorldLit, new Color(.11f, .42f, .49f));
+            stone = Material(art.WorldLit, new Color(.65f, .66f, .57f));
+            flame = Material(art.WorldLit, new Color(1, .53f, .10f));
+            var woodTexture = PrototypeTextures.Wood();
+            var canvasTexture = PrototypeTextures.Canvas();
+            var stoneTexture = PrototypeTextures.Stone();
+            owned.Add(woodTexture);
+            owned.Add(canvasTexture);
+            owned.Add(stoneTexture);
+            timber.mainTexture = woodTexture;
+            canvas.mainTexture = canvasTexture;
+            stone.mainTexture = stoneTexture;
+            teal.mainTexture = woodTexture;
             initialized = true;
             ApplyAmbient();
             UpdateSize();
@@ -86,61 +119,73 @@ namespace Game.HotUpdate.Camp
 
         public void Refresh(CampProgress camp)
         {
-            if (level == camp.Level.Id)
+            int displayed = camp.ArrivalSeen ? camp.Level.Id : 0;
+            if (level == displayed)
             {
                 return;
             }
 
-            level = camp.Level.Id;
+            level = displayed;
+            waterPoint = null;
             if (buildings != null)
             {
                 buildings.SetActive(false);
                 Destroy(buildings);
+                buildings = null;
+            }
+
+            if (level == 0)
+            {
+                return;
             }
 
             buildings = new GameObject("CampStage " + level);
             buildings.transform.SetParent(settlement, false);
             var root = buildings.transform;
+            var courtyard = new GameObject("CampCourtyard").transform;
+            courtyard.SetParent(root, false);
+            courtyard.localPosition = CampPosition(CourtyardAnchor);
+            courtyard.localScale = Vector3.one * .76f;
             if (level >= 3)
             {
                 for (int x = -3; x <= 3; x++)
                 {
                     for (int z = -2; z <= 2; z++)
                     {
-                        Box("CourtyardPaving", root, new Vector3(x * .82f, .025f, z * .78f), new Vector3(.78f, .05f, .74f), stone);
+                        Box("CourtyardPaving", courtyard, new Vector3(x * .82f, .025f, z * .78f), new Vector3(.78f, .05f, .74f), stone);
                     }
                 }
             }
 
-            Shadow(root);
+            Shadow(courtyard);
             Shelter(root, level >= 4);
             if (level >= 2)
             {
-                Fence(root);
+                Fence(courtyard);
+                Workbench(root);
             }
 
             if (level >= 3)
             {
                 Well(root);
-                Box("GardenSoil", root, new Vector3(2, .08f, 1.1f), new Vector3(1.15f, .13f, 1.3f), timber);
-                for (int i = 0; i < 4; i++)
-                {
-                    Box("GardenLeaves", root, new Vector3(1.7f + i % 2 * .5f, .28f, .75f + i / 2 * .6f), new Vector3(.32f, .3f, .35f), teal);
-                }
+                Farm(root);
             }
 
-            Box("SupplyChest", root, new Vector3(-2, .28f, -.3f), new Vector3(.75f, .5f, .6f), timber);
-            Box("ChestBand", root, new Vector3(-2, .29f, -.32f), new Vector3(.12f, .55f, .65f), sand);
+            var supplySite = CampPosition(SupplyAnchor);
+            Box("SupplyChest", root, supplySite + new Vector3(0, .28f, 0), new Vector3(.75f, .5f, .6f), timber);
+            Box("ChestBand", root, supplySite + new Vector3(0, .29f, -.02f), new Vector3(.12f, .55f, .65f), sand);
+            var fireSite = CampPosition(CampfireAnchor);
             for (int index = 0; index < 6; index++)
             {
                 float angle = index * Mathf.PI / 3;
-                Box("FireStone", root, new Vector3(.8f + Mathf.Cos(angle) * .4f, .10f, -.8f + Mathf.Sin(angle) * .4f), new Vector3(.27f, .20f, .25f), stone);
+                var offset = new Vector3(Mathf.Cos(angle) * .4f, .10f, Mathf.Sin(angle) * .4f);
+                Box("FireStone", root, fireSite + offset, new Vector3(.27f, .20f, .25f), stone);
             }
 
             var fire = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             fire.name = "Campfire";
             fire.transform.SetParent(root, false);
-            fire.transform.localPosition = new Vector3(.8f, .23f, -.8f);
+            fire.transform.localPosition = fireSite + Vector3.up * .23f;
             fire.transform.localScale = new Vector3(.35f, .5f, .35f);
             fire.GetComponent<Renderer>().sharedMaterial = flame;
             Destroy(fire.GetComponent<Collider>());
@@ -150,7 +195,8 @@ namespace Game.HotUpdate.Camp
         {
             var body = new GameObject(house ? "IslandCabin" : "ArrivalTent").transform;
             body.SetParent(root, false);
-            body.localPosition = new Vector3(-.45f, .06f, .55f);
+            body.localPosition = CampPosition(ShelterAnchor) + Vector3.up * .06f;
+            body.localScale = Vector3.one * 1.13f;
             if (house)
             {
                 Box("CabinBody", body, new Vector3(0, .65f, 0), new Vector3(2.05f, 1.25f, 1.8f), timber);
@@ -167,6 +213,12 @@ namespace Game.HotUpdate.Camp
             };
             var mesh = new Mesh { name = house ? "CabinRoofMesh" : "CanvasTentMesh", vertices = vertices };
             mesh.triangles = new[] { 0, 2, 1, 0, 3, 2, 4, 6, 5, 4, 7, 6, 8, 10, 9 };
+            mesh.uv = new[]
+            {
+                Vector2.zero, Vector2.right, Vector2.one, Vector2.up,
+                Vector2.zero, Vector2.right, Vector2.one, Vector2.up,
+                Vector2.zero, new Vector2(.5f, 1), Vector2.right
+            };
             mesh.RecalculateNormals();
             owned.Add(mesh);
             var roof = new GameObject("ShelterRoof", typeof(MeshFilter), typeof(MeshRenderer));
@@ -186,9 +238,9 @@ namespace Game.HotUpdate.Camp
             for (int index = 0; index < 9; index++)
             {
                 float x = -3.1f + index * .775f;
-                Box("FencePost", root, new Vector3(x, .40f, 2.2f), new Vector3(.17f, .8f, .17f), timber);
                 if (Math.Abs(x) > .7f)
                 {
+                    Box("FencePost", root, new Vector3(x, .40f, 2.2f), new Vector3(.17f, .8f, .17f), timber);
                     Box("FencePost", root, new Vector3(x, .40f, -2.2f), new Vector3(.17f, .8f, .17f), timber);
                 }
             }
@@ -203,34 +255,77 @@ namespace Game.HotUpdate.Camp
                 Box("FenceRail", root, new Vector3(x, .5f, 0), new Vector3(.10f, .12f, 4.5f), sand);
             }
 
-            Box("FenceRail", root, new Vector3(0, .5f, 2.2f), new Vector3(6.2f, .12f, .10f), sand);
             foreach (float x in new[] { -1.95f, 1.95f })
             {
+                Box("FenceRail", root, new Vector3(x, .5f, 2.2f), new Vector3(2.3f, .12f, .10f), sand);
                 Box("FenceRail", root, new Vector3(x, .5f, -2.2f), new Vector3(2.3f, .12f, .10f), sand);
+            }
+
+            foreach (float x in new[] { -.72f, .72f })
+            {
+                Box("InlandGatePost", root, new Vector3(x, .58f, 2.2f), new Vector3(.23f, 1.16f, .23f), timber);
+            }
+        }
+
+        private void Workbench(Transform root)
+        {
+            var bench = new GameObject("Workbench").transform;
+            bench.SetParent(root, false);
+            bench.localPosition = CampPosition(WorkbenchAnchor);
+            Box("WorkbenchTop", bench, new Vector3(0, .65f, 0), new Vector3(1.2f, .13f, .7f), timber);
+            foreach (float x in new[] { -.48f, .48f })
+            {
+                Box("WorkbenchLeg", bench, new Vector3(x, .29f, 0), new Vector3(.16f, .58f, .56f), timber);
+            }
+
+            Box("ToolBox", bench, new Vector3(.3f, .79f, .05f), new Vector3(.34f, .16f, .25f), sand);
+        }
+
+        private void Farm(Transform root)
+        {
+            var plot = new GameObject("FarmPlot").transform;
+            plot.SetParent(root, false);
+            plot.localPosition = CampPosition(FarmAnchor);
+            plot.localScale = Vector3.one * 1.70f;
+            Box("FarmSoil", plot, new Vector3(0, .065f, 0), new Vector3(1.55f, .13f, 1.30f), timber);
+            for (int row = 0; row < 3; row++)
+            {
+                float x = (row - 1) * .43f;
+                Box("FarmFurrow", plot, new Vector3(x, .14f, 0), new Vector3(.20f, .08f, 1.14f), dark);
+                foreach (float z in new[] { -.31f, .31f })
+                {
+                    Box("FarmSprout", plot, new Vector3(x, .25f, z), new Vector3(.18f, .21f, .18f), teal);
+                }
             }
         }
 
         private void Well(Transform root)
         {
+            var point = new GameObject("WaterPoint").transform;
+            waterPoint = point;
+            point.SetParent(root, false);
+            point.localPosition = CampPosition(WaterAnchor);
+            var interaction = point.gameObject.AddComponent<BoxCollider>();
+            interaction.center = new Vector3(0, .48f, 0);
+            interaction.size = new Vector3(.85f, .96f, .85f);
             var well = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             well.name = "CourtyardWell";
-            well.transform.SetParent(root, false);
-            well.transform.localPosition = new Vector3(2, .36f, -1);
-            well.transform.localScale = new Vector3(.90f, .35f, .90f);
+            well.transform.SetParent(point, false);
+            well.transform.localPosition = new Vector3(0, .29f, 0);
+            well.transform.localScale = new Vector3(.76f, .29f, .76f);
             well.GetComponent<Renderer>().sharedMaterial = stone;
             Destroy(well.GetComponent<Collider>());
-            Box("WellBeam", root, new Vector3(2, 1.05f, -1), new Vector3(1.15f, .12f, .15f), timber);
-            foreach (float x in new[] { 1.55f, 2.45f })
+            Box("WellBeam", point, new Vector3(0, .90f, 0), new Vector3(.85f, .12f, .15f), timber);
+            foreach (float x in new[] { -.32f, .32f })
             {
-                Box("WellPost", root, new Vector3(x, .7f, -1), new Vector3(.1f, .7f, .1f), timber);
+                Box("WellPost", point, new Vector3(x, .60f, 0), new Vector3(.1f, .57f, .1f), timber);
             }
         }
 
-        private Material Material(Color color)
+        private Material Material(Material template, Color color)
         {
-            string shader = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null ? "Universal Render Pipeline/Lit" : "Standard";
-            var material = new Material(Shader.Find(shader)) { color = color };
-            material.SetFloat(material.HasProperty("_Smoothness") ? "_Smoothness" : "_Glossiness", .05f);
+            var material = new Material(template) { color = color };
+            material.SetFloat("_Smoothness", .05f);
             owned.Add(material);
             return material;
         }
@@ -248,8 +343,6 @@ namespace Game.HotUpdate.Camp
 
         private void Shadow(Transform root)
         {
-            var material = new Material(Shader.Find("Sprites/Default")) { color = Color.white };
-            owned.Add(material);
             var mesh = new Mesh { name = "CampContactShadow" };
             var vertices = new Vector3[33];
             var colors = new Color[33];
@@ -274,12 +367,13 @@ namespace Game.HotUpdate.Camp
             var shadow = new GameObject("CampContactShadow", typeof(MeshFilter), typeof(MeshRenderer));
             shadow.transform.SetParent(root, false);
             shadow.GetComponent<MeshFilter>().sharedMesh = mesh;
-            shadow.GetComponent<MeshRenderer>().sharedMaterial = material;
+            shadow.GetComponent<MeshRenderer>().sharedMaterial = worldSprite;
         }
 
         private void Update()
         {
             UpdateSize();
+            UpdateCameraTransition();
             bool pressed = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
             Vector2 position = Mouse.current != null ? Mouse.current.position.ReadValue() : Vector2.zero;
             if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
@@ -303,7 +397,16 @@ namespace Game.HotUpdate.Camp
                 }
             }
 
-            if (Physics.Raycast(sceneCamera.ScreenPointToRay(position), out var hit) && hit.transform == settlement)
+            if (!Physics.Raycast(sceneCamera.ScreenPointToRay(position), out var hit))
+            {
+                return;
+            }
+
+            if (hit.transform == waterPoint)
+            {
+                WaterSelected?.Invoke();
+            }
+            else if (hit.transform == settlement)
             {
                 Selected?.Invoke();
             }
@@ -318,7 +421,59 @@ namespace Game.HotUpdate.Camp
 
             screenWidth = Screen.width;
             screenHeight = Screen.height;
-            sceneCamera.orthographicSize = Mathf.Max(6.6f, 11.75f / Mathf.Max(.1f, (float)screenWidth / Mathf.Max(1, screenHeight)));
+            float aspect = Mathf.Max(.1f, (float)screenWidth / Mathf.Max(1, screenHeight));
+            overviewSize = Mathf.Max(OverviewHalfHeight, artworkHalfWidth / aspect);
+            ApplyCameraZoom();
+        }
+
+        internal bool CanMoveCamera(CampCameraMove move)
+        {
+            return !Mathf.Approximately(ResolveCameraTarget(move), targetZoom);
+        }
+
+        internal void MoveCamera(CampCameraMove move)
+        {
+            float target = ResolveCameraTarget(move);
+            if (Mathf.Approximately(target, targetZoom))
+            {
+                return;
+            }
+
+            startZoom = cameraZoom;
+            targetZoom = target;
+            cameraElapsed = 0;
+        }
+
+        private float ResolveCameraTarget(CampCameraMove move)
+        {
+            return move switch
+            {
+                CampCameraMove.Near => Mathf.Min(1.6f, targetZoom + .15f),
+                CampCameraMove.Far => Mathf.Max(1, targetZoom - .15f),
+                CampCameraMove.Reset => 1,
+                _ => targetZoom
+            };
+        }
+
+        private void UpdateCameraTransition()
+        {
+            if (cameraElapsed >= CameraTransitionSeconds)
+            {
+                return;
+            }
+
+            cameraElapsed = Mathf.Min(CameraTransitionSeconds, cameraElapsed + Time.unscaledDeltaTime);
+            float blend = Mathf.SmoothStep(0, 1, cameraElapsed / CameraTransitionSeconds);
+            cameraZoom = Mathf.Lerp(startZoom, targetZoom, blend);
+            ApplyCameraZoom();
+        }
+
+        private void ApplyCameraZoom()
+        {
+            var cameraTransform = sceneCamera.transform;
+            var overviewPosition = cameraTransform.localRotation * (Vector3.back * CameraDistance);
+            cameraTransform.localPosition = overviewPosition + settlement.localPosition * (1 - 1 / cameraZoom);
+            sceneCamera.orthographicSize = overviewSize / cameraZoom;
         }
 
         public void Dispose()
