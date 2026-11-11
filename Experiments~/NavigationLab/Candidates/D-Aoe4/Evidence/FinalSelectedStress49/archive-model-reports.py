@@ -180,7 +180,9 @@ def main():
                 case = by_name[name]
                 assert case['InputSha256'] == expected
                 selected.append({key: case[key] for key in ['Name', 'Status', 'InputSha256', 'ReplayVerified', 'FinalTick']})
-            shutil.copyfile(subset_file, destination / 'full41-input-subset.json')
+            subset_destination = destination / 'full41-input-subset.json'
+            if subset_file.resolve() != subset_destination.resolve():
+                shutil.copyfile(subset_file, subset_destination)
             write_json(destination / 'full41-derived.json', {
                 'scope': 'Exact input-hash subset derived from original completed stress49. No separate full41 simulation or fresh report is claimed.',
                 'sourceStressSummarySha256': sha_file(source / 'summary.json'),
