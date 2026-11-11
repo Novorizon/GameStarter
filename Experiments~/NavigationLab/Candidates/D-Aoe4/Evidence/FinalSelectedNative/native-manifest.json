@@ -1,0 +1,35 @@
+{
+  "output": "/workspace/navigation-comparison/native/d-selected-9e61",
+  "runId": "22482f7344294b01960f1b87f9972201",
+  "expectedCoreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "expectedOracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "graphicsRequired": false,
+  "wallDeadlineSeconds": 7200,
+  "stepsPerEditorUpdate": 250,
+  "runs": [
+    {
+      "name": "Aoe4ProgressExchangeFactory-open-arena",
+      "input": "/workspace/navigation-comparison/native/d-selected-9e61/open-arena.unity-input.json",
+      "assemblyName": "NavigationLab.DAoe4",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.DAoe4.dll",
+      "factory": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+      "expectedCandidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c"
+    },
+    {
+      "name": "Aoe4ProgressExchangeFactory-forest-full44-large",
+      "input": "/workspace/navigation-comparison/native/d-selected-9e61/forest-full44-large.unity-input.json",
+      "assemblyName": "NavigationLab.DAoe4",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.DAoe4.dll",
+      "factory": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+      "expectedCandidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c"
+    },
+    {
+      "name": "Aoe4ProgressExchangeFactory-dynamic-route-block-and-open",
+      "input": "/workspace/navigation-comparison/native/d-selected-9e61/dynamic-route-block-and-open.unity-input.json",
+      "assemblyName": "NavigationLab.DAoe4",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.DAoe4.dll",
+      "factory": "NavigationLab.DAoe4.Aoe4ProgressExchangeFactory",
+      "expectedCandidateSha256": "9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c"
+    }
+  ]
+}
