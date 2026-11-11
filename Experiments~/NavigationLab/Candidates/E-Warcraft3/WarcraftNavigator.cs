@@ -504,6 +504,7 @@ namespace NavigationLab.Candidates.EWarcraft3
                 }
 
                 blocker.YieldCell = cell;
+                goalRevision++;
                 blocker.YieldRequester = requester.Id;
                 blocker.YieldStarted = step;
                 blocker.RequesterStartGoalDistance = Point2.Distance(requester.Position, world.Center(requester.Goal));
@@ -553,6 +554,7 @@ namespace NavigationLab.Candidates.EWarcraft3
             }
 
             unit.YieldCell = -1;
+            goalRevision++;
             unit.YieldRequester = 0;
             SetPath(unit, search.Find(unit.Position, unit.Goal, unit.Profile));
             unit.LastReplan = step;
