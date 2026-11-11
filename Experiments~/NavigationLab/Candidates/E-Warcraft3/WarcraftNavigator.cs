@@ -518,6 +518,12 @@ namespace NavigationLab.Candidates.EWarcraft3
             for (int rejoin = finalRejoin; rejoin >= unit.Waypoint; rejoin--)
             {
                 int cell = world.CellAt(unit.Path[rejoin]);
+                if (cell < 0 || Point2.Distance(unit.Path[rejoin], world.Center(cell)) > .001)
+                {
+                    Count("RefinedQuarterRejoinsSkipped", 1);
+                    continue;
+                }
+
                 var local = search.Find(unit.Position, cell, unit.Profile, clear, 6);
                 if (local != null)
                 {
