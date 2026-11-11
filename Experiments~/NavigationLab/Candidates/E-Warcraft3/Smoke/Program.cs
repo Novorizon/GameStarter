@@ -9,6 +9,7 @@ string repository = args[0];
 string name = args[1];
 string output = args[2];
 bool baseline = args.Contains("--baseline");
+bool grouped = args.Contains("--grouped");
 Directory.CreateDirectory(output);
 var watch = Stopwatch.StartNew();
 var world = ParseForest(Path.Combine(repository, "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes"));
@@ -20,7 +21,7 @@ int count = name == "late46" ? 46 : int.Parse(new string(name.Where(char.IsDigit
 var inputs = Enumerable.Range(1, count).Select(id => new SpawnRequest(id, name == "late46" && id > 44 ? small : profile, world.SpawnCells[0])).ToArray();
 var original = Sources(repository);
 var oracle = new ContinuousOracle(world);
-INavigationFactory factory = baseline ? new WarcraftBaselineFactory() : new WarcraftFactory();
+INavigationFactory factory = baseline ? new WarcraftBaselineFactory() : grouped ? new WarcraftGroupedYieldFactory() : new WarcraftFactory();
 using var navigator = factory.Create(world, name == "late46" ? new[] { small, big } : new[] { profile });
 int next = 0;
 int firstSettled = -1;

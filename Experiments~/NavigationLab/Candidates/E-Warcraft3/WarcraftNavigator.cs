@@ -7,11 +7,11 @@ namespace NavigationLab.Candidates.EWarcraft3
 {
     public sealed class WarcraftFactory : INavigationFactory
     {
-        public string Id => "E-Warcraft3-Inspired-FriendlyYield";
+        public string Id => "E-Warcraft3-Inspired-SpatialYield";
         public string Description => "WC3-inspired pathing map, A*, local replanning, collision stops and friendly yield; independent code.";
         public NavigationFeatures Features => NavigationFeatures.DeathAndReinforcement | NavigationFeatures.DynamicTerrain | NavigationFeatures.MovingTarget
             | NavigationFeatures.MultipleTargets | NavigationFeatures.AssignedGoals | NavigationFeatures.LargeBodies | NavigationFeatures.FastPerTick;
-        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, true);
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, true, false);
     }
 
     public sealed class WarcraftBaselineFactory : INavigationFactory
@@ -19,7 +19,15 @@ namespace NavigationLab.Candidates.EWarcraft3
         public string Id => "E0-Warcraft3-Inspired-LocalRepath";
         public string Description => "Same independent spatial controller with explicit friendly-yield extension disabled; preserved failure baseline.";
         public NavigationFeatures Features => new WarcraftFactory().Features;
-        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, false);
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, false, false);
+    }
+
+    public sealed class WarcraftGroupedYieldFactory : INavigationFactory
+    {
+        public string Id => "E2-Warcraft3-Inspired-GroupedYield";
+        public string Description => "Rejected grouping experiment; retained to reproduce the extra blocking caused by freezing unrelated traffic.";
+        public NavigationFeatures Features => new WarcraftFactory().Features;
+        public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new WarcraftNavigator(world, profiles, true, true);
     }
 
     internal sealed class MobileUnit
@@ -60,6 +68,8 @@ namespace NavigationLab.Candidates.EWarcraft3
         private GlobalSearch search;
         private readonly UnitProfile[] profiles;
         private readonly bool friendlyYield;
+        private readonly bool groupedYield;
+        private readonly List<int> yieldGroup = new List<int>();
         private readonly List<MobileUnit> units = new List<MobileUnit>();
         private readonly Dictionary<int, int> goalOwners = new Dictionary<int, int>();
         private readonly Dictionary<Tuple<int, int, int>, GoalEligibility> eligibility = new Dictionary<Tuple<int, int, int>, GoalEligibility>();
@@ -68,17 +78,23 @@ namespace NavigationLab.Candidates.EWarcraft3
         private long step;
         private long goalRevision;
         private bool disposed;
+        private int activeRequester;
+        private int returningUnit;
+        private bool groupReturning;
+        private long groupStarted;
         public IReadOnlyDictionary<string, long> Metrics => metrics;
         public string LastSpawnFailure { get; private set; } = "None";
 
-        internal WarcraftNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool friendlyYield)
+        internal WarcraftNavigator(WorldDefinition world, IReadOnlyList<UnitProfile> profiles, bool friendlyYield, bool groupedYield)
         {
             this.world = world.Clone();
             this.profiles = profiles.Distinct().ToArray();
             this.friendlyYield = friendlyYield;
+            this.groupedYield = groupedYield;
             geometry = new PathingGeometry(this.world);
             search = new GlobalSearch(this.world, geometry, Count);
             Count("FriendlyYieldEnabled", friendlyYield ? 1 : 0);
+            Count("GroupedYieldEnabled", groupedYield ? 1 : 0);
         }
 
         public bool TrySpawn(SpawnRequest request)
@@ -87,6 +103,11 @@ namespace NavigationLab.Candidates.EWarcraft3
             if (disposed || units.Any(unit => unit.Id == request.Id))
             {
                 return Reject(disposed ? "Disposed" : "DuplicateId");
+            }
+
+            if (groupedYield && activeRequester != 0)
+            {
+                return Reject("TrafficNegotiationActive");
             }
 
             Point2 position = world.Center(request.SpawnCell);
@@ -156,15 +177,22 @@ namespace NavigationLab.Candidates.EWarcraft3
 
             step++;
             Count("SimulationSubsteps", 1);
-            if (step % 100 == 0)
+            if (groupedYield)
+            {
+                UpdateGroup();
+            }
+            if (step % 100 == 0 && activeRequester == 0)
             {
                 PromoteWaiting();
             }
 
             foreach (var unit in units)
             {
-                UpdateYield(unit);
-                if (unit.BlockedSteps >= 80 && step - unit.LastReplan >= 80)
+                if (!groupedYield)
+                {
+                    UpdateYield(unit);
+                }
+                if (CanMoveInGroup(unit) && unit.BlockedSteps >= 80 && step - unit.LastReplan >= 80)
                 {
                     RepairPath(unit);
                 }
@@ -175,7 +203,7 @@ namespace NavigationLab.Candidates.EWarcraft3
             for (int index = 0; index < units.Count; index++)
             {
                 var unit = units[index];
-                next[index] = PreferredPosition(unit);
+                next[index] = CanMoveInGroup(unit) ? PreferredPosition(unit) : unit.Position;
                 if (!geometry.ClearSegment(starts[index], next[index], unit.Profile.RadiusMm))
                 {
                     next[index] = starts[index];
@@ -214,6 +242,11 @@ namespace NavigationLab.Candidates.EWarcraft3
             }
 
             units.Remove(unit);
+            yieldGroup.Remove(id);
+            if (returningUnit == id)
+            {
+                returningUnit = 0;
+            }
             if (goalOwners.TryGetValue(unit.Goal, out int owner) && owner == unit.Id)
             {
                 goalOwners.Remove(unit.Goal);
@@ -242,6 +275,13 @@ namespace NavigationLab.Candidates.EWarcraft3
             eligibility.Clear();
             admissionRejections.Clear();
             goalRevision++;
+            if (activeRequester != 0)
+            {
+                Count("YieldGroupsAbortedByWorldChange", 1);
+                activeRequester = 0;
+                returningUnit = 0;
+                yieldGroup.Clear();
+            }
             Count("WorldChanges", 1);
             foreach (var unit in units)
             {
@@ -281,6 +321,8 @@ namespace NavigationLab.Candidates.EWarcraft3
             goalOwners.Clear();
             eligibility.Clear();
             admissionRejections.Clear();
+            yieldGroup.Clear();
+            activeRequester = 0;
         }
 
         private GoalEligibility Eligible(UnitProfile profile, int targetId)
@@ -476,6 +518,10 @@ namespace NavigationLab.Candidates.EWarcraft3
 
         private void TryRequestYield(MobileUnit requester)
         {
+            if (groupedYield && activeRequester != 0 && requester.Id != (groupReturning ? returningUnit : activeRequester))
+            {
+                return;
+            }
             if (requester.Waypoint >= requester.Path.Count)
             {
                 SetPath(requester, search.Find(requester.Position, requester.Goal, requester.Profile));
@@ -483,6 +529,7 @@ namespace NavigationLab.Candidates.EWarcraft3
 
             Point2 nextPoint = requester.Waypoint < requester.Path.Count ? requester.Path[requester.Waypoint] : world.Center(requester.Goal);
             var blocker = units.Where(other => other.Id != requester.Id && other.YieldCell < 0
+                && (!groupedYield || other.Id != activeRequester)
                 && (State(other) != MotionState.Moving || other.BlockedSteps >= 80)
                 && Point2.Distance(requester.Position, other.Position) <= world.CellSizeMm * 2.5
                 && PathingGeometry.PointSegmentSquared(other.Position, requester.Position, nextPoint)
@@ -516,6 +563,21 @@ namespace NavigationLab.Candidates.EWarcraft3
                 SetPath(blocker, path);
                 blocker.BlockedSteps = 0;
                 Count("FriendlyYieldAccepted", 1);
+                if (groupedYield)
+                {
+                    if (activeRequester == 0)
+                    {
+                        activeRequester = requester.Id;
+                        groupStarted = step;
+                        groupReturning = false;
+                        returningUnit = 0;
+                        Count("YieldGroupsStarted", 1);
+                    }
+                    if (!yieldGroup.Contains(blocker.Id))
+                    {
+                        yieldGroup.Add(blocker.Id);
+                    }
+                }
                 return;
             }
 
@@ -575,6 +637,12 @@ namespace NavigationLab.Candidates.EWarcraft3
                     continue;
                 }
 
+                var attacks = Eligible(unit.Profile, unit.TargetId).Attacks;
+                if (!Enumerable.Range(0, world.CellCount).Any(cell => attacks[cell] && !goalOwners.ContainsKey(cell)))
+                {
+                    continue;
+                }
+
                 int goal = SelectGoal(unit.Profile, unit.TargetId, search.Reachable(unit.Position, unit.Profile), unit.Position, true);
                 if (goal < 0)
                 {
@@ -595,6 +663,62 @@ namespace NavigationLab.Candidates.EWarcraft3
                 unit.LastReplan = step;
                 Count("AttackPromotions", 1);
             }
+        }
+
+        private bool CanMoveInGroup(MobileUnit unit)
+        {
+            return !groupedYield || activeRequester == 0 || unit.YieldCell >= 0
+                || unit.Id == (groupReturning ? returningUnit : activeRequester);
+        }
+
+        private void UpdateGroup()
+        {
+            if (activeRequester == 0)
+            {
+                return;
+            }
+
+            var requester = units.FirstOrDefault(unit => unit.Id == activeRequester);
+            if (!groupReturning && (requester == null || State(requester) != MotionState.Moving || step - groupStarted > 20000))
+            {
+                groupReturning = true;
+                Count(step - groupStarted > 20000 ? "YieldGroupTimeouts" : "YieldGroupPassagesCompleted", 1);
+            }
+
+            if (!groupReturning)
+            {
+                return;
+            }
+
+            if (returningUnit != 0)
+            {
+                var returning = units.FirstOrDefault(unit => unit.Id == returningUnit);
+                if (returning != null && State(returning) == MotionState.Moving)
+                {
+                    return;
+                }
+                yieldGroup.Remove(returningUnit);
+                returningUnit = 0;
+                Count("FriendlyYieldCompleted", 1);
+            }
+
+            yieldGroup.RemoveAll(id => !units.Any(unit => unit.Id == id));
+            if (yieldGroup.Count == 0)
+            {
+                activeRequester = 0;
+                groupReturning = false;
+                Count("YieldGroupsCompleted", 1);
+                return;
+            }
+
+            returningUnit = yieldGroup[yieldGroup.Count - 1];
+            var next = units.Single(unit => unit.Id == returningUnit);
+            next.YieldCell = -1;
+            next.YieldRequester = 0;
+            goalRevision++;
+            SetPath(next, search.Find(next.Position, next.Goal, next.Profile));
+            next.LastReplan = step;
+            Count("YieldGroupReturnStarts", 1);
         }
 
         private static void SetPath(MobileUnit unit, List<Point2>? path)

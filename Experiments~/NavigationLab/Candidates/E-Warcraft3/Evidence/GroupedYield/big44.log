@@ -1,0 +1,13 @@
+big44 tick=0 born=1/44 moving=1 attack=0 elapsedMs=119
+big44 tick=1000 born=44/44 moving=41 attack=3 elapsedMs=7782
+big44 tick=2000 born=44/44 moving=38 attack=6 elapsedMs=20236
+big44 tick=3000 born=44/44 moving=38 attack=6 elapsedMs=22350
+big44 tick=4000 born=44/44 moving=38 attack=6 elapsedMs=24961
+big44 tick=5000 born=44/44 moving=38 attack=6 elapsedMs=26271
+big44 tick=6000 born=44/44 moving=38 attack=6 elapsedMs=31717
+big44 tick=7000 born=44/44 moving=38 attack=6 elapsedMs=34557
+big44 tick=8000 born=44/44 moving=38 attack=6 elapsedMs=39946
+big44 tick=9000 born=44/44 moving=38 attack=6 elapsedMs=43817
+big44 tick=10000 born=44/44 moving=38 attack=6 elapsedMs=47354
+big44 tick=11000 born=44/44 moving=38 attack=6 elapsedMs=49308
+FINAL big44 pass=False born=44/44 tick=12000 attack=6 wait=0 failure=Arrival/200-tick stability timeout

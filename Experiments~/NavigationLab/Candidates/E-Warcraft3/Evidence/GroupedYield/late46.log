@@ -1,0 +1,13 @@
+late46 tick=0 born=1/46 moving=1 attack=0 elapsedMs=136
+late46 tick=1000 born=44/46 moving=37 attack=7 elapsedMs=2098
+late46 tick=2000 born=44/46 moving=38 attack=6 elapsedMs=3717
+late46 tick=3000 born=44/46 moving=38 attack=6 elapsedMs=5360
+late46 tick=4000 born=44/46 moving=31 attack=13 elapsedMs=6825
+late46 tick=5000 born=44/46 moving=31 attack=13 elapsedMs=8924
+late46 tick=6000 born=44/46 moving=31 attack=13 elapsedMs=11116
+late46 tick=7000 born=44/46 moving=31 attack=13 elapsedMs=13730
+late46 tick=8000 born=44/46 moving=31 attack=13 elapsedMs=15946
+late46 tick=9000 born=44/46 moving=31 attack=13 elapsedMs=18308
+late46 tick=10000 born=44/46 moving=31 attack=13 elapsedMs=20558
+late46 tick=11000 born=44/46 moving=31 attack=13 elapsedMs=36347
+FINAL late46 pass=False born=44/46 tick=12000 attack=13 wait=0 failure=Arrival/200-tick stability timeout

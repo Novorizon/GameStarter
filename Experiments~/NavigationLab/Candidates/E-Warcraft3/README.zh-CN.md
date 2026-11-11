@@ -29,3 +29,27 @@
 ## 测试状态
 
 公共 Core/Runner 正在由导航实验主分支建立。候选会使用相同输入、独立连续几何检查器与相同成功条件；正式命令、源码指纹及结果在可运行后补入本页。当前资料核对和设计不算测试通过。
+
+## 早期真实 Forest 排错记录
+
+以下是早期 debug，**不是统一跨算法矩阵或 Unity 验收**。所有输入直接解析同一 `ForestNavigation.bytes`，每个5ms子步使用公共独立 `ContinuousOracle` 检查身体/障碍/基地扫掠、速度、真实攻击状态及出生/拒绝身份。成功还需全员实际到位、最大兼容攻击人数达到独立匹配结果，并稳定200个50ms逻辑tick。
+
+| 版本 | Medium8 / Big12 | Big44 | Medium45 | Big44稳定后晚到Small2 |
+| --- | --- | --- | --- | --- |
+| 初版非分组让路 | 仅2/1人到位，其余堵住 | 未作为通过 | 未作为通过 | 未作为通过 |
+| 修正连续碰撞停步优先级（E1） | 8/8、12/12通过 | 44/44、18攻26候场通过 | 45出生、8仍Moving，失败 | 46出生、22仍Moving，失败 |
+| 请求者占有让路组、分阶段返场（E2） | 未重计覆盖 | 44出生、38仍Moving，失败 | 45出生、28仍Moving，失败 | 初始44也未稳定，失败 |
+
+首个确定的实现错误是：仅按等待时长决定谁停步，可能先停前车，再因后车将追撞而停后车，导致整队互锁。E1先检查一方独自行走、另一方停住时哪种选择安全，再使用等待优先级；相同Forest小/中阵容因此恢复，Big12实际发生两次友军让路和返场。
+
+E2试图冻结无关交通，为单个请求者逐个让路，结果制造更多阻塞；该变体被拒绝，默认factory恢复较优E1。E2仅保留为 `WarcraftGroupedYieldFactory`，不能使用其失败结果冒充默认方案结果，也不能因Big44通过就把默认E1称为普适。
+
+原始日志和来源指纹：`Evidence/EarlyForest`、`Evidence/SoloPriority`、`Evidence/GroupedYield`。初轮报告还暴露单体最小间距Infinity与Point2派生属性递归的JSON写入错误，日志保留；后续报告使用nullable间距与显式X/Y，并未改变几何检查。
+
+早期smoke独立运行示例（共享Core/Oracle同步到本分支后）：
+
+```bash
+dotnet run --project Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/NavigationLab.EWarcraft3.Smoke.csproj -c Release -- /path/to/GameStarter big44 /tmp/E-Forest
+```
+
+`--baseline`关闭显式友军让路，`--grouped`选择被拒绝的E2。报告中的factory ID区分实际变体；同一`name`不代表不同输入，不能拿重跑数量当新覆盖。
