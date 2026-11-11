@@ -37,6 +37,7 @@ namespace NavigationLab.Oracle
             Require(before.Count == after.Count, "Rejected spawn changed live body count.");
             VerifyUnchangedBodies(before, after, -1);
             VerifyIdentity(after);
+            ValidateTransition(after, after, 0);
         }
 
         public void RegisterDeath(int id, IReadOnlyList<UnitSnapshot> before, IReadOnlyList<UnitSnapshot> after)
@@ -45,18 +46,24 @@ namespace NavigationLab.Oracle
             Require(after.Count == before.Count - 1 && after.All(unit => unit.Id != id), "Removal did not remove exactly the explicit ID.");
             VerifyUnchangedBodies(before, after, id);
             VerifyIdentity(after);
+            ValidateTransition(after, after, 0);
         }
 
         public void ApplyChange(WorldChange change, IReadOnlyList<UnitSnapshot> before, IReadOnlyList<UnitSnapshot> after)
         {
             VerifyUnchangedBodies(before, after, -1);
+            ValidateWorldChangeInput(change, before);
+            World = World.WithChange(change.DeepClone());
+            ValidateTransition(after, after, 0);
+        }
+
+        public void ValidateWorldChangeInput(WorldChange change, IReadOnlyList<UnitSnapshot> before)
+        {
             var next = World.WithChange(change.DeepClone());
             foreach (var unit in before)
             {
-                Require(CircleFits(next, unit.Position, live[unit.Id].Profile.RadiusMm), "INVALID TEST INPUT: world change overlaps a live body.");
+                Require(CircleFits(next, unit.Position, live[unit.Id].Profile.RadiusMm), "INVALID TEST INPUT: world change overlaps live body " + unit.Id);
             }
-            World = next;
-            ValidateTransition(after, after, 0);
         }
 
         public void ValidateTransition(IReadOnlyList<UnitSnapshot> before, IReadOnlyList<UnitSnapshot> after, int milliseconds)
@@ -65,7 +72,9 @@ namespace NavigationLab.Oracle
             var previous = before.ToDictionary(unit => unit.Id);
             foreach (var unit in after)
             {
-                Require(!double.IsNaN(unit.Position.X) && !double.IsInfinity(unit.Position.X) && !double.IsNaN(unit.Position.Y) && !double.IsInfinity(unit.Position.Y), "Nonfinite body position.");
+                Require(
+                    !double.IsNaN(unit.Position.X) && !double.IsInfinity(unit.Position.X) && !double.IsNaN(unit.Position.Y) && !double.IsInfinity(unit.Position.Y),
+                    "Nonfinite body position.");
                 var request = live[unit.Id];
                 Require(unit.TargetId == request.TargetId, "Navigator changed the unit's requested target.");
                 Point2 from = previous.TryGetValue(unit.Id, out var old) ? old.Position : unit.Position;
@@ -79,7 +88,9 @@ namespace NavigationLab.Oracle
                 {
                     Require(unit.GoalCell >= 0 && unit.GoalCell < World.CellCount, "Settled body has no valid goal.");
                     Require(World.HoldingAllowed(unit.GoalCell), "Settled in transit-only, spawn or blocked cell.");
-                    Require(Point2.Distance(unit.Position, World.Center(unit.GoalCell)) <= SimulationProtocol.GoalToleranceMm, "Settled body is not physically at its goal.");
+                    Require(
+                        Point2.Distance(unit.Position, World.Center(unit.GoalCell)) <= SimulationProtocol.GoalToleranceMm,
+                        "Settled body is not physically at its goal.");
                     if (request.AssignedGoalCell >= 0)
                     {
                         Require(unit.GoalCell == request.AssignedGoalCell, "Explicit destination changed.");
@@ -87,7 +98,9 @@ namespace NavigationLab.Oracle
                     var target = World.Target(request.TargetId);
                     if (unit.State == MotionState.Waiting)
                     {
-                        Require(Point2.Distance(unit.Position, target.Center) <= target.RadiusMm + World.GatheringDistanceMm + 0.1, "Waiting outside target gathering radius.");
+                        Require(
+                            Point2.Distance(unit.Position, target.Center) <= target.RadiusMm + World.GatheringDistanceMm + 0.1,
+                            "Waiting outside target gathering radius.");
                     }
                     bool attack = CanAttack(World, unit.Position, request.Profile, target);
                     Require((unit.State == MotionState.Attacking) == attack, "Attack state disagrees with physical range/line of sight.");
@@ -103,7 +116,8 @@ namespace NavigationLab.Oracle
                     Point2 b0 = previous.TryGetValue(b.Id, out var oldB) ? oldB.Position : b.Position;
                     Point2 relativeStart = a0 - b0;
                     Point2 relativeVelocity = (a.Position - a0) - (b.Position - b0);
-                    double time = relativeVelocity.LengthSquared > 1e-20 ? Clamp(-Point2.Dot(relativeStart, relativeVelocity) / relativeVelocity.LengthSquared, 0, 1) : 0;
+                    double time = relativeVelocity.LengthSquared > 1e-20
+                        ? Clamp(-Point2.Dot(relativeStart, relativeVelocity) / relativeVelocity.LengthSquared, 0, 1) : 0;
                     double gap = (relativeStart + relativeVelocity * time).Length - live[a.Id].Profile.RadiusMm - live[b.Id].Profile.RadiusMm;
                     Require(gap >= -SimulationProtocol.GeometryToleranceMm, "Continuous body collision between " + a.Id + " and " + b.Id);
                     MinimumBodyGapMm = Math.Min(MinimumBodyGapMm, gap);
@@ -143,7 +157,9 @@ namespace NavigationLab.Oracle
             {
                 if (unit.Id != removedId)
                 {
-                    Require(current.TryGetValue(unit.Id, out var actual) && actual.Position == unit.Position, "Instantaneous mutation moved or hid an existing body.");
+                    Require(
+                        current.TryGetValue(unit.Id, out var actual) && actual.Position == unit.Position,
+                        "Instantaneous mutation moved or hid an existing body.");
                 }
             }
         }
