@@ -1,6 +1,6 @@
 # E：Warcraft III 风格公开行为的独立复现
 
-当前工作分支为 `experiment/navigation-e-warcraft3-refined`；原 E1b 分支、冻结 DLL 与未完成长测保留。新增 `WarcraftRefinedFactory`（E4）只用于明确选择的精细连接实验，不能把旧版报告改名为 E4。
+主实验分支 `experiment/navigation-e-warcraft3` 现整体选择 `WarcraftRefinedFactory`（E4-v2）。辅助分支 `experiment/navigation-e-warcraft3-refined` 保留修复过程；`experiment/navigation-e-warcraft3-e1b`、原快照与源码/DLL归档保留旧E1b对照。不能把旧版报告改名为E4。
 
 本分支为 `experiment/navigation-e-warcraft3`，基线为 `8c0dd50`。**它不是已获证实的暴雪原版寻路算法实现**。目前能核实的是官方公开的指令、碰撞与堵路行为；未取得原引擎完整寻路源码、设计文档或可复现实机轨迹。
 
@@ -60,9 +60,9 @@ dotnet run --project Experiments~/NavigationLab/Candidates/E-Warcraft3/Smoke/Nav
 
 `--baseline`关闭显式友军让路，`--grouped`选择被拒绝的E2，`--backoff`选择E3。报告中的factory ID区分实际变体；同一`name`不代表不同输入，不能拿重跑数量当新覆盖。
 
-## 默认版本与被拒绝的退让扩展
+## 保留的E1b对照与被拒绝的退让扩展
 
-默认 `NavigationLab.Candidates.EWarcraft3.WarcraftFactory` 使用较稳的空间重寻路与非分组友军让路（E1b）。它按空间净空而非其它单位的射程决定专用格优先级；预注册Small不再改变Big的整体填充顺序。当前存在的普适性失败不会被版本名称或参数改变掩盖。
+保留的对照 `NavigationLab.Candidates.EWarcraft3.WarcraftFactory` 使用较稳的空间重寻路与非分组友军让路（E1b）。它按空间净空而非其它单位的射程决定专用格优先级；预注册Small不再改变Big的整体填充顺序。当前存在的普适性失败不会被版本名称或参数改变掩盖。
 
 - `WarcraftBaselineFactory`：E0，仅空间A*、动态局部重搜和连续碰撞停步，不主动让路。
 - `WarcraftGroupedYieldFactory`：被拒绝的E2，冻结无关交通的让路组/返场实验。
@@ -119,3 +119,21 @@ E4在动态粗图搜索失败、最终目标当前没有被身体占据时，才
 Forest45后续独立检查固定其它44实际身体（包括另2个Moving）：15/19的25mm搜索未找到单体路，14的原Goal被15身体占据；15拟议竖直路线实际穿过原地图阻挡格，初步离散猜测被否定。此结果不证明几何无解，也不推出必须挪42个驻留者。未根据未证实猜测增加切线策略或放宽几何，完整审阅保存在`RefinedForest45Audit`。
 
 被替代E1b的最终v2长测已明确中止：12项闭合，5通过、7失败；活动300密集场景只读取到94083微步的落盘下界，SIGTERM中止，不是deadline失败，也没有形成49或41项整体结果。`E1bFinalV2Partial`保存12个闭合报告/完整闭合轨迹/输入、原3C#运行时和4DLL压缩归档、源稳定后验与中止标记；不完整活动轨迹仅在原外部目录保留并记录SHA。之后以选定E4单独运行完整共同stress49和成功case重放，不混合两个版本拼分。
+
+
+## 选定E4整体实验的复现入口
+
+需Python3、.NET8 SDK和netstandard2.1 targeting pack。从仓库根目录运行；默认会对成功case做全新实例重放，失败与未支持不算通过。
+
+```bash
+python3 Tools~/NavigationLab/freeze-run.py \
+  --harness-root . \
+  --candidate-root . \
+  --candidate-project Experiments~/NavigationLab/Candidates/E-Warcraft3/NavigationLab.EWarcraft3.csproj \
+  --factory NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory \
+  --snapshots /tmp/navlab-e-snapshots \
+  --output /tmp/navlab-e-stress \
+  --suite stress
+```
+
+本分支包含所选修复实现和已完成关键证据；完整stress49正在单独执行。当前不能用关键5例、旧7项smoke或旧12项partial拼成49项。完成后再归档统一摘要、失败、输入、压缩轨迹、实际4DLL与编译来源，并从同一批输入派生full41。

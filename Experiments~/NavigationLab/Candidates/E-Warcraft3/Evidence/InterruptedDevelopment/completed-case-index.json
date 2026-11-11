@@ -37,7 +37,7 @@
     "open-arena.json": "9a28eabcd8c4d42e89c34a8df8aeec210e7b2cbdd756b086d0e6c13f945c77dd",
     "forest-full44-large.json": "3a0d4e63c2cd3c3651fe479ac6f956373a1891edd475dcfca54834902b4edbc5"
   },
-  "retention": "This index retains the completed compact reports, original log/build provenance and interruption marker. Full original report commands/traces remain at the original external output; they are not asserted to be a complete archived final matrix. FinalV2Stress is the final common protocol run.",
+  "retention": "This index retains compact reports, original log/build provenance and interruption marker from an obsolete partial development run. Full original report commands/traces remain at the original external output. It is not a complete archived final matrix; the subsequently selected E4 run is recorded separately.",
   "completedCases": [
     {
       "Name": "static-unreachable-retains-pending",
