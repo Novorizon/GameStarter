@@ -23,6 +23,7 @@ VerifyExceptionIsolation();
 var polygonChecks = VerifyPolygonGoalCompatibility();
 VerifyTightZeroRangeArrival();
 VerifySettledTargetRelocation();
+VerifyOffsetExactWidthCorridor();
 var isolated = Run(false);
 var interleaved = Run(true);
 if (isolated.Hash != interleaved.Hash)
@@ -35,6 +36,7 @@ Console.WriteLine(JsonSerializer.Serialize(new
     exceptionHostRestoration = true,
     tightZeroRangeArrival = true,
     settledTargetRelocation = true,
+    offsetExactWidthCorridor = true,
     polygonChecks,
     isolated = new { trajectorySha256 = isolated.Hash, pairSweeps = isolated.PairSweeps, bodySweeps = isolated.BodySweeps },
     interleaved = new { trajectorySha256 = interleaved.Hash, pairSweeps = interleaved.PairSweeps, bodySweeps = interleaved.BodySweeps },
@@ -298,6 +300,60 @@ static void VerifySettledTargetRelocation()
                 nav.ApplyWorldChange(change);
                 oracle.ApplyChange(change, before, nav.Snapshot());
             }
+        }
+    }
+}
+
+static void VerifyOffsetExactWidthCorridor()
+{
+    var walk = new bool[24 * 9];
+    for (int x = 0; x < 24; x++)
+    {
+        walk[4 * 24 + x] = true;
+        if (x >= 16)
+        {
+            for (int y = 1; y < 8; y++)
+            {
+                walk[y * 24 + x] = true;
+            }
+        }
+    }
+    int goal = 4 * 24 + 18;
+    int spawn = 4 * 24 + 1;
+    var holding = new bool[walk.Length];
+    holding[goal] = true;
+    var world = new WorldDefinition(
+        24,
+        9,
+        500,
+        new Point2(0, -60),
+        walk,
+        holding,
+        new[] { spawn },
+        new[] { new TargetDefinition(1, new Point2(10750, 2190), 500) },
+        4000);
+    var profile = new UnitProfile(250, 55, 1000);
+    if (!ContinuousOracle.SegmentFits(world, world.Center(spawn), world.Center(goal), profile.RadiusMm))
+    {
+        throw new InvalidOperationException("The non-binary exact-width corridor must be physically traversable.");
+    }
+    foreach (var factory in new INavigationFactory[] { new OrcaFactory(), new OrcaYieldFactory() })
+    {
+        using var nav = factory.Create(world, new[] { profile });
+        var oracle = new ContinuousOracle(world);
+        Birth(nav, oracle, new SpawnRequest(1, profile, spawn, 1, goal));
+        int stable = 0;
+        for (int step = 0; step < 7000 && stable < 2000; step++)
+        {
+            Advance(nav, oracle);
+            stable = nav.Snapshot().Single().State == MotionState.Attacking ? stable + 1 : 0;
+        }
+        if (stable < 2000)
+        {
+            var final = nav.Snapshot().Single();
+            throw new InvalidOperationException("Exact-width offset corridor did not arrive: " + factory.Id
+                + " pos=" + final.Position.X + "," + final.Position.Y
+                + " staticProposalStops=" + (nav.Metrics.TryGetValue("UnsafeStaticOrSpeedProposalStops", out long stops) ? stops : 0));
         }
     }
 }

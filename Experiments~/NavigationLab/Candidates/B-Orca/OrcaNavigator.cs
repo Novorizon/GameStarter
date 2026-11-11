@@ -13,6 +13,7 @@ namespace NavigationLab.Candidates.BOrca
         internal const NavigationFeatures SupportedFeatures = NavigationFeatures.DeathAndReinforcement | NavigationFeatures.DynamicTerrain
             | NavigationFeatures.MovingTarget | NavigationFeatures.MultipleTargets | NavigationFeatures.AssignedGoals
             | NavigationFeatures.LargeBodies | NavigationFeatures.FastPerTick;
+        private const double ExecutionToleranceMm = SimulationProtocol.GeometryToleranceMm / 4;
         private readonly SimulatorContext context = new SimulatorContext();
         private readonly Dictionary<int, Actor> actors = new Dictionary<int, Actor>();
         private readonly Dictionary<int, Actor> goalOwners = new Dictionary<int, Actor>();
@@ -52,6 +53,7 @@ namespace NavigationLab.Candidates.BOrca
             declaredProfiles = profiles.Distinct().ToList();
             minimumAttackRange = profiles.Count == 0 ? 0 : profiles.Min(profile => profile.AttackRangeMm);
             Set("RegisteredProfiles", profiles.Count);
+            Set("ExecutionNumericalToleranceMicrometres", (long)Math.Round(ExecutionToleranceMm * 1000));
             Set("RouteResolutionHalfCells", 1);
             Set("UsesSipp", 0);
             Set("NegotiatedYieldEnabled", coordinatedYield ? 1 : 0);
@@ -165,7 +167,7 @@ namespace NavigationLab.Candidates.BOrca
                     var delta = destination - actor.Position;
                     double maximum = actor.Request.Profile.SpeedMmPerTick / 50.0;
                     double distancePerStep = Math.Min(maximum * SimulationProtocol.MicrostepMilliseconds, delta.Length);
-                    var velocity = delta.Length <= .05 ? default : delta.Normalized * (distancePerStep / SimulationProtocol.MicrostepMilliseconds);
+                    var velocity = delta.Length <= .005 ? default : delta.Normalized * (distancePerStep / SimulationProtocol.MicrostepMilliseconds);
                     simulator.SetAgentPrefVelocity(actor.RvoId, new Vector((float)velocity.X, (float)velocity.Y));
                 }
 
@@ -297,10 +299,10 @@ namespace NavigationLab.Candidates.BOrca
             {
                 var settled = ordered.Where(other => other != actor && Arrived(other)).ToArray();
                 Func<Point2, bool> blocked = point => settled.Any(other => Point2.Distance(point, other.Position)
-                    < actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm + .01);
+                    < actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - ExecutionToleranceMm);
                 Func<Point2, Point2, bool> blockedSegment = (first, second) => settled.Any(other =>
                     Geometry.PointSegmentSquared(other.Position, first, second)
-                        < Square(actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - .005));
+                        < Square(actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - ExecutionToleranceMm));
                 var path = Mesh(actor.Request.Profile).Find(actor.Position, GoalPoint(actor), blocked, out int expanded, blockedSegment);
                 Add("GlobalExpandedNodes", expanded);
                 Add("DynamicRepaths");
@@ -321,7 +323,7 @@ namespace NavigationLab.Candidates.BOrca
                     if (Geometry.Clear(world, actor.Position, target, actor.Request.Profile.RadiusMm)
                         && !ordered.Any(other => other != actor && Arrived(other)
                             && Geometry.PointSegmentSquared(other.Position, actor.Position, target)
-                                < Square(actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm + .01)))
+                                < Square(actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - ExecutionToleranceMm)))
                     {
                         actor.Waypoint = next;
                         Add("VisibleRouteShortcuts");
@@ -550,10 +552,10 @@ namespace NavigationLab.Candidates.BOrca
             }
             var protectedBodies = ordered.Where(other => other != blocker && (other == requester || Arrived(other))).ToArray();
             Func<Point2, bool> blocked = point => protectedBodies.Any(other => Point2.Distance(point, other.Position)
-                < blocker.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - .005);
+                < blocker.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - ExecutionToleranceMm);
             Func<Point2, Point2, bool> blockedSegment = (first, second) => protectedBodies.Any(other =>
                 Geometry.PointSegmentSquared(other.Position, first, second)
-                    < Square(blocker.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - .005));
+                    < Square(blocker.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm - ExecutionToleranceMm));
             var sorted = candidates.OrderBy(cell => goalOwners.ContainsKey(cell) ? 2 : world.HoldingAllowed(cell) ? 1 : 0)
                 .ThenBy(cell => Point2.Distance(world.Center(cell), blocker.Position)).ThenBy(cell => cell).ToArray();
             int offset = sorted.Length == 0 ? 0 : blocker.YieldTrialRound * 12 % sorted.Length;
@@ -601,8 +603,8 @@ namespace NavigationLab.Candidates.BOrca
                     throw new InvalidOperationException("ORCA returned a non-finite physical position.");
                 }
 
-                if (Point2.Distance(before[index], point) > allowed + .01
-                    || !Geometry.Clear(world, before[index], point, ordered[index].Request.Profile.RadiusMm))
+                if (Point2.Distance(before[index], point) > allowed + ExecutionToleranceMm
+                    || !Geometry.Clear(world, before[index], point, ordered[index].Request.Profile.RadiusMm, true, ExecutionToleranceMm))
                 {
                     next[index] = before[index];
                     stopped[index] = true;
@@ -619,7 +621,7 @@ namespace NavigationLab.Candidates.BOrca
                     for (int second = first + 1; second < ordered.Length; second++)
                     {
                         double radius = ordered[first].Request.Profile.RadiusMm + ordered[second].Request.Profile.RadiusMm;
-                        if (Geometry.PairSweepSquared(before[first], next[first], before[second], next[second]) >= Square(radius - .005))
+                        if (Geometry.PairSweepSquared(before[first], next[first], before[second], next[second]) >= Square(radius - ExecutionToleranceMm))
                         {
                             continue;
                         }

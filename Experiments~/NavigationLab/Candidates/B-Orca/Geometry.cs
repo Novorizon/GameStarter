@@ -6,13 +6,13 @@ namespace NavigationLab.Candidates.BOrca
     /// <summary>Candidate-side geometry. The runner independently verifies actual positions using its own oracle.</summary>
     internal static class Geometry
     {
-        internal static bool Clear(WorldDefinition world, Point2 first, Point2 second, double radius, bool targets = true)
+        internal static bool Clear(WorldDefinition world, Point2 first, Point2 second, double radius, bool targets = true, double toleranceMm = 0)
         {
             if (targets)
             {
                 foreach (var target in world.Targets)
                 {
-                    if (PointSegmentSquared(target.Center, first, second) < Square(target.RadiusMm + radius) - .000001)
+                    if (PointSegmentSquared(target.Center, first, second) < Square(Math.Max(0, target.RadiusMm + radius - toleranceMm)) - .000001)
                     {
                         return false;
                     }
@@ -36,7 +36,7 @@ namespace NavigationLab.Candidates.BOrca
                     double x0 = world.Origin.X + x * cellSize;
                     double y0 = world.Origin.Y + y * cellSize;
                     double distance = SegmentBoxSquared(first, second, x0, y0, x0 + cellSize, y0 + cellSize);
-                    if (radius < .001 ? distance <= 1e-12 : distance < radius * radius - .000001)
+                    if (radius < .001 ? distance <= 1e-12 : distance < Square(Math.Max(0, radius - toleranceMm)) - .000001)
                     {
                         return false;
                     }

@@ -1,0 +1,21 @@
+{
+  "scope": "The exact same independent oracle, original radius250, speed55 and shifted500mm corridor. Only candidate execution numeric tolerance changed to0.025mm; static goal eligibility and shared oracle0.1mm unchanged.",
+  "beforeLogSha256": "d826950aad3c6614888f20d6ebfc45b16d0e81ec32dd90b400259b4b178fac75",
+  "afterLogSha256": "aa45eccc8cc0dd9911e5a19c9955a897fc66bfdbfa54d6dd13113124ff62c4c9",
+  "sourceAfter": {
+    "ArgumentGuardCompatibility.cs": "6578f0ba74c272e7cf56835cc6ba20c4778d82a4315c4fbd201717e2bf359982",
+    "Geometry.cs": "8965c16c1139f1964e2f330d456c06aae23d04b917d76145f25f448bc23276e2",
+    "OrcaFactory.cs": "3efbc1443252d6f7e0e7e97e4f5bf91c882bc40845d213782e95d1f753b59850",
+    "OrcaNavigator.cs": "72268e7b13fe4923ec6d571a44cbf37fd8b99b23049837a16ce65f12e4a1dcc9",
+    "RouteMesh.cs": "07a171e5c8f5730f5045b4e7a15323faab29caaeb6c09a116745e8f8c09403c8",
+    "SelfTest/Program.cs": "467be60478515bc005590684004c0c9f42e166b99250b83120599bd0272108a6",
+    "SimulatorContext.cs": "29310201464540596ff4c8256de6a9fbf596640dc837a31b19fca35de1fea987",
+    "ThirdParty/RVO2/Agent.cs": "6e95c5b82cd89bb7ad0b2a73d136dec27b935285ed2c89332a3aba20d254b140",
+    "ThirdParty/RVO2/KdTree.cs": "17b0f2af539b3cd9f086c821e4744f605edab8532c01f2ef8d32ae05329d1428",
+    "ThirdParty/RVO2/Line.cs": "3ab66ff3609631cbdd4d3f9e1b5cf02aa57691af6e195170e7d2278d3ad50187",
+    "ThirdParty/RVO2/Obstacle.cs": "c7853005c1bd95f69c824ea9b801cc2b9560b4b65b717e55d738d2efbd260302",
+    "ThirdParty/RVO2/RVOMath.cs": "a6c8976610867b58ef1f17bf2f6dc3089a235e4bc2eb6c57bd66e62acf2d2dfe",
+    "ThirdParty/RVO2/Simulator.cs": "d2ec317dfdb3b434213f7c3dfa17f01fda628f05b271d9a3ceb6099f4175bcf6",
+    "ThirdParty/RVO2/Vector2.cs": "a3785fcab6e8774e627b03dd4798b5e8c1bef9092556800e9525a260e9c48236"
+  }
+}

@@ -60,3 +60,9 @@ dotnet run --project Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Navig
 `Evidence/Development` 保留初始实现的范围状态失败、修复后的smoke和原72对照，以及当时完整候选源和实际DLL。b-000两工厂均5/7，open-arena和原72因候场半径边界提前标Waiting而失败；b-001两工厂smoke7/7，但运行时共享harness有修改，不能作为最终冻结同源证据。b-002单独原72两工厂通过。最终全面矩阵会使用统一冻结源、编译清单、重放及Unity结果另行报告。
 
 动态路线对停止身体同时检查节点与连接边，不能让擦过圆盘的边反复被物理执行器拒绝。临时让路使用实际路线阻挡关系、附近物理空位置与动态身体约束的完整A*路线，并保留原永久Goal；终态仍要求返回或合法重新取得永久目标。
+
+## 浮点执行容差回归
+
+独立Oracle的数值容差固定0.1mm。B的执行器最初几乎零容差：Y原点-60mm、500mm恰宽走廊、r250身体时，RVO将2190mm表示成2190.000057mm，导致7000微步全被静态门截回，身体始终停在出生点。这是适配层bug，不能计作ORCA的寻路能力边界。
+
+执行层现使用0.025mm数值容差，仍由原0.1mm独立Oracle核对原始半径/速度。静态Goal资格和世界输入不变。相同走廊已真实到位并稳定200tick，零射程接触、r250/490/700外包Goal、移动target、交错实例与异常恢复也重新通过；原源码/DLL/失败及修复后报告保存在 `Evidence/OffsetCorridorRegression`。指标 `ExecutionNumericalToleranceMicrometres=25` 公开该数值规则。
