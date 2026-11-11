@@ -1,0 +1,7 @@
+# B当前选定版本的冻结证据
+
+B0和B1均基于源提交8c6a4a2；实际frozen candidate DLL SHA均为a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831。Factory分别为NavigationLab.Candidates.BOrca.OrcaFactory和OrcaYieldFactory，协商让路/目标交换只在B1开启。Core/Oracle保留共同v2标准，原RVO源码、体型、速度、地图、Goal集合保持。
+
+每包含精确源码、实际Compile输入、四角色DLL及原build-manifest，verify-packages.py检查原字节而不是重跑模拟。FrozenDllRegressions在相同实际a69 DLL上通过了完整原自检（包含U清路径绕行和完整2000个5ms稳定interval）及B0/B1各3个不同体型补充例/fresh；这些补充例不计入共同49。
+
+两轮共同49+fresh仍执行中：云端results/b0-v2-final-stress与b1-v2-final-stress。此提交不声明完整49完成；结束后添加原报告、输入、哈希和失败首末窗口。旧源码、被替代的中止阶段、旧Native原件均在Evidence/SupersededBeforeStartJoin，不能用旧结果替代本版本。

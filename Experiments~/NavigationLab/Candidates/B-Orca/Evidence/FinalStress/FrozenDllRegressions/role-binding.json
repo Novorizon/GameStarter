@@ -1,0 +1,24 @@
+{
+  "scope": "Same compiled selftest program built from selected source; actual candidate/Core/Oracle DLLs replaced by exact immutable formal DLL bytes before execution. U and all existing selftests count complete physical intervals.",
+  "modelManifestPath": "/workspace/navigation-comparison/results/b0-v2-final-stress/build-manifest.json",
+  "actualFiles": {
+    "NavigationLab.BOrca.SelfTest.runtimeconfig.json": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df",
+    "NavigationLab.BOrca.dll": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+    "NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "NavigationLab.BOrca.SelfTest.dll": "37e015d6b8d74995fd6ba7df2c80fa989c0492f357247de2419c6a33a249b309",
+    "NavigationLab.BOrca.SelfTest.deps.json": "4fd697acee8449c9b51e1ed4003922ab9bfec13397888c999c8a777984beed61",
+    "NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73"
+  },
+  "identicalSelectedSelftestSources": {
+    "Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Program.cs": {
+      "sourceSha256": "ec175f38e19af47de1117c8e67e8d8c676ca1a586bc5dd8001a490e5fab56e79",
+      "localSource": "/workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Program.cs",
+      "frozenSource": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Program.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/NavigationLab.BOrca.SelfTest.csproj": {
+      "sourceSha256": "57880872159a1740107981a9ea92014c4950777c3f4a70411ed4ab1d187b037d",
+      "localSource": "/workspace/navigation-comparison/b-orca/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/NavigationLab.BOrca.SelfTest.csproj",
+      "frozenSource": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/NavigationLab.BOrca.SelfTest.csproj"
+    }
+  }
+}

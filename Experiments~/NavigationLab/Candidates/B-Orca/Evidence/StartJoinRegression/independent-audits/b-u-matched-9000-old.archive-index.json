@@ -1,0 +1,21 @@
+{
+  "scope": "Original independently sealed matching9000 old/new U query. New2000 complete intervals passed; old did not reach. Different from earlier7000 insufficient-window records and non-final fe6 policy.",
+  "originalDirectory": "/workspace/navigation-comparison/audit/b-u-matched-9000-old",
+  "originalManifestSha256": "fdca48e5ad4bd734102e0578684a1429ccc5a8f10e86c89659c8f1626993084c",
+  "archiveSha256": "cea55ee4e8beb66bfd3ceeaab534ff88a52582993f3fd403fd4f947db95fa46a",
+  "files": {
+    "Program.cs": "dc3e9c614d7fbb6f7abf84fd02dfc96108268e8c2591cc72ed031b20d3bf02e7",
+    "Query.csproj": "8a1ea131b1b3176aa5bd7d6349e636ac3733cc3e9a516f149dd4b6a25b55c26c",
+    "README.md": "92e5efbb35a1dc68c09ff085fe84c08f082474d26f452b89385848d85267b240",
+    "Snapshot/NavigationLab.BOrca.dll": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7",
+    "Snapshot/NavigationLab.Core.dll": "c9385babc5fd6a81395c8cd1dd22d7bf65e7a34dc6104399cac821dbbd7f9902",
+    "Snapshot/NavigationLab.Oracle.dll": "799b4de4143a798d6856dbd4ade7bcb6f9764de78ee6eed2cede2ef2a841c108",
+    "Snapshot/RVO2-LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "empty-change.jsonl.gz": "07336728ce513afae270bf6be3f468eb2062d841947349d465b7e09df4bfde49",
+    "manifest.json": "fdca48e5ad4bd734102e0578684a1429ccc5a8f10e86c89659c8f1626993084c",
+    "original-path.jsonl.gz": "07be5fd9ca688aabdf7adfff7fbb2409907302f0bf314151b4dd439cccde5381",
+    "query.json": "99ed5455d3de88b54201c43fc2355c476fc324ad48c9025a598272a678985f8f",
+    "query.log": "99ed5455d3de88b54201c43fc2355c476fc324ad48c9025a598272a678985f8f",
+    "role-binding.json": "54cfc2dee452f6143fb8c0d77d62ef992868e962385986de825006274dc53364"
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "scope": "Current selected source8c6a4a2. Exact source, actual Compile inputs and original four DLL roles. Package alone does not imply stress49 completion. Original absolute-path build manifest retained unchanged.",
+  "factory": "NavigationLab.Candidates.BOrca.OrcaFactory",
+  "originCandidate": {
+    "repository": "/workspace/navigation-comparison/b-orca",
+    "commit": "8c6a4a20158fd95ae2d4de7d4c50847d44bd8286",
+    "branch": "experiment/navigation-b-orca",
+    "dirty": false
+  },
+  "snapshotIdentitySha256": "a45e8ae3db636b272a94f5538d9ee0c59cd26e13055b3243f048c259b8946188",
+  "originalBuildManifestSha256": "ab6d62819b1d6268b6f1842fd51e03b1dd5644da2809e54ae20ec54f69294dd8",
+  "archiveSha256": "2c3e80566773bd1a515f067f8d8cf309acc2adaeebf3bccef980a7db7c9bff09",
+  "files": {
+    "Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes": {
+      "sha256": "ad5dd54b722c97779ad6b0f6e22548d3288ed380c8d758b7615d1e6894165256",
+      "bytes": 1925,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/GameAssets/TowerDefense/Data/ForestNavigation.bytes"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/BattleBriefing.cs": {
+      "sha256": "8d6440c526a407a9079a96a27676d0dcfb034dfcac773453e7768fd84bcf23d8",
+      "bytes": 2155,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/BattleBriefing.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/BattlePauseState.cs": {
+      "sha256": "9874de324a024cbc438aaa33446930c04dfc887990e9f764eefe896e83262d37",
+      "bytes": 1157,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/BattlePauseState.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Configuration.cs": {
+      "sha256": "f008402a7536bdaee62665aa3bf7f0cb5c99c0947c7b6794fcffccb4ea7b5034",
+      "bytes": 6175,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Configuration.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/DemoConfiguration.cs": {
+      "sha256": "2e23aaee416297fd1eed084b69d029b8ef7123be747cd0140053af7415a20189",
+      "bytes": 4966,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/DemoConfiguration.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/FightSession.cs": {
+      "sha256": "89038901396cca1872c0495912cb660f1bba1f656194ddfe8f96729ba5243c20",
+      "bytes": 27084,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/FightSession.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationAgent.cs": {
+      "sha256": "5bd788579d589637eedf8b538ba3a5be3ed678553347ab6ea1115ff73175bc38",
+      "bytes": 1314,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationAgent.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.AdmissionGates.cs": {
+      "sha256": "20ae2cc7647e4a06b2db45583c530a7ead8585a71955784e49047916a33ccee3",
+      "bytes": 26656,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.AdmissionGates.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.AttackQuotas.cs": {
+      "sha256": "9593d31afacf1dc8588f8a9c79f27b5e89c32847d6a9f181a55a174a08b3a64f",
+      "bytes": 6961,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.AttackQuotas.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Gates.cs": {
+      "sha256": "6c195b4b16c7c8a2109c8b1fbcb5a2533ee03122b26105b24262b9a9c9fc29d6",
+      "bytes": 7057,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Gates.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Parking.cs": {
+      "sha256": "86892b107142fbd8af609bad6c371b3e664b22fc508f5b884f9c60cb53b74b74",
+      "bytes": 5065,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Parking.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Planning.cs": {
+      "sha256": "c16520d5f68fe786d3020679d590869aa9c31043fa8c2c22b6f134170141bc22",
+      "bytes": 17282,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Planning.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Recovery.cs": {
+      "sha256": "79b81c362871d463664c17791b8aa0085861568ff5608ccae0f58c55fa56a68d",
+      "bytes": 18785,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Recovery.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Traffic.cs": {
+      "sha256": "949ef250245e7c2707b89638b1cbefdaa81255f4c40e31be0bedc1059841181b",
+      "bytes": 2651,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.Traffic.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.cs": {
+      "sha256": "878c304c118a59754b6463405edd33118d1ec39b208be9b0e2b73106f804e727",
+      "bytes": 26183,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationCrowd.cs"
+    },
+    "Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationGrid.cs": {
+      "sha256": "a418d545df2ebcf971df2ca8270c17b6d0a611255afb0e2ea40d1e8aa1b1117e",
+      "bytes": 8345,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Assets/HotUpdate/TowerDefense/Domain/Navigation/NavigationGrid.cs"
+    },
+    "Config/Luban/Data/tdenemy.xlsx": {
+      "sha256": "8da6af18bd1d8a59e4e61e1471e026273b6ada430a64124da7228f19c7024618",
+      "bytes": 5294,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Config/Luban/Data/tdenemy.xlsx"
+    },
+    "Config/Luban/Data/tdspawn.xlsx": {
+      "sha256": "5722ea3e594c7f2f8cf75d8d25f5a7e7f964f8113972f3bb14c8210a1257bcaa",
+      "bytes": 5357,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Config/Luban/Data/tdspawn.xlsx"
+    },
+    "Config/Luban/Data/tdwave.xlsx": {
+      "sha256": "7d747d3475096094eeb824eaf22c004408dec43ef4f2ae58c737fba42f6ef549",
+      "bytes": 5102,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Config/Luban/Data/tdwave.xlsx"
+    },
+    "Experiments~/NavigationLab/Candidates/A-Sipp/NavigationLab.ASipp.csproj": {
+      "sha256": "937c5b59c3cfdede63e1c6ee8890171b16df77f3176359a69290c859e9c7067a",
+      "bytes": 598,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/A-Sipp/NavigationLab.ASipp.csproj"
+    },
+    "Experiments~/NavigationLab/Candidates/A-Sipp/SippFactory.cs": {
+      "sha256": "4eaadfd14f001d9644ca63560655b96d2742f2646590000c03c6292be9a62b86",
+      "bytes": 5024,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/A-Sipp/SippFactory.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ArgumentGuardCompatibility.cs": {
+      "sha256": "6578f0ba74c272e7cf56835cc6ba20c4778d82a4315c4fbd201717e2bf359982",
+      "bytes": 1361,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ArgumentGuardCompatibility.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/Geometry.cs": {
+      "sha256": "8965c16c1139f1964e2f330d456c06aae23d04b917d76145f25f448bc23276e2",
+      "bytes": 5769,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/Geometry.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/NavigationLab.BOrca.csproj": {
+      "sha256": "702a10395a51d258835bb4efd6b558b997baea913d4432d4f62a6640b7475cc7",
+      "bytes": 680,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/NavigationLab.BOrca.csproj"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/OrcaFactory.cs": {
+      "sha256": "3efbc1443252d6f7e0e7e97e4f5bf91c882bc40845d213782e95d1f753b59850",
+      "bytes": 1076,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/OrcaFactory.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/OrcaNavigator.cs": {
+      "sha256": "3d749dc10e10522d4cfbc2f5c0ab93cd153e60766da1a3b8d14f134065c8b10a",
+      "bytes": 44791,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/OrcaNavigator.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/README.zh-CN.md": {
+      "sha256": "4bccf08ae27f14fced8771f19e95346d4a2b6fb93f5a54443e9dc5f289dc85b9",
+      "bytes": 10534,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/README.zh-CN.md"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/RouteMesh.cs": {
+      "sha256": "957b35dcfe245ff93c15cbe95725bdbf0ca72c0b9c93fd06de8cfee3b1709d3f",
+      "bytes": 11554,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/RouteMesh.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/NavigationLab.BOrca.SelfTest.csproj": {
+      "sha256": "57880872159a1740107981a9ea92014c4950777c3f4a70411ed4ab1d187b037d",
+      "bytes": 643,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/NavigationLab.BOrca.SelfTest.csproj"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Program.cs": {
+      "sha256": "ec175f38e19af47de1117c8e67e8d8c676ca1a586bc5dd8001a490e5fab56e79",
+      "bytes": 17288,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Program.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/SimulatorContext.cs": {
+      "sha256": "29310201464540596ff4c8256de6a9fbf596640dc837a31b19fca35de1fea987",
+      "bytes": 2422,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/SimulatorContext.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Agent.cs": {
+      "sha256": "6e95c5b82cd89bb7ad0b2a73d136dec27b935285ed2c89332a3aba20d254b140",
+      "bytes": 30727,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Agent.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/KdTree.cs": {
+      "sha256": "17b0f2af539b3cd9f086c821e4744f605edab8532c01f2ef8d32ae05329d1428",
+      "bytes": 24978,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/KdTree.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/LICENSE": {
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/LICENSE"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Line.cs": {
+      "sha256": "3ab66ff3609631cbdd4d3f9e1b5cf02aa57691af6e195170e7d2278d3ad50187",
+      "bytes": 1303,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Line.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Obstacle.cs": {
+      "sha256": "c7853005c1bd95f69c824ea9b801cc2b9560b4b65b717e55d738d2efbd260302",
+      "bytes": 1470,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Obstacle.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/RVOMath.cs": {
+      "sha256": "a6c8976610867b58ef1f17bf2f6dc3089a235e4bc2eb6c57bd66e62acf2d2dfe",
+      "bytes": 5617,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/RVOMath.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Simulator.cs": {
+      "sha256": "d2ec317dfdb3b434213f7c3dfa17f01fda628f05b271d9a3ceb6099f4175bcf6",
+      "bytes": 61892,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Simulator.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Vector2.cs": {
+      "sha256": "a3785fcab6e8774e627b03dd4798b5e8c1bef9092556800e9525a260e9c48236",
+      "bytes": 9262,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/RVO2/Vector2.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/upstream.json": {
+      "sha256": "9023511bb70a223075fa69f1b7621e43fb785d2e9838a74d769908aab5395b12",
+      "bytes": 835,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/ThirdParty/upstream.json"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll": {
+      "sha256": "a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
+      "bytes": 66560,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/bin/Release/netstandard2.1/NavigationLab.BOrca.dll"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs": {
+      "sha256": "2709798141b676ec191594806a723869b9925fbe61ab5ec7feaf6285028ba812",
+      "bytes": 207,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs"
+    },
+    "Experiments~/NavigationLab/Candidates/B-Orca/obj/Release/netstandard2.1/NavigationLab.BOrca.AssemblyInfo.cs": {
+      "sha256": "87ac169968923a4056ea3ba57fb05553340875b2807a2f83c9cd6d225241552c",
+      "bytes": 970,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Candidates/B-Orca/obj/Release/netstandard2.1/NavigationLab.BOrca.AssemblyInfo.cs"
+    },
+    "Experiments~/NavigationLab/Core/Contracts.cs": {
+      "sha256": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c",
+      "bytes": 9945,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Core/Contracts.cs"
+    },
+    "Experiments~/NavigationLab/Core/NavigationLab.Core.csproj": {
+      "sha256": "8deb199fd7c331f9a9770948183ac6f7b7739c119054b8968b5311e73ede5bb5",
+      "bytes": 406,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Core/NavigationLab.Core.csproj"
+    },
+    "Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll": {
+      "sha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "bytes": 15360,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll"
+    },
+    "Experiments~/NavigationLab/Core/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs": {
+      "sha256": "2709798141b676ec191594806a723869b9925fbe61ab5ec7feaf6285028ba812",
+      "bytes": 207,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Core/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs"
+    },
+    "Experiments~/NavigationLab/Core/obj/Release/netstandard2.1/NavigationLab.Core.AssemblyInfo.cs": {
+      "sha256": "07d9fd2f1d8e91050ec68b299249a87e660c4c188553b5180b184b291732177a",
+      "bytes": 967,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Core/obj/Release/netstandard2.1/NavigationLab.Core.AssemblyInfo.cs"
+    },
+    "Experiments~/NavigationLab/Inputs/authored-forest.json": {
+      "sha256": "8a7e639a81c9523fb0371f25247db19119612ad1130e89ec9b78f38b2f964dde",
+      "bytes": 3853,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Inputs/authored-forest.json"
+    },
+    "Experiments~/NavigationLab/Oracle/ContinuousOracle.cs": {
+      "sha256": "c41a9814e2072c0a997b81bc9191774c8a46094807fde577f192198477d7cbeb",
+      "bytes": 15654,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Oracle/ContinuousOracle.cs"
+    },
+    "Experiments~/NavigationLab/Oracle/NavigationLab.Oracle.csproj": {
+      "sha256": "fe09cf69f8f92565be857c372b12fdf1eeb1bd65087dd5dd008f2eee92b3a2b9",
+      "bytes": 496,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Oracle/NavigationLab.Oracle.csproj"
+    },
+    "Experiments~/NavigationLab/Oracle/bin/Release/netstandard2.1/NavigationLab.Oracle.dll": {
+      "sha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+      "bytes": 17408,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Oracle/bin/Release/netstandard2.1/NavigationLab.Oracle.dll"
+    },
+    "Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs": {
+      "sha256": "2709798141b676ec191594806a723869b9925fbe61ab5ec7feaf6285028ba812",
+      "bytes": 207,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs"
+    },
+    "Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/NavigationLab.Oracle.AssemblyInfo.cs": {
+      "sha256": "017c770ab9a2fc55726ed99fbe59af198f0d6f85c7f34dbc70986a626f17acbd",
+      "bytes": 973,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/NavigationLab.Oracle.AssemblyInfo.cs"
+    },
+    "Experiments~/NavigationLab/README.zh-CN.md": {
+      "sha256": "d22a2b22de18848c3bccbdab6e15700807b510407f576571dd38421387646ef3",
+      "bytes": 5506,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/README.zh-CN.md"
+    },
+    "Experiments~/NavigationLab/Runner/LabCases.cs": {
+      "sha256": "8ebd5b5bbfe51275111a95b8b70c9320f7935a130d1c3689731587c72759beab",
+      "bytes": 23838,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/LabCases.cs"
+    },
+    "Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj": {
+      "sha256": "5018b49290d0aaf7935ca5d9d10e3ae8eaa283c0424a5f4d79046b98f0fa4d35",
+      "bytes": 836,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj"
+    },
+    "Experiments~/NavigationLab/Runner/Program.cs": {
+      "sha256": "0ed5c3bc023682c202361531642244326e0852255d21b887150fcb0d78841746",
+      "bytes": 51407,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/Program.cs"
+    },
+    "Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Core.dll": {
+      "sha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "bytes": 15360,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Core.dll"
+    },
+    "Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Oracle.dll": {
+      "sha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+      "bytes": 17408,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Oracle.dll"
+    },
+    "Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.deps.json": {
+      "sha256": "961b950e1f8c5e3517d9d767795b7e82c596e99099ec813cc6547325f1adec36",
+      "bytes": 1265,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.deps.json"
+    },
+    "Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll": {
+      "sha256": "da91ca36911ee8ea7d4d744b2bf211b2734c8cafd65b37e1f53f0d2a19fdb7e7",
+      "bytes": 130560,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll"
+    },
+    "Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.runtimeconfig.json": {
+      "sha256": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df",
+      "bytes": 328,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.runtimeconfig.json"
+    },
+    "Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs": {
+      "sha256": "3509c0134d01417e72dac88c9162978a33a28868b5b416aa946cabdf0d822198",
+      "bytes": 197,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs"
+    },
+    "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs": {
+      "sha256": "f7fa4d8723fa00bd5aacee1a46b4b78fdb72f1be9b7f5da0b9ffb597c5ead718",
+      "bytes": 1187,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.AssemblyInfo.cs"
+    },
+    "Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs": {
+      "sha256": "addb143f8c43b95f1bb73a0cba7c793281935c4ab8ccabbdf6b04d3e0f809e0e",
+      "bytes": 287,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Experiments~/NavigationLab/Runner/obj/Release/net8.0/NavigationLab.Runner.GlobalUsings.g.cs"
+    },
+    "Verification~/TowerDefenseNavigation/Scenarios.cs": {
+      "sha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab",
+      "bytes": 9597,
+      "originalPath": "/workspace/navigation-comparison/frozen-b0-startjoin-final/snapshot-a45e8ae3db636b272a94f553/Verification~/TowerDefenseNavigation/Scenarios.cs"
+    }
+  }
+}
