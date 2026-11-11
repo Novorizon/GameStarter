@@ -1,0 +1,50 @@
+["/workspace/.singleton-removal-env/dotnet/dotnet", "/workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll", "--assembly", "/workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27/Experiments~/NavigationLab/Candidates/A-Sipp/bin/Release/netstandard2.1/NavigationLab.ASipp.dll", "--factory", "NavigationLab.Candidates.ASipp.SippFactory", "--suite", "stress", "--output", "/workspace/navigation-comparison/results/a-v2-final-stress", "--build-manifest", "/workspace/navigation-comparison/results/a-v2-final-stress/build-manifest.json", "--require-build-manifest"]
+PASSED open-arena admitted=48 alive=48 pending=0 attack=16 tick=257 
+PASSED mixed-speed-approach admitted=64 alive=64 pending=0 attack=16 tick=492 
+PASSED large-radius-turning-clearance admitted=48 alive=48 pending=0 attack=12 tick=428 
+PASSED single-cell-throat admitted=48 alive=48 pending=0 attack=16 tick=336 
+PASSED u-obstacle admitted=56 alive=56 pending=0 attack=16 tick=267 
+PASSED right-angle-corridor admitted=32 alive=32 pending=0 attack=16 tick=271 
+PASSED cross-junction-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=293 
+PASSED cross-junction-original-4m admitted=72 alive=72 pending=0 attack=12 tick=306 
+PASSED cross-junction-original-5m admitted=72 alive=72 pending=0 attack=16 tick=333 
+PASSED shared-spawn-parking-lanes admitted=72 alive=72 pending=0 attack=6 tick=309 
+PASSED shared-spawn-original-5m admitted=72 alive=72 pending=0 attack=16 tick=327 
+PASSED three-hundred-units-parking-lanes admitted=300 alive=300 pending=0 attack=6 tick=953 
+PASSED three-hundred-units-original-12m admitted=300 alive=300 pending=0 attack=16 tick=1063 
+PASSED forest-single-small admitted=1 alive=1 pending=0 attack=1 tick=596 
+PASSED forest-single-medium admitted=1 alive=1 pending=0 attack=1 tick=695 
+PASSED forest-single-large admitted=1 alive=1 pending=0 attack=1 tick=1190 
+PASSED forest-wave-1 admitted=8 alive=8 pending=0 attack=8 tick=840 
+PASSED forest-wave-2 admitted=16 alive=16 pending=0 attack=13 tick=893 
+PASSED forest-wave-3 admitted=18 alive=18 pending=0 attack=14 tick=1199 
+PASSED forest-wave-4 admitted=25 alive=25 pending=0 attack=15 tick=1248 
+PASSED forest-wave-5 admitted=30 alive=30 pending=0 attack=15 tick=1274 
+PASSED forest-wave-6 admitted=29 alive=29 pending=0 attack=15 tick=1498 
+PASSED forest-full44-large admitted=44 alive=44 pending=0 attack=18 tick=2220 
+PASSED forest-full45-medium admitted=45 alive=45 pending=0 attack=12 tick=1220 
+PASSED forest-full44-two-late-small admitted=46 alive=46 pending=0 attack=20 tick=5428 
+PASSED static-unreachable-retains-pending admitted=0 alive=0 pending=12 attack=0 tick=200 
+PASSED physical-and-endpoint-overflow-200 admitted=39 alive=39 pending=161 attack=12 tick=260 
+PASSED capacity-death-refills-original-queue admitted=52 alive=39 pending=148 attack=12 tick=409 
+PASSED moving-noncenter-death-and-reinforcement admitted=25 alive=24 pending=0 attack=16 tick=408 
+PASSED settled-batch-death-and-reinforcement admitted=54 alive=48 pending=0 attack=16 tick=355 
+PASSED old-waiters-refill-without-newcomers admitted=48 alive=42 pending=0 attack=16 tick=334 
+PASSED ranged84-before-short1-fairness admitted=86 alive=85 pending=0 attack=84 tick=2489 
+PASSED short16-before-ranged84-fairness admitted=101 alive=100 pending=0 attack=84 tick=2590 
+UNSUPPORTED dynamic-route-block-and-open admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare DynamicTerrain
+UNSUPPORTED target-relocation-before-arrival admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare MovingTarget
+UNSUPPORTED target-relocation-after-settlement admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare MovingTarget
+UNSUPPORTED opposing-flow-wide-arena admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare MultipleTargets, AssignedGoals
+UNSUPPORTED large-body-wide-approach admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare LargeBodies
+UNSUPPORTED large-body-sparse-group admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare LargeBodies
+UNSUPPORTED large-small-sparse-group admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare LargeBodies
+UNSUPPORTED fast-per-tick-approach admitted=0 alive=0 pending=0 attack=0 tick=0 Factory does not declare FastPerTick
+PASSED random-multigate-maze-11 admitted=32 alive=32 pending=0 attack=16 tick=412 
+PASSED random-multigate-maze-97 admitted=32 alive=32 pending=0 attack=16 tick=360 
+PASSED random-multigate-maze-713 admitted=32 alive=32 pending=0 attack=16 tick=366 
+PASSED random-multigate-maze-20261111 admitted=32 alive=32 pending=0 attack=16 tick=454 
+PASSED random-multigate-maze-1701 admitted=32 alive=32 pending=0 attack=16 tick=374 
+PASSED random-multigate-maze-991 admitted=32 alive=32 pending=0 attack=16 tick=362 
+PASSED large-portal-grid-128 admitted=128 alive=128 pending=0 attack=128 tick=564 
+PASSED large-portal-grid-256 admitted=256 alive=256 pending=0 attack=256 tick=999 

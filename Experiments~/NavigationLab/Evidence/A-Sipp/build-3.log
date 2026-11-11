@@ -1,0 +1,12 @@
+["/workspace/.singleton-removal-env/dotnet/dotnet", "build", "/workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27/Experiments~/NavigationLab/Candidates/A-Sipp/NavigationLab.ASipp.csproj", "-c", "Release", "-m:1", "--disable-build-servers", "--nologo", "-p:PathMap=/workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27=/navigation-lab", "-p:ContinuousIntegrationBuild=true"]
+  Determining projects to restore...
+  Restored /workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27/Experiments~/NavigationLab/Candidates/A-Sipp/NavigationLab.ASipp.csproj (in 157 ms).
+  1 of 2 projects are up-to-date for restore.
+  NavigationLab.Core -> /workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll
+  NavigationLab.ASipp -> /workspace/navigation-comparison/snapshots/snapshot-8f5764c5a7f84fa13a377a27/Experiments~/NavigationLab/Candidates/A-Sipp/bin/Release/netstandard2.1/NavigationLab.ASipp.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:04.46
