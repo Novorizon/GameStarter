@@ -1,0 +1,907 @@
+[
+  {
+    "path": "ActualDlls/NavigationLab.CSupCom2.dll",
+    "bytes": 55296,
+    "sha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372"
+  },
+  {
+    "path": "ActualDlls/NavigationLab.Core.dll",
+    "bytes": 15360,
+    "sha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73"
+  },
+  {
+    "path": "ActualDlls/NavigationLab.Oracle.dll",
+    "bytes": 17408,
+    "sha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+  },
+  {
+    "path": "ActualDlls/NavigationLab.Runner.deps.json",
+    "bytes": 1265,
+    "sha256": "961b950e1f8c5e3517d9d767795b7e82c596e99099ec813cc6547325f1adec36"
+  },
+  {
+    "path": "ActualDlls/NavigationLab.Runner.dll",
+    "bytes": 130560,
+    "sha256": "2fc5fafc69a34d8b379fa042eb197e0b09b08592fafbec1e36efea5ebc77bee5"
+  },
+  {
+    "path": "ActualDlls/NavigationLab.Runner.runtimeconfig.json",
+    "bytes": 328,
+    "sha256": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df"
+  },
+  {
+    "path": "README.md",
+    "bytes": 2284,
+    "sha256": "ac91a24cb5eec3862d681eb53531a05d7ec5239d8855d0c7b1a0034a61e0a62d"
+  },
+  {
+    "path": "StrictSelfCheck/README.md",
+    "bytes": 6205,
+    "sha256": "48f27fd751baf292032a972255fe32579344969b0a841bc0d961dbf801509977"
+  },
+  {
+    "path": "StrictSelfCheck/comparison.json",
+    "bytes": 332144,
+    "sha256": "d6362121534649df9591a9fe8e68a53082930cde44dd1bcee4fcb3ace2781700"
+  },
+  {
+    "path": "StrictSelfCheck/diagrams/C33-a39ed58c--capacity-death-refills-original-queue.svg",
+    "bytes": 29926,
+    "sha256": "33b4ebd6c56a661a6145b8f7d15dff43a1fe7a8fd17a8e731dd03d5d55b954cc"
+  },
+  {
+    "path": "StrictSelfCheck/diagrams/C33-a39ed58c--forest-full44-large.svg",
+    "bytes": 174944,
+    "sha256": "6150ce038cb3f65c3f6770cacf5450be9e79a0ddf7e947e9352b5d811922a02b"
+  },
+  {
+    "path": "StrictSelfCheck/diagrams/C33-a39ed58c--forest-full44-two-late-small.svg",
+    "bytes": 175960,
+    "sha256": "f3e5af85c01131a3bfc1c3becf1424d36accd89f9e4230f58558965ac2e3dc45"
+  },
+  {
+    "path": "StrictSelfCheck/diagrams/C33-a39ed58c--forest-full45-medium.svg",
+    "bytes": 175356,
+    "sha256": "9684f226b0a993b749be09f444e8844b639d647b6f9a173ef5b0ec9f7c21e5ca"
+  },
+  {
+    "path": "StrictSelfCheck/diagrams/C33-a39ed58c--ranged84-before-short1-fairness.svg",
+    "bytes": 184342,
+    "sha256": "6a9e87ada314d34780757e0d02616d42e86fd01d3374018b5aa009c7de4876cf"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/capacity-death-refills-original-queue.json",
+    "bytes": 42401,
+    "sha256": "7d367cddbcd62512a49ff9d2f29ad3d66edcc027e926bf7a92fd847b0100228d"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/cross-junction-original-4m.json",
+    "bytes": 18396,
+    "sha256": "d2dfd12a5cb032ac85d4fec101bb2dc453bdd82870c1d897eaf3ca7c60c1a20b"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/cross-junction-original-5m.json",
+    "bytes": 18396,
+    "sha256": "86a3da4193a7675271e2dfe59273076bd65ae2685cd8baeeeb5a8ef0ee933d9a"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/cross-junction-parking-lanes.json",
+    "bytes": 19732,
+    "sha256": "40f425a892e1d97991b5ca2091a94081cce716db67e3dd922e73c86e9c11c554"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/dynamic-route-block-and-open.json",
+    "bytes": 8652,
+    "sha256": "8845386ec442c20ab2076de899eb6c64b027be6717b4b964b83f8f98dafdda02"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/fast-per-tick-approach.json",
+    "bytes": 3601,
+    "sha256": "a69f3652281eb171548be3cb9a032b9cf1e14e164878661a8a070bc599cc3376"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-full44-large.json",
+    "bytes": 12400,
+    "sha256": "545fd7c95d54ad8bcb91f3d6819aa253c845042cf6e11847d126daec4a6d611b"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-full44-two-late-small.json",
+    "bytes": 12818,
+    "sha256": "5cb64fd8c3d1d05454ed93aaa54e0a7e504dbae55a8f54956d1a1f1593fe54c8"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-full45-medium.json",
+    "bytes": 12650,
+    "sha256": "3f4c85f5b1008ab6f107af46889af1375fdba147ec26f0e1ae28977047249057"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-single-large.json",
+    "bytes": 3590,
+    "sha256": "56a3914cf85aea35ef6ad29daa86b3ac9045d5fe51ec871389e938cdb56f78f8"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-single-medium.json",
+    "bytes": 3591,
+    "sha256": "787596f737665d1bb252fd10dae58abc443e336a04b409d6ed52316087c626c7"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-single-small.json",
+    "bytes": 3591,
+    "sha256": "35872b9847d19a6de3b40864c0e418c13ef0f59d18784c42c1cb04cdb99277ce"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-wave-1.json",
+    "bytes": 5034,
+    "sha256": "23018b770fbf1384bb851b3bf81765f0df82c9ffa0b9a212ccb8f9fbf036fcfd"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-wave-2.json",
+    "bytes": 6695,
+    "sha256": "bf1dc50a102ff5d94206cfa2554c0e70a18c8c42e838fcda016ca7c6afad8732"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-wave-3.json",
+    "bytes": 7102,
+    "sha256": "1cfeb4a729e78c98c3ab1cc888a12c332b3196c58c33d2f593f33a65832bb391"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-wave-4.json",
+    "bytes": 8559,
+    "sha256": "37d0e87447ec1843d369d1eb8a4f9c59007b456995b02f3e5b65f9f67bfcd91d"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-wave-5.json",
+    "bytes": 9591,
+    "sha256": "6610876bf1eee7e97181d2641e083774866e42b731a1d99f4cc46d9e0d8332d8"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/forest-wave-6.json",
+    "bytes": 9391,
+    "sha256": "6e6a3b0c2ebc105ceca17c48d17567f6c8c63e435eaacc0164ed6669aee6b1ea"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/large-body-sparse-group.json",
+    "bytes": 4417,
+    "sha256": "7a0788c3f7640041516af4abf8c40d84e454ffca887c8590f625c6244a5ff36e"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/large-body-wide-approach.json",
+    "bytes": 2982,
+    "sha256": "2f618d21e4d3824a3bfd039d445200d0bc609203a051e3c7c5f0b02aa3e0d673"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/large-portal-grid-128.json",
+    "bytes": 52162,
+    "sha256": "81979aa3ce677e855981619b91ba17d135b4e867676cc4f002b6b47b0e018fe6"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/large-portal-grid-256.json",
+    "bytes": 79085,
+    "sha256": "63976e6ad5edfc9f4dbd39578755cd694e1c6ade30f6f001a2ebde8c23e91b67"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/large-radius-turning-clearance.json",
+    "bytes": 12688,
+    "sha256": "955c9b6d22e852a4c99ae0755a97b3e8500aa572be54707916c0d9853e7b8d75"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/large-small-sparse-group.json",
+    "bytes": 5039,
+    "sha256": "91d1bf53f78485f23251477dc719099f9e92d51d4330d82d1475f4e4267681f0"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/mixed-speed-approach.json",
+    "bytes": 15990,
+    "sha256": "5ac9f5015bf6b370d2361525d83d49d5afc3e229ce5e5e6773f37a74b3d89936"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/moving-noncenter-death-and-reinforcement.json",
+    "bytes": 7906,
+    "sha256": "18122082aa936f89407b40882ac1871a349bbb182c2c5e01f517fac7b916e9cd"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/old-waiters-refill-without-newcomers.json",
+    "bytes": 12897,
+    "sha256": "673fa883561ebd63fe6158ced9682a6756f9467665bfd37a787c735917c44825"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/open-arena.json",
+    "bytes": 12612,
+    "sha256": "33eec4794d8240a7ce29c9d27b44f42883ec265c9117641f7ebaa6da16e027d9"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/opposing-flow-wide-arena.json",
+    "bytes": 4277,
+    "sha256": "c7491312b0b5b66883ac299435c4f6c6050c965997743fb18749a055858991bb"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/physical-and-endpoint-overflow-200.json",
+    "bytes": 42200,
+    "sha256": "8404a7d64a8a34429525308cbeebdbcffbb1637d8f4731351962e74f760ccd8a"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/random-multigate-maze-11.json",
+    "bytes": 10502,
+    "sha256": "71503ffe91bb6d852b1dfde65236a4c60b41f8ae765229fa912e36a11d89688b"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/random-multigate-maze-1701.json",
+    "bytes": 10502,
+    "sha256": "963d54136787d5f298aee9f9be651e02bb033dbeb3dfb3e8eccbdd813711c640"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/random-multigate-maze-20261111.json",
+    "bytes": 10502,
+    "sha256": "9f12b873cb38a1770ce4c2366e6b3150bda97631b6fbbec4e68c5132615596d3"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/random-multigate-maze-713.json",
+    "bytes": 10502,
+    "sha256": "aacef3996ee358b39c0388ed98c86b6712992b0f83ea5e20a00226e5d657f344"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/random-multigate-maze-97.json",
+    "bytes": 10502,
+    "sha256": "cfa893760d1703971bed6a8b4f7b878bb13402f1e9b164582911929234bf8a6f"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/random-multigate-maze-991.json",
+    "bytes": 10502,
+    "sha256": "113aded56946a1ea40d367faf27ec5be66346a738f37a9e1f8de0ff58ba688c1"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/ranged84-before-short1-fairness.json",
+    "bytes": 20999,
+    "sha256": "4ca6153dd5b50eef7a899b13d92b582a74b8d04d1d1b1b0e78ae7cddd6ba7cea"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/right-angle-corridor.json",
+    "bytes": 9386,
+    "sha256": "e475f40bf9cb7a320e05b2e5bff85d68a95f5e4f2dbd586826e660a5640c1917"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/settled-batch-death-and-reinforcement.json",
+    "bytes": 12897,
+    "sha256": "20ef11d6af9f2ad4176783bb194dc4f441be4dfb9117815a534c1da98b6d9423"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/shared-spawn-original-5m.json",
+    "bytes": 17666,
+    "sha256": "b3f0bce6a93220715c4ef78d5f90db0d44cb3ae2f86220f52794d7471bab3456"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/shared-spawn-parking-lanes.json",
+    "bytes": 18677,
+    "sha256": "1ca4506d225ce90dbfcdef7b09e8e3f47b4074f00405786494203edd2801c988"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/short16-before-ranged84-fairness.json",
+    "bytes": 24356,
+    "sha256": "fda7dcd61d5fdaa5dd7fe27d12a208e52e491c3925215f96d4ee514be22b186c"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/single-cell-throat.json",
+    "bytes": 12796,
+    "sha256": "3b9e5021929e2d2c8dd05c4839efa5a6e3aef28800ff0da6c3281f74f27f2517"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/static-unreachable-retains-pending.json",
+    "bytes": 5140,
+    "sha256": "c0a56ee9dc1906d9c9e7854155cf73acd45d47855a31954bcd812ba40aa05983"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/target-relocation-after-settlement.json",
+    "bytes": 7942,
+    "sha256": "1369ec437e43ac1f727f29641a7645a14e479fd863913ead9ded4887292b4e5e"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/target-relocation-before-arrival.json",
+    "bytes": 7940,
+    "sha256": "78fb0455d1ca749008433cff0916404de69cd38a32d6429353e240679a9bde76"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/three-hundred-units-original-12m.json",
+    "bytes": 70476,
+    "sha256": "3275eb78a88a4bd0cd2c135f12adfa45c23702456960443815d50a90c7327295"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/three-hundred-units-parking-lanes.json",
+    "bytes": 72555,
+    "sha256": "3ee580f3a0e60afe16b171e52c695c8d3935ef74be86689c8cd706268f791adf"
+  },
+  {
+    "path": "StrictSelfCheck/inputs/u-obstacle.json",
+    "bytes": 14640,
+    "sha256": "6c4d767e7ca3798130d890bd8a66a2af198096a13f48aa0462c7d03ce5b10688"
+  },
+  {
+    "path": "actual-compiled-source.zip",
+    "bytes": 115069,
+    "sha256": "c37d1bc848170614ae39ed09cf0731c06b74e7edfafb870c9d7b272e9c8240a5"
+  },
+  {
+    "path": "build-0.log",
+    "bytes": 899,
+    "sha256": "2418b3e29a4e59918ae81ef5b6b27548234ce9ed482c64cba1f7295173df612a"
+  },
+  {
+    "path": "build-1.log",
+    "bytes": 1151,
+    "sha256": "980b8aa49fc58a63902a3d10d62a2a35c4cf2042aadc84583426e94ee9f052fe"
+  },
+  {
+    "path": "build-2.log",
+    "bytes": 1341,
+    "sha256": "5957b2d44f2a1afebaff715adc8c99fe081a784c0ff069729c37f2a7904216b6"
+  },
+  {
+    "path": "build-3.log",
+    "bytes": 1201,
+    "sha256": "470a6abd0459560d3d50f28b72200ae80b003aa2bd90179e02c6146711809c6b"
+  },
+  {
+    "path": "build-manifest.json",
+    "bytes": 24030,
+    "sha256": "f64af4da3f3cf873854ec825af2d08521d457c51b43cf5d878385a2973b4649e"
+  },
+  {
+    "path": "capacity-death-refills-original-queue.json.gz",
+    "bytes": 23303,
+    "sha256": "ba849e52be4ec642ffe82b6f5619f1c79db88cce39d2aa4ba4cf454912d9db86"
+  },
+  {
+    "path": "compile-items-0.json",
+    "bytes": 3368,
+    "sha256": "c58deaa72df2b44e1c55fadf566a5c7859cada5d58336a9e4e42fc3b9fb6775e"
+  },
+  {
+    "path": "compile-items-1.json",
+    "bytes": 3407,
+    "sha256": "8ebe9b036c849232febe8e2041a3f9655d367d10719e762a70f8eac9645db2c7"
+  },
+  {
+    "path": "compile-items-2.json",
+    "bytes": 6573,
+    "sha256": "cc8c8ed96dea78d39727bdf71162aded6a0f892d431b3c2f01c42756b7d4f1e4"
+  },
+  {
+    "path": "compile-items-3.json",
+    "bytes": 5461,
+    "sha256": "d58c9c760d6f73035fcaf87110a657d0cf0249fec340e06123962c04b8091b6b"
+  },
+  {
+    "path": "cross-junction-original-4m.json.gz",
+    "bytes": 2525,
+    "sha256": "388df498e6aead4e7b21799aab1a2acba83b5b183891cf58ac1c00fd9bda83f3"
+  },
+  {
+    "path": "cross-junction-original-5m.json.gz",
+    "bytes": 2585,
+    "sha256": "34c398be295efedb1cd65fc1f1ebdfbe8023265ba25960b26b560e18971008d4"
+  },
+  {
+    "path": "cross-junction-parking-lanes.json.gz",
+    "bytes": 2500,
+    "sha256": "eda25c10b93c7bfd61370064774045134581a0444f9d6a3850377bbd8963b758"
+  },
+  {
+    "path": "dynamic-route-block-and-open.json.gz",
+    "bytes": 2078,
+    "sha256": "8199877cf63316984d5e9195472ba6f495946d457d1ecececf3c21292e641bec"
+  },
+  {
+    "path": "execution.log",
+    "bytes": 4985,
+    "sha256": "e875f95244b62cc6b311092fd3f24f382a0e006cecf1a6f5259cf390cd8cbc29"
+  },
+  {
+    "path": "fast-per-tick-approach.json.gz",
+    "bytes": 1386,
+    "sha256": "efdd03bc4e0801c2a94f122a99aeeb6098e8faad2b285f7870af95aa609e0381"
+  },
+  {
+    "path": "forest-full44-large.json.gz",
+    "bytes": 4486,
+    "sha256": "2094d3959d6f1d40721f412a19bbc8bc6d32f4dc7552bde3cb329224cdbd027a"
+  },
+  {
+    "path": "forest-full44-two-late-small.json.gz",
+    "bytes": 4363,
+    "sha256": "dd9952410747187287805d3a38e4c7991dbe60dba2643c9cd445e38b80a3f3c6"
+  },
+  {
+    "path": "forest-full45-medium.json.gz",
+    "bytes": 3261,
+    "sha256": "afd1ddb59b888f76b94b49c1bd7b45fa6142a67c495ee59ab0a136749d98c07e"
+  },
+  {
+    "path": "forest-single-large.json.gz",
+    "bytes": 1335,
+    "sha256": "d17b5b72c7d79285954b82315d43096a78589f4b8c0e93ab7e6441c88074ddfe"
+  },
+  {
+    "path": "forest-single-medium.json.gz",
+    "bytes": 1320,
+    "sha256": "82fb0f24a46d22843f30c53a389350ace97f7d8c2b2bf23d69180b3c52473014"
+  },
+  {
+    "path": "forest-single-small.json.gz",
+    "bytes": 1339,
+    "sha256": "2f787186397f2780c479ba999b8585ae9103734bbd826a74c8edb69a0d17c9a1"
+  },
+  {
+    "path": "forest-wave-1.json.gz",
+    "bytes": 1479,
+    "sha256": "2b835700a1a6d14132a7d91e8f14b6e1030d0f2213eb14594ac14d94a3143e2f"
+  },
+  {
+    "path": "forest-wave-2.json.gz",
+    "bytes": 1771,
+    "sha256": "86df85fa64df3eddb16ab332abfc0c7eaf128218d424e14762f921d484b884ab"
+  },
+  {
+    "path": "forest-wave-3.json.gz",
+    "bytes": 2046,
+    "sha256": "ccba110ed169d5d1a8c282967c2b7b305a335c6a173a1b20d280d93665146302"
+  },
+  {
+    "path": "forest-wave-4.json.gz",
+    "bytes": 2115,
+    "sha256": "8082665a23b1838c723e74bd86f22ef34dd76fab619c74383b3d0586e3bfc532"
+  },
+  {
+    "path": "forest-wave-5.json.gz",
+    "bytes": 2408,
+    "sha256": "54be5e274fe54df5184c40960c0e5f53314005ff6cb8993491aab772a3d51e62"
+  },
+  {
+    "path": "forest-wave-6.json.gz",
+    "bytes": 2817,
+    "sha256": "5e52374e5c6141e88ff124c2b03d1206042019366c96687e80036bd528b38245"
+  },
+  {
+    "path": "frozen-execution.json",
+    "bytes": 226,
+    "sha256": "634206f025fd404f627b055a59b1c14f0a85852255d8d3a2992b79ed35df60ff"
+  },
+  {
+    "path": "full41-derived.json",
+    "bytes": 7174,
+    "sha256": "f73ff196bfd462e6d409d4fd60279012b392fddfef9411ac3e32a93b1366f8a8"
+  },
+  {
+    "path": "inputs/capacity-death-refills-original-queue.json",
+    "bytes": 42401,
+    "sha256": "7d367cddbcd62512a49ff9d2f29ad3d66edcc027e926bf7a92fd847b0100228d"
+  },
+  {
+    "path": "inputs/cross-junction-original-4m.json",
+    "bytes": 18396,
+    "sha256": "d2dfd12a5cb032ac85d4fec101bb2dc453bdd82870c1d897eaf3ca7c60c1a20b"
+  },
+  {
+    "path": "inputs/cross-junction-original-5m.json",
+    "bytes": 18396,
+    "sha256": "86a3da4193a7675271e2dfe59273076bd65ae2685cd8baeeeb5a8ef0ee933d9a"
+  },
+  {
+    "path": "inputs/cross-junction-parking-lanes.json",
+    "bytes": 19732,
+    "sha256": "40f425a892e1d97991b5ca2091a94081cce716db67e3dd922e73c86e9c11c554"
+  },
+  {
+    "path": "inputs/dynamic-route-block-and-open.json",
+    "bytes": 8652,
+    "sha256": "8845386ec442c20ab2076de899eb6c64b027be6717b4b964b83f8f98dafdda02"
+  },
+  {
+    "path": "inputs/fast-per-tick-approach.json",
+    "bytes": 3601,
+    "sha256": "a69f3652281eb171548be3cb9a032b9cf1e14e164878661a8a070bc599cc3376"
+  },
+  {
+    "path": "inputs/forest-full44-large.json",
+    "bytes": 12400,
+    "sha256": "545fd7c95d54ad8bcb91f3d6819aa253c845042cf6e11847d126daec4a6d611b"
+  },
+  {
+    "path": "inputs/forest-full44-two-late-small.json",
+    "bytes": 12818,
+    "sha256": "5cb64fd8c3d1d05454ed93aaa54e0a7e504dbae55a8f54956d1a1f1593fe54c8"
+  },
+  {
+    "path": "inputs/forest-full45-medium.json",
+    "bytes": 12650,
+    "sha256": "3f4c85f5b1008ab6f107af46889af1375fdba147ec26f0e1ae28977047249057"
+  },
+  {
+    "path": "inputs/forest-single-large.json",
+    "bytes": 3590,
+    "sha256": "56a3914cf85aea35ef6ad29daa86b3ac9045d5fe51ec871389e938cdb56f78f8"
+  },
+  {
+    "path": "inputs/forest-single-medium.json",
+    "bytes": 3591,
+    "sha256": "787596f737665d1bb252fd10dae58abc443e336a04b409d6ed52316087c626c7"
+  },
+  {
+    "path": "inputs/forest-single-small.json",
+    "bytes": 3591,
+    "sha256": "35872b9847d19a6de3b40864c0e418c13ef0f59d18784c42c1cb04cdb99277ce"
+  },
+  {
+    "path": "inputs/forest-wave-1.json",
+    "bytes": 5034,
+    "sha256": "23018b770fbf1384bb851b3bf81765f0df82c9ffa0b9a212ccb8f9fbf036fcfd"
+  },
+  {
+    "path": "inputs/forest-wave-2.json",
+    "bytes": 6695,
+    "sha256": "bf1dc50a102ff5d94206cfa2554c0e70a18c8c42e838fcda016ca7c6afad8732"
+  },
+  {
+    "path": "inputs/forest-wave-3.json",
+    "bytes": 7102,
+    "sha256": "1cfeb4a729e78c98c3ab1cc888a12c332b3196c58c33d2f593f33a65832bb391"
+  },
+  {
+    "path": "inputs/forest-wave-4.json",
+    "bytes": 8559,
+    "sha256": "37d0e87447ec1843d369d1eb8a4f9c59007b456995b02f3e5b65f9f67bfcd91d"
+  },
+  {
+    "path": "inputs/forest-wave-5.json",
+    "bytes": 9591,
+    "sha256": "6610876bf1eee7e97181d2641e083774866e42b731a1d99f4cc46d9e0d8332d8"
+  },
+  {
+    "path": "inputs/forest-wave-6.json",
+    "bytes": 9391,
+    "sha256": "6e6a3b0c2ebc105ceca17c48d17567f6c8c63e435eaacc0164ed6669aee6b1ea"
+  },
+  {
+    "path": "inputs/large-body-sparse-group.json",
+    "bytes": 4417,
+    "sha256": "7a0788c3f7640041516af4abf8c40d84e454ffca887c8590f625c6244a5ff36e"
+  },
+  {
+    "path": "inputs/large-body-wide-approach.json",
+    "bytes": 2982,
+    "sha256": "2f618d21e4d3824a3bfd039d445200d0bc609203a051e3c7c5f0b02aa3e0d673"
+  },
+  {
+    "path": "inputs/large-portal-grid-128.json",
+    "bytes": 52162,
+    "sha256": "81979aa3ce677e855981619b91ba17d135b4e867676cc4f002b6b47b0e018fe6"
+  },
+  {
+    "path": "inputs/large-portal-grid-256.json",
+    "bytes": 79085,
+    "sha256": "63976e6ad5edfc9f4dbd39578755cd694e1c6ade30f6f001a2ebde8c23e91b67"
+  },
+  {
+    "path": "inputs/large-radius-turning-clearance.json",
+    "bytes": 12688,
+    "sha256": "955c9b6d22e852a4c99ae0755a97b3e8500aa572be54707916c0d9853e7b8d75"
+  },
+  {
+    "path": "inputs/large-small-sparse-group.json",
+    "bytes": 5039,
+    "sha256": "91d1bf53f78485f23251477dc719099f9e92d51d4330d82d1475f4e4267681f0"
+  },
+  {
+    "path": "inputs/mixed-speed-approach.json",
+    "bytes": 15990,
+    "sha256": "5ac9f5015bf6b370d2361525d83d49d5afc3e229ce5e5e6773f37a74b3d89936"
+  },
+  {
+    "path": "inputs/moving-noncenter-death-and-reinforcement.json",
+    "bytes": 7906,
+    "sha256": "18122082aa936f89407b40882ac1871a349bbb182c2c5e01f517fac7b916e9cd"
+  },
+  {
+    "path": "inputs/old-waiters-refill-without-newcomers.json",
+    "bytes": 12897,
+    "sha256": "673fa883561ebd63fe6158ced9682a6756f9467665bfd37a787c735917c44825"
+  },
+  {
+    "path": "inputs/open-arena.json",
+    "bytes": 12612,
+    "sha256": "33eec4794d8240a7ce29c9d27b44f42883ec265c9117641f7ebaa6da16e027d9"
+  },
+  {
+    "path": "inputs/opposing-flow-wide-arena.json",
+    "bytes": 4277,
+    "sha256": "c7491312b0b5b66883ac299435c4f6c6050c965997743fb18749a055858991bb"
+  },
+  {
+    "path": "inputs/physical-and-endpoint-overflow-200.json",
+    "bytes": 42200,
+    "sha256": "8404a7d64a8a34429525308cbeebdbcffbb1637d8f4731351962e74f760ccd8a"
+  },
+  {
+    "path": "inputs/random-multigate-maze-11.json",
+    "bytes": 10502,
+    "sha256": "71503ffe91bb6d852b1dfde65236a4c60b41f8ae765229fa912e36a11d89688b"
+  },
+  {
+    "path": "inputs/random-multigate-maze-1701.json",
+    "bytes": 10502,
+    "sha256": "963d54136787d5f298aee9f9be651e02bb033dbeb3dfb3e8eccbdd813711c640"
+  },
+  {
+    "path": "inputs/random-multigate-maze-20261111.json",
+    "bytes": 10502,
+    "sha256": "9f12b873cb38a1770ce4c2366e6b3150bda97631b6fbbec4e68c5132615596d3"
+  },
+  {
+    "path": "inputs/random-multigate-maze-713.json",
+    "bytes": 10502,
+    "sha256": "aacef3996ee358b39c0388ed98c86b6712992b0f83ea5e20a00226e5d657f344"
+  },
+  {
+    "path": "inputs/random-multigate-maze-97.json",
+    "bytes": 10502,
+    "sha256": "cfa893760d1703971bed6a8b4f7b878bb13402f1e9b164582911929234bf8a6f"
+  },
+  {
+    "path": "inputs/random-multigate-maze-991.json",
+    "bytes": 10502,
+    "sha256": "113aded56946a1ea40d367faf27ec5be66346a738f37a9e1f8de0ff58ba688c1"
+  },
+  {
+    "path": "inputs/ranged84-before-short1-fairness.json",
+    "bytes": 20999,
+    "sha256": "4ca6153dd5b50eef7a899b13d92b582a74b8d04d1d1b1b0e78ae7cddd6ba7cea"
+  },
+  {
+    "path": "inputs/right-angle-corridor.json",
+    "bytes": 9386,
+    "sha256": "e475f40bf9cb7a320e05b2e5bff85d68a95f5e4f2dbd586826e660a5640c1917"
+  },
+  {
+    "path": "inputs/settled-batch-death-and-reinforcement.json",
+    "bytes": 12897,
+    "sha256": "20ef11d6af9f2ad4176783bb194dc4f441be4dfb9117815a534c1da98b6d9423"
+  },
+  {
+    "path": "inputs/shared-spawn-original-5m.json",
+    "bytes": 17666,
+    "sha256": "b3f0bce6a93220715c4ef78d5f90db0d44cb3ae2f86220f52794d7471bab3456"
+  },
+  {
+    "path": "inputs/shared-spawn-parking-lanes.json",
+    "bytes": 18677,
+    "sha256": "1ca4506d225ce90dbfcdef7b09e8e3f47b4074f00405786494203edd2801c988"
+  },
+  {
+    "path": "inputs/short16-before-ranged84-fairness.json",
+    "bytes": 24356,
+    "sha256": "fda7dcd61d5fdaa5dd7fe27d12a208e52e491c3925215f96d4ee514be22b186c"
+  },
+  {
+    "path": "inputs/single-cell-throat.json",
+    "bytes": 12796,
+    "sha256": "3b9e5021929e2d2c8dd05c4839efa5a6e3aef28800ff0da6c3281f74f27f2517"
+  },
+  {
+    "path": "inputs/static-unreachable-retains-pending.json",
+    "bytes": 5140,
+    "sha256": "c0a56ee9dc1906d9c9e7854155cf73acd45d47855a31954bcd812ba40aa05983"
+  },
+  {
+    "path": "inputs/target-relocation-after-settlement.json",
+    "bytes": 7942,
+    "sha256": "1369ec437e43ac1f727f29641a7645a14e479fd863913ead9ded4887292b4e5e"
+  },
+  {
+    "path": "inputs/target-relocation-before-arrival.json",
+    "bytes": 7940,
+    "sha256": "78fb0455d1ca749008433cff0916404de69cd38a32d6429353e240679a9bde76"
+  },
+  {
+    "path": "inputs/three-hundred-units-original-12m.json",
+    "bytes": 70476,
+    "sha256": "3275eb78a88a4bd0cd2c135f12adfa45c23702456960443815d50a90c7327295"
+  },
+  {
+    "path": "inputs/three-hundred-units-parking-lanes.json",
+    "bytes": 72555,
+    "sha256": "3ee580f3a0e60afe16b171e52c695c8d3935ef74be86689c8cd706268f791adf"
+  },
+  {
+    "path": "inputs/u-obstacle.json",
+    "bytes": 14640,
+    "sha256": "6c4d767e7ca3798130d890bd8a66a2af198096a13f48aa0462c7d03ce5b10688"
+  },
+  {
+    "path": "large-body-sparse-group.json.gz",
+    "bytes": 1678,
+    "sha256": "2399b82f8f8e9516785178c79ec98d8dea44748eb2e7f1a243b0127b1125540a"
+  },
+  {
+    "path": "large-body-wide-approach.json.gz",
+    "bytes": 1312,
+    "sha256": "1a402d6b4441e720f872298afea2f2ff5db062e14eb8da531d1c7c999f3cb65c"
+  },
+  {
+    "path": "large-portal-grid-128.json.gz",
+    "bytes": 3386,
+    "sha256": "fbbed9593c09709540c18983cd0bed5363013e9cd7de88972184d96919eebfa5"
+  },
+  {
+    "path": "large-portal-grid-256.json.gz",
+    "bytes": 5154,
+    "sha256": "ee600e3bf17fdf5e8fdb6765b01611c0c64d59b44904e7b8d2737acb46e95f05"
+  },
+  {
+    "path": "large-radius-turning-clearance.json.gz",
+    "bytes": 2788,
+    "sha256": "ca0cf7327b306c4cc74f3bcaa2c3970f9cef956246d178bfb06ed15201a97046"
+  },
+  {
+    "path": "large-small-sparse-group.json.gz",
+    "bytes": 1775,
+    "sha256": "a5965fb6d102f4a923990a9d2dd08091a3a98e11425a0a55ad432d6e81d2c988"
+  },
+  {
+    "path": "mixed-speed-approach.json.gz",
+    "bytes": 2795,
+    "sha256": "fc4f61e2e76545795e8f1091dd910fb1e3cf7a436cdd77f3759e0ade1466f827"
+  },
+  {
+    "path": "moving-noncenter-death-and-reinforcement.json.gz",
+    "bytes": 2049,
+    "sha256": "cc0de8b258faace984d819590b4776b8d69f3c3f3e3bcc042caccea48fff5e5e"
+  },
+  {
+    "path": "old-waiters-refill-without-newcomers.json.gz",
+    "bytes": 2295,
+    "sha256": "c1e3e467bd2bed2f7ec2b5c11929d6c3646d6f989f0073afa798123d6fb99d03"
+  },
+  {
+    "path": "open-arena.json.gz",
+    "bytes": 2213,
+    "sha256": "2a014f274ec8114e7da17a7faef44fc51b711c75c0d8c39f9fdda5ba869e5dce"
+  },
+  {
+    "path": "opposing-flow-wide-arena.json.gz",
+    "bytes": 1502,
+    "sha256": "8020dda5e4a90f2a31107d4820314ccb83c8de6b0880867a53b8343617cb2654"
+  },
+  {
+    "path": "physical-and-endpoint-overflow-200.json.gz",
+    "bytes": 13745,
+    "sha256": "2f71bd6b66e5f140f52f4fa1d61bcdfa243c124837dba736cd9148dfbd797912"
+  },
+  {
+    "path": "random-multigate-maze-11.json.gz",
+    "bytes": 2117,
+    "sha256": "8665384cd68ab20f8d07970e3f1eb9c1af4b35667df8335399ff3355f0bb2fab"
+  },
+  {
+    "path": "random-multigate-maze-1701.json.gz",
+    "bytes": 2111,
+    "sha256": "5cd56aea269cc5c7af80b8989b4f10bf7d7f025e2345ff11871d99651dc39df3"
+  },
+  {
+    "path": "random-multigate-maze-20261111.json.gz",
+    "bytes": 2118,
+    "sha256": "927850ab2ef1aa5e5ec2552c7b50b203bbd648a22046140c8a87f94614bb70f5"
+  },
+  {
+    "path": "random-multigate-maze-713.json.gz",
+    "bytes": 2172,
+    "sha256": "81423ab1c3bee7e151778a3236efbbea2c40238bee712e6b978ab784454beaf8"
+  },
+  {
+    "path": "random-multigate-maze-97.json.gz",
+    "bytes": 2077,
+    "sha256": "ad8cbad3d695d428ad5aad26a5182acde499149aec9ffc9b3e0cf9876a1352d7"
+  },
+  {
+    "path": "random-multigate-maze-991.json.gz",
+    "bytes": 2065,
+    "sha256": "fe7dc3c4ba50996f3dc8a46827ea6e2566d82420796ea3f4f041de6c5ef33c56"
+  },
+  {
+    "path": "ranged84-before-short1-fairness.json.gz",
+    "bytes": 2786,
+    "sha256": "5866761fd500f061963b53b65db960df6dff5c67e1cfde0479b27bb3fe6a3b3f"
+  },
+  {
+    "path": "right-angle-corridor.json.gz",
+    "bytes": 1837,
+    "sha256": "d8c1a8a904de40e1aaea58583b030e4c3af161f6c3871a45f117d0cb3d382849"
+  },
+  {
+    "path": "settled-batch-death-and-reinforcement.json.gz",
+    "bytes": 2339,
+    "sha256": "45b904ce855dfd8313b4631a00b84112458a203e7300e9d9c481f0cbbe04602f"
+  },
+  {
+    "path": "shared-spawn-original-5m.json.gz",
+    "bytes": 2472,
+    "sha256": "9e77796ac4f42bde6f5b0f4f67c6dbfaf80967da7d11333630b4edc8f766c7f3"
+  },
+  {
+    "path": "shared-spawn-parking-lanes.json.gz",
+    "bytes": 2489,
+    "sha256": "77415015f683f3cf30b722e56e37fcae5589e4d130d6edd21b3226f5cba431b7"
+  },
+  {
+    "path": "short16-before-ranged84-fairness.json.gz",
+    "bytes": 3052,
+    "sha256": "ddab91ac5c3047e1b2c0935e7763a0efa72e8cc0ad2e8949f781d408508c92e0"
+  },
+  {
+    "path": "single-cell-throat.json.gz",
+    "bytes": 2237,
+    "sha256": "c481dfa555aa890dd0f1705e69d5cf16d84e5ec98f606f4edbf210fa7de7573d"
+  },
+  {
+    "path": "static-unreachable-retains-pending.json.gz",
+    "bytes": 1911,
+    "sha256": "d21b6b1058d2bd4ccac4186cffcd8700ecca1b466b9a55808af5e75bc3854aa4"
+  },
+  {
+    "path": "summary.json",
+    "bytes": 256426,
+    "sha256": "c36c045fe4d6d62c863a34e66a1288e6a8ac7479e916bc78cde76acfb0cd4649"
+  },
+  {
+    "path": "target-relocation-after-settlement.json.gz",
+    "bytes": 2227,
+    "sha256": "32e64851b3ace89e014564c9acffa869da6cc50f2e264aadbdf461ebb3f74e55"
+  },
+  {
+    "path": "target-relocation-before-arrival.json.gz",
+    "bytes": 2091,
+    "sha256": "ff402286a1c3a8547b4d1da272653b947119ad630de5ece30e29e212f29703f3"
+  },
+  {
+    "path": "three-hundred-units-original-12m.json.gz",
+    "bytes": 8437,
+    "sha256": "a3626070067e8daddd157d5114828b4675eb97884f8104ca5b6ea9398a6e7042"
+  },
+  {
+    "path": "three-hundred-units-parking-lanes.json.gz",
+    "bytes": 8126,
+    "sha256": "c02711754ca26b61bed4e6c68e1b3936543a6d2b998fd1bbe21a091f3994b9a7"
+  },
+  {
+    "path": "trace-inventory.json",
+    "bytes": 15576,
+    "sha256": "eee5400245794e6445eb86f3af479ba4671256d1b486b57191cb862c152424be"
+  },
+  {
+    "path": "traces/capacity-death-refills-original-queue.jsonl.gz",
+    "bytes": 358806,
+    "sha256": "f300b688a4263bcd1a30ea2d74fa9e7cc7423e984c680e987a3f4f3feca15767"
+  },
+  {
+    "path": "traces/forest-full44-large.jsonl.gz",
+    "bytes": 11254407,
+    "sha256": "fda73519dcdb2d7353801e29405c955b98bc86fddc848f8b78ac62a6438b4fe4"
+  },
+  {
+    "path": "traces/forest-full44-two-late-small.jsonl.gz",
+    "bytes": 8374928,
+    "sha256": "9c1ee94b738546cc1fcf0a20f9631752dfbfe36863d52db9e473aa6f3daa66b6"
+  },
+  {
+    "path": "traces/forest-full45-medium.jsonl.gz",
+    "bytes": 5906943,
+    "sha256": "3dbd6747010a1f61d09595be7f63c1729fd15e6b60d7cd5f2791dc1734cf2ac7"
+  },
+  {
+    "path": "traces/ranged84-before-short1-fairness.jsonl.gz",
+    "bytes": 699149,
+    "sha256": "e5dd99c01d72de228b2260f8b6291fd21810fa35525c8a7c7937feaf593cd718"
+  },
+  {
+    "path": "u-obstacle.json.gz",
+    "bytes": 2281,
+    "sha256": "f7858ae8f4c6aa1cb7ac0dd7b71139ca43791d69f8a98e60549f4866ec78782a"
+  }
+]

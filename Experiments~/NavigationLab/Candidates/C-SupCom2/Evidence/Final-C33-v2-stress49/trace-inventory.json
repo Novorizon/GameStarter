@@ -1,0 +1,345 @@
+[
+  {
+    "case": "capacity-death-refills-original-queue",
+    "bytes": 358806,
+    "gzipFileSha256": "f300b688a4263bcd1a30ea2d74fa9e7cc7423e984c680e987a3f4f3feca15767",
+    "versioned": true,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/capacity-death-refills-original-queue.jsonl.gz"
+  },
+  {
+    "case": "cross-junction-original-4m",
+    "bytes": 354189,
+    "gzipFileSha256": "89eff43d256082fdbe9413d48592194847072950e308d2b476db28bd8ce9bbb8",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/cross-junction-original-4m.jsonl.gz"
+  },
+  {
+    "case": "cross-junction-original-5m",
+    "bytes": 383696,
+    "gzipFileSha256": "cccb596fac14b05107ea68beb09152a2607443737b12628d8766df96029afaa7",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/cross-junction-original-5m.jsonl.gz"
+  },
+  {
+    "case": "cross-junction-parking-lanes",
+    "bytes": 500149,
+    "gzipFileSha256": "88999a1004cdfbee5dca43363e45caab2b872b036ef7cebb3225299e674e53df",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/cross-junction-parking-lanes.jsonl.gz"
+  },
+  {
+    "case": "dynamic-route-block-and-open",
+    "bytes": 635655,
+    "gzipFileSha256": "990a3646a6b3aa185fd9b4d7540f90c04a590d2c31cb18fe2a808e92840485f0",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/dynamic-route-block-and-open.jsonl.gz"
+  },
+  {
+    "case": "fast-per-tick-approach",
+    "bytes": 12952,
+    "gzipFileSha256": "87cdb03c34abe7f58e02559957a84f141ef8fb4fe00ef94a76d70710bc54c37a",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/fast-per-tick-approach.jsonl.gz"
+  },
+  {
+    "case": "forest-full44-large",
+    "bytes": 11254407,
+    "gzipFileSha256": "fda73519dcdb2d7353801e29405c955b98bc86fddc848f8b78ac62a6438b4fe4",
+    "versioned": true,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-full44-large.jsonl.gz"
+  },
+  {
+    "case": "forest-full44-two-late-small",
+    "bytes": 8374928,
+    "gzipFileSha256": "9c1ee94b738546cc1fcf0a20f9631752dfbfe36863d52db9e473aa6f3daa66b6",
+    "versioned": true,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-full44-two-late-small.jsonl.gz"
+  },
+  {
+    "case": "forest-full45-medium",
+    "bytes": 5906943,
+    "gzipFileSha256": "3dbd6747010a1f61d09595be7f63c1729fd15e6b60d7cd5f2791dc1734cf2ac7",
+    "versioned": true,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-full45-medium.jsonl.gz"
+  },
+  {
+    "case": "forest-single-large",
+    "bytes": 202094,
+    "gzipFileSha256": "018e44c22469d8cf3a19c6214cfe893a1380cae79b07ebec827a9b871de34db2",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-single-large.jsonl.gz"
+  },
+  {
+    "case": "forest-single-medium",
+    "bytes": 118316,
+    "gzipFileSha256": "fe846347bc12424e84814844f2ea94c4e24a99ab842396af9d9e54f7fd3d40a4",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-single-medium.jsonl.gz"
+  },
+  {
+    "case": "forest-single-small",
+    "bytes": 72720,
+    "gzipFileSha256": "2ec2d7349375ec8200cb27e653ecbf9644b295d2beeb61e12060c6cdea278ef4",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-single-small.jsonl.gz"
+  },
+  {
+    "case": "forest-wave-1",
+    "bytes": 738597,
+    "gzipFileSha256": "e8f156f6b6af3fe79711164af2146e06222f36da5bc6f720ee77f9d032e762f7",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-wave-1.jsonl.gz"
+  },
+  {
+    "case": "forest-wave-2",
+    "bytes": 1398811,
+    "gzipFileSha256": "cafe272022e59e145356f0aed24b422b7115bb6fda7ea3544beb7073d16af432",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-wave-2.jsonl.gz"
+  },
+  {
+    "case": "forest-wave-3",
+    "bytes": 2321451,
+    "gzipFileSha256": "c7105bca5a30a94255948875bd414f600a4575cc223d2a6527509684c4d1415c",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-wave-3.jsonl.gz"
+  },
+  {
+    "case": "forest-wave-4",
+    "bytes": 1937102,
+    "gzipFileSha256": "917979a73dd2e14185121f9f0b5b8b2d48f80123cd32fb5bd01a4dfd97df1706",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-wave-4.jsonl.gz"
+  },
+  {
+    "case": "forest-wave-5",
+    "bytes": 3153126,
+    "gzipFileSha256": "88626ddadbd4b4ec879574e2537ce76f13b85cc41c3aa04421d08cec590ce086",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-wave-5.jsonl.gz"
+  },
+  {
+    "case": "forest-wave-6",
+    "bytes": 3710958,
+    "gzipFileSha256": "a3c78aeb747efb6292f2b593f84c543cac5df7e41bd68084bb785e7d4a9bfffa",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/forest-wave-6.jsonl.gz"
+  },
+  {
+    "case": "large-body-sparse-group",
+    "bytes": 71095,
+    "gzipFileSha256": "f8104a6ef02d6a66f644dd0891c57ba470c7652a70e6f069afc363fc6cf3d4d0",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/large-body-sparse-group.jsonl.gz"
+  },
+  {
+    "case": "large-body-wide-approach",
+    "bytes": 17224,
+    "gzipFileSha256": "2c77577d8d12668327c693b45c61f7ba19831ca6cfa4b7fad09405653b1f44d2",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/large-body-wide-approach.jsonl.gz"
+  },
+  {
+    "case": "large-portal-grid-128",
+    "bytes": 3430351,
+    "gzipFileSha256": "e83b99818c986a6832a36f06255fa047530a77989ed31244fc2fe1d6d7708ecc",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/large-portal-grid-128.jsonl.gz"
+  },
+  {
+    "case": "large-portal-grid-256",
+    "bytes": 7557335,
+    "gzipFileSha256": "d89b78395b9fc6d4bd235c470ea4b893d6743b2816cd1c055c19490ed3ba2297",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/large-portal-grid-256.jsonl.gz"
+  },
+  {
+    "case": "large-radius-turning-clearance",
+    "bytes": 873979,
+    "gzipFileSha256": "4233d3996d01478e31def406f661243300000cbdc19d619d5fc15ca767570869",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/large-radius-turning-clearance.jsonl.gz"
+  },
+  {
+    "case": "large-small-sparse-group",
+    "bytes": 105649,
+    "gzipFileSha256": "e118a26b17a84a438f5b16e0f354dd35900a1138fabe2c7da4dbdd49d3403f5d",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/large-small-sparse-group.jsonl.gz"
+  },
+  {
+    "case": "mixed-speed-approach",
+    "bytes": 880675,
+    "gzipFileSha256": "c79a7e26bc7dffee8bb6514cacf7ba20624759fda2213738a9fa3eac5857a8d7",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/mixed-speed-approach.jsonl.gz"
+  },
+  {
+    "case": "moving-noncenter-death-and-reinforcement",
+    "bytes": 279992,
+    "gzipFileSha256": "15c908c1fe3e3267a3da474bf9ca0f47380aa08b69cf2d88189035b26c1148f1",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/moving-noncenter-death-and-reinforcement.jsonl.gz"
+  },
+  {
+    "case": "old-waiters-refill-without-newcomers",
+    "bytes": 188446,
+    "gzipFileSha256": "f358df5e4aac45bee728592ad3c49ae00a57b57c46d4cece6a43ed269f16187a",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/old-waiters-refill-without-newcomers.jsonl.gz"
+  },
+  {
+    "case": "open-arena",
+    "bytes": 247046,
+    "gzipFileSha256": "ec38987d8f3447b5dc7180cd3c7429123af5c9e92ca9cdce719325f628f1d924",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/open-arena.jsonl.gz"
+  },
+  {
+    "case": "opposing-flow-wide-arena",
+    "bytes": 86577,
+    "gzipFileSha256": "f1bc29ac0c5a4aec5e3998021d56b25f488fa8276988535a7cd57d56827da376",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/opposing-flow-wide-arena.jsonl.gz"
+  },
+  {
+    "case": "physical-and-endpoint-overflow-200",
+    "bytes": 194696,
+    "gzipFileSha256": "3b284703339847af113fdb453bf672786013861c7d922b564ff8b45ef18dc7ec",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/physical-and-endpoint-overflow-200.jsonl.gz"
+  },
+  {
+    "case": "random-multigate-maze-11",
+    "bytes": 792193,
+    "gzipFileSha256": "b56d47dba728e8d3db6e19371343d2f3e40679f8c0a75267327fb2671ac64616",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/random-multigate-maze-11.jsonl.gz"
+  },
+  {
+    "case": "random-multigate-maze-1701",
+    "bytes": 769929,
+    "gzipFileSha256": "fc817caaaa04193e41e001129857ba46c13cbfe79857ec269fd2cbf91ba69feb",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/random-multigate-maze-1701.jsonl.gz"
+  },
+  {
+    "case": "random-multigate-maze-20261111",
+    "bytes": 1198231,
+    "gzipFileSha256": "d10b6521258e5ece43988ca982a011a458cc0a9c26faccd93e6b6f65dbee8465",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/random-multigate-maze-20261111.jsonl.gz"
+  },
+  {
+    "case": "random-multigate-maze-713",
+    "bytes": 765203,
+    "gzipFileSha256": "2d2b10e1b23dc4e0134979684350b54bca5c8a3c54296060cc79aef6d006afd0",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/random-multigate-maze-713.jsonl.gz"
+  },
+  {
+    "case": "random-multigate-maze-97",
+    "bytes": 690511,
+    "gzipFileSha256": "c1a96c2d59913296e967d4c78b4ff1bc5ea7bff0915fb74a072daab79319278b",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/random-multigate-maze-97.jsonl.gz"
+  },
+  {
+    "case": "random-multigate-maze-991",
+    "bytes": 681616,
+    "gzipFileSha256": "35bfe8c86a6ba4b7879dac520dbe6ee7c4d32e1e6b9e4ddb3fb3f122d5ba2bd1",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/random-multigate-maze-991.jsonl.gz"
+  },
+  {
+    "case": "ranged84-before-short1-fairness",
+    "bytes": 699149,
+    "gzipFileSha256": "e5dd99c01d72de228b2260f8b6291fd21810fa35525c8a7c7937feaf593cd718",
+    "versioned": true,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/ranged84-before-short1-fairness.jsonl.gz"
+  },
+  {
+    "case": "right-angle-corridor",
+    "bytes": 121273,
+    "gzipFileSha256": "9e35ac9bd3f1aa1b2cbdc3c809a3d222ed1f613011f940140322b19f7ea67479",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/right-angle-corridor.jsonl.gz"
+  },
+  {
+    "case": "settled-batch-death-and-reinforcement",
+    "bytes": 202450,
+    "gzipFileSha256": "bdfad3228436e4d00cfc970da3434fa4313c291122a8a5be33165bb38a409461",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/settled-batch-death-and-reinforcement.jsonl.gz"
+  },
+  {
+    "case": "shared-spawn-original-5m",
+    "bytes": 218565,
+    "gzipFileSha256": "a7a3e08820b3858c8440494293216f5feffa1fb59570903a91b550374d16b9e0",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/shared-spawn-original-5m.jsonl.gz"
+  },
+  {
+    "case": "shared-spawn-parking-lanes",
+    "bytes": 363059,
+    "gzipFileSha256": "ee8d4cf2f869ad95b62a3c776e501c18d546760596547b86ad87e2c545ede63f",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/shared-spawn-parking-lanes.jsonl.gz"
+  },
+  {
+    "case": "short16-before-ranged84-fairness",
+    "bytes": 369623,
+    "gzipFileSha256": "9a211389c20e83c6a68ee798dad58ee52b0a7f325fdda17da0ebc57409b91dc4",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/short16-before-ranged84-fairness.jsonl.gz"
+  },
+  {
+    "case": "single-cell-throat",
+    "bytes": 644494,
+    "gzipFileSha256": "88750f74388a8710da3cd3dc7f03bc817aa91ff839f0d9ab6ab4fa91385e653a",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/single-cell-throat.jsonl.gz"
+  },
+  {
+    "case": "static-unreachable-retains-pending",
+    "bytes": 4984,
+    "gzipFileSha256": "0a6dcb8bcc8211f5a9c3fb87a3b30d4340550dbc72d010405123c2f39028e0c3",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/static-unreachable-retains-pending.jsonl.gz"
+  },
+  {
+    "case": "target-relocation-after-settlement",
+    "bytes": 570883,
+    "gzipFileSha256": "fc0885226a302a49847fe5dbf60d5f25b519cb360cb8966ab8caac29aa761686",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/target-relocation-after-settlement.jsonl.gz"
+  },
+  {
+    "case": "target-relocation-before-arrival",
+    "bytes": 362800,
+    "gzipFileSha256": "8abe9bb5c99214da7711a16339dcdfe80732c78d4b585105fb61667f06e9accf",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/target-relocation-before-arrival.jsonl.gz"
+  },
+  {
+    "case": "three-hundred-units-original-12m",
+    "bytes": 14084520,
+    "gzipFileSha256": "86915e00e480631cd34e86b861d47d4764279e7186975046c495e49001726882",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/three-hundred-units-original-12m.jsonl.gz"
+  },
+  {
+    "case": "three-hundred-units-parking-lanes",
+    "bytes": 11223913,
+    "gzipFileSha256": "bd0eb7ea4a16e7971f245a0b0d6719401745f80fde45d62980b281c2458ca7ab",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/three-hundred-units-parking-lanes.jsonl.gz"
+  },
+  {
+    "case": "u-obstacle",
+    "bytes": 418556,
+    "gzipFileSha256": "93bbb84790afb10623e9b938b1b13dedaaef83aad0149a6036e4e878b5da0ea7",
+    "versioned": false,
+    "originalAbsolutePath": "/workspace/navigation-comparison/results/c-final2-v2-stress49/traces/u-obstacle.jsonl.gz"
+  }
+]

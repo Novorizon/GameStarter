@@ -1,0 +1,13 @@
+["/workspace/.singleton-removal-env/dotnet/dotnet", "build", "/workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj", "-c", "Release", "-m:1", "--disable-build-servers", "--nologo", "-p:PathMap=/workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e=/navigation-lab", "-p:ContinuousIntegrationBuild=true"]
+  Determining projects to restore...
+  Restored /workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Runner/NavigationLab.Runner.csproj (in 174 ms).
+  2 of 3 projects are up-to-date for restore.
+  NavigationLab.Core -> /workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll
+  NavigationLab.Oracle -> /workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Oracle/bin/Release/netstandard2.1/NavigationLab.Oracle.dll
+  NavigationLab.Runner -> /workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Runner/bin/Release/net8.0/NavigationLab.Runner.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:06.25

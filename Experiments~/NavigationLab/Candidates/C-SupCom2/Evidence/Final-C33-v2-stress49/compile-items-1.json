@@ -1,0 +1,61 @@
+{
+  "Properties": {
+    "TargetFramework": "netstandard2.1",
+    "LangVersion": "9"
+  },
+  "Items": {
+    "Compile": [
+      {
+        "Identity": "ContinuousOracle.cs",
+        "FullPath": "/workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Oracle/ContinuousOracle.cs",
+        "RootDir": "/",
+        "Filename": "ContinuousOracle",
+        "Extension": ".cs",
+        "RelativeDir": "",
+        "Directory": "workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Oracle/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.DefaultItems.props",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.Sdk.DefaultItems",
+        "DefiningProjectExtension": ".props"
+      },
+      {
+        "Identity": "obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs",
+        "FullPath": "/workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs",
+        "RootDir": "/",
+        "Filename": ".NETStandard,Version=v2.1.AssemblyAttributes",
+        "Extension": ".cs",
+        "RelativeDir": "obj/Release/netstandard2.1/",
+        "Directory": "workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Microsoft.Common.CurrentVersion.targets",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/",
+        "DefiningProjectName": "Microsoft.Common.CurrentVersion",
+        "DefiningProjectExtension": ".targets"
+      },
+      {
+        "Identity": "obj/Release/netstandard2.1/NavigationLab.Oracle.AssemblyInfo.cs",
+        "FullPath": "/workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/NavigationLab.Oracle.AssemblyInfo.cs",
+        "RootDir": "/",
+        "Filename": "NavigationLab.Oracle.AssemblyInfo",
+        "Extension": ".cs",
+        "RelativeDir": "obj/Release/netstandard2.1/",
+        "Directory": "workspace/navigation-comparison/c-final2-snapshots/snapshot-b353b77565baa325c3839f6e/Experiments~/NavigationLab/Oracle/obj/Release/netstandard2.1/",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.GenerateAssemblyInfo.targets",
+        "DefiningProjectDirectory": "/workspace/.singleton-removal-env/dotnet/sdk/8.0.427/Sdks/Microsoft.NET.Sdk/targets/",
+        "DefiningProjectName": "Microsoft.NET.GenerateAssemblyInfo",
+        "DefiningProjectExtension": ".targets"
+      }
+    ]
+  }
+}

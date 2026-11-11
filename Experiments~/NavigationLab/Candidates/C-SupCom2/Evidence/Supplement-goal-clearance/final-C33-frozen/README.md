@@ -1,0 +1,1 @@
+最终冻结C33同DLL补充，candidate SHA1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372。共享原3端点净空契约均Error=null/全入场/全到位/0队列/2000微步稳定/fresh identical；另外单列一r650自目标移动P。两类分母为3和1，不加入共同49，也不拿它们替代49里真实失败。actual DLL与完整编译源随最终共同49归档。
