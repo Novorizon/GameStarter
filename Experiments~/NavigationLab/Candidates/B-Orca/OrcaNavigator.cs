@@ -138,6 +138,10 @@ namespace NavigationLab.Candidates.BOrca
             if (coordinatedYield && microstep % SimulationProtocol.Substeps == 0)
             {
                 CoordinateYield(ordered);
+                if (microstep % 100 == 0)
+                {
+                    ExchangeCrossedMovingGoals(ordered);
+                }
             }
             if (microstep % 100 == 0)
             {
@@ -429,6 +433,63 @@ namespace NavigationLab.Candidates.BOrca
             }
         }
 
+        private void ExchangeCrossedMovingGoals(Actor[] ordered)
+        {
+            // Relabel only equal-profile, equal-target, freely assigned moving bodies. The set of legal
+            // physical endpoints and every unit's radius, speed, target and assigned-order identity stay intact.
+            foreach (var first in ordered)
+            {
+                if (first.Goal < 0 || first.Yielding || Arrived(first) || first.Request.AssignedGoalCell >= 0)
+                {
+                    continue;
+                }
+                Actor? selected = null;
+                double bestGain = world.CellSizeMm * .25;
+                foreach (var second in ordered)
+                {
+                    if (second.Goal < 0 || second.Request.Id <= first.Request.Id || second.Yielding || Arrived(second)
+                        || second.Request.AssignedGoalCell >= 0 || !second.Request.Profile.Equals(first.Request.Profile)
+                        || second.Request.TargetId != first.Request.TargetId)
+                    {
+                        continue;
+                    }
+                    double before = Point2.Distance(first.Position, GoalPoint(first)) + Point2.Distance(second.Position, GoalPoint(second));
+                    double after = Point2.Distance(first.Position, GoalPoint(second)) + Point2.Distance(second.Position, GoalPoint(first));
+                    if (before - after > bestGain)
+                    {
+                        bestGain = before - after;
+                        selected = second;
+                    }
+                }
+                if (selected == null)
+                {
+                    continue;
+                }
+                bool firstReachable = Mesh(first.Request.Profile).StaticallyReachable(first.Position, GoalPoint(selected), out int firstExpanded);
+                bool secondReachable = Mesh(selected.Request.Profile).StaticallyReachable(selected.Position, GoalPoint(first), out int secondExpanded);
+                Add("StaticReachabilityExpandedNodes", firstExpanded + secondExpanded);
+                if (!firstReachable || !secondReachable)
+                {
+                    Add("CrossedGoalExchangeDisconnectedRejections");
+                    continue;
+                }
+                int previous = first.Goal;
+                first.Goal = selected.Goal;
+                selected.Goal = previous;
+                goalOwners[first.Goal] = first;
+                goalOwners[selected.Goal] = selected;
+                foreach (var changed in new[] { first, selected })
+                {
+                    changed.Path.Clear();
+                    changed.Waypoint = 0;
+                    changed.RepathAt = 0;
+                    changed.BestError = double.PositiveInfinity;
+                    changed.LastProgress = microstep;
+                }
+                Add("CrossedMovingGoalExchanges");
+            }
+        }
+
         private void CoordinateYield(Actor[] ordered)
         {
             foreach (var actor in ordered)
@@ -466,7 +527,9 @@ namespace NavigationLab.Candidates.BOrca
                 }
 
                 requester.YieldRetryAt = microstep + 200;
-                foreach (var blocker in ordered.Where(actor => actor != requester && !actor.Yielding && Arrived(actor))
+                foreach (var blocker in ordered.Where(actor => actor != requester && !actor.Yielding
+                    && (Arrived(actor) || actor.Request.Id > requester.Request.Id && microstep - actor.LastProgress >= 500
+                        && !ordered.Any(dependent => dependent.Yielding && dependent.YieldRequester == actor.Request.Id)))
                     .OrderBy(actor => Point2.Distance(actor.Position, requester.Position)))
                 {
                     double distance = Point2.Distance(blocker.Position, requester.Position);
@@ -481,6 +544,10 @@ namespace NavigationLab.Candidates.BOrca
 
                     if (TryAngularYield(blocker, requester, ordered) || TryBeginYield(blocker, requester, ordered))
                     {
+                        if (!Arrived(blocker))
+                        {
+                            Add("MovingPeerYieldRequests");
+                        }
                         requester.LastProgress = microstep;
                         break;
                     }

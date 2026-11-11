@@ -5,7 +5,7 @@ B 分支从冻结 A `8c0dd50` 分离。这里只增加独立候选和实验，�
 ## 实际实现
 
 - **B0 / `NavigationLab.Candidates.BOrca.OrcaFactory`**：官方 RVO2-CS ORCA 速度求解器，八邻 A* 全局路线，实际停止身体参与动态重寻路，精确静态扫掠和停止身体约束下的可见路点简化，死亡或目标移动后的空攻击位刷新。
-- **B1 / `NavigationLab.Candidates.BOrca.OrcaYieldFactory`**：B0 加显式临时让位、到位者返场，以及受限射程单位的合法目标交换。B1 的结果单独报告，不覆盖 B0 的失败。
+- **B1 / `NavigationLab.Candidates.BOrca.OrcaYieldFactory`**：B0 加显式临时让位、到位者返场、停滞移动同伴的有序让位，以及合法目标交换。移动同伴只向低ID请求者让路，且已有让位依赖的移动者不再接受请求；相同profile/target且没有显式assigned goal的移动单位可以交换交叉目标，要求总欧氏距离至少下降四分之一格且两条新路线静态可达。所有永久终点集合、实际体型、速度和目标身份保留。B1 的结果单独报告，不覆盖 B0 的失败。
 
 路线节点为原格边长的一半，支持身体通过偶数宽走廊的中线。**最终站位仍只允许原世界的 holding cell**；路线节点不会增加最终目标数，也不修改地图、单位身体或速度。
 
