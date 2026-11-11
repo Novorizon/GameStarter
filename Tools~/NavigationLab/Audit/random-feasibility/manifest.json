@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "utc": "2026-11-11T03:00:25.039801+00:00",
+  "scope": "Six independently constructed and replayed serial witnesses, original world/requests/radius/speed/range and deadline; large cases static evidence only. No candidate receives witness routes or target/order answers.",
+  "producerSourcesFrozenBeforeAndAfterBuild": true,
+  "sources": {
+    "Feasibility.csproj": "5106c5019c1d95ee3fbc99f07d783ed0526b17a0b3346fb6070d7160337083fa",
+    "Program.cs": "40aefe52863d9c2077b86ee92f50140091eccfdd0703079c5bab96ac91c94852",
+    "Replay/Program.cs": "4c3643619dca5c42763d80f879d9d2397980921abc9a0d2ff07c5f3fa2b76932",
+    "Replay/Replay.csproj": "d54c9966e1ad769456a396f1d9d132e1662d0fd1cd4bdd8fd977a0f9c18d1270",
+    "Snapshot/ContinuousOracle.cs": "06b02d324777fbaf1f6ac4ab840ef5108d3815830557288645c058247d3acc4b",
+    "Snapshot/Contracts.cs": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c",
+    "Snapshot/LabCases.cs": "3221e39684ca7d4d4985ffcfc449d0645e0f3c559139220bb9b158104e3e3c13",
+    "Snapshot/Scenarios.cs": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab"
+  },
+  "originSources": {
+    "Contracts.cs": {
+      "source": "/workspace/navigation-comparison/comparison/Experiments~/NavigationLab/Core/Contracts.cs",
+      "sha256": "5fc38debb07bd4948f26d6d4c7995726b0a3c476684275b4a49692694c504f2c"
+    },
+    "ContinuousOracle.cs": {
+      "source": "/workspace/navigation-comparison/comparison/Experiments~/NavigationLab/Oracle/ContinuousOracle.cs",
+      "sha256": "06b02d324777fbaf1f6ac4ab840ef5108d3815830557288645c058247d3acc4b"
+    },
+    "LabCases.cs": {
+      "source": "/workspace/navigation-comparison/comparison/Experiments~/NavigationLab/Runner/LabCases.cs",
+      "sha256": "3221e39684ca7d4d4985ffcfc449d0645e0f3c559139220bb9b158104e3e3c13"
+    },
+    "Scenarios.cs": {
+      "source": "/workspace/navigation-comparison/comparison/Verification~/TowerDefenseNavigation/Scenarios.cs",
+      "sha256": "b509e980396e6c3e042f99c984db0de08db1d336c3bd8cee4e519d003185b9ab"
+    }
+  },
+  "producerBinarySha256": "891c0f800647adb959c7c9aa07b6df19d2ddd4cb02bcec769d0d499eca3fd1f4",
+  "replayerBinarySha256": "e7167a8a30f6c1d346317f5ec0f036221e21aa07158b06c2236bf1f7b4e4bf2b",
+  "artifacts": {
+    "final-build.log": "c2468defa0725a834fa02857edff1f7a74915ce2f73da15f871a84fdb3605c20",
+    "final-generation.log": "ce053222d16b2c7a080251d90ab6a2a69878d58c7b83b024c81e2f0e59118150",
+    "final-replay.log": "466e625fe48ad0bd7a85e3185ab61b511fcce51e3c69aca1764586d5bbb28268",
+    "large-portal-grid-128-static.json": "db1509915168821514fc694f01c5dd11abf85f6ea0b6a58e2fc14cc10bff4fab",
+    "large-portal-grid-256-static.json": "9202226430d95a4f056c643922a80700f8d4d291d3be8fc2c334f5e3ebaabd1b",
+    "random-multigate-maze-11-input.json": "81c84d41a4043d95cef660908d69a84ed86f420326b67069108fc235f7cc4762",
+    "random-multigate-maze-11-witness.json.gz": "e476e16a7170916a462155944d90a4dd77356206c24f826a0731bec86abbda4b",
+    "random-multigate-maze-1701-input.json": "b5df6a84e0057c2e922acf6ede413fb002f1c42c3a1b5996390e6135f2392904",
+    "random-multigate-maze-1701-witness.json.gz": "875be9290e825535262fe8416bf75f1d661f834b1e9ebf8b78d8d9f7f45c9b30",
+    "random-multigate-maze-20261111-input.json": "dbdd0fc32438aad0fe030cca2502f2e1ecd213b35216e8be15ee3dad470d1791",
+    "random-multigate-maze-20261111-witness.json.gz": "16af401d86ae32a19b67ae48dea36dc191ba70fa99463866144a4bdb6f83008e",
+    "random-multigate-maze-713-input.json": "cefd59379a6e44c12c38081ac6de19de307684bcc4c97964288ea3ffc4796e7a",
+    "random-multigate-maze-713-witness.json.gz": "a542d7d8b1133d84f8a529bcde888a7455b6e051a8b0245a35d84d89f4010499",
+    "random-multigate-maze-97-input.json": "dfad254425aaf4444dd3c5c8ee17182a08f283e413cf6ae3cc266d0f7f5ee15e",
+    "random-multigate-maze-97-witness.json.gz": "291aae5cc59f49656eee9f4a515dfade9c8367f4b716b955a109aab695bfadde",
+    "random-multigate-maze-991-input.json": "aa1d4bbeeeabad8cb7310703a2a83fb4fe1659acdc9c3b0b94719f1d4347e160",
+    "random-multigate-maze-991-witness.json.gz": "c927e2c823d0b2fbf04a335e415b0d707f7c88c9a22443b72b5bc5153b491ce0",
+    "replay-results.json": "c11aa62e2480532d741958304415dc77f984446d193caaf807e77d5156c24c42",
+    "summary.json": "84c79adc25d1074b7215f6c448a4c1686ac2693d3d6b8c42bf155a561a1c3425"
+  }
+}

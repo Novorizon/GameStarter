@@ -1,0 +1,17 @@
+{
+  "name": "large-portal-grid-256",
+  "requested": 256,
+  "actualRadiusMm": 250,
+  "rangeMm": 12000,
+  "staticFittingAttackCentreCount": 548,
+  "staticallyConnectedAttackCentreCount": 548,
+  "spawnCount": 3,
+  "sourceConnectedCells": 11629,
+  "consideredStaticEdges": 12512,
+  "acceptedBfsTreeEdges": 11628,
+  "allSpawnEntrancesInSameComponent": true,
+  "minimumPairwiseGoalBodyGapMm": 500,
+  "geometrySha256": "19970b47bb83966d9a466a8cb05421c8e7e9f538c69f49cc08a3c39d54cecdb6",
+  "jointDynamicFeasibilityProved": false,
+  "scope": "Static body clearance, range/LOS, reachability and candidate-count evidence only. This is not simultaneous arrival proof, a packing completeness proof, or an algorithm result."
+}
