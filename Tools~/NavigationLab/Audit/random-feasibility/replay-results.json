@@ -1,0 +1,78 @@
+{
+  "success": true,
+  "count": 6,
+  "cases": [
+    {
+      "name": "random-multigate-maze-11",
+      "success": true,
+      "live": 32,
+      "attackers": 16,
+      "waiting": 16,
+      "physicalSegments": 2030,
+      "executionMilliseconds": 213000,
+      "BodySweeps": 34598,
+      "PairSweeps": 356396,
+      "MinimumBodyGapMm": 500
+    },
+    {
+      "name": "random-multigate-maze-1701",
+      "success": true,
+      "live": 32,
+      "attackers": 16,
+      "waiting": 16,
+      "physicalSegments": 2026,
+      "executionMilliseconds": 212600,
+      "BodySweeps": 34102,
+      "PairSweeps": 349188,
+      "MinimumBodyGapMm": 500
+    },
+    {
+      "name": "random-multigate-maze-20261111",
+      "success": true,
+      "live": 32,
+      "attackers": 16,
+      "waiting": 16,
+      "physicalSegments": 3142,
+      "executionMilliseconds": 324200,
+      "BodySweeps": 52806,
+      "PairSweeps": 544136,
+      "MinimumBodyGapMm": 500
+    },
+    {
+      "name": "random-multigate-maze-713",
+      "success": true,
+      "live": 32,
+      "attackers": 16,
+      "waiting": 16,
+      "physicalSegments": 1830,
+      "executionMilliseconds": 193000,
+      "BodySweeps": 31142,
+      "PairSweeps": 320184,
+      "MinimumBodyGapMm": 500
+    },
+    {
+      "name": "random-multigate-maze-97",
+      "success": true,
+      "live": 32,
+      "attackers": 16,
+      "waiting": 16,
+      "physicalSegments": 1678,
+      "executionMilliseconds": 177800,
+      "BodySweeps": 28954,
+      "PairSweeps": 298420,
+      "MinimumBodyGapMm": 500
+    },
+    {
+      "name": "random-multigate-maze-991",
+      "success": true,
+      "live": 32,
+      "attackers": 16,
+      "waiting": 16,
+      "physicalSegments": 1580,
+      "executionMilliseconds": 168000,
+      "BodySweeps": 27262,
+      "PairSweeps": 280582,
+      "MinimumBodyGapMm": 500
+    }
+  ]
+}
