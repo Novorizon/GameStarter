@@ -1,0 +1,22 @@
+{
+  "exitCode": 1,
+  "originalModelInputFileSha256": {
+    "target-relocation-after-settlement": "1369ec437e43ac1f727f29641a7645a14e479fd863913ead9ded4887292b4e5e",
+    "old-waiters-refill-without-newcomers": "673fa883561ebd63fe6158ced9682a6756f9467665bfd37a787c735917c44825"
+  },
+  "stagedPluginHashes": {
+    "NavigationLab.Core.dll": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "NavigationLab.Oracle.dll": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "NavigationLab.EWarcraft3.dll": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543"
+  },
+  "stagedAndFrozenBinariesUnchanged": true,
+  "freshManifestBoundReport": true,
+  "runId": "a94ca006785c4fddbd914528f6595d5e",
+  "nativeManifestSha256": "9fa73f56b9d2556603e1c9587f95a263334c2f8f0848594a9f173a9e22773e0b",
+  "driverSourceSha256": "f8c59416e2a2f2d30a83aca8efa443f33a40459ee6d9bf708907a074c85e46f6",
+  "buildManifests": {
+    "/workspace/navigation-comparison/results/helper-v2-e-forest8/build-manifest.json": "dbe5df0bcedc04a6fa45bb72cec787dc9eadd03ba1c2150e39cbfd07ddc1f070"
+  },
+  "scope": "Unity Editor Play/Mono plugin experiment; no replacement of the default business backend.",
+  "assetCleanupVerified": true
+}

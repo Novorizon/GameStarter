@@ -1,0 +1,531 @@
+{
+  "world": {
+    "width": 35,
+    "height": 29,
+    "cellSizeMm": 1000,
+    "origin": {
+      "x": 0,
+      "y": 0
+    },
+    "walkable": "0000000000000000000000000000000000001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111000000000000000000000000000000000000",
+    "holding": "0000000000000000000000000000000000001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111001111111111111111111111111111111110011111111111111111111111111111111100111111111111111111111111111111111000000000000000000000000000000000000",
+    "spawnCells": [
+      491
+    ],
+    "targets": [
+      {
+        "id": 1,
+        "x": 27500,
+        "y": 14500,
+        "radiusMm": 1000
+      }
+    ],
+    "gatheringDistanceMm": 7000
+  },
+  "requests": [
+    {
+      "readyTick": 0,
+      "id": 1,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 2,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 3,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 4,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 5,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 6,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 7,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 8,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 9,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 10,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 11,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 12,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 13,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 14,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 15,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 16,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 17,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 18,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 19,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 20,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 21,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 22,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 23,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 24,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 25,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 26,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 27,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 28,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 29,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 30,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 31,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 32,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 33,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 34,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 35,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 36,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 37,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 38,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 39,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 40,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 41,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 42,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 43,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 44,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 45,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 46,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 47,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 0,
+      "id": 48,
+      "radiusMm": 250,
+      "speedMmPerTick": 1000,
+      "attackRangeMm": 1000,
+      "spawnCell": 491,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    }
+  ],
+  "worldEvents": [],
+  "deaths": [
+    {
+      "tick": 0,
+      "count": 6,
+      "afterSettlement": true,
+      "replace": false,
+      "requireMoving": false,
+      "range": -1,
+      "attackersOnly": true
+    }
+  ],
+  "expectation": "FullArrival",
+  "expectedLive": 42,
+  "expectedAttackers": 16,
+  "deadlineTicks": 12000,
+  "holdTicks": 200,
+  "initialSettledCheckTick": -1,
+  "minimumOldWaitingPromotions": 6,
+  "requiredFeatures": "DeathAndReinforcement",
+  "microstepMilliseconds": 5,
+  "logicalTickMilliseconds": 50,
+  "modelInputSha256": "f925a5fd4c1dc206ccf2c86471265dfebe3a5c2f4d32e831475ae407a445f6e7",
+  "minimumAttackers": []
+}

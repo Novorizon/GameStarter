@@ -1,0 +1,27 @@
+{
+  "output": "/workspace/navigation-comparison/native/e-v2-lifecycle",
+  "runId": "a94ca006785c4fddbd914528f6595d5e",
+  "expectedCoreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "expectedOracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "graphicsRequired": false,
+  "wallDeadlineSeconds": 1200,
+  "stepsPerEditorUpdate": 250,
+  "runs": [
+    {
+      "name": "WarcraftFactory-target-relocation-after-settlement",
+      "input": "/workspace/navigation-comparison/native/e-v2-lifecycle/target-relocation-after-settlement.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftFactory",
+      "expectedCandidateSha256": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543"
+    },
+    {
+      "name": "WarcraftFactory-old-waiters-refill-without-newcomers",
+      "input": "/workspace/navigation-comparison/native/e-v2-lifecycle/old-waiters-refill-without-newcomers.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftFactory",
+      "expectedCandidateSha256": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543"
+    }
+  ]
+}

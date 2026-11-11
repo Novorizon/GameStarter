@@ -75,3 +75,14 @@ E3早期无条件backoff破坏了初始44人稳定；限定到空间专用Goal�
 共享harness `c882538`、默认运行时源`8a0a3cd`已通过freeze-run构建绑定、独立oracle与全新实例重放。结果为 **6 Passed / 1 Failed / 0 Unsupported**：open48、Forest8、非格心途中死亡补兵、动态堵路/重开、大体型r700、快速2200mm/tick通过，6项通过均重放一致；原72场景全部实际生成，但最终11人Moving、仅9攻击，deadline12000，明确失败。
 
 这7项是旧协议 `c882538` 下来源绑定的smoke，不计为最终共同 v2 矩阵。暂停/实例隔离、源与DLL无漂移均通过；`formalEvidenceReady=true`表示来源完整，并不表示`success=true`（本轮success为false）。`Evidence/BoundSmoke7`保留summary、编译项、buildmanifest、实际输入、日志与压缩逐步轨迹；其中冻结DLL SHA为`ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543`，不能与未PathMap的live构建DLL指纹混用。后续同一公共full/stress仍须单独验证并记录真实失败。
+
+
+## 选择性的真实 Unity Play / Mono 复验
+
+`Evidence/SelectedUnityMono`保存相同冻结DLL（`ba4fbaaa…c543`）的真实Unity 2022.3.62f1复验：
+
+- Forest第1波8/8全攻击，8120微步后满足200稳定区间；实际OpenGLCore/llvmpipe软件渲染通过画面检查并保存PNG。
+- 24人初始到位后移动目标，确实执行1次WorldChange并重分配24个Goal，最终16攻8候场、200稳定区间通过；使用Null图形。
+- 48人“旧候场补位”用例在初始阶段仍有1人Moving，0次死亡、0稳定区间，失败。补位事件未触发，不能宣称这轮验证了旧候场补位。
+
+此轮旧驱动的deadline guard比共同模型最多多9微步（45ms），失败报告止于120010微步；已在索引中保留限制，未把它算成相同协议的49项完整重跑。后续驱动`d91e168`已统一deadline，但没有用新版驱动冒充这轮记录。这里只确认选定场景能在同DLL的Unity Mono中执行，不代表生产后端切换、IL2CPP、手机性能或真实硬件GPU验收。

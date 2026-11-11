@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "scope": "Selected real Unity 2022.3.62f1 Editor Play/Mono execution of the identical frozen E DLL, not a complete stress49 rerun or GameStarter business integration, IL2CPP, hardware GPU/device acceptance.",
+  "candidateAssemblySha256": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543",
+  "passed": 2,
+  "failed": 1,
+  "allOriginalModelInputsByteIdenticalToFinalStress": true,
+  "graphics": "Only forest-wave-1 used OpenGLCore and llvmpipe (software renderer), with rendering validation and PNG. LifecycleSelected used Null graphics.",
+  "deadlineGuardLimitation": "Driver f8c59416.. predated d91e168 exact-deadline fix. Failed old-waiters stopped at 120010 microsteps (logical finalTick12001), 9 microsteps (45ms) beyond the model maximum120001. It still failed before initial settlement: 48 live, 16 attack,31 waiting,1 moving,0 deaths,0 hold. No claim that waiting-to-attack promotion executed. Successful selected cases finished well before the deadline.",
+  "rawLogs": "Unity/console original logs remain at original native directories; no logs copied into Git.",
+  "cases": [
+    {
+      "run": "GraphicsForest8",
+      "name": "forest-wave-1",
+      "success": true,
+      "admitted": 8,
+      "live": 8,
+      "pending": 0,
+      "attacking": 8,
+      "waiting": 0,
+      "deaths": 0,
+      "holdTicks": 200,
+      "checkedMicrosteps": 8120,
+      "renderingValidated": true
+    },
+    {
+      "run": "LifecycleSelected",
+      "name": "target-relocation-after-settlement",
+      "success": true,
+      "admitted": 24,
+      "live": 24,
+      "pending": 0,
+      "attacking": 16,
+      "waiting": 8,
+      "deaths": 0,
+      "holdTicks": 200,
+      "checkedMicrosteps": 13400,
+      "renderingValidated": false
+    },
+    {
+      "run": "LifecycleSelected",
+      "name": "old-waiters-refill-without-newcomers",
+      "success": false,
+      "admitted": 48,
+      "live": 48,
+      "pending": 0,
+      "attacking": 16,
+      "waiting": 31,
+      "deaths": 0,
+      "holdTicks": 0,
+      "checkedMicrosteps": 120010,
+      "renderingValidated": false
+    }
+  ],
+  "archivedFileSha256": {
+    "GraphicsForest8/native-provenance.json": "879d3c1a4f1f2699bb5c56323633bdbb65dfb171bb37ff3f303e1b9138b047ad",
+    "GraphicsForest8/native-manifest.json": "e617f57df429d8c3640a007fb84b5bbec4ff3efe6d4711292e02b71acd7e3aac",
+    "GraphicsForest8/forest-wave-1.unity-input.json": "64d62a4a6006335081125ecdf6e4823dac37beb0ce14ee69caccdc2f7d189eb2",
+    "GraphicsForest8/WarcraftFactory-forest-wave-1.png": "cf5eae6c04e5afc695f31c6d04377ef9ef90b0ab7d54ff5795b587c26812ea30",
+    "GraphicsForest8/validation.json": "7be31553f495fea755914d173b4454218d9d897bf778c345da5be6c8f2c37b60",
+    "GraphicsForest8/forest-wave-1.original-model-input.json": "23018b770fbf1384bb851b3bf81765f0df82c9ffa0b9a212ccb8f9fbf036fcfd",
+    "GraphicsForest8/model-build-manifest-0.json": "dbe5df0bcedc04a6fa45bb72cec787dc9eadd03ba1c2150e39cbfd07ddc1f070",
+    "LifecycleSelected/target-relocation-after-settlement.unity-input.json": "73d5c2a73f43ec579f21e6348a20edfd15a046bf33d15f0a514de876d4b88a61",
+    "LifecycleSelected/native-provenance.json": "c3bb8f8004ba2f2962c9a7fd232fc44fa08ab3687e20261c37c88e1aa63668c1",
+    "LifecycleSelected/native-manifest.json": "9fa73f56b9d2556603e1c9587f95a263334c2f8f0848594a9f173a9e22773e0b",
+    "LifecycleSelected/old-waiters-refill-without-newcomers.unity-input.json": "662a1fb4b868ada5f736c5ae759f9c5e64fba97c1d551e0e512328599519914c",
+    "LifecycleSelected/validation.json": "59903131838eb9ee643f46bb89a52a2c4c9e37d761e124a3ce6f252aa1f7a398",
+    "LifecycleSelected/target-relocation-after-settlement.original-model-input.json": "1369ec437e43ac1f727f29641a7645a14e479fd863913ead9ded4887292b4e5e",
+    "LifecycleSelected/old-waiters-refill-without-newcomers.original-model-input.json": "673fa883561ebd63fe6158ced9682a6756f9467665bfd37a787c735917c44825",
+    "LifecycleSelected/model-build-manifest-0.json": "dbe5df0bcedc04a6fa45bb72cec787dc9eadd03ba1c2150e39cbfd07ddc1f070"
+  }
+}

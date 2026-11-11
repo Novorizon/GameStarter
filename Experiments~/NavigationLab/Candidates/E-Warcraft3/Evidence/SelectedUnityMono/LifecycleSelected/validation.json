@@ -1,0 +1,253 @@
+{
+    "success": false,
+    "shutdownVerified": true,
+    "runId": "a94ca006785c4fddbd914528f6595d5e",
+    "unity": "2022.3.62f1",
+    "graphics": "Null",
+    "device": "Null Device",
+    "manifestSha256": "9fa73f56b9d2556603e1c9587f95a263334c2f8f0848594a9f173a9e22773e0b",
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "stopwatchFrequency": 10000000,
+    "cases": [
+        {
+            "name": "WarcraftFactory-target-relocation-after-settlement",
+            "factoryId": "E-Warcraft3-Inspired-SpatialYield",
+            "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftFactory",
+            "inputSha256": "73d5c2a73f43ec579f21e6348a20edfd15a046bf33d15f0a514de876d4b88a61",
+            "modelInputSha256": "3862b8b6e1baa87a3368e3c9aa7cdce2975db7eba155e02fad7950b4be3b6508",
+            "candidateSha256": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "0.028024554414344038",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 24,
+            "admitted": 24,
+            "rejected": 23,
+            "deaths": 0,
+            "live": 24,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 8,
+            "finalTick": 1340,
+            "holdTicks": 200,
+            "checkedMicrosteps": 13400,
+            "pairSweeps": 3618544,
+            "bodySweeps": 316956,
+            "maximumStepStopwatchTicks": 481859,
+            "stepStopwatchTicks": 14444336,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "FriendlyYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "GroupedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RequesterBackoffEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 47
+                },
+                {
+                    "name": "ReachabilityCells",
+                    "value": 42528
+                },
+                {
+                    "name": "GlobalAStarSearches",
+                    "value": 115
+                },
+                {
+                    "name": "AStarExpandedCells",
+                    "value": 6904
+                },
+                {
+                    "name": "Spawned",
+                    "value": 24
+                },
+                {
+                    "name": "SimulationSubsteps",
+                    "value": 13400
+                },
+                {
+                    "name": "BodyMoveSubsteps",
+                    "value": 35382
+                },
+                {
+                    "name": "Rejected_SpawnOccupied",
+                    "value": 23
+                },
+                {
+                    "name": "DirectConnectors",
+                    "value": 39
+                },
+                {
+                    "name": "SpatialCollisionStops",
+                    "value": 6609
+                },
+                {
+                    "name": "WaitingSubsteps",
+                    "value": 6609
+                },
+                {
+                    "name": "LocalSearches",
+                    "value": 111
+                },
+                {
+                    "name": "NoSpatialPath",
+                    "value": 137
+                },
+                {
+                    "name": "FriendlyYieldRequests",
+                    "value": 5
+                },
+                {
+                    "name": "FriendlyYieldAccepted",
+                    "value": 4
+                },
+                {
+                    "name": "FriendlyYieldCompleted",
+                    "value": 4
+                },
+                {
+                    "name": "DynamicGlobalRepaths",
+                    "value": 4
+                },
+                {
+                    "name": "WorldChanges",
+                    "value": 1
+                },
+                {
+                    "name": "GoalReassignments",
+                    "value": 24
+                },
+                {
+                    "name": "LocalRejoins",
+                    "value": 29
+                },
+                {
+                    "name": "FriendlyYieldNoSidePocket",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "WarcraftFactory-old-waiters-refill-without-newcomers",
+            "factoryId": "E-Warcraft3-Inspired-SpatialYield",
+            "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftFactory",
+            "inputSha256": "662a1fb4b868ada5f736c5ae759f9c5e64fba97c1d551e0e512328599519914c",
+            "modelInputSha256": "f925a5fd4c1dc206ccf2c86471265dfebe3a5c2f4d32e831475ae407a445f6e7",
+            "candidateSha256": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543",
+            "detail": "System.InvalidOperationException: Arrival deadline: live=48 pending=0 moving=1 failure=None\n  at NavigationLab.UnityValidation.UnityNavigationLab.Advance () [0x007cb] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:317 \n  at NavigationLab.UnityValidation.UnityNavigationLab.Poll () [0x001d7] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:128 ",
+            "minimumGapMm": "0",
+            "screenshot": "",
+            "success": false,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 48,
+            "admitted": 48,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 48,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 31,
+            "finalTick": 12001,
+            "holdTicks": 0,
+            "checkedMicrosteps": 120010,
+            "pairSweeps": 135032504,
+            "bodySweeps": 5750376,
+            "maximumStepStopwatchTicks": 125892070,
+            "stepStopwatchTicks": 1271095412,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "FriendlyYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "GroupedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RequesterBackoffEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 48
+                },
+                {
+                    "name": "ReachabilityCells",
+                    "value": 42528
+                },
+                {
+                    "name": "GlobalAStarSearches",
+                    "value": 49196
+                },
+                {
+                    "name": "AStarExpandedCells",
+                    "value": 1523502
+                },
+                {
+                    "name": "Spawned",
+                    "value": 48
+                },
+                {
+                    "name": "SimulationSubsteps",
+                    "value": 120010
+                },
+                {
+                    "name": "BodyMoveSubsteps",
+                    "value": 14815
+                },
+                {
+                    "name": "DirectConnectors",
+                    "value": 38
+                },
+                {
+                    "name": "SpatialCollisionStops",
+                    "value": 121583
+                },
+                {
+                    "name": "WaitingSubsteps",
+                    "value": 121583
+                },
+                {
+                    "name": "LocalSearches",
+                    "value": 3063
+                },
+                {
+                    "name": "NoSpatialPath",
+                    "value": 52191
+                },
+                {
+                    "name": "DynamicGlobalRepaths",
+                    "value": 6
+                },
+                {
+                    "name": "LocalRejoins",
+                    "value": 14
+                },
+                {
+                    "name": "FriendlyYieldRequests",
+                    "value": 1489
+                },
+                {
+                    "name": "FriendlyYieldNoSidePocket",
+                    "value": 1489
+                }
+            ]
+        }
+    ]
+}

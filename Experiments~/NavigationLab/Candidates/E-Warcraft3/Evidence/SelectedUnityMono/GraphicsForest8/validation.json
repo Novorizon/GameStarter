@@ -1,0 +1,88 @@
+{
+    "success": true,
+    "shutdownVerified": true,
+    "runId": "8f69c48dcf5947608cd1dfd6f2d76c2d",
+    "unity": "2022.3.62f1",
+    "graphics": "OpenGLCore",
+    "device": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "manifestSha256": "e617f57df429d8c3640a007fb84b5bbec4ff3efe6d4711292e02b71acd7e3aac",
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "stopwatchFrequency": 10000000,
+    "cases": [
+        {
+            "name": "WarcraftFactory-forest-wave-1",
+            "factoryId": "E-Warcraft3-Inspired-SpatialYield",
+            "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftFactory",
+            "inputSha256": "64d62a4a6006335081125ecdf6e4823dac37beb0ce14ee69caccdc2f7d189eb2",
+            "modelInputSha256": "4287743cac00ef7287179738aa7592923ef817416e284b88fac1a6e78fe08686",
+            "candidateSha256": "ba4fbaaa6445087f1e80095c34368ebcaba2f75b43ea363d6d6f332d65a0c543",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "100",
+            "screenshot": "WarcraftFactory-forest-wave-1.png",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": true,
+            "renderingError": "",
+            "originalRequests": 8,
+            "admitted": 8,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 8,
+            "pending": 0,
+            "attacking": 8,
+            "waiting": 0,
+            "finalTick": 812,
+            "holdTicks": 200,
+            "checkedMicrosteps": 8120,
+            "pairSweeps": 206444,
+            "bodySweeps": 60796,
+            "maximumStepStopwatchTicks": 134017,
+            "stepStopwatchTicks": 1456605,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "FriendlyYieldEnabled",
+                    "value": 1
+                },
+                {
+                    "name": "GroupedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "RequesterBackoffEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 8
+                },
+                {
+                    "name": "ReachabilityCells",
+                    "value": 2600
+                },
+                {
+                    "name": "GlobalAStarSearches",
+                    "value": 8
+                },
+                {
+                    "name": "AStarExpandedCells",
+                    "value": 2096
+                },
+                {
+                    "name": "Spawned",
+                    "value": 8
+                },
+                {
+                    "name": "SimulationSubsteps",
+                    "value": 8120
+                },
+                {
+                    "name": "BodyMoveSubsteps",
+                    "value": 40962
+                }
+            ]
+        }
+    ]
+}
