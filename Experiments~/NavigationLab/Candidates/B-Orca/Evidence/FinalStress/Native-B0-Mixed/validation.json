@@ -1,0 +1,817 @@
+{
+    "success": false,
+    "shutdownVerified": true,
+    "runId": "a8aa7a6ecd0545eb9060af93130b2953",
+    "unity": "2022.3.62f1",
+    "graphics": "Null",
+    "device": "Null Device",
+    "manifestSha256": "2183bf4f6a6b99570a71ce7e197c45c49dddcf661d956c502c37372edbe11b39",
+    "coreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+    "oracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+    "scope": "Unity Editor Play/Mono independent navigation experiment. Not GameStarter business replacement, IL2CPP or device acceptance.",
+    "stopwatchFrequency": 10000000,
+    "cases": [
+        {
+            "name": "OrcaFactory-forest-single-large",
+            "factoryId": "B0-Orca",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+            "inputSha256": "bf9365ba5db8e52a836222ef44d6afd55dde897d15c4121a5ab825ca8481df07",
+            "modelInputSha256": "5f0f1e8352e84f5f48c50e2c4a5b28d298b0e2c40e051c8808d9bf3eb2a5507b",
+            "candidateSha256": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "not-observed",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 1,
+            "admitted": 1,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 1,
+            "pending": 0,
+            "attacking": 1,
+            "waiting": 0,
+            "finalTick": 1358,
+            "holdTicks": 200,
+            "checkedMicrosteps": 13580,
+            "pairSweeps": 0,
+            "bodySweeps": 13581,
+            "maximumStepStopwatchTicks": 7340115,
+            "stepStopwatchTicks": 46299253,
+            "holdMaximumDriftMm": 0.05292892456054688,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 332
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 128
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 44
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 1
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 13581
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 1
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 1025
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 33052
+                },
+                {
+                    "name": "Spawned",
+                    "value": 1
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 13580
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 58
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 16945992
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 15876175
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 170479
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 68
+                }
+            ]
+        },
+        {
+            "name": "OrcaFactory-forest-wave-1",
+            "factoryId": "B0-Orca",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+            "inputSha256": "64d62a4a6006335081125ecdf6e4823dac37beb0ce14ee69caccdc2f7d189eb2",
+            "modelInputSha256": "4287743cac00ef7287179738aa7592923ef817416e284b88fac1a6e78fe08686",
+            "candidateSha256": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "-0.024814474570291623",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 8,
+            "admitted": 8,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 8,
+            "pending": 0,
+            "attacking": 8,
+            "waiting": 0,
+            "finalTick": 940,
+            "holdTicks": 200,
+            "checkedMicrosteps": 9400,
+            "pairSweeps": 242284,
+            "bodySweeps": 71036,
+            "maximumStepStopwatchTicks": 1868211,
+            "stepStopwatchTicks": 76876080,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 332
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 128
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 45
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 1
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 9401
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 8
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 1033
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 133203
+                },
+                {
+                    "name": "Spawned",
+                    "value": 8
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 9400
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 262
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 18073632
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 52150683
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 1325277
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 331
+                },
+                {
+                    "name": "UnsafePairProposalStops",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "name": "OrcaFactory-dynamic-route-block-and-open",
+            "factoryId": "B0-Orca",
+            "factoryType": "NavigationLab.Candidates.BOrca.OrcaFactory",
+            "inputSha256": "6b8bdf17daf495250308ce32490524de86292319c466bbebe59e2ba02ec61339",
+            "modelInputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+            "candidateSha256": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "-0.024910767609924278",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 24,
+            "admitted": 24,
+            "rejected": 23,
+            "deaths": 0,
+            "live": 24,
+            "pending": 0,
+            "attacking": 16,
+            "waiting": 8,
+            "finalTick": 800,
+            "holdTicks": 200,
+            "checkedMicrosteps": 8000,
+            "pairSweeps": 2128145,
+            "bodySweeps": 187358,
+            "maximumStepStopwatchTicks": 1738845,
+            "stepStopwatchTicks": 272828886,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "RegisteredProfiles",
+                    "value": 1
+                },
+                {
+                    "name": "ExecutionNumericalToleranceMicrometres",
+                    "value": 25
+                },
+                {
+                    "name": "RouteResolutionHalfCells",
+                    "value": 1
+                },
+                {
+                    "name": "UsesSipp",
+                    "value": 0
+                },
+                {
+                    "name": "NegotiatedYieldEnabled",
+                    "value": 0
+                },
+                {
+                    "name": "PhysicalSubstepMilliseconds",
+                    "value": 5
+                },
+                {
+                    "name": "MaximumPolygonExtraClearanceMicrometres",
+                    "value": 302
+                },
+                {
+                    "name": "BasePolygonVerticesBuilt",
+                    "value": 384
+                },
+                {
+                    "name": "MaximumBasePolygonVertices",
+                    "value": 128
+                },
+                {
+                    "name": "BasePolygonGoalCompatibilityChecks",
+                    "value": 2630
+                },
+                {
+                    "name": "SimulatorRebuilds",
+                    "value": 3
+                },
+                {
+                    "name": "SimulatorStateSwaps",
+                    "value": 8003
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 47
+                },
+                {
+                    "name": "RouteMeshBuilds",
+                    "value": 2
+                },
+                {
+                    "name": "StaticReachabilityExpandedNodes",
+                    "value": 6695
+                },
+                {
+                    "name": "GlobalExpandedNodes",
+                    "value": 72591
+                },
+                {
+                    "name": "Spawned",
+                    "value": 24
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 8000
+                },
+                {
+                    "name": "DynamicRepaths",
+                    "value": 203
+                },
+                {
+                    "name": "RouteAndPreferenceStopwatchTicks",
+                    "value": 12698186
+                },
+                {
+                    "name": "OrcaSolverStopwatchTicks",
+                    "value": 220221926
+                },
+                {
+                    "name": "PhysicalFilterStopwatchTicks",
+                    "value": 4424267
+                },
+                {
+                    "name": "RejectedSpawns",
+                    "value": 23
+                },
+                {
+                    "name": "WorldChanges",
+                    "value": 2
+                },
+                {
+                    "name": "VisibleRouteShortcuts",
+                    "value": 194
+                },
+                {
+                    "name": "UnsafePairProposalStops",
+                    "value": 100
+                }
+            ]
+        },
+        {
+            "name": "Aoe4Factory-forest-single-large",
+            "factoryId": "D-aoe4-published-architecture",
+            "factoryType": "NavigationLab.DAoe4.Aoe4Factory",
+            "inputSha256": "bf9365ba5db8e52a836222ef44d6afd55dde897d15c4121a5ab825ca8481df07",
+            "modelInputSha256": "5f0f1e8352e84f5f48c50e2c4a5b28d298b0e2c40e051c8808d9bf3eb2a5507b",
+            "candidateSha256": "fcca5c1ddbef60a8139b47d2067c2bc7d4f7cc277d06c4ba99548bf6001eab4d",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "not-observed",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 1,
+            "admitted": 1,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 1,
+            "pending": 0,
+            "attacking": 1,
+            "waiting": 0,
+            "finalTick": 1196,
+            "holdTicks": 200,
+            "checkedMicrosteps": 11960,
+            "pairSweeps": 0,
+            "bodySweeps": 11961,
+            "maximumStepStopwatchTicks": 950633,
+            "stepStopwatchTicks": 25942537,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "IndependentBattleInstances",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 1
+                },
+                {
+                    "name": "StaticReachabilityBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "HpaSearches",
+                    "value": 2
+                },
+                {
+                    "name": "PortalGraphBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "PortalGraphNodes",
+                    "value": 133
+                },
+                {
+                    "name": "PortalNodesExpanded",
+                    "value": 144
+                },
+                {
+                    "name": "TileConnectedComponents",
+                    "value": 23
+                },
+                {
+                    "name": "Spawned",
+                    "value": 1
+                },
+                {
+                    "name": "GoalAssignments",
+                    "value": 1
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 11960
+                },
+                {
+                    "name": "LocalPrioritySweeps",
+                    "value": 11960
+                },
+                {
+                    "name": "SegmentFlowBuilds",
+                    "value": 17
+                },
+                {
+                    "name": "LosIntegrationSeeds",
+                    "value": 735
+                },
+                {
+                    "name": "FmmAcceptedCells",
+                    "value": 1807
+                },
+                {
+                    "name": "NarrowPreciseWaypointSteps",
+                    "value": 6838
+                },
+                {
+                    "name": "SteeringSamples",
+                    "value": 9958
+                },
+                {
+                    "name": "LosSteeringUses",
+                    "value": 2898
+                },
+                {
+                    "name": "LosSupersedesGridCorrection",
+                    "value": 225
+                },
+                {
+                    "name": "RouteRefreshes",
+                    "value": 1
+                },
+                {
+                    "name": "PhysicalGridReconnectSteps",
+                    "value": 222
+                },
+                {
+                    "name": "ImmobileCircleRebuilds",
+                    "value": 1
+                },
+                {
+                    "name": "ImmobileCirclesIntegrated",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "Aoe4Factory-forest-wave-1",
+            "factoryId": "D-aoe4-published-architecture",
+            "factoryType": "NavigationLab.DAoe4.Aoe4Factory",
+            "inputSha256": "64d62a4a6006335081125ecdf6e4823dac37beb0ce14ee69caccdc2f7d189eb2",
+            "modelInputSha256": "4287743cac00ef7287179738aa7592923ef817416e284b88fac1a6e78fe08686",
+            "candidateSha256": "fcca5c1ddbef60a8139b47d2067c2bc7d4f7cc277d06c4ba99548bf6001eab4d",
+            "detail": "Complete, continuously checked stationary-task residency.",
+            "minimumGapMm": "0.25958589943485322",
+            "screenshot": "",
+            "success": true,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 8,
+            "admitted": 8,
+            "rejected": 0,
+            "deaths": 0,
+            "live": 8,
+            "pending": 0,
+            "attacking": 8,
+            "waiting": 0,
+            "finalTick": 830,
+            "holdTicks": 200,
+            "checkedMicrosteps": 8300,
+            "pairSweeps": 211484,
+            "bodySweeps": 62236,
+            "maximumStepStopwatchTicks": 3985526,
+            "stepStopwatchTicks": 116526574,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "IndependentBattleInstances",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 8
+                },
+                {
+                    "name": "StaticReachabilityBuilds",
+                    "value": 1
+                },
+                {
+                    "name": "HpaSearches",
+                    "value": 40
+                },
+                {
+                    "name": "PortalGraphBuilds",
+                    "value": 4
+                },
+                {
+                    "name": "PortalGraphNodes",
+                    "value": 532
+                },
+                {
+                    "name": "PortalNodesExpanded",
+                    "value": 956
+                },
+                {
+                    "name": "TileConnectedComponents",
+                    "value": 184
+                },
+                {
+                    "name": "Spawned",
+                    "value": 8
+                },
+                {
+                    "name": "GoalAssignments",
+                    "value": 8
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 8300
+                },
+                {
+                    "name": "LocalPrioritySweeps",
+                    "value": 8300
+                },
+                {
+                    "name": "SegmentFlowBuilds",
+                    "value": 66
+                },
+                {
+                    "name": "LosIntegrationSeeds",
+                    "value": 1827
+                },
+                {
+                    "name": "FmmAcceptedCells",
+                    "value": 6582
+                },
+                {
+                    "name": "NarrowPreciseWaypointSteps",
+                    "value": 27332
+                },
+                {
+                    "name": "SteeringSamples",
+                    "value": 57136
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 88
+                },
+                {
+                    "name": "LosSteeringUses",
+                    "value": 14425
+                },
+                {
+                    "name": "LosSupersedesGridCorrection",
+                    "value": 818
+                },
+                {
+                    "name": "RouteRefreshes",
+                    "value": 32
+                },
+                {
+                    "name": "PhysicalGridReconnectSteps",
+                    "value": 991
+                },
+                {
+                    "name": "ImmobileCircleRebuilds",
+                    "value": 8
+                },
+                {
+                    "name": "ImmobileCirclesIntegrated",
+                    "value": 36
+                },
+                {
+                    "name": "StaticShortenedProposals",
+                    "value": 1064
+                },
+                {
+                    "name": "SteeringWaits",
+                    "value": 8
+                }
+            ]
+        },
+        {
+            "name": "Aoe4Factory-dynamic-route-block-and-open",
+            "factoryId": "D-aoe4-published-architecture",
+            "factoryType": "NavigationLab.DAoe4.Aoe4Factory",
+            "inputSha256": "6b8bdf17daf495250308ce32490524de86292319c466bbebe59e2ba02ec61339",
+            "modelInputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+            "candidateSha256": "fcca5c1ddbef60a8139b47d2067c2bc7d4f7cc277d06c4ba99548bf6001eab4d",
+            "detail": "System.InvalidOperationException: Arrival deadline: live=24 pending=0 moving=2 failure=None\n  at NavigationLab.UnityValidation.UnityNavigationLab.Advance () [0x007cd] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:317 \n  at NavigationLab.UnityValidation.UnityNavigationLab.Poll () [0x001d7] in /workspace/GameStarter/Assets/NavigationLabValidation/Editor/UnityNavigationLab.cs:128 ",
+            "minimumGapMm": "1.4507942299833871",
+            "screenshot": "",
+            "success": false,
+            "initialBatchVerified": false,
+            "renderingValidated": false,
+            "renderingError": "",
+            "originalRequests": 24,
+            "admitted": 24,
+            "rejected": 23,
+            "deaths": 0,
+            "live": 24,
+            "pending": 0,
+            "attacking": 14,
+            "waiting": 8,
+            "finalTick": 12000,
+            "holdTicks": 0,
+            "checkedMicrosteps": 120001,
+            "pairSweeps": 33040421,
+            "bodySweeps": 2875382,
+            "maximumStepStopwatchTicks": 3983688,
+            "stepStopwatchTicks": 1985330145,
+            "holdMaximumDriftMm": 0.0,
+            "metrics": [
+                {
+                    "name": "IndependentBattleInstances",
+                    "value": 1
+                },
+                {
+                    "name": "SpawnAttempts",
+                    "value": 47
+                },
+                {
+                    "name": "StaticReachabilityBuilds",
+                    "value": 68
+                },
+                {
+                    "name": "HpaSearches",
+                    "value": 262220
+                },
+                {
+                    "name": "PortalGraphBuilds",
+                    "value": 25
+                },
+                {
+                    "name": "PortalGraphNodes",
+                    "value": 7873
+                },
+                {
+                    "name": "PortalNodesExpanded",
+                    "value": 90918741
+                },
+                {
+                    "name": "TileConnectedComponents",
+                    "value": 507
+                },
+                {
+                    "name": "Spawned",
+                    "value": 24
+                },
+                {
+                    "name": "GoalAssignments",
+                    "value": 24
+                },
+                {
+                    "name": "Microsteps",
+                    "value": 120001
+                },
+                {
+                    "name": "LocalPrioritySweeps",
+                    "value": 120001
+                },
+                {
+                    "name": "SegmentFlowBuilds",
+                    "value": 254
+                },
+                {
+                    "name": "LosIntegrationSeeds",
+                    "value": 49474
+                },
+                {
+                    "name": "FmmAcceptedCells",
+                    "value": 78054
+                },
+                {
+                    "name": "LosSteeringUses",
+                    "value": 10810
+                },
+                {
+                    "name": "SteeringSamples",
+                    "value": 38779
+                },
+                {
+                    "name": "FlowCacheHits",
+                    "value": 120
+                },
+                {
+                    "name": "WorldInvalidations",
+                    "value": 2
+                },
+                {
+                    "name": "ImmobileCircleRebuilds",
+                    "value": 24
+                },
+                {
+                    "name": "ImmobileCirclesIntegrated",
+                    "value": 275
+                },
+                {
+                    "name": "AcceptedWorldChanges",
+                    "value": 2
+                },
+                {
+                    "name": "RouteRefreshes",
+                    "value": 238386
+                },
+                {
+                    "name": "NarrowPreciseWaypointSteps",
+                    "value": 8753
+                },
+                {
+                    "name": "LosSupersedesGridCorrection",
+                    "value": 155
+                },
+                {
+                    "name": "StaticShortenedProposals",
+                    "value": 65
+                },
+                {
+                    "name": "PhysicalGridReconnectSteps",
+                    "value": 157
+                },
+                {
+                    "name": "ZeroFlowGoalLosRecoverySteps",
+                    "value": 287
+                },
+                {
+                    "name": "FlowCoverageRepaths",
+                    "value": 23810
+                }
+            ]
+        }
+    ]
+}

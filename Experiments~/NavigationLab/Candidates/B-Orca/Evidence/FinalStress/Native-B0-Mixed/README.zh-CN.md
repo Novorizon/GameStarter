@@ -1,0 +1,5 @@
+原始Unity Play/Mono报告保留完整混合6项：B0/OrcaFactory为3通过（forest-single-large、forest-wave-1、dynamic-route-block-and-open）；D-r8另外3项为2通过1失败，因此原报告global success为false、exitCode为1。不得将混合报告冒称B0六项，也不删改原JSON。B0仅引用其明确factory及SHA8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7的3项。
+
+本目录不是IL2CPP、正式战斗接入、渲染或设备验收。已验证相同冻结DLL、fresh/clean报告、原输入、source绑定及临时资产清理；完整D身份需查D分支，Root另有统一索引。
+
+UnityNavigationLab.source.txt保留已运行driver源码原字节（SHA与provenance一致），后缀避免被候选项目默认Compile通配符误收集。

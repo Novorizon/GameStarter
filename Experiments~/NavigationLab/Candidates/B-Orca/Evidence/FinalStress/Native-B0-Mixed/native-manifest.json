@@ -1,0 +1,59 @@
+{
+  "output": "/workspace/navigation-comparison/native/b0-d-final-subset",
+  "runId": "a8aa7a6ecd0545eb9060af93130b2953",
+  "expectedCoreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "expectedOracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "graphicsRequired": false,
+  "wallDeadlineSeconds": 1800,
+  "stepsPerEditorUpdate": 250,
+  "runs": [
+    {
+      "name": "OrcaFactory-forest-single-large",
+      "input": "/workspace/navigation-comparison/native/b0-d-final-subset/forest-single-large.unity-input.json",
+      "assemblyName": "NavigationLab.BOrca",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.BOrca.dll",
+      "factory": "NavigationLab.Candidates.BOrca.OrcaFactory",
+      "expectedCandidateSha256": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7"
+    },
+    {
+      "name": "OrcaFactory-forest-wave-1",
+      "input": "/workspace/navigation-comparison/native/b0-d-final-subset/forest-wave-1.unity-input.json",
+      "assemblyName": "NavigationLab.BOrca",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.BOrca.dll",
+      "factory": "NavigationLab.Candidates.BOrca.OrcaFactory",
+      "expectedCandidateSha256": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7"
+    },
+    {
+      "name": "OrcaFactory-dynamic-route-block-and-open",
+      "input": "/workspace/navigation-comparison/native/b0-d-final-subset/dynamic-route-block-and-open.unity-input.json",
+      "assemblyName": "NavigationLab.BOrca",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.BOrca.dll",
+      "factory": "NavigationLab.Candidates.BOrca.OrcaFactory",
+      "expectedCandidateSha256": "8175992a5d009fe91ee8e6707feabc1e3f7a69c04ad3242315f06e54d5da36b7"
+    },
+    {
+      "name": "Aoe4Factory-forest-single-large",
+      "input": "/workspace/navigation-comparison/native/b0-d-final-subset/forest-single-large.unity-input.json",
+      "assemblyName": "NavigationLab.DAoe4",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.DAoe4.dll",
+      "factory": "NavigationLab.DAoe4.Aoe4Factory",
+      "expectedCandidateSha256": "fcca5c1ddbef60a8139b47d2067c2bc7d4f7cc277d06c4ba99548bf6001eab4d"
+    },
+    {
+      "name": "Aoe4Factory-forest-wave-1",
+      "input": "/workspace/navigation-comparison/native/b0-d-final-subset/forest-wave-1.unity-input.json",
+      "assemblyName": "NavigationLab.DAoe4",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.DAoe4.dll",
+      "factory": "NavigationLab.DAoe4.Aoe4Factory",
+      "expectedCandidateSha256": "fcca5c1ddbef60a8139b47d2067c2bc7d4f7cc277d06c4ba99548bf6001eab4d"
+    },
+    {
+      "name": "Aoe4Factory-dynamic-route-block-and-open",
+      "input": "/workspace/navigation-comparison/native/b0-d-final-subset/dynamic-route-block-and-open.unity-input.json",
+      "assemblyName": "NavigationLab.DAoe4",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.DAoe4.dll",
+      "factory": "NavigationLab.DAoe4.Aoe4Factory",
+      "expectedCandidateSha256": "fcca5c1ddbef60a8139b47d2067c2bc7d4f7cc277d06c4ba99548bf6001eab4d"
+    }
+  ]
+}
