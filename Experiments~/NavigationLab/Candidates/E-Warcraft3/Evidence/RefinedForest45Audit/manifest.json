@@ -1,0 +1,15 @@
+{
+  "scope": "Independent fixed44-neighbor queries with no successful route found and a rejected manual hypothesis, not full candidate execution",
+  "files": {
+    "query-result.json": "216e9942d6aaa18ffb9b966a9afddf7b0df7982f3e16ecb9b879974ac81ef33d",
+    "id15-fine-execution.log": "1f49c618878d0d0de125000bb8d0c412706249c8d26de6e63350125baf043a7c",
+    "README.zh-CN.md": "84981e429280519f109a9221282e1ec07bd46f7cd969b87c835268ba0079f2e5",
+    "geometry.py": "01cb1ed37e8cea6f4fc7c0b90417ce797061ca3ec69695c3fb9620509b71d872",
+    "id15-fine-result.json": "1f49c618878d0d0de125000bb8d0c412706249c8d26de6e63350125baf043a7c",
+    "original-report.json": "0478e801cdba9e7b46df5e38c7f5bb2895131cf3373cda153fc67f6bfbfe011f",
+    "original-build-manifest.json": "64e2a8febd76ebdf3d6eea4ea341d65e0e584ea7872619b95b2bcdd3568e2c9a",
+    "query.py": "861b278553991f4d3f45cf65d54637d80b7f59d3eb0c732820819c7894f6c96c",
+    "query-execution.log": "216e9942d6aaa18ffb9b966a9afddf7b0df7982f3e16ecb9b879974ac81ef33d",
+    "inputs/forest-full45-medium.json": "3f4c85f5b1008ab6f107af46889af1375fdba147ec26f0e1ae28977047249057"
+  }
+}

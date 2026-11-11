@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "utc": "2026-11-11T04:42:36.704888+00:00",
+  "status": "InterruptedSupersededDevelopment",
+  "notACompleteMatrix": true,
+  "notADeadlineFailureForInterruptedCase": true,
+  "reason": "E1b coarse-grid dynamic connector omission was independently proved and corrected by the reviewed general E4-v2 fallback. Root authorized selecting E4 after complete key regressions and stopping the superseded long run. A separate complete E4 stress49 will be run.",
+  "pid": 76285,
+  "completedCaseCount": 12,
+  "completedCases": [
+    {
+      "name": "cross-junction-original-4m",
+      "status": "Failed",
+      "reportFile": "cross-junction-original-4m.json"
+    },
+    {
+      "name": "cross-junction-original-5m",
+      "status": "Failed",
+      "reportFile": "cross-junction-original-5m.json"
+    },
+    {
+      "name": "cross-junction-parking-lanes",
+      "status": "Passed",
+      "reportFile": "cross-junction-parking-lanes.json"
+    },
+    {
+      "name": "large-radius-turning-clearance",
+      "status": "Failed",
+      "reportFile": "large-radius-turning-clearance.json"
+    },
+    {
+      "name": "mixed-speed-approach",
+      "status": "Failed",
+      "reportFile": "mixed-speed-approach.json"
+    },
+    {
+      "name": "open-arena",
+      "status": "Passed",
+      "reportFile": "open-arena.json"
+    },
+    {
+      "name": "right-angle-corridor",
+      "status": "Failed",
+      "reportFile": "right-angle-corridor.json"
+    },
+    {
+      "name": "shared-spawn-original-5m",
+      "status": "Failed",
+      "reportFile": "shared-spawn-original-5m.json"
+    },
+    {
+      "name": "shared-spawn-parking-lanes",
+      "status": "Passed",
+      "reportFile": "shared-spawn-parking-lanes.json"
+    },
+    {
+      "name": "single-cell-throat",
+      "status": "Passed",
+      "reportFile": "single-cell-throat.json"
+    },
+    {
+      "name": "three-hundred-units-parking-lanes",
+      "status": "Passed",
+      "reportFile": "three-hundred-units-parking-lanes.json"
+    },
+    {
+      "name": "u-obstacle",
+      "status": "Failed",
+      "reportFile": "u-obstacle.json"
+    }
+  ],
+  "interruptedCase": "three-hundred-units-original-12m",
+  "interruptedTrace": "traces/three-hundred-units-original-12m.jsonl.gz",
+  "partialTraceMustNotBeTreatedAsComplete": true,
+  "sourceIdentitySha256": "99a0a7bb02ee8c476d77d76bc2728594d977b13fa8739eca7ac769d4f6a3f252",
+  "selectedFactory": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+  "selectedCandidateAssemblySha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+  "closedCaseStatusCounts": {
+    "Failed": 7,
+    "Passed": 5
+  },
+  "lastReadableFlushedMicrostepLowerBound": 94083,
+  "partialTraceFileSha256": "4773eebfddfd413b5cc2a9624f5a2426c7e75beb67c93d73ad8d60529a7b28c5",
+  "partialTraceLocation": "/workspace/navigation-comparison/results/e-v2-stress/traces/three-hundred-units-original-12m.jsonl.gz",
+  "retention": "Closed case reports, complete closed traces, inputs, build provenance and exact frozen sources/DLLs are archived here. The interrupted active trace is retained only at the external location, with its exact hash and incomplete scope.",
+  "frozenExecutionReturnCode": 143,
+  "sourceZipSha256": "bb5c1e954c7c724965d3c600d920b1aae8d1ddc8560721f96cbf4f92cf8f1f45",
+  "binariesZipSha256": "1305eb56b8262fad42d0845e4130d0a0d9bcef8b9de3bf1427d75cecd7ed5252"
+}
