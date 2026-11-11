@@ -1,5 +1,7 @@
 # 塔防寻路、避障与围攻
 
+本文记录冻结A的SIPP方案。新一轮A–E候选的公开资料、独立实现范围、相同输入对照与复现入口见[A–E导航实验](NavigationLab/README.zh-CN.md)。
+
 当前实现、无炮塔围攻与死亡恢复的完整证据见[导航验收](Navigation/Verification.zh-CN.md)。
 
 ## 本次任务与证据边界
@@ -82,7 +84,7 @@
 | 网格 A* | 静态全局路线；合作路径论文也以单体搜索为基础 [S1] | 编辑逻辑区域、建筑占地明确，易于纯 C# 测试 | 独立规划不避免同伴冲突；必须加入半径、斜角与路径段校验 |
 | NavMesh + 路径走廊 | 连续自由形状地形；Detour 将路径查询、路径走廊和 crowd 分开 [S7] | 多高度、复杂地形以及成熟场景工具链 | NavMesh 不负责分配围攻位置；原生/Unity 集成及位置所有权需额外验证 |
 | 共享 flow field | 共享大批单位的全局方向；《Supreme Commander 2》使用 portal graph A*、flow field 与 steering [S4] | 大量敌人朝相近目标移动、重复计算较多 | 不分配攻击位置，也不独立保证同伴无碰撞；大型分块架构对小地图可能过重 |
-| 层级全局寻路 + steering | 《Age of Empires IV》官方演讲说明组合 flow fields、hierarchical A* 和 steering [S5] | 大地图、不同体型、动态建筑 | 本次只核实官方演讲摘要，不能据此编造其全部实现细节或性能指标 |
+| 层级全局寻路 + steering | 《Age of Empires IV》官方演讲说明组合 flow fields、hierarchical A* 和 steering [S5] | 大地图、不同体型、动态建筑 | 完整公开架构、本项目具体选择与未复现部分见A–E实验；公开slides不等于商业源码或性能保证 |
 | ORCA / RVO2 | 以速度约束处理局部避撞；原作者明确需要外部全局方向 [S8] | 可快速改变速度的连续移动角色 | 不保证绕过大障碍或消除全局死锁；高密度可导致约束不可行，SDK 接入并不等于验收 |
 | DetourCrowd / A* Pro crowd | 成熟中间件把全局导航和局部避让组合 [S7][S9] | 接受对应工具链、许可和运行约束的项目 | A* Pro 的相关功能为收费功能；“拥挤目的地已到达”可能仍不在攻击范围 |
 | CA* / HCA* / WHCA* | Silver 的合作路径方法用空间时间预约；WHCA* 将搜索限制在时间窗 [S1] | 可预测移动、明确通行与等待，适合离散领域测试 | 优先规划不完备；完整路径较保守，时间窗则需要持续重新协调 |
@@ -290,7 +292,7 @@ Ma 等人的 MAPD 定义还要求任务有限、非任务端点不少于机器�
 - **[S2] Mike Phillips / Maxim Likhachev, 2011, SIPP: Safe Interval Path Planning for Dynamic Environments.** [CMU 论文原文](https://www.cs.cmu.edu/~maxim/files/sipp_icra11.pdf)、[作者实验室记录](https://sbpl.github.io/publications/sipp-icra11/)。安全区间、最早到达与等待、已知动态轨迹下的单体理论分析；原文也检查移动中的换位碰撞。
 - **[S3] Trevor Standley / Richard Korf, 2011, Complete Algorithms for Cooperative Pathfinding Problems.** [IJCAI 原文](https://ijcai.org/Proceedings/11/Papers/118.pdf)。相关工作明确指出 HCA* 的固定优先顺序可能令后续单位无解，联合求解与分解方法有不同成本。
 - **[S4] Elijah Emerson, Crowd Pathfinding and Steering Using Flow Field Tiles.** [Game AI Pro 第 23 章](https://www.gameaipro.com/GameAIPro/GameAIPro_Chapter23_Crowd_Pathfinding_and_Steering_Using_Flow_Field_Tiles.pdf)。开发者讲述《Supreme Commander 2》的共享流场、动态失效、净空扩张和连通区域等实践。
-- **[S5] Frank Cheng, Pathing in Age of Empires IV, GDC 2022.** [官方演讲页面](https://gdcvault.com/play/1028036/Pathing-in-Age-of-Empires)。本次确认摘要中的组合方案；未取得完整 slides，不额外推断其内部实现。
+- **[S5] Frank Cheng, Pathing in Age of Empires IV, GDC 2022.** [官方演讲页面](https://gdcvault.com/play/1028036/Pathing-in-Age-of-Empires)、[官方36页完整slides](https://media.gdcvault.com/GDC%2B2022/Speaker%2BSlides/Pathing%2BIn%2BAge_Cheng_Frank%2B2022-03-29%2B00.16.38.pdf)。完整阅读与机制核对记录在A–E实验；未披露的具体控制和围攻策略不作为商业实现事实。
 - **[S6] Michael Dawe, Beyond the Kung-Fu Circle: A Flexible System for Managing NPC Attacks.** [Game AI Pro 第 28 章](https://www.gameaipro.com/GameAIPro/GameAIPro_Chapter28_Beyond_the_Kung-Fu_Circle_A_Flexible_System_for_Managing_NPC_Attacks.pdf)。开发者讲述《Kingdoms of Amalur: Reckoning》的集中位置/攻击容量管理。
 - **[S7] Recast Navigation / Detour。** [官方仓库](https://github.com/recastnavigation/recastnavigation)、[Crowd 文档](https://recastnav.com/group__crowd.html)。路径查询、走廊和 crowd 职责，以及 crowd 对位置与速度的管理。
 - **[S8] ORCA / RVO2 原作者。** [ORCA 原文](https://gamma.cs.unc.edu/ORCA/publications/ORCA.pdf)、[RVO2 官方说明](https://gamma-web.iacs.umd.edu/RVO2/documentation/2.0/whatsnew.html)。局部速度约束需要外部全局方向，不能等同完整路径规划。官方 RVO2-CS 仅用于独立实验分支，未加入正式运行时依赖。
