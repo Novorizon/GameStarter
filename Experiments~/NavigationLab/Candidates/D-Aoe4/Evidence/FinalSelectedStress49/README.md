@@ -1,5 +1,11 @@
-# D12选定源码与构建包
+# D12 选定版本完整证据
 
-实际Factory为NavigationLab.DAoe4.Aoe4ProgressExchangeFactory，DLL为9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c。source-and-binaries.zip逐条核对原build-manifest源文件和四角色DLL，并逐ZIP成员再次校验。
+共同49项完整结束：26通过、23失败、0未支持、0非法输入。完成不代表全部通过；所有通过项有全新实例重放。
 
-完整49仍在原results/d-final-stress运行；没有以源包或选择性Mono结果冒称完整模型已通过。完成后同目录补原完整报告、输入、重放/执行指纹和明确trace库存。迁机应从源重建Runner，其根路径元数据不能直接假设可移植。
+Factory `NavigationLab.DAoe4.Aoe4ProgressExchangeFactory`；实际候选DLL `9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c`。原summary、49份输入、完整案例报告、冻结执行和构建身份原样保留。source-and-binaries.zip是当次实际编译源与四角色DLL；Runner根路径元数据须在迁机时重建。
+
+trace-storage.json明确列出原完整轨迹路径与SHA；版本化trace-windows只有失败案例首尾窗口及派生检查点，不是完整轨迹。归档字节校验不等于重新执行仿真；full41是同一49输入的逐字子集，不另计覆盖。
+
+选定DLL的真实Linux Unity/Mono子集为2通过、1失败，原件见 ../FinalSelectedNative。不是49项全Unity验收，不代表图形、IL2CPP、Windows或手机验证。
+
+本项目依据AoE4公开架构独立实现；有限测试不证明一般完备性，也不证明商业游戏内部实现，未进行性能排名。

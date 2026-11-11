@@ -1,0 +1,526 @@
+{
+  "open-arena": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/open-arena.jsonl.gz",
+    "originalFileSha256": "031f976ac358ba94f36b7d66f00c3cbf13c11476a5c5b1e4ea5c8dcddaf72195",
+    "logicalPhysicalTraceSha256": "4ac63041f8222d54e69ce74e9a3376dcda2016ea5b7f2294a9e888955f8bcdcd"
+  },
+  "mixed-speed-approach": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/mixed-speed-approach.jsonl.gz",
+    "originalFileSha256": "2464a780bbc96e0cc23d9f782adc72298221e7e4a5a8cee8bbff1d4b788a8ba6",
+    "logicalPhysicalTraceSha256": "bb6550fb9b2aead6c7f0b0ad6766180b694724830626de073f27e0c12777dea5"
+  },
+  "large-radius-turning-clearance": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/large-radius-turning-clearance.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 984756,
+    "originalFileSha256": "65744aa0a0f98782efd041c7eec752e96bacdbb46af0f0fb5fe8ada1f70a64e0",
+    "logicalPhysicalTraceSha256": "74b2d01dfddadf58d5778e7064489017fc385f33df0514bae60ebe47ee629edb",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/large-radius-turning-clearance.first.jsonl.gz": "9920ac96433d2a9e96d26b70404c55afb8d2c583d2a0fc162e41580231c8b437",
+      "trace-windows/large-radius-turning-clearance.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/large-radius-turning-clearance.last-checkpoint.json": "c665d67bffd50700135372cc87cbd71876e31a8f710c80d1de939bf9bc7c5236"
+    }
+  },
+  "single-cell-throat": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/single-cell-throat.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 373098,
+    "originalFileSha256": "0b5c884e833d7d1560b6180cb37ca56db6725a0e7f075e01f32ef5daf8b012ad",
+    "logicalPhysicalTraceSha256": "e2720ba5b644a2c38272037391698b9654a4856a8ceffb2e480a02cacf8848dc",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/single-cell-throat.first.jsonl.gz": "83aeb489579a1c9b7c6ddda450f798ab656a5a547f396779c75ac0f8688552fc",
+      "trace-windows/single-cell-throat.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/single-cell-throat.last-checkpoint.json": "eb383e7f55af8c45ee1c9b91104a877ff260e9e676a5673062e7057cbdd5d96e"
+    }
+  },
+  "u-obstacle": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/u-obstacle.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 664993,
+    "originalFileSha256": "cf1f1b55e26371aca137087cea5ded417d7dd6b45abaa33070848842720e3ce7",
+    "logicalPhysicalTraceSha256": "3606724e893db49042d9209a181893f0d6ee0c20f1fcd2eafb726e49063363e4",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/u-obstacle.first.jsonl.gz": "4c02a19c29e0bb38d1bc7eb9421c35455fe5ae0dbe54a3aabaa7963a4e5444f6",
+      "trace-windows/u-obstacle.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/u-obstacle.last-checkpoint.json": "ce83f48e71529a419fe54fd6f030173883517792c4b85444395223c66e427328"
+    }
+  },
+  "right-angle-corridor": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/right-angle-corridor.jsonl.gz",
+    "originalFileSha256": "26c34b7b98657720c06dc5334814d43d17d23387c85e244c00721e0ced6614ee",
+    "logicalPhysicalTraceSha256": "b4c9a74b6e7a4ceefd07930a63876d7d3e5efd8e0755d179b5821df8012533f6"
+  },
+  "cross-junction-parking-lanes": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/cross-junction-parking-lanes.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 775661,
+    "originalFileSha256": "27c1cc49c08ec81143f43fcadc1376064d00005fec19ca9fc18004ee1f6679e5",
+    "logicalPhysicalTraceSha256": "e546d040418f4756eb12ff797ed92b094ce460d6405dc30cd0a308186e103e1a",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/cross-junction-parking-lanes.first.jsonl.gz": "04f960fc3fe85a4e87d93e4ad18546d71679d70be9689a6ff51e32dd394a80d7",
+      "trace-windows/cross-junction-parking-lanes.last.jsonl.gz": "1c353836f32f75928c4325ba4b84ce40443de112de312e6e91fd0bf27a13db9c",
+      "trace-windows/cross-junction-parking-lanes.last-checkpoint.json": "f68a8ca8f7692acbf8de0e806aafe1a0713270829a2c85b1d3822de9a432e681"
+    }
+  },
+  "cross-junction-original-4m": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/cross-junction-original-4m.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 594972,
+    "originalFileSha256": "9d6023eb80013581741446b46df6597f70f96c090a8a7f20b4f14c398abfd46b",
+    "logicalPhysicalTraceSha256": "8c6c97021e7146c9cc14163a868b2cb90c250d66f4cafc0be8715b861cd714ad",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/cross-junction-original-4m.first.jsonl.gz": "e3495dfb4b5440297168595394451a06f2391d58d02be13d63a56c6453748411",
+      "trace-windows/cross-junction-original-4m.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/cross-junction-original-4m.last-checkpoint.json": "8f7c4fecdf54d62633bc1b75526cd37e315cda2c9d9fa9a8b0ae730d350940ec"
+    }
+  },
+  "cross-junction-original-5m": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/cross-junction-original-5m.jsonl.gz",
+    "originalFileSha256": "c22d5eb7dec0538e57870e18632546cf29c9305c6f18e9b85d41c25db515f7d7",
+    "logicalPhysicalTraceSha256": "25667e9c275274f6e208eaaa884d5c38d0aadeeb49fef5bea403af4d7466098b"
+  },
+  "shared-spawn-parking-lanes": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/shared-spawn-parking-lanes.jsonl.gz",
+    "originalFileSha256": "ca86960fa7efe71f340865602feb5a4ca714d54938837747487d16abb2dcd694",
+    "logicalPhysicalTraceSha256": "19109367181e2e267bf80f823eff05732d71201a0cc8c9db7feed3757adfb16a"
+  },
+  "shared-spawn-original-5m": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/shared-spawn-original-5m.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 653232,
+    "originalFileSha256": "22339fbf131a5505459b178a359cb83e84a0f6ed618da1f28af98d7b005b6885",
+    "logicalPhysicalTraceSha256": "ab222b3e912ace4ce143bdd9c27468dd5f1729105c446e6a89e8d5ce66385bc1",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/shared-spawn-original-5m.first.jsonl.gz": "c2680876ba60062c33caf0e223aec610f8962cc319745a236c5120133b62bbad",
+      "trace-windows/shared-spawn-original-5m.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/shared-spawn-original-5m.last-checkpoint.json": "0cec398eea03d12a784bc0c10396b7be9b857679bbbf65802b0f735a5612f022"
+    }
+  },
+  "three-hundred-units-parking-lanes": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/three-hundred-units-parking-lanes.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 10432817,
+    "originalFileSha256": "105ba7e2f7ba13bcc4701bd67a296b278e7ca1ba299740f00f6a11b876348cd4",
+    "logicalPhysicalTraceSha256": "a96c7a677562a75cd774e0f9c35b9efec486838bfe08fbacfc4c6b5022ca358b",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/three-hundred-units-parking-lanes.first.jsonl.gz": "86c99dd2b0bf061d5f909c3bd72e99b6f8346b336627f46fb9c8ac6fabec7fda",
+      "trace-windows/three-hundred-units-parking-lanes.last.jsonl.gz": "04112700b9a1e415ad4dc7b13aae3f2d7ce7794477d3100b4fa9b33c3c279815",
+      "trace-windows/three-hundred-units-parking-lanes.last-checkpoint.json": "421ea6c6b4e7c9e7f381378a9a25ef9bdf7c8f89dc375efede290e31b1759fc3"
+    }
+  },
+  "three-hundred-units-original-12m": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/three-hundred-units-original-12m.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 10307642,
+    "originalFileSha256": "c8f8e892fcb36dc72e49db8634cf11a01b59159397fd9bef3f3ba360a6daa253",
+    "logicalPhysicalTraceSha256": "072dd406de065fee7e8e744656828786d63be22d6749d6f1fbf34ab76992a94f",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/three-hundred-units-original-12m.first.jsonl.gz": "dcacb2e7c9305bddff34608e251fa73fb7eed7455e46cd4b9e34931e5207d7ee",
+      "trace-windows/three-hundred-units-original-12m.last.jsonl.gz": "05b493d2595f9da422e9b5fc355321515b06a7f1efcca3165055d9f6d077b532",
+      "trace-windows/three-hundred-units-original-12m.last-checkpoint.json": "09359159312706bc6a0816515093cc0e7973631285efe0e4c717e49b0cb28f0d"
+    }
+  },
+  "forest-single-small": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-single-small.jsonl.gz",
+    "originalFileSha256": "d38282893ea2cb293b850469e61679d7a3b322a10712454f1170695b7f1dc127",
+    "logicalPhysicalTraceSha256": "b6f4f57b5fecd8d072d6248a671427f19d8065a78e480259fcab372865c34c6f"
+  },
+  "forest-single-medium": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-single-medium.jsonl.gz",
+    "originalFileSha256": "681439bd6cbcff91229a3d17628b8726705a41b5e65e8875240fab39531a793a",
+    "logicalPhysicalTraceSha256": "b58b5ee3eedb7ce9b22e66583f6d6ab51fd44363d9dbb338c2e634e5cac09ae1"
+  },
+  "forest-single-large": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-single-large.jsonl.gz",
+    "originalFileSha256": "812f3abe9616fea36f4316231d75e9b486e7bcff9130fd97ccbf3afec34536e9",
+    "logicalPhysicalTraceSha256": "345c77104c5849da4704a968b418dbbbda17664673fe7db53f64715edc6cef70"
+  },
+  "forest-wave-1": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-wave-1.jsonl.gz",
+    "originalFileSha256": "01392e8f71b062d96780ae87b62b94ffeb565b90e3ca6cc7b1e1f2892ea38fb5",
+    "logicalPhysicalTraceSha256": "d50e5cd8e618a94a62ab0f02488901fd99c08c1ac141ac52cf55322bd45b6d8d"
+  },
+  "forest-wave-2": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-wave-2.jsonl.gz",
+    "originalFileSha256": "04223428242dc74fe09d94bf715c823b448ecf8514861d45c94a979354b91085",
+    "logicalPhysicalTraceSha256": "b1e9761df12a08764916c31d7df295f083fbd2f249d68b835cafa853fae8e52a"
+  },
+  "forest-wave-3": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-wave-3.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 4013281,
+    "originalFileSha256": "28828140c294f95f6a6887fe18451c8d3fa1d925d4e4d1687aa8f3f85be2dbc6",
+    "logicalPhysicalTraceSha256": "d94d8a0536b6d9b8ed94d00b64f3544a04dface2f3f995b91bc68d79f8390de9",
+    "totalRawLines": 70001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 69874,
+    "derivedFiles": {
+      "trace-windows/forest-wave-3.first.jsonl.gz": "7d3f05e4e92b204f79f87db67485f9b3059a06d4a8383e6a2e11bdce4e249829",
+      "trace-windows/forest-wave-3.last.jsonl.gz": "b4dff2a24b20cd92d703f65f4ef36276a8ad80d546ae791e5f92912ea37732ec",
+      "trace-windows/forest-wave-3.last-checkpoint.json": "712bd3a36a5dec3293692c5cff63c9ca6bccdb168b7dc224457f7b178aaf217c"
+    }
+  },
+  "forest-wave-4": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-wave-4.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 1668429,
+    "originalFileSha256": "cfa9522ff4f08514bf0ffdae4590906ef1df8383b2e3901f903cb818c1fe29c3",
+    "logicalPhysicalTraceSha256": "d93c84ae757ba3cad409a1c78419faa62ec90caad4d18d61493b00f347880987",
+    "totalRawLines": 70001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 69874,
+    "derivedFiles": {
+      "trace-windows/forest-wave-4.first.jsonl.gz": "72d73f4c4076edfec526e4d31146b7d0e65001626c9cf9f6ce92ff2e3a8b5e33",
+      "trace-windows/forest-wave-4.last.jsonl.gz": "45f1e2c2e2a3e60a4749d227b4ccc52376df994d8ee7a50223b4e0b9409986ca",
+      "trace-windows/forest-wave-4.last-checkpoint.json": "6641eebe766368ba60d32a775a5fd5dd781f819ba1edb3a8f90db142c9b8e513"
+    }
+  },
+  "forest-wave-5": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-wave-5.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 2405781,
+    "originalFileSha256": "53cd5c8c96b8ed7601473f42b13737c9d657e748f768bd4e5abd4e9b4a271ef1",
+    "logicalPhysicalTraceSha256": "184ee745651db3e334f409f885d8cc3fddd34cf23c8d54f53c1205dc2a6b360a",
+    "totalRawLines": 70001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 69874,
+    "derivedFiles": {
+      "trace-windows/forest-wave-5.first.jsonl.gz": "7d3f05e4e92b204f79f87db67485f9b3059a06d4a8383e6a2e11bdce4e249829",
+      "trace-windows/forest-wave-5.last.jsonl.gz": "45f1e2c2e2a3e60a4749d227b4ccc52376df994d8ee7a50223b4e0b9409986ca",
+      "trace-windows/forest-wave-5.last-checkpoint.json": "e6f1fb90a48c8a626a3c3211f3ee25fbf5a82433b764b8d2a58b4eb827141ad1"
+    }
+  },
+  "forest-wave-6": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-wave-6.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 3579216,
+    "originalFileSha256": "fe5ee638f4507c55d2b491d7d0c6d0d2f03881462ed7afcf6cd50af261e8ebbe",
+    "logicalPhysicalTraceSha256": "3f969fc9f01e4e7364d94d637bdea70a4aa9a98b462d4daa859f3b6aacecd048",
+    "totalRawLines": 70001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 69874,
+    "derivedFiles": {
+      "trace-windows/forest-wave-6.first.jsonl.gz": "48847a81a1b90cdbb0db103376f502570ff77c0d80470dff8bcdd4146123e808",
+      "trace-windows/forest-wave-6.last.jsonl.gz": "45f1e2c2e2a3e60a4749d227b4ccc52376df994d8ee7a50223b4e0b9409986ca",
+      "trace-windows/forest-wave-6.last-checkpoint.json": "cdf82e1cb0cb10222a90a5804390d72442a4671eeb86e20e877a4f0dd4af53f2"
+    }
+  },
+  "forest-full44-large": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-full44-large.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 10531244,
+    "originalFileSha256": "fa304569eb6c9b3a1b572114feda096067df394ced8c52c65a8bd7d8adf4dadd",
+    "logicalPhysicalTraceSha256": "561f4f47be8400adf7520b968f03bc178ccf494aece273c10febf87deb6c4679",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/forest-full44-large.first.jsonl.gz": "1ddefcda7ac272553391063e7628f27b528491cfcd3bcdca24282d5628bde2ed",
+      "trace-windows/forest-full44-large.last.jsonl.gz": "5085225fe59d8329b9e1aa539eafdc771216201784f146ea3bb62913136396e3",
+      "trace-windows/forest-full44-large.last-checkpoint.json": "bfd688cc72ef0d4fe4c3eb48e3f18e94e4a980d6296bb95063c79269045905a4"
+    }
+  },
+  "forest-full45-medium": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-full45-medium.jsonl.gz",
+    "originalFileSha256": "f8b7207fbbb290194d79d6a3b3a1744b585bff2355e8921494a7dd594d1d8ea2",
+    "logicalPhysicalTraceSha256": "1740e137b9c410421d90c0cf29be540485cb08668c4ae788aab4fda56914bc0a"
+  },
+  "forest-full44-two-late-small": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/forest-full44-two-late-small.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 7827751,
+    "originalFileSha256": "4255477ee924e34669acce888ec8f182e541c85278236f15fcc13d50ca7d52d3",
+    "logicalPhysicalTraceSha256": "4454c363861d00b43423465242b8a12fb334555d00d38d60820b329436cf01b6",
+    "totalRawLines": 39991,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 39864,
+    "derivedFiles": {
+      "trace-windows/forest-full44-two-late-small.first.jsonl.gz": "1ddefcda7ac272553391063e7628f27b528491cfcd3bcdca24282d5628bde2ed",
+      "trace-windows/forest-full44-two-late-small.last.jsonl.gz": "47e45f38655ef04b81207540c7ad13ac3f8c07c63c4785051fa022abf1c4ec6e",
+      "trace-windows/forest-full44-two-late-small.last-checkpoint.json": "880aa3e17ee876eb4aa5bdaeb1db1ed8206c055f2aa81dae5b30146be7170f10"
+    }
+  },
+  "static-unreachable-retains-pending": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/static-unreachable-retains-pending.jsonl.gz",
+    "originalFileSha256": "0a6dcb8bcc8211f5a9c3fb87a3b30d4340550dbc72d010405123c2f39028e0c3",
+    "logicalPhysicalTraceSha256": "89e540959931cf063d5cee9dc6a8186d9d5354a22a7e4c58e9dc48af1d1b8eaf"
+  },
+  "physical-and-endpoint-overflow-200": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/physical-and-endpoint-overflow-200.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 174896,
+    "originalFileSha256": "26158717df64d5e6b5d43149fe90aa10daaa2ea027da0cda658b805466fb1093",
+    "logicalPhysicalTraceSha256": "f3b88df7d10df1b7c4bdf45948261ea5ff1de3b41ddcf4bfbdc1f18bf49b3376",
+    "totalRawLines": 60001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 59874,
+    "derivedFiles": {
+      "trace-windows/physical-and-endpoint-overflow-200.first.jsonl.gz": "1f6bb524e2acfc49091eb252c83add46e67f5ee9a712f86255f4c966565519b4",
+      "trace-windows/physical-and-endpoint-overflow-200.last.jsonl.gz": "ceb80c71750c05e7836b17fd8d17571ff97bf7578c19c55b9485f5ad87e86c2f",
+      "trace-windows/physical-and-endpoint-overflow-200.last-checkpoint.json": "6efef5b937136cb0e567cddb2a40b74ccd57f4f726239f7e54adbef55ad68357"
+    }
+  },
+  "capacity-death-refills-original-queue": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/capacity-death-refills-original-queue.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 225926,
+    "originalFileSha256": "79631e09e66c83bd7aa126bea1ec9dbf11e271f7156cb1a556d1b1ca47ec8529",
+    "logicalPhysicalTraceSha256": "3a69e9e9b611e7f78c1d70c5dadffc82f8a6e88f83e8a9c9ab4b13355d278189",
+    "totalRawLines": 80001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 79874,
+    "derivedFiles": {
+      "trace-windows/capacity-death-refills-original-queue.first.jsonl.gz": "1f6bb524e2acfc49091eb252c83add46e67f5ee9a712f86255f4c966565519b4",
+      "trace-windows/capacity-death-refills-original-queue.last.jsonl.gz": "a4f8018d8744afee8f914db70c1d04f52dbd20f2c3ee0566f6cd02209f64d44c",
+      "trace-windows/capacity-death-refills-original-queue.last-checkpoint.json": "1e19580a07e880522cb28b0eb6c1d58233730e497306d8f7de7b5587752fc982"
+    }
+  },
+  "moving-noncenter-death-and-reinforcement": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/moving-noncenter-death-and-reinforcement.jsonl.gz",
+    "originalFileSha256": "71894359fc6ea0d090edc36bf7ff54a0b705045be6e113f173f6557c3c486ca5",
+    "logicalPhysicalTraceSha256": "ef387af2f185af323d39e0f7bdd5225d026238ace2a4821c20d7c67c99bf4c17"
+  },
+  "settled-batch-death-and-reinforcement": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/settled-batch-death-and-reinforcement.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 537416,
+    "originalFileSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+    "logicalPhysicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/settled-batch-death-and-reinforcement.first.jsonl.gz": "c2680876ba60062c33caf0e223aec610f8962cc319745a236c5120133b62bbad",
+      "trace-windows/settled-batch-death-and-reinforcement.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/settled-batch-death-and-reinforcement.last-checkpoint.json": "ee667074090c1149284a82163eb3a8c88b4ae9fa426b78017ab286c7f3b3e826"
+    }
+  },
+  "old-waiters-refill-without-newcomers": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/old-waiters-refill-without-newcomers.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 537416,
+    "originalFileSha256": "4eb206423bda09c3540ecc0b9dbb9b377730a36278fb15b5f678ae2c2015c6d3",
+    "logicalPhysicalTraceSha256": "b84f14a675931051167ad1ca8ae2476c4ac4c785e9be2755c88fe60b11ea35e9",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/old-waiters-refill-without-newcomers.first.jsonl.gz": "c2680876ba60062c33caf0e223aec610f8962cc319745a236c5120133b62bbad",
+      "trace-windows/old-waiters-refill-without-newcomers.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/old-waiters-refill-without-newcomers.last-checkpoint.json": "ee667074090c1149284a82163eb3a8c88b4ae9fa426b78017ab286c7f3b3e826"
+    }
+  },
+  "ranged84-before-short1-fairness": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/ranged84-before-short1-fairness.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 315726,
+    "originalFileSha256": "69b1651aa2797776bc3cb608ac140b0643b9644a16f7fb39f9b384cea6f5cc75",
+    "logicalPhysicalTraceSha256": "7cb62c24e695750e53c153ffde48ae751367d5890f5087545c2fdbfd38c7a199",
+    "totalRawLines": 19991,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 19864,
+    "derivedFiles": {
+      "trace-windows/ranged84-before-short1-fairness.first.jsonl.gz": "3ee944aa50ea073c329c691ff6fd106f487386c83deb40110281870cf362da1d",
+      "trace-windows/ranged84-before-short1-fairness.last.jsonl.gz": "0b11be18dcf140184f13553a0d5cbff7d977339bc85944d5a219fc68770b40e2",
+      "trace-windows/ranged84-before-short1-fairness.last-checkpoint.json": "6d2f02d5bd00d262d631dfb62e5573f0415c6537c8b3f76b7148a53d76e9352e"
+    }
+  },
+  "short16-before-ranged84-fairness": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/short16-before-ranged84-fairness.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 470831,
+    "originalFileSha256": "c4ac3de2b59a1848d5f041e63bb06c9361ffb4f7b9cab90dca10f532af7e996d",
+    "logicalPhysicalTraceSha256": "ba19354f291513e1934abde5fafe995b8594cb7179bc1f3bd334ae0009fe2b37",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/short16-before-ranged84-fairness.first.jsonl.gz": "3737024217087f86991d3ec5cbd0cacc28389a5a20c072d9e6319935c43667cc",
+      "trace-windows/short16-before-ranged84-fairness.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/short16-before-ranged84-fairness.last-checkpoint.json": "a7aaf870331863fd4600bf1faecfe9a41d798860a9a833587f264c06c838589b"
+    }
+  },
+  "dynamic-route-block-and-open": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/dynamic-route-block-and-open.jsonl.gz",
+    "originalFileSha256": "54c881deede48acdb48ec68da60183d8f65b11b050909c7f658911bb2a18786e",
+    "logicalPhysicalTraceSha256": "18609b25ad80f0df375a92b2f609605185089150ba7ad96a5f8f99a7b691fb86"
+  },
+  "target-relocation-before-arrival": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/target-relocation-before-arrival.jsonl.gz",
+    "originalFileSha256": "c5cfac5b29d8dcc13a3cec8aec97af75b96c30dd4e28aaf357af4fd8fdade123",
+    "logicalPhysicalTraceSha256": "324b6af133a8493da424149210b6596408ff6000d72374d5514942f18918d694"
+  },
+  "target-relocation-after-settlement": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/target-relocation-after-settlement.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 888935,
+    "originalFileSha256": "fad771788fc531be47d104c4ac9b4aba439c9be1b0c3c951c82e7a76b07e43b4",
+    "logicalPhysicalTraceSha256": "09a1b01f7a3a2a2c95c47b042e7c43edea102c39883eac6c033a3b85220998ab",
+    "totalRawLines": 120001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 119874,
+    "derivedFiles": {
+      "trace-windows/target-relocation-after-settlement.first.jsonl.gz": "e73b6d22ea26c132856f8eaae0ccce06ebe597d917db6ddd3b183d07ab56f89c",
+      "trace-windows/target-relocation-after-settlement.last.jsonl.gz": "fee3250077b93b84eae671fcb8ed4bd13a520615be2e6bff4ae9e29df34275dd",
+      "trace-windows/target-relocation-after-settlement.last-checkpoint.json": "a67f03bd02f5cdbbc329453ec27d1a2d420a9538debf0d316f33bc0573c391b1"
+    }
+  },
+  "opposing-flow-wide-arena": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/opposing-flow-wide-arena.jsonl.gz",
+    "originalFileSha256": "a2299f947deb4c94a9cd1f7940562156e1c1a1aca876f62fb9288e86b8cde52b",
+    "logicalPhysicalTraceSha256": "dc516fc47ce33e60906c429f6895ee84f11c518fa1d6dbcc2cb96395c499a5d5"
+  },
+  "large-body-wide-approach": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/large-body-wide-approach.jsonl.gz",
+    "originalFileSha256": "461d67ae7e31dc92868371d554ad51dfbf3b57108e75f966d5a64ff8b59cddb7",
+    "logicalPhysicalTraceSha256": "67f6fc4d663a17abc935891a97d3d2ac793a28ddf21d7a39e71d191706a7d1b4"
+  },
+  "large-body-sparse-group": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/large-body-sparse-group.jsonl.gz",
+    "originalFileSha256": "c6bd55b0a786e101e5f64e659230499d291fa8387286ce24d310f9b414cc2afe",
+    "logicalPhysicalTraceSha256": "c22d867989635c6f0b4880ee8ad586fe0173e237db5e540ec63ca17413f2f015"
+  },
+  "large-small-sparse-group": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/large-small-sparse-group.jsonl.gz",
+    "originalFileSha256": "0b3b1e5cbdfc49064b737f62221e446d0993e46bdbaa644f0cd3caa4f98d82e7",
+    "logicalPhysicalTraceSha256": "e7fd4962347bc20c730e6822a4eb06cc42c41d41d8cf874d163fcadbdaea0dfb"
+  },
+  "fast-per-tick-approach": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/fast-per-tick-approach.jsonl.gz",
+    "originalFileSha256": "e1595d1e1fe65d2e05d52b7bcc5d07265267e87c70d738adda7207ca068d4333",
+    "logicalPhysicalTraceSha256": "af5d5bf4a0d115387c1c4152926bcb8123a2fbd6685acec467c9c17a04b7e00a"
+  },
+  "random-multigate-maze-11": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/random-multigate-maze-11.jsonl.gz",
+    "originalFileSha256": "75b46b25f3d59ec1d00e91decb2cf4fb22fc92313bb8bc012f6394d301760326",
+    "logicalPhysicalTraceSha256": "4af86d89e27a05660d157006e1bf503ee0eee09049fdb41e74dc26dd21d07b27"
+  },
+  "random-multigate-maze-97": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/random-multigate-maze-97.jsonl.gz",
+    "originalFileSha256": "7fcc93f6c55f2530622f14261ceedf01a7e8801177436a5cc8f0d26bba7f1b51",
+    "logicalPhysicalTraceSha256": "7d00c2bebbca42871ec9e8c28f0fae9b5d6ee9985c1015f915662bb01007ede1"
+  },
+  "random-multigate-maze-713": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/random-multigate-maze-713.jsonl.gz",
+    "originalFileSha256": "cd44b13dfccad1ce6dfddd062c16f5cd86758f5701bda1a724d30201e92dbba0",
+    "logicalPhysicalTraceSha256": "4959ce03174702a910389b7372a3759e3aaf66e1437b2dc6d8f12f3f75c56e6b"
+  },
+  "random-multigate-maze-20261111": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/random-multigate-maze-20261111.jsonl.gz",
+    "originalFileSha256": "e6abb884b5d3205d1fd300cfc1977758e8e74bbc19fb9e88fda6b73a158a50b0",
+    "logicalPhysicalTraceSha256": "28a97353c48a1c710912c1531eee21c810c36ebfee69d0eb97f0e6c93254c087"
+  },
+  "random-multigate-maze-1701": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/random-multigate-maze-1701.jsonl.gz",
+    "originalFileSha256": "0e5934052ff1d3b280c42cba276eab3e8650fa2dd2aa404e5d4386a77017e0ce",
+    "logicalPhysicalTraceSha256": "b2fb23efc9bbc8384c7bc580b9c77ebb168c6c4542c9b2e1d584fbae40adbaaa"
+  },
+  "random-multigate-maze-991": {
+    "fullTraceNotIncluded": true,
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/random-multigate-maze-991.jsonl.gz",
+    "originalFileSha256": "2ea3eae115d101ec18adf59c6b533010e3edc7d28642b4b5a8af90fe33c56b31",
+    "logicalPhysicalTraceSha256": "1227aa53da357c4be50de27e3b307e0d33a0c4dc16ac6a1e6379f82a42582d30"
+  },
+  "large-portal-grid-128": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/large-portal-grid-128.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 2874111,
+    "originalFileSha256": "ce2c404717e7684c6239b76bf3d910085be859c99931e8737927dd39786ad929",
+    "logicalPhysicalTraceSha256": "0066619d92d56fef445c6fd1a27cbb241efa20bf0effd7707a3f78e76e01803d",
+    "totalRawLines": 150001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 149874,
+    "derivedFiles": {
+      "trace-windows/large-portal-grid-128.first.jsonl.gz": "37b971004e65352aa27405d51ccc7c3fbceef0f6083be021cd1743c853a04c36",
+      "trace-windows/large-portal-grid-128.last.jsonl.gz": "29fb5780184c5c5c9735c1c99f733927017d43de30db7749c8e6a51cca9ab80b",
+      "trace-windows/large-portal-grid-128.last-checkpoint.json": "ce6bd640d5060a331985b27fe3611c127b5e2ca478122ede03987bd16babc284"
+    }
+  },
+  "large-portal-grid-256": {
+    "originalFullTracePath": "/workspace/navigation-comparison/results/d-final-stress/traces/large-portal-grid-256.jsonl.gz",
+    "fullTraceNotIncluded": true,
+    "compressedBytes": 8621359,
+    "originalFileSha256": "6b86741624884b9024c3b1c7d1f10f2f6fa7b2106d458bd7455c2ba0bc0d665d",
+    "logicalPhysicalTraceSha256": "8b0f44a2bede5a9bcca25c9dfd926b6d2210b5d83467cc788de026cb83486c6b",
+    "totalRawLines": 150001,
+    "windowLines": 128,
+    "firstWindowStep": 1,
+    "lastWindowStartingStep": 149874,
+    "derivedFiles": {
+      "trace-windows/large-portal-grid-256.first.jsonl.gz": "37b971004e65352aa27405d51ccc7c3fbceef0f6083be021cd1743c853a04c36",
+      "trace-windows/large-portal-grid-256.last.jsonl.gz": "e1f76bee85f4ff1b63c04ae5b4cffd4b5a6aa6a68d287943d96d3eb5f3976e51",
+      "trace-windows/large-portal-grid-256.last-checkpoint.json": "98a8fec612b9f584cf64d12418d8742e5aae978afa37a737d31dc72b5346cc1e"
+    }
+  }
+}
