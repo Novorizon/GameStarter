@@ -1,0 +1,3 @@
+原始Unity Editor Play/Mono完整6项报告，使用同一个a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831实际DLL：B0三项2P1F，B1三项2P1F，因此完整global false/exit1原样保留。单体各tick1408通过；dynamic各tick800通过；44人各到原tick12000失败：B0为27Moving/9Attack/8Wait，B1为33Moving/6Attack/5Wait。两者均实际44人存活，没有物理Oracle运动违例。
+
+各自factory及平台人数单独归属，不能把完整6项都归给某factory，也不抄.NET8人数。报告fresh绑定、插件/冻结DLL不变、临时资产清理、shutdown均通过。Null图形设备只验证Mono插件与Oracle，不声称渲染、IL2CPP、完整业务接入或真机。原JSON/inputs/manifests/provenance未修改。driver原字节用.source.txt避免被候选Compile通配符收集。

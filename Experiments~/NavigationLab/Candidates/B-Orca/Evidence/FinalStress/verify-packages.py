@@ -34,3 +34,21 @@ for label in ('B0', 'B1'):
     print(label, index['factory'], manifest['candidateAssemblySha256'], 'source/Compile/DLL archive OK')
 
 print('Archived exact source/Compile/DLL bytes verified; no simulation or full trace validation is claimed by this check.')
+
+native = root / 'Native-A69-Selected'
+if native.exists():
+    recorded = json.loads((native / 'archive-files.json').read_bytes())
+    for name, expected in recorded.items():
+        assert sha((native / name).read_bytes()) == expected, name
+    provenance = json.loads((native / 'native-provenance.json').read_bytes())
+    validation = json.loads((native / 'validation.json').read_bytes())
+    assert sha((native / 'native-manifest.json').read_bytes()) == provenance['nativeManifestSha256']
+    assert sha((native / 'UnityNavigationLab.source.txt').read_bytes()) == provenance['driverSourceSha256']
+    assert provenance['freshManifestBoundReport'] is True and provenance['stagedAndFrozenBinariesUnchanged'] is True
+    assert provenance['assetCleanupVerified'] is True and validation['shutdownVerified'] is True
+    assert validation['runId'] == provenance['runId']
+    for factory, label in [('B0-Orca', 'B0'), ('B1-OrcaYield', 'B1')]:
+        selected = [case for case in validation['cases'] if case['factoryId'] == factory]
+        expected = json.loads((root / label / 'build-manifest.json').read_bytes())['candidateAssemblySha256']
+        assert len(selected) == 3 and all(case['candidateSha256'] == expected for case in selected)
+        print('Native', factory, sum(case['success'] for case in selected), 'pass', sum(not case['success'] for case in selected), 'fail; original mixed report unchanged')

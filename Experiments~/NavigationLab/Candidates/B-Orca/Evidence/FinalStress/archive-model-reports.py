@@ -129,20 +129,22 @@ def main():
     parser.add_argument('--output-root', type=Path, default=Path(__file__).resolve().parent)
     parser.add_argument('--window-lines', type=int, default=128)
     parser.add_argument('--verify-only', action='store_true')
+    parser.add_argument('--label', action='append', choices=['B0', 'B1'], help='Archive/verify only completed named candidates; default both')
     args = parser.parse_args()
     assert args.window_lines > 0
+    labels = args.label or ['B0', 'B1']
     if args.verify_only:
-        for label in ['B0', 'B1']:
+        for label in labels:
             verify(args.output_root / label)
         return
     # Refuse to create an archive from partial executions, including partial success placeholders.
-    for label in ['B0', 'B1']:
+    for label in labels:
         source = args.reports_root / (label.lower() + '-v2-final-stress')
         validate_summary(json.loads((source / 'summary.json').read_bytes()))
         execution = json.loads((source / 'frozen-execution.json').read_bytes())
         assert execution.get('frozenSourceAndBinariesUnchanged') is True
         assert execution.get('freshManifestBoundReport') is True and execution.get('diagnosticNoReplay') is False
-    for label in ['B0', 'B1']:
+    for label in labels:
         source = args.reports_root / (label.lower() + '-v2-final-stress')
         destination = args.output_root / label
         summary = json.loads((source / 'summary.json').read_bytes())
@@ -168,6 +170,27 @@ def main():
                     'originalFileSha256': case.get('TraceFileSha256'), 'logicalPhysicalTraceSha256': case.get('TraceSha256')
                 }
         write_json(destination / 'trace-storage.json', windows)
+        subset_file = args.output_root / 'full41-input-subset.json'
+        if subset_file.exists():
+            subset = json.loads(subset_file.read_bytes())['inputSha256']
+            assert len(subset) == 41
+            by_name = {case['Name']: case for case in summary['cases']}
+            selected = []
+            for name, expected in subset.items():
+                case = by_name[name]
+                assert case['InputSha256'] == expected
+                selected.append({key: case[key] for key in ['Name', 'Status', 'InputSha256', 'ReplayVerified', 'FinalTick']})
+            shutil.copyfile(subset_file, destination / 'full41-input-subset.json')
+            write_json(destination / 'full41-derived.json', {
+                'scope': 'Exact input-hash subset derived from original completed stress49. No separate full41 simulation or fresh report is claimed.',
+                'sourceStressSummarySha256': sha_file(source / 'summary.json'),
+                'inputSubsetManifestSha256': sha_file(subset_file),
+                'passed': sum(case['Status'] == 'Passed' for case in selected),
+                'failed': sum(case['Status'] == 'Failed' for case in selected),
+                'unsupported': sum(case['Status'] == 'Unsupported' for case in selected),
+                'caseReferences': selected
+            })
+            files += ['full41-input-subset.json', 'full41-derived.json']
         files += ['trace-storage.json']
         files += [str(path.relative_to(destination)) for path in (destination / 'trace-windows').glob('*')]
         write_json(destination / 'model-archive-index.json', {

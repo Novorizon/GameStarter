@@ -1,0 +1,297 @@
+{
+  "scope": "Exact input-hash subset derived from original completed stress49. No separate full41 simulation or fresh report is claimed.",
+  "sourceStressSummarySha256": "362909c45de54cb3888392e1f5b48c06e4e02fffc71aaa12f43354e74b70c96f",
+  "inputSubsetManifestSha256": "787fd3979245a1859a769c3acdb7bdec43a25dc7121801f735ffd4e8a9217441",
+  "passed": 37,
+  "failed": 4,
+  "unsupported": 0,
+  "caseReferences": [
+    {
+      "Name": "static-unreachable-retains-pending",
+      "Status": "Passed",
+      "InputSha256": "634e6ea791aee28f2886938936238c6763d1f436e558dd2d9bd3f81bd5032e5c",
+      "ReplayVerified": true,
+      "FinalTick": 200
+    },
+    {
+      "Name": "moving-noncenter-death-and-reinforcement",
+      "Status": "Passed",
+      "InputSha256": "3a0bcdc6382a04c801ce4b0e1fd4fb5cc70a0da60ab4d111049539f74a4d325f",
+      "ReplayVerified": true,
+      "FinalTick": 386
+    },
+    {
+      "Name": "old-waiters-refill-without-newcomers",
+      "Status": "Passed",
+      "InputSha256": "f925a5fd4c1dc206ccf2c86471265dfebe3a5c2f4d32e831475ae407a445f6e7",
+      "ReplayVerified": true,
+      "FinalTick": 376
+    },
+    {
+      "Name": "random-multigate-maze-11",
+      "Status": "Passed",
+      "InputSha256": "5f33fea1dc20224af28bdaa488ecb1aa985810f9d8579d332f7d8aa9bc70baa0",
+      "ReplayVerified": true,
+      "FinalTick": 390
+    },
+    {
+      "Name": "forest-wave-6",
+      "Status": "Passed",
+      "InputSha256": "fb317fe40a35d6ce7eaa9c05a1e8ee9aaf02760d60135a4266aef9a0f5bd1f71",
+      "ReplayVerified": true,
+      "FinalTick": 1990
+    },
+    {
+      "Name": "forest-single-small",
+      "Status": "Passed",
+      "InputSha256": "99630388af44d2baf1285b6432dc1611c29cbc279d0d903ca6a8252745d7338d",
+      "ReplayVerified": true,
+      "FinalTick": 569
+    },
+    {
+      "Name": "forest-wave-5",
+      "Status": "Passed",
+      "InputSha256": "173c4edd034df556eaec8de9f8ad29ae2457b439431dbd1f851bede9b3b93ad5",
+      "ReplayVerified": true,
+      "FinalTick": 1422
+    },
+    {
+      "Name": "forest-wave-1",
+      "Status": "Passed",
+      "InputSha256": "4287743cac00ef7287179738aa7592923ef817416e284b88fac1a6e78fe08686",
+      "ReplayVerified": true,
+      "FinalTick": 945
+    },
+    {
+      "Name": "u-obstacle",
+      "Status": "Passed",
+      "InputSha256": "ea159d7dde87e0e66bd57b5e216cbab2bf5d50e9a54d4ac0c9b45f0892542739",
+      "ReplayVerified": true,
+      "FinalTick": 500
+    },
+    {
+      "Name": "forest-full44-two-late-small",
+      "Status": "Failed",
+      "InputSha256": "7b714560c65db529a2ac45e976bf451c8dd538b20aa049ec3ceacd5f4dc4e320",
+      "ReplayVerified": false,
+      "FinalTick": 3999
+    },
+    {
+      "Name": "capacity-death-refills-original-queue",
+      "Status": "Failed",
+      "InputSha256": "41ae21c659fb02b2c44f3657f4860c827132d3679e3103ae37db09650fdddb06",
+      "ReplayVerified": false,
+      "FinalTick": 8000
+    },
+    {
+      "Name": "large-small-sparse-group",
+      "Status": "Passed",
+      "InputSha256": "0a9c1e2f5c13fd073d8dae1ab36f9603b3808adbe8f024af0e8f6068387c8a3e",
+      "ReplayVerified": true,
+      "FinalTick": 296
+    },
+    {
+      "Name": "cross-junction-original-5m",
+      "Status": "Passed",
+      "InputSha256": "5b4853e0d303e2e3048cfb6ce3c9f6a5d7e36d1f4b1c19c1aef45fafa099d0cd",
+      "ReplayVerified": true,
+      "FinalTick": 879
+    },
+    {
+      "Name": "settled-batch-death-and-reinforcement",
+      "Status": "Passed",
+      "InputSha256": "1e23c3960a90e204f86fc1444d1ca7bf6736297731bfd899c15a0d7d22bbcf08",
+      "ReplayVerified": true,
+      "FinalTick": 413
+    },
+    {
+      "Name": "large-radius-turning-clearance",
+      "Status": "Passed",
+      "InputSha256": "2f9c25573366986ec2c1af51ee28851b74623fd26b7ead7110cef86d45d52707",
+      "ReplayVerified": true,
+      "FinalTick": 652
+    },
+    {
+      "Name": "cross-junction-parking-lanes",
+      "Status": "Passed",
+      "InputSha256": "8e661c7feb50d581ce240c30b760fab74ad893ced8709a68747b9fbe21840c55",
+      "ReplayVerified": true,
+      "FinalTick": 431
+    },
+    {
+      "Name": "cross-junction-original-4m",
+      "Status": "Passed",
+      "InputSha256": "262a139ba9abbf6341f28944de08439f4efbf469f3dc8e3d09fcbef2d900a54e",
+      "ReplayVerified": true,
+      "FinalTick": 535
+    },
+    {
+      "Name": "forest-single-medium",
+      "Status": "Passed",
+      "InputSha256": "831dfbf72956562149727195f98de0b92d49bf662901338833cb4f8eecd33d98",
+      "ReplayVerified": true,
+      "FinalTick": 805
+    },
+    {
+      "Name": "shared-spawn-parking-lanes",
+      "Status": "Passed",
+      "InputSha256": "ccc04e690e248dc8da9e5aae2548a0da7493dc6ec5994de8e788f1d86b92e6ae",
+      "ReplayVerified": true,
+      "FinalTick": 451
+    },
+    {
+      "Name": "short16-before-ranged84-fairness",
+      "Status": "Passed",
+      "InputSha256": "07af0ab8e78ad1131c7651833c85b889ac0b82eeb6a8dd1891dc488d981d9f62",
+      "ReplayVerified": true,
+      "FinalTick": 4111
+    },
+    {
+      "Name": "forest-wave-3",
+      "Status": "Passed",
+      "InputSha256": "1bbe6d055a0ae2e51ea48d86fc92526580964a8ee156e619863d3f10233ee579",
+      "ReplayVerified": true,
+      "FinalTick": 1144
+    },
+    {
+      "Name": "forest-single-large",
+      "Status": "Passed",
+      "InputSha256": "5f0f1e8352e84f5f48c50e2c4a5b28d298b0e2c40e051c8808d9bf3eb2a5507b",
+      "ReplayVerified": true,
+      "FinalTick": 1408
+    },
+    {
+      "Name": "forest-full45-medium",
+      "Status": "Passed",
+      "InputSha256": "626a99fe6972d938944ab816c6ef959b93dae272ffa8538397a0a518958fd217",
+      "ReplayVerified": true,
+      "FinalTick": 1616
+    },
+    {
+      "Name": "fast-per-tick-approach",
+      "Status": "Passed",
+      "InputSha256": "96bda50edf6ee1243530e218ce17685bb5bd65969d6261e4f3ac85b9bf593c81",
+      "ReplayVerified": true,
+      "FinalTick": 230
+    },
+    {
+      "Name": "right-angle-corridor",
+      "Status": "Passed",
+      "InputSha256": "4b35e5c79d7835fd229fc0370f5f8499b88eae77bb03cc5e8c8d0212eb83f5a6",
+      "ReplayVerified": true,
+      "FinalTick": 420
+    },
+    {
+      "Name": "dynamic-route-block-and-open",
+      "Status": "Passed",
+      "InputSha256": "8e52554a02aceb0fab470314a3237aeb151798d20305ae5a4cb531f9f511111a",
+      "ReplayVerified": true,
+      "FinalTick": 800
+    },
+    {
+      "Name": "opposing-flow-wide-arena",
+      "Status": "Passed",
+      "InputSha256": "4c999ae61678cdc13b29edc81a9c66528f940ef07bd5a1dbb073c6dc90916993",
+      "ReplayVerified": true,
+      "FinalTick": 276
+    },
+    {
+      "Name": "forest-wave-4",
+      "Status": "Passed",
+      "InputSha256": "127ed4cc587cdd350fd4bcba71627b9b9acb2db26948e0481f20dc791f8688fb",
+      "ReplayVerified": true,
+      "FinalTick": 1213
+    },
+    {
+      "Name": "target-relocation-before-arrival",
+      "Status": "Passed",
+      "InputSha256": "51af3a54243b8dc42b968230d48549a2d4e09a946f059f2d77e32c458f9e1cc9",
+      "ReplayVerified": true,
+      "FinalTick": 471
+    },
+    {
+      "Name": "mixed-speed-approach",
+      "Status": "Passed",
+      "InputSha256": "3937d8bdf4f45614880d5a0c705c8e7cf7080af273e7e07f411d7f98d819c48f",
+      "ReplayVerified": true,
+      "FinalTick": 941
+    },
+    {
+      "Name": "random-multigate-maze-97",
+      "Status": "Passed",
+      "InputSha256": "2f582ebc736e93c23eb449dd6f31dff84334e04075b90943f719a3214efd8c8b",
+      "ReplayVerified": true,
+      "FinalTick": 374
+    },
+    {
+      "Name": "single-cell-throat",
+      "Status": "Passed",
+      "InputSha256": "d566c5ddbd26c3cdbced54c1174a2000fece1929bdeace48d6f925be17d728f7",
+      "ReplayVerified": true,
+      "FinalTick": 959
+    },
+    {
+      "Name": "target-relocation-after-settlement",
+      "Status": "Passed",
+      "InputSha256": "3862b8b6e1baa87a3368e3c9aa7cdce2975db7eba155e02fad7950b4be3b6508",
+      "ReplayVerified": true,
+      "FinalTick": 1300
+    },
+    {
+      "Name": "shared-spawn-original-5m",
+      "Status": "Passed",
+      "InputSha256": "b0d6e96f3086874e003561f30e03bd7d6c6b156567fcb4a03763e9fc51e038fc",
+      "ReplayVerified": true,
+      "FinalTick": 437
+    },
+    {
+      "Name": "ranged84-before-short1-fairness",
+      "Status": "Passed",
+      "InputSha256": "f439d7b7287c728a1852f1ec892ce6a672b135689741ef156ecb81071a0da249",
+      "ReplayVerified": true,
+      "FinalTick": 3479
+    },
+    {
+      "Name": "forest-wave-2",
+      "Status": "Passed",
+      "InputSha256": "c9d713ac5d522aba2c0ace769037e060f8c1122326cc74a751cfaafe987eedaf",
+      "ReplayVerified": true,
+      "FinalTick": 1100
+    },
+    {
+      "Name": "physical-and-endpoint-overflow-200",
+      "Status": "Failed",
+      "InputSha256": "cb0ee72e9d5ee8b038409699d86388464b4e1fd71bc2df40e9b6dab4dd9c813e",
+      "ReplayVerified": false,
+      "FinalTick": 6000
+    },
+    {
+      "Name": "open-arena",
+      "Status": "Passed",
+      "InputSha256": "7cd9ca187983a04498f392a94a697dec10ea5f1648820500c535186c09da518b",
+      "ReplayVerified": true,
+      "FinalTick": 328
+    },
+    {
+      "Name": "large-body-wide-approach",
+      "Status": "Passed",
+      "InputSha256": "c824f36380270908402353b7ebfdb55daaa2e26b646226cd9194b0d32b552553",
+      "ReplayVerified": true,
+      "FinalTick": 245
+    },
+    {
+      "Name": "large-body-sparse-group",
+      "Status": "Passed",
+      "InputSha256": "e623283113cd55e439c80f3c739e936d76f9d99ad7f1f807d1adc51928eb5f93",
+      "ReplayVerified": true,
+      "FinalTick": 297
+    },
+    {
+      "Name": "forest-full44-large",
+      "Status": "Failed",
+      "InputSha256": "24b0bfcf0c42213380222edaea7663e5c95439ac00c7e88697264c13973ec87e",
+      "ReplayVerified": false,
+      "FinalTick": 12000
+    }
+  ]
+}
