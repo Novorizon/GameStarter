@@ -38,6 +38,26 @@ namespace NavigationLab.DAoe4
             clearance.Clear();
         }
 
+        internal System.Collections.Generic.IEnumerable<int> Neighbours(int cell)
+        {
+            foreach (int next in World.Neighbours(cell))
+            {
+                yield return next;
+            }
+            int x = cell % World.Width;
+            int y = cell / World.Width;
+            for (int dy = -1; dy <= 1; dy += 2)
+            {
+                for (int dx = -1; dx <= 1; dx += 2)
+                {
+                    if (x + dx >= 0 && x + dx < World.Width && y + dy >= 0 && y + dy < World.Height)
+                    {
+                        yield return (y + dy) * World.Width + x + dx;
+                    }
+                }
+            }
+        }
+
         internal bool[] Clearance(int radius)
         {
             if (!clearance.TryGetValue(radius, out var cells))
@@ -146,7 +166,7 @@ namespace NavigationLab.DAoe4
             queue.Enqueue(start);
             while (queue.TryDequeue(out int cell))
             {
-                foreach (int next in World.Neighbours(cell))
+                foreach (int next in Neighbours(cell))
                 {
                     if (distances[next] < 0 && CanEdge(cell, next, radius))
                     {

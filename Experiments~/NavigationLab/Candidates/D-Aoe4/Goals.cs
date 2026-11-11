@@ -43,7 +43,7 @@ namespace NavigationLab.DAoe4
         private bool PreferredAttack(int cell, UnitProfile profile, int target)
         {
             return geometry.CanAttack(World.Center(cell), profile, target)
-                && World.Neighbours(cell).Any(next => geometry.CanEdge(cell, next, profile.RadiusMm)
+                && geometry.Neighbours(cell).Any(next => geometry.CanEdge(cell, next, profile.RadiusMm)
                     && !geometry.CanAttack(World.Center(next), profile, target));
         }
 

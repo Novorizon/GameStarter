@@ -38,8 +38,8 @@ namespace NavigationLab.DAoe4
         private readonly struct Edge
         {
             internal readonly int Node;
-            internal readonly int Cost;
-            internal Edge(int node, int cost)
+            internal readonly double Cost;
+            internal Edge(int node, double cost)
             {
                 Node = node;
                 Cost = cost;
@@ -109,10 +109,10 @@ namespace NavigationLab.DAoe4
             var open = new MinHeap();
             foreach (int node in starts)
             {
-                int distance = startDistance[graph.Cells[node]];
+                double distance = startDistance[graph.Cells[node]];
                 if (distance >= 0)
                 {
-                    cost[node] = distance * World.CellSizeMm;
+                    cost[node] = distance;
                     open.Push(node, cost[node] + Heuristic(graph.Cells[node], goal));
                 }
             }
@@ -128,8 +128,12 @@ namespace NavigationLab.DAoe4
                 int cell = graph.Cells[node];
                 if (Tile(cell) == goalTile && goalDistance[cell] >= 0)
                 {
-                    best = cost[node] + goalDistance[cell] * World.CellSizeMm;
-                    end = node;
+                    double arrival = cost[node] + goalDistance[cell];
+                    if (arrival < best)
+                    {
+                        best = arrival;
+                        end = node;
+                    }
                 }
                 foreach (var edge in graph.Edges[node])
                 {
@@ -285,7 +289,7 @@ namespace NavigationLab.DAoe4
             {
                 return gradient;
             }
-            int next = World.Neighbours(cell).Where(value => field.Included[value] && geometry.CanEdge(cell, value, radius))
+            int next = geometry.Neighbours(cell).Where(value => field.Included[value] && geometry.CanEdge(cell, value, radius))
                 .OrderBy(value => field.Distance[value]).ThenBy(value => value).DefaultIfEmpty(-1).First();
             return next >= 0 && field.Distance[next] < field.Distance[cell] ? (World.Center(next) - position).Normalized : default;
         }
@@ -315,7 +319,7 @@ namespace NavigationLab.DAoe4
                     while (queue.Count > 0)
                     {
                         int current = queue.Dequeue();
-                        foreach (int next in World.Neighbours(current))
+                        foreach (int next in geometry.Neighbours(current))
                         {
                             if (values[next] < 0 && Tile(next) == tile && geometry.CanEdge(current, next, radius))
                             {
@@ -342,7 +346,7 @@ namespace NavigationLab.DAoe4
             var cells = new List<int>();
             for (int cell = 0; cell < World.CellCount; cell++)
             {
-                if (stand[cell] && World.Neighbours(cell).Any(next => Tile(next) != Tile(cell) && geometry.CanEdge(cell, next, radius)))
+                if (stand[cell] && geometry.Neighbours(cell).Any(next => Tile(next) != Tile(cell) && geometry.CanEdge(cell, next, radius)))
                 {
                     cells.Add(cell);
                 }
@@ -367,14 +371,14 @@ namespace NavigationLab.DAoe4
                 {
                     if (other != i && distance[cells[other]] >= 0)
                     {
-                        graph.Edges[i].Add(new Edge(other, distance[cells[other]] * World.CellSizeMm));
+                        graph.Edges[i].Add(new Edge(other, distance[cells[other]]));
                     }
                 }
-                foreach (int next in World.Neighbours(cell))
+                foreach (int next in geometry.Neighbours(cell))
                 {
                     if (Tile(next) != Tile(cell) && lookup.TryGetValue(next, out int other) && geometry.CanEdge(cell, next, radius))
                     {
-                        graph.Edges[i].Add(new Edge(other, World.CellSizeMm));
+                        graph.Edges[i].Add(new Edge(other, Point2.Distance(World.Center(cell), World.Center(next))));
                     }
                 }
             }
@@ -383,26 +387,34 @@ namespace NavigationLab.DAoe4
             return graph;
         }
 
-        private int[] TileDistances(int start, int radius)
+        private double[] TileDistances(int start, int radius)
         {
-            var result = Enumerable.Repeat(-1, World.CellCount).ToArray();
+            var result = Enumerable.Repeat(-1.0, World.CellCount).ToArray();
             if (!geometry.Clearance(radius)[start])
             {
                 return result;
             }
             int tile = Tile(start);
-            var queue = new Queue<int>();
+            var open = new MinHeap();
             result[start] = 0;
-            queue.Enqueue(start);
-            while (queue.Count > 0)
+            open.Push(start, 0);
+            while (open.TryPop(out int cell, out double distance))
             {
-                int cell = queue.Dequeue();
-                foreach (int next in World.Neighbours(cell))
+                if (distance > result[cell] + 1e-7)
                 {
-                    if (Tile(next) == tile && result[next] < 0 && geometry.CanEdge(cell, next, radius))
+                    continue;
+                }
+                foreach (int next in geometry.Neighbours(cell))
+                {
+                    if (Tile(next) != tile || !geometry.CanEdge(cell, next, radius))
                     {
-                        result[next] = result[cell] + 1;
-                        queue.Enqueue(next);
+                        continue;
+                    }
+                    double candidate = distance + Point2.Distance(World.Center(cell), World.Center(next));
+                    if (result[next] < 0 || candidate < result[next] - 1e-7)
+                    {
+                        result[next] = candidate;
+                        open.Push(next, candidate);
                     }
                 }
             }
@@ -468,13 +480,18 @@ namespace NavigationLab.DAoe4
                 }
                 accepted[cell] = true;
                 Add("FmmAcceptedCells");
-                foreach (int next in World.Neighbours(cell))
+                foreach (int next in geometry.Neighbours(cell))
                 {
                     if (!field.Included[next] || accepted[next] || !geometry.CanEdge(cell, next, radius))
                     {
                         continue;
                     }
-                    double estimate = Eikonal(field, accepted, next, radius);
+                    double estimate = Math.Min(Eikonal(field, accepted, next, radius),
+                        field.Distance[cell] + Point2.Distance(World.Center(cell), World.Center(next)));
+                    if (cell / World.Width != next / World.Width && cell % World.Width != next % World.Width)
+                    {
+                        Add("DiagonalFlowRelaxations");
+                    }
                     if (estimate < field.Distance[next] - 1e-7)
                     {
                         field.Distance[next] = estimate;
@@ -521,7 +538,7 @@ namespace NavigationLab.DAoe4
 
         private double Heuristic(int from, int to)
         {
-            return (Math.Abs(from % World.Width - to % World.Width) + Math.Abs(from / World.Width - to / World.Width)) * World.CellSizeMm;
+            return Point2.Distance(World.Center(from), World.Center(to));
         }
 
         private static double Value(Flow field, int cell, bool inBounds)

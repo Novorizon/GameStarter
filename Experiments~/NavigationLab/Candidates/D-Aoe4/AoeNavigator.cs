@@ -257,7 +257,7 @@ namespace NavigationLab.DAoe4
                 }
                 if (actor.PreciseWaypoint == cell && field != null)
                 {
-                    int forward = World.Neighbours(cell).Where(next => field.Included[next]
+                    int forward = planningGeometry.Neighbours(cell).Where(next => field.Included[next]
                         && field.Distance[next] < field.Distance[cell] - 1e-6 && planningGeometry.CanEdge(cell, next, actor.Request.Profile.RadiusMm)
                         && planningGeometry.CanSegment(actor.Position, World.Center(next), actor.Request.Profile.RadiusMm))
                         .OrderBy(next => field.Distance[next]).ThenBy(next => next).DefaultIfEmpty(-1).First();
@@ -275,7 +275,7 @@ namespace NavigationLab.DAoe4
                     && NearStaticCorner(cell, actor.Request.Profile.RadiusMm))
                 {
                     Point2 center = World.Center(cell);
-                    int next = World.Neighbours(cell)
+                    int next = planningGeometry.Neighbours(cell)
                         .Where(candidate => field.Included[candidate] && field.Distance[candidate] < field.Distance[cell] - 1e-6
                             && planningGeometry.CanEdge(cell, candidate, actor.Request.Profile.RadiusMm))
                         .OrderBy(candidate => field.Distance[candidate]).ThenBy(candidate => candidate).DefaultIfEmpty(-1).First();
