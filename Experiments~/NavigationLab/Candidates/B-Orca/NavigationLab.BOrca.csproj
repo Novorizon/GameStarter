@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <NavigationLabCoreRoot Condition="'$(NavigationLabCoreRoot)' == ''">../../Core</NavigationLabCoreRoot>
+    <NoWarn>$(NoWarn);CS8625;CS8600;CS8602;CS8603;CS8618</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="SelfTest/**/*.cs" />
+    <ProjectReference Include="$(NavigationLabCoreRoot)/NavigationLab.Core.csproj" />
+  </ItemGroup>
+</Project>

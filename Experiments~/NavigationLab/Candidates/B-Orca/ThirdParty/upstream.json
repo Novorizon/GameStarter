@@ -1,0 +1,15 @@
+{
+  "upstream": "https://github.com/snape/RVO2-CS",
+  "commit": "de124a275d51d421bb9e2a77952210527ab60b04",
+  "license": "Apache-2.0",
+  "files": {
+    "Agent.cs": "6e95c5b82cd89bb7ad0b2a73d136dec27b935285ed2c89332a3aba20d254b140",
+    "KdTree.cs": "17b0f2af539b3cd9f086c821e4744f605edab8532c01f2ef8d32ae05329d1428",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "Line.cs": "3ab66ff3609631cbdd4d3f9e1b5cf02aa57691af6e195170e7d2278d3ad50187",
+    "Obstacle.cs": "c7853005c1bd95f69c824ea9b801cc2b9560b4b65b717e55d738d2efbd260302",
+    "RVOMath.cs": "a6c8976610867b58ef1f17bf2f6dc3089a235e4bc2eb6c57bd66e62acf2d2dfe",
+    "Simulator.cs": "d2ec317dfdb3b434213f7c3dfa17f01fda628f05b271d9a3ceb6099f4175bcf6",
+    "Vector2.cs": "a3785fcab6e8774e627b03dd4798b5e8c1bef9092556800e9525a260e9c48236"
+  }
+}

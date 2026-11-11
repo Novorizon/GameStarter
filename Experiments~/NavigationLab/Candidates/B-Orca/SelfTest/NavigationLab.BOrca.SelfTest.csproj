@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
+    <ImportDirectoryBuildTargets>false</ImportDirectoryBuildTargets>
+    <NavigationLabOracleRoot Condition="'$(NavigationLabOracleRoot)' == ''">../../../Oracle</NavigationLabOracleRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../NavigationLab.BOrca.csproj" />
+    <ProjectReference Include="$(NavigationLabOracleRoot)/NavigationLab.Oracle.csproj" />
+  </ItemGroup>
+</Project>
