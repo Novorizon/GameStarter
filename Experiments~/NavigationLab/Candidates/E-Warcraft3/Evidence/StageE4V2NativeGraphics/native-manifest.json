@@ -1,0 +1,35 @@
+{
+  "output": "/workspace/navigation-comparison/native/e4-final-selected-graphics",
+  "runId": "e130084d85b24a699503708e9788bb20",
+  "expectedCoreSha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+  "expectedOracleSha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
+  "graphicsRequired": true,
+  "wallDeadlineSeconds": 2400,
+  "stepsPerEditorUpdate": 250,
+  "runs": [
+    {
+      "name": "WarcraftRefinedFactory-u-obstacle",
+      "input": "/workspace/navigation-comparison/native/e4-final-selected-graphics/u-obstacle.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "expectedCandidateSha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f"
+    },
+    {
+      "name": "WarcraftRefinedFactory-forest-full44-large",
+      "input": "/workspace/navigation-comparison/native/e4-final-selected-graphics/forest-full44-large.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "expectedCandidateSha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f"
+    },
+    {
+      "name": "WarcraftRefinedFactory-target-relocation-after-settlement",
+      "input": "/workspace/navigation-comparison/native/e4-final-selected-graphics/target-relocation-after-settlement.unity-input.json",
+      "assemblyName": "NavigationLab.EWarcraft3",
+      "assemblyPath": "/workspace/GameStarter/Assets/NavigationLabValidation/Plugins/NavigationLab.EWarcraft3.dll",
+      "factory": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+      "expectedCandidateSha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "label": "e-owner-after",
+  "scope": "Supplementary goal compatibility contract, not an added or modified common49 case. Original world/radius/speed/holding cells kept before/after.",
+  "scriptSha256": "3c6372c377b358b48b5497f60b36b7b092ad63971b56b9e675275d028cef9065",
+  "driverAssemblySha256": "e5303f884f22316c084c0e95feba6e992f26e101e7173bbd9a0264dd92e8cd11",
+  "factoryType": "NavigationLab.Candidates.EWarcraft3.WarcraftRefinedFactory",
+  "factoryId": "E4-Warcraft3-Inspired-RefinedConnections",
+  "declaredFeatures": "DeathAndReinforcement, DynamicTerrain, MovingTarget, MultipleTargets, AssignedGoals, LargeBodies, FastPerTick",
+  "results": [
+    {
+      "Name": "two-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 168,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 2171
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 1528.4271247461902,
+        "Settled": 2,
+        "Steps": 2091,
+        "StableMicrosteps": 2000,
+        "Admitted": 2,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "26c7ebe6a41e8980cb4c3b4a24290010966919b0c83a73cda5094a6447104eb7",
+        "FinalState": "1:11500,5500:1:91|2:9500,3500:1:57",
+        "MinimumBodyGapMm": 3.103277188374477,
+        "PairSweeps": 2092,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "three-large",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 241,
+        "MinimumBodyGapMm": 687.7674693472384,
+        "PairSweeps": 6736
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 936.0679774997898,
+        "Settled": 3,
+        "Steps": 2176,
+        "StableMicrosteps": 2000,
+        "Admitted": 3,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "cccfb2d62311a5ba8fd5328133192eadadcb7837b1f7aa8d99920629bdf6fa8a",
+        "FinalState": "1:11500,5500:1:91|2:9500,3500:1:57|3:9500,6500:1:105",
+        "MinimumBodyGapMm": 4.962541944603117,
+        "PairSweeps": 6532,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    },
+    {
+      "Name": "mixed-three",
+      "independentSerialWitness": {
+        "Success": true,
+        "Steps": 267,
+        "MinimumBodyGapMm": 83.81154862025676,
+        "PairSweeps": 6814
+      },
+      "candidate": {
+        "ClaimedGoalMinimumGapMm": 170,
+        "Settled": 3,
+        "Steps": 2186,
+        "StableMicrosteps": 2000,
+        "Admitted": 3,
+        "Pending": 0,
+        "LastSpawnRejection": "None",
+        "TraceSha256": "e5d47a157505146d9283da0725724c53555f0b66ab69c024205340f7dcdc0cac",
+        "FinalState": "1:11500,5500:1:91|2:9500,3500:1:57|3:11500,4500:1:75",
+        "MinimumBodyGapMm": 4.962541944603117,
+        "PairSweeps": 6562,
+        "Error": null
+      },
+      "freshReplayIdentical": true,
+      "candidateAssemblySha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+      "coreAssemblySha256": "856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
+      "oracleAssemblySha256": "59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b"
+    }
+  ]
+}

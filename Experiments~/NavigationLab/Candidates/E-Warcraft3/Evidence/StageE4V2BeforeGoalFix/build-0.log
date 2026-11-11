@@ -1,0 +1,10 @@
+["dotnet", "build", "/workspace/navigation-comparison/e-final-snapshots/snapshot-a396bb835d7fb4daca90d547/Experiments~/NavigationLab/Core/NavigationLab.Core.csproj", "-c", "Release", "-m:1", "--disable-build-servers", "--nologo", "-p:PathMap=/workspace/navigation-comparison/e-final-snapshots/snapshot-a396bb835d7fb4daca90d547=/navigation-lab", "-p:ContinuousIntegrationBuild=true"]
+  Determining projects to restore...
+  Restored /workspace/navigation-comparison/e-final-snapshots/snapshot-a396bb835d7fb4daca90d547/Experiments~/NavigationLab/Core/NavigationLab.Core.csproj (in 84 ms).
+  NavigationLab.Core -> /workspace/navigation-comparison/e-final-snapshots/snapshot-a396bb835d7fb4daca90d547/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.62

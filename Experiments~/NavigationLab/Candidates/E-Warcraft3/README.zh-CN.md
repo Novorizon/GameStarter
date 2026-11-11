@@ -1,6 +1,6 @@
 # E：Warcraft III 风格公开行为的独立复现
 
-主实验分支 `experiment/navigation-e-warcraft3` 现整体选择 `WarcraftRefinedFactory`（E4-v2）。辅助分支 `experiment/navigation-e-warcraft3-refined` 保留修复过程；`experiment/navigation-e-warcraft3-e1b`、原快照与源码/DLL归档保留旧E1b对照。不能把旧版报告改名为E4。
+主实验分支 `experiment/navigation-e-warcraft3` 现整体选择 `WarcraftRefinedFactory`（E4，含目标圆盘相容性与自身旧Goal释放修复）。辅助分支 `experiment/navigation-e-warcraft3-refined` 保留修复过程；`experiment/navigation-e-warcraft3-e1b`、原快照与源码/DLL归档保留旧E1b对照。不能把旧版报告改名为E4。
 
 本分支为 `experiment/navigation-e-warcraft3`，基线为 `8c0dd50`。**它不是已获证实的暴雪原版寻路算法实现**。目前能核实的是官方公开的指令、碰撞与堵路行为；未取得原引擎完整寻路源码、设计文档或可复现实机轨迹。
 
@@ -112,13 +112,13 @@ E4在动态粗图搜索失败、最终目标当前没有被身体占据时，才
 
 ### 选定整体版本与旧长测的中止
 
-选定E4-v2（运行时代码`a5d592f`，冻结DLL `7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f`）作为后续整体E版本。关键5个完整输入中，U56、直角32、Forest44通过并完成全新实例重放；Forest45剩3Moving、晚到46剩2Moving，在真正deadline12000失败。晚到46的初始44稳定前提已实际核验，不把前提未到位的结果当作晚到测试。
+此前阶段选定E4-v2（运行时代码`a5d592f`，冻结DLL `7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f`）作为后续整体E版本。关键5个完整输入中，U56、直角32、Forest44通过并完成全新实例重放；Forest45剩3Moving、晚到46剩2Moving，在真正deadline12000失败。晚到46的初始44稳定前提已实际核验，不把前提未到位的结果当作晚到测试。
 
 `RefinedRegressions/V2-Forest`为完整三例组，已严格校验所有原始证据。较早的`V2-Forest-Partial`仅是当时44/45闭合后的历史阶段备份，不另计覆盖。失败case没有执行成功case那种重放，`ReplayVerified=false`不能据此另算一次“重放不一致”。
 
 Forest45后续独立检查固定其它44实际身体（包括另2个Moving）：15/19的25mm搜索未找到单体路，14的原Goal被15身体占据；15拟议竖直路线实际穿过原地图阻挡格，初步离散猜测被否定。此结果不证明几何无解，也不推出必须挪42个驻留者。未根据未证实猜测增加切线策略或放宽几何，完整审阅保存在`RefinedForest45Audit`。
 
-被替代E1b的最终v2长测已明确中止：12项闭合，5通过、7失败；活动300密集场景只读取到94083微步的落盘下界，SIGTERM中止，不是deadline失败，也没有形成49或41项整体结果。`E1bFinalV2Partial`保存12个闭合报告/完整闭合轨迹/输入、原3C#运行时和4DLL压缩归档、源稳定后验与中止标记；不完整活动轨迹仅在原外部目录保留并记录SHA。之后以选定E4单独运行完整共同stress49和成功case重放，不混合两个版本拼分。
+被替代E1b的最终v2长测已明确中止：12项闭合，5通过、7失败；活动300密集场景只读取到94083微步的落盘下界，SIGTERM中止，不是deadline失败，也没有形成49或41项整体结果。`E1bFinalV2Partial`保存12个闭合报告/完整闭合轨迹/输入、原3C#运行时和4DLL压缩归档、源稳定后验与中止标记；不完整活动轨迹仅在原外部目录保留并记录SHA。之后的7f阶段实际完整49及后续Goal修正均分别记录，不混合版本拼分。
 
 
 ## 选定E4整体实验的复现入口
@@ -136,4 +136,21 @@ python3 Tools~/NavigationLab/freeze-run.py \
   --suite stress
 ```
 
-本分支包含所选修复实现和已完成关键证据；完整stress49正在单独执行。当前不能用关键5例、旧7项smoke或旧12项partial拼成49项。完成后再归档统一摘要、失败、输入、压缩轨迹、实际4DLL与编译来源，并从同一批输入派生full41。
+本分支包含所选修复实现和已完成关键证据；完整stress49正在单独执行。当前不能用关键5例、旧7项smoke或旧12项partial拼成最终源的49项。完成后再归档统一摘要、失败、输入、压缩轨迹、实际4DLL与编译来源，并从同一批输入派生full41。
+
+
+## 目标圆盘相容性与最终源
+
+稀疏大体型case通过仍不足以证明终点分配正确。补充三例保留原Holding集合中的相邻冲突点及足够替代点：2个r650、3个r650、r650/r650/r180。旧7f实际分配的Goal净距均为-300mm，虽然身体碰撞停止保持安全，却只能1/2、2/3、2/3到位；独立Oracle以原半径/速度/目标集合实际顺序移动后全员稳定，证明存在可行替代。共享driver固定原输入SHA，证书Goal只用于独立见证，不传给候选。
+
+最终修复只增加有效持有Goal之间的半径和检查，原SelectGoal因此选择原集合内的合法替代点。不同格心最小距为格边长，若两半径和不超过格边长，直接证明无冲突；其余才计算真实中心距，跨所有target检查。没有缩小半径、增加Holding或修改地图。
+
+中间ad4源修好三例后，单r650的合法目标移动又暴露自身旧Goal误挡新位置：原Goal仍是候场点、新相邻Goal进入攻击范围，单体仍不动。独立Oracle只需10微步到位。最终在候场补位查询期间临时释放自身旧Goal，并用finally恢复失败/异常情况，再按原流程提交成功更换，不增加外部参数。
+
+最终运行时代码为`3136ae8`，DLL为`f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d`。三例均全员到位、2000微步稳定、完整新实例轨迹重放一致；单体移动目标已到新Goal并稳定。另一个独立Assigned负例确认：有可用C也不能替代强制B；先拒绝冲突B，显式死亡释放A后，同一请求再入场并保留B。两项生命周期补例的新实例结果也一致，均未并入三例或49项分母。
+
+`GoalCompatibility`保存通用driver、原输入/可行见证、7f与ad4与最终源的实际补充报告、源绑定关键回归和打包源码。最终源open/U/直角/Forest44/晚到46/Forest8的Input、完整Trace、Commands、FinalState和Status逐项等于7f对应例；成功case均完成正式重放，晚到46仍是真失败，不伪称通过。
+
+7f阶段已自然跑完49，严格验证后为37通过/12失败/0未支持/0非法输入；同一批输入派生full41为30通过/11失败。`StageE4V2BeforeGoalFix`保留其完整报告、输入、压缩轨迹、实际4DLL与全部冻结源；`StageE4V2NativeGraphics`的图形3P也只属于7f旧源，不能用于最终f0源。当前最终f0将以独立新目录执行完整49，不能拿7f分数冒称最终结果。
+
+历史E1b的精确源码/DLL以历史支与冻结归档为准；当前`WarcraftFactory`仅作为关闭精细连接的结构对照，共享后续Goal相容性修复，不冒称旧DLL逐字重现。生产Bootstrap/FightSession仍为A，没有切换业务默认后端。

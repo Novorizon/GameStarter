@@ -1,0 +1,39 @@
+{
+  "scope": "Supplementary one-r650 target move; original two Holding points1000mm apart, no other body. Not common49 input.",
+  "success": false,
+  "oldGoal": 75,
+  "newGoal": 76,
+  "radius": 650,
+  "speed": 1000,
+  "attackRange": 300,
+  "initialStableMicrosteps": 2000,
+  "candidateAfterMove": {
+    "Id": 1,
+    "x": 11500,
+    "y": 4500,
+    "GoalCell": 75,
+    "state": 2,
+    "steps": 10000,
+    "stable": 0
+  },
+  "independentWitnessSuccess": true,
+  "independentWitnessMovementMicrosteps": 10,
+  "independentWitnessHoldMicrosteps": 2000,
+  "candidateAssemblySha256": "ad4b9eef4d46df4a3047cb7124ab93c6f382d35966271925eb6d2ade77203737",
+  "oracleBodySweeps": 12107,
+  "metrics": {
+    "FriendlyYieldEnabled": 1,
+    "GroupedYieldEnabled": 0,
+    "RequesterBackoffEnabled": 0,
+    "RefinedConnectionsEnabled": 1,
+    "SpawnAttempts": 1,
+    "ReachabilityCells": 9594,
+    "GlobalAStarSearches": 2,
+    "AStarExpandedCells": 35,
+    "Spawned": 1,
+    "SimulationSubsteps": 12105,
+    "BodyMoveSubsteps": 105,
+    "WorldChanges": 1,
+    "DirectConnectors": 1
+  }
+}

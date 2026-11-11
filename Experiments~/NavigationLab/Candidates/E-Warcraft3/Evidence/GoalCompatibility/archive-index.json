@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "scope": "Supplementary3 positive goal-packing fixtures plus separately reported owner-promotion and assigned-conflict lifecycle. Never added to common49. All actual original geometry/profile data retained; certificates are used only by independent witnesses, not passed to candidate.",
+  "beforeCandidateSha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+  "intermediateCandidateSha256": "ad4b9eef4d46df4a3047cb7124ab93c6f382d35966271925eb6d2ade77203737",
+  "selectedCandidateSha256": "f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d",
+  "archives": {
+    "shared-driver.zip": "668ed014999b048a6947cf309a64b68f1f681330ab050149947cb980b98f6eb5",
+    "original-e-driver.zip": "f5ef7706aef534e33093a674f10b452429c471ed9efbc9bac70e24b65e6343a0",
+    "promotion.zip": "0e18cbc2a9ddf69762fe32cd82ac737cdc3289fbf6ff66d88e0c9731a02e548b",
+    "assigned.zip": "a710cfbef78773c2a059fa758ec6891f577a65ddd74aa96d05b1646540d3d985"
+  }
+}

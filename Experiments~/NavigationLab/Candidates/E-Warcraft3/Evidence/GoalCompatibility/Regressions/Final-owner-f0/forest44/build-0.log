@@ -1,0 +1,10 @@
+["dotnet", "build", "/workspace/navigation-comparison/e-owner-fixed-snapshots/snapshot-03b76f46fb66f2c3ce81d92b/Experiments~/NavigationLab/Core/NavigationLab.Core.csproj", "-c", "Release", "-m:1", "--disable-build-servers", "--nologo", "-p:PathMap=/workspace/navigation-comparison/e-owner-fixed-snapshots/snapshot-03b76f46fb66f2c3ce81d92b=/navigation-lab", "-p:ContinuousIntegrationBuild=true"]
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  NavigationLab.Core -> /workspace/navigation-comparison/e-owner-fixed-snapshots/snapshot-03b76f46fb66f2c3ce81d92b/Experiments~/NavigationLab/Core/bin/Release/netstandard2.1/NavigationLab.Core.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.10

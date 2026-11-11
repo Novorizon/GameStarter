@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "scope": "Same complete final common v2 corpus as archived A, byte-for-byte all49 exported inputs. No algorithm simulation reexecuted.",
+  "matchedInputFiles": 49,
+  "referenceInputs": "/workspace/navigation-comparison/comparison/Experiments~/NavigationLab/Evidence/A-Sipp/inputs"
+}

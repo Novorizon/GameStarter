@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "sourceIdentitySha256": "a396bb835d7fb4daca90d5478177954e56660e9258d8e4840fd3cf53ac6a107b",
+  "archiveScope": "The zip contains every original non-generated source/input listed in the build manifest. Generated MSBuild compile items remain separately recorded in the manifest and compile-items outputs. It includes original docs as captured before final evidence was added.",
+  "sourceZipSha256": "1e8c0841ad398b5713e0a97d72baecb8e8b166f8e5b877385f9ef307dab3e75e",
+  "sourceFileCount": 39,
+  "candidateAssemblySha256": "7f4cdb6b660ab3280276239034bd763d084b5a28d7411021cc30cdf4fb11869f",
+  "binariesZipSha256": "4c53549266331a549d3d64eb3bc6c39bf8bb3e5db1cd537fb9e27e4dd4261256",
+  "binariesScope": "Exact four DLLs used by this run, archived for integrity review. Reproduce from source with freeze-run; runner metadata references the original frozen snapshot path."
+}
