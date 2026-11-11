@@ -233,6 +233,13 @@ namespace NavigationLab.DAoe4
                 }
                 Point2 steeringDestination = destination;
                 int cell = World.CellAt(actor.Position);
+                bool directFlowExit = !reconnecting && field != null
+                    && planningGeometry.CanSegment(actor.Position, World.Center(field.Exit), actor.Request.Profile.RadiusMm);
+                if (directFlowExit && actor.PreciseWaypoint >= 0)
+                {
+                    actor.PreciseWaypoint = -1;
+                    Add("LosSupersedesGridCorrection");
+                }
                 if (actor.PreciseWaypoint >= 0 && cell != actor.WaypointSourceCell && cell != actor.PreciseWaypoint)
                 {
                     actor.PreciseWaypoint = -1;
@@ -253,7 +260,7 @@ namespace NavigationLab.DAoe4
                 {
                     actor.PreciseWaypoint = -1;
                 }
-                if (actor.PreciseWaypoint < 0 && field != null && cell >= 0
+                if (!directFlowExit && actor.PreciseWaypoint < 0 && field != null && cell >= 0
                     && NearStaticCorner(cell, actor.Request.Profile.RadiusMm))
                 {
                     Point2 center = World.Center(cell);
