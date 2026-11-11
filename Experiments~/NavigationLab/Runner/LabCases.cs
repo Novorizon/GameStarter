@@ -4,9 +4,21 @@ using NavigationLab.Core;
 using NavigationLab.Oracle;
 
 internal sealed record ScheduledRequest(int ReadyTick, SpawnRequest Request);
-internal sealed record TerrainEvent(int Tick, WorldChange Change);
-internal sealed record DeathEvent(int Tick, int Count, bool AfterSettlement, bool Replace, bool RequireMoving = false, int Range = -1);
-internal enum CaseExpectation { FullArrival, EndpointPolicyOverflow, StaticUnreachable }
+internal sealed record TerrainEvent(int Tick, WorldChange Change, bool AfterSettlement = false);
+internal sealed record DeathEvent(
+    int Tick,
+    int Count,
+    bool AfterSettlement,
+    bool Replace,
+    bool RequireMoving = false,
+    int Range = -1,
+    bool AttackersOnly = false);
+internal enum CaseExpectation
+{
+    FullArrival,
+    EndpointPolicyOverflow,
+    StaticUnreachable
+}
 internal sealed class LabCase
 {
     public string Name { get; init; } = "";
@@ -23,6 +35,7 @@ internal sealed class LabCase
     public int DeadlineTicks { get; init; } = 12000;
     public int HoldTicks { get; init; } = 200;
     public int? RequireInitialSettledAtTick { get; init; }
+    public int MinimumOldWaitingPromotions { get; init; }
     public int PhysicalAreaUpperBound { get; init; }
     public string Feasibility { get; init; } = "Original fixed input previously constructively witnessed; no route/goal assignment passed to candidate.";
 }
@@ -120,6 +133,19 @@ internal static class LabCases
             Features = NavigationFeatures.DeathAndReinforcement,
             DeathEvents = new() { new DeathEvent(0, 6, true, true) }
         });
+        cases.Add(new LabCase
+        {
+            Name = "old-waiters-refill-without-newcomers",
+            Family = "lifecycle-fairness",
+            World = lifecycleWorld,
+            Requests = Orders(lifecycleWorld, 48, new UnitProfile(250, 1000, 1000)),
+            ExpectedLive = 42,
+            ExpectedAttackers = 16,
+            Features = NavigationFeatures.DeathAndReinforcement,
+            DeathEvents = new() { new DeathEvent(0, 6, true, false, AttackersOnly: true) },
+            MinimumOldWaitingPromotions = 6,
+            Feasibility = "Remove6 actual attackers only after48 bodies/16attackers settle; no newborn requests exist, so6 old waiting IDs must physically fill the released attack places."
+        });
         AddFairness(cases);
         AddDynamic(cases);
         AddDirectedFlows(cases);
@@ -179,6 +205,19 @@ internal static class LabCases
         var profiles = document.RootElement.GetProperty("enemies").EnumerateArray().ToDictionary(
             item => item.GetProperty("id").GetInt32(), item => new UnitProfile(item.GetProperty("radius").GetInt32(),
                 item.GetProperty("speedPerTick").GetInt32(), item.GetProperty("attackRange").GetInt32()));
+        foreach (var single in new[] { ("small", 2), ("medium", 1), ("large", 4) })
+        {
+            cases.Add(new LabCase
+            {
+                Name = "forest-single-" + single.Item1,
+                Family = "forest-single-body",
+                World = world,
+                Requests = Orders(world, 1, profiles[single.Item2]),
+                ExpectedLive = 1,
+                ExpectedAttackers = 1,
+                DeadlineTicks = 7000
+            });
+        }
         int[] attackers = { 8, 13, 14, 15, 15, 15 };
         for (int wave = 1; wave <= 6; wave++)
         {
@@ -231,10 +270,25 @@ internal static class LabCases
             Requests = Orders(world, 24, new UnitProfile(250, 333, 1000)), ExpectedLive = 24, ExpectedAttackers = 16, Features = NavigationFeatures.DynamicTerrain,
             TerrainEvents = new() { new TerrainEvent(3, new WorldChange { BlockCells = wall }), new TerrainEvent(600, new WorldChange { OpenCells = wall }) },
             Feasibility = "Door wall is inserted ahead of all speed-bounded bodies; two permanent alternate openings and later full reopening remain feasible." });
-        cases.Add(new LabCase { Name = "target-moves-before-arrival", Family = "moving-target", World = world,
+        cases.Add(new LabCase { Name = "target-relocation-before-arrival", Family = "target-relocation", World = world,
             Requests = Orders(world, 24, new UnitProfile(250, 333, 1000)), ExpectedLive = 24, ExpectedAttackers = 16, Features = NavigationFeatures.MovingTarget,
             TerrainEvents = new() { new TerrainEvent(3, new WorldChange { ReplaceTarget = new TargetDefinition(1, world.Center(27 + 19 * width), 1000) }) },
-            Feasibility = "Base moves in empty far-side arena before any bounded-speed body can approach; open paths remain." });
+            Feasibility = "Discrete target relocation in empty far-side arena before any bounded-speed body can approach; no continuous solid-target sweep is claimed." });
+        cases.Add(new LabCase
+        {
+            Name = "target-relocation-after-settlement",
+            Family = "target-relocation",
+            World = world,
+            Requests = Orders(world, 24, new UnitProfile(250, 333, 1000)),
+            ExpectedLive = 24,
+            ExpectedAttackers = 16,
+            Features = NavigationFeatures.MovingTarget,
+            TerrainEvents = new()
+            {
+                new TerrainEvent(1000, new WorldChange { ReplaceTarget = new TargetDefinition(1, world.Center(16 + 14 * width), 1000) }, true)
+            },
+            Feasibility = "After24 physically settle, base relocates11m left. Old settled centres are at most8.005m from old base, so new base is clear by at least2.995m; new16 attack ring is open. Discrete relocation only."
+        });
     }
 
     private static void AddDirectedFlows(List<LabCase> cases)
@@ -256,6 +310,32 @@ internal static class LabCases
         cases.Add(new LabCase { Name = "large-body-wide-approach", Family = "large-body", World = largeWorld,
             Requests = Orders(largeWorld, 1, new UnitProfile(700, 500, 2000)), ExpectedLive = 1, ExpectedAttackers = 1, Features = NavigationFeatures.LargeBodies,
             Feasibility = "One 700mm disc in a wide open room, no packing interaction; reachable valid target centres are independently checked." });
+        var sparse = largeWorld.CopyWalkable();
+        for (int index = 0; index < sparse.Length; index++)
+        {
+            sparse[index] = sparse[index] && index % largeWorld.Width % 4 == 0 && index / largeWorld.Width % 4 == 0;
+        }
+        var sparseWorld = new WorldDefinition(largeWorld.Width, largeWorld.Height, 1000, default, largeWorld.CopyWalkable(), sparse,
+            largeWorld.SpawnCells.ToArray(), largeWorld.Targets.ToArray(), 10000);
+        foreach (bool mixed in new[] { false, true })
+        {
+            var sparseRequests = Orders(sparseWorld, 8, new UnitProfile(650, 500, 6000));
+            if (mixed)
+            {
+                sparseRequests.AddRange(Orders(sparseWorld, 3, new UnitProfile(180, 1000, 8000), 0, 9));
+            }
+            cases.Add(new LabCase
+            {
+                Name = mixed ? "large-small-sparse-group" : "large-body-sparse-group",
+                Family = "large-body-group",
+                World = sparseWorld,
+                Requests = sparseRequests,
+                ExpectedLive = sparseRequests.Count,
+                ExpectedAttackers = sparseRequests.Count,
+                Features = NavigationFeatures.LargeBodies,
+                Feasibility = "Open35x29 room with holding centres spaced4m, maximum body diameter1.3m; distinct endpoints leave wide traversable corridors and all demands have compatible attack positions."
+            });
+        }
         cases.Add(new LabCase { Name = "fast-per-tick-approach", Family = "fast-speed", World = largeWorld,
             Requests = Orders(largeWorld, 4, new UnitProfile(250, 2200, 1000)), ExpectedLive = 4, ExpectedAttackers = 4, Features = NavigationFeatures.FastPerTick,
             Feasibility = "Sparse fast bodies in wide open room; 5ms displacements remain220mm and are continuously checked." });
@@ -327,12 +407,20 @@ internal static class LabCases
                 walk[y * width + x] = !border || x > 0 && y > 0 && x < width - 1 && y < height - 1;
             }
         }
-        return new WorldDefinition(width, height, cell, default, walk, walk, entries,
-            targets.Select((index, i) => new TargetDefinition(i + 1, new Point2(index % width * cell + cell / 2, index / width * cell + cell / 2), 1000)).ToArray(), gather);
+        var definitions = targets.Select((index, i) =>
+        {
+            var center = new Point2(index % width * cell + cell / 2, index / width * cell + cell / 2);
+            return new TargetDefinition(i + 1, center, 1000);
+        }).ToArray();
+        return new WorldDefinition(width, height, cell, default, walk, walk, entries, definitions, gather);
     }
 
     private static List<ScheduledRequest> Orders(WorldDefinition world, int count, UnitProfile profile, int ready = 0, int first = 1)
     {
-        return Enumerable.Range(first, count).Select((id, index) => new ScheduledRequest(ready, new SpawnRequest(id, profile, world.SpawnCells[index % world.SpawnCells.Count]))).ToList();
+        return Enumerable.Range(first, count).Select((id, index) =>
+        {
+            var request = new SpawnRequest(id, profile, world.SpawnCells[index % world.SpawnCells.Count]);
+            return new ScheduledRequest(ready, request);
+        }).ToList();
     }
 }
