@@ -22,6 +22,7 @@ var factory = new OrcaFactory();
 VerifyExceptionIsolation();
 var polygonChecks = VerifyPolygonGoalCompatibility();
 VerifyTightZeroRangeArrival();
+VerifySettledTargetRelocation();
 var isolated = Run(false);
 var interleaved = Run(true);
 if (isolated.Hash != interleaved.Hash)
@@ -33,6 +34,7 @@ Console.WriteLine(JsonSerializer.Serialize(new
     success = true,
     exceptionHostRestoration = true,
     tightZeroRangeArrival = true,
+    settledTargetRelocation = true,
     polygonChecks,
     isolated = new { trajectorySha256 = isolated.Hash, pairSweeps = isolated.PairSweeps, bodySweeps = isolated.BodySweeps },
     interleaved = new { trajectorySha256 = interleaved.Hash, pairSweeps = interleaved.PairSweeps, bodySweeps = interleaved.BodySweeps },
@@ -255,6 +257,47 @@ static void VerifyTightZeroRangeArrival()
             var final = nav.Snapshot().Single();
             throw new InvalidOperationException("Zero-range base/ceiling tangent Goal did not arrive: " + factory.Id
                 + " pos=" + final.Position.X + "," + final.Position.Y + " state=" + final.State);
+        }
+    }
+}
+
+static void VerifySettledTargetRelocation()
+{
+    var world = new WorldDefinition(
+        20,
+        12,
+        1000,
+        default,
+        Enumerable.Repeat(true, 240).ToArray(),
+        Enumerable.Repeat(true, 240).ToArray(),
+        new[] { 121 },
+        new[] { new TargetDefinition(1, new Point2(14500, 6500), 500) },
+        7000);
+    var profile = new UnitProfile(200, 1000, 1000);
+    foreach (var factory in new INavigationFactory[] { new OrcaFactory(), new OrcaYieldFactory() })
+    {
+        using var nav = factory.Create(world, new[] { profile });
+        var oracle = new ContinuousOracle(world);
+        Birth(nav, oracle, new SpawnRequest(1, profile, 121));
+        for (int phase = 0; phase < 2; phase++)
+        {
+            int stable = 0;
+            for (int step = 0; step < 5000 && stable < 2000; step++)
+            {
+                Advance(nav, oracle);
+                stable = nav.Snapshot().Single().State == MotionState.Attacking ? stable + 1 : 0;
+            }
+            if (stable < 2000)
+            {
+                throw new InvalidOperationException("Existing attackers did not retarget a moved base: " + factory.Id + " phase=" + phase);
+            }
+            if (phase == 0)
+            {
+                var before = nav.Snapshot();
+                var change = new WorldChange { ReplaceTarget = new TargetDefinition(1, new Point2(10500, 6500), 500) };
+                nav.ApplyWorldChange(change);
+                oracle.ApplyChange(change, before, nav.Snapshot());
+            }
         }
     }
 }

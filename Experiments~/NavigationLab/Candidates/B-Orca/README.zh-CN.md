@@ -4,8 +4,8 @@ B 分支从冻结 A `8c0dd50` 分离。这里只增加独立候选和实验，�
 
 ## 实际实现
 
-- **B0 / `NavigationLab.Candidates.BOrca.OrcaFactory`**：官方 RVO2-CS ORCA 速度求解器，八邻 A* 全局路线，实际停止身体参与动态重寻路，精确静态扫掠和停止身体约束下的可见路点简化。
-- **B1 / `NavigationLab.Candidates.BOrca.OrcaYieldFactory`**：B0 加显式临时让位、到位者返场、死亡后的空攻击位补员，以及受限射程单位的合法目标交换。B1 的结果单独报告，不覆盖 B0 的失败。
+- **B0 / `NavigationLab.Candidates.BOrca.OrcaFactory`**：官方 RVO2-CS ORCA 速度求解器，八邻 A* 全局路线，实际停止身体参与动态重寻路，精确静态扫掠和停止身体约束下的可见路点简化，死亡或目标移动后的空攻击位刷新。
+- **B1 / `NavigationLab.Candidates.BOrca.OrcaYieldFactory`**：B0 加显式临时让位、到位者返场，以及受限射程单位的合法目标交换。B1 的结果单独报告，不覆盖 B0 的失败。
 
 路线节点为原格边长的一半，支持身体通过偶数宽走廊的中线。**最终站位仍只允许原世界的 holding cell**；路线节点不会增加最终目标数，也不修改地图、单位身体或速度。
 
@@ -58,3 +58,5 @@ dotnet run --project Experiments~/NavigationLab/Candidates/B-Orca/SelfTest/Navig
 ## 开发记录
 
 `Evidence/Development` 保留初始实现的范围状态失败、修复后的smoke和原72对照，以及当时完整候选源和实际DLL。b-000两工厂均5/7，open-arena和原72因候场半径边界提前标Waiting而失败；b-001两工厂smoke7/7，但运行时共享harness有修改，不能作为最终冻结同源证据。b-002单独原72两工厂通过。最终全面矩阵会使用统一冻结源、编译清单、重放及Unity结果另行报告。
+
+动态路线对停止身体同时检查节点与连接边，不能让擦过圆盘的边反复被物理执行器拒绝。临时让路使用实际路线阻挡关系、附近物理空位置与动态身体约束的完整A*路线，并保留原永久Goal；终态仍要求返回或合法重新取得永久目标。

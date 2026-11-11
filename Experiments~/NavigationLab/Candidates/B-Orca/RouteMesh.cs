@@ -74,15 +74,21 @@ namespace NavigationLab.Candidates.BOrca
             return component[goalNode] || Geometry.Clear(world, start, goal, radius);
         }
 
-        internal List<Point2>? Find(Point2 start, Point2 goal, Func<Point2, bool>? dynamicBlocked, out int expanded)
+        internal List<Point2>? Find(
+            Point2 start,
+            Point2 goal,
+            Func<Point2, bool>? dynamicBlocked,
+            out int expanded,
+            Func<Point2, Point2, bool>? blockedSegment = null)
         {
             expanded = 0;
-            if (Geometry.Clear(world, start, goal, radius) && SegmentAvoids(start, goal, dynamicBlocked))
+            if (Geometry.Clear(world, start, goal, radius) && SegmentAvoids(start, goal, dynamicBlocked)
+                && (blockedSegment == null || !blockedSegment(start, goal)))
             {
                 return new List<Point2> { goal };
             }
 
-            int startNode = ClosestJoin(start, dynamicBlocked);
+            int startNode = ClosestJoin(start, dynamicBlocked, blockedSegment);
             int goalNode = Node(goal);
             if (startNode < 0 || goalNode < 0 || !stand[goalNode])
             {
@@ -124,7 +130,8 @@ namespace NavigationLab.Candidates.BOrca
 
                 foreach (int next in Neighbours(current))
                 {
-                    if (next != goalNode && dynamicBlocked != null && dynamicBlocked(Center(next)))
+                    if ((next != goalNode && dynamicBlocked != null && dynamicBlocked(Center(next)))
+                        || (blockedSegment != null && blockedSegment(Center(current), Center(next))))
                     {
                         continue;
                     }
@@ -163,7 +170,7 @@ namespace NavigationLab.Candidates.BOrca
             return true;
         }
 
-        private int ClosestJoin(Point2 point, Func<Point2, bool>? dynamicBlocked)
+        private int ClosestJoin(Point2 point, Func<Point2, bool>? dynamicBlocked, Func<Point2, Point2, bool>? blockedSegment = null)
         {
             int centerX = (int)Math.Round((point.X - world.Origin.X) / step);
             int centerY = (int)Math.Round((point.Y - world.Origin.Y) / step);
@@ -181,7 +188,8 @@ namespace NavigationLab.Candidates.BOrca
                         continue;
                     }
 
-                    if (dynamicBlocked != null && candidate > .01 && dynamicBlocked(target))
+                    if ((dynamicBlocked != null && candidate > .01 && dynamicBlocked(target))
+                        || (blockedSegment != null && blockedSegment(point, target)))
                     {
                         continue;
                     }
