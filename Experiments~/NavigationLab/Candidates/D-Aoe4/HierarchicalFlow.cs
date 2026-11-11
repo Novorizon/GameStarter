@@ -13,6 +13,7 @@ namespace NavigationLab.DAoe4
             internal int Radius;
             internal int Revision;
             internal int[] Tiles = Array.Empty<int>();
+            internal int[] Components = Array.Empty<int>();
             internal int[] Exits = Array.Empty<int>();
             internal int LastTile = -1;
             internal int LastSegmentIndex = -1;
@@ -49,6 +50,7 @@ namespace NavigationLab.DAoe4
         private readonly GridGeometry geometry;
         private readonly IDictionary<string, long> metrics;
         private readonly int largestRadius;
+        private readonly Dictionary<int, int[]> components = new Dictionary<int, int[]>();
         private readonly Dictionary<int, PortalGraph> graphs = new Dictionary<int, PortalGraph>();
         private readonly Dictionary<string, Flow> flows = new Dictionary<string, Flow>();
         private readonly Queue<string> flowOrder = new Queue<string>();
@@ -66,6 +68,7 @@ namespace NavigationLab.DAoe4
         internal void Invalidate()
         {
             graphs.Clear();
+            components.Clear();
             flows.Clear();
             flowOrder.Clear();
             retainedCells = 0;
@@ -85,7 +88,7 @@ namespace NavigationLab.DAoe4
             var startDistance = TileDistances(start, radius);
             if (startTile == goalTile && startDistance[goal] >= 0)
             {
-                return new Route { Goal = goal, Radius = radius, Revision = geometry.Revision, Tiles = new[] { startTile }, Exits = new[] { goal } };
+                return new Route { Goal = goal, Radius = radius, Revision = geometry.Revision, Tiles = new[] { startTile }, Components = new[] { Component(start, radius) }, Exits = new[] { goal } };
             }
             var graph = Graph(radius);
             if (!graph.TileNodes.TryGetValue(startTile, out var starts) || !graph.TileNodes.ContainsKey(goalTile))
@@ -144,18 +147,21 @@ namespace NavigationLab.DAoe4
             reversed.Insert(0, start);
             reversed.Add(goal);
             var tiles = new List<int> { startTile };
+            var routeComponents = new List<int> { Component(start, radius) };
             var exits = new List<int>();
             for (int i = 1; i < reversed.Count; i++)
             {
                 int tile = Tile(reversed[i]);
-                if (tile != tiles[tiles.Count - 1])
+                int component = Component(reversed[i], radius);
+                if (component != routeComponents[routeComponents.Count - 1])
                 {
                     exits.Add(reversed[i - 1]);
                     tiles.Add(tile);
+                    routeComponents.Add(component);
                 }
             }
             exits.Add(goal);
-            return new Route { Goal = goal, Radius = radius, Revision = geometry.Revision, Tiles = tiles.ToArray(), Exits = exits.ToArray() };
+            return new Route { Goal = goal, Radius = radius, Revision = geometry.Revision, Tiles = tiles.ToArray(), Components = routeComponents.ToArray(), Exits = exits.ToArray() };
         }
 
         internal Point2 Direction(Point2 position, Route route, out Flow? usedFlow)
@@ -167,30 +173,13 @@ namespace NavigationLab.DAoe4
                 return default;
             }
             int tile = Tile(cell);
+            int component = Component(cell, route.Radius);
             int index = route.CurrentIndex;
-            if (route.Tiles[index] != tile)
+            if (route.Components[index] != component)
             {
-                int next = -1;
-                for (int i = index + 1; i < route.Tiles.Length; i++)
-                {
-                    if (route.Tiles[i] == tile)
-                    {
-                        next = i;
-                        break;
-                    }
-                }
-                if (next < 0)
-                {
-                    for (int i = index - 1; i >= 0; i--)
-                    {
-                        if (route.Tiles[i] == tile)
-                        {
-                            next = i;
-                            break;
-                        }
-                    }
-                }
-                index = next;
+                var matches = Enumerable.Range(0, route.Components.Length).Where(i => route.Components[i] == component).ToArray();
+                // Ambiguous re-entry is replanned from the real position instead of jumping to another visit.
+                index = matches.Length == 1 ? matches[0] : -1;
             }
             if (index < 0)
             {
@@ -288,7 +277,42 @@ namespace NavigationLab.DAoe4
         internal bool OnRoute(Point2 position, Route route)
         {
             int cell = World.CellAt(position);
-            return cell >= 0 && route.Revision == geometry.Revision && Array.IndexOf(route.Tiles, Tile(cell)) >= 0;
+            return cell >= 0 && route.Revision == geometry.Revision && Array.IndexOf(route.Components, Component(cell, route.Radius)) >= 0;
+        }
+
+        private int Component(int cell, int radius)
+        {
+            if (!components.TryGetValue(radius, out var values))
+            {
+                values = Enumerable.Repeat(-1, World.CellCount).ToArray();
+                var stand = geometry.Clearance(radius);
+                for (int first = 0; first < World.CellCount; first++)
+                {
+                    if (!stand[first] || values[first] >= 0)
+                    {
+                        continue;
+                    }
+                    int tile = Tile(first);
+                    var queue = new Queue<int>();
+                    queue.Enqueue(first);
+                    values[first] = first;
+                    while (queue.Count > 0)
+                    {
+                        int current = queue.Dequeue();
+                        foreach (int next in World.Neighbours(current))
+                        {
+                            if (values[next] < 0 && Tile(next) == tile && geometry.CanEdge(current, next, radius))
+                            {
+                                values[next] = first;
+                                queue.Enqueue(next);
+                            }
+                        }
+                    }
+                    Add("TileConnectedComponents");
+                }
+                components.Add(radius, values);
+            }
+            return cell >= 0 && cell < values.Length ? values[cell] : -1;
         }
 
         private PortalGraph Graph(int radius)

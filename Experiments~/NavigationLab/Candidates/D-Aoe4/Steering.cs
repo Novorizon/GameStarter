@@ -24,7 +24,7 @@ namespace NavigationLab.DAoe4
                 return desired;
             }
             Point2 best = default;
-            double bestScore = -.03;
+            double bestScore = -.2;
             int hand = (actor.Request.Id & 1) == 0 ? 1 : -1;
             for (int i = 0; i < 25; i++)
             {
@@ -50,6 +50,10 @@ namespace NavigationLab.DAoe4
         {
             Add("SteeringSamples");
             risk = false;
+            if (delta.LengthSquared < 1e-12)
+            {
+                return double.NegativeInfinity;
+            }
             Point2 next = actor.Position + delta;
             if (!geometry.CanSegment(actor.Position, next, actor.Request.Profile.RadiusMm))
             {
@@ -66,13 +70,15 @@ namespace NavigationLab.DAoe4
             foreach (var other in neighbours)
             {
                 double radius = actor.Request.Profile.RadiusMm + other.Request.Profile.RadiusMm;
-                Point2 otherNext = other.Position + other.Velocity;
+                Point2 otherMove = other.Planned ? other.Proposal : default;
+                Point2 otherNext = other.Position + otherMove;
                 if (GridGeometry.SweptGapSquared(actor.Position, next, other.Position, otherNext) < radius * radius - 1e-5)
                 {
                     risk = true;
                     return double.NegativeInfinity;
                 }
-                Point2 otherForecast = Forecast(other.Position, other.Velocity, Destination(other), horizon);
+                Point2 otherDestination = other.PreciseWaypoint >= 0 ? World.Center(other.PreciseWaypoint) : Destination(other);
+                Point2 otherForecast = Forecast(other.Position, otherMove, otherDestination, horizon);
                 double gap = Math.Sqrt(GridGeometry.SweptGapSquared(actor.Position, forecast, other.Position, otherForecast)) - radius;
                 double guard = 0;
                 double initialGap = Point2.Distance(actor.Position, other.Position) - radius;

@@ -35,6 +35,8 @@ namespace NavigationLab.DAoe4
             internal SpawnRequest Request;
             internal Point2 Position;
             internal Point2 Velocity;
+            internal Point2 Proposal;
+            internal bool Planned;
             internal int Goal;
             internal HierarchicalFlow.Route? Route;
             internal int RouteGoal = -1;
@@ -46,6 +48,7 @@ namespace NavigationLab.DAoe4
             internal int YieldHoldStarted;
             internal int LastPromotionRevision = -1;
             internal int PreciseWaypoint = -1;
+            internal int WaypointSourceCell = -1;
             internal int ObservationStep;
             internal Point2 ObservationPosition;
         }
@@ -154,8 +157,16 @@ namespace NavigationLab.DAoe4
                 }
             }
             var desired = new Point2[ordered.Length];
-            for (int i = 0; i < ordered.Length; i++)
+            foreach (var actor in ordered)
             {
+                actor.Planned = false;
+                actor.Proposal = default;
+            }
+            int rotation = ordered.Length == 0 ? 0 : step / SimulationProtocol.Substeps % ordered.Length;
+            Add("LocalPrioritySweeps");
+            for (int order = 0; order < ordered.Length; order++)
+            {
+                int i = (order + rotation) % ordered.Length;
                 var actor = ordered[i];
                 Point2 destination = Destination(actor);
                 double error = Point2.Distance(actor.Position, destination);
@@ -176,46 +187,84 @@ namespace NavigationLab.DAoe4
                 if (error <= 1e-6)
                 {
                     desired[i] = default;
+                    actor.Planned = true;
                     continue;
                 }
                 int goal = actor.YieldCell >= 0 ? actor.YieldCell : actor.Goal;
-                if (actor.Route == null || actor.RouteGoal != goal || !planner.OnRoute(actor.Position, actor.Route))
+                int physicalCell = World.CellAt(actor.Position);
+                int anchor = physicalCell;
+                if (physicalCell < 0 || !geometry.Clearance(actor.Request.Profile.RadiusMm)[physicalCell])
                 {
-                    actor.Route = planner.FindRoute(World.CellAt(actor.Position), goal, actor.Request.Profile.RadiusMm);
+                    anchor = Enumerable.Range(0, World.CellCount).Where(candidate => geometry.Clearance(actor.Request.Profile.RadiusMm)[candidate]
+                        && geometry.CanSegment(actor.Position, World.Center(candidate), actor.Request.Profile.RadiusMm))
+                        .OrderBy(candidate => Point2.Distance(actor.Position, World.Center(candidate))).ThenBy(candidate => candidate).DefaultIfEmpty(-1).First();
+                    if (anchor >= 0)
+                    {
+                        actor.PreciseWaypoint = anchor;
+                        Add("PhysicalGridReconnectSteps");
+                    }
+                }
+                bool reconnecting = anchor >= 0 && anchor != physicalCell;
+                if (actor.Route == null || actor.RouteGoal != goal || (!reconnecting && !planner.OnRoute(actor.Position, actor.Route)))
+                {
+                    actor.Route = planner.FindRoute(anchor, goal, actor.Request.Profile.RadiusMm);
                     actor.RouteGoal = goal;
                     actor.PreciseWaypoint = -1;
                     Add("RouteRefreshes");
                 }
                 HierarchicalFlow.Flow? field = null;
                 Point2 direction = actor.Route == null ? default : planner.Direction(actor.Position, actor.Route, out field);
-                if (direction.LengthSquared < 1e-12 && step % SimulationProtocol.Substeps == 0)
+                if (!reconnecting && direction.LengthSquared < 1e-12 && step % SimulationProtocol.Substeps == 0)
                 {
-                    actor.Route = planner.FindRoute(World.CellAt(actor.Position), goal, actor.Request.Profile.RadiusMm);
+                    actor.Route = planner.FindRoute(anchor, goal, actor.Request.Profile.RadiusMm);
                     direction = actor.Route == null ? default : planner.Direction(actor.Position, actor.Route, out field);
                     Add("FlowCoverageRepaths");
                 }
+                if (reconnecting)
+                {
+                    actor.PreciseWaypoint = anchor;
+                    actor.WaypointSourceCell = physicalCell;
+                }
                 Point2 steeringDestination = destination;
                 int cell = World.CellAt(actor.Position);
+                if (actor.PreciseWaypoint >= 0 && cell != actor.WaypointSourceCell && cell != actor.PreciseWaypoint)
+                {
+                    actor.PreciseWaypoint = -1;
+                }
+                if (actor.PreciseWaypoint == cell && field != null)
+                {
+                    int forward = World.Neighbours(cell).Where(next => field.Included[next]
+                        && field.Distance[next] < field.Distance[cell] - 1e-6 && geometry.CanEdge(cell, next, actor.Request.Profile.RadiusMm)
+                        && geometry.CanSegment(actor.Position, World.Center(next), actor.Request.Profile.RadiusMm))
+                        .OrderBy(next => field.Distance[next]).ThenBy(next => next).DefaultIfEmpty(-1).First();
+                    if (forward >= 0)
+                    {
+                        actor.PreciseWaypoint = forward;
+                        actor.WaypointSourceCell = cell;
+                    }
+                }
                 if (actor.PreciseWaypoint >= 0 && Point2.Distance(actor.Position, World.Center(actor.PreciseWaypoint)) <= 1e-6)
                 {
                     actor.PreciseWaypoint = -1;
                 }
                 if (actor.PreciseWaypoint < 0 && field != null && cell >= 0
-                    && World.Neighbours(cell).Any(next => !geometry.CanEdge(cell, next, actor.Request.Profile.RadiusMm)))
+                    && NearStaticCorner(cell, actor.Request.Profile.RadiusMm))
                 {
                     Point2 center = World.Center(cell);
-                    if (Point2.Distance(actor.Position, center) > 1e-6
+                    int next = World.Neighbours(cell)
+                        .Where(candidate => field.Included[candidate] && field.Distance[candidate] < field.Distance[cell] - 1e-6
+                            && geometry.CanEdge(cell, candidate, actor.Request.Profile.RadiusMm))
+                        .OrderBy(candidate => field.Distance[candidate]).ThenBy(candidate => candidate).DefaultIfEmpty(-1).First();
+                    if (next >= 0 && geometry.CanSegment(actor.Position, World.Center(next), actor.Request.Profile.RadiusMm))
+                    {
+                        actor.PreciseWaypoint = next;
+                    }
+                    else if (Point2.Distance(actor.Position, center) > 1e-6
                         && geometry.CanSegment(actor.Position, center, actor.Request.Profile.RadiusMm))
                     {
                         actor.PreciseWaypoint = cell;
                     }
-                    else
-                    {
-                        actor.PreciseWaypoint = World.Neighbours(cell)
-                            .Where(next => field.Included[next] && field.Distance[next] < field.Distance[cell] - 1e-6
-                                && geometry.CanEdge(cell, next, actor.Request.Profile.RadiusMm))
-                            .OrderBy(next => field.Distance[next]).ThenBy(next => next).DefaultIfEmpty(-1).First();
-                    }
+                    actor.WaypointSourceCell = cell;
                 }
                 if (actor.PreciseWaypoint >= 0)
                 {
@@ -224,6 +273,8 @@ namespace NavigationLab.DAoe4
                     Add("NarrowPreciseWaypointSteps");
                 }
                 desired[i] = SampleVelocity(actor, direction, steeringDestination, ordered);
+                actor.Proposal = desired[i];
+                actor.Planned = true;
             }
             var proposed = ordered.Select((actor, index) => actor.Position + desired[index]).ToArray();
             // Deterministic engine collision stopping is visible in metrics; it never grants liveness by itself.
@@ -331,6 +382,26 @@ namespace NavigationLab.DAoe4
             actors.Clear();
             goalOwners.Clear();
             disposed = true;
+        }
+
+        private bool NearStaticCorner(int cell, int radius)
+        {
+            int x = cell % World.Width;
+            int y = cell / World.Width;
+            var stand = geometry.Clearance(radius);
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    int nx = x + dx;
+                    int ny = y + dy;
+                    if (nx < 0 || ny < 0 || nx >= World.Width || ny >= World.Height || !stand[ny * World.Width + nx])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private Point2 Destination(Actor actor)
