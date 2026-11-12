@@ -130,15 +130,19 @@ namespace NavigationLab.UnityPlayground
         public int[] blockCells = Array.Empty<int>();
         public int[] openCells = Array.Empty<int>();
         public bool afterSettlement;
+        public bool hasReplaceTarget;
         public TargetInput replaceTarget;
 
         public WorldChange Change()
         {
+            // JsonUtility can deserialize a null inline class as an instance with all fields at their defaults.
+            bool replace = replaceTarget != null && (hasReplaceTarget || replaceTarget.id != 0 || replaceTarget.radiusMm != 0
+                || replaceTarget.x != 0 || replaceTarget.y != 0);
             return new WorldChange
             {
                 BlockCells = (int[])blockCells.Clone(),
                 OpenCells = (int[])openCells.Clone(),
-                ReplaceTarget = replaceTarget == null ? (TargetDefinition?)null : replaceTarget.Definition()
+                ReplaceTarget = replace ? replaceTarget.Definition() : (TargetDefinition?)null
             };
         }
 

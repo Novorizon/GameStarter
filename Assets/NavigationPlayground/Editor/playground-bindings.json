@@ -1,5 +1,5 @@
 {
-  "scope": "Editor-only interactive observation of the exact frozen selected DLLs. Local runs are not the published .NET49 or independent replay evidence. A uses isolated original Domain inside ASipp.dll, never the business HotUpdate types.",
+  "scope": "Editor-only bridge experiment. A and C33 are new builds at the listed source commits. Other assemblies retain their original frozen bindings.",
   "assemblies": {
     "core": {
       "file": "NavigationLab.Core.dll",
@@ -17,10 +17,9 @@
     },
     "A": {
       "file": "NavigationLab.ASipp.dll",
-      "sha256": "2a7c9467f14826252c4af4ab369bb5abf056fa7ce816b8d403aaf732e22e1c7a",
+      "sha256": "d57b1e9b48c6bc1346d5c3397fc06e1a398539e8b75116c96e8314b01c302e16",
       "sourceFactory": "NavigationLab.Candidates.ASipp.SippFactory",
-      "sourceSnapshot": "8f5764c5a7f84fa13a377a2755af740caf94e38c03da3a5fe63bbaffd84f82b1",
-      "sourceManifestSha256": "9e942b0d13ad81d0153ae349c6bf4b1f7c64898688e83a5b359074cc43392a49"
+      "sourceCommit": "67c21760320440e6bf8b77f31f939b81316adb79"
     },
     "B": {
       "file": "NavigationLab.BOrca.dll",
@@ -31,10 +30,9 @@
     },
     "C": {
       "file": "NavigationLab.CSupCom2.dll",
-      "sha256": "1f5318fa321da4c4d6b567393b3e1ea2da0b6737250f1c3d721f3038c8c0d372",
+      "sha256": "c3d767647a84b1bbbcff1353a901a2a73aea921d984bee236d9590e5753565e3",
       "sourceFactory": "NavigationLab.CSupCom2.Factory",
-      "sourceSnapshot": "b353b77565baa325c3839f6e79d63bbd44152ca46c75ffd7bfaa67d581ce6e87",
-      "sourceManifestSha256": "f64af4da3f3cf873854ec825af2d08521d457c51b43cf5d878385a2973b4649e"
+      "sourceCommit": "66f3782ee17d73cbd189cc170a4cfb4c13268629"
     },
     "D": {
       "file": "NavigationLab.DAoe4.dll",
@@ -345,6 +343,18 @@
       "originalInputSha256": "7e872621e00d6badc2acb623d39ced318aa6252b0cf9a688651420cc4472fa4f",
       "originalFileSha256": "63976e6ad5edfc9f4dbd39578755cd694e1c6ade30f6f001a2ebde8c23e91b67",
       "unityFileSha256": "d5cffeb4f46ffe27d96bd47594647d85f447fc281e2b2b545bbd09a05e41aca5"
+    },
+    {
+      "name": "bridge-open-control",
+      "originalInputSha256": "927d6ee3b0d995709893d2046f67b8610eb01c4166e23f3902d311aa7ccb7796",
+      "originalFileSha256": "53f9e9259444e01dea0e953a3b961e867535862a9ab96e0819d5d1efd2310645",
+      "unityFileSha256": "9871f74a583711d364e5d2812f017449f1ef6cdaaa20bcfd2104c4f75ef63048"
+    },
+    {
+      "name": "bridge-short-cut-detour",
+      "originalInputSha256": "06338ebcfe4c2d9ec32be482dec8ab2b3aefdf13398f8282124b5e2241ac234d",
+      "originalFileSha256": "5326d6471f84d4dbf1a809f87a44f13a529d4148fb90049d9ccc873c10536e16",
+      "unityFileSha256": "c87fc783a723c3508ee044b0fa663733240866c4f7d0be2b401eb6f61a4845f9"
     }
   ]
 }
