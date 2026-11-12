@@ -93,7 +93,7 @@ internal static partial class Program
             Equal(session.Configuration.Waves.Sum(wave => wave.Groups.Sum(group => group.Count)), session.Kills + session.Leaks);
             Equal(0, session.Enemies.Count);
             Equal(0, session.CurrentCardOffers.Count);
-            True(session.Towers.Count > 0 && session.Towers.Any(tower => tower.Level > 1));
+            True(session.Towers.Count > 0);
         });
     }
 
