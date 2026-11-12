@@ -7,8 +7,8 @@ namespace NavigationLab.CSupCom2
 {
     public sealed class Factory : INavigationFactory
     {
-        public string Id => "C-SupCom2-FlowTiles";
-        public string Description => "Public SupCom2 sector portals/merging A*/Eikonal flow tiles; project-specific safe steering and siege goals.";
+        public string Id => "C-SupCom2-NearSiegePositions";
+        public string Description => "Sector portal flow tiles with stable, approach-ranked siege positions and continuous body safety.";
         public NavigationFeatures Features => NavigationFeatures.DeathAndReinforcement | NavigationFeatures.DynamicTerrain | NavigationFeatures.MovingTarget
             | NavigationFeatures.MultipleTargets | NavigationFeatures.AssignedGoals | NavigationFeatures.LargeBodies | NavigationFeatures.FastPerTick;
 
@@ -20,6 +20,8 @@ namespace NavigationLab.CSupCom2
 
     internal sealed class Navigator : INavigator
     {
+        private const double CenterToleranceMm = .000001;
+
         private sealed class Actor
         {
             internal int Id;
@@ -38,9 +40,14 @@ namespace NavigationLab.CSupCom2
             internal long YieldUntil;
             internal int Stuck;
             internal bool Processed;
-            internal bool VacancyTransfer;
+            internal Point2[]? RecoveryPath;
+            internal Point2[]? CandidateRecoveryPath;
+            internal CrowdBody[]? RecoveryBodies;
+            internal Point2 RecoveryOrigin;
+            internal int RecoveryWaypoint;
+            internal long NextRecoveryAt;
+            internal bool YieldRequested;
             internal bool PreferClearCorridor;
-            internal double BestDistance = double.PositiveInfinity;
             internal double SiegeWindowBest = double.PositiveInfinity;
         }
 
@@ -98,58 +105,25 @@ namespace NavigationLab.CSupCom2
                 RequestedGoal = request.AssignedGoalCell,
                 TargetId = request.TargetId
             };
-            var changes = new Dictionary<Actor, int>();
-            if (!Assign(actor, new HashSet<int>(), changes, 0) || !CompatibleClaims(changes))
+            int goal = FindUnclaimedGoal(actor);
+            if (goal < 0)
             {
                 LastSpawnFailure = "NoCompatibleReachableGoal";
                 Count("GoalRejected");
                 return false;
             }
-            foreach (var change in changes)
-            {
-                if (actors.ContainsKey(change.Key.Id))
-                {
-                    owners.Remove(change.Key.Goal);
-                }
-            }
-            foreach (var change in changes)
-            {
-                if (change.Key.Goal != change.Value)
-                {
-                    Count("BusinessGoalReassignments");
-                }
-                change.Key.Goal = change.Value;
-                change.Key.Route = null;
-                change.Key.BestDistance = double.PositiveInfinity;
-                change.Key.SiegeWindowBest = double.PositiveInfinity;
-                change.Key.ProgressAnchor = change.Key.Position;
-                change.Key.Stuck = 0;
-                owners[change.Value] = change.Key.Id;
-            }
+
+            AssignGoal(actor, goal);
             actors.Add(actor.Id, actor);
             maximumClaimRadius = Math.Max(maximumClaimRadius, actor.Profile.RadiusMm);
-            EnsureAttackService(actor);
             LastSpawnFailure = "None";
             Count("Spawned");
-            PromoteWaiting();
             return true;
         }
 
         public void Step()
         {
             microstep++;
-            foreach (var actor in actors.Values)
-            {
-                if ((actor.VacancyTransfer || actor.PreferClearCorridor) && State(actor) != MotionState.Moving)
-                {
-                    if (actor.VacancyTransfer)
-                    {
-                        Count("VacancyTransfersArrived");
-                    }
-                    actor.VacancyTransfer = false;
-                    actor.PreferClearCorridor = false;
-                }
-            }
             if (completedGroupSleeping)
             {
                 Count("CompletedGroupSleepSteps");
@@ -175,6 +149,7 @@ namespace NavigationLab.CSupCom2
                 {
                     actor.YieldGoal = -1;
                     actor.Route = null;
+                    actor.PreferClearCorridor = false;
                     Count("YieldReturns");
                 }
             }
@@ -183,19 +158,28 @@ namespace NavigationLab.CSupCom2
                 int destination = actor.YieldGoal >= 0 ? actor.YieldGoal : actor.Goal;
                 Point2 target = destination >= 0 ? world.Center(destination) : actor.Position;
                 double remaining = Point2.Distance(actor.Position, target);
-                if (remaining < .000001)
+                if (remaining < CenterToleranceMm)
                 {
                     actor.Velocity = default;
                     actor.Processed = true;
                     continue;
                 }
-                Point2? guide = planner.Guide(actor.Position, destination, actor.Profile.RadiusMm, ref actor.Route);
+                Point2? guide = RecoveryGuide(actor) ?? planner.Guide(actor.Position, destination, actor.Profile.RadiusMm, ref actor.Route);
                 if (!guide.HasValue)
                 {
                     actor.Stuck++;
                     actor.Processed = true;
                     Count("MissingFlowDirections");
                     continue;
+                }
+                if (actor.RecoveryPath == null && actor.YieldGoal < 0 && actor.NextRecoveryAt <= microstep && remaining <= world.CellSizeMm * 5
+                    && SettledBodyBlocks(actor, guide.Value, ordered))
+                {
+                    actor.NextRecoveryAt = microstep + 200;
+                    if (RecoverApproach(actor, ordered))
+                    {
+                        guide = RecoveryGuide(actor) ?? guide;
+                    }
                 }
                 double maximum = actor.Profile.SpeedMmPerTick / (double)SimulationProtocol.Substeps;
                 Point2 preferred = (guide.Value - actor.Position).Normalized;
@@ -205,15 +189,9 @@ namespace NavigationLab.CSupCom2
                 actor.Velocity = next - actor.Position;
                 actor.Position = next;
                 actor.Processed = true;
-                double goalDistance = Point2.Distance(next, target);
-                actor.BestDistance = Math.Min(actor.BestDistance, goalDistance);
                 if (moved < maximum * .1)
                 {
                     Count("CollisionStops");
-                }
-                if (actor.Stuck > 400 && microstep % 10 == 0)
-                {
-                    RequestYield(actor, ordered);
                 }
             }
             if (microstep % 200 == 0)
@@ -229,11 +207,13 @@ namespace NavigationLab.CSupCom2
                     actor.Stuck = stagnant && State(actor) == MotionState.Moving ? actor.Stuck + 200 : 0;
                     actor.ProgressAnchor = actor.Position;
                 }
-                if (ordered.Any(actor => actor.Stuck > 200 && actor.YieldGoal < 0 && InSiegeArea(actor)))
+                foreach (var actor in ordered.Where(actor => actor.Stuck >= 200 && actor.YieldGoal < 0 && actor.Goal >= 0
+                    && actor.NextRecoveryAt <= microstep))
                 {
-                    if (!RedistributeStalledGoals(ordered))
+                    actor.NextRecoveryAt = microstep + 200;
+                    if (!RecoverApproach(actor, ordered) && actor.Stuck >= 400 && !actor.YieldRequested)
                     {
-                        RedistributeSiegeGoals(ordered);
+                        RequestYield(actor, ordered);
                     }
                 }
             }
@@ -313,6 +293,12 @@ namespace NavigationLab.CSupCom2
             foreach (var actor in ordered)
             {
                 int destination = actor.YieldGoal >= 0 ? actor.YieldGoal : actor.Goal;
+                if (actor.RecoveryPath != null && actor.RecoveryPath.Skip(actor.RecoveryWaypoint).Any(point => planner.IsDirty(point, destination, dirty)))
+                {
+                    actor.RecoveryPath = null;
+                    actor.PreferClearCorridor = false;
+                }
+                actor.RecoveryBodies = null;
                 bool invalidYield = actor.YieldGoal >= 0 && (!planner.Connected(actor.Position, destination, actor.Profile.RadiusMm)
                     || !actors.TryGetValue(actor.YieldRequester, out var requester) || requester.Goal < 0);
                 if (actor.Goal < 0 || invalidYield || change.ReplaceTarget?.Id == actor.TargetId || planner.IsDirty(actor.Position, destination, dirty)
@@ -343,11 +329,13 @@ namespace NavigationLab.CSupCom2
                 {
                     continue;
                 }
-                var changes = new Dictionary<Actor, int>();
-                if (!Assign(actor, new HashSet<int>(), changes, 0) || !CommitGoals(changes))
+                int goal = FindUnclaimedGoal(actor);
+                if (goal < 0)
                 {
                     Count("InvalidatedGoalsWithoutReplacement");
+                    continue;
                 }
+                AssignGoal(actor, goal);
             }
         }
 
@@ -372,113 +360,90 @@ namespace NavigationLab.CSupCom2
 
         private bool Completed(Actor actor)
         {
-            return !actor.VacancyTransfer && State(actor) != MotionState.Moving && CanHold(actor, actor.Goal)
+            return State(actor) != MotionState.Moving && CanHold(actor, actor.Goal)
                 && Geometry.Clear(world, actor.Position, actor.Profile.RadiusMm);
         }
 
-        private bool Assign(Actor actor, HashSet<int> seen, Dictionary<Actor, int> changes, int depth)
+        private int FindUnclaimedGoal(Actor actor, bool attackOnly = false)
         {
-            if (depth > 12)
+            if (actor.AssignedGoal)
             {
-                return false;
+                int goal = actor.RequestedGoal;
+                return CanHold(actor, goal) && FitsClaim(actor, goal) && planner.Connected(actor.Position, goal, actor.Profile.RadiusMm) ? goal : -1;
             }
-            IEnumerable<int> candidates = actor.AssignedGoal ? new[] { actor.RequestedGoal } : Enumerable.Range(0, world.CellCount);
-            var ordered = candidates.Where(cell => CanHold(actor, cell) && (worldChanged ? planner.Connected(actor.Position, cell, actor.Profile.RadiusMm)
-                : planner.Connected(world.CellAt(actor.Position), cell, actor.Profile.RadiusMm)))
-                .OrderBy(cell => Attack(actor, world.Center(cell)) ? 0 : 1)
-                .ThenBy(cell => Rarity(actor, cell))
-                .ThenByDescending(cell => Point2.Distance(actor.Position, world.Center(cell)))
-                .ThenBy(cell => cell).ToArray();
-            foreach (int goal in ordered)
+
+            TargetDefinition target = targets[actor.TargetId];
+            var candidates = Enumerable.Range(0, world.CellCount)
+                .Where(cell => cell != actor.Goal && CanHold(actor, cell) && FitsClaim(actor, cell))
+                .Select(cell => (Cell: cell, Attacks: Attack(actor, world.Center(cell))))
+                .Where(candidate => !attackOnly || candidate.Attacks)
+                .ToArray();
+            if (candidates.Length == 0)
             {
-                if (seen.Contains(goal) || owners.TryGetValue(goal, out int currentOwner) && currentOwner == actor.Id)
-                {
-                    continue;
-                }
-                if (!owners.ContainsKey(goal) && FitsClaim(actor, goal, changes))
-                {
-                    seen.Add(goal);
-                    changes[actor] = goal;
-                    return true;
-                }
+                return -1;
             }
-            foreach (int goal in ordered)
+
+            CrowdBody[] claims = GetApproachBodies(actor, true);
+            double[] costs = planner.ApproachCosts(actor.Position, actor.Profile.RadiusMm, claims);
+            foreach (var candidate in candidates.Where(item => !double.IsPositiveInfinity(costs[item.Cell]))
+                .OrderByDescending(item => item.Attacks)
+                .ThenBy(item => item.Attacks ? 0 : Point2.Distance(world.Center(item.Cell), target.Center))
+                .ThenBy(item => costs[item.Cell])
+                .ThenBy(item => item.Attacks ? Rarity(actor, item.Cell) : 0)
+                .ThenBy(item => item.Cell))
             {
-                if (!seen.Add(goal) || !owners.TryGetValue(goal, out int owner) || owner == actor.Id)
+                if (KeepsPassageOpen(actor, candidate.Cell, claims, costs, candidates.Select(item => item.Cell)))
                 {
-                    continue;
-                }
-                Actor occupant = actors[owner];
-                if (occupant.AssignedGoal || occupant.VacancyTransfer)
-                {
-                    continue;
-                }
-                bool cellClaimsSuffice = maximumClaimRadius <= world.CellSizeMm * .5 && actor.Profile.RadiusMm <= world.CellSizeMm * .5
-                    && changes.Keys.All(other => other.Profile.RadiusMm <= world.CellSizeMm * .5);
-                if (cellClaimsSuffice && Assign(occupant, seen, changes, depth + 1))
-                {
-                    changes[actor] = goal;
-                    return true;
-                }
-                if (!cellClaimsSuffice)
-                {
-                    var branchChanges = new Dictionary<Actor, int>(changes);
-                    var branchSeen = new HashSet<int>(seen);
-                    if (Assign(occupant, branchSeen, branchChanges, depth + 1) && FitsClaim(actor, goal, branchChanges))
-                    {
-                        changes.Clear();
-                        foreach (var update in branchChanges)
-                        {
-                            changes[update.Key] = update.Value;
-                        }
-                        changes[actor] = goal;
-                        seen.UnionWith(branchSeen);
-                        return true;
-                    }
+                    return candidate.Cell;
                 }
             }
-            return false;
+            return -1;
         }
 
-        private bool FitsClaim(Actor actor, int goal, IReadOnlyDictionary<Actor, int> updates)
+        private bool KeepsPassageOpen(Actor actor, int candidate, CrowdBody[] claims, double[] costs, IEnumerable<int> available)
         {
-            int largest = maximumClaimRadius;
-            foreach (var other in updates.Keys)
-            {
-                largest = Math.Max(largest, other.Profile.RadiusMm);
-            }
-            if ((double)actor.Profile.RadiusMm + largest <= world.CellSizeMm)
+            int radius = actor.Profile.RadiusMm;
+            if (!planner.IsPossiblePassage(candidate, radius, costs))
             {
                 return true;
             }
-            var all = actors.Values.Concat(updates.Keys.Where(other => !actors.ContainsKey(other.Id)));
-            foreach (var other in all)
+
+            var proposed = new CrowdBody(world.Center(candidate), radius);
+            if (Point2.Distance(proposed.Position, actor.Position) < radius * 2 - SimulationProtocol.GeometryToleranceMm)
             {
-                int otherGoal = updates.TryGetValue(other, out int replacement) ? replacement : other.Goal;
-                if (other == actor || otherGoal < 0)
-                {
-                    continue;
-                }
-                if (Point2.Distance(world.Center(goal), world.Center(otherGoal)) < (double)actor.Profile.RadiusMm + other.Profile.RadiusMm - 1e-6)
-                {
-                    return false;
-                }
+                return true;
             }
-            return true;
+            double[] after = planner.ApproachCosts(actor.Position, radius, claims.Append(proposed).ToArray());
+            bool cutsAccess = available.Any(cell => cell != candidate && !double.IsPositiveInfinity(costs[cell])
+                && double.IsPositiveInfinity(after[cell]) && Point2.Distance(world.Center(cell), proposed.Position) >= radius * 2);
+            if (cutsAccess)
+            {
+                Count("PassageGoalsKeptClear");
+            }
+            return !cutsAccess;
         }
 
-        private bool CompatibleClaims(IReadOnlyDictionary<Actor, int> updates)
+        private CrowdBody[] GetApproachBodies(Actor actor, bool includeClaims)
         {
-            var claimed = new HashSet<int>();
-            foreach (var actor in actors.Values.Concat(updates.Keys.Where(other => !actors.ContainsKey(other.Id))))
+            return actors.Values.Where(other => other != actor && (includeClaims ? other.Goal >= 0 : State(other) != MotionState.Moving))
+                .Select(other => new CrowdBody(includeClaims ? world.Center(other.Goal) : other.Position, other.Profile.RadiusMm))
+                .Where(body => !includeClaims || Point2.Distance(actor.Position, body.Position)
+                    >= actor.Profile.RadiusMm + body.Radius - SimulationProtocol.GeometryToleranceMm)
+                .ToArray();
+        }
+
+        private bool FitsClaim(Actor actor, int goal)
+        {
+            if (owners.TryGetValue(goal, out int owner) && owner != actor.Id)
             {
-                int goal = updates.TryGetValue(actor, out int replacement) ? replacement : actor.Goal;
-                if (goal >= 0 && (!claimed.Add(goal) || !FitsClaim(actor, goal, updates)))
-                {
-                    return false;
-                }
+                return false;
             }
-            return true;
+            if ((double)actor.Profile.RadiusMm + maximumClaimRadius <= world.CellSizeMm)
+            {
+                return true;
+            }
+            return actors.Values.All(other => other == actor || other.Goal < 0
+                || Point2.Distance(world.Center(goal), world.Center(other.Goal)) >= (double)actor.Profile.RadiusMm + other.Profile.RadiusMm - 1e-6);
         }
 
         private int Rarity(Actor actor, int cell)
@@ -520,7 +485,7 @@ namespace NavigationLab.CSupCom2
 
         private MotionState State(Actor actor)
         {
-            if (actor.Goal < 0 || actor.YieldGoal >= 0 || Point2.Distance(actor.Position, world.Center(actor.Goal)) > SimulationProtocol.GoalToleranceMm)
+            if (actor.Goal < 0 || actor.YieldGoal >= 0 || Point2.Distance(actor.Position, world.Center(actor.Goal)) >= CenterToleranceMm)
             {
                 return MotionState.Moving;
             }
@@ -538,6 +503,11 @@ namespace NavigationLab.CSupCom2
             if (toGoal.Length <= distance && SafeMotion(actor, target, ordered))
             {
                 return target;
+            }
+            Point2 forward = actor.Position + preferred * distance;
+            if (actor.RecoveryPath != null && SafeMotion(actor, forward, ordered))
+            {
+                return forward;
             }
             Point2 separation = default;
             foreach (var other in ordered)
@@ -557,7 +527,6 @@ namespace NavigationLab.CSupCom2
             Point2 direction = (preferred + separation * 1.5 + side * (actor.Stuck > 5 ? .35 : .05)).Normalized;
             Point2 best = actor.Position;
             double bestScore = double.NegativeInfinity;
-            Point2 forward = actor.Position + preferred * distance;
             if (SafeMotion(actor, forward, ordered))
             {
                 if (actor.PreferClearCorridor && ClearBodyCorridor(actor, target, ordered))
@@ -632,11 +601,11 @@ namespace NavigationLab.CSupCom2
             int indirectGoal = -1;
             foreach (var blocker in ordered.OrderBy(actor => Point2.Distance(actor.Position, requester.Position)))
             {
-                if (blocker.Id == requester.Id || blocker.YieldGoal >= 0)
+                if (blocker.Id == requester.Id || blocker.YieldGoal >= 0 || State(blocker) != MotionState.Moving)
                 {
                     continue;
                 }
-                if (State(blocker) == MotionState.Moving && (blocker.Stuck <= 400 || blocker.Id < requester.Id))
+                if (blocker.Stuck < 400 || blocker.Id < requester.Id)
                 {
                     continue;
                 }
@@ -653,7 +622,7 @@ namespace NavigationLab.CSupCom2
                     .Where(cell => planner.Connected(origin, cell, blocker.Profile.RadiusMm))
                     .Where(cell => FreePosition(world.Center(cell), blocker.Profile.RadiusMm, blocker.Id))
                     .Where(cell => !ordered.Any(other => other.Id != blocker.Id && other.YieldGoal == cell))
-                    .Where(cell => cell != requester.Goal || CanExchangeVacancyGoals(requester, blocker, ordered))
+                    .Where(cell => cell != requester.Goal)
                     .OrderByDescending(cell => Geometry.PointSegment(world.Center(cell), requester.Position, world.Center(requester.Goal)))
                     .ThenBy(cell => Point2.Distance(world.Center(cell), blocker.Position)).ThenBy(cell => cell).ToArray();
                 if (candidates.Length == 0)
@@ -670,24 +639,8 @@ namespace NavigationLab.CSupCom2
                     }
                     continue;
                 }
-                candidates = direct;
-                if (candidates[0] == requester.Goal)
-                {
-                    CommitVacancyExchange(requester, blocker);
-                    return;
-                }
-                BeginYield(requester, blocker, candidates[0], false);
+                BeginYield(requester, blocker, direct[0], false);
                 return;
-            }
-            if (InSiegeArea(requester))
-            {
-                Actor? mover = ordered.Where(blocker => blocker.Id != requester.Id && CanExchangeVacancyGoals(requester, blocker, ordered))
-                    .OrderBy(blocker => GoalStepsFrom(requester, blocker.Goal)).ThenBy(blocker => blocker.Id).FirstOrDefault();
-                if (mover != null)
-                {
-                    CommitVacancyExchange(requester, mover);
-                    return;
-                }
             }
             if (indirectBlocker != null)
             {
@@ -702,39 +655,11 @@ namespace NavigationLab.CSupCom2
             blocker.YieldRequester = requester.Id;
             blocker.YieldUntil = microstep + 1600;
             blocker.Route = null;
-            blocker.BestDistance = double.PositiveInfinity;
+            blocker.RecoveryPath = null;
+            requester.YieldRequested = true;
             requester.Stuck = 0;
             Count("LocalPushRequests");
             Count(indirect ? "IndirectYieldFallbacks" : "DirectYieldRequests");
-        }
-
-        private void CommitVacancyExchange(Actor requester, Actor mover)
-        {
-            int vacated = mover.Goal;
-            if (!CommitGoals(new Dictionary<Actor, int> { [mover] = requester.Goal, [requester] = vacated }))
-            {
-                return;
-            }
-            mover.VacancyTransfer = true;
-            requester.PreferClearCorridor = true;
-            mover.PreferClearCorridor = true;
-            Count("PermanentVacancyGoalExchanges");
-        }
-
-        private bool CanExchangeVacancyGoals(Actor requester, Actor blocker, Actor[] ordered)
-        {
-            if (requester.AssignedGoal || blocker.AssignedGoal || requester.TargetId != blocker.TargetId
-                || !requester.Profile.Equals(blocker.Profile) || blocker.VacancyTransfer || State(blocker) == MotionState.Moving
-                || !CanHold(requester, blocker.Goal) || !CanHold(blocker, requester.Goal)
-                || GoalStepsFrom(requester, blocker.Goal) >= GoalStepsFrom(requester, requester.Goal)
-                || !planner.Connected(requester.Goal, blocker.Goal, requester.Profile.RadiusMm)
-                || ordered.Any(other => other.Id != requester.Id && other.Id != blocker.Id && other.YieldGoal == requester.Goal)
-                || !owners.TryGetValue(requester.Goal, out int requesterOwner) || requesterOwner != requester.Id
-                || !owners.TryGetValue(blocker.Goal, out int blockerOwner) || blockerOwner != blocker.Id)
-            {
-                return false;
-            }
-            return ClearBodyCorridor(blocker, world.Center(requester.Goal), ordered);
         }
 
         private bool ClearBodyCorridor(Actor actor, Point2 destination, Actor[] ordered)
@@ -742,12 +667,6 @@ namespace NavigationLab.CSupCom2
             return Geometry.Segment(world, actor.Position, destination, actor.Profile.RadiusMm)
                 && ordered.All(other => other.Id == actor.Id || Geometry.PointSegment(other.Position, actor.Position, destination)
                     >= actor.Profile.RadiusMm + other.Profile.RadiusMm - 1e-6);
-        }
-
-        private int GoalStepsFrom(Actor actor, int goal)
-        {
-            int source = world.CellAt(actor.Position);
-            return Math.Abs(source % world.Width - goal % world.Width) + Math.Abs(source / world.Width - goal / world.Width);
         }
 
         private bool ReleaseYield(Actor blocker)
@@ -766,319 +685,122 @@ namespace NavigationLab.CSupCom2
         {
             foreach (var actor in actors.Values.OrderBy(actor => actor.Id))
             {
-                EnsureAttackService(actor);
+                if (actor.AssignedGoal || actor.Goal < 0 || Attack(actor, world.Center(actor.Goal)))
+                {
+                    continue;
+                }
+
+                int goal = FindUnclaimedGoal(actor, true);
+                if (goal >= 0)
+                {
+                    AssignGoal(actor, goal);
+                    Count("WaitingPromotions");
+                }
             }
         }
 
-        private void EnsureAttackService(Actor actor)
+        private void AssignGoal(Actor actor, int goal)
         {
-            if (actor.AssignedGoal || actor.VacancyTransfer || actor.Goal < 0 || Attack(actor, world.Center(actor.Goal)))
+            if (owners.TryGetValue(actor.Goal, out int owner) && owner == actor.Id)
             {
-                return;
+                owners.Remove(actor.Goal);
             }
-            var updates = new Dictionary<Actor, int>();
-            if (AugmentAttack(actor, new HashSet<int>(), updates) && CommitGoals(updates))
+            if (actor.Goal != goal)
             {
-                Count("WaitingPromotions");
-                return;
+                Count("BusinessGoalReassignments");
             }
-            updates.Clear();
-            int[] requested = AttackCells(actor).ToArray();
-            foreach (int goal in requested)
-            {
-                if (!owners.TryGetValue(goal, out int owner) || owner == actor.Id)
-                {
-                    continue;
-                }
-                Actor flexible = actors[owner];
-                if (flexible.AssignedGoal || flexible.VacancyTransfer || flexible.TargetId != actor.TargetId)
-                {
-                    continue;
-                }
-                var flexibleSet = new HashSet<int>(AttackCells(flexible));
-                if (flexibleSet.Count <= requested.Length || requested.Any(cell => !flexibleSet.Contains(cell)))
-                {
-                    continue;
-                }
-                int sameProfileClaims = actors.Values.Count(other => other.TargetId == actor.TargetId && other.Profile.Equals(flexible.Profile)
-                    && other.Goal >= 0 && Attack(other, world.Center(other.Goal)));
-                if (sameProfileClaims <= 1)
-                {
-                    continue;
-                }
-                int alternative = Enumerable.Range(0, world.CellCount)
-                    .Where(cell => cell == actor.Goal || !owners.ContainsKey(cell))
-                    .Where(cell => CanHold(flexible, cell) && planner.Connected(flexible.Goal, cell, flexible.Profile.RadiusMm))
-                    .OrderBy(cell => Attack(flexible, world.Center(cell)) ? 0 : 1)
-                    .ThenBy(cell => Point2.Distance(flexible.Position, world.Center(cell))).ThenBy(cell => cell).DefaultIfEmpty(-1).First();
-                if (alternative < 0)
-                {
-                    continue;
-                }
-                updates[flexible] = alternative;
-                updates[actor] = goal;
-                if (CommitGoals(updates))
-                {
-                    Count("AttackServiceExchanges");
-                    return;
-                }
-                updates.Clear();
-            }
-        }
-
-        private bool AugmentAttack(Actor actor, HashSet<int> visited, Dictionary<Actor, int> updates)
-        {
-            foreach (int goal in AttackCells(actor).OrderBy(cell => Point2.Distance(actor.Position, world.Center(cell))).ThenBy(cell => cell))
-            {
-                if (!visited.Add(goal))
-                {
-                    continue;
-                }
-                if (!owners.TryGetValue(goal, out int owner))
-                {
-                    updates[actor] = goal;
-                    return true;
-                }
-                if (owner == actor.Id || actors[owner].AssignedGoal || actors[owner].VacancyTransfer)
-                {
-                    continue;
-                }
-                if (AugmentAttack(actors[owner], visited, updates))
-                {
-                    updates[actor] = goal;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private IEnumerable<int> AttackCells(Actor actor)
-        {
-            return Enumerable.Range(0, world.CellCount).Where(cell => CanHold(actor, cell) && Attack(actor, world.Center(cell))
-                && (!worldChanged || planner.Connected(actor.Position, cell, actor.Profile.RadiusMm)));
-        }
-
-        private bool CommitGoals(Dictionary<Actor, int> updates)
-        {
-            if (worldChanged && updates.Any(update => !planner.Connected(update.Key.Position, update.Value, update.Key.Profile.RadiusMm)))
-            {
-                Count("RejectedUnreachableGoalChanges");
-                return false;
-            }
-            if (!CompatibleClaims(updates))
-            {
-                Count("RejectedOverlappingGoalChanges");
-                return false;
-            }
-            foreach (var actor in updates.Keys)
-            {
-                if (owners.TryGetValue(actor.Goal, out int owner) && owner == actor.Id)
-                {
-                    owners.Remove(actor.Goal);
-                }
-            }
-            foreach (var update in updates)
-            {
-                update.Key.Goal = update.Value;
-                ResetGoalProgress(update.Key);
-                owners[update.Value] = update.Key.Id;
-            }
-            return true;
+            actor.Goal = goal;
+            ResetGoalProgress(actor);
+            owners[goal] = actor.Id;
         }
 
         private static void ResetGoalProgress(Actor actor)
         {
             actor.Route = null;
             actor.YieldGoal = -1;
-            actor.VacancyTransfer = false;
+            actor.RecoveryPath = null;
+            actor.CandidateRecoveryPath = null;
+            actor.RecoveryBodies = null;
+            actor.RecoveryWaypoint = 0;
+            actor.NextRecoveryAt = 0;
+            actor.YieldRequested = false;
             actor.PreferClearCorridor = false;
-            actor.BestDistance = double.PositiveInfinity;
             actor.Stuck = 0;
             actor.ProgressAnchor = actor.Position;
             actor.SiegeWindowBest = double.PositiveInfinity;
         }
 
-        private void RedistributeSiegeGoals(Actor[] ordered)
+        private bool RecoverApproach(Actor actor, Actor[] ordered)
         {
-            // This is the experiment's siege-slot layer, not a claim about the closed game's attack AI.
-            // A min-cost matching changes only destinations; every body still moves through the flow/physics pipeline.
-            ordered = ordered.Where(actor => !actor.VacancyTransfer && InSiegeArea(actor)).ToArray();
-            if (ordered.Length == 0 || ordered.Length > 160)
+            if (actor.RecoveryPath != null && actor.Stuck < 400)
             {
-                return;
+                return true;
             }
-            var included = new HashSet<int>(ordered.Select(actor => actor.Id));
-            int[] goals = Enumerable.Range(0, world.CellCount).Where(world.HoldingAllowed)
-                .Where(cell => !owners.TryGetValue(cell, out int owner) || included.Contains(owner))
-                .Where(cell => ordered.Any(actor => CanHold(actor, cell))).ToArray();
-            int count = ordered.Length;
-            if (goals.Length < count)
+
+            CrowdBody[] settled = GetApproachBodies(actor, false);
+            if (actor.RecoveryBodies == null || !actor.RecoveryBodies.SequenceEqual(settled)
+                || Point2.Distance(actor.Position, actor.RecoveryOrigin) >= SimulationProtocol.GoalToleranceMm)
             {
-                return;
+                actor.CandidateRecoveryPath = planner.FindApproach(actor.Position, actor.Goal, actor.Profile.RadiusMm, settled);
+                actor.RecoveryOrigin = actor.Position;
+                actor.RecoveryBodies = settled;
             }
-            const double impossible = 1e16;
-            var costs = new double[count, goals.Length];
-            for (int row = 0; row < count; row++)
+
+            var path = actor.CandidateRecoveryPath!;
+            int first = ReferenceEquals(path, actor.RecoveryPath) ? actor.RecoveryWaypoint : 0;
+            for (int index = path.Length - 1; index >= first; index--)
             {
-                Actor actor = ordered[row];
-                int origin = world.CellAt(actor.Position);
-                if (!planner.CanStand(origin, actor.Profile.RadiusMm))
+                Point2 waypoint = path[index];
+                if (Point2.Distance(actor.Position, waypoint) <= CenterToleranceMm || !ClearBodyCorridor(actor, waypoint, ordered))
                 {
-                    origin = actor.Goal;
+                    continue;
                 }
-                int attackCount = AttackCells(actor).Count();
-                bool settled = State(actor) != MotionState.Moving;
-                var bodies = actors.Values.Where(other => other.Id != actor.Id && State(other) != MotionState.Moving)
-                    .Select(other => new CrowdBody(other.Position, other.Profile.RadiusMm)).ToArray();
-                double[] traffic = planner.TrafficCosts(actor.Position, actor.Profile.RadiusMm, bodies);
-                for (int column = 0; column < goals.Length; column++)
+                if (ReferenceEquals(path, actor.RecoveryPath) && index == actor.RecoveryWaypoint)
                 {
-                    int goal = goals[column];
-                    if (actor.AssignedGoal && goal != actor.RequestedGoal || !CanHold(actor, goal)
-                        || !planner.Connected(origin, goal, actor.Profile.RadiusMm))
-                    {
-                        costs[row, column] = impossible;
-                        continue;
-                    }
-                    double cost = traffic[goal];
-                    if (double.IsInfinity(cost))
-                    {
-                        costs[row, column] = impossible;
-                        continue;
-                    }
-                    if (Attack(actor, world.Center(goal)))
-                    {
-                        cost -= 1e12 + 1e8 / Math.Max(1, attackCount);
-                    }
-                    if (settled && goal != actor.Goal)
-                    {
-                        cost += 10000;
-                    }
-                    costs[row, column] = cost;
+                    return false;
                 }
+                actor.RecoveryPath = path;
+                actor.RecoveryWaypoint = index;
+                actor.PreferClearCorridor = true;
+                actor.Stuck = 0;
+                Count("SameGoalApproachRecoveries");
+                return true;
             }
-            int[]? matching = MinimumCostMatching(costs, impossible);
-            if (matching == null)
-            {
-                Count("SiegeMatchingInfeasible");
-                return;
-            }
-            var updates = new Dictionary<Actor, int>();
-            for (int index = 0; index < count; index++)
-            {
-                int goal = goals[matching[index]];
-                if (goal != ordered[index].Goal)
-                {
-                    updates[ordered[index]] = goal;
-                }
-            }
-            if (updates.Count > 0)
-            {
-                if (CommitGoals(updates))
-                {
-                    Count("SiegeMatchingReassignments", updates.Count);
-                }
-            }
-            Count("SiegeMatchingRuns");
+            return false;
         }
 
-        private bool RedistributeStalledGoals(Actor[] ordered)
+        private bool SettledBodyBlocks(Actor actor, Point2 waypoint, Actor[] ordered)
         {
-            var eligible = ordered.Where(actor => actor.Stuck > 400 && actor.YieldGoal < 0 && actor.Goal >= 0
-                && !actor.AssignedGoal && !actor.VacancyTransfer && State(actor) == MotionState.Moving && InSiegeArea(actor)).ToArray();
-            if (eligible.Length < 2 || eligible.Length > 160)
+            foreach (var other in ordered)
             {
-                return false;
-            }
-            var visited = new HashSet<int>();
-            foreach (var seed in eligible)
-            {
-                if (!visited.Add(seed.Id))
+                if (other.Id != actor.Id && State(other) != MotionState.Moving
+                    && Geometry.PointSegment(other.Position, actor.Position, waypoint) < actor.Profile.RadiusMm + other.Profile.RadiusMm - 1e-7)
                 {
-                    continue;
-                }
-                var members = new List<Actor> { seed };
-                for (int index = 0; index < members.Count; index++)
-                {
-                    Actor current = members[index];
-                    foreach (var other in eligible)
-                    {
-                        if (!visited.Contains(other.Id) && other.TargetId == seed.TargetId && other.Profile.Equals(seed.Profile)
-                            && Point2.Distance(current.Position, other.Position) <= current.Profile.RadiusMm + other.Profile.RadiusMm + world.CellSizeMm)
-                        {
-                            visited.Add(other.Id);
-                            members.Add(other);
-                        }
-                    }
-                }
-                if (members.Count < 2)
-                {
-                    continue;
-                }
-                var goals = members.Select(actor => actor.Goal).ToArray();
-                var costs = new double[members.Count, goals.Length];
-                const double impossible = 1e16;
-                double oldCost = 0;
-                for (int row = 0; row < members.Count; row++)
-                {
-                    Actor actor = members[row];
-                    int origin = planner.CanStand(world.CellAt(actor.Position), actor.Profile.RadiusMm) ? world.CellAt(actor.Position) : actor.Goal;
-                    var bodies = ordered.Where(other => other.Id != actor.Id && State(other) != MotionState.Moving)
-                        .Select(other => new CrowdBody(other.Position, other.Profile.RadiusMm)).ToArray();
-                    double[] traffic = planner.TrafficCosts(actor.Position, actor.Profile.RadiusMm, bodies);
-                    for (int column = 0; column < goals.Length; column++)
-                    {
-                        int goal = goals[column];
-                        if (!CanHold(actor, goal) || !planner.Connected(origin, goal, actor.Profile.RadiusMm) || double.IsInfinity(traffic[goal]))
-                        {
-                            costs[row, column] = impossible;
-                            continue;
-                        }
-                        Point2 destination = world.Center(goal);
-                        double cost = traffic[goal] + Point2.Distance(actor.Position, destination) * .1;
-                        // This is a momentary executable-step cost, not a future collision reservation.
-                        // A wall-detour goal is left to the ordinary static path cost rather than penalized for lacking direct LOS.
-                        if (Geometry.Segment(world, actor.Position, destination, actor.Profile.RadiusMm) && !CanAdvanceToward(actor, destination, ordered))
-                        {
-                            cost += world.CellSizeMm * 2;
-                        }
-                        costs[row, column] = cost;
-                    }
-                    oldCost += costs[row, row];
-                }
-                int[]? matching = MinimumCostMatching(costs, impossible);
-                if (matching == null)
-                {
-                    continue;
-                }
-                double newCost = Enumerable.Range(0, members.Count).Sum(row => costs[row, matching[row]]);
-                if (newCost >= oldCost - 1e-7)
-                {
-                    continue;
-                }
-                var updates = new Dictionary<Actor, int>();
-                for (int row = 0; row < members.Count; row++)
-                {
-                    if (members[row].Goal != goals[matching[row]])
-                    {
-                        updates[members[row]] = goals[matching[row]];
-                    }
-                }
-                if (updates.Count > 0 && CommitGoals(updates))
-                {
-                    Count("StalledClusterReassignments", updates.Count);
-                    Count("StalledClusterRecoveries");
                     return true;
                 }
             }
             return false;
         }
 
-        private bool CanAdvanceToward(Actor actor, Point2 destination, Actor[] ordered)
+        private static Point2? RecoveryGuide(Actor actor)
         {
-            Point2 offset = destination - actor.Position;
-            double distance = Math.Min(offset.Length, actor.Profile.SpeedMmPerTick / (double)SimulationProtocol.Substeps);
-            return ClearBodyCorridor(actor, actor.Position + offset.Normalized * distance, ordered);
+            if (actor.RecoveryPath == null)
+            {
+                return null;
+            }
+            var path = actor.RecoveryPath;
+            while (actor.RecoveryWaypoint < path.Length
+                && Point2.Distance(actor.Position, path[actor.RecoveryWaypoint]) < CenterToleranceMm)
+            {
+                actor.RecoveryWaypoint++;
+            }
+            if (actor.RecoveryWaypoint < path.Length)
+            {
+                return path[actor.RecoveryWaypoint];
+            }
+            actor.RecoveryPath = null;
+            actor.PreferClearCorridor = false;
+            return null;
         }
 
         private bool InSiegeArea(Actor actor)
@@ -1108,86 +830,6 @@ namespace NavigationLab.CSupCom2
                 }
             }
             return false;
-        }
-
-        private static int[]? MinimumCostMatching(double[,] costs, double impossible)
-        {
-            int rows = costs.GetLength(0);
-            int columns = costs.GetLength(1);
-            var u = new double[rows + 1];
-            var v = new double[columns + 1];
-            var p = new int[columns + 1];
-            var way = new int[columns + 1];
-            for (int row = 1; row <= rows; row++)
-            {
-                p[0] = row;
-                int column = 0;
-                var minimum = Enumerable.Repeat(impossible, columns + 1).ToArray();
-                var used = new bool[columns + 1];
-                do
-                {
-                    used[column] = true;
-                    int active = p[column];
-                    double delta = impossible;
-                    int next = 0;
-                    for (int candidate = 1; candidate <= columns; candidate++)
-                    {
-                        if (used[candidate])
-                        {
-                            continue;
-                        }
-                        double reduced = costs[active - 1, candidate - 1] - u[active] - v[candidate];
-                        if (reduced < minimum[candidate])
-                        {
-                            minimum[candidate] = reduced;
-                            way[candidate] = column;
-                        }
-                        if (minimum[candidate] < delta)
-                        {
-                            delta = minimum[candidate];
-                            next = candidate;
-                        }
-                    }
-                    if (delta >= impossible * .5)
-                    {
-                        return null;
-                    }
-                    for (int candidate = 0; candidate <= columns; candidate++)
-                    {
-                        if (used[candidate])
-                        {
-                            u[p[candidate]] += delta;
-                            v[candidate] -= delta;
-                        }
-                        else
-                        {
-                            minimum[candidate] -= delta;
-                        }
-                    }
-                    column = next;
-                }
-                while (p[column] != 0);
-                do
-                {
-                    int previous = way[column];
-                    p[column] = p[previous];
-                    column = previous;
-                }
-                while (column != 0);
-            }
-            var result = new int[rows];
-            for (int column = 1; column <= columns; column++)
-            {
-                if (p[column] > 0)
-                {
-                    if (costs[p[column] - 1, column - 1] >= impossible * .5)
-                    {
-                        return null;
-                    }
-                    result[p[column] - 1] = column - 1;
-                }
-            }
-            return result;
         }
 
         private void Count(string name, long amount = 1)

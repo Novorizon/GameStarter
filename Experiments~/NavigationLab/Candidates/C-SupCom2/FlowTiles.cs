@@ -100,6 +100,7 @@ namespace NavigationLab.CSupCom2
             internal int Version;
             internal bool[] Stand = Array.Empty<bool>();
             internal bool[] Edges = Array.Empty<bool>();
+            internal int[]? ApproachEdges;
             internal double[] Costs = Array.Empty<double>();
             internal int[] Components = Array.Empty<int>();
             internal int[] HoldingDepth = Array.Empty<int>();
@@ -217,57 +218,66 @@ namespace NavigationLab.CSupCom2
             return false;
         }
 
-        internal double[] TrafficCosts(Point2 position, int radius, IReadOnlyList<CrowdBody> bodies)
+        internal double[] ApproachCosts(Point2 position, int radius, IReadOnlyList<CrowdBody> bodies, int goal = -1, int[]? parents = null)
         {
-            // Auxiliary siege-assignment diagnostics. These costs do not command motion or reserve future positions.
             RadiusGraph graph = Graph(radius);
-            var occupancy = new double[world.CellCount];
-            const double penalty = 100000;
+            int[] edges = graph.ApproachEdges ??= BuildApproachEdges(graph);
+            var occupied = new bool[world.CellCount];
+            var blockedEdges = new bool[edges.Length];
             foreach (var body in bodies)
             {
-                double clearance = radius + body.Radius;
-                int x0 = Math.Max(0, (int)((body.Position.X - clearance - world.Origin.X) / world.CellSizeMm));
-                int x1 = Math.Min(world.Width - 1, (int)((body.Position.X + clearance - world.Origin.X) / world.CellSizeMm));
-                int y0 = Math.Max(0, (int)((body.Position.Y - clearance - world.Origin.Y) / world.CellSizeMm));
-                int y1 = Math.Min(world.Height - 1, (int)((body.Position.Y + clearance - world.Origin.Y) / world.CellSizeMm));
+                double clearance = radius + body.Radius - SimulationProtocol.GeometryToleranceMm;
+                int padding = (int)Math.Ceiling(clearance / world.CellSizeMm) + 1;
+                int bodyCell = world.CellAt(body.Position);
+                int x0 = Math.Max(0, bodyCell % world.Width - padding);
+                int x1 = Math.Min(world.Width - 1, bodyCell % world.Width + padding);
+                int y0 = Math.Max(0, bodyCell / world.Width - padding);
+                int y1 = Math.Min(world.Height - 1, bodyCell / world.Width + padding);
                 for (int y = y0; y <= y1; y++)
                 {
                     for (int x = x0; x <= x1; x++)
                     {
-                        int next = y * world.Width + x;
-                        if (Point2.Distance(world.Center(next), body.Position) < clearance - SimulationProtocol.GeometryToleranceMm)
+                        int cell = y * world.Width + x;
+                        Point2 center = world.Center(cell);
+                        occupied[cell] |= Point2.Distance(center, body.Position) < clearance;
+                        int firstEdge = cell * 8;
+                        for (int edge = firstEdge; edge < firstEdge + 8; edge++)
                         {
-                            occupancy[next] += penalty;
+                            int next = edges[edge];
+                            if (next >= 0 && Geometry.PointSegment(body.Position, center, world.Center(next)) < clearance)
+                            {
+                                blockedEdges[edge] = true;
+                            }
                         }
                     }
                 }
             }
+
             var distances = Enumerable.Repeat(double.PositiveInfinity, world.CellCount).ToArray();
-            var heap = new MinHeap();
-            int cell = world.CellAt(position);
-            if (cell < 0)
+            int origin = world.CellAt(position);
+            if (origin < 0)
             {
                 return distances;
             }
-            int sx = cell % world.Width;
-            int sy = cell / world.Width;
-            for (int dy = -2; dy <= 2; dy++)
+
+            var heap = new MinHeap();
+            int sx = origin % world.Width;
+            int sy = origin / world.Width;
+            for (int y = Math.Max(0, sy - 2); y <= Math.Min(world.Height - 1, sy + 2); y++)
             {
-                for (int dx = -2; dx <= 2; dx++)
+                for (int x = Math.Max(0, sx - 2); x <= Math.Min(world.Width - 1, sx + 2); x++)
                 {
-                    int x = sx + dx;
-                    int y = sy + dy;
-                    if (x < 0 || y < 0 || x >= world.Width || y >= world.Height)
+                    int seed = y * world.Width + x;
+                    Point2 center = world.Center(seed);
+                    if (!graph.Stand[seed] || occupied[seed] || !Geometry.Segment(world, position, center, radius)
+                        || bodies.Any(body => Geometry.PointSegment(body.Position, position, center)
+                            < radius + body.Radius - SimulationProtocol.GeometryToleranceMm))
                     {
                         continue;
                     }
-                    int start = y * world.Width + x;
-                    if (!graph.Stand[start] || !Geometry.Segment(world, position, world.Center(start), radius))
-                    {
-                        continue;
-                    }
-                    distances[start] = Point2.Distance(position, world.Center(start)) + occupancy[start];
-                    heap.Push(start, distances[start]);
+
+                    distances[seed] = Point2.Distance(position, center);
+                    heap.Push(seed, distances[seed]);
                 }
             }
             while (heap.Count > 0)
@@ -277,30 +287,204 @@ namespace NavigationLab.CSupCom2
                 {
                     continue;
                 }
-                Count("SiegeTrafficDiagnosisExpanded");
-                int direction = 0;
-                foreach (int next in FourNeighbours(item.Key))
+                if (item.Key == goal)
                 {
-                    bool valid = graph.Edges[item.Key * 4 + direction++];
-                    if (!valid)
+                    break;
+                }
+
+                int firstEdge = item.Key * 8;
+                for (int edge = firstEdge; edge < firstEdge + 8; edge++)
+                {
+                    int next = edges[edge];
+                    if (next < 0 || blockedEdges[edge] || occupied[next])
                     {
                         continue;
                     }
-                    double distance = item.Value + world.CellSizeMm + occupancy[next];
+                    double distance = item.Value + world.CellSizeMm * (edge - firstEdge < 4 ? 1 : Math.Sqrt(2));
                     if (distance + 1e-7 < distances[next])
                     {
                         distances[next] = distance;
+                        if (parents != null)
+                        {
+                            parents[next] = item.Key;
+                        }
                         heap.Push(next, distance);
                     }
                 }
             }
-            for (int index = 0; index < distances.Length; index++)
-            {
-                // Ending where an incumbent stands can be a legitimate joint reassignment; crossing it remains costly.
-                distances[index] -= occupancy[index];
-            }
-            Count("SiegeTrafficDiagnosisRuns");
+            Count("ApproachSearches");
             return distances;
+        }
+
+        private int[] BuildApproachEdges(RadiusGraph graph)
+        {
+            var edges = Enumerable.Repeat(-1, world.CellCount * 8).ToArray();
+            for (int cell = 0; cell < world.CellCount; cell++)
+            {
+                if (!graph.Stand[cell])
+                {
+                    continue;
+                }
+                int first = cell * 8;
+                int direction = 0;
+                foreach (int next in FourNeighbours(cell))
+                {
+                    if (graph.Edges[cell * 4 + direction])
+                    {
+                        edges[first + direction] = next;
+                    }
+                    direction++;
+                }
+                for (int dy = -1; dy <= 1; dy += 2)
+                {
+                    for (int dx = -1; dx <= 1; dx += 2)
+                    {
+                        int x = cell % world.Width + dx;
+                        int y = cell / world.Width + dy;
+                        if (x >= 0 && x < world.Width && y >= 0 && y < world.Height)
+                        {
+                            int next = y * world.Width + x;
+                            if (graph.Stand[next] && Geometry.Segment(world, world.Center(cell), world.Center(next), graph.Radius))
+                            {
+                                edges[first + direction] = next;
+                            }
+                        }
+                        direction++;
+                    }
+                }
+            }
+            return edges;
+        }
+
+        internal Point2[] FindApproach(Point2 position, int goal, int radius, IReadOnlyList<CrowdBody> bodies)
+        {
+            var parents = Enumerable.Repeat(-1, world.CellCount).ToArray();
+            double[] distances = ApproachCosts(position, radius, bodies, goal, parents);
+            if (double.IsPositiveInfinity(distances[goal]))
+            {
+                return FindLocalApproach(position, world.Center(goal), radius, bodies);
+            }
+            var path = new List<Point2>();
+            for (int cell = goal; cell >= 0; cell = parents[cell])
+            {
+                path.Add(world.Center(cell));
+            }
+            path.Reverse();
+            return path.ToArray();
+        }
+
+        private Point2[] FindLocalApproach(Point2 position, Point2 target, int radius, IReadOnlyList<CrowdBody> bodies)
+        {
+            double half = world.CellSizeMm * .5;
+            int startX = (int)Math.Round((position.X - world.Origin.X) / half);
+            int startY = (int)Math.Round((position.Y - world.Origin.Y) / half);
+            int targetX = (int)Math.Round((target.X - world.Origin.X) / half);
+            int targetY = (int)Math.Round((target.Y - world.Origin.Y) / half);
+            const int padding = 6;
+            const int maximumSpan = 28;
+            if (Math.Abs(startX - targetX) > maximumSpan || Math.Abs(startY - targetY) > maximumSpan)
+            {
+                return Array.Empty<Point2>();
+            }
+
+            int left = Math.Max(0, Math.Min(startX, targetX) - padding);
+            int bottom = Math.Max(0, Math.Min(startY, targetY) - padding);
+            int width = Math.Min(world.Width * 2, Math.Max(startX, targetX) + padding) - left + 1;
+            int height = Math.Min(world.Height * 2, Math.Max(startY, targetY) + padding) - bottom + 1;
+            int Index(int x, int y) => (y - bottom) * width + x - left;
+            Point2 Position(int index) => world.Origin + new Point2((left + index % width) * half, (bottom + index / width) * half);
+            var nearby = bodies.Where(body => body.Position.X >= world.Origin.X + left * half - body.Radius - radius
+                && body.Position.X <= world.Origin.X + (left + width - 1) * half + body.Radius + radius
+                && body.Position.Y >= world.Origin.Y + bottom * half - body.Radius - radius
+                && body.Position.Y <= world.Origin.Y + (bottom + height - 1) * half + body.Radius + radius).ToArray();
+            bool Clear(Point2 from, Point2 to) => Geometry.Segment(world, from, to, radius) && nearby.All(body =>
+                Geometry.PointSegment(body.Position, from, to) >= radius + body.Radius - 1e-7);
+
+            var distances = Enumerable.Repeat(double.PositiveInfinity, width * height).ToArray();
+            var parents = Enumerable.Repeat(-1, distances.Length).ToArray();
+            var connectors = new Point2[distances.Length];
+            var heap = new MinHeap();
+            for (int y = Math.Max(bottom, startY - 2); y < Math.Min(bottom + height, startY + 3); y++)
+            {
+                for (int x = Math.Max(left, startX - 2); x < Math.Min(left + width, startX + 3); x++)
+                {
+                    int index = Index(x, y);
+                    Point2 end = Position(index);
+                    var entry = new[] { position, new Point2(position.X, end.Y), new Point2(end.X, position.Y) };
+                    foreach (Point2 connector in entry)
+                    {
+                        double length = Point2.Distance(position, connector) + Point2.Distance(connector, end);
+                        if (length < distances[index] && Clear(position, connector) && Clear(connector, end))
+                        {
+                            distances[index] = length;
+                            connectors[index] = connector;
+                        }
+                    }
+                    if (!double.IsPositiveInfinity(distances[index]))
+                    {
+                        heap.Push(index, distances[index]);
+                    }
+                }
+            }
+            int goal = Index(targetX, targetY);
+            while (heap.Count > 0)
+            {
+                var current = heap.Pop();
+                if (current.Value > distances[current.Key])
+                {
+                    continue;
+                }
+                if (current.Key == goal)
+                {
+                    var path = new List<Point2>();
+                    int seed = goal;
+                    while (parents[seed] >= 0)
+                    {
+                        path.Add(Position(seed));
+                        seed = parents[seed];
+                    }
+                    path.Add(Position(seed));
+                    path.Add(connectors[seed]);
+                    path.Reverse();
+                    Count("HalfCellApproachRecoveries");
+                    return path.ToArray();
+                }
+
+                int x0 = current.Key % width;
+                int y0 = current.Key / width;
+                Point2 from = Position(current.Key);
+                for (int y = Math.Max(0, y0 - 1); y <= Math.Min(height - 1, y0 + 1); y++)
+                {
+                    for (int x = Math.Max(0, x0 - 1); x <= Math.Min(width - 1, x0 + 1); x++)
+                    {
+                        int next = y * width + x;
+                        Point2 to = Position(next);
+                        double distance = current.Value + Point2.Distance(from, to);
+                        if (distance < distances[next] && Clear(from, to))
+                        {
+                            distances[next] = distance;
+                            parents[next] = current.Key;
+                            heap.Push(next, distance);
+                        }
+                    }
+                }
+            }
+            return Array.Empty<Point2>();
+        }
+
+        internal bool IsPossiblePassage(int cell, int radius, double[] costs)
+        {
+            RadiusGraph graph = Graph(radius);
+            int neighbours = 0;
+            int direction = 0;
+            foreach (int next in FourNeighbours(cell))
+            {
+                if (graph.Edges[cell * 4 + direction++] && !double.IsPositiveInfinity(costs[next]))
+                {
+                    neighbours++;
+                }
+            }
+            return neighbours == 2;
         }
 
         internal HashSet<int> ChangeWorld(WorldDefinition next, WorldChange change)
