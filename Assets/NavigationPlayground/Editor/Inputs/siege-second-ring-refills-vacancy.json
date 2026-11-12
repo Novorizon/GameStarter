@@ -1,0 +1,111 @@
+{
+  "world": {
+    "width": 16,
+    "height": 13,
+    "cellSizeMm": 1000,
+    "origin": {
+      "x": 0,
+      "y": 0
+    },
+    "walkable": "0000000000000000000000000000000000000011111111100000001111111110000000111111111000000011111111100111111111111110000000111111111000000011111111100000001111111110000000111111111000000000000000000000000000000000",
+    "holding": "0000000000000000000000000000000000000011111111100000001111111110000000111111111000000011111111100000001111111110000000111111111000000011111111100000001111111110000000111111111000000000000000000000000000000000",
+    "spawnCells": [
+      98
+    ],
+    "targets": [
+      {
+        "id": 1,
+        "x": 9500,
+        "y": 6500,
+        "radiusMm": 500
+      }
+    ],
+    "gatheringDistanceMm": 4000
+  },
+  "requests": [
+    {
+      "readyTick": 0,
+      "id": 1,
+      "radiusMm": 250,
+      "speedMmPerTick": 200,
+      "attackRangeMm": 500,
+      "spawnCell": 98,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 80,
+      "id": 2,
+      "radiusMm": 250,
+      "speedMmPerTick": 200,
+      "attackRangeMm": 500,
+      "spawnCell": 98,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 160,
+      "id": 3,
+      "radiusMm": 250,
+      "speedMmPerTick": 200,
+      "attackRangeMm": 500,
+      "spawnCell": 98,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 240,
+      "id": 4,
+      "radiusMm": 250,
+      "speedMmPerTick": 200,
+      "attackRangeMm": 500,
+      "spawnCell": 98,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 320,
+      "id": 5,
+      "radiusMm": 250,
+      "speedMmPerTick": 200,
+      "attackRangeMm": 500,
+      "spawnCell": 98,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    },
+    {
+      "readyTick": 400,
+      "id": 6,
+      "radiusMm": 250,
+      "speedMmPerTick": 200,
+      "attackRangeMm": 500,
+      "spawnCell": 98,
+      "targetId": 1,
+      "assignedGoalCell": -1
+    }
+  ],
+  "worldEvents": [],
+  "deaths": [
+    {
+      "tick": 780,
+      "count": 1,
+      "afterSettlement": false,
+      "replace": false,
+      "requireMoving": false,
+      "range": -1,
+      "attackersOnly": true
+    }
+  ],
+  "expectation": "FullArrival",
+  "expectedLive": 5,
+  "expectedAttackers": 4,
+  "deadlineTicks": 1200,
+  "holdTicks": 200,
+  "initialSettledCheckTick": -1,
+  "minimumOldWaitingPromotions": 1,
+  "requiredFeatures": "DeathAndReinforcement",
+  "microstepMilliseconds": 5,
+  "logicalTickMilliseconds": 50,
+  "modelInputSha256": "6d2c84577942eecd639e542c4807e98827a1b738d752ce9ed1738677d1471925",
+  "minimumAttackers": []
+}

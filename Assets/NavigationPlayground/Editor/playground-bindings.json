@@ -1,5 +1,5 @@
 {
-  "scope": "Editor-only bridge experiment. A and C33 are new builds at the listed source commits. Other assemblies retain their original frozen bindings.",
+  "scope": "Editor-only siege experiment. Experimental builds are bound to the listed source commits and assembly hashes.",
   "assemblies": {
     "core": {
       "file": "NavigationLab.Core.dll",
@@ -17,9 +17,9 @@
     },
     "A": {
       "file": "NavigationLab.ASipp.dll",
-      "sha256": "d57b1e9b48c6bc1346d5c3397fc06e1a398539e8b75116c96e8314b01c302e16",
+      "sha256": "96fdf5a72eb8f02b2863c050db4686435aa3b3902535e52c9747569eef25f725",
       "sourceFactory": "NavigationLab.Candidates.ASipp.SippFactory",
-      "sourceCommit": "67c21760320440e6bf8b77f31f939b81316adb79"
+      "sourceCommit": "2df27b79f9ac8abf7c2301b09eb8141a184cb82e"
     },
     "B": {
       "file": "NavigationLab.BOrca.dll",
@@ -30,9 +30,9 @@
     },
     "C": {
       "file": "NavigationLab.CSupCom2.dll",
-      "sha256": "c3d767647a84b1bbbcff1353a901a2a73aea921d984bee236d9590e5753565e3",
+      "sha256": "e6c556f0edae077273ee5fb90017086e7add19019fbf32dc9f367247d022435f",
       "sourceFactory": "NavigationLab.CSupCom2.Factory",
-      "sourceCommit": "66f3782ee17d73cbd189cc170a4cfb4c13268629"
+      "sourceCommit": "3811018111547ac97d279bb10cb0809e532b60ca"
     },
     "D": {
       "file": "NavigationLab.DAoe4.dll",
@@ -355,6 +355,24 @@
       "originalInputSha256": "06338ebcfe4c2d9ec32be482dec8ab2b3aefdf13398f8282124b5e2241ac234d",
       "originalFileSha256": "5326d6471f84d4dbf1a809f87a44f13a529d4148fb90049d9ccc873c10536e16",
       "unityFileSha256": "c87fc783a723c3508ee044b0fa663733240866c4f7d0be2b401eb6f61a4845f9"
+    },
+    {
+      "name": "siege-near-front-and-side",
+      "originalInputSha256": "6e8ec4fab728735c8cab34e46d46ae4179e1bc753149e09c93795786daaea6ef",
+      "originalFileSha256": "5b07362536dc519fcc91988f768a63866ce26b8a9a93acaf1d5e7bfe5d9a74d0",
+      "unityFileSha256": "8039369f0ed07c532b2fd9d3951e27782a7912fd971a11b6fefd19106836e86c"
+    },
+    {
+      "name": "siege-fill-first-then-second",
+      "originalInputSha256": "8158998ca5151945bf9052d1e76368008afae634470caf7e26510cdcc42a2da7",
+      "originalFileSha256": "9b13a43589afab8040aa0dc5c4340d989e6a85e3fe2736bf33bcecda07fadcd2",
+      "unityFileSha256": "cdac398272a048f12f072d9e0a59f69c75ee8ac7dbd79346b689c8bb5a8015f9"
+    },
+    {
+      "name": "siege-second-ring-refills-vacancy",
+      "originalInputSha256": "6d2c84577942eecd639e542c4807e98827a1b738d752ce9ed1738677d1471925",
+      "originalFileSha256": "0212872ede8f212ff7a7d261eeeb69abbc09bb3c7779950144b29d4a99ec2f40",
+      "unityFileSha256": "49144549f64b541cf60439464d00878c33da3b761d6a6f6e2f51438da8af695f"
     }
   ]
 }

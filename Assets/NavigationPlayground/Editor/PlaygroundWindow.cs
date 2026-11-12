@@ -155,14 +155,14 @@ namespace NavigationLab.UnityPlayground
         public const string ScenePath = Root + "/Scenes/NavigationPlayground.unity";
         private const string PendingKey = "NavigationPlayground.Pending";
         private const string PreviousSceneKey = "NavigationPlayground.PreviousStartScene";
-        private static readonly string[] Names = { "A / SIPP (Bridge)", "B0 / ORCA", "B1 / ORCA + Yield", "C33 / Flow field (Bridge)", "D12 / Hierarchical + exchange", "E / A* + refinement" };
+        private static readonly string[] Names = { "A / SIPP (Siege)", "B0 / ORCA", "B1 / ORCA + Yield", "C33 / Flow field (Siege)", "D12 / Hierarchical + exchange", "E / A* + refinement" };
         private static readonly string[] PluginHashes =
         {
             "NavigationLab.Core.dll:856fd3729b3e44972361c1e36fe0a0b333c7c215c9676e74ca372e397d5bbb73",
             "NavigationLab.Oracle.dll:59453caa82a3e057ccca6f5e9bdc69ddda61f6278d4d9dfe00da2a209a44d17b",
-            "NavigationLab.ASipp.dll:d57b1e9b48c6bc1346d5c3397fc06e1a398539e8b75116c96e8314b01c302e16",
+            "NavigationLab.ASipp.dll:96fdf5a72eb8f02b2863c050db4686435aa3b3902535e52c9747569eef25f725",
             "NavigationLab.BOrca.dll:a69bc87d5e10f614f463929f374d2b294ed0c0840377c91fcfc7b7f7280e2831",
-            "NavigationLab.CSupCom2.dll:c3d767647a84b1bbbcff1353a901a2a73aea921d984bee236d9590e5753565e3",
+            "NavigationLab.CSupCom2.dll:e6c556f0edae077273ee5fb90017086e7add19019fbf32dc9f367247d022435f",
             "NavigationLab.DAoe4.dll:9e6107cfe1dcd6d83ac137314109a145835c764b3a29a87171bde4412572b19c",
             "NavigationLab.EWarcraft3.dll:f0e3f31d8ade5fbb7eb691228b7b7fd71491f30c51ffffb4938755c78b99d29d"
         };
