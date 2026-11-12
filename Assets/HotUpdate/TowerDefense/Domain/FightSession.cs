@@ -112,7 +112,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             routes = configuration.Routes.ToDictionary(value => value.Id, CreateRoute);
             Gold = configuration.InitialGold;
             BaseHp = configuration.BaseHealth;
-            Navigation = configuration.Navigation == null ? null : new NavigationCrowd(configuration.Navigation);
+            Navigation = configuration.Navigation == null ? null : new NavigationCrowd(configuration.Navigation, stableSiegePositions: true);
             if (Navigation != null)
             {
                 foreach (var definition in configuration.Enemies)

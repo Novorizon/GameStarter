@@ -34,6 +34,12 @@ namespace Game
 
         protected override void OnStart()
         {
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+            if (Screen.fullScreen)
+            {
+                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            }
+#endif
             cts = new CancellationTokenSource();
             startupError = null;
             State = StartupState.Starting;
