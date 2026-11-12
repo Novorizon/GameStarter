@@ -58,6 +58,7 @@ namespace NavigationLab.CSupCom2
         };
         private long microstep;
         private bool completedGroupSleeping;
+        private bool worldChanged;
         private int maximumClaimRadius;
         public IReadOnlyDictionary<string, long> Metrics => metrics;
         public string LastSpawnFailure { get; private set; } = "None";
@@ -252,63 +253,102 @@ namespace NavigationLab.CSupCom2
             }
             owners.Remove(actor.Goal);
             Count("Removed");
+            if (worldChanged)
+            {
+                ReassignUnclaimedGoals(actors.Values.Where(other => other.Goal < 0).OrderBy(other => other.Id));
+            }
             PromoteWaiting();
             return true;
         }
 
         public bool ApplyWorldChange(WorldChange change)
         {
-            WakeCompletedGroup();
+            if (change == null || change.BlockCells == null || change.OpenCells == null
+                || change.BlockCells.Concat(change.OpenCells).Any(cell => cell < 0 || cell >= world.CellCount)
+                || change.BlockCells.Intersect(change.OpenCells).Any()
+                || change.ReplaceTarget is TargetDefinition replacement && (!targets.ContainsKey(replacement.Id) || replacement.RadiusMm < 0
+                    || double.IsNaN(replacement.Center.X) || double.IsInfinity(replacement.Center.X)
+                    || double.IsNaN(replacement.Center.Y) || double.IsInfinity(replacement.Center.Y)))
+            {
+                Count("InvalidWorldChanges");
+                return false;
+            }
+
+            change = new WorldChange
+            {
+                BlockCells = change.BlockCells.Where(world.IsWalkable).ToArray(),
+                OpenCells = change.OpenCells.Where(cell => !world.IsWalkable(cell)).ToArray(),
+                ReplaceTarget = change.ReplaceTarget
+            };
+            if (change.ReplaceTarget is TargetDefinition target && targets[target.Id].Center == target.Center && targets[target.Id].RadiusMm == target.RadiusMm)
+            {
+                change.ReplaceTarget = null;
+            }
+            if (change.BlockCells.Length == 0 && change.OpenCells.Length == 0 && !change.ReplaceTarget.HasValue)
+            {
+                Count("NoOpWorldChanges");
+                return true;
+            }
+
             WorldDefinition next = world.WithChange(change);
             if (actors.Values.Any(actor => !Geometry.Clear(next, actor.Position, actor.Profile.RadiusMm)))
             {
                 Count("InvalidWorldChanges");
                 return false;
             }
-            planner.ChangeWorld(next, change);
+            WakeCompletedGroup();
+            worldChanged = true;
+            HashSet<int> dirty = planner.ChangeWorld(next, change);
             world = next;
             targets = world.Targets.ToDictionary(target => target.Id);
-            owners.Clear();
-            foreach (var actor in actors.Values.OrderBy(actor => actor.Id))
+            Actor[] ordered = actors.Values.OrderBy(actor => actor.Id).ToArray();
+            foreach (var actor in ordered)
             {
-                actor.Route = null;
-                actor.YieldGoal = -1;
-                actor.VacancyTransfer = false;
-                actor.PreferClearCorridor = false;
-                actor.SiegeWindowBest = double.PositiveInfinity;
-                actor.ProgressAnchor = actor.Position;
-                actor.Stuck = 0;
-                if (CanHold(actor, actor.Goal) && !owners.ContainsKey(actor.Goal))
+                if (actor.Goal >= 0 && (!CanHold(actor, actor.Goal) || !planner.Connected(actor.Position, actor.Goal, actor.Profile.RadiusMm)))
                 {
-                    owners[actor.Goal] = actor.Id;
-                }
-                else
-                {
+                    owners.Remove(actor.Goal);
                     actor.Goal = -1;
                 }
             }
-            foreach (var actor in actors.Values.Where(actor => actor.Goal < 0).OrderBy(actor => actor.Id))
+            foreach (var actor in ordered)
             {
-                var changes = new Dictionary<Actor, int>();
-                if (!Assign(actor, new HashSet<int>(), changes, 0) || !CompatibleClaims(changes))
+                int destination = actor.YieldGoal >= 0 ? actor.YieldGoal : actor.Goal;
+                bool invalidYield = actor.YieldGoal >= 0 && (!planner.Connected(actor.Position, destination, actor.Profile.RadiusMm)
+                    || !actors.TryGetValue(actor.YieldRequester, out var requester) || requester.Goal < 0);
+                if (actor.Goal < 0 || invalidYield || change.ReplaceTarget?.Id == actor.TargetId || planner.IsDirty(actor.Position, destination, dirty)
+                    || actor.Route != null && !planner.RebindRoute(actor.Route, actor.Profile.RadiusMm, dirty))
                 {
-                    Count("InvalidatedGoalsWithoutReplacement");
-                    continue;
+                    if (actor.Route != null)
+                    {
+                        Count("WorldChangeRoutesInvalidated");
+                    }
+                    ResetGoalProgress(actor);
                 }
-                foreach (var update in changes)
+                else if (actor.Route != null)
                 {
-                    owners.Remove(update.Key.Goal);
-                }
-                foreach (var update in changes)
-                {
-                    update.Key.Goal = update.Value;
-                    update.Key.Route = null;
-                    owners[update.Value] = update.Key.Id;
+                    Count("WorldChangeRoutesPreserved");
                 }
             }
+            ReassignUnclaimedGoals(ordered);
             PromoteWaiting();
             Count("WorldChanges");
             return true;
+        }
+
+        private void ReassignUnclaimedGoals(IEnumerable<Actor> ordered)
+        {
+            foreach (var actor in ordered)
+            {
+                if (actor.Goal >= 0)
+                {
+                    continue;
+                }
+                var changes = new Dictionary<Actor, int>();
+                if (!Assign(actor, new HashSet<int>(), changes, 0) || !CommitGoals(changes))
+                {
+                    Count("InvalidatedGoalsWithoutReplacement");
+                }
+            }
         }
 
         public IReadOnlyList<UnitSnapshot> Snapshot()
@@ -343,7 +383,8 @@ namespace NavigationLab.CSupCom2
                 return false;
             }
             IEnumerable<int> candidates = actor.AssignedGoal ? new[] { actor.RequestedGoal } : Enumerable.Range(0, world.CellCount);
-            var ordered = candidates.Where(cell => CanHold(actor, cell) && planner.Connected(world.CellAt(actor.Position), cell, actor.Profile.RadiusMm))
+            var ordered = candidates.Where(cell => CanHold(actor, cell) && (worldChanged ? planner.Connected(actor.Position, cell, actor.Profile.RadiusMm)
+                : planner.Connected(world.CellAt(actor.Position), cell, actor.Profile.RadiusMm)))
                 .OrderBy(cell => Attack(actor, world.Center(cell)) ? 0 : 1)
                 .ThenBy(cell => Rarity(actor, cell))
                 .ThenByDescending(cell => Point2.Distance(actor.Position, world.Center(cell)))
@@ -813,11 +854,17 @@ namespace NavigationLab.CSupCom2
 
         private IEnumerable<int> AttackCells(Actor actor)
         {
-            return Enumerable.Range(0, world.CellCount).Where(cell => CanHold(actor, cell) && Attack(actor, world.Center(cell)));
+            return Enumerable.Range(0, world.CellCount).Where(cell => CanHold(actor, cell) && Attack(actor, world.Center(cell))
+                && (!worldChanged || planner.Connected(actor.Position, cell, actor.Profile.RadiusMm)));
         }
 
         private bool CommitGoals(Dictionary<Actor, int> updates)
         {
+            if (worldChanged && updates.Any(update => !planner.Connected(update.Key.Position, update.Value, update.Key.Profile.RadiusMm)))
+            {
+                Count("RejectedUnreachableGoalChanges");
+                return false;
+            }
             if (!CompatibleClaims(updates))
             {
                 Count("RejectedOverlappingGoalChanges");
@@ -833,17 +880,22 @@ namespace NavigationLab.CSupCom2
             foreach (var update in updates)
             {
                 update.Key.Goal = update.Value;
-                update.Key.Route = null;
-                update.Key.YieldGoal = -1;
-                update.Key.VacancyTransfer = false;
-                update.Key.PreferClearCorridor = false;
-                update.Key.BestDistance = double.PositiveInfinity;
-                update.Key.Stuck = 0;
-                update.Key.ProgressAnchor = update.Key.Position;
-                update.Key.SiegeWindowBest = double.PositiveInfinity;
+                ResetGoalProgress(update.Key);
                 owners[update.Value] = update.Key.Id;
             }
             return true;
+        }
+
+        private static void ResetGoalProgress(Actor actor)
+        {
+            actor.Route = null;
+            actor.YieldGoal = -1;
+            actor.VacancyTransfer = false;
+            actor.PreferClearCorridor = false;
+            actor.BestDistance = double.PositiveInfinity;
+            actor.Stuck = 0;
+            actor.ProgressAnchor = actor.Position;
+            actor.SiegeWindowBest = double.PositiveInfinity;
         }
 
         private void RedistributeSiegeGoals(Actor[] ordered)

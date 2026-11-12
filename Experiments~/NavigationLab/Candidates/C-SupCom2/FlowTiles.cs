@@ -65,6 +65,7 @@ namespace NavigationLab.CSupCom2
     internal sealed class FlowRoute
     {
         internal int[] Nodes = Array.Empty<int>();
+        internal IReadOnlyList<FlowTiles.Portal> Portals = Array.Empty<FlowTiles.Portal>();
         internal int Phase;
         internal int Goal;
         internal int GraphVersion;
@@ -83,7 +84,7 @@ namespace NavigationLab.CSupCom2
 
     internal sealed class FlowTiles
     {
-        private sealed class Portal
+        internal sealed class Portal
         {
             internal int Id;
             internal int Sector;
@@ -168,6 +169,17 @@ namespace NavigationLab.CSupCom2
             RadiusGraph graph = Graph(radius);
             return source >= 0 && goal >= 0 && source < world.CellCount && goal < world.CellCount
                 && graph.Components[source] >= 0 && graph.Components[source] == graph.Components[goal];
+        }
+
+        internal bool Connected(Point2 position, int goal, int radius)
+        {
+            int cell = world.CellAt(position);
+            RadiusGraph graph = Graph(radius);
+            if (cell < 0 || !CanStand(goal, radius))
+            {
+                return false;
+            }
+            return graph.Stand[cell] ? graph.Components[cell] == graph.Components[goal] : FindConnector(position, cell, goal, graph) >= 0;
         }
 
         internal bool NearHolding(Point2 position, int radius, int maximumSteps)
@@ -291,7 +303,7 @@ namespace NavigationLab.CSupCom2
             return distances;
         }
 
-        internal void ChangeWorld(WorldDefinition next, WorldChange change)
+        internal HashSet<int> ChangeWorld(WorldDefinition next, WorldChange change)
         {
             var dirty = new HashSet<int>();
             int largestRadius = graphs.Count == 0 ? world.CellSizeMm : graphs.Keys.Max();
@@ -338,6 +350,41 @@ namespace NavigationLab.CSupCom2
             graphs.Clear();
             Count("DirtySectors", dirty.Count);
             Count("DynamicGraphRebuilds");
+            return dirty;
+        }
+
+        internal bool IsDirty(Point2 position, int goal, HashSet<int> dirty)
+        {
+            int current = world.CellAt(position);
+            return current < 0 || goal < 0 || dirty.Contains(Sector(current)) || dirty.Contains(Sector(goal));
+        }
+
+        internal bool RebindRoute(FlowRoute route, int radius, HashSet<int> dirty)
+        {
+            RadiusGraph graph = Graph(radius);
+            var rebound = new int[route.Nodes.Length];
+            // Guide reads the preceding portal to recognize that the current portal is an arrival anchor.
+            for (int index = Math.Max(0, route.Phase - 1); index < route.Nodes.Length; index++)
+            {
+                Portal old = route.Portals[route.Nodes[index]];
+                Portal oldPeer = route.Portals[old.Peer];
+                if (index >= route.Phase && (dirty.Contains(old.Sector) || dirty.Contains(oldPeer.Sector))
+                    || !graph.SectorPortals.TryGetValue(old.Sector, out var candidates))
+                {
+                    return false;
+                }
+                int replacement = candidates.Where(id => graph.Portals[id].Cells.SequenceEqual(old.Cells)
+                    && graph.Portals[graph.Portals[id].Peer].Cells.SequenceEqual(oldPeer.Cells)).DefaultIfEmpty(-1).First();
+                if (replacement < 0)
+                {
+                    return false;
+                }
+                rebound[index] = replacement;
+            }
+            route.Nodes = rebound;
+            route.Portals = graph.Portals;
+            route.GraphVersion = graph.Version;
+            return true;
         }
 
         internal FlowRoute? Route(int source, int goal, int radius)
@@ -438,7 +485,7 @@ namespace NavigationLab.CSupCom2
                     suffixes[nodes[index]] = nodes.Skip(index).ToArray();
                 }
             }
-            return new FlowRoute { Nodes = nodes.ToArray(), Goal = goal, GraphVersion = graph.Version };
+            return new FlowRoute { Nodes = nodes.ToArray(), Portals = graph.Portals, Goal = goal, GraphVersion = graph.Version };
         }
 
         internal Point2? Guide(Point2 position, int goal, int radius, ref FlowRoute? route)
@@ -453,30 +500,7 @@ namespace NavigationLab.CSupCom2
             {
                 // Continuous steering can legally enter part of a cell whose centre lacks clearance.
                 // Reconnect through a physically visible route cell; never relocate the body to it.
-                int x0 = Math.Max(0, cell % world.Width - 2);
-                int x1 = Math.Min(world.Width - 1, cell % world.Width + 2);
-                int y0 = Math.Max(0, cell / world.Width - 2);
-                int y1 = Math.Min(world.Height - 1, cell / world.Width + 2);
-                int connector = -1;
-                double bestConnector = double.PositiveInfinity;
-                for (int connectorY = y0; connectorY <= y1; connectorY++)
-                {
-                    for (int connectorX = x0; connectorX <= x1; connectorX++)
-                    {
-                        int next = connectorY * world.Width + connectorX;
-                        if (!graph.Stand[next] || graph.Components[next] != graph.Components[goal]
-                            || !Geometry.Segment(world, position, world.Center(next), radius))
-                        {
-                            continue;
-                        }
-                        double cost = Point2.Distance(world.Center(next), world.Center(goal)) + Point2.Distance(position, world.Center(next)) * .1;
-                        if (cost < bestConnector)
-                        {
-                            connector = next;
-                            bestConnector = cost;
-                        }
-                    }
-                }
+                int connector = FindConnector(position, cell, goal, graph);
                 route = null;
                 Count("DisplacedSourceReconnects");
                 return connector < 0 ? (Point2?)null : world.Center(connector);
@@ -588,6 +612,35 @@ namespace NavigationLab.CSupCom2
             }
             var route = Route(source, goal, radius);
             return route == null ? double.PositiveInfinity : Point2.Distance(position, world.Center(goal));
+        }
+
+        private int FindConnector(Point2 position, int cell, int goal, RadiusGraph graph)
+        {
+            int x0 = Math.Max(0, cell % world.Width - 2);
+            int x1 = Math.Min(world.Width - 1, cell % world.Width + 2);
+            int y0 = Math.Max(0, cell / world.Width - 2);
+            int y1 = Math.Min(world.Height - 1, cell / world.Width + 2);
+            int connector = -1;
+            double bestConnector = double.PositiveInfinity;
+            for (int y = y0; y <= y1; y++)
+            {
+                for (int x = x0; x <= x1; x++)
+                {
+                    int next = y * world.Width + x;
+                    if (!graph.Stand[next] || graph.Components[next] != graph.Components[goal]
+                        || !Geometry.Segment(world, position, world.Center(next), graph.Radius))
+                    {
+                        continue;
+                    }
+                    double cost = Point2.Distance(world.Center(next), world.Center(goal)) + Point2.Distance(position, world.Center(next)) * .1;
+                    if (cost < bestConnector)
+                    {
+                        connector = next;
+                        bestConnector = cost;
+                    }
+                }
+            }
+            return connector;
         }
 
         private RadiusGraph Graph(int radius)
