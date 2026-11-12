@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 {
@@ -75,6 +76,31 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
         public bool IsWalkable(int cell) => cell >= 0 && cell < CellCount && walkable[cell];
         public bool HoldingAllowed(int cell) => IsWalkable(cell) && holdingAllowed[cell];
+
+        internal NavigationGrid WithTerrain(IReadOnlyCollection<int> blocked, IReadOnlyCollection<int> opened)
+        {
+            var next = (bool[])walkable.Clone();
+            foreach (int cell in blocked)
+            {
+                next[cell] = false;
+            }
+
+            foreach (int cell in opened)
+            {
+                next[cell] = true;
+            }
+
+            return new NavigationGrid(Width, Height, CellSize, Origin, next, TargetCenter, TargetRadius, holdingAllowed, SpawnCells.ToArray());
+        }
+
+        internal bool DiscOverlapsCell(Position2 position, int radius, int cell)
+        {
+            int left = Origin.X + cell % Width * CellSize;
+            int bottom = Origin.Y + cell / Width * CellSize;
+            int closestX = Math.Max(left, Math.Min(left + CellSize, position.X));
+            int closestY = Math.Max(bottom, Math.Min(bottom + CellSize, position.Y));
+            return DistanceSquared(position, new Position2(closestX, closestY)) < (long)radius * radius;
+        }
 
         public int CellAt(Position2 point)
         {

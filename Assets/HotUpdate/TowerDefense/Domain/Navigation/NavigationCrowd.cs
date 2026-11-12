@@ -37,6 +37,10 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             internal int PromotionRevision = -1;
             internal long NextPromotionTick;
             internal int TrafficRevision;
+            internal bool TerrainRepairPending;
+            internal int TerrainRepairRevision = -1;
+            internal long TerrainRepairRetryTick;
+            internal Position2? TerrainMovementOrigin;
         }
 
         private sealed class TimedCell
@@ -53,7 +57,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             internal long End;
         }
 
-        private readonly NavigationGrid grid;
+        private NavigationGrid grid;
         private readonly int planningHorizon;
         private readonly int searchLimit;
         private readonly Dictionary<long, Profile> profiles = new Dictionary<long, Profile>();
@@ -271,6 +275,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 UpdatePosition(occupants[agent.Id], tick);
             }
 
+            if (terrainRepairsPending)
+            {
+                RepairTerrainRoutes();
+            }
+
             ReplanReleasedTraffic();
             if (!AdvanceRecovery() && !TryStartAttackRecovery())
             {
@@ -329,7 +338,17 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 return cached;
             }
 
-            var profile = new Profile { Radius = radius, Range = attackRange, Stand = new bool[grid.CellCount] };
+            var profile = new Profile { Radius = radius, Range = attackRange };
+            RefreshProfileGeometry(profile);
+            profiles.Add(key, profile);
+            return profile;
+        }
+
+        private void RefreshProfileGeometry(Profile profile)
+        {
+            int radius = profile.Radius;
+            int attackRange = profile.Range;
+            profile.Stand = new bool[grid.CellCount];
             profile.Attack = new bool[grid.CellCount];
             profile.PreferredAttack = new bool[grid.CellCount];
             profile.Gather = new bool[grid.CellCount];
@@ -356,9 +375,6 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 profile.Gather[cell] = !eligible[cell]
                     && NavigationGrid.DistanceSquared(grid.Center(cell), grid.TargetCenter) <= gathering * gathering;
             }
-
-            profiles.Add(key, profile);
-            return profile;
         }
 
         private Profile AdmissionProfile(int radius, int attackRange)
@@ -394,7 +410,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
         private bool[] Flood(Profile profile, int start, int ignoreOwner, int extraBlocked, bool includeGoals)
         {
-            // Static reachability depends only on this immutable grid and body radius. Reuse the last component
+            // Static reachability depends only on current grid geometry and body radius. Reuse the last component
             // per radius; callers only read this mask. Budgeted trials still perform and count the original flood.
             bool geometryOnly = !includeGoals && extraBlocked < 0 && admissionBudgetStart < 0;
             if (geometryOnly && start >= 0 && start < grid.CellCount
@@ -555,6 +571,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
             state.Path = path;
             state.Segment = 0;
+            state.TerrainMovementOrigin = null;
             var last = path[path.Count - 1];
             state.Agent.GoalCell = last.Cell;
             state.Agent.ArrivalTick = last.Arrival;
@@ -587,12 +604,13 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             if (state.Segment + 1 >= path.Count)
             {
                 actor.Position = grid.Center(actor.GoalCell);
-                actor.Status = state.AttackGoal ? NavigationAgentStatus.Attacking : NavigationAgentStatus.Waiting;
+                actor.Status = state.TerrainRepairPending ? NavigationAgentStatus.Navigating
+                    : state.AttackGoal ? NavigationAgentStatus.Attacking : NavigationAgentStatus.Waiting;
                 actor.RemainingDistance = 0;
             }
             else
             {
-                var from = grid.Center(path[state.Segment].Cell);
+                var from = state.TerrainMovementOrigin ?? grid.Center(path[state.Segment].Cell);
                 var next = path[state.Segment + 1];
                 var to = grid.Center(next.Cell);
                 long elapsed = Math.Max(0, tick - next.Departure);

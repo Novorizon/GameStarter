@@ -23,7 +23,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                     continue;
                 }
 
-                if (state.Agent.Status != NavigationAgentStatus.Navigating)
+                if (state.Agent.Status != NavigationAgentStatus.Navigating || state.TerrainRepairPending)
                 {
                     state.TrafficRevision = trafficRevision;
                     continue;

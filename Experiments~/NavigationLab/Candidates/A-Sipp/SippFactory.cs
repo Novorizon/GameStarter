@@ -9,9 +9,9 @@ namespace NavigationLab.Candidates.ASipp
 {
     public sealed class SippFactory : INavigationFactory
     {
-        public string Id => "A-Sipp";
-        public string Description => "Frozen 8c0dd50 / Domain 074502 SIPP+prioritized reservations; 5ms linear presentation of unchanged 50ms simulation.";
-        public NavigationFeatures Features => NavigationFeatures.DeathAndReinforcement;
+        public string Id => "A-Sipp-DynamicTerrain";
+        public string Description => "SIPP with topology revisions and repair of affected reservations at 50ms simulation boundaries.";
+        public NavigationFeatures Features => NavigationFeatures.DeathAndReinforcement | NavigationFeatures.DynamicTerrain;
         public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new SippNavigator(world, profiles);
     }
 
@@ -113,7 +113,11 @@ namespace NavigationLab.Candidates.ASipp
             starts.Remove(id);
             return crowd.Remove(id);
         }
-        public bool ApplyWorldChange(WorldChange change) => false;
+        public bool ApplyWorldChange(WorldChange change)
+        {
+            return phase == 0 && change != null && !change.ReplaceTarget.HasValue
+                && crowd.TryApplyTerrainChange(change.BlockCells, change.OpenCells);
+        }
         public void Dispose()
         {
             starts.Clear();
