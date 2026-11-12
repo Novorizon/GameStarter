@@ -59,7 +59,12 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             }
 
             var reachable = Flood(state.Profile, start, state.Agent.Id, -1, true);
-            var rings = gathering.Where(cell => reachable[cell]).GroupBy(cell => SiegeWaitingRing(cell, front)).OrderBy(ring => ring.Key);
+            var profilesWithAttackSlots = profiles.Values.Where(profile => profile.Registered && !ReferenceEquals(profile, state.Profile)).ToArray();
+            // Keep a real first-ring slot available to other body profiles when reachable waiting ground is available.
+            var rings = gathering.Where(cell => reachable[cell]).GroupBy(cell => (
+                AttackForOtherProfile: profilesWithAttackSlots.Any(profile => profile.Attack[cell]),
+                Distance: SiegeWaitingRing(cell, front)))
+                .OrderBy(ring => ring.Key.AttackForOtherProfile).ThenBy(ring => ring.Key.Distance);
             foreach (var ring in rings)
             {
                 var waiting = new bool[grid.CellCount];
