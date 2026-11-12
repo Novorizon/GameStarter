@@ -20,7 +20,7 @@ internal static partial class Program
             Equal(6, configuration.Waves.Length);
             Equal(407, configuration.BuildSlots.Length);
             Equal(3, configuration.Towers.Length);
-            Equal(4, configuration.Enemies.Length);
+            Equal(5, configuration.Enemies.Length);
             Equal(7, configuration.Cards.Length);
             Equal(1, configuration.Routes.Length);
             True(configuration.Routes[0].Points.Length >= 2);
