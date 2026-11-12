@@ -9,8 +9,8 @@ namespace NavigationLab.Candidates.ASipp
 {
     public sealed class SippFactory : INavigationFactory
     {
-        public string Id => "A-Sipp-DynamicTerrain";
-        public string Description => "SIPP with topology revisions and repair of affected reservations at 50ms simulation boundaries.";
+        public string Id => "A-Sipp-SiegePositions";
+        public string Description => "SIPP with earliest reachable attack positions, stable attackers, nearby waiting and dynamic terrain.";
         public NavigationFeatures Features => NavigationFeatures.DeathAndReinforcement | NavigationFeatures.DynamicTerrain;
         public INavigator Create(WorldDefinition world, IReadOnlyList<UnitProfile> profiles) => new SippNavigator(world, profiles);
     }
@@ -50,7 +50,7 @@ namespace NavigationLab.Candidates.ASipp
                 target.RadiusMm,
                 world.CopyHolding(),
                 world.SpawnCells.ToArray());
-            crowd = new NavigationCrowd(grid, gatheringDistance: world.GatheringDistanceMm);
+            crowd = new NavigationCrowd(grid, gatheringDistance: world.GatheringDistanceMm, stableSiegePositions: true);
             foreach (var profile in profiles)
             {
                 crowd.RegisterProfile(profile.RadiusMm, profile.AttackRangeMm);

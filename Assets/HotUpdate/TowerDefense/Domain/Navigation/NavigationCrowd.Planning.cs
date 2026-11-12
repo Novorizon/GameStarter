@@ -98,6 +98,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
         private List<TimedCell> FindPlan(Occupant state, int start, bool allowGathering)
         {
             LastExpandedNodes = 0;
+            if (stableSiegePositions)
+            {
+                return FindStableSiegePlan(state, start, allowGathering);
+            }
+
             if (!parkingPrepared)
             {
                 PrepareParking();

@@ -60,6 +60,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
         private NavigationGrid grid;
         private readonly int planningHorizon;
         private readonly int searchLimit;
+        private readonly bool stableSiegePositions;
         private readonly Dictionary<long, Profile> profiles = new Dictionary<long, Profile>();
         private readonly Dictionary<int, Occupant> occupants = new Dictionary<int, Occupant>();
         private readonly List<NavigationAgent> agents = new List<NavigationAgent>();
@@ -82,7 +83,12 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
         public int CachedAdmissionRejections { get; private set; }
         public int ReservationCount => reservations.Values.Sum(list => list.Count);
 
-        public NavigationCrowd(NavigationGrid grid, int planningHorizon = 4096, int searchLimit = 200000, int gatheringDistance = 4000)
+        public NavigationCrowd(
+            NavigationGrid grid,
+            int planningHorizon = 4096,
+            int searchLimit = 200000,
+            int gatheringDistance = 4000,
+            bool stableSiegePositions = false)
         {
             this.grid = grid ?? throw new ArgumentNullException(nameof(grid));
             if (planningHorizon < 4 || planningHorizon > 100000 || searchLimit < 100 || searchLimit > 5000000
@@ -93,6 +99,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
             this.planningHorizon = planningHorizon;
             this.searchLimit = searchLimit;
+            this.stableSiegePositions = stableSiegePositions;
             GatheringDistance = gatheringDistance;
             Agents = new ReadOnlyCollection<NavigationAgent>(agents);
             foreach (int cell in grid.SpawnCells)
@@ -173,7 +180,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                 return Reject(NavigationFailure.SpawnOccupied);
             }
 
-            if (TryAdmitThroughGates(id, spawn, profile, start, speed))
+            if (!stableSiegePositions && TryAdmitThroughGates(id, spawn, profile, start, speed))
             {
                 return true;
             }
@@ -281,7 +288,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
             }
 
             ReplanReleasedTraffic();
-            if (!AdvanceRecovery() && !TryStartAttackRecovery())
+            if (!AdvanceRecovery() && !TryStartAttackRecovery() && !stableSiegePositions)
             {
                 // A revision is needed only after goal ownership changes. No frame-by-frame random shuffling or teleporting.
                 foreach (var state in occupants.Values.OrderBy(value => value.Agent.Id))
@@ -536,6 +543,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
 
         private bool GoalPreservesAccess(List<AccessRegion> regions, int goal, int owner)
         {
+            if (stableSiegePositions)
+            {
+                return PreservesSiegeApproach(regions, goal, owner);
+            }
+
             foreach (var region in regions)
             {
                 if (!region.Before[goal])

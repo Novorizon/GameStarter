@@ -98,6 +98,11 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
         /// <summary>Give already present waiting units the attack vacancy before admitting a distant replacement.</summary>
         private bool TryStartAttackRecovery()
         {
+            if (stableSiegePositions)
+            {
+                return RecoveryActive || TryPromoteSiegeWaiter() || TryRecoverSiegeAttackAccess();
+            }
+
             if (RecoveryActive)
             {
                 return true;
@@ -272,6 +277,7 @@ namespace Game.HotUpdate.TowerDefense.Domain.Navigation
                             if (goalOwners.TryGetValue(next, out int owner))
                             {
                                 if (!occupants.TryGetValue(owner, out var actor) || !ReferenceEquals(actor.Profile, profile)
+                                    || stableSiegePositions && actor.AttackGoal
                                     || ContainsVacancy(node, next))
                                 {
                                     continue;
