@@ -676,7 +676,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             float aspect = Mathf.Max(.1f, (float)Screen.width / Screen.height);
             worldCamera.aspect = aspect;
             float halfDepth = .5f * projectedMapDepth;
-            float halfSize = Mathf.Max((halfDepth + .20f) / viewport.height, (MapWidth * .5f + .24f) / (aspect * viewport.width));
+            float halfSize = Mathf.Max((halfDepth + .20f) / viewport.height, (projectedMapWidth * .5f + .24f) / (aspect * viewport.width));
             worldCamera.orthographicSize = halfSize;
             var camera = worldCamera.transform;
             var offset = viewport.center - new Vector2(.5f, .5f);
@@ -696,7 +696,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
             for (int index = 0; index < entranceMarkers.Length; index++)
             {
-                PlaceRouteMarker(entranceMarkers[index], configuration.Routes[index].Points[0], .15f, 27);
+                var entrance = configuration.ForestRedrawEntrance ?? configuration.Routes[index].Points[0];
+                PlaceRouteMarker(entranceMarkers[index], entrance, .15f, 27);
             }
 
             var points = configuration.Routes[0].Points;

@@ -65,6 +65,11 @@ namespace Game.HotUpdate.TowerDefense.Domain
 
         private bool ReachedObjective(Enemy enemy)
         {
+            if (enemy.NavigationAgent != null)
+            {
+                return enemy.NavigationAgent.Status == Navigation.NavigationAgentStatus.Attacking;
+            }
+
             if (enemy.Distance < enemy.Route.Length)
             {
                 return false;

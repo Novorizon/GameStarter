@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Game.HotUpdate.TowerDefense.Domain.Navigation;
 
 namespace Game.HotUpdate.TowerDefense.Domain
 {
@@ -40,6 +41,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
             internal long NextBaseAttackTick;
             internal int RoadSegmentIndex;
             internal int RoadSegmentStart;
+            internal NavigationAgent NavigationAgent;
         }
 
         private sealed class Route
@@ -216,6 +218,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 largestAssaultBodyRadius = routes.Values.Max(route => route.LargestBodyRadius);
             }
 
+            InitializeANavigation();
             ReserveBaseAttackCorridors();
             Gold = configuration.InitialGold;
             BaseLevel = configuration.Objective.HasBase ? 1 : 0;
@@ -261,11 +264,17 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 return false;
             }
 
+            var slot = slots[slotId];
+            if (aCrowd != null && !ChangeATowerTerrain(slot.Position, building: true))
+            {
+                return false;
+            }
+
             var definition = towerDefinitions[towerTypeId];
             int paid = BuildCost(definition);
             Gold -= paid;
             usedOpeningDiscount |= definition.Id == Configuration.OpeningDiscountTowerId;
-            towers.Add(new Tower { Id = nextTowerId++, Slot = slots[slotId], Definition = definition, PaidBuildCost = paid });
+            towers.Add(new Tower { Id = nextTowerId++, Slot = slot, Definition = definition, PaidBuildCost = paid });
             RefreshSnapshots();
             return true;
         }
@@ -339,7 +348,13 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 return false;
             }
 
-            Gold = SaturatingAdd(Gold, SellValue(towers[index]));
+            var tower = towers[index];
+            if (aCrowd != null && !ChangeATowerTerrain(tower.Slot.Position, building: false, tower))
+            {
+                return false;
+            }
+
+            Gold = SaturatingAdd(Gold, SellValue(tower));
             towers.RemoveAt(index);
             RefreshSnapshots();
             return true;
@@ -425,12 +440,17 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 {
                     Gold = SaturatingAdd(Gold, target.Definition.GoldReward);
                     Kills++;
+                    aCrowd?.Remove(target.Id);
                     enemies.Remove(target);
                     RewardResolvedEnemy(target);
                 }
             }
 
-            if (useRoadTraffic)
+            if (aCrowd != null)
+            {
+                AdvanceANavigation();
+            }
+            else if (useRoadTraffic)
             {
                 AdvanceTraffic();
             }
@@ -542,7 +562,18 @@ namespace Game.HotUpdate.TowerDefense.Domain
             var route = routes[group.RouteId];
             int lane = 0;
             var position = route.Definition.Points[0];
-            if (useAuthoredNavigation)
+            NavigationAgent agent = null;
+            if (aCrowd != null)
+            {
+                agent = TrySpawnAEnemy(definition);
+                if (agent == null)
+                {
+                    return false;
+                }
+
+                position = agent.Position;
+            }
+            else if (useAuthoredNavigation)
             {
                 if (!CanSpawnOnTerrain(position, definition.BodyRadius))
                 {
@@ -579,6 +610,7 @@ namespace Game.HotUpdate.TowerDefense.Domain
                 Definition = definition,
                 Route = route,
                 Position = position,
+                NavigationAgent = agent,
                 Lane = lane,
                 BatchIndex = batchIndex,
                 Health = definition.Health

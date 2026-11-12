@@ -1,0 +1,11 @@
+{
+  "name": "GameStarter.CurrentNavigationWindowsBuild.Editor",
+  "references": [
+    "GameStarter.Editor",
+    "HybridCLR.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": false
+}

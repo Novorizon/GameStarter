@@ -260,6 +260,8 @@ namespace Game.HotUpdate.TowerDefense.Domain
         // Zero is used by scenarios with individually authored pads.
         public int BuildGridStep { get; set; }
         public BattleTerrain Terrain { get; set; }
+        internal Navigation.NavigationGrid AGrid { get; set; }
+        internal Position2? ForestRedrawEntrance { get; set; }
         public RouteDefinition[] Routes { get; set; } = Array.Empty<RouteDefinition>();
         public BuildSlotDefinition[] BuildSlots { get; set; } = Array.Empty<BuildSlotDefinition>();
         public TowerDefinition[] Towers { get; set; } = Array.Empty<TowerDefinition>();

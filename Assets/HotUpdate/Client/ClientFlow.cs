@@ -16,7 +16,7 @@ using UnityEngine.InputSystem.UI;
 namespace Game.HotUpdate.Client
 {
     /// <summary>玩家页面和塔防之间的业务流程。资源、档案和视图均由本模块拥有。</summary>
-    public sealed class ClientFlow : IDisposable
+    public sealed partial class ClientFlow : IDisposable
     {
         private CancellationTokenSource lifetime;
         private cfg.Tables tables;
@@ -71,6 +71,13 @@ namespace Game.HotUpdate.Client
                 }
 
                 hub = PlayerHubView.Create(this, root.transform);
+#if NOVORIZON_CURRENT_NAVIGATION_CHECK
+                if (StartCurrentNavigationPlayerCheck())
+                {
+                    Debug.Log("PLAYER_PAGE_READY");
+                    return;
+                }
+#endif
                 server = GameServerConnection.FromEnvironment(hub.SetServerStatus);
                 RefreshServer();
                 RetryArrival();
@@ -170,30 +177,10 @@ namespace Game.HotUpdate.Client
             var leases = new List<IDisposable>();
             try
             {
-                var token = lifetime.Token;
-                var resources = ResourceManager.Instance;
-                var map = await resources.AcquireAsync<Sprite>(plan.Stage.MapAsset, token, true);
-                leases.Add(map);
-                var battleFont = Art.Font;
-                if (resources.IsValid(TowerDefensePrototypeView.HudFontAddress))
-                {
-                    var font = await resources.AcquireAsync<TMP_FontAsset>(TowerDefensePrototypeView.HudFontAddress, token, true);
-                    leases.Add(font);
-                    battleFont = font.Asset;
-                }
-
-                Texture2D hudAtlas = null;
-                if (resources.IsValid(TowerDefensePrototypeView.HudAssetAddress))
-                {
-                    var hud = await resources.AcquireAsync<Texture2D>(TowerDefensePrototypeView.HudAssetAddress, token, true);
-                    leases.Add(hud);
-                    hudAtlas = hud.Asset;
-                }
-
-                token.ThrowIfCancellationRequested();
-                battle = TowerDefensePrototypeView.Create(plan.Configuration, battleFont, map.Asset, plan.Seed, leases, Art, hudAtlas);
+                var assets = await LoadBattleAssetsAsync(plan, leases, lifetime.Token);
+                battle = TowerDefensePrototypeView.Create(plan.Configuration, assets.Font, assets.Map, plan.Seed, leases, Art, assets.HudAtlas);
                 battle.transform.SetParent(root.transform, false);
-                battle.SetArt(map.Asset, Art.Atlas, battleFont);
+                battle.SetArt(assets.Map, Art.Atlas, assets.Font);
                 if (plan.Stage.Id == 1 && Journey.HighestWave == 0)
                 {
                     battle.EnableFirstBattleGuide();
@@ -242,6 +229,34 @@ namespace Game.HotUpdate.Client
                     hub.Refresh();
                 }
             }
+        }
+
+        private async Task<(Sprite Map, TMP_FontAsset Font, Texture2D HudAtlas)> LoadBattleAssetsAsync(
+            ExpeditionPlan plan,
+            List<IDisposable> leases,
+            CancellationToken token)
+        {
+            var resources = ResourceManager.Instance;
+            var map = await resources.AcquireAsync<Sprite>(plan.Stage.MapAsset, token, true);
+            leases.Add(map);
+            var battleFont = Art.Font;
+            if (resources.IsValid(TowerDefensePrototypeView.HudFontAddress))
+            {
+                var font = await resources.AcquireAsync<TMP_FontAsset>(TowerDefensePrototypeView.HudFontAddress, token, true);
+                leases.Add(font);
+                battleFont = font.Asset;
+            }
+
+            Texture2D hudAtlas = null;
+            if (resources.IsValid(TowerDefensePrototypeView.HudAssetAddress))
+            {
+                var hud = await resources.AcquireAsync<Texture2D>(TowerDefensePrototypeView.HudAssetAddress, token, true);
+                leases.Add(hud);
+                hudAtlas = hud.Asset;
+            }
+
+            token.ThrowIfCancellationRequested();
+            return (map.Asset, battleFont, hudAtlas);
         }
 
         public void RetryArrival()

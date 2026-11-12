@@ -17,6 +17,7 @@ namespace Game.HotUpdate.TowerDefense.Data
             private readonly BattleObjective objective;
             private readonly BattleTerrain terrain;
             private readonly Position2[] routePoints;
+            private ForestRedrawNavigation forestRedraw;
 
             internal Settings(BattleObjective objective, BattleTerrain terrain = null, Position2[] routePoints = null)
             {
@@ -27,11 +28,46 @@ namespace Game.HotUpdate.TowerDefense.Data
 
             internal void ApplyTo(FightConfiguration configuration)
             {
+                if (forestRedraw != null)
+                {
+                    ApplyForestRedraw(configuration);
+                    return;
+                }
+
                 configuration.Objective = objective;
                 if (terrain != null)
                 {
                     TowerDefenseTables.ApplyTerrain(configuration, terrain, routePoints);
+                    if (configuration.StageId == 1 && objective.Type == BattleObjectiveType.DefendBase
+                        && objective.BaseAttack?.Engagement != null && objective.BaseAttack.LocalArea != null)
+                    {
+                        configuration.AGrid = TowerDefenseANavigationLayout.Create(configuration);
+                    }
                 }
+            }
+
+            internal void UseForestRedraw(string source)
+            {
+                forestRedraw = ForestRedrawNavigation.Parse(source);
+            }
+
+            private void ApplyForestRedraw(FightConfiguration configuration)
+            {
+                var original = objective.BaseAttack;
+                var target = forestRedraw.Target;
+                int radius = forestRedraw.TargetRadius;
+                var bounds = new BaseAttackEngagement(
+                    new Position2(target.X - radius, target.Y - radius),
+                    new Position2(target.X + radius, target.Y + radius),
+                    original.Engagement.Reach,
+                    original.Engagement.WindupTicks);
+                var approach = new BaseApproachArea(forestRedraw.HoldingMin, forestRedraw.HoldingMax, Array.Empty<BaseApproachObstacle>());
+                var layout = new BaseAttackLayout(original.ApproachInset, Array.Empty<BaseAttackPath>(), bounds, approach);
+                configuration.Objective = new BattleObjective(objective.Type, objective.TargetName, objective.BaseAttackIntervalTicks,
+                    objective.EscapesToDefeat, objective.BaseUpgrades.ToArray(), objective.Assault, layout);
+                TowerDefenseTables.ApplyTerrain(configuration, forestRedraw.BuildTerrain, forestRedraw.Route);
+                configuration.ForestRedrawEntrance = forestRedraw.SpawnMarker;
+                configuration.AGrid = forestRedraw.CreateGrid();
             }
         }
 
@@ -137,7 +173,14 @@ namespace Game.HotUpdate.TowerDefense.Data
                 using var lease = await ResourceManager.Instance.AcquireAsync<TextAsset>(address, token, true);
                 try
                 {
-                    settings.Add(stage.Id, Parse(lease.Asset.text));
+                    var map = Parse(lease.Asset.text);
+                    if (stage.Id == 1)
+                    {
+                        using var grid = await ResourceManager.Instance.AcquireAsync<TextAsset>("TowerDefense/Maps/ForestRedrawGrid", token, true);
+                        map.UseForestRedraw(grid.Asset.text);
+                    }
+
+                    settings.Add(stage.Id, map);
                 }
                 catch (ArgumentException error)
                 {

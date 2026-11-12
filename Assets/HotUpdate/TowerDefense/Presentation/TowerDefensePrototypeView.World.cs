@@ -20,6 +20,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private const float TowerModelScale = TowerFoundationRadius / TowerModelFoundationRadius;
         private const float TowerGroundOffset = .02f;
         private static readonly float DefaultProjectedMapDepth = MapDepth * Mathf.Sin(CameraPitch * Mathf.Deg2Rad);
+        private float projectedMapWidth = MapWidth;
         private float projectedMapDepth = DefaultProjectedMapDepth;
         private float CellHalfWidth => configuration.BuildGridStep > 0 ? configuration.BuildGridStep / 2000f : .54f;
         private float CellHalfDepth => configuration.BuildGridStep > 0 ? configuration.BuildGridStep / 2000f : .58f;
@@ -134,6 +135,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         {
             mapRenderer.sprite = map;
             mapRenderer.enabled = map != null;
+            float width = MapWidth;
             float depth = DefaultProjectedMapDepth;
             if (map != null)
             {
@@ -141,7 +143,16 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                 var size = map.rect.size;
                 var pivot = map.pivot - size * .5f;
                 var camera = worldCamera.transform;
-                float unitsPerPixel = MapWidth / size.x;
+                float unitsPerPixel = width / size.x;
+                if (configuration.ForestRedrawEntrance.HasValue)
+                {
+                    const float pixelsPerMetre = 80;
+                    float originY = 1080 - 7.56f * pixelsPerMetre * Mathf.Sin(CameraPitch * Mathf.Deg2Rad);
+                    pivot += new Vector2(size.x * .5f - 960, originY - size.y * .5f);
+                    unitsPerPixel = 1 / pixelsPerMetre;
+                    width = size.x * unitsPerPixel;
+                }
+
                 float scale = unitsPerPixel * map.pixelsPerUnit;
                 depth = size.y * unitsPerPixel;
                 mapRenderer.transform.localScale = new Vector3(scale, scale, 1);
@@ -149,8 +160,9 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                     + camera.right * (pivot.x * unitsPerPixel) + camera.up * (pivot.y * unitsPerPixel);
             }
 
-            if (!Mathf.Approximately(depth, projectedMapDepth))
+            if (!Mathf.Approximately(width, projectedMapWidth) || !Mathf.Approximately(depth, projectedMapDepth))
             {
+                projectedMapWidth = width;
                 projectedMapDepth = depth;
                 lastWidth = 0;
             }
