@@ -47,7 +47,7 @@ namespace Game.HotUpdate.Client
             root.transform.SetParent(parent, false);
             var view = root.AddComponent<PlayerHubView>();
             view.owner = owner;
-            view.scene = CampSceneView.Create(root.transform, owner.Art.CampMap);
+            view.scene = CampSceneView.Create(root.transform, owner.Art.CampMap, owner.Art);
             view.CreateInterface();
             view.scene.Selected = view.SelectCamp;
             view.Refresh();

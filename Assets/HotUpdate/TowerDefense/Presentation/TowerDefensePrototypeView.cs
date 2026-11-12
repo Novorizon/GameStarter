@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.HotUpdate.Client;
 using Game.HotUpdate.TowerDefense.Domain;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -111,7 +112,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             TMP_FontAsset uiFont,
             Sprite map = null,
             uint randomSeed = 1,
-            List<IDisposable> assetLeases = null)
+            List<IDisposable> assetLeases = null,
+            ClientArt art = null)
         {
             if (uiFont == null)
             {
@@ -132,7 +134,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                     root.AddComponent<PrototypeAssetLifetime>().Own(assetLeases);
                 }
 
-                view.Initialize(config, uiFont, map, randomSeed);
+                view.Initialize(config, uiFont, map, randomSeed, art);
             }
             catch
             {
@@ -143,7 +145,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             return view;
         }
 
-        public void Initialize(FightConfiguration config, TMP_FontAsset uiFont, Sprite map = null, uint randomSeed = 1)
+        public void Initialize(FightConfiguration config, TMP_FontAsset uiFont, Sprite map = null, uint randomSeed = 1, ClientArt art = null)
         {
             if (initialized || disposed)
             {
@@ -164,7 +166,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             completedReported = false;
             font = uiFont != null ? uiFont : throw new ArgumentNullException(nameof(uiFont), "Load the YooAsset TMP font before creating battle UI.");
             initialized = true;
-            CreateWorld(map);
+            CreateWorld(map, art);
             CreateInterface();
             selectedDefinition = configuration.Towers[0].Id;
             SetNotice("选择下方塔卡，再点击绿色区域部署。点击防御塔查看射程。");

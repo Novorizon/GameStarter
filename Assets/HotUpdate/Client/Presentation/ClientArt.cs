@@ -17,6 +17,8 @@ namespace Game.HotUpdate.Client
         public Texture2D Atlas { get; private set; }
         public Texture2D Background { get; private set; }
         public Sprite CampMap { get; private set; }
+        public Material WorldLit { get; private set; }
+        public Material WorldSprite { get; private set; }
         public string ArrivalScript { get; private set; }
         public string Title { get; private set; }
 
@@ -32,8 +34,8 @@ namespace Game.HotUpdate.Client
                 art.CampMap = await art.Load<Sprite>(theme.CampMap, token);
                 art.ArrivalScript = (await art.Load<TextAsset>("Camp/Story/Arrival", token)).text;
                 // 显式资源依赖保留运行时程序化模型/阴影所需 Shader，避免仅靠 Shader.Find 被构建裁剪。
-                await art.Load<Material>("Common/Rendering/WorldLit", token);
-                await art.Load<Material>("Common/Rendering/WorldSprite", token);
+                art.WorldLit = await art.Load<Material>("Common/Rendering/WorldLit", token);
+                art.WorldSprite = await art.Load<Material>("Common/Rendering/WorldSprite", token);
                 var picture = await art.Load<TextAsset>(theme.Background, token);
                 var layout = await art.Load<TextAsset>(theme.StartupLayout, token);
                 token.ThrowIfCancellationRequested();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.HotUpdate.Client;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -15,6 +16,7 @@ namespace Game.HotUpdate.Camp
         private Transform settlement;
         private SpriteRenderer island;
         private GameObject buildings;
+        private Material spriteTemplate;
         private Material timber;
         private Material sand;
         private Material canvas;
@@ -33,17 +35,18 @@ namespace Game.HotUpdate.Camp
         public Action Selected;
         public int DisplayedLevel => level;
 
-        public static CampSceneView Create(Transform parent, Sprite map)
+        public static CampSceneView Create(Transform parent, Sprite map, ClientArt art = null)
         {
             var root = new GameObject("IslandCampScene");
             root.transform.SetParent(parent, false);
             var view = root.AddComponent<CampSceneView>();
-            view.Initialize(map);
+            view.Initialize(map, art);
             return view;
         }
 
-        private void Initialize(Sprite map)
+        private void Initialize(Sprite map, ClientArt art)
         {
+            spriteTemplate = art?.WorldSprite;
             var cameraRoot = new GameObject("CampCamera");
             cameraRoot.transform.SetParent(transform, false);
             cameraRoot.tag = "MainCamera";
@@ -72,13 +75,13 @@ namespace Game.HotUpdate.Camp
             var target = settlement.gameObject.AddComponent<BoxCollider>();
             target.center = new Vector3(0, .6f, 0);
             target.size = new Vector3(6.6f, 1.5f, 4.6f);
-            timber = Material(new Color(.43f, .25f, .11f));
-            sand = Material(new Color(.86f, .72f, .45f));
-            canvas = Material(new Color(.91f, .78f, .50f));
-            dark = Material(new Color(.16f, .20f, .16f));
-            teal = Material(new Color(.11f, .42f, .49f));
-            stone = Material(new Color(.65f, .66f, .57f));
-            flame = Material(new Color(1, .53f, .10f));
+            timber = Material(art?.WorldLit, new Color(.43f, .25f, .11f));
+            sand = Material(art?.WorldLit, new Color(.86f, .72f, .45f));
+            canvas = Material(art?.WorldLit, new Color(.91f, .78f, .50f));
+            dark = Material(art?.WorldLit, new Color(.16f, .20f, .16f));
+            teal = Material(art?.WorldLit, new Color(.11f, .42f, .49f));
+            stone = Material(art?.WorldLit, new Color(.65f, .66f, .57f));
+            flame = Material(art?.WorldLit, new Color(1, .53f, .10f));
             initialized = true;
             ApplyAmbient();
             UpdateSize();
@@ -226,10 +229,20 @@ namespace Game.HotUpdate.Camp
             }
         }
 
-        private Material Material(Color color)
+        private Material Material(Material template, Color color)
         {
-            string shader = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null ? "Universal Render Pipeline/Lit" : "Standard";
-            var material = new Material(Shader.Find(shader)) { color = color };
+            Material material;
+            if (template != null)
+            {
+                material = new Material(template);
+            }
+            else
+            {
+                string shader = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null ? "Universal Render Pipeline/Lit" : "Standard";
+                material = new Material(Shader.Find(shader));
+            }
+
+            material.color = color;
             material.SetFloat(material.HasProperty("_Smoothness") ? "_Smoothness" : "_Glossiness", .05f);
             owned.Add(material);
             return material;
@@ -248,7 +261,8 @@ namespace Game.HotUpdate.Camp
 
         private void Shadow(Transform root)
         {
-            var material = new Material(Shader.Find("Sprites/Default")) { color = Color.white };
+            var material = spriteTemplate != null ? new Material(spriteTemplate) : new Material(Shader.Find("Sprites/Default"));
+            material.color = Color.white;
             owned.Add(material);
             var mesh = new Mesh { name = "CampContactShadow" };
             var vertices = new Vector3[33];

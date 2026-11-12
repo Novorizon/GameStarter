@@ -16,7 +16,7 @@ using UnityEngine.InputSystem.UI;
 namespace Game.HotUpdate.Client
 {
     /// <summary>玩家页面和塔防之间的业务流程。资源、档案和视图均由本模块拥有。</summary>
-    public sealed class ClientFlow : IDisposable
+    public sealed partial class ClientFlow : IDisposable
     {
         private CancellationTokenSource lifetime;
         private cfg.Tables tables;
@@ -63,7 +63,12 @@ namespace Game.HotUpdate.Client
                 }
 
                 hub = PlayerHubView.Create(this, root.transform);
-                RetryArrival();
+#if NOVORIZON_COMPILED_GAME
+                if (!StartASiegePlayerCheck())
+#endif
+                {
+                    RetryArrival();
+                }
                 Debug.Log("PLAYER_PAGE_READY");
             }
             catch
@@ -130,7 +135,7 @@ namespace Game.HotUpdate.Client
                 var map = await ResourceManager.Instance.AcquireAsync<Sprite>(plan.Stage.MapAsset, token, true);
                 leases.Add(map);
                 token.ThrowIfCancellationRequested();
-                battle = TowerDefensePrototypeView.Create(plan.Configuration, Art.Font, map.Asset, plan.Seed, leases);
+                battle = TowerDefensePrototypeView.Create(plan.Configuration, Art.Font, map.Asset, plan.Seed, leases, Art);
                 battle.transform.SetParent(root.transform, false);
                 battle.SetArt(map.Asset, Art.Atlas, Art.Panel, Art.Font);
                 battleCampLevel = plan.CampLevel.Id;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.HotUpdate.Client;
 using Game.HotUpdate.TowerDefense.Domain;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +14,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private const float CameraPitch = 55;
         private const float MapWidth = 22;
         private const float MapDepth = 15.12f;
+        private Material litTemplate;
+        private Material spriteTemplate;
         private Material stone;
         private Material stoneLight;
         private Material wood;
@@ -23,8 +26,10 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private Material shadowMaterial;
         private Mesh shadowMesh;
 
-        private void CreateWorld(Sprite map)
+        private void CreateWorld(Sprite map, ClientArt art)
         {
+            litTemplate = art?.WorldLit;
+            spriteTemplate = art?.WorldSprite;
             field = new GameObject("Battlefield").transform;
             field.SetParent(transform, false);
             previousCamera = Camera.main;
@@ -355,8 +360,19 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private Material MakeMaterial(Color color, bool unlit = false)
         {
-            bool urp = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null;
-            var material = new Material(Shader.Find(unlit ? "Sprites/Default" : urp ? "Universal Render Pipeline/Lit" : "Standard"));
+            var template = unlit ? spriteTemplate : litTemplate;
+            Material material;
+            if (template != null)
+            {
+                material = new Material(template);
+            }
+            else
+            {
+                bool urp = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline != null;
+                string shader = unlit ? "Sprites/Default" : urp ? "Universal Render Pipeline/Lit" : "Standard";
+                material = new Material(Shader.Find(shader));
+            }
+
             material.color = color;
             if (!unlit)
             {
