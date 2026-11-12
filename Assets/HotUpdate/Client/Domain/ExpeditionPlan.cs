@@ -12,8 +12,22 @@ namespace Game.HotUpdate.Client
         public BattleBriefing Briefing { get; }
         public uint Seed { get; }
         public cfg.CampLevel CampLevel { get; }
+        internal CampaignChapter Chapter { get; }
+        public string Supplies { get; }
 
         public ExpeditionPlan(cfg.Tables tables, int stageId, uint seed, int campLevelId)
+            : this(tables, stageId, seed, campLevelId, null, null, null)
+        {
+        }
+
+        internal ExpeditionPlan(
+            cfg.Tables tables,
+            int stageId,
+            uint seed,
+            int campLevelId,
+            CampaignStory campaign,
+            LocalCampaignData choices,
+            TowerDefenseMapObjectives.Settings mapSettings)
         {
             if (tables == null)
             {
@@ -23,6 +37,13 @@ namespace Game.HotUpdate.Client
             Stage = tables.TbTdStage.Get(stageId);
             CampLevel = tables.TbCampLevel.Get(campLevelId);
             Configuration = TowerDefenseTables.Create(tables, stageId);
+            mapSettings?.ApplyTo(Configuration);
+            if (campaign != null)
+            {
+                Chapter = campaign.Chapter(stageId);
+                Supplies = campaign.ApplyTo(Configuration, choices);
+            }
+
             Briefing = new BattleBriefing(Configuration);
             Seed = seed;
         }

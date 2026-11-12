@@ -8,7 +8,7 @@
 | --- | --- |
 | 平台 | PC 与手机，横屏，鼠标与触控都能完成全部操作 |
 | 战斗 | 先单人；账号、玩家档案、开局和结算与服务器交互 |
-| 路线 | 编辑折线路线，固定建造点；首版不允许造塔改变路线 |
+| 关卡坐标 | 关卡配置提供出生位置、基地或传送门位置，以及塔位。 |
 | 画面 | 轻度卡通，2D 地图底图，3D 塔、基地和 NPC |
 | 更新 | 继续使用现有 YooAsset 统一下载；业务代码进入热更程序集 |
 | 文字 | 全部使用 TextMeshProUGUI 与 TMP_FontAsset；中文动态 SDF 字体走 YooAsset |
@@ -24,15 +24,15 @@
 
 ## 当前原型边界
 
-`FightSession` 不依赖 Unity、Manager 或视图，按固定 tick 处理造塔、升级、刷怪、移动、命中、金币、基地损伤、波次、选卡和胜败。配置通过 `FightConfiguration` 传入；Luban 数据在接入边界转换为该配置，表现层不直接修改配置表。
+`FightSession` 独立处理固定 tick 的造塔、升级、刷怪、命中、金币、基地损伤、波次、选卡和胜败。Luban 数据在接入边界转换为 `FightConfiguration`，表现层读取领域状态。
 
 代码入口：[领域配置](../../Assets/HotUpdate/TowerDefense/Domain/Configuration.cs)、[战斗会话](../../Assets/HotUpdate/TowerDefense/Domain/FightSession.cs)、[账号/结算契约](../../Assets/HotUpdate/TowerDefense/Online/BackendContracts.cs)、[账号会话协调](../../Assets/HotUpdate/TowerDefense/Online/AccountSession.cs)。
 
 `TowerDefensePrototypeView` 将命令交给领域会话，并根据会话状态生成占位场景和运行时 UI。原型使用临时 Canvas 与简单 3D 占位物；它不代表正式美术、完整页面流程或后端已经上线。验收以本次代码、测试和运行记录为准，不能仅凭设计文档认定功能完成。
 
-本轮 Luban 内容为 13 张业务表和 Example，共 14 张；营地等级/任务集中在两张表。当前关卡有 6 波、7 个建造点、3 类塔、4 类敌人和 7 张卡。`DemoConfiguration` 的 5 波静态配置只保留作独立领域测试/诊断 fallback，正式原型入口应走真实 Luban 表，不以 fallback 数据代替表接入验收。
+Luban 内容为 13 张业务表和 Example，共 14 张。营地等级和任务集中在两张表。正式关卡入口读取 Luban 与地图 JSON。
 
-首版不实现合作同步、PvP 排名、防作弊战斗服、动态堵路、完整局外养成、付费商城或真实账号渠道登录。服务器协议可先对接可测试接口，真实部署仍需后端提供对应服务与协议版本。
+首版不实现合作同步、PvP 排名、防作弊战斗服、完整局外养成、付费商城或真实账号渠道登录。服务器协议可先对接可测试接口，真实部署仍需后端提供对应服务与协议版本。
 
 ## 品类参考与来源
 

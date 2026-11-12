@@ -158,7 +158,8 @@ namespace Game
                 : state.Message ?? "正在准备游戏";
             if (state.Failed)
             {
-                message.text = "启动未完成，请检查网络后重新进入游戏";
+                message.text = "启动失败，请重新进入游戏";
+                percent.text = "";
                 return;
             }
 

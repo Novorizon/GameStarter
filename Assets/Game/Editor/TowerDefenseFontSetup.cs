@@ -14,6 +14,10 @@ namespace Game.Editor
     {
         public const string SourceFontPath = "Assets/GameAssets/Common/Fonts/GameUI.otf";
         public const string FontAssetPath = "Assets/GameAssets/Common/Fonts/GameUI.asset";
+        public const string HudFontAssetPath = ClientResourcesSetup.HudFontAssetPath;
+        public const string HudBoldFontAssetPath = ClientResourcesSetup.HudBoldFontAssetPath;
+        private const string HudFontDirectory = "Assets/GameAssets/Common/Fonts/";
+        private const string HudFontLicensePath = "Assets/StreamingAssets/ThirdPartyLicenses/Battle-HUD-Sans.txt";
         private const string LicensePath = "Assets/GameAssets/Common/Fonts/LICENSE-Noto.txt";
         private const string MobileShaderName = "TextMeshPro/Mobile/Distance Field";
         private const string SettingsPath = "Assets/TextMesh Pro/Resources/TMP Settings.asset";
@@ -196,6 +200,37 @@ namespace Game.Editor
         /// <summary>保留已有 font/material/首张 atlas 的 GUID 与子资源引用，可重复在批处理构建前执行。</summary>
         public static TMP_FontAsset EnsureFont()
         {
+            if (!File.Exists(LicensePath))
+            {
+                throw new FileNotFoundException("Keep the Noto font license with the game font.", LicensePath);
+            }
+
+            return EnsureFontAsset(SourceFontPath, FontAssetPath, "TowerDefenseUI", WarmCharacters());
+        }
+
+        [MenuItem("Tools/Novorizon/Tower Defense/Prepare Battle HUD Fonts")]
+        public static void GenerateBattleHudFonts()
+        {
+            RequireEditMode();
+            var fallback = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath);
+            if (fallback == null || !File.Exists(HudFontLicensePath))
+            {
+                throw new InvalidOperationException("The battle HUD fonts require the base game font and the bundled Noto Sans SC license.");
+            }
+
+            const string warm = " 0123456789./+%×林间哨站基地耐久波次金币防御塔部署防守升级出售攻速射程理论秒伤";
+            var medium = EnsureFontAsset(HudFontDirectory + "BattleHudMedium.ttf", HudFontAssetPath, "BattleHudMedium", warm, 512);
+            var bold = EnsureFontAsset(HudFontDirectory + "BattleHudBold.ttf", HudBoldFontAssetPath, "BattleHudBold", warm, 512);
+            medium.fontWeightTable[(int)FontWeight.Bold / 100].regularTypeface = bold;
+            medium.fallbackFontAssetTable = new List<TMP_FontAsset> { fallback };
+            EditorUtility.SetDirty(medium);
+            AssetDatabase.SaveAssets();
+            ClientResourcesSetup.EnsureConfigured();
+            Debug.Log("BATTLE_HUD_FONT_WEIGHTS_READY");
+        }
+
+        private static TMP_FontAsset EnsureFontAsset(string sourcePath, string assetPath, string name, string warmCharacters, int atlasSize = AtlasSize)
+        {
             RequireEditMode();
             if (!EssentialsReady())
             {
@@ -204,26 +239,26 @@ namespace Game.Editor
             }
 
             TMP_Settings.LoadDefaultSettings();
-            if (!File.Exists(SourceFontPath) || !File.Exists(LicensePath))
+            if (!File.Exists(sourcePath))
             {
-                throw new FileNotFoundException("Keep TowerDefenseUI.otf and its LICENSE-Noto.txt together in the Fonts directory.");
+                throw new FileNotFoundException("The font source is missing.", sourcePath);
             }
 
-            var importer = AssetImporter.GetAtPath(SourceFontPath) as TrueTypeFontImporter;
+            var importer = AssetImporter.GetAtPath(sourcePath) as TrueTypeFontImporter;
             if (importer != null && !importer.includeFontData)
             {
                 importer.includeFontData = true;
                 importer.SaveAndReimport();
             }
 
-            var source = AssetDatabase.LoadAssetAtPath<Font>(SourceFontPath);
+            var source = AssetDatabase.LoadAssetAtPath<Font>(sourcePath);
             if (source == null)
             {
-                throw new InvalidOperationException("Unity could not import the Noto OTF source font.");
+                throw new InvalidOperationException("Unity could not import " + sourcePath);
             }
 
             var shader = LoadMobileShader();
-            var existing = AssetDatabase.LoadMainAssetAtPath(FontAssetPath);
+            var existing = AssetDatabase.LoadMainAssetAtPath(assetPath);
             var font = existing as TMP_FontAsset;
             if (existing != null && font == null)
             {
@@ -237,22 +272,22 @@ namespace Game.Editor
                     PointSize,
                     Padding,
                     GlyphRenderMode.SDFAA,
-                    AtlasSize,
-                    AtlasSize,
+                    atlasSize,
+                    atlasSize,
                     AtlasPopulationMode.Dynamic,
                     true);
                 if (font == null)
                 {
-                    throw new InvalidOperationException("TextCore could not create the dynamic SDF font from the OTF source.");
+                    throw new InvalidOperationException("TextCore could not create the dynamic SDF font from " + sourcePath);
                 }
 
-                font.name = "TowerDefenseUI";
-                AssetDatabase.CreateAsset(font, FontAssetPath);
+                font.name = name;
+                AssetDatabase.CreateAsset(font, assetPath);
             }
 
             font.atlasPopulationMode = AtlasPopulationMode.Dynamic;
             font.isMultiAtlasTexturesEnabled = true;
-            if (font.sourceFontFile != source || font.atlasWidth != AtlasSize || font.atlasHeight != AtlasSize
+            if (font.sourceFontFile != source || font.atlasWidth != atlasSize || font.atlasHeight != atlasSize
                 || font.atlasPadding != Padding || Math.Abs(font.faceInfo.pointSize - PointSize) > .01f)
             {
                 throw new InvalidOperationException(
@@ -269,17 +304,17 @@ namespace Game.Editor
                 font.material = new Material(shader);
             }
 
-            font.material.name = "TowerDefenseUI Material";
+            font.material.name = name + " Material";
             font.material.shader = shader;
             font.material.SetTexture("_MainTex", font.atlasTextures[0]);
-            font.material.SetFloat("_TextureWidth", AtlasSize);
-            font.material.SetFloat("_TextureHeight", AtlasSize);
+            font.material.SetFloat("_TextureWidth", atlasSize);
+            font.material.SetFloat("_TextureHeight", atlasSize);
             font.material.SetFloat("_GradientScale", Padding + 1);
             PersistSubAssets(font);
 
             // Rebuild the small warm set in place so source font reimport cannot leave stale glyph indices.
             font.ClearFontAssetData();
-            if (!font.TryAddCharacters(WarmCharacters(), out string missingCharacters))
+            if (!font.TryAddCharacters(warmCharacters, out string missingCharacters))
             {
                 throw new InvalidOperationException("The Noto subset is missing UI glyphs: " + missingCharacters);
             }
@@ -315,7 +350,7 @@ namespace Game.Editor
                     continue;
                 }
 
-                atlas.name = "TowerDefenseUI Atlas " + index;
+                atlas.name = font.name + " Atlas " + index;
                 if (!AssetDatabase.Contains(atlas))
                 {
                     AssetDatabase.AddObjectToAsset(atlas, font);
@@ -328,6 +363,7 @@ namespace Game.Editor
             const string labels = "塔防肉鸽三选一选择本局强化基地金币波次开始战斗暂停继续升级已满级伤害射程攻速建造点防御塔查看确认返回重试胜利失败守护成功失守离线原型账号登录结算设置音量敌人来袭空点击下方圆圈显示实际攻击范围无法检查当前完成解除状态恭喜获得卡牌组合生命地图路线剩余冷却训练挑战准备 →·×：，。！";
             const string client = "翠林守卫森林旅人见习探索经验最高波次累计击败名敌防线旅程任务首战告捷赢得一次哨站防守筑起累计建造三座防御塔战地祝福选择张强化卡本地档案进度保存在此设备已达成出征准备营确认返回未完成的当前记录等级满资源初始化系统检查版本载入玩家页面游戏代码更新完成网络重新绿色区域部署按键取消请选择金币不足实际攻击范围";
             string camp = File.ReadAllText("Assets/GameAssets/Camp/Story/Arrival.json");
+            camp += File.ReadAllText("Assets/GameAssets/Camp/Story/Outpost.json");
             foreach (string directory in new[] { "Assets/HotUpdate/Camp", "Assets/HotUpdate/Client", "Assets/HotUpdate/TowerDefense/Presentation" })
             {
                 foreach (string file in Directory.GetFiles(directory, "*.cs", SearchOption.AllDirectories))

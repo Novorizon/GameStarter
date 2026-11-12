@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.HotUpdate.Client;
 using Game.HotUpdate.TowerDefense.Domain;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -30,15 +31,14 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private readonly Dictionary<int, EnemyView> enemies = new Dictionary<int, EnemyView>();
         private readonly Dictionary<int, TowerView> towers = new Dictionary<int, TowerView>();
-        private readonly Dictionary<int, GameObject> slots = new Dictionary<int, GameObject>();
         private readonly HashSet<int> liveEnemies = new HashSet<int>();
+        private readonly HashSet<int> liveTowers = new HashSet<int>();
         private readonly List<int> removals = new List<int>();
-        private readonly List<Material> materials = new List<Material>();
+        private readonly List<UnityEngine.Object> materialAssets = new List<UnityEngine.Object>();
         private readonly List<Sprite> generatedIcons = new List<Sprite>();
         private readonly List<RaycastResult> uiHits = new List<RaycastResult>();
         private readonly List<Button> buildButtons = new List<Button>();
-        private readonly Color ink = new Color(.95f, .93f, .82f);
-        private readonly Color cream = new Color(.98f, .95f, .84f);
+        private readonly Color ink = new Color(.94f, .975f, 1f);
         private FightConfiguration configuration;
         private FightSession session;
         private BattleBriefing briefing;
@@ -46,10 +46,8 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private uint seed;
         private Camera worldCamera;
         private readonly List<Mesh> generatedMeshes = new List<Mesh>();
-        private readonly List<Image> skinnedPanels = new List<Image>();
         private readonly List<Image> atlasImages = new List<Image>();
         private readonly List<int> atlasIndices = new List<int>();
-        private Sprite panelSprite;
         private Camera previousCamera;
         private bool previousCameraEnabled;
         private GameObject eventSystemOwned;
@@ -60,24 +58,39 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private Material[] towerMaterials;
         private Material[] enemyMaterials;
         private TMP_FontAsset font;
-        private readonly TMP_Text[] stats = new TMP_Text[4];
-        private readonly TMP_Text[] buildTitles = new TMP_Text[3];
-        private readonly TMP_Text[] buildCosts = new TMP_Text[3];
+        private TMP_Text objectiveText;
+        private TMP_Text goldText;
+        private TMP_Text buffsText;
+        private Image objectiveFill;
+        private Image draftProgress;
         private readonly TMP_Text[] cardRarities = new TMP_Text[3];
         private TMP_Text notice;
-        private TMP_Text towerDetails;
-        private TMP_Text nextWaveLabel;
+        private GameObject towerInspector;
+        private Image towerPortrait;
+        private TMP_Text towerName;
+        private TMP_Text towerLevel;
         private TMP_Text pauseLabel;
-        private Button nextWave;
+        private Button startBattle;
+        private Button repairBase;
         private Button upgrade;
+        private TMP_Text upgradePrice;
+        private TMP_Text upgradeStatus;
+        private Button sell;
+        private TMP_Text sellRefund;
         private GameObject cardModal;
-        private GameObject cardResume;
         private GameObject resultModal;
         private TMP_Text resultText;
-        private TMP_Text waveForecast;
-        private GameObject forecastPanel;
-        private int forecastIndex = -1;
-        private BattlePhase forecastPhase;
+        private TMP_Text waveStatus;
+        private TMP_Text draftScoreText;
+        private TMP_Text reinforcementText;
+        private TMP_Text killTallyText;
+        private TMP_Text campaignCue;
+        private RectTransform[] entranceMarkers;
+        private RectTransform goalMarker;
+        private RectTransform relayMarker;
+        private TMP_Text relayCaption;
+        private GameObject relayLamp;
+        private TMP_Text[] buildPrices;
         private readonly TMP_Text[] cardNames = new TMP_Text[3];
         private readonly TMP_Text[] cardDescriptions = new TMP_Text[3];
         private readonly Image[] cardImages = new Image[3];
@@ -87,23 +100,41 @@ namespace Game.HotUpdate.TowerDefense.Presentation
         private bool buildMode;
         private bool completedReported;
         private GameObject exitConfirm;
+        private GameObject systemMenu;
+        private GameObject restartConfirm;
         private bool skipSimulationFrame;
         public string RunId { get; private set; }
         public event Action<FightSession> Finished;
         public event Action ExitRequested;
         private int selectedTower;
+        private bool selectedBase;
         private float accumulator;
         private float uiTimer;
         private Rect lastSafeArea;
+        private Rect battlefieldPixels;
         private int lastWidth;
         private int lastHeight;
         private BattlePhase shownPhase;
         private bool initialized;
         private bool disposed;
         private bool destroying;
+        private const float OpeningCountdownSeconds = 10f;
+        private float openingSecondsRemaining = OpeningCountdownSeconds;
+        private const string FirstBattleHint = "推荐橡木箭塔。路口附近的草地能覆盖更多路段。";
+        private bool firstBattleGuide;
+        private bool PreparingBattle => session.Phase == BattlePhase.Planning && session.WaveIndex == 0;
+        private bool GuidingOpening => firstBattleGuide && PreparingBattle;
 
         public FightSession Session => session;
         public Camera WorldCamera => worldCamera;
+
+        internal void EnableFirstBattleGuide()
+        {
+            firstBattleGuide = true;
+            SetNotice(FirstBattleHint);
+            SynchronizeWorld(0);
+            RefreshInterface();
+        }
 
         // Lease ownership transfers before any native UI is created, including failed initialization.
         public static TowerDefensePrototypeView Create(
@@ -111,7 +142,9 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             TMP_FontAsset uiFont,
             Sprite map = null,
             uint randomSeed = 1,
-            List<IDisposable> assetLeases = null)
+            List<IDisposable> assetLeases = null,
+            ClientArt art = null,
+            Texture2D hudAtlas = null)
         {
             if (uiFont == null)
             {
@@ -132,7 +165,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
                     root.AddComponent<PrototypeAssetLifetime>().Own(assetLeases);
                 }
 
-                view.Initialize(config, uiFont, map, randomSeed);
+                view.Initialize(config, uiFont, map, randomSeed, art, hudAtlas);
             }
             catch
             {
@@ -143,7 +176,13 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             return view;
         }
 
-        public void Initialize(FightConfiguration config, TMP_FontAsset uiFont, Sprite map = null, uint randomSeed = 1)
+        public void Initialize(
+            FightConfiguration config,
+            TMP_FontAsset uiFont,
+            Sprite map = null,
+            uint randomSeed = 1,
+            ClientArt art = null,
+            Texture2D hudAtlas = null)
         {
             if (initialized || disposed)
             {
@@ -157,17 +196,18 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             }
 
             seed = randomSeed;
-            session = new FightSession(configuration, seed);
+            session = new FightSession(configuration, seed, AssaultRules.Default);
             briefing = new BattleBriefing(configuration);
             session.SetPaused(pauseState.IsPaused);
+            skipSimulationFrame = true;
             RunId = Guid.NewGuid().ToString("N");
             completedReported = false;
             font = uiFont != null ? uiFont : throw new ArgumentNullException(nameof(uiFont), "Load the YooAsset TMP font before creating battle UI.");
             initialized = true;
-            CreateWorld(map);
-            CreateInterface();
+            CreateWorld(map, art);
+            CreateInterface(hudAtlas);
             selectedDefinition = configuration.Towers[0].Id;
-            SetNotice("选择下方塔卡，再点击绿色区域部署。点击防御塔查看射程。");
+            SetNotice("选择右侧塔卡，在地图上预览建塔。");
             SynchronizeWorld(0);
             RefreshInterface();
         }
@@ -180,21 +220,33 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             }
 
             UpdateSafeArea();
-            HandlePointer();
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 HandleEscape();
             }
-
-            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+            else
             {
-                StartWave();
+                HandlePointer();
             }
 
-            float elapsed = Mathf.Min(Time.unscaledDeltaTime, .25f);
-            bool skip = skipSimulationFrame;
+            if (PreparingBattle && !mapDetails.activeSelf && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                StartBattle();
+            }
+
+            float frameTime = Time.unscaledDeltaTime;
+            float elapsed = Mathf.Min(frameTime, .25f);
+            bool advanceTime = !skipSimulationFrame && !session.IsPaused;
             skipSimulationFrame = false;
-            if (!skip && session.Phase == BattlePhase.Fighting && !session.IsPaused)
+            if (advanceTime && PreparingBattle)
+            {
+                openingSecondsRemaining = Mathf.Max(0, openingSecondsRemaining - frameTime);
+                if (openingSecondsRemaining == 0)
+                {
+                    StartBattle();
+                }
+            }
+            else if (advanceTime && session.Phase == BattlePhase.Fighting)
             {
                 accumulator += elapsed;
                 const float tickSeconds = FightSession.TickMilliseconds / 1000f;
@@ -214,6 +266,12 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             else
             {
                 accumulator = 0;
+            }
+
+            UpdatePlacementPreview();
+            if (buildGoldToast.activeSelf && Time.unscaledTime >= buildGoldToastUntil)
+            {
+                buildGoldToast.SetActive(false);
             }
 
             SynchronizeWorld(elapsed);
@@ -240,39 +298,72 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
         private void SelectDefinition(int id)
         {
-            var definition = FindTower(id);
-            if (session.IsPaused || session.Gold < definition.BuildCost)
+            if (buildMode && selectedDefinition == id)
             {
-                SetNotice("金币不足或战斗已暂停，暂时无法建造。");
+                CancelPlacement();
                 return;
             }
 
-            buildMode = !buildMode || selectedDefinition != id;
+            var definition = FindTower(id);
+            if (session.IsPaused)
+            {
+                return;
+            }
+
+            if (session.Gold < session.BuildCost(definition))
+            {
+                ShowBuildGoldToast();
+                return;
+            }
+
+            buildGoldToast.SetActive(false);
+            buildMode = true;
             selectedDefinition = id;
             selectedTower = 0;
-            SetNotice(buildMode ? "选择绿色建造区域部署" + definition.Name + "，按返回键可取消。" : "已取消建造。");
+            selectedBase = false;
+            useQuickActions = false;
+            SetNotice(Mouse.current == null ? "拖动预览，模型为原色时松手建塔。" : "红色不可建造 · 右键取消");
             RefreshInterface();
         }
 
-        private void BuildAt(int slot)
+        private void CancelPlacement()
         {
-            if (!session.BuildTower(slot, selectedDefinition))
+            EndPlacement();
+            SetNotice("已取消建造。");
+            RefreshInterface();
+        }
+
+        private void EndPlacement()
+        {
+            buildMode = false;
+            trackingPlacementTouch = false;
+            placementGhost?.SetActive(false);
+            buildGoldToast.SetActive(false);
+        }
+
+        private void BuildAt(Vector2 pointer)
+        {
+            var definition = FindTower(selectedDefinition);
+            if (session.IsPaused || (session.Phase != BattlePhase.Planning && session.Phase != BattlePhase.Fighting))
             {
-                SetNotice("无法建造，请检查金币与位置。");
                 return;
             }
 
-            foreach (var tower in session.Towers)
+            if (session.Gold < session.BuildCost(definition))
             {
-                if (tower.SlotId == slot)
-                {
-                    selectedTower = tower.Id;
-                    break;
-                }
+                ShowBuildGoldToast();
+                return;
             }
 
-            buildMode = false;
-            SetNotice("防御塔已建造，圆圈显示实际攻击范围。");
+            if (!ResolvePlacement(pointer, out _, out int slot) || slot == 0 || !session.BuildTower(slot, selectedDefinition))
+            {
+                SetNotice("这里不能建塔。");
+                return;
+            }
+
+            buildGoldToast.SetActive(false);
+            SetNotice(session.Gold < session.BuildCost(definition) ? "已建造 · 金币不足" : "已建造 · 可继续放置");
+            RefreshInterface();
         }
 
         private void HandleEscape()
@@ -281,15 +372,29 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             {
                 CancelExit();
             }
+            else if (restartConfirm.activeSelf)
+            {
+                restartConfirm.SetActive(false);
+            }
+            else if (systemMenu.activeSelf)
+            {
+                ToggleSystemMenu();
+            }
+            else if (mapDetails.activeSelf)
+            {
+                CloseMapDetails();
+            }
             else if (buildMode)
             {
-                buildMode = false;
-                SetNotice("已取消建造。");
-                RefreshInterface();
+                CancelPlacement();
+            }
+            else if (useQuickActions || selectedBase)
+            {
+                CloseSelection();
             }
             else
             {
-                TogglePause();
+                ToggleSystemMenu();
             }
         }
 
@@ -325,17 +430,73 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             RefreshInterface();
         }
 
-        private void StartWave()
+        private void SellSelected()
         {
-            SetNotice(session.StartNextWave() ? "敌人来袭，守住基地！" : "请先完成当前波次、选卡或解除暂停。");
+            int previousGold = session.Gold;
+            if (session.SellTower(selectedTower))
+            {
+                selectedTower = 0;
+                useQuickActions = false;
+                SetNotice("已出售，返还 " + (session.Gold - previousGold) + " 金币。");
+                SynchronizeWorld(0);
+            }
+
             RefreshInterface();
+        }
+
+        private void SelectBase()
+        {
+            EndPlacement();
+            selectedTower = 0;
+            useQuickActions = false;
+            selectedBase = true;
+            SetNotice("");
+            RefreshInterface();
+        }
+
+        private void CloseSelection()
+        {
+            selectedTower = 0;
+            selectedBase = false;
+            useQuickActions = false;
+            RefreshInterface();
+        }
+
+        private void UpgradeBase()
+        {
+            if (session.UpgradeBase())
+            {
+                SetNotice("基地已加固至 Lv." + session.BaseLevel);
+            }
+
+            RefreshInterface();
+        }
+
+        private void StartBattle()
+        {
+            if (session.StartNextWave())
+            {
+                SetNotice("");
+            }
+
+            RefreshInterface();
+        }
+
+        private void RepairBase()
+        {
+            int previousHealth = session.BaseHp;
+            if (session.RepairBase())
+            {
+                SetNotice("修复了 " + (session.BaseHp - previousHealth) + " 点耐久。");
+                RefreshInterface();
+            }
         }
 
         private void ChooseCard(int index)
         {
             if (session.ChooseCard(index))
             {
-                SetNotice("强化已生效。准备下一波吧。");
+                SetNotice("强化已生效。");
                 RefreshInterface();
             }
         }
@@ -349,12 +510,31 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             }
         }
 
+        private void ToggleSystemMenu()
+        {
+            if (pauseState.ReturnPending || restartConfirm.activeSelf)
+            {
+                return;
+            }
+
+            if (audioSettingsPanel.activeSelf)
+            {
+                CloseAudioSettings();
+                return;
+            }
+
+            systemMenu.SetActive(!systemMenu.activeSelf);
+            ApplyPause();
+        }
+
         private void ApplyPause()
         {
             accumulator = 0;
             if (initialized && !disposed)
             {
-                session.SetPaused(pauseState.IsPaused);
+                bool paused = pauseState.IsPaused || systemMenu.activeSelf || mapDetails.activeSelf;
+                skipSimulationFrame |= session.IsPaused != paused;
+                session.SetPaused(paused);
                 RefreshInterface();
             }
         }
@@ -387,18 +567,24 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
             enemies.Clear();
             towers.Clear();
-            session = new FightSession(configuration, seed);
+            session = new FightSession(configuration, seed, AssaultRules.Default);
             pauseState.ResetForNewRun();
             session.SetPaused(pauseState.IsPaused);
+            systemMenu.SetActive(false);
+            mapDetails.SetActive(false);
+            restartConfirm.SetActive(false);
             exitConfirm.SetActive(false);
-            forecastIndex = -1;
             RunId = Guid.NewGuid().ToString("N");
             completedReported = false;
             selectedTower = 0;
-            buildMode = false;
+            selectedBase = false;
+            useQuickActions = false;
+            EndPlacement();
+            openingSecondsRemaining = OpeningCountdownSeconds;
+            skipSimulationFrame = true;
             accumulator = 0;
             rangeRing.enabled = false;
-            SetNotice("已使用相同种子重新开始，试试不同的建造和选卡。");
+            SetNotice(GuidingOpening ? FirstBattleHint : string.Empty);
             RefreshInterface();
         }
 
@@ -415,6 +601,7 @@ namespace Game.HotUpdate.TowerDefense.Presentation
             }
 
             disposed = true;
+            SaveAudioSettings();
             session?.SetPaused(true);
             if (!destroying)
             {
@@ -438,12 +625,12 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
             generatedMeshes.Clear();
             meshCache.Clear();
-            foreach (var material in materials)
+            foreach (var asset in materialAssets)
             {
-                Destroy(material);
+                Destroy(asset);
             }
 
-            materials.Clear();
+            materialAssets.Clear();
             foreach (var icon in generatedIcons)
             {
                 Destroy(icon);
@@ -465,7 +652,6 @@ namespace Game.HotUpdate.TowerDefense.Presentation
 
     public sealed class PrototypeWorldTarget : MonoBehaviour
     {
-        public int SlotId;
         public int TowerId;
     }
 }

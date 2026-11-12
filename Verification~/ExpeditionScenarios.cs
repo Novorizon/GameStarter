@@ -17,7 +17,7 @@ internal static partial class Program
             Equal(6, plan.Briefing.Waves.Count);
             Equal(126, plan.Briefing.EnemyCount);
             Equal(240, plan.Configuration.InitialGold);
-            Equal(7, plan.Configuration.BuildSlots.Length);
+            Equal(407, plan.Configuration.BuildSlots.Length);
             Equal(2, plan.CampLevel.Id);
             var fight = new FightSession(plan.Configuration, plan.Seed);
             Equal(4729u, fight.Seed);
@@ -130,7 +130,7 @@ internal static partial class Program
             Equal(40, new JourneyProgress(ReadTowerDefenseTables(), store).Camp.Wood);
             Equal(1, store.Saves);
         });
-        Check("authored stage remains winnable across varied expedition seeds", () =>
+        Check("combat at the configured spawn point settles across varied expedition seeds", () =>
         {
             foreach (uint seed in new uint[] { 0, 1, 33, 4729, 12345, 987654, 2147483648, uint.MaxValue })
             {
@@ -139,7 +139,7 @@ internal static partial class Program
                 Equal(6, run.Session.WaveIndex);
             }
         });
-        Check("retrying a battle after camp construction keeps the departure reward level", () =>
+        Check("retrying a battle after camp milestone migration keeps the departure reward level", () =>
         {
             var store = new JourneyStore
             {
@@ -154,10 +154,10 @@ internal static partial class Program
             store.Fail = true;
             Throws<IOException>(() => journey.Record(battle));
             store.Fail = false;
-            True(journey.Camp.Upgrade());
             Equal(3, journey.Camp.Level.Id);
             int wood = journey.Camp.Wood;
             True(journey.Record(battle));
+            Equal(4, journey.Camp.Level.Id);
             Equal(wood + 35, journey.Camp.Wood);
             True(!journey.Record(battle));
             True(journey.Record(new JourneyBattle { RunId = "bound-defeat", CampLevelId = 2, Wave = 2 }));

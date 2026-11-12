@@ -3,18 +3,19 @@
   "assets": [
     {
       "path": "Assets/GameAssets/TowerDefense/Art/Map.png",
-      "description": "Reference-2 low-poly raised diorama. No baked construction markers; grass and sandstone paving use comparable visual units.",
-      "promptSummary": "Retain the diorama road/bridge/pond geometry and camera; remove seven white construction pads and fill ordinary grass; enlarge road paving seams to grass-tile scale.",
-      "import": "1672x941 RGBA original imagegen edit, Single Sprite; no pixel post-processing.",
+      "description": "Forest Outpost diorama with cleared ground southwest and northeast of the base.",
+      "toolMode": "built-in imagegen",
+      "generatedDate": "2026-11-11",
+      "promptSummary": "Remove the two fir-and-rock clusters below the final road and to the right of the diagonal ridge. Replace them with matching flat tiled grass. Preserve the road, ponds, bridge, cliffs and transparent silhouette.",
+      "import": "1670x942 RGBA, Single Sprite. Only the two generated clearings were applied to the original sprite.",
       "alignment": {
         "width": 22,
-        "depth": 15.12,
+        "depth": 15.15,
         "cameraPitch": 55,
-        "routePoints": 18,
-        "buildRegions": 7,
-        "pixelToLogical": "x=(pixelX/1672-0.5)*22000; y=(0.5-pixelY/941)*15120"
+        "routePoints": 35,
+        "pixelToLogical": "x=(pixelX-835)*22000/1670; y=(471-pixelY)*22000/(1670*sin(55 degrees))"
       },
-      "sha256": "13d335ec4e67c35f86dee3e4577ae3150dbfb47d06d08b9cd63d7b8774f9df83"
+      "sha256": "49365e801603fc9348f3d48c3545fe102264de0442b8e552e84d2e5f43cf3344"
     },
     {
       "path": "Assets/GameAssets/Common/UI/Icons.png",
@@ -38,6 +39,26 @@
       "sha256": "0ee607691495460a3fb53fe7f457c18e96a41eb887de80b5f80fb2383d6fbc24"
     },
     {
+      "path": "Assets/GameAssets/Common/UI/AvatarShore.png",
+      "description": "Shore appearance for the local traveler.",
+      "toolMode": "built-in imagegen",
+      "generatedDate": "2026-11-09",
+      "reference": "Assets/GameAssets/Common/UI/Avatar.png",
+      "promptSummary": "Stylized concept for a game portrait. Use the supplied image as the style and framing template. Create a distinct island traveler with a young adult woman, dark navy shoulder-length hair tied at one side, warm light brown skin, and a sea-blue scarf over an ivory and muted teal canvas jacket with a small brass clasp. Keep the friendly expression, centered head-and-shoulders bust, broad low-poly planes, soft warm light, character scale, and transparent silhouette. Leave a small margin around hair and shoulders. One character, square canvas, no writing, no frame, no scenery.",
+      "import": "Original transparent PNG, Single Sprite, maximum import size 512.",
+      "sha256": "2f66fab45bc0b3f9f43e55db756f96e4412cc003d1f011db56aca876c6c4a2bf"
+    },
+    {
+      "path": "Assets/GameAssets/Common/UI/AvatarEmber.png",
+      "description": "Ember appearance for the local traveler.",
+      "toolMode": "built-in imagegen",
+      "generatedDate": "2026-11-09",
+      "reference": "Assets/GameAssets/Common/UI/Avatar.png",
+      "promptSummary": "Stylized concept for a game portrait. Use the supplied image as the style and framing template. Create a distinct island traveler with a young adult man, dark brown skin, short black textured hair, and a terracotta neckerchief over a muted charcoal canvas jacket with a small bronze clasp. Keep the friendly expression, centered head-and-shoulders bust, broad low-poly planes, soft warm light, character scale, and transparent silhouette. Leave a small margin around hair and shoulders. One character, square canvas, no writing, no frame, no scenery.",
+      "import": "Original transparent PNG, Single Sprite, maximum import size 512.",
+      "sha256": "90b1168ebd0a4a81e233cf677415124821b2f4caabdf9a75944146c47e46c8ef"
+    },
+    {
       "path": "Assets/GameAssets/Common/Startup/Background.bytes",
       "description": "Launch forest citadel background, also cached for next launch; the business hall uses its separate island map.",
       "promptSummary": "Premium low-poly blue-roof forest citadel on left, sandstone courtyard and turquoise creek, warm cinematic light, calm dark valley on right for player/task UI; no baked interface or text.",
@@ -46,10 +67,14 @@
     },
     {
       "path": "Assets/GameAssets/Camp/Art/Island.png",
-      "description": "Fixed island camp hall: empty clearing, arrival beach, damaged rowboat, turquoise sea and island vegetation. Camp buildings render separately in 3D.",
-      "promptSummary": "Premium near-overhead 55-degree low-poly island settlement background; broad empty camp clearing, warm afternoon light, no buildings/pads/UI/text; calm HUD edges.",
-      "import": "1672x941 original imagegen PNG, Single Sprite, no pixel editing.",
-      "sha256": "9b51f6260891124998a4d285518489e1441343e5678ee45757a580d9d4e39e42"
+      "description": "Pine-lined Tidal Camp clearing with a trail into the hills, a waterfall, and a rowboat on the foreground shore. Camp buildings render separately in 3D.",
+      "source": "User-supplied PNG",
+      "import": "1672x941 RGB PNG, Single Sprite, original file.",
+      "alignment": {
+        "cameraPitch": 55,
+        "clearingAnchorUv": [0.46, 0.48]
+      },
+      "sha256": "e1f8a61f8b4ffc4f88ceee2bc8de4594d51d7a8861ad0d5e9d89d20b3ec9fa7b"
     }
   ],
   "font": {

@@ -38,7 +38,11 @@ namespace Game
 
         public GameHotUpdate(ResourceMode resourceMode, bool simulateResourcesInEditor = true)
         {
+#if NOVORIZON_COMPILED_GAME
+            this.resourceMode = ResourceMode.Offline;
+#else
             this.resourceMode = resourceMode;
+#endif
 #if UNITY_EDITOR
             simulateResources = simulateResourcesInEditor;
 #endif

@@ -27,3 +27,7 @@ Recordings/
 
 /Assets/NovorizonSamples/
 /Assets/NovorizonSamples.meta
+/Assets/Game/Editor/NativeValidation/
+/Assets/Game/Editor/NativeValidation.meta
+/Assets/Game/Runtime/GameEntry.NativeValidation.cs*
+/Assets/HotUpdate/HotGame.NativeValidation.cs*

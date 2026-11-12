@@ -36,7 +36,7 @@ internal static partial class Program
         Check("entry uses actual Framework singleton and rejects duplicates", EntrySingleton);
         Check("a recreated scene entry starts through Awake after editor reset", EntryRestart);
         Check("entry delegates manager startup to the hot game and initializes once", EntryManagers);
-        Check("entry initializes network only when NetworkSettings exists", EntryNetwork);
+        Check("entry leaves the optional game server connection to the client flow", EntryNetwork);
         Check("failed resource initialization blocks manager creation", EntryResourceFailure);
         Check("closing while resources initialize prevents later manager creation", EntryResourceCancellation);
         Check("manager failure reports failed startup before tables are loaded", EntryManagerFailure);
@@ -88,7 +88,7 @@ internal static partial class Program
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
         var ownerField = typeof(GameEntry).GetField("hotUpdate", flags);
         var owner = ownerField.GetValue(entry);
-        var task = (Task)typeof(GameEntry).GetField("startupTask", flags).GetValue(entry);
+        var task = entry.StartupTask;
         if (owner == null || task == null)
         {
             throw new InvalidOperationException("Entry has not started.");
@@ -233,7 +233,7 @@ internal static partial class Program
         UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Equal(StartupState.Ready, entry.State);
-        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,network,tables", string.Join(",", ManagerContracts.Calls));
+        Equal("resources,storage,input,scenes,audio,ui,gpu,entities,worlds,tables", string.Join(",", ManagerContracts.Calls));
         ResetEntry();
     }
 
@@ -276,10 +276,9 @@ internal static partial class Program
     private static void EntryShutdownOrder()
     {
         ResetEntry();
-        UnityEngine.Resources.Assets["NetworkSettings"] = new Game.Framework.Network.Unity.NetworkSettings();
         var entry = CreateEntry();
         Complete(entry.ShutdownAsync());
-        Equal("hot,network,worlds,entities,gpu,ui,audio,scenes,input,storage,resources", string.Join(",", ManagerContracts.Cleanup));
+        Equal("hot,worlds,entities,gpu,ui,audio,scenes,input,storage,resources", string.Join(",", ManagerContracts.Cleanup));
         Complete(entry.ShutdownAsync());
         True(!UI.UIManager.TryGetInstance(out _));
         True(!Game.Framework.Data.DataManager.IsCreated);

@@ -5,11 +5,19 @@ using Game.HotUpdate.Camp;
 
 namespace Game.HotUpdate.Client
 {
+    public enum TravelerAppearance
+    {
+        Forest = 0,
+        Shore = 1,
+        Ember = 2
+    }
+
     [Serializable]
     public sealed class LocalJourneyData
     {
         public int version = 2;
         public string nickname = "森林旅人";
+        public TravelerAppearance appearance;
         public int experience;
         public int highestWave;
         public int victories;
@@ -19,6 +27,7 @@ namespace Game.HotUpdate.Client
         public string lastRunId = "";
         public List<int> completedTasks = new List<int>();
         public LocalCampData camp;
+        public LocalCampaignData campaign;
     }
 
     public struct JourneyBattle
@@ -30,6 +39,8 @@ namespace Game.HotUpdate.Client
         public int Kills;
         public int Towers;
         public int Cards;
+        public int StageId;
+        public bool RelayHeld;
     }
 
     public interface ILocalJourneyStore
@@ -41,6 +52,8 @@ namespace Game.HotUpdate.Client
     /// <summary>本地探索档案；不代表服务器账号、正式经验或经济余额。</summary>
     public sealed class JourneyProgress
     {
+        public const int MaxNicknameLength = 12;
+
         private readonly ILocalJourneyStore store;
         private readonly cfg.PlayerLevel[] levels;
         private readonly cfg.JourneyTask[] tasks;
@@ -49,6 +62,7 @@ namespace Game.HotUpdate.Client
         public CampProgress Camp { get; }
 
         public string Nickname => data.nickname;
+        public TravelerAppearance Appearance => data.appearance;
         public int Experience => data.experience;
         public int HighestWave => data.highestWave;
         public int Victories => data.victories;
@@ -58,6 +72,27 @@ namespace Game.HotUpdate.Client
         public IReadOnlyList<cfg.JourneyTask> Tasks => tasks;
         public cfg.PlayerLevel Level => levels.Last(value => value.Experience <= data.experience);
         public cfg.PlayerLevel NextLevel => levels.FirstOrDefault(value => value.Experience > data.experience);
+        public CampaignStep StoryStep => data.campaign.step;
+        public CampaignEnding Ending => data.campaign.ending;
+        public string KeeperName => data.campaign.keeperName;
+        public bool RelayHeld => data.campaign.relayHeld;
+        internal bool GuardingRelay => data.campaign.guardRelay;
+        public int ClearedStages => StoryStep switch
+        {
+            CampaignStep.OutpostSupplies or CampaignStep.Outpost => 0,
+            CampaignStep.OutpostReturn or CampaignStep.WaterPoint or CampaignStep.Sluice => 1,
+            CampaignStep.SluiceReturn or CampaignStep.Ridge => 2,
+            CampaignStep.RidgeReturn or CampaignStep.Lighthouse => 3,
+            _ => 4
+        };
+        public int NextStageId => StoryStep switch
+        {
+            CampaignStep.Outpost => 1,
+            CampaignStep.Sluice => 2,
+            CampaignStep.Ridge => 3,
+            CampaignStep.Lighthouse => 4,
+            _ => 0
+        };
 
         public JourneyProgress(cfg.Tables tables, ILocalJourneyStore store)
         {
@@ -86,8 +121,75 @@ namespace Game.HotUpdate.Client
                 data.camp = Camp.CreateInitial();
             }
 
-            Camp.Validate(data.camp);
+            data.camp = Camp.Restore(data.camp, data.victories);
+            // 旧版本只有林间哨站。曾通关的档案从首胜返营接续。
+            if (data.campaign == null || data.campaign.format == 0)
+            {
+                data.campaign = new LocalCampaignData { format = 1, step = data.victories > 0 ? CampaignStep.OutpostReturn : CampaignStep.OutpostSupplies };
+            }
+
+            if (data.campaign.format != 1 || !Enum.IsDefined(typeof(CampaignStep), StoryStep) || !Enum.IsDefined(typeof(CampaignEnding), Ending))
+            {
+                throw new InvalidOperationException("The local campaign progress is invalid; the original file was preserved.");
+            }
+
             data.version = 2;
+        }
+
+        internal LocalCampaignData ExpeditionChoices() => data.campaign.Copy();
+
+        internal void AdvanceCampaign(CampaignStep expected, int choice)
+        {
+            if (StoryStep != expected || !Camp.ExpeditionUnlocked || choice < 0 || choice > 1)
+            {
+                throw new InvalidOperationException("The campaign action is no longer available.");
+            }
+
+            var next = Copy(data);
+            var campaign = next.campaign;
+            switch (expected)
+            {
+                case CampaignStep.OutpostSupplies:
+                    campaign.repairKit = choice == 1;
+                    campaign.step = CampaignStep.Outpost;
+                    break;
+                case CampaignStep.OutpostReturn:
+                    campaign.bringWater = choice == 1;
+                    campaign.step = CampaignStep.WaterPoint;
+                    break;
+                case CampaignStep.WaterPoint:
+                    campaign.step = CampaignStep.Sluice;
+                    break;
+                case CampaignStep.SluiceReturn:
+                    campaign.guardRelay = choice == 0;
+                    campaign.step = CampaignStep.Ridge;
+                    break;
+                case CampaignStep.RidgeReturn:
+                    campaign.step = CampaignStep.Lighthouse;
+                    break;
+                case CampaignStep.ReturnBell:
+                    campaign.step = CampaignStep.SecondBell;
+                    break;
+                case CampaignStep.SecondBell:
+                    campaign.step = CampaignStep.TidalGate;
+                    break;
+                case CampaignStep.TidalGate:
+                    campaign.step = CampaignStep.EndingChoice;
+                    break;
+                case CampaignStep.EndingChoice:
+                    campaign.ending = choice == 0 ? CampaignEnding.Keeper : CampaignEnding.Chart;
+                    campaign.keeperName = choice == 0 ? Nickname : null;
+                    campaign.step = CampaignStep.Epilogue;
+                    break;
+                case CampaignStep.Epilogue:
+                    campaign.step = CampaignStep.Complete;
+                    break;
+                default:
+                    throw new InvalidOperationException("This campaign step is advanced by a battle result.");
+            }
+
+            store.Save(next);
+            data = next;
         }
 
         public int Progress(cfg.JourneyTask task)
@@ -98,6 +200,28 @@ namespace Game.HotUpdate.Client
         public bool Completed(cfg.JourneyTask task)
         {
             return data.completedTasks.Contains(task.Id);
+        }
+
+        public bool TrySaveIdentity(string nickname, TravelerAppearance appearance)
+        {
+            string name = nickname == data.nickname ? nickname : nickname?.Trim();
+            if (name != data.nickname && (string.IsNullOrEmpty(name) || name.Length > MaxNicknameLength
+                || name.Any(character => !char.IsLetterOrDigit(character) && character != ' ' && character != '-' && character != '_')))
+            {
+                return false;
+            }
+
+            if (name == data.nickname && appearance == data.appearance)
+            {
+                return true;
+            }
+
+            var next = Copy(data);
+            next.nickname = name;
+            next.appearance = appearance;
+            store.Save(next);
+            data = next;
+            return true;
         }
 
         public bool Record(JourneyBattle battle)
@@ -112,19 +236,31 @@ namespace Game.HotUpdate.Client
                 return false;
             }
 
-            var next = new LocalJourneyData
+            int victories = checked(data.victories + (battle.Victory ? 1 : 0));
+            var next = Copy(data);
+            next.highestWave = Math.Max(data.highestWave, battle.Wave);
+            next.victories = victories;
+            next.enemiesKilled = checked(data.enemiesKilled + battle.Kills);
+            next.towersBuilt = checked(data.towersBuilt + battle.Towers);
+            next.cardsChosen = checked(data.cardsChosen + battle.Cards);
+            next.lastRunId = battle.RunId;
+            next.camp = Camp.BattleLoot(battle.Victory, battle.CampLevelId, victories);
+            if (battle.Victory && battle.StageId != 0 && battle.StageId == NextStageId)
             {
-                nickname = data.nickname,
-                experience = data.experience,
-                highestWave = Math.Max(data.highestWave, battle.Wave),
-                victories = checked(data.victories + (battle.Victory ? 1 : 0)),
-                enemiesKilled = checked(data.enemiesKilled + battle.Kills),
-                towersBuilt = checked(data.towersBuilt + battle.Towers),
-                cardsChosen = checked(data.cardsChosen + battle.Cards),
-                completedTasks = new List<int>(data.completedTasks),
-                lastRunId = battle.RunId,
-                camp = Camp.BattleLoot(battle.Victory, battle.CampLevelId)
-            };
+                next.campaign.step = StoryStep switch
+                {
+                    CampaignStep.Outpost => CampaignStep.OutpostReturn,
+                    CampaignStep.Sluice => CampaignStep.SluiceReturn,
+                    CampaignStep.Ridge => CampaignStep.RidgeReturn,
+                    CampaignStep.Lighthouse => CampaignStep.ReturnBell,
+                    _ => throw new InvalidOperationException("Unexpected campaign battle.")
+                };
+                if (StoryStep == CampaignStep.Ridge)
+                {
+                    next.campaign.relayHeld = data.campaign.guardRelay && battle.RelayHeld;
+                }
+            }
+
             foreach (var task in tasks)
             {
                 if (!next.completedTasks.Contains(task.Id) && Metric(next, task.Metric) >= task.Target)
@@ -155,6 +291,7 @@ namespace Game.HotUpdate.Client
             return new LocalJourneyData
             {
                 nickname = source.nickname,
+                appearance = source.appearance,
                 experience = source.experience,
                 highestWave = source.highestWave,
                 victories = source.victories,
@@ -163,7 +300,8 @@ namespace Game.HotUpdate.Client
                 cardsChosen = source.cardsChosen,
                 lastRunId = source.lastRunId,
                 completedTasks = new List<int>(source.completedTasks),
-                camp = source.camp?.Copy()
+                camp = source.camp?.Copy(),
+                campaign = source.campaign?.Copy()
             };
         }
 

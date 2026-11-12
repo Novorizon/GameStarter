@@ -68,7 +68,7 @@ Google Play 和 App Store 发行 checkout 固定 Unity IAP `5.5.0`。共用工�
 
 ## 启动验收和退出
 
-命令行 Player 验收通过 `--novorizon-native-smoke` 开启：启动完成后输出 Ready/Failed 标记，并以成功或失败码退出，供脚本判定。探针读取本次启动任务和状态，不向业务暴露额外等待接口；常规启动不主动退出。Editor 验收分别检查启动、界面和退出清理，不能代替 Player/IL2CPP/设备验收。
+命令行 Player 验收使用 `Tools~/native-validate.ps1` 构建的专用 Player。脚本只在验收副本中临时导入 `NativeFixtures~/RuntimeProbes`。运行验收 Player 时传入 `--novorizon-native-smoke`，启动完成后输出 Ready/Failed 标记并返回退出码。常规程序集由编译器省略无实现的探针调用。Editor 验收分别检查启动、界面和退出清理，Player、IL2CPP 和设备验收独立记录。
 
 启动 token 在 Player 和 Editor 都使用。入口退出、被销毁或主动释放时取消本次启动，异步操作恢复后不得继续初始化服务、加载代码或发布 Ready。切后台、关闭普通界面或重开战斗不自动取消整个入口；后台事件仍按业务约定保存设置。取消不会强制中断不支持取消的原生操作，其清理完成仍由资源管理器跟踪。
 
