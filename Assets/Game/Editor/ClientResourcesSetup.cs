@@ -8,6 +8,9 @@ namespace Game.Editor
     [InitializeOnLoad]
     public static class ClientResourcesSetup
     {
+        internal const string HudFontAssetPath = "Assets/GameAssets/Common/Fonts/BattleHudMedium.asset";
+        internal const string HudBoldFontAssetPath = "Assets/GameAssets/Common/Fonts/BattleHudBold.asset";
+
         static ClientResourcesSetup()
         {
             EditorApplication.delayCall += EnsureConfigured;
@@ -52,7 +55,7 @@ namespace Game.Editor
                 "Assets/GameAssets/Common/Fonts/GameUI.asset",
                 nameof(PackSeparately),
                 nameof(ClientAddressRule));
-            foreach (string font in new[] { TowerDefenseFontSetup.HudFontAssetPath, TowerDefenseFontSetup.HudBoldFontAssetPath })
+            foreach (string font in new[] { HudFontAssetPath, HudBoldFontAssetPath })
             {
                 if (!string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(font)))
                 {

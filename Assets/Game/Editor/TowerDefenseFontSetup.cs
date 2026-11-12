@@ -14,8 +14,8 @@ namespace Game.Editor
     {
         public const string SourceFontPath = "Assets/GameAssets/Common/Fonts/GameUI.otf";
         public const string FontAssetPath = "Assets/GameAssets/Common/Fonts/GameUI.asset";
-        public const string HudFontAssetPath = "Assets/GameAssets/Common/Fonts/BattleHudMedium.asset";
-        public const string HudBoldFontAssetPath = HudFontDirectory + "BattleHudBold.asset";
+        public const string HudFontAssetPath = ClientResourcesSetup.HudFontAssetPath;
+        public const string HudBoldFontAssetPath = ClientResourcesSetup.HudBoldFontAssetPath;
         private const string HudFontDirectory = "Assets/GameAssets/Common/Fonts/";
         private const string HudFontLicensePath = "Assets/StreamingAssets/ThirdPartyLicenses/Battle-HUD-Sans.txt";
         private const string LicensePath = "Assets/GameAssets/Common/Fonts/LICENSE-Noto.txt";
