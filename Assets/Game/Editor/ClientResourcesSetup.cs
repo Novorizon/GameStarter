@@ -18,7 +18,12 @@ namespace Game.Editor
             GameDataSetup.EnsureConfigured();
             var package = AssetBundleCollectorSettingData.Setting.Packages.Single(value => value.PackageName == GameDataPaths.PackageName);
             bool changed = false;
-            foreach (var path in new[] { "UI/Icons.png", "UI/Panel.png", "UI/Avatar.png", "Startup/Background.bytes", "Startup/Layout.json" })
+            var commonUiPaths = new[]
+            {
+                "UI/Icons.png", "UI/Panel.png", "UI/Avatar.png", "UI/AvatarShore.png", "UI/AvatarEmber.png", "UI/BattleHud.png", "UI/CampHud.png",
+                "Startup/Background.bytes", "Startup/Layout.json"
+            };
+            foreach (var path in commonUiPaths)
             {
                 changed |= ResourceCollectorSetup.SetGroup(
                     package,
@@ -29,6 +34,17 @@ namespace Game.Editor
                     nameof(ClientAddressRule));
             }
 
+            foreach (string texture in new[] { "ExpeditionBackdrop", "ExpeditionBanner", "ExpeditionGlyphs" })
+            {
+                changed |= ResourceCollectorSetup.SetGroup(
+                    package,
+                    "ExpeditionUI",
+                    "ui",
+                    "Assets/GameAssets/Common/UI/" + texture + ".png",
+                    nameof(PackSeparately),
+                    nameof(ClientAddressRule));
+            }
+
             changed |= ResourceCollectorSetup.SetGroup(
                 package,
                 "ClientFonts",
@@ -36,6 +52,14 @@ namespace Game.Editor
                 "Assets/GameAssets/Common/Fonts/GameUI.asset",
                 nameof(PackSeparately),
                 nameof(ClientAddressRule));
+            foreach (string font in new[] { TowerDefenseFontSetup.HudFontAssetPath, TowerDefenseFontSetup.HudBoldFontAssetPath })
+            {
+                if (!string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(font)))
+                {
+                    changed |= ResourceCollectorSetup.SetGroup(package, "ClientFonts", "fonts", font, nameof(PackSeparately), nameof(ClientAddressRule));
+                }
+            }
+
             foreach (string material in new[] { "WorldLit", "WorldSprite" })
             {
                 changed |= ResourceCollectorSetup.SetGroup(

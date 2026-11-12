@@ -12,12 +12,14 @@
 - SDK StoryPlayer 驱动三段漂流抵达对白，TMP 呈现；正文以 YooAsset story 资源发布。完成或主动跳过记录已抵达，取消/失败不冒充完成，奖励在任务页另行领取。抵达保存未成功时可在当前大厅重试序章。
 - 本地建设、任务领取、战斗统计和补给使用同一份档案原子提交；失败不先扣材料/发奖励，同一当前战报不重复入账。旧档案保留战绩并初始化营地，真实 JsonUtility 的缺字段行为有单独验证。补给锁定出征时营地等级，保存失败后先建设营地再重试也不改变原战报奖励。
 - 14 张真实 Luban 表：8 张战斗、主题/旅程任务/等级 3 张、营地等级/任务 2 张及 Example。结构与合理分组见[客户端规划](../Game/ClientPlan.zh-CN.md)。
-- 固定路线塔防：6 波、7 建造位置、18 路线点、3 塔型、4 怪物型、7 强化卡；闲置隐藏建造标记，选塔后显示可建位置，点塔显示实际领域射程。
+- 塔防由关卡配置出兵、出生位置、目标位置、塔位、敌人和强化卡。战斗领域根据敌人当前位置结算基地攻击或逃脱。点选已建塔显示领域计算的实际射程。
 - 卡牌基础品级/颜色与表内图标已接通，抽牌仍为单池权重。飞入、粒子和主题扩展未在本轮制作。
 - AOT 启动展示继续保留：无下载显示步骤，有下载显示实际字节；图片/已知布局/文案缓存供下次启动。资源下载完成仍等业务就绪才退出展示。
 - imagegen 海岛底图、低模塔防地图、公共面板/图标/头像；文字全部 TMP。公共图像/字体和营地 maps/story/rendering 分类由 YooAsset 管理；运行时材质所需 Shader 有实际资源依赖。
 
-## 当前验证
+## 历史验证记录
+
+以下结果对应报告生成时的版本。
 
 | 项目 | 证据 |
 | --- | --- |
@@ -41,10 +43,10 @@
 
 [桌面](Validation/prototype.json)、[宽屏](Validation/phone-layout.json)、[脚本编译](Validation/player-compile.json)、[程序集](Validation/sample-assemblies.json)、[包安装](Validation/packages.json)、[资源包](Validation/resource-build.json)、[输入范围](Validation/inputs.json)。启动生命周期报告见 [EntryStartup](../Validation/EntryStartup/)。
 
-验收入口：`Game.Editor.TowerDefenseValidation.Run`，加 `--novorizon-phone-layout` 检查宽屏；`Game.Editor.GameEntryValidation.Run` 验证启动与退出。这些 Play 验收不加 `-quit`。
+在独立验收副本中使用 `Tools~/unity-validate.sh tower-defense` 或 PowerShell 的 `TowerDefense` 阶段。可通过 `--novorizon-phone-layout` 或 `-PhoneLayout` 切换手机横屏布局。连续启动与退出使用 `startup-cycles` 或 `StartupCycles` 阶段。
 
 ## 规划与范围
 
 [海岛说明](../Game/IslandCamp.zh-CN.md)记录模块、数据、存档与玩法规则。[Meshy 清单](../Game/MeshyBrief.zh-CN.md)包含帐篷/围栏/庭院/小屋和战斗模型制作要求；当前仅保留 Cube/简单几何体占位，正式模型、动画与 LOD 由用户通过 Meshy 提供。
 
-[网络核对](../Game/ServerIntegration.zh-CN.md)已补用户的成功交叉验证与本实例 VPN disabled 的实时证据。本项目仍未执行正式服务器登录/经济/领奖，当前材料是本地玩法。IL2CPP、手机设备/性能、硬件 GPU、声音与完整媒体播放未作为通过声明。地图台地是 2D 表现，当前未引入 RVO 或动态堵路。
+[网络核对](../Game/ServerIntegration.zh-CN.md)已补用户的成功交叉验证与本实例 VPN disabled 的实时证据。本项目仍未执行正式服务器登录/经济/领奖，当前材料是本地玩法。IL2CPP、手机设备/性能、硬件 GPU、声音与完整媒体播放未作为通过声明。地图台地由 2D 底图表现。

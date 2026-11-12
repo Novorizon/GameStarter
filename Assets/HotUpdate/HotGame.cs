@@ -8,8 +8,6 @@ using Game.Framework.Data;
 using Game.Framework.Event;
 using Game.Framework.HotUpdate;
 using Game.Framework.Input;
-using Game.Framework.Network;
-using Game.Framework.Network.Unity;
 using Game.Framework.Storage;
 using Game.Framework.Timing;
 using Game.Resource;
@@ -77,10 +75,6 @@ namespace Game.HotUpdate
             GpuAnimatorManager.Instance.Initialize();
             EntityManager.Instance.Initialize();
             WorldManager.Instance.Initialize();
-            if (Resources.Load<NetworkSettings>("NetworkSettings") != null)
-            {
-                NetworkManager.Instance.Initialize();
-            }
 
             return Task.CompletedTask;
         }
@@ -98,6 +92,8 @@ namespace Game.HotUpdate
             client = new ClientFlow();
             await client.StartAsync(tables, token);
         }
+
+        partial void ValidateNativeSchema(cfg.Tables tables);
 
         private static async Task LoadTablesAsync(CancellationToken token)
         {
@@ -160,7 +156,6 @@ namespace Game.HotUpdate
         private void ReleaseManagers()
         {
             GameSettings.Release();
-            NetworkManager.Release();
             WorldManager.Release();
             EntityManager.Release();
             GpuAnimatorManager.Release();

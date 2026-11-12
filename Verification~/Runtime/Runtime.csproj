@@ -14,6 +14,7 @@
     <ProjectReference Include="../FrameworkUnity/FrameworkUnity.csproj" />
     <Compile Include="../../Assets/Game/Runtime/*.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GameEntry.ModelValidation.cs" />
     <ProjectReference Include="../Managers/Resources/Resources.csproj" />
     <ProjectReference Include="../Managers/HotManager/HotManager.csproj" />
     <ProjectReference Include="../Startup/Startup.csproj" />

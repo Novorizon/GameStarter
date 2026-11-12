@@ -2,19 +2,31 @@
 
 ## 最小战斗循环
 
-出征前先显示准备页，使用实际关卡配置汇总波数、敌人、路线/建造点和胜负补给；确认后才申请战场资源。开始一局时固定关卡配置、配置版本和随机种子。每次新出征生成种子，局内重试保留该种子；加载失败重试也使用已确认的计划。玩家在建造点购买塔、观察下一波信息，再主动开始波次。怪物按编辑路线移动；塔在领域中选目标并结算命中。击杀给局内金币，漏怪扣基地生命。清波后给波次奖励，并在需要时暂停模拟、弹出三个互不相同的可选增益；选择一次后回到备战。基地生命归零则失败，最后一波结清则胜利。
+出征前的准备页汇总关卡目标、失败条件、敌人和胜负补给。确认后才申请战场美术资源。一局开始后固定关卡配置和随机种子，重试复用该种子。开场有 10 秒备战时间，玩家可以建塔、等待倒计时结束或立即开战。随后刷怪组按时间出兵，并通过 `RouteId` 读取关卡的出生位置。塔在领域中选目标并结算命中。每击杀一名敌人获得 1 点击杀积分，积分达标时暂停模拟并选一张强化卡，选完继续当前战斗。
+
+每张地图的目标配置位于 [地图规则目录](../../Assets/GameAssets/TowerDefense/Maps)。JSON 文件与 `TdStage.mapAsset` 的文件名对应，`objectiveType` 对应 `BattleObjectiveType`，`targetName` 用于准备页和战场目标标牌。
+
+地图的 `assault` 配置包含增援间隔 `reinforcementGapTicks`、首抽门槛 `firstDraftPoints` 和后续门槛 `repeatDraftPoints`。当前值为 100 tick、6 分和 12 分。增援间隔从上一批最后一个敌人出场到下一批首个敌人出场计算。击杀金币即时发放，各出兵批次的防守金币在该批全部结算后发放。
+
+| 目标类型 | 参数 | 判定 |
+| --- | --- | --- |
+| `DefendBase` | `baseAttackWindupTicks`、`baseAttackIntervalTicks` | 敌人当前位置与目标坐标一致时进入基地攻击结算。全歼敌军且基地仍有耐久时获胜，基地耐久归零时失败。 |
+| `InterceptEscapes` | `escapesToDefeat` | 各路线共用同一传送门坐标。敌人当前位置与传送门坐标一致时离场并计为逃脱，全局计数达到阈值即失败。最后一名敌人离场时，逃脱数低于阈值则获胜。例如峡谷双潭填 7，最多允许 6 名逃脱。 |
+
+敌人满足基地攻击条件后，按 `baseAttackWindupTicks` 完成首次攻击前摇，随后每 `baseAttackIntervalTicks` 攻击一次。前摇为零时首次攻击即时结算。每 tick 为 50 毫秒。
+
+守基地关卡的 `baseUpgrades` 从 Lv.1 升 Lv.2 起逐级配置 `goldCost` 和 `durabilityIncrease`。备战和战斗中可点击基地或标牌，用局内金币加固。加固同时提高上限和当前耐久，保留此前受损的点数。修理和回复强化以当局最新上限结算，重开时恢复初始等级和耐久。
 
 战斗表现不决定伤害：当前原型使用即时命中规则，弹道、闪光和受击动画仅表现结果。以后若需要有飞行时间、穿透、爆炸或弹道阻挡，必须把相应规则移入领域模拟，而不是让 Unity 碰撞回调直接改血量。
 
 ```mermaid
 stateDiagram-v2
     [*] --> Planning: 创建会话
-    Planning --> Fighting: 开始下一波
-    Fighting --> ChoosingCard: 清波且配置给牌
-    ChoosingCard --> Planning: 选择一张有效卡
-    Fighting --> Planning: 清波且不出牌
-    Fighting --> Victory: 最后一波结清
-    Fighting --> Defeat: 基地生命归零
+    Planning --> Fighting: 倒计时结束或立即开战
+    Fighting --> ChoosingCard: 击杀积分达标
+    ChoosingCard --> Fighting: 选择一张有效卡
+    Fighting --> Victory: 敌军全部出场并结清
+    Fighting --> Defeat: 基地耐久耗尽或逃脱达到阈值
     Victory --> [*]
     Defeat --> [*]
 ```
@@ -23,7 +35,9 @@ stateDiagram-v2
 
 ## 当前领域配置与后续拆表
 
-战斗 schema 是 [towerdefense.xml](../../Config/Luban/Defines/towerdefense.xml)，对应 8 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表；[client.xml](../../Config/Luban/Defines/client.xml) 定义主题、旅程任务、玩家等级以及营地等级/任务 5 张表。加上 Example 共 14 张表。当前关卡为 6 波、7 建造点、3 塔型、4 怪物型、7 张卡；静态 `DemoConfiguration` 仍是测试用的 5 波版本。营地配置与存档规则见[海岛说明](../Game/IslandCamp.zh-CN.md)。
+战斗 schema 对应 8 个 Excel 输入和 `cfg.Tables` 下的 `TbTd...` 表。客户端 schema 定义主题、旅程任务、玩家等级、营地等级和营地任务。加上 Example 共 14 张表。正式关卡读取 Luban 表与对应地图 JSON。 [战斗 schema](../../Config/Luban/Defines/towerdefense.xml) [客户端 schema](../../Config/Luban/Defines/client.xml) [营地配置与存档](../Game/IslandCamp.zh-CN.md)
+
+单路线关卡可在地图 JSON 中用 `routePoints` 保存与底图对齐的关卡坐标。多路线关卡按 Luban 的 `stageId`、`routeId` 和 `sequence` 组合。首末坐标分别对应出生位置和关卡目标。地图 JSON 的 `towerPlacement` 保存建造范围、道路半宽和禁建区域，用于生成塔位。 [关卡配置读取](../../Assets/HotUpdate/TowerDefense/Data/TowerDefenseMapObjectives.cs)
 
 | 已有表 / bean | 主键和关系 | 关键字段 |
 | --- | --- | --- |
@@ -32,7 +46,7 @@ stateDiagram-v2
 | `TbTdBuildSlot / TdBuildSlot` | `id`；`stageId → TdStage` | `x,y`，固定建造点 |
 | `TbTdTower / TdTower` | `id` | `buildCost,upgradeCost,damage,range,attackIntervalTicks,maxLevel,upgradeDamage,upgradeRange` |
 | `TbTdEnemy / TdEnemy` | `id` | `health,speedPerTick,goldReward,baseDamage` |
-| `TbTdWave / TdWave` | `id`；`stageId → TdStage`，`sequence` 决定波次顺序 | `rewardGold,giveCard` |
+| `TbTdWave / TdWave` | `id`，`stageId → TdStage`，`sequence` 决定出兵顺序 | `rewardGold` 为该批结算金币，`giveCard` 用于旧会话 |
 | `TbTdSpawn / TdSpawn` | `id`；`waveId → TdWave`，`enemyId → TdEnemy`，`routeId` 必须属于该波关卡 | `count,startTick,intervalTicks` |
 | `TbTdCard / TdCard` | `id` | `name,description,effect,value,weight,maxStacks,iconIndex,rarity` |
 | `TbClientTheme / ClientTheme` | `id` | 字体、面板、图标、头像、背景与启动布局地址 |
@@ -50,14 +64,14 @@ stateDiagram-v2
 | `BuildSlotDefinition` | `Id`、`Position2 Position` | `TbTdBuildSlot`，`id` | 关卡内唯一；不落在路径或基地碰撞占地中；不能依赖图片识别生成 |
 | `TowerDefinition` | `Id/Name`、建造/升级费用、伤害、射程、攻击间隔 tick、最大等级、每级伤害/射程增量 | `TbTdTower`，`id` | 费用非负、间隔大于零；正式升级曲线复杂时拆 `TbTowerLevel(towerId,level)` |
 | `EnemyDefinition` | `Id/Name`、生命、每 tick 速度、金币奖励、基地伤害 | `TbTdEnemy`，`id` | 生命和速度大于零，奖励/基地伤害非负；模型及动画由表现表关联 |
-| `WaveDefinition` | `Id`、清波金币、`GiveCard`、刷怪组数组 | `TbTdWave`，`id` | 归属于关卡或由关卡引用；空组和最终波规则必须明确 |
+| `WaveDefinition` | `Id`、结算金币、`GiveCard`、刷怪组数组 | `TbTdWave`，`id` | 为连续进攻提供按顺序执行的出兵批次 |
 | `SpawnGroup` | `EnemyId/RouteId/Count/StartTick/IntervalTicks` | `TbTdSpawn`，按 `waveId` 组合 | 外键指向敌人和关卡路线；数量、间隔和起始 tick 有上限；不得整数溢出 |
 | `CardDefinition` | `Id/Name/Description`、效果类型和值、抽取权重、最大叠层 | `TbTdCard`，`id` | 稳定 ID；权重为正；已满层或无效卡不应进入候选集 |
 | 表现绑定 | 公共 UI、地图、卡牌图标，当前 3D 由代码生成 | `TbClientTheme` 的公共 UI 地址、`TdStage.mapAsset` 和 `TdCard.iconIndex` | 正式模型/动画地址由对应塔/敌人定义关联；领域只持 ID，不读取资源 |
 
 原型效果集合为 `DamagePercent`、`AttackSpeedPercent`、`RangePercent`、`Gold`、`HealBase`。它们适合先验证选卡与叠加体验，不能据此认定燃烧、冰冻、连锁、召唤或主动技能已实现。
 
-BattleBriefing 为准备页和局内情报汇总同一波各刷怪组的敌人数量、清波金币与是否选卡；最后一波不显示不存在的额外选卡。备战预告下一波，防守中显示当前进攻。
+BattleBriefing 为准备页汇总全场敌军名册和数量，并为战场显示各出兵批次的路线。战斗 HUD 显示剩余敌军、增援倒计时和当前抽卡积分。
 
 当前三个塔型全部是单体即时命中，差异在基础伤害、射速、射程和费用；即使名字为炮塔，也尚无范围伤害。百分比卡跨波保留，对全塔生效并按百分点线性累加；金币和修复卡是即时局内效果，没有局外成长写入。
 
@@ -90,7 +104,7 @@ BattleBriefing 为准备页和局内情报汇总同一波各刷怪组的敌人�
 4. 候选不足三张必须有明确规则，避免软锁。建议正式版配置一个无限叠层的金币类兜底池；是否允许少于三张、重抽、跳过或保底稀有度仍需产品决定。
 5. 正式稀有度可使用“先按稀有度，再在该稀有度按牌权重抽取”，或者直接单池权重。首版原型是单池权重，不应在表现层再随机改稀有度。
 
-已确定选卡期间停止领域模拟，UI 可使用独立展示时钟；当前在清波后 ChoosingCard 阶段选择，选择后回备战，不自动推进下一波。品级采用白/绿/蓝/紫/橙五档，主题与稀有度、叠层分别配置，具体见[卡牌等级与表现规划](../Game/CardDraft.zh-CN.md)。当前未实现该规划中的完整配色映射、分级抽取或高品质演出。
+击杀积分达标时进入 ChoosingCard，暂停出兵和战斗时间。选卡后恢复当前战斗，超出门槛的积分计入下一次选择。品级采用白、绿、蓝、紫、橙五档，主题与稀有度、叠层分别配置。具体见[卡牌等级与表现规划](../Game/CardDraft.zh-CN.md)。
 
 建议第一批流派围绕三个容易解释的轴扩展：高频攻击、重击范围、经济续航。先验证每次选择有取舍，再增加元素体系、塔合成与复杂触发链。卡牌效果描述应由结构化数值生成或校验，防止描述和实际效果不符。
 
